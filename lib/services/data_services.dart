@@ -19,6 +19,7 @@ class RestAPIServices implements IKirthanRestApi {
 
   Future<List<Userdetail>> getUserDetails(String userType) async {
     String requestBody = "";
+    print(requestBody);
     if (userType == "SuperAdmin" ) {
       requestBody = '{"userType":"SuperAdmin"}';
       //requestBody = '{"updatedby":"Manjunath"}';
