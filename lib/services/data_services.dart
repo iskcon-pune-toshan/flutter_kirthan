@@ -36,7 +36,7 @@ class RestAPIServices implements IKirthanRestApi {
       List<dynamic> userdetailsData = json.decode(response.body);
       //print(userdetailsData);
       List<Userdetail> userdetails = userdetailsData.map((userdetailsData) => Userdetail.fromMap(userdetailsData)).toList();
-
+      //Added a comment
       //print(userdetails);
 
       return userdetails;
