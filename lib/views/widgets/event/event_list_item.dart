@@ -4,16 +4,16 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
-import 'package:flutter_kirthan/views/widgets/event/view_event.dart';
+import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-
 
 class EventRequestsListItem extends StatelessWidget {
   final EventRequest eventrequest;
   final UserRequest userrequests;
   final IKirthanRestApi apiSvc = new RestAPIServices();
 
-  EventRequestsListItem({@required this.eventrequest,@required this.userrequests});
+  EventRequestsListItem(
+      {@required this.eventrequest, @required this.userrequests});
 
   @override
   Widget build(BuildContext context) {
@@ -43,23 +43,24 @@ class EventRequestsListItem extends StatelessWidget {
             ),
           ),
         ),
-
         Row(
           children: <Widget>[
             SizedBox(
               height: 35,
               width: 65,
-
               child: RaisedButton(
-                child: eventrequest.isProcessed? const Text("Processed"):const Text("Not Processed"),
+                child: eventrequest.isProcessed
+                    ? const Text("Processed")
+                    : const Text("Not Processed"),
                 onPressed: () {
-                  Map<String,dynamic> processrequestmap = new Map<String,dynamic>();
+                  Map<String, dynamic> processrequestmap =
+                      new Map<String, dynamic>();
                   processrequestmap["id"] = eventrequest?.id;
                   processrequestmap["approvalstatus"] = "Approved";
                   processrequestmap["approvalcomments"] = "ApprovalComments";
                   processrequestmap["eventType"] = eventrequest?.eventType;
                   apiSvc?.processEventRequest(processrequestmap);
-                  SnackBar mysnackbar = SnackBar (
+                  SnackBar mysnackbar = SnackBar(
                     content: Text("Event $process $successful "),
                     duration: new Duration(seconds: 4),
                     backgroundColor: Colors.green,
@@ -70,7 +71,6 @@ class EventRequestsListItem extends StatelessWidget {
             ),
           ],
         ),
-
         Row(
           children: <Widget>[
             SizedBox(
@@ -79,10 +79,11 @@ class EventRequestsListItem extends StatelessWidget {
               child: RaisedButton(
                 child: const Text("Delete"),
                 onPressed: () {
-                  Map<String,dynamic> processrequestmap = new Map<String,dynamic>();
+                  Map<String, dynamic> processrequestmap =
+                      new Map<String, dynamic>();
                   processrequestmap["id"] = eventrequest?.id;
                   apiSvc?.deleteEventRequest(processrequestmap);
-                  SnackBar mysnackbar = SnackBar (
+                  SnackBar mysnackbar = SnackBar(
                     content: Text("Event $delete "),
                     duration: new Duration(seconds: 4),
                     backgroundColor: Colors.red,
@@ -93,7 +94,6 @@ class EventRequestsListItem extends StatelessWidget {
             ),
           ],
         ),
-
         Row(
           children: <Widget>[
             SizedBox(
@@ -102,14 +102,18 @@ class EventRequestsListItem extends StatelessWidget {
               child: RaisedButton(
                 child: const Text("Edit"),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileView(eventrequest: eventrequest)),);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            EditProfileView(eventrequest: eventrequest)),
+                  );
 //updateEvent
                 },
               ),
             ),
           ],
         ),
-
       ],
     );
 

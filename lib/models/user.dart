@@ -1,8 +1,6 @@
 import 'package:flutter_kirthan/exceptions/validation_exception.dart';
 
 class UserLogin {
-  //int id;
-  //String userid;
   String username;
   String password;
   String usertype;
@@ -11,8 +9,6 @@ class UserLogin {
   UserLogin({this.username, this.password, this.usertype});
 //Typically called from the data_source layer after getting data from an external source.
   UserLogin.fromJson(Map<String, dynamic> map) {
-    //id = map['id'];
-    //userid = map['userid'];
     username = map['username'];
     password= map['password'];
     usertype= map['usertype'];
@@ -20,8 +16,6 @@ class UserLogin {
 //Typically called from service or data_source layer just before persisting data.
   //Here is the appropriate place to check data validity before persistence.
   Map<String, dynamic> toJson() {
-    //validate
-    _validation();
     final Map<String, dynamic> data = new Map<String, dynamic>();
     //data['id'] = this.id;
     //data['userid'] = this.userid;
@@ -30,14 +24,19 @@ class UserLogin {
     data['usertype'] = this.usertype;
     return data;
   }
-  _validation() {
-    if (username == null) {
-      //NullNameException is defined in the exception folder of the domain
-      throw NullNameException('Name cannot be Null');
-    }
+
+  static List<UserLogin> getUsers() {
+    List<UserLogin> users = List<UserLogin>();
+    users.add(UserLogin(username: "manjunath_biji",password: "", usertype: "Admin"));
+    users.add(UserLogin(username: "Srinivasa_naik",password: "", usertype: "Admin"));
+    users.add(UserLogin(username: "kashyap_kale",password: "", usertype: "Team"));
+    users.add(UserLogin(username: "anuj_kakde",password: "", usertype: "User"));
+    users.add(UserLogin(username: "janice_m",password: "", usertype: "Local Admin"));
+    users.add(UserLogin(username: "vardhan_biji",password: "", usertype: "User"));
+    users.add(UserLogin(username: "toshan_nimai",password: "", usertype: "User"));
+    users.add(UserLogin(username: "parth_prabhu",password: "", usertype: "User"));
+    return users;
   }
-
-
 }
 
 class UserRequest {
@@ -238,4 +237,92 @@ class UserDetail {
 
       return users;
     }
+}
+
+
+class UserAccess {
+  String userType;
+  Map<String,Map<String,bool>> role;
+  String dataEntitlement;
+
+  List<String> _accessTypes = ["Create","Edit","Delete","View","Process"];
+  List<String> _screenNames = ["Register User","Forgot password","Login screen","Team","Event","Team-user","Event-User","Notification Hub"];
+  //List<String> roles = [];
+  //List<Map<String,List<String>>> roles;
+  static Map<String,Map<String,bool>>  _userRole = {"Register User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":false},
+    "Forgot password":{"Create":true,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Login screen":{"Create":true,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Team":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Event":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":false},
+    "Team-user":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Event-User":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Notification Hub":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":true},
+  };
+  static Map<String,Map<String,bool>>  _teamRole = {"Register User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":false},
+  "Forgot password":{"Create":true,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Login screen":{"Create":true,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Team":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Event":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":false},
+    "Team-user":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Event-User":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
+    "Notification Hub":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":true},
+  };
+  static Map<String,Map<String,bool>>  _localAdminRole ={"Register User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Forgot password":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Login screen":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Team":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Event":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Team-user":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Event-User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Notification Hub":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true}
+  };
+
+  static Map<String,Map<String,bool>>  _adminRole = {"Register User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Forgot password":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Login screen":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Team":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Event":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Team-user":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Event-User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
+    "Notification Hub":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true}
+  };
+
+  UserAccess({this.userType, this.role, this.dataEntitlement});
+
+  static List<UserAccess> getUserEntitlements() {
+    List<UserAccess> entitlements = List<UserAccess>();
+    entitlements.add(UserAccess(userType: "Admin",role: _userRole,dataEntitlement: "global"));
+    entitlements.add(UserAccess(userType: "Local Admin",role: _teamRole,dataEntitlement: "location"));
+    entitlements.add(UserAccess(userType: "Team",role: _localAdminRole,dataEntitlement: "team"));
+    entitlements.add(UserAccess(userType: "User",role: _adminRole,dataEntitlement: "self"));
+
+    return entitlements;
+  }
+
+}
+
+class UserEntitlements {
+  Map<String,bool> _screenAccess;
+  String _dataEntitlements;
+  String _screenName;
+
+  Map<String,bool> get screenAccess => _screenAccess;
+
+  String get dataEntitlements => _dataEntitlements;
+
+  String get screenName => _screenName;
+
+  set dataEntitlements(String value) {
+    _dataEntitlements = value;
+  }
+
+  set screenName(String value) {
+    _screenName = value;
+  }
+
+  set screenAccess(Map<String,bool> value) {
+    _screenAccess = value;
+  }
+
+
 }

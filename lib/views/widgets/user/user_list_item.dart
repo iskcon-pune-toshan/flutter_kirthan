@@ -4,7 +4,7 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
-import 'package:flutter_kirthan/views/widgets/user/view_user.dart';
+import 'package:flutter_kirthan/views/pages/user/user_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 
 class UserRequestsListItem extends StatelessWidget {

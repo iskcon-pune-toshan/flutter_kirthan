@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/teamusermapping.dart';
+import 'package:flutter_kirthan/views/pages/teamuser/teamuser_create.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
 

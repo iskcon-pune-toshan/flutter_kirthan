@@ -1,0 +1,15 @@
+import 'dart:async';
+import 'package:flutter_kirthan/models/team.dart';
+
+abstract class ITeamRestApi {
+//team
+  Future<List<TeamRequest>> getTeamRequests(String teamTitle);
+
+  Future<TeamRequest> submitNewTeamRequest(Map<String, dynamic> teamrequestmap);
+
+  Future<void> submitUpdateTeamRequest(String teamrequestmap);
+
+  Future<bool> processTeamRequest(Map<String, dynamic> processrequestmap);
+
+  Future<bool> deleteTeamRequest(Map<String, dynamic> processrequestmap);
+}

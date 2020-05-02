@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/eventusermapping.dart';
+import 'package:flutter_kirthan/views/pages/eventuser/eventuser_create.dart';
 
 class TeamUserView extends StatefulWidget {
   final String title = "Team User Mapping View";

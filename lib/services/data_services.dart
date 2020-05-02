@@ -404,7 +404,11 @@ class RestAPIServices implements IKirthanRestApi {
 
   Future<List<TeamUser>> getTeamUserMappings(String teamMapping) async {
     String requestBody = '{"createdBy":"SYSTEM"}';
-
+    /*String requestBody = '{"eventdate":"sysdate()"}'; //today
+    requestBody = '{"eventdate":"sysdate()+1"}'; //tomorrow
+    requestBody = '{"eventdate":"sysdate()+7"}'; //week
+    requestBody = '{"eventdate":"sysdate()+30"}'; //month
+*/
     print(requestBody);
 
     var response = await _client.put('$_baseUrl/getteamusermappings', headers: {"Content-Type": "application/json"}, body: requestBody);

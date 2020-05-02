@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
 import 'package:flutter_kirthan/view_models/main_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/main_page.dart';
+import 'package:flutter_kirthan/views/pages/user/login.dart';
+//import 'package:flutter_kirthan/views/pages/main_page.dart';
 
-final MainPageViewModel mainPageVM = MainPageViewModel(apiSvc: RestAPIServices());
-//updated by anuj machine
-void main() => runApp(KirthanApp(mainPageVM: mainPageVM));
+//final MainPageViewModel mainPageVM = MainPageViewModel(apiSvc: RestAPIServices());
+
+//void main() => runApp(KirthanApp(mainPageVM: mainPageVM));
+
+void main() => runApp(KirthanApp());
 
 class KirthanApp extends StatelessWidget {
-  final MainPageViewModel mainPageVM;
+  //final MainPageViewModel mainPageVM;
 
-  KirthanApp({@required this.mainPageVM});
+  //KirthanApp({@required this.mainPageVM});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,8 @@ class KirthanApp extends StatelessWidget {
         primaryColorLight: Color(0xff0a0a0a),
         primaryColorDark: Color(0xff000000),
       ),
-      home: MainPage(viewModel: mainPageVM),
+      home:LoginApp() ,
+      //MainPage(viewModel: mainPageVM),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -11,6 +11,7 @@ class TeamUserMapping extends StatefulWidget {
   List<UserRequest> selectedUsers;
 
   final String title = "Team User Mapping";
+  final String screenName = "Team-user";
 
   @override
   _TeamUserMappingState createState() =>

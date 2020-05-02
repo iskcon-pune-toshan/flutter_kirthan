@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/userinfo.dart';
-import './teaminfo.dart';
+import 'package:flutter_kirthan/junk/userinfo.dart';
+
 
 class TeamInfo extends StatelessWidget {
   int teamId;

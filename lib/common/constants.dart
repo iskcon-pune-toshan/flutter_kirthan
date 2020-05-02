@@ -40,3 +40,15 @@ const String successful = "Successfully";
 const String delete = "Deleted";
 const String process = "Processed";
 
+//Screen Names
+const String REGISTER_USER = "Register User";
+const String FORGOT_PASSWORD = "Forgot password";
+const String LOGIN_SCREEN = "Login screen";
+const String TEAM = "Team";
+const String EVENT = "Event";
+const String TEAM_USER = "Team-user";
+const String EVENT_USER = "Event-User";
+const String NOTIFICATION_HUB = "Notification Hub";
+
+
+

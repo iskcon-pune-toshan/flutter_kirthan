@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/view_models/main_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/user/user_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/views/pages/user/user_maintenance.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/userselection.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/teamuserview.dart';
 
 class UsersPanel extends StatelessWidget {
-  String userType;
+  final String userType;
+
+  final String title = "Register User";
+  final String screenName = "Register User";
+
+
   UsersPanel({this.userType});
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<MainPageViewModel>(
+    return ScopedModelDescendant<UserPageViewModel>(
+      //rebuildOnChange: true,
       builder: (context, child, model) {
         return FutureBuilder<List<UserRequest>>(
           future: model.userrequests,
@@ -54,7 +57,7 @@ class UsersPanel extends StatelessWidget {
                               model.setUserRequests("U");
                             },
                           ),
-                          Expanded(
+                          /*Expanded(
                             child: RaisedButton(
                               child: const Text("Create an User Request"),
                               onPressed: () {
@@ -64,7 +67,7 @@ class UsersPanel extends StatelessWidget {
                                         builder: (context) => UserWrite()));
                               },
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                       ListView.builder(

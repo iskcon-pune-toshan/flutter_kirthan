@@ -1,20 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/main_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/views/pages/event/event_maintenance.dart';
-import 'package:flutter_kirthan/views/pages/eventuser/eventuserview.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/teamuserview.dart';
+import 'package:flutter_kirthan/views/pages/eventuser/eventuser_view.dart';
+import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
 
 class EventsPanel extends StatelessWidget {
   String eventType;
+  final String screenName = "Event";
+
   EventsPanel({this.eventType});
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<MainPageViewModel>(
+    return ScopedModelDescendant<EventPageViewModel>(
       builder: (context, child, model) {
         return FutureBuilder<List<EventRequest>>(
           future: model.eventrequests,
@@ -34,13 +36,13 @@ class EventsPanel extends StatelessWidget {
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          RaisedButton(
+                          /*RaisedButton(
                             child: const Text("Today"),
                             onPressed: () {
                               print("Today");
                               model.setEventRequests("1");
                             },
-                          ),
+                          ),*/
                           RaisedButton(
                             child: const Text("Event-User Add"),
                             onPressed: () {
@@ -61,17 +63,6 @@ class EventsPanel extends StatelessWidget {
 
                             },
                           ),
-                          Expanded(
-                            child: RaisedButton(
-                              child: const Text("Create an Event"),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => EventWrite()));
-                              },
-                            ),
-                          ),
                         ],
                       ),
                       ListView.builder(
@@ -90,7 +81,7 @@ class EventsPanel extends StatelessWidget {
                   return NoInternetConnection(
                     action: () async {
                       //await model.setSuperAdminUserRequests("SuperAdmin");
-                      await model.setUserRequests("All");
+                      //await model.setUserRequests("All");
                       await model.setEventRequests("All");
                     },
                   );
