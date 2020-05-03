@@ -79,6 +79,7 @@ class TeamRequestsListItem extends StatelessWidget {
           //child: const Text("Edit"),
           icon: Icon(Icons.edit),
           tooltip: "Edit",
+          iconSize: 25.0,
           onPressed: () {
             Navigator.push(
               context,

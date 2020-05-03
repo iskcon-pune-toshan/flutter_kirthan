@@ -112,6 +112,7 @@ class _EventViewState extends State<EventView>
           }
         },
         currentIndex: _index,
+        selectedItemColor: Colors.orange,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

@@ -34,7 +34,7 @@ class _TeamViewState extends State<TeamView>
   @override
   void initState() {
     super.initState();
-    _index = 0;
+    _index = 2;
     loadData();
   }
 
@@ -96,6 +96,7 @@ class _TeamViewState extends State<TeamView>
           }
         },
         currentIndex: _index,
+        selectedItemColor: Colors.orange,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

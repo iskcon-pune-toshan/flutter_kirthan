@@ -53,7 +53,6 @@ class _UserViewState extends State<UserView> {
             case 0:
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => EventView()));
-
               break;
             case 1:
               Navigator.push(
@@ -68,7 +67,7 @@ class _UserViewState extends State<UserView> {
           }
         },
         currentIndex: _index,
-        //backgroundColor: Colors.yellow,
+        selectedItemColor: Colors.orange,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

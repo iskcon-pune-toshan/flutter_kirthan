@@ -1,4 +1,3 @@
-//import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
@@ -40,71 +39,52 @@ class UserRequestsListItem extends StatelessWidget {
             ),
           ),
         ),
-        Row(
-          children: <Widget>[
-            RaisedButton(
-              child: userrequest.isProcessed
-                  ? const Text("Processed")
-                  : const Text("Not Processed"),
-              onPressed: () {
-                Map<String, dynamic> processrequestmap =
-                    new Map<String, dynamic>();
-                processrequestmap["id"] = userrequest?.id;
-                processrequestmap["approvalstatus"] = "Approved";
-                processrequestmap["approvalcomments"] = "ApprovalComments";
-                processrequestmap["usertype"] = userrequest?.userType;
-                apiSvc?.processUserRequest(processrequestmap);
-                SnackBar mysnackbar = SnackBar(
-                  content: Text("User $process $successful "),
-                  duration: new Duration(seconds: 4),
-                  backgroundColor: Colors.green,
-                );
-                Scaffold.of(context).showSnackBar(mysnackbar);
-              },
-            ),
-          ],
+        IconButton(
+          icon: Icon(Icons.sync),
+          tooltip: "Process",
+          iconSize: 25.0,
+          onPressed: () {
+            Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
+            processrequestmap["id"] = userrequest?.id;
+            processrequestmap["approvalstatus"] = "Approved";
+            processrequestmap["approvalcomments"] = "ApprovalComments";
+            processrequestmap["usertype"] = userrequest?.userType;
+            apiSvc?.processUserRequest(processrequestmap);
+            SnackBar mysnackbar = SnackBar(
+              content: Text("User $process $successful "),
+              duration: new Duration(seconds: 4),
+              backgroundColor: Colors.green,
+            );
+            Scaffold.of(context).showSnackBar(mysnackbar);
+          },
         ),
-        Row(
-          children: <Widget>[
-            SizedBox(
-              height: 35,
-              width: 55,
-              child: RaisedButton(
-                child: const Text("Delete"),
-                onPressed: () {
-                  Map<String, dynamic> processrequestmap =
-                      new Map<String, dynamic>();
-                  processrequestmap["id"] = userrequest?.id;
-                  apiSvc?.deleteUserRequest(processrequestmap);
-                  SnackBar mysnackbar = SnackBar(
-                    content: Text("User $delete "),
-                    duration: new Duration(seconds: 4),
-                    backgroundColor: Colors.red,
-                  );
-                  Scaffold.of(context).showSnackBar(mysnackbar);
-                },
-              ),
-            ),
-          ],
+        IconButton(
+          icon: Icon(Icons.delete),
+          tooltip: "Delete",
+          iconSize: 25.0,
+          onPressed: () {
+            Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
+            processrequestmap["id"] = userrequest?.id;
+            apiSvc?.deleteUserRequest(processrequestmap);
+            SnackBar mysnackbar = SnackBar(
+              content: Text("User $delete "),
+              duration: new Duration(seconds: 4),
+              backgroundColor: Colors.red,
+            );
+            Scaffold.of(context).showSnackBar(mysnackbar);
+          },
         ),
-        Row(
-          children: <Widget>[
-            SizedBox(
-              height: 35,
-              width: 55,
-              child: RaisedButton(
-                child: const Text("Edit"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            UserEdit(userrequest: userrequest)),
-                  );
-                },
-              ),
-            ),
-          ],
+        IconButton(
+          icon: Icon(Icons.edit),
+          tooltip: "Edit",
+          iconSize: 25.0,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UserEdit(userrequest: userrequest)),
+            );
+          },
         ),
       ],
     );
