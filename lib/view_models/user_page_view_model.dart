@@ -25,6 +25,12 @@ class UserPageViewModel extends Model {
     return userrequests != null;
   }
 
+  Future<List<UserRequest>> getUserRequests(String userType) {
+    Future<List<UserRequest>> usersreqs = apiSvc?.getUserRequests(userType);
+    return usersreqs;
+  }
+
+
   Future<UserRequest> submitNewUserRequest(Map<String, dynamic> userrequestmap) {
     Future<UserRequest> userrequest = apiSvc?.submitNewUserRequest(userrequestmap);
     return userrequest;

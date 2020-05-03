@@ -21,6 +21,11 @@ class TeamPageViewModel extends Model {
     return teamrequests != null;
   }
 
+  Future<List<TeamRequest>> getTeamRequests(String teamTitle) {
+    Future<List<TeamRequest>> teamreqs = apiSvc?.getTeamRequests(teamTitle);
+    return teamreqs;
+  }
+
   Future<TeamRequest> submitNewTeamRequest(Map<String, dynamic> teamrequestmap) {
     Future<TeamRequest> teamrequest = apiSvc?.submitNewTeamRequest(teamrequestmap);
     return teamrequest;

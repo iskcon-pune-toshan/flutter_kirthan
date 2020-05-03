@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_create.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
+
+final UserPageViewModel userPageVM =
+UserPageViewModel(apiSvc: UserAPIService());
+
 
 class UserSelection extends StatefulWidget {
   UserSelection({Key key}) : super(key: key);
@@ -15,7 +21,7 @@ class UserSelection extends StatefulWidget {
 
 class _UserSelectionState extends State<UserSelection> {
   final _formKey = GlobalKey<FormState>();
-  final IKirthanRestApi apiSvc = new RestAPIServices();
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
   Future<List<UserRequest>> users;
   List<UserRequest> selectedUsers ;
   bool sort;
@@ -24,7 +30,7 @@ class _UserSelectionState extends State<UserSelection> {
   void initState() {
     sort = false;
     selectedUsers = [];
-    users = apiSvc?.getUserRequests("SA");
+    users = userPageVM.getUserRequests("SA");
     super.initState();
   }
 
@@ -151,7 +157,7 @@ class _UserSelectionState extends State<UserSelection> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                TeamUserMapping(selectedUsers: selectedUsers)));
+                                TeamUserCreate(selectedUsers: selectedUsers)));
                   },
                 ),
               ),

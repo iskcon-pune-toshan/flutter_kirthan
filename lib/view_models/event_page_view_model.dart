@@ -22,6 +22,12 @@ class EventPageViewModel extends Model {
     return eventrequests != null;
   }
 
+  Future<List<EventRequest>> getEventRequests(String userType) {
+    Future<List<EventRequest>> eventRequests =
+    apiSvc?.getEventRequests(userType);
+    return eventRequests;
+  }
+
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap) {
     Future<EventRequest> eventRequest =

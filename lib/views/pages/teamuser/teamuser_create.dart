@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/services/team_service_impl.dart';
+import 'package:flutter_kirthan/services/team_user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/team.dart';
@@ -6,23 +10,30 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
 
-class TeamUserMapping extends StatefulWidget {
-  TeamUserMapping({this.selectedUsers}) : super();
+final TeamUserPageViewModel teamUserPageVM =
+TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+
+final TeamPageViewModel teamPageVM =
+TeamPageViewModel(apiSvc: TeamAPIService());
+
+
+class TeamUserCreate extends StatefulWidget {
+  TeamUserCreate({this.selectedUsers}) : super();
   List<UserRequest> selectedUsers;
 
   final String title = "Team User Mapping";
   final String screenName = "Team-user";
 
   @override
-  _TeamUserMappingState createState() =>
-      _TeamUserMappingState(selectedUsers: selectedUsers);
+  _TeamUserCreateState createState() =>
+      _TeamUserCreateState(selectedUsers: selectedUsers);
 }
 
-class _TeamUserMappingState extends State<TeamUserMapping> {
+class _TeamUserCreateState extends State<TeamUserCreate> {
   final _formKey = GlobalKey<FormState>();
   List<UserRequest> selectedUsers;
-  final IKirthanRestApi apiSvc = new RestAPIServices();
-  _TeamUserMappingState({this.selectedUsers});
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
+  _TeamUserCreateState({this.selectedUsers});
   TeamUser teamUser = new TeamUser();
   Future<List<TeamRequest>> teams;
 
@@ -36,7 +47,7 @@ class _TeamUserMappingState extends State<TeamUserMapping> {
 
   @override
   void initState() {
-    teams = apiSvc?.getTeamRequests("SA");
+    teams = teamPageVM.getTeamRequests("SA");
     super.initState();
     //_selectedTeam =  null;
   }
@@ -136,7 +147,7 @@ class _TeamUserMappingState extends State<TeamUserMapping> {
                     }
                     //Map<String,dynamic> teamusermap = teamUser.toJson();
                     print(listofTeamUsers);
-                    apiSvc?.submitNewTeamUserMapping(listofTeamUsers);
+                    teamUserPageVM.submitNewTeamUserMapping(listofTeamUsers);
                   },
                 ),
               ),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
+import 'package:flutter_kirthan/services/team_user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/eventuser/eventuser_create.dart';
+
+final TeamUserPageViewModel teamUserPageVM =
+TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+
 
 class TeamUserView extends StatefulWidget {
   final String title = "Team User Mapping View";
@@ -12,7 +16,7 @@ class TeamUserView extends StatefulWidget {
 }
 
 class _TeamUserViewState extends State<TeamUserView> {
-  final IKirthanRestApi apiSvc = new RestAPIServices();
+//  final IKirthanRestApi apiSvc = new RestAPIServices();
   Future<List<TeamUser>> teamusers;
 
   List<TeamUser> listofteamusers = new List<TeamUser>();
@@ -99,7 +103,7 @@ class _TeamUserViewState extends State<TeamUserView> {
 */
   @override
   void initState() {
-    teamusers = apiSvc?.getTeamUserMappings("SA");
+    teamusers = teamUserPageVM.getTeamUserMappings("SA");
     teamusers.then((newteamusers) {
       newteamusers.forEach((teamuser) => usercehckmap[
               teamuser.teamId.toString() +
@@ -235,7 +239,7 @@ class _TeamUserViewState extends State<TeamUserView> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                EventUserMapping(selectedTeamUsers: selectedTeamUsers)));
+                                EventUserCreate(selectedTeamUsers: selectedTeamUsers)));
                   },
                 ),
               ),
@@ -245,7 +249,7 @@ class _TeamUserViewState extends State<TeamUserView> {
                   child: Text('DELETE SELECTED ${selectedTeamUsers.length}'),
                   onPressed: () {
                     print(selectedTeamUsers);
-                    apiSvc?.submitDeleteTeamUserMapping(selectedTeamUsers);
+                    teamUserPageVM.submitDeleteTeamUserMapping(selectedTeamUsers);
                   },
                 ),
               ),

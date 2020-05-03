@@ -4,34 +4,46 @@ import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/eventuser.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/services/event_user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/event_user_page_view_model.dart';
 import 'package:intl/intl.dart';
 
-class EventUserMapping extends StatefulWidget {
-  EventUserMapping({this.selectedTeamUsers}) : super();
+final EventUserPageViewModel eventUserPageVM =
+EventUserPageViewModel(apiSvc: EventUserAPIService());
+
+final EventPageViewModel eventPageVM =
+EventPageViewModel(apiSvc: EventAPIService());
+
+
+class EventUserCreate extends StatefulWidget {
+  EventUserCreate({this.selectedTeamUsers}) : super();
   List<TeamUser> selectedTeamUsers;
 
   final String title = "Event User Mapping";
 
   @override
-  _EventUserMappingState createState() =>
-      _EventUserMappingState(selectedTeamUsers: selectedTeamUsers);
+  _EventUserCreateState createState() =>
+      _EventUserCreateState(selectedTeamUsers: selectedTeamUsers);
 }
 
-class _EventUserMappingState extends State<EventUserMapping> {
-  final IKirthanRestApi apiSvc = new RestAPIServices();
+class _EventUserCreateState extends State<EventUserCreate> {
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
   List<TeamUser> selectedTeamUsers;
   Future<List<EventRequest>> events;
 
   EventRequest _selectedEvent;
   EventUser eventUser;
 
-  _EventUserMappingState({this.selectedTeamUsers});
+  _EventUserCreateState({this.selectedTeamUsers});
   bool sort;
 
   @override
   void initState() {
     sort = false;
-    events = apiSvc?.getEventRequests("AA");
+    //events = eventPageVM.getEventRequests("AA");
+    events = eventPageVM.getEventRequests("AA");
     super.initState();
     //_selectedTeam =  null;
   }
@@ -188,7 +200,7 @@ class _EventUserMappingState extends State<EventUserMapping> {
                       }
                       //Map<String,dynamic> teamusermap = teamUser.toJson();
                       print(listofEventUsers);
-                      apiSvc?.submitNewEventTeamUserMapping(listofEventUsers);
+                      eventUserPageVM.submitNewEventTeamUserMapping(listofEventUsers);
                     },
                   ),
                 ),
