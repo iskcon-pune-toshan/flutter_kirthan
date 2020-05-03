@@ -19,7 +19,7 @@ class TeamAPIService implements ITeamRestApi {
 
   TeamAPIService.internal();
 
-  Future<void> submitUpdateTeamRequest(String teamrequestmap) async {
+  Future<bool> submitUpdateTeamRequest(String teamrequestmap) async {
     print(teamrequestmap);
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);

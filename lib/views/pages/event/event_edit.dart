@@ -1,26 +1,20 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
-/*import 'package:flutter_kirthan/services/data_services.dart';
-//import 'package:http/http.dart' as http;
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'dart:async';
-import 'package:flutter/material.dart';*/
 
 
-class EditProfileView extends StatefulWidget {
+class EditEvent extends StatefulWidget {
   EventRequest eventrequest ;
-  EditProfileView({Key key, @required this.eventrequest}) : super(key: key);
+  EditEvent({Key key, @required this.eventrequest}) : super(key: key);
 
   @override
-  _EditProfileViewState createState() => new _EditProfileViewState();
+  _EditEventState createState() => new _EditEventState();
 }
 
-class _EditProfileViewState extends State<EditProfileView> {
+class _EditEventState extends State<EditEvent> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   //EventRequest eventrequestobj = new EventRequest();
   //_EditProfileViewState({Key key, @required this.eventrequest}) ;

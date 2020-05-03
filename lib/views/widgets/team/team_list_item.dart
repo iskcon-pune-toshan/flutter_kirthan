@@ -4,14 +4,15 @@ import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
+import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/team/team_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 
-
 class TeamRequestsListItem extends StatelessWidget {
   final TeamRequest teamrequest;
-  final IKirthanRestApi apiSvc = new RestAPIServices();
-  TeamRequestsListItem({@required this.teamrequest});
+  final TeamPageViewModel teamPageVM;
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
+  TeamRequestsListItem({@required this.teamrequest, @required this.teamPageVM});
 
   @override
   Widget build(BuildContext context) {
@@ -25,90 +26,68 @@ class TeamRequestsListItem extends StatelessWidget {
     );
 
     var subTitle = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Icon(
           Icons.movie,
+          semanticLabel: teamrequest?.teamDescription,
+          textDirection: TextDirection.ltr,
           color: KirthanStyles.subTitleColor,
           size: KirthanStyles.subTitleFontSize,
         ),
-        /*Container(
-          margin: const EdgeInsets.only(left: 4.0),
-          child: Text(
-            teamrequest?.teamTitle,
-            style: TextStyle(
-              color: KirthanStyles.subTitleColor,
-            ),
-          ),
-        ),*/
-        Row(
-          children: <Widget>[
-            SizedBox(
-              height: 35,
-              width: 65,
+        IconButton(
+          icon: Icon(Icons.sync),
+          tooltip: "Process",
+          iconSize: 25.0,
 
-              child: RaisedButton(
-                child: teamrequest.isProcessed? const Text("Processed"):const Text("Not Processed"),
-                onPressed: () {
-                  Map<String,dynamic> processrequestmap = new Map<String,dynamic>();
-                  processrequestmap["id"] = teamrequest?.id;
-                  processrequestmap["approvalstatus"] = "Approved";
-                  processrequestmap["approvalcomments"] = "ApprovalComments";
+          /*child: teamrequest.isProcessed
+                    ? const Text("Processed")
+                    : const Text("Not Processed"),
+                */
+          onPressed: () {
+            Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
+            processrequestmap["id"] = teamrequest?.id;
+            processrequestmap["approvalstatus"] = "Approved";
+            processrequestmap["approvalcomments"] = "ApprovalComments";
 
-                  apiSvc?.processTeamRequest(processrequestmap);
-                  SnackBar mysnackbar = SnackBar (
-                    content: Text("team $process "),
-                    duration: new Duration(seconds: 4),
-                    backgroundColor: Colors.green,
-                  );
-                  Scaffold.of(context).showSnackBar(mysnackbar);
-                },
-              ),
-            ),
-          ],
+            teamPageVM.processTeamRequest(processrequestmap);
+            SnackBar mysnackbar = SnackBar(
+              content: Text("team $process "),
+              duration: new Duration(seconds: 4),
+              backgroundColor: Colors.green,
+            );
+            Scaffold.of(context).showSnackBar(mysnackbar);
+          },
         ),
-
-
-        Row(
-          children: <Widget>[
-            SizedBox(
-              height: 35,
-              width: 55,
-              child: RaisedButton(
-                child: const Text("Delete"),
-                onPressed: () {
-                  Map<String,dynamic> teamrequestmap = new Map<String,dynamic>();
-                  teamrequestmap["id"] = teamrequest?.id;
-                  apiSvc?.deleteTeamRequest(teamrequestmap);
-                  SnackBar mysnackbar = SnackBar (
-                    content: Text("team $delete "),
-                    duration: new Duration(seconds: 4),
-                    backgroundColor: Colors.red,
-                  );
-                  Scaffold.of(context).showSnackBar(mysnackbar);
-                },
-              ),
-            ),
-          ],
+        IconButton(
+          icon: Icon(Icons.delete),
+          tooltip: "Delete",
+          iconSize: 25.0,
+          onPressed: () {
+            Map<String, dynamic> teamrequestmap = new Map<String, dynamic>();
+            teamrequestmap["id"] = teamrequest?.id;
+            teamPageVM.deleteTeamRequest(teamrequestmap);
+            SnackBar mysnackbar = SnackBar(
+              content: Text("team $delete "),
+              duration: new Duration(seconds: 4),
+              backgroundColor: Colors.red,
+            );
+            Scaffold.of(context).showSnackBar(mysnackbar);
+          },
         ),
-
-        Row(
-          children: <Widget>[
-            SizedBox(
-              height: 35,
-              width: 55,
-              child: RaisedButton(
-                child: const Text("Edit"),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileView(teamrequest: teamrequest)),);
-                  //updateEvent
-                },
-              ),
-            ),
-          ],
+        IconButton(
+          //child: const Text("Edit"),
+          icon: Icon(Icons.edit),
+          tooltip: "Edit",
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      EditTeam(teamrequest: teamrequest)),
+            );
+          },
         ),
-
-
       ],
     );
 

@@ -25,4 +25,25 @@ class UserPageViewModel extends Model {
     return userrequests != null;
   }
 
+  Future<UserRequest> submitNewUserRequest(Map<String, dynamic> userrequestmap) {
+    Future<UserRequest> userrequest = apiSvc?.submitNewUserRequest(userrequestmap);
+    return userrequest;
+  }
+
+  Future<bool> processUserRequest(Map<String, dynamic> processrequestmap) {
+    Future<bool> processFlag = apiSvc?.processUserRequest(processrequestmap);
+    return processFlag;
+  }
+
+  Future<bool> deleteUserRequest(Map<String, dynamic> processrequestmap) {
+    Future<bool> deleteFlag = apiSvc?.deleteUserRequest(processrequestmap);
+    return deleteFlag;
+  }
+
+  Future<bool> submitUpdateUserRequest(String userrequestmap) {
+    Future<bool> updateFlag = apiSvc?.submitUpdateUserRequest(userrequestmap);
+    return updateFlag;
+  }
+
+
 }

@@ -56,11 +56,10 @@ class EventsPanel extends StatelessWidget {
                             //child: const Text("This Week"),
                             child: const Text("Event-User View"),
                             onPressed: () {
-                          Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                          builder: (context) => EventUserView()));
-
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EventUserView()));
                             },
                           ),
                         ],
@@ -72,7 +71,9 @@ class EventsPanel extends StatelessWidget {
                         itemBuilder: (_, int index) {
                           var eventrequest = eventRequests[index];
                           return EventRequestsListItem(
-                              eventrequest: eventrequest);
+                            eventrequest: eventrequest,
+                            eventPageVM: model,
+                          );
                         },
                       ),
                     ],

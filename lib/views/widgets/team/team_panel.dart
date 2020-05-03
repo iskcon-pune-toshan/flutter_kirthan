@@ -9,7 +9,6 @@ import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
 
-
 class TeamsPanel extends StatelessWidget {
   String teamType;
   final String screenName = "Team";
@@ -37,14 +36,14 @@ class TeamsPanel extends StatelessWidget {
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          RaisedButton(
+                          /*                        RaisedButton(
                             child: const Text("All Teams"),
                             onPressed: () {
                               print("All Teams");
                               model.setTeamRequests("AE");
                             },
                           ),
-
+*/
                           RaisedButton(
                             child: const Text("Team-User Add"),
                             onPressed: () {
@@ -65,7 +64,7 @@ class TeamsPanel extends StatelessWidget {
                                       builder: (context) => TeamUserView()));
                             },
                           ),
-                          Expanded(
+                          /*                        Expanded(
                             child: RaisedButton(
                               child: const Text("Create a Team"),
                               onPressed: () {
@@ -75,17 +74,21 @@ class TeamsPanel extends StatelessWidget {
                                         builder: (context) =>
                                             TeamWrite()));
                               },
-                            ),
                           ),
+                          ),
+*/
                         ],
                       ),
                       ListView.builder(
                         shrinkWrap: true,
                         itemCount:
-                        teamRequests == null ? 0 : teamRequests.length,
+                            teamRequests == null ? 0 : teamRequests.length,
                         itemBuilder: (_, int index) {
                           var teamrequest = teamRequests[index];
-                          return TeamRequestsListItem(teamrequest: teamrequest);
+                          return TeamRequestsListItem(
+                            teamrequest: teamrequest,
+                            teamPageVM: model
+                          );
                         },
                       ),
                     ],

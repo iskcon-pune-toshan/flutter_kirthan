@@ -20,4 +20,25 @@ class TeamPageViewModel extends Model {
     teamrequests = apiSvc?.getTeamRequests(teamTitle);
     return teamrequests != null;
   }
+
+  Future<TeamRequest> submitNewTeamRequest(Map<String, dynamic> teamrequestmap) {
+    Future<TeamRequest> teamrequest = apiSvc?.submitNewTeamRequest(teamrequestmap);
+    return teamrequest;
+  }
+
+  Future<bool> submitUpdateTeamRequest(String teamrequestmap) {
+    Future<bool>  updateflag = apiSvc?.submitUpdateTeamRequest(teamrequestmap);
+    return updateflag;
+  }
+
+  Future<bool> processTeamRequest(Map<String, dynamic> processrequestmap) {
+    Future<bool>  processflag = apiSvc?.processTeamRequest(processrequestmap);
+    return processflag;
+
+  }
+
+  Future<bool> deleteTeamRequest(Map<String, dynamic> processrequestmap) {
+    Future<bool>  deleteflag = apiSvc?.deleteTeamRequest(processrequestmap);
+    return deleteflag;
+  }
 }

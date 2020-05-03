@@ -134,7 +134,7 @@ class UserAPIService implements IUserRestApi {
     return userdetails;
   }
 
-  Future<void> submitUpdateUserRequest(String userrequestmap) async {
+  Future<bool> submitUpdateUserRequest(String userrequestmap) async {
     print(userrequestmap);
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);

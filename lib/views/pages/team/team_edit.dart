@@ -4,22 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
+import 'package:flutter_kirthan/services/team_service_impl.dart';
+import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 
+final TeamPageViewModel teamPageVM =
+TeamPageViewModel(apiSvc: TeamAPIService());
 
-
-class EditProfileView extends StatefulWidget {
+class EditTeam extends StatefulWidget {
   TeamRequest teamrequest ;
 
-  EditProfileView({Key key, @required this.teamrequest}) : super(key: key);
+  EditTeam({Key key, @required this.teamrequest}) : super(key: key);
 
   @override
-  _EditProfileViewState createState() => new _EditProfileViewState();
+  _EditTeamState createState() => new _EditTeamState();
 }
 
-class _EditProfileViewState extends State<EditProfileView> {
+class _EditTeamState extends State<EditTeam> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   TeamRequest teamrequest= new TeamRequest();
-  final IKirthanRestApi apiSvc = new RestAPIServices();
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
 
 
 
@@ -60,7 +63,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                   print(widget.teamrequest.teamTitle);
                   print(widget.teamrequest.teamDescription);
                   String teamrequestStr = jsonEncode(widget.teamrequest.toStrJson());
-                  apiSvc?.submitUpdateTeamRequest(teamrequestStr);
+                  teamPageVM.submitUpdateTeamRequest(teamrequestStr);
+                  //apiSvc?.submitUpdateTeamRequest(teamrequestStr);
                 },
               ))
         ]),

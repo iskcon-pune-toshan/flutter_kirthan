@@ -16,5 +16,5 @@ abstract class IUserRestApi {
 
   Future<bool> deleteUserRequest(Map<String, dynamic> processrequestmap);
 
-  Future<void> submitUpdateUserRequest(String userrequestmap);
+  Future<bool> submitUpdateUserRequest(String userrequestmap);
 }

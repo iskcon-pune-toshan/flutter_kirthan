@@ -7,7 +7,7 @@ abstract class ITeamRestApi {
 
   Future<TeamRequest> submitNewTeamRequest(Map<String, dynamic> teamrequestmap);
 
-  Future<void> submitUpdateTeamRequest(String teamrequestmap);
+  Future<bool> submitUpdateTeamRequest(String teamrequestmap);
 
   Future<bool> processTeamRequest(Map<String, dynamic> processrequestmap);
 

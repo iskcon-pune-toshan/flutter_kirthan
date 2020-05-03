@@ -8,11 +8,12 @@ abstract class IEventRestApi {
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap);
 
-  Future<List<EventRequest>> getDummyEventRequests();
-
   Future<bool> processEventRequest(Map<String, dynamic> processrequestmap);
 
   Future<bool> deleteEventRequest(Map<String, dynamic> processrequestmap);
 
-  Future<void> submitUpdateEventRequest(String eventrequestmap);
+  Future<bool> submitUpdateEventRequest(String eventrequestmap);
+
+  Future<List<EventRequest>> getDummyEventRequests();
+
 }

@@ -132,7 +132,7 @@ class EventAPIService implements IEventRestApi {
     return eventrequests;
   }
 
-  Future<void> submitUpdateEventRequest(String eventrequestmap) async {
+  Future<bool> submitUpdateEventRequest(String eventrequestmap) async {
     print(eventrequestmap);
 
     var response = await _client.put('$_baseUrl/submitupdateeventrequest',

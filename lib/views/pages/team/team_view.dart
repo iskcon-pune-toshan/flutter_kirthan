@@ -43,26 +43,6 @@ class _TeamViewState extends State<TeamView>
     return Scaffold(
       appBar: AppBar(
         title: Text("Teams"),
-        actions: <Widget>[
-          PopupMenuButton(
-              icon: Icon(Icons.tune),
-              onSelected: (input) {
-                _selectedValue = input;
-                print(input);
-                teamPageVM.setTeamRequests("All");
-              },
-              itemBuilder: (BuildContext context) {
-                return eventTime.map((f) {
-                  return CheckedPopupMenuItem<String>(
-                    child: Text(f),
-                    value: f,
-                    checked: _selectedValue == f ? true : false,
-                    enabled: true,
-                    //checked: true,
-                  );
-                }).toList();
-              }),
-        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -87,7 +67,10 @@ class _TeamViewState extends State<TeamView>
         backgroundColor: Colors.green,
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => TeamWrite()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      TeamWrite()));
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
