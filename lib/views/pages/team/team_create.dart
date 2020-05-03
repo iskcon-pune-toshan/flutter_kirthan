@@ -4,8 +4,6 @@ import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 

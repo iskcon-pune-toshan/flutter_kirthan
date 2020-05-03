@@ -1,9 +1,12 @@
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
+
+final UserPageViewModel userPageVM =
+UserPageViewModel(apiSvc: UserAPIService());
 
 class UserWrite extends StatefulWidget {
   UserWrite({Key key}) : super(key: key);
@@ -16,7 +19,7 @@ class _UserWriteState extends State<UserWrite> {
 
   final _formKey = GlobalKey<FormState>();
   UserRequest userrequest = new UserRequest();
-  final IKirthanRestApi apiSvc = new RestAPIServices();
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
   //UserRequest newuserrequest = new UserRequest();
   List<String> _states = [ "Andhra Pradesh",
     "Arunachal Pradesh",
@@ -460,7 +463,7 @@ class _UserWriteState extends State<UserWrite> {
                                 userrequest.approvalStatus = "Approved";
                                 userrequest.approvalComments = "AAA";
                                 Map<String,dynamic> usermap = userrequest.toJson();
-                                UserRequest newuserrequest =await apiSvc?.submitNewUserRequest(usermap);
+                                UserRequest newuserrequest =await userPageVM.submitNewUserRequest(usermap);
                                 print(newuserrequest.id);
                                 String uid = newuserrequest.id.toString();
                                 SnackBar mysnackbar = SnackBar (

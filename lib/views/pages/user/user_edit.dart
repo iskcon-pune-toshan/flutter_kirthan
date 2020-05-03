@@ -1,56 +1,59 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
-/*import 'package:flutter_kirthan/services/data_services.dart';
-//import 'package:http/http.dart' as http;
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'dart:async';
-import 'package:flutter/material.dart';*/
+import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 
+final UserPageViewModel userPageVM =
+    UserPageViewModel(apiSvc: UserAPIService());
 
-class EditProfileView extends StatefulWidget {
-  UserRequest userrequest ;
-  EditProfileView({Key key, @required this.userrequest}) : super(key: key);
+class UserEdit extends StatefulWidget {
+  UserRequest userrequest;
+  UserEdit({Key key, @required this.userrequest}) : super(key: key);
 
   @override
-  _EditProfileViewState createState() => new _EditProfileViewState();
+  _UserEditState createState() => new _UserEditState();
 }
 
-class _EditProfileViewState extends State<EditProfileView> {
+class _UserEditState extends State<UserEdit> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  final IKirthanRestApi apiSvc = new RestAPIServices();
-
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
 
   String _selectedState;
   String state;
-  var _states = ["GOA","GUJ","MAH"];
+  var _states = ["GOA", "GUJ", "MAH"];
   // controllers for form text controllers
-  final TextEditingController _userUserNameController = new TextEditingController();
-  String userName ;
-  final TextEditingController _userPasswordController = new TextEditingController();
-  String password ;
-  final TextEditingController _userFirstNameController = new TextEditingController();
-  String firstName ;
-  final TextEditingController _userLastNameController = new TextEditingController();
-  String lastName ;
-  final TextEditingController _userEmailController = new TextEditingController();
-  String email ;
-  final TextEditingController _userAddressController = new TextEditingController();
-  String address ;
-  final TextEditingController _userPhoneNumberController = new TextEditingController();
-  String phoneNumber ;
+  final TextEditingController _userUserNameController =
+      new TextEditingController();
+  String userName;
+  final TextEditingController _userPasswordController =
+      new TextEditingController();
+  String password;
+  final TextEditingController _userFirstNameController =
+      new TextEditingController();
+  String firstName;
+  final TextEditingController _userLastNameController =
+      new TextEditingController();
+  String lastName;
+  final TextEditingController _userEmailController =
+      new TextEditingController();
+  String email;
+  final TextEditingController _userAddressController =
+      new TextEditingController();
+  String address;
+  final TextEditingController _userPhoneNumberController =
+      new TextEditingController();
+  String phoneNumber;
   final TextEditingController _linetwoController = new TextEditingController();
   String lineTwo;
-  final TextEditingController _linethreeController = new TextEditingController();
+  final TextEditingController _linethreeController =
+      new TextEditingController();
   String lineThree;
   final TextEditingController _cityController = new TextEditingController();
   String city;
   final TextEditingController _pincodeController = new TextEditingController();
   String pinCode;
-
 
   @override
   void initState() {
@@ -64,12 +67,10 @@ class _EditProfileViewState extends State<EditProfileView> {
     _linetwoController.text = widget.userrequest.addLineTwo;
     _linethreeController.text = widget.userrequest.addLineThree;
     _pincodeController.text = widget.userrequest.pinCode.toString();
-    _selectedState="GUJ";
-    _cityController.text=widget.userrequest.city;
+    _selectedState = "GUJ";
+    _cityController.text = widget.userrequest.city;
     return super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,9 +94,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                   print(firstName);
                   print(lastName);
                   print(address);
-                  String userrequestStr = jsonEncode(widget.userrequest.toStrJson());
-                  apiSvc?.submitUpdateEventRequest(userrequestStr);
-
+                  String userrequestStr =
+                      jsonEncode(widget.userrequest.toStrJson());
+                  userPageVM.submitUpdateUserRequest(userrequestStr);
                 },
               ))
         ]),
@@ -106,11 +107,10 @@ class _EditProfileViewState extends State<EditProfileView> {
             child: new ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               children: <Widget>[
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Username", hintText: "alternate name?"),
+                    decoration: const InputDecoration(
+                        labelText: "Username", hintText: "alternate name?"),
                     autocorrect: false,
                     controller: _userUserNameController,
                     onSaved: (String value) {
@@ -118,8 +118,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "Password"),
@@ -130,7 +128,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "First name"),
@@ -141,7 +138,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "Last name"),
@@ -152,8 +148,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "Email"),
@@ -164,10 +158,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Phone number"),
+                    decoration:
+                        const InputDecoration(labelText: "Phone number"),
                     autocorrect: false,
                     controller: _userPhoneNumberController,
                     onSaved: (String value) {
@@ -175,7 +169,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "Address"),
@@ -186,8 +179,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "Line 2"),
@@ -198,7 +189,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "Line 3"),
@@ -209,7 +199,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "PinCode"),
@@ -220,7 +209,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "City"),
@@ -231,16 +219,16 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                 ),
-
                 DropdownButtonFormField<String>(
                   value: _selectedState,
                   icon: const Icon(Icons.location_city),
                   hint: Text('Select State'),
                   items: _states
                       .map((state) => DropdownMenuItem(
-                    value: state,
-                    child: Text(state),
-                  )).toList(),
+                            value: state,
+                            child: Text(state),
+                          ))
+                      .toList(),
                   onChanged: (input) {
                     setState(() {
                       _selectedState = input;
@@ -249,9 +237,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   onSaved: (input) {
                     state = input;
                   },
-
                 ),
-
               ],
             )));
   }

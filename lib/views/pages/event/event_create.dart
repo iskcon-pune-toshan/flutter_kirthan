@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
@@ -6,6 +8,10 @@ import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+
+final EventPageViewModel eventPageVM =
+EventPageViewModel(apiSvc: EventAPIService());
+
 
 class EventWrite extends StatefulWidget {
   EventWrite({Key key}) : super(key: key);
@@ -18,7 +24,7 @@ class _EventWriteState extends State<EventWrite> {
 
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
-  final IKirthanRestApi apiSvc = new RestAPIServices();
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
   List<String> _states = [ "Andhra Pradesh",
     "Arunachal Pradesh",
     "Assam",
@@ -494,7 +500,7 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.approvalStatus = "Approved";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String,dynamic> eventmap = eventrequest.toJson();
-                                EventRequest neweventrequest =await apiSvc?.submitNewEventRequest(eventmap);
+                                EventRequest neweventrequest =await eventPageVM.submitNewEventRequest(eventmap);
                                 print(neweventrequest.id);
                                 String uid = neweventrequest.id.toString();
                                 SnackBar mysnackbar = SnackBar (

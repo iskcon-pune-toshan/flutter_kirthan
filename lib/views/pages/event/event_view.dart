@@ -96,7 +96,10 @@ class _EventViewState extends State<EventView>
           setState(() => _index = newIndex);
           print(newIndex);
           switch(newIndex) {
-            case 0: break;
+            case 0:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => EventView()));
+              break;
             case 1:
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => UserView()));

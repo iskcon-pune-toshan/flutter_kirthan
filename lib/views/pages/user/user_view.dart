@@ -7,8 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
-
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class UserView extends StatefulWidget {
   UserView({Key key}) : super(key: key);
@@ -18,7 +17,6 @@ class UserView extends StatefulWidget {
 
   @override
   _UserViewState createState() => _UserViewState();
-
 }
 
 class _UserViewState extends State<UserView> {
@@ -26,7 +24,6 @@ class _UserViewState extends State<UserView> {
   Future loadData() async {
     await userPageVM.setUserRequests("All");
   }
-
 
   @override
   void initState() {
@@ -38,9 +35,9 @@ class _UserViewState extends State<UserView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title: Text("User"),
-        ),
+      ),
       body: ScopedModel<UserPageViewModel>(
         model: userPageVM,
         child: UsersPanel(
@@ -52,13 +49,10 @@ class _UserViewState extends State<UserView> {
         onTap: (newIndex) {
           setState(() => _index = newIndex);
           print(newIndex);
-          switch(newIndex) {
+          switch (newIndex) {
             case 0:
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EventView(
-                      )));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EventView()));
 
               break;
             case 1:
@@ -69,7 +63,8 @@ class _UserViewState extends State<UserView> {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
-            case 3: break;
+            case 3:
+              break;
           }
         },
         currentIndex: _index,
@@ -78,7 +73,6 @@ class _UserViewState extends State<UserView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
-
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
@@ -92,10 +86,8 @@ class _UserViewState extends State<UserView> {
             icon: Icon(Icons.notifications),
             title: Text('Notifications'),
           ),
-
         ],
       ),
     );
   }
-
 }

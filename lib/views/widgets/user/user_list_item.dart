@@ -43,15 +43,18 @@ class UserRequestsListItem extends StatelessWidget {
         Row(
           children: <Widget>[
             RaisedButton(
-              child: userrequest.isProcessed? const Text("Processed"):const Text("Not Processed"),
+              child: userrequest.isProcessed
+                  ? const Text("Processed")
+                  : const Text("Not Processed"),
               onPressed: () {
-                Map<String,dynamic> processrequestmap = new Map<String,dynamic>();
+                Map<String, dynamic> processrequestmap =
+                    new Map<String, dynamic>();
                 processrequestmap["id"] = userrequest?.id;
                 processrequestmap["approvalstatus"] = "Approved";
                 processrequestmap["approvalcomments"] = "ApprovalComments";
                 processrequestmap["usertype"] = userrequest?.userType;
                 apiSvc?.processUserRequest(processrequestmap);
-                SnackBar mysnackbar = SnackBar (
+                SnackBar mysnackbar = SnackBar(
                   content: Text("User $process $successful "),
                   duration: new Duration(seconds: 4),
                   backgroundColor: Colors.green,
@@ -61,8 +64,6 @@ class UserRequestsListItem extends StatelessWidget {
             ),
           ],
         ),
-
-
         Row(
           children: <Widget>[
             SizedBox(
@@ -71,10 +72,11 @@ class UserRequestsListItem extends StatelessWidget {
               child: RaisedButton(
                 child: const Text("Delete"),
                 onPressed: () {
-                  Map<String,dynamic> processrequestmap = new Map<String,dynamic>();
+                  Map<String, dynamic> processrequestmap =
+                      new Map<String, dynamic>();
                   processrequestmap["id"] = userrequest?.id;
                   apiSvc?.deleteUserRequest(processrequestmap);
-                  SnackBar mysnackbar = SnackBar (
+                  SnackBar mysnackbar = SnackBar(
                     content: Text("User $delete "),
                     duration: new Duration(seconds: 4),
                     backgroundColor: Colors.red,
@@ -85,7 +87,6 @@ class UserRequestsListItem extends StatelessWidget {
             ),
           ],
         ),
-
         Row(
           children: <Widget>[
             SizedBox(
@@ -94,20 +95,19 @@ class UserRequestsListItem extends StatelessWidget {
               child: RaisedButton(
                 child: const Text("Edit"),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileView(userrequest:userrequest)),);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            UserEdit(userrequest: userrequest)),
+                  );
                 },
               ),
             ),
           ],
         ),
-
       ],
     );
-
-
-
-
-
 
     return Column(
       children: <Widget>[

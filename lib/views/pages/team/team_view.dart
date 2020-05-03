@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/widgets/team/team_panel.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
@@ -79,12 +80,18 @@ class _TeamViewState extends State<TeamView>
           setState(() => _index = newIndex);
           print(newIndex);
           switch(newIndex) {
-            case 0: break;
+            case 0:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => EventView()));
+              break;
             case 1:
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => UserView()));
               break;
-            case 2: break;
+            case 2:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => TeamView()));
+              break;
             case 3: break;
           }
         },

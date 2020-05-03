@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+
+final EventPageViewModel eventPageVM =
+EventPageViewModel(apiSvc: EventAPIService());
 
 
 class EditEvent extends StatefulWidget {
@@ -18,7 +23,7 @@ class _EditEventState extends State<EditEvent> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   //EventRequest eventrequestobj = new EventRequest();
   //_EditProfileViewState({Key key, @required this.eventrequest}) ;
-  final IKirthanRestApi apiSvc = new RestAPIServices();
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
   String _selectedState;
   String state;
   var _states = ["GOA","GUJ","MAH"];
@@ -87,7 +92,7 @@ class _EditEventState extends State<EditEvent> {
                   //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
                   //String eventmap = widget.eventrequest.toStrJsonJson();
                   String eventrequestStr = jsonEncode(widget.eventrequest.toStrJson());
-                  apiSvc?.submitUpdateEventRequest(eventrequestStr);
+                  eventPageVM.submitUpdateEventRequest(eventrequestStr);
                 },
               ))
         ]),

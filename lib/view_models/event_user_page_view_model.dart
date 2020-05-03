@@ -26,13 +26,11 @@ class EventUserPageViewModel extends Model {
       List<EventUser> listofeventsermap) {
     Future<List<EventUser>> eventusers = apiSvc?.submitNewEventTeamUserMapping(listofeventsermap);
     return eventusers;
-
   }
 
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(
       List<EventUser> listofeventsermap) {
     Future<List<EventUser>> eventusers = apiSvc?.submitDeleteEventTeamUserMapping (listofeventsermap);
     return eventusers;
-
   }
 }
