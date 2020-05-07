@@ -1,17 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_kirthan/models/teamuser.dart';
+import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/team_user_service_interface.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_kirthan/models/user.dart';
 
-class TeamUserAPIService implements ITeamUserRestApi {
-  //final _baseUrl = 'http://10.0.2.2:8080';
-  final _baseUrl = 'http://192.168.1.8:8080'; //Manju
-  //final _baseUrl = 'http://192.168.1.7:8080'; // Janice
-  http.Client _client = http.Client();
-
-  set client(http.Client value) => _client = value;
+class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
 
   static final TeamUserAPIService _internal = TeamUserAPIService.internal();
 
@@ -25,7 +19,7 @@ class TeamUserAPIService implements ITeamUserRestApi {
     String requestBody = json.encode(listofteamusermap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/submitnewteamusermapping',
+    var response = await client1.put('$baseUrl/submitnewteamusermapping',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -56,7 +50,7 @@ class TeamUserAPIService implements ITeamUserRestApi {
 */
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/getteamusermappings',
+    var response = await client1.put('$baseUrl/getteamusermappings',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -81,7 +75,7 @@ class TeamUserAPIService implements ITeamUserRestApi {
     String requestBody = json.encode(listofteamusermap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/submitdeleteteamusermapping',
+    var response = await client1.put('$baseUrl/submitdeleteteamusermapping',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {

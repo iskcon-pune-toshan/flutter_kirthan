@@ -8,7 +8,7 @@ import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_user_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 final EventUserPageViewModel eventUserPageVM =
 EventUserPageViewModel(apiSvc: EventUserAPIService());
@@ -22,7 +22,7 @@ class EventUserCreate extends StatefulWidget {
   List<TeamUser> selectedTeamUsers;
 
   final String title = "Event User Mapping";
-  final String screenName = EVENT_USER;
+  final String screenName = SCR_EVENT_USER;
 
   @override
   _EventUserCreateState createState() =>

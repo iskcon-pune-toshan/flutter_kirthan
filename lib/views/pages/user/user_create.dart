@@ -4,6 +4,7 @@ import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
@@ -19,7 +20,7 @@ class _UserWriteState extends State<UserWrite> {
 
   final _formKey = GlobalKey<FormState>();
   UserRequest userrequest = new UserRequest();
-  final String screenName = REGISTER_USER;
+  final String screenName = SCR_REGISTER_USER;
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   //UserRequest newuserrequest = new UserRequest();
   List<String> _states = [ "Andhra Pradesh",

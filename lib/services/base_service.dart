@@ -1,16 +1,11 @@
 import 'package:http/http.dart' as http;
 
-class BaseAPIService {
-  final _baseUrl = 'http://192.168.1.8:8080'; //Manju
-  http.Client _client = http.Client();
+abstract class BaseAPIService {
+  //final baseUrl = 'http://10.0.2.2:8080';
+  //final baseUrl = 'http://192.168.1.7:8080'; // Janice
 
-  set client(http.Client value) => _client = value;
+  final baseUrl = 'http://192.168.1.8:8080'; //Manju
+  http.Client client1 = http.Client();
 
-  static final BaseAPIService _internal = BaseAPIService.internal();
-
-  factory BaseAPIService() => _internal;
-
-  BaseAPIService.internal();
-
-
+  set client(http.Client value) => client1 = value;
 }

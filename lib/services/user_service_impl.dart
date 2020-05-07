@@ -1,17 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/user_service_interface.dart';
 
-class UserAPIService implements IUserRestApi {
-  final _baseUrl = 'http://192.168.1.8:8080'; //Manju
-  http.Client _client = http.Client();
-
-  set client(http.Client value) => _client = value;
-
+class UserAPIService extends BaseAPIService implements IUserRestApi {
   static final UserAPIService _internal = UserAPIService.internal();
 
   factory UserAPIService() => _internal;
@@ -31,7 +26,7 @@ class UserAPIService implements IUserRestApi {
 
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/getuserrequests',
+    var response = await client1.put('$baseUrl/getuserrequests',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -56,7 +51,7 @@ class UserAPIService implements IUserRestApi {
     String requestBody = json.encode(userrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/submitnewuserrequest',
+    var response = await client1.put('$baseUrl/submitnewuserrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -78,7 +73,7 @@ class UserAPIService implements IUserRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/processuserrequest',
+    var response = await client1.put('$baseUrl/processuserrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -94,7 +89,7 @@ class UserAPIService implements IUserRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/deleteuserrequest',
+    var response = await client1.put('$baseUrl/deleteuserrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -107,7 +102,7 @@ class UserAPIService implements IUserRestApi {
   }
 
   Future<List<UserRequest>> getDummyUserRequests() async {
-    var response = await _client.get('$_baseUrl/getdummyuserrequest',
+    var response = await client1.get('$baseUrl/getdummyuserrequest',
         headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
@@ -139,7 +134,7 @@ class UserAPIService implements IUserRestApi {
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);
 
-    var response = await _client.put('$_baseUrl/submitupdateuserrequest',
+    var response = await client1.put('$baseUrl/submitupdateuserrequest',
         headers: {"Content-Type": "application/json"}, body: userrequestmap);
 
     if (response.statusCode == 200) {

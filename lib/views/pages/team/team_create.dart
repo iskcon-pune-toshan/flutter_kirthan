@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
@@ -11,7 +12,7 @@ final TeamPageViewModel teamPageVM =
 class TeamWrite extends StatefulWidget {
   TeamWrite({Key key}) : super(key: key);
 
-  final String screenName = TEAM;
+  final String screenName = SCR_TEAM;
 
   @override
   _TeamWriteState createState() => _TeamWriteState();

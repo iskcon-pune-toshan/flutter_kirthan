@@ -15,7 +15,7 @@ class LoginApp extends StatefulWidget {
   LoginApp({Key key}) : super(key: key);
 
   final String title = "Login";
-  final String screenName = LOGIN_SCREEN;
+  final String screenName = SCR_LOGIN_SCREEN;
 
   @override
   _LoginAppState createState() => _LoginAppState();
@@ -28,16 +28,22 @@ class _LoginAppState extends State<LoginApp> {
   List<UserAccess> entitlements;
   UserLogin _selecteduser;
   UserAccess _userAccess;
-  SharedPreferences sharedPreferences;
+  SharedPreferences prefs;
   //final MainPageViewModel mainPageVM;
 
   //_LoginAppState({this.mainPageVM});
+
+  void loadPref() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("My Name", "Manjunath Bijinepalli");
+  }
 
   @override
   void initState() {
     super.initState();
     users = UserLogin.getUsers();
     entitlements = UserAccess.getUserEntitlements();
+    loadPref();
     print(entitlements);
     //_userAccess = entitlements.singleWhere((access) => access.userType ==  _selecteduser.usertype);
   }
@@ -148,13 +154,19 @@ class _LoginAppState extends State<LoginApp> {
                                 //print(_uname);
                                 //print(_password);
                                 //print(_selecteduser.usertype);
+                                print(prefs.getString("My Name"));
                                 _userAccess = entitlements.singleWhere(
                                     (access) =>
                                         access.userType ==
                                         _selecteduser.usertype);
                                 _userAccess.role.forEach((k,v) {
-                                  sharedPreferences.setStringList(k,v);
+                                  print("Key: $k");
+                                  print("Values: $v");
+                                  prefs.setStringList(k,v);
                                 });
+                                prefs.setString("userName", _selecteduser.username);
+                                prefs.setString("userType", _selecteduser.usertype);
+                                prefs.setString("dataEnt", _userAccess.dataEntitlement);
                                 //sharedPreferences.setStringList(_userAccess.userType, _userAccess.role);
                                 //print(_userAccess);
                                 Navigator.push(

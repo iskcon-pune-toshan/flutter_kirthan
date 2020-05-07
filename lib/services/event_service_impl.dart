@@ -1,19 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_kirthan/services/base_service.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_kirthan/models/event.dart';
-
 import 'package:flutter_kirthan/services/event_service_interface.dart';
 
-class EventAPIService  implements IEventRestApi {
-
-  //final _baseUrl = 'http://10.0.2.2:8080';
-  final _baseUrl = 'http://192.168.1.8:8080'; //Manju
-  //final _baseUrl = 'http://192.168.1.7:8080'; // Janice
-  http.Client _client = http.Client();
-
-  set client(http.Client value) => _client = value;
+class EventAPIService extends BaseAPIService implements IEventRestApi  {
 
   static final EventAPIService _internal = EventAPIService.internal();
 
@@ -21,15 +12,13 @@ class EventAPIService  implements IEventRestApi {
 
   EventAPIService.internal();
 
-
-
   Future<bool> processEventRequest(
       Map<String, dynamic> processrequestmap) async {
     print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/processeventrequest',
+    var response = await client1.put('$baseUrl/processeventrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -54,7 +43,7 @@ class EventAPIService  implements IEventRestApi {
 
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/geteventrequests',
+    var response = await client1.put('$baseUrl/geteventrequests',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -96,7 +85,7 @@ class EventAPIService  implements IEventRestApi {
     String requestBody = json.encode(eventrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/submitneweventrequest',
+    var response = await client1.put('$baseUrl/submitneweventrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -119,7 +108,7 @@ class EventAPIService  implements IEventRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/deleteeventrequest',
+    var response = await client1.put('$baseUrl/deleteeventrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -139,7 +128,7 @@ class EventAPIService  implements IEventRestApi {
   Future<bool> submitUpdateEventRequest(String eventrequestmap) async {
     print(eventrequestmap);
 
-    var response = await _client.put('$_baseUrl/submitupdateeventrequest',
+    var response = await client1.put('$baseUrl/submitupdateeventrequest',
         headers: {"Content-Type": "application/json"}, body: eventrequestmap);
 
     if (response.statusCode == 200) {

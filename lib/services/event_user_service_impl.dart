@@ -1,17 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_kirthan/models/eventuser.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/event_user_service_interface.dart';
 
-class EventUserAPIService implements IEventUserRestApi {
-  //final _baseUrl = 'http://10.0.2.2:8080';
-  final _baseUrl = 'http://192.168.1.8:8080'; //Manju
-  //final _baseUrl = 'http://192.168.1.7:8080'; // Janice
-  http.Client _client = http.Client();
-
-  set client(http.Client value) => _client = value;
+class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
 
   static final EventUserAPIService _internal = EventUserAPIService.internal();
 
@@ -25,7 +19,7 @@ class EventUserAPIService implements IEventUserRestApi {
     String requestBody = json.encode(listofeventusermap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/submitneweventteamusermapping',
+    var response = await client1.put('$baseUrl/submitneweventteamusermapping',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -53,7 +47,7 @@ class EventUserAPIService implements IEventUserRestApi {
 
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/geteventteamusermappings',
+    var response = await client1.put('$baseUrl/geteventteamusermappings',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -79,8 +73,8 @@ class EventUserAPIService implements IEventUserRestApi {
     String requestBody = json.encode(listofeventusermap);
     print(requestBody);
 
-    var response = await _client.put(
-        '$_baseUrl/submitdeleteeventteamusermapping',
+    var response = await client1.put(
+        '$baseUrl/submitdeleteeventteamusermapping',
         headers: {"Content-Type": "application/json"},
         body: requestBody);
 

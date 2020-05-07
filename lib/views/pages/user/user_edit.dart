@@ -5,12 +5,13 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
 
 class UserEdit extends StatefulWidget {
-  final String screenName = REGISTER_USER;
+  final String screenName = SCR_REGISTER_USER;
   UserRequest userrequest;
   UserEdit({Key key, @required this.userrequest}) : super(key: key);
 

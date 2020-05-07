@@ -5,13 +5,14 @@ import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
 TeamPageViewModel(apiSvc: TeamAPIService());
 
 class EditTeam extends StatefulWidget {
   TeamRequest teamrequest ;
-  final String screenName = TEAM;
+  final String screenName = SCR_TEAM;
 
   EditTeam({Key key, @required this.teamrequest}) : super(key: key);
 

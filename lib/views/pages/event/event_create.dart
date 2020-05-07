@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
@@ -13,7 +14,7 @@ EventPageViewModel(apiSvc: EventAPIService());
 
 class EventWrite extends StatefulWidget {
   EventWrite({Key key}) : super(key: key);
-  final String screenName = EVENT;
+  final String screenName = SCR_EVENT;
 
   @override
   _EventWriteState createState() => _EventWriteState();

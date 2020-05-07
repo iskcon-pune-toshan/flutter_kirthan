@@ -5,6 +5,8 @@ import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
@@ -12,7 +14,7 @@ EventPageViewModel(apiSvc: EventAPIService());
 
 class EditEvent extends StatefulWidget {
   EventRequest eventrequest ;
-  final String screenName = EVENT;
+  final String screenName = SCR_EVENT;
 
   EditEvent({Key key, @required this.eventrequest}) : super(key: key);
 

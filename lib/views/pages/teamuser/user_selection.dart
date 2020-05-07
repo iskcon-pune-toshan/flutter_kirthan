@@ -4,6 +4,7 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_create.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
@@ -13,7 +14,7 @@ class UserSelection extends StatefulWidget {
   UserSelection({Key key}) : super(key: key);
 
   final String title = "User Selection";
-  final String screenName = TEAM_USER;
+  final String screenName = SCR_TEAM_USER;
 
   @override
   _UserSelectionState createState() => _UserSelectionState();

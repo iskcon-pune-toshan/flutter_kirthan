@@ -10,8 +10,8 @@ class UserLogin {
 //Typically called from the data_source layer after getting data from an external source.
   UserLogin.fromJson(Map<String, dynamic> map) {
     username = map['username'];
-    password= map['password'];
-    usertype= map['usertype'];
+    password = map['password'];
+    usertype = map['usertype'];
   }
 //Typically called from service or data_source layer just before persisting data.
   //Here is the appropriate place to check data validity before persistence.
@@ -27,14 +27,22 @@ class UserLogin {
 
   static List<UserLogin> getUsers() {
     List<UserLogin> users = List<UserLogin>();
-    users.add(UserLogin(username: "manjunath_biji",password: "", usertype: "Admin"));
-    users.add(UserLogin(username: "Srinivasa_naik",password: "", usertype: "Admin"));
-    users.add(UserLogin(username: "kashyap_kale",password: "", usertype: "Team"));
-    users.add(UserLogin(username: "anuj_kakde",password: "", usertype: "User"));
-    users.add(UserLogin(username: "janice_m",password: "", usertype: "Local Admin"));
-    users.add(UserLogin(username: "vardhan_biji",password: "", usertype: "User"));
-    users.add(UserLogin(username: "toshan_nimai",password: "", usertype: "User"));
-    users.add(UserLogin(username: "parth_prabhu",password: "", usertype: "User"));
+    users.add(
+        UserLogin(username: "manjunath_biji", password: "", usertype: "Admin"));
+    users.add(
+        UserLogin(username: "Srinivasa_naik", password: "", usertype: "Admin"));
+    users.add(
+        UserLogin(username: "kashyap_kale", password: "", usertype: "Team"));
+    users
+        .add(UserLogin(username: "anuj_kakde", password: "", usertype: "User"));
+    users.add(
+        UserLogin(username: "janice_m", password: "", usertype: "Local Admin"));
+    users.add(
+        UserLogin(username: "vardhan_biji", password: "", usertype: "User"));
+    users.add(
+        UserLogin(username: "toshan_nimai", password: "", usertype: "User"));
+    users.add(
+        UserLogin(username: "parth_prabhu", password: "", usertype: "User"));
     return users;
   }
 }
@@ -67,37 +75,41 @@ class UserRequest {
   String approvalStatus;
   String approvalComments;
 
-
 //Typically called form service layer to create a new user
-  UserRequest({this.id, this.userId, this.userName, this.password, this.userType,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.phoneNumber,
-    this.addLineOne,
-    this.addLineTwo,
-    this.addLineThree,
-    this.locality,
-    this.city,
-    this.pinCode,
-    this.state,
-    this.country,
-    this.govtIdType,
-    this.govtId,
-    this.isProcessed,
-    this.createdBy,
-    this.updatedBy,
-    this.updateTime,
-    this.approvalStatus,
-    this.approvalComments }
-      );
+  UserRequest(
+      {this.id,
+      this.userId,
+      this.userName,
+      this.password,
+      this.userType,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.phoneNumber,
+      this.addLineOne,
+      this.addLineTwo,
+      this.addLineThree,
+      this.locality,
+      this.city,
+      this.pinCode,
+      this.state,
+      this.country,
+      this.govtIdType,
+      this.govtId,
+      this.isProcessed,
+      this.createdBy,
+      this.updatedBy,
+      this.updateTime,
+      this.approvalStatus,
+      this.approvalComments});
 //Typically called from the data_source layer after getting data from an external source.
   factory UserRequest.fromJson(Map<String, dynamic> data) {
-    return UserRequest( id: data['id'],
+    return UserRequest(
+      id: data['id'],
       userId: data['userId'],
-      userName: data['userName'] ,
-      password: data['password'] ,
-      userType: data['userType'] ,
+      userName: data['userName'],
+      password: data['password'],
+      userType: data['userType'],
       firstName: data['firstName'],
       lastName: data['lastName'],
       email: data['email'],
@@ -150,158 +162,367 @@ class UserRequest {
     );
   }
 
-
 //Typically called from service or data_source layer just before persisting data.
   //Here is the appropriate place to check data validity before persistence.
   Map<String, dynamic> toJson() {
-
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['userId'] = this.userId;
     data['userName'] = this.userName;
     data['password'] = this.password;
     data['userType'] = this.userType;
-    data['firstName']=this.firstName;
-    data['lastName']=this.lastName;
-    data['email']=this.email;
-    data['phoneNumber']=this.phoneNumber;
-    data['addLineOne']=this.addLineOne;
-    data['addLineTwo']=this.addLineTwo;
-    data['addLineThree']=this.addLineThree;
-    data['locality']=this.locality;
-    data['city']=this.city;
-    data['pinCode']=this.pinCode;
-    data['state']=this.state;
-    data['country']=this.country;
-    data['govtIdType']=this.govtIdType;
-    data['govtId']=this.govtId;
-    data['isProcessed']=this.isProcessed;
-    data['createdBy']=this.createdBy;
-    data['createTime']=this.createTime;
-    data['updatedBy']=this.updatedBy;
-    data['updateTime']=this.updateTime;
-    data['approvalStatus']=this.approvalStatus;
-    data['approvalComments']=this.approvalComments;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['email'] = this.email;
+    data['phoneNumber'] = this.phoneNumber;
+    data['addLineOne'] = this.addLineOne;
+    data['addLineTwo'] = this.addLineTwo;
+    data['addLineThree'] = this.addLineThree;
+    data['locality'] = this.locality;
+    data['city'] = this.city;
+    data['pinCode'] = this.pinCode;
+    data['state'] = this.state;
+    data['country'] = this.country;
+    data['govtIdType'] = this.govtIdType;
+    data['govtId'] = this.govtId;
+    data['isProcessed'] = this.isProcessed;
+    data['createdBy'] = this.createdBy;
+    data['createTime'] = this.createTime;
+    data['updatedBy'] = this.updatedBy;
+    data['updateTime'] = this.updateTime;
+    data['approvalStatus'] = this.approvalStatus;
+    data['approvalComments'] = this.approvalComments;
 
     return data;
   }
 
   Map toStrJson() {
-
     return {
-      "id":this.id,
-      "userId":this.userId,
-      "userName":this.userName,
-      "userType":this.userType,
-      "password":this.password,
-      "firstName":this.firstName,
-      "lastName":this.lastName,
-      "email":this.email,
-      "phoneNumber":this.phoneNumber,
-      "addLineOne":this.addLineOne,
-      "addLineTwo":this.addLineTwo,
-      "addLineThree":this.addLineThree,
-      "locality":this.locality,
-      "city":this.city,
-      "pinCode":this.pinCode,
-      "state":this.state,
-      "country":this.country,
-      "govtIdType":this.govtIdType,
-      "govtId":this.govtId,
-      "isProcessed":this.isProcessed,
-      "createdBy":this.createdBy,
-      "updatedBy":this.updatedBy,
-      "updateTime":this.updateTime,
-      "createTime":this.createTime,
-      "approvalStatus":this.approvalStatus,
-      "approvalComments":this.approvalComments
+      "id": this.id,
+      "userId": this.userId,
+      "userName": this.userName,
+      "userType": this.userType,
+      "password": this.password,
+      "firstName": this.firstName,
+      "lastName": this.lastName,
+      "email": this.email,
+      "phoneNumber": this.phoneNumber,
+      "addLineOne": this.addLineOne,
+      "addLineTwo": this.addLineTwo,
+      "addLineThree": this.addLineThree,
+      "locality": this.locality,
+      "city": this.city,
+      "pinCode": this.pinCode,
+      "state": this.state,
+      "country": this.country,
+      "govtIdType": this.govtIdType,
+      "govtId": this.govtId,
+      "isProcessed": this.isProcessed,
+      "createdBy": this.createdBy,
+      "updatedBy": this.updatedBy,
+      "updateTime": this.updateTime,
+      "createTime": this.createTime,
+      "approvalStatus": this.approvalStatus,
+      "approvalComments": this.approvalComments
     };
-
   }
-
 }
 
 class UserDetail {
-    String firstname;
-    String lastname;
-    String username;
+  String firstname;
+  String lastname;
+  String username;
 
-    UserDetail({this.firstname, this.lastname, this.username});
+  UserDetail({this.firstname, this.lastname, this.username});
 
-    static List<UserDetail> getUsers() {
-      List<UserDetail> users = List<UserDetail>();
-      users.add(UserDetail(firstname: "Manjunath",lastname: "Bijinepalli",username: "manjunath_biji"));
-      users.add(UserDetail(firstname: "Kashyap",lastname: "Kale",username: "kashyap.kale"));
-      users.add(UserDetail(firstname: "Janice",lastname: "M",username: "janice.m"));
-      users.add(UserDetail(firstname: "Anuj",lastname: "Kakde",username: "anuj.kakde"));
+  static List<UserDetail> getUsers() {
+    List<UserDetail> users = List<UserDetail>();
+    users.add(UserDetail(
+        firstname: "Manjunath",
+        lastname: "Bijinepalli",
+        username: "manjunath_biji"));
+    users.add(UserDetail(
+        firstname: "Kashyap", lastname: "Kale", username: "kashyap.kale"));
+    users.add(
+        UserDetail(firstname: "Janice", lastname: "M", username: "janice.m"));
+    users.add(UserDetail(
+        firstname: "Anuj", lastname: "Kakde", username: "anuj.kakde"));
 
-      return users;
-    }
+    return users;
+  }
 }
-
 
 class UserAccess {
   String userType;
-  Map<String,List<String>> role;
+  Map<String, List<String>> role;
   String dataEntitlement;
 
-  List<String> _accessTypes = ["Create","Edit","Delete","View","Process"];
-  List<String> _screenNames = ["Register User","Forgot password","Login screen","Team","Event","Team-user","Event-User","Notification Hub"];
+  List<String> _accessTypes = ["Create", "Edit", "Delete", "View", "Process"];
+  List<String> _screenNames = [
+    "Register User",
+    "Forgot password",
+    "Login screen",
+    "Team",
+    "Event",
+    "Team-user",
+    "Event-User",
+    "Notification Hub"
+  ];
   //List<String> roles = [];
   //List<Map<String,List<String>>> roles;
-  static Map<String,List<String>>  _userRole = {"Register User":["Create:true","Edit:true","Delete:true","View:true","Process:false"],
-  "Forgot password":["Create:true","Edit:false","Delete:false","View:false","Process:false"],
-  "Login screen":["Create:true","Edit:false","Delete:false","View:false","Process:false"],
-  "Team":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
-  "Event":["Create:true","Edit:true","Delete:true","View:true","Process:false"],
-  "Team-user":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
-  "Event-User":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
-  "Notification Hub":["Create:false","Edit:false","Delete:false","View:false","Process:true"],
+  static Map<String, List<String>> _userRole = {
+    "Register User": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:false"
+    ],
+    "Forgot password": [
+      "Create:true",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Login screen": [
+      "Create:true",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Team": [
+      "Create:false",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Event": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:false"
+    ],
+    "Team-user": [
+      "Create:false",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Event-User": [
+      "Create:false",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Notification Hub": [
+      "Create:false",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:true"
+    ],
   };
 
-  static Map<String,List<String>>   _teamRole = {"Register User":["Create:true","Edit:true","Delete:true","View:true","Process:false"],
-  "Forgot password":["Create:true","Edit:false","Delete:false","View:false","Process:false"],
-  "Login screen":["Create:true","Edit:false","Delete:false","View:false","Process:false"],
-  "Team":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
-  "Event":["Create:true","Edit:true","Delete:true","View:true","Process:false"],
-  "Team-user":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
-  "Event-User":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
-  "Notification Hub":["Create:false","Edit:false","Delete:false","View:false","Process:true"],
-};
-
-  static Map<String,List<String>>   _localAdminRole ={"Register User":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-  "Forgot password":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-  "Login screen":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-  "Team":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-  "Event":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-  "Team-user":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-  "Event-User":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-  "Notification Hub":["Create:true","Edit:true","Delete:true","View:true","Process:true"]
+  static Map<String, List<String>> _teamRole = {
+    "Register User": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:false"
+    ],
+    "Forgot password": [
+      "Create:true",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Login screen": [
+      "Create:true",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Team": [
+      "Create:false",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Event": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:false"
+    ],
+    "Team-user": [
+      "Create:false",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Event-User": [
+      "Create:false",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:false"
+    ],
+    "Notification Hub": [
+      "Create:false",
+      "Edit:false",
+      "Delete:false",
+      "View:false",
+      "Process:true"
+    ],
   };
 
+  static Map<String, List<String>> _localAdminRole = {
+    "Register User": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Forgot password": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Login screen": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Team": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Event": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Team-user": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Event-User": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Notification Hub": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ]
+  };
 
-  static Map<String,List<String>>   _adminRole = {"Register User":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-    "Forgot password":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-    "Login screen":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-    "Team":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-    "Event":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-    "Team-user":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-    "Event-User":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
-    "Notification Hub":["Create:true","Edit:true","Delete:true","View:true","Process:true"]
+  static Map<String, List<String>> _adminRole = {
+    "Register User": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Forgot password": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Login screen": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Team": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Event": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Team-user": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Event-User": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ],
+    "Notification Hub": [
+      "Create:true",
+      "Edit:true",
+      "Delete:true",
+      "View:true",
+      "Process:true"
+    ]
   };
 
   UserAccess({this.userType, this.role, this.dataEntitlement});
 
   static List<UserAccess> getUserEntitlements() {
     List<UserAccess> entitlements = List<UserAccess>();
-    entitlements.add(UserAccess(userType: "Admin",role: _userRole,dataEntitlement: "global"));
-    entitlements.add(UserAccess(userType: "Local Admin",role: _teamRole,dataEntitlement: "location"));
-    entitlements.add(UserAccess(userType: "Team",role: _localAdminRole,dataEntitlement: "team"));
-    entitlements.add(UserAccess(userType: "User",role: _adminRole,dataEntitlement: "self"));
+    entitlements.add(UserAccess(
+        userType: "Admin", role: _adminRole, dataEntitlement: "global"));
+    entitlements.add(UserAccess(
+        userType: "Local Admin",
+        role: _localAdminRole,
+        dataEntitlement: "location"));
+    entitlements.add(
+        UserAccess(userType: "Team", role: _teamRole, dataEntitlement: "team"));
+    entitlements.add(
+        UserAccess(userType: "User", role: _userRole, dataEntitlement: "self"));
 
     return entitlements;
   }
-
 }
 
 class UserEntitlements {
@@ -326,6 +547,4 @@ class UserEntitlements {
   set screenAccess(List<String> value) {
     _screenAccess = value;
   }
-
-
 }

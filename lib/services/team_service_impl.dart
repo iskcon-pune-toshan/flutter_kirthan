@@ -1,17 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/models/team.dart';
 
 import 'package:flutter_kirthan/services/team_service_interface.dart';
 
-class TeamAPIService implements ITeamRestApi {
-  //final _baseUrl = 'http://10.0.2.2:8080';
-  final _baseUrl = 'http://192.168.1.8:8080'; //Manju
-  //final _baseUrl = 'http://192.168.1.7:8080'; // Janice
-  http.Client _client = http.Client();
-
-  set client(http.Client value) => _client = value;
+class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
 
   static final TeamAPIService _internal = TeamAPIService.internal();
 
@@ -24,7 +18,7 @@ class TeamAPIService implements ITeamRestApi {
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);
 
-    var response = await _client.put('$_baseUrl/submitupdateteamrequest',
+    var response = await client1.put('$baseUrl/submitupdateteamrequest',
         headers: {"Content-Type": "application/json"}, body: teamrequestmap);
 
     if (response.statusCode == 200) {
@@ -40,7 +34,7 @@ class TeamAPIService implements ITeamRestApi {
     String requestBody = json.encode(eventrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/submitnewteamrequest',
+    var response = await client1.put('$baseUrl/submitnewteamrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -62,7 +56,7 @@ class TeamAPIService implements ITeamRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/deleteteamrequest',
+    var response = await client1.put('$baseUrl/deleteteamrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -83,7 +77,7 @@ class TeamAPIService implements ITeamRestApi {
 
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/getteamrequests',
+    var response = await client1.put('$baseUrl/getteamrequests',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {
@@ -108,7 +102,7 @@ class TeamAPIService implements ITeamRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await _client.put('$_baseUrl/processteamrequest',
+    var response = await client1.put('$baseUrl/processteamrequest',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
     if (response.statusCode == 200) {

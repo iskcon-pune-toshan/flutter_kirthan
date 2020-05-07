@@ -7,6 +7,8 @@ import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
@@ -14,7 +16,7 @@ EventPageViewModel(apiSvc: EventAPIService());
 
 class EventView extends StatefulWidget {
   final String title = "Events";
-  final String screenName = EVENT;
+  final String screenName = SCR_EVENT;
 
   EventView({Key key}) : super(key: key);
 
@@ -27,7 +29,20 @@ class _EventViewState extends State<EventView>
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
   String _selectedValue;
   int _index;
+  SharedPreferences prefs;
+  List<String> access;
+  Map<String,String> accessTypes = new Map<String,String>();
 
+  void loadPref() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      access = prefs.getStringList(widget.screenName);
+      access.forEach((f) {
+        List<String> access = f.split(":");
+        accessTypes[access.elementAt(0)] =  access.elementAt(1);
+      });
+    });
+  }
   Future loadData() async {
     await eventPageVM.setEventRequests("All");
   }
@@ -37,11 +52,14 @@ class _EventViewState extends State<EventView>
     super.initState();
     _index = 0;
     loadData();
+    loadPref();
   }
 
   @override
   Widget build(BuildContext context) {
-
+    //accessTypes.containsKey(ACCESS_TYPE_CREATE)
+  //print("Accesstype: C: $accessTypes.containsKey(ACCESS_TYPE_CREATE)");
+  //print(accessTypes[ACCESS_TYPE_PROCESS]);
     return Scaffold(
       appBar: AppBar(
         title: Text("Events"),
@@ -84,13 +102,21 @@ class _EventViewState extends State<EventView>
           eventType: "All",
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:
+      accessTypes[ACCESS_TYPE_CREATE] == "true" ?
+        FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.green,
+        //tooltip: accessTypes["Create"].toString(),
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => EventWrite()));
         },
+      ):
+      FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.grey,
+        onPressed: null,
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
