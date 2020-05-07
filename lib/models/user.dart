@@ -242,49 +242,52 @@ class UserDetail {
 
 class UserAccess {
   String userType;
-  Map<String,Map<String,bool>> role;
+  Map<String,List<String>> role;
   String dataEntitlement;
 
   List<String> _accessTypes = ["Create","Edit","Delete","View","Process"];
   List<String> _screenNames = ["Register User","Forgot password","Login screen","Team","Event","Team-user","Event-User","Notification Hub"];
   //List<String> roles = [];
   //List<Map<String,List<String>>> roles;
-  static Map<String,Map<String,bool>>  _userRole = {"Register User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":false},
-    "Forgot password":{"Create":true,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Login screen":{"Create":true,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Team":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Event":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":false},
-    "Team-user":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Event-User":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Notification Hub":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":true},
-  };
-  static Map<String,Map<String,bool>>  _teamRole = {"Register User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":false},
-  "Forgot password":{"Create":true,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Login screen":{"Create":true,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Team":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Event":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":false},
-    "Team-user":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Event-User":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":false},
-    "Notification Hub":{"Create":false,"Edit":false,"Delete":false,"View":false,"Process":true},
-  };
-  static Map<String,Map<String,bool>>  _localAdminRole ={"Register User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Forgot password":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Login screen":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Team":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Event":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Team-user":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Event-User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Notification Hub":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true}
+  static Map<String,List<String>>  _userRole = {"Register User":["Create:true","Edit:true","Delete:true","View:true","Process:false"],
+  "Forgot password":["Create:true","Edit:false","Delete:false","View:false","Process:false"],
+  "Login screen":["Create:true","Edit:false","Delete:false","View:false","Process:false"],
+  "Team":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
+  "Event":["Create:true","Edit:true","Delete:true","View:true","Process:false"],
+  "Team-user":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
+  "Event-User":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
+  "Notification Hub":["Create:false","Edit:false","Delete:false","View:false","Process:true"],
   };
 
-  static Map<String,Map<String,bool>>  _adminRole = {"Register User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Forgot password":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Login screen":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Team":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Event":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Team-user":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Event-User":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true},
-    "Notification Hub":{"Create":true,"Edit":true,"Delete":true,"View":true,"Process":true}
+  static Map<String,List<String>>   _teamRole = {"Register User":["Create:true","Edit:true","Delete:true","View:true","Process:false"],
+  "Forgot password":["Create:true","Edit:false","Delete:false","View:false","Process:false"],
+  "Login screen":["Create:true","Edit:false","Delete:false","View:false","Process:false"],
+  "Team":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
+  "Event":["Create:true","Edit:true","Delete:true","View:true","Process:false"],
+  "Team-user":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
+  "Event-User":["Create:false","Edit:false","Delete:false","View:false","Process:false"],
+  "Notification Hub":["Create:false","Edit:false","Delete:false","View:false","Process:true"],
+};
+
+  static Map<String,List<String>>   _localAdminRole ={"Register User":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+  "Forgot password":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+  "Login screen":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+  "Team":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+  "Event":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+  "Team-user":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+  "Event-User":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+  "Notification Hub":["Create:true","Edit:true","Delete:true","View:true","Process:true"]
+  };
+
+
+  static Map<String,List<String>>   _adminRole = {"Register User":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+    "Forgot password":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+    "Login screen":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+    "Team":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+    "Event":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+    "Team-user":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+    "Event-User":["Create:true","Edit:true","Delete:true","View:true","Process:true"],
+    "Notification Hub":["Create:true","Edit:true","Delete:true","View:true","Process:true"]
   };
 
   UserAccess({this.userType, this.role, this.dataEntitlement});
@@ -302,11 +305,11 @@ class UserAccess {
 }
 
 class UserEntitlements {
-  Map<String,bool> _screenAccess;
+  List<String> _screenAccess;
   String _dataEntitlements;
   String _screenName;
 
-  Map<String,bool> get screenAccess => _screenAccess;
+  List<String> get screenAccess => _screenAccess;
 
   String get dataEntitlements => _dataEntitlements;
 
@@ -320,7 +323,7 @@ class UserEntitlements {
     _screenName = value;
   }
 
-  set screenAccess(Map<String,bool> value) {
+  set screenAccess(List<String> value) {
     _screenAccess = value;
   }
 

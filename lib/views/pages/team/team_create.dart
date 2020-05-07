@@ -1,17 +1,17 @@
-import 'dart:async';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
 
 class TeamWrite extends StatefulWidget {
   TeamWrite({Key key}) : super(key: key);
+
+  final String screenName = TEAM;
 
   @override
   _TeamWriteState createState() => _TeamWriteState();

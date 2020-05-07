@@ -3,8 +3,7 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_create.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
@@ -14,6 +13,7 @@ class UserSelection extends StatefulWidget {
   UserSelection({Key key}) : super(key: key);
 
   final String title = "User Selection";
+  final String screenName = TEAM_USER;
 
   @override
   _UserSelectionState createState() => _UserSelectionState();

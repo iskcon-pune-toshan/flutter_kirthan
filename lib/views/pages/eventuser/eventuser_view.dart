@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/eventuser.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
 import 'package:flutter_kirthan/services/event_user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_user_page_view_model.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 
 final EventUserPageViewModel eventUserPageVM =
 EventUserPageViewModel(apiSvc: EventUserAPIService());
@@ -11,6 +10,7 @@ EventUserPageViewModel(apiSvc: EventUserAPIService());
 
 class EventUserView extends StatefulWidget {
   final String title = "Event User Mapping View";
+  final String screenName = EVENT_USER;
 
   @override
   _EventUserViewState createState() => _EventUserViewState();

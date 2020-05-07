@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_kirthan/models/event.dart';
 
 import 'package:flutter_kirthan/services/event_service_interface.dart';
 
-class EventAPIService implements IEventRestApi {
+class EventAPIService  implements IEventRestApi {
+
   //final _baseUrl = 'http://10.0.2.2:8080';
   final _baseUrl = 'http://192.168.1.8:8080'; //Manju
   //final _baseUrl = 'http://192.168.1.7:8080'; // Janice
@@ -18,6 +20,8 @@ class EventAPIService implements IEventRestApi {
   factory EventAPIService() => _internal;
 
   EventAPIService.internal();
+
+
 
   Future<bool> processEventRequest(
       Map<String, dynamic> processrequestmap) async {

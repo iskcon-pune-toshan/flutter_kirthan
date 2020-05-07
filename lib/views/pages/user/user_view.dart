@@ -5,6 +5,7 @@ import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/widgets/user/user_panel.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
@@ -13,7 +14,7 @@ class UserView extends StatefulWidget {
   UserView({Key key}) : super(key: key);
 
   final String title = "Users";
-  final String screenName = "Login screen";
+  final String screenName = REGISTER_USER;
 
   @override
   _UserViewState createState() => _UserViewState();

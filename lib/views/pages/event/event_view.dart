@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
@@ -13,6 +14,7 @@ EventPageViewModel(apiSvc: EventAPIService());
 
 class EventView extends StatefulWidget {
   final String title = "Events";
+  final String screenName = EVENT;
 
   EventView({Key key}) : super(key: key);
 

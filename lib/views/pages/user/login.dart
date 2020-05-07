@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_create.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 
 //final MainPageViewModel mainPageVM =
 //  MainPageViewModel(apiSvc: RestAPIServices());
@@ -13,7 +15,7 @@ class LoginApp extends StatefulWidget {
   LoginApp({Key key}) : super(key: key);
 
   final String title = "Login";
-  final String screenName = "Login screen";
+  final String screenName = LOGIN_SCREEN;
 
   @override
   _LoginAppState createState() => _LoginAppState();
@@ -26,6 +28,7 @@ class _LoginAppState extends State<LoginApp> {
   List<UserAccess> entitlements;
   UserLogin _selecteduser;
   UserAccess _userAccess;
+  SharedPreferences sharedPreferences;
   //final MainPageViewModel mainPageVM;
 
   //_LoginAppState({this.mainPageVM});
@@ -149,6 +152,10 @@ class _LoginAppState extends State<LoginApp> {
                                     (access) =>
                                         access.userType ==
                                         _selecteduser.usertype);
+                                _userAccess.role.forEach((k,v) {
+                                  sharedPreferences.setStringList(k,v);
+                                });
+                                //sharedPreferences.setStringList(_userAccess.userType, _userAccess.role);
                                 //print(_userAccess);
                                 Navigator.push(
                                     context,

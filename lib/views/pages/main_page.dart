@@ -10,19 +10,19 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MainPage extends StatefulWidget {
-  final MainPageViewModel viewModel;
+class MyMainPage extends StatefulWidget {
+  final MyMainPageViewModel viewModel;
   final UserLogin userLogin;
   final UserAccess userAccess;
   String screenName;
 
-  MainPage({Key key, @required this.viewModel, @required this.userLogin, @required this.userAccess}) : super(key: key);
+  MyMainPage({Key key, @required this.viewModel, @required this.userLogin, @required this.userAccess}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
+class _MainPageState extends State<MyMainPage> with SingleTickerProviderStateMixin {
   TabController tabController;
 
   Future loadData() async {
@@ -65,7 +65,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           ],
         ),
       ),
-      body: ScopedModel<MainPageViewModel>(
+      body: ScopedModel<MyMainPageViewModel>(
         model: widget.viewModel,
         child: TabBarView(
           controller: tabController,

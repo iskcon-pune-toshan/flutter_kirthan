@@ -11,7 +11,7 @@ import 'package:flutter_kirthan/models/team.dart';
 
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 
-class RestAPIServices implements IKirthanRestApi {
+class MyRestAPIServices implements IKirthanRestApi {
   //final _baseUrl = 'http://10.0.2.2:8080';
   final _baseUrl = 'http://192.168.1.8:8080'; //Manju
   //final _baseUrl = 'http://192.168.1.7:8080'; // Janice
@@ -19,9 +19,9 @@ class RestAPIServices implements IKirthanRestApi {
 
   set client(http.Client value) => _client = value;
 
-  static final RestAPIServices _internal = RestAPIServices.internal();
-  factory RestAPIServices() => _internal;
-  RestAPIServices.internal();
+  static final MyRestAPIServices _internal = MyRestAPIServices.internal();
+  factory MyRestAPIServices() => _internal;
+  MyRestAPIServices.internal();
 
   Future<List<UserRequest>> getUserRequests(String userType) async {
     String requestBody = '{"locality":"Warje"}';

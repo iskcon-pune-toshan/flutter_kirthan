@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
@@ -7,8 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
 
 final TeamUserPageViewModel teamUserPageVM =
 TeamUserPageViewModel(apiSvc: TeamUserAPIService());
@@ -21,8 +20,9 @@ class TeamUserCreate extends StatefulWidget {
   TeamUserCreate({this.selectedUsers}) : super();
   List<UserRequest> selectedUsers;
 
+  final String screenName = TEAM_USER;
   final String title = "Team User Mapping";
-  final String screenName = "Team-user";
+
 
   @override
   _TeamUserCreateState createState() =>

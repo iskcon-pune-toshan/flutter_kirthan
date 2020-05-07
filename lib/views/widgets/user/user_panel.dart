@@ -11,7 +11,6 @@ class UsersPanel extends StatelessWidget {
   final String title = "Register User";
   final String screenName = "Register User";
 
-
   UsersPanel({this.userType});
   @override
   Widget build(BuildContext context) {
@@ -76,7 +75,10 @@ class UsersPanel extends StatelessWidget {
                             userRequests == null ? 0 : userRequests.length,
                         itemBuilder: (_, int index) {
                           var userrequest = userRequests[index];
-                          return UserRequestsListItem(userrequest: userrequest);
+                          return UserRequestsListItem(
+                            userrequest: userrequest,
+                            userPageVM: model,
+                          );
                         },
                       ),
                     ],

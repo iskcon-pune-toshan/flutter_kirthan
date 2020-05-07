@@ -7,7 +7,7 @@ import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/team.dart';
 
 
-class MainPageViewModel extends Model {
+class MyMainPageViewModel extends Model {
   Future<List<UserRequest>> _userrequests;
   Future<List<EventRequest>> _eventrequests;
   Future<List<TeamRequest>> _teamrequests;
@@ -38,7 +38,7 @@ class MainPageViewModel extends Model {
 
   final IKirthanRestApi apiSvc;
 
-  MainPageViewModel({@required this.apiSvc});
+  MyMainPageViewModel({@required this.apiSvc});
 
 
   Future<bool> setUserRequests(String userType) async {

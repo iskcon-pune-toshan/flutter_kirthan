@@ -6,7 +6,7 @@ import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/widgets/team/team_panel.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:scoped_model/scoped_model.dart';
-
+import 'package:flutter_kirthan/common/constants.dart';
 
 final TeamPageViewModel teamPageVM =
 TeamPageViewModel(apiSvc: TeamAPIService());
@@ -14,6 +14,7 @@ TeamPageViewModel(apiSvc: TeamAPIService());
 
 class TeamView extends StatefulWidget {
   final String title = "Teams";
+  final String screenName = TEAM;
 
   TeamView({Key key}) : super(key: key);
 

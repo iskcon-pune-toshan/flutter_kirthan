@@ -2,16 +2,16 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 
 final TeamPageViewModel teamPageVM =
 TeamPageViewModel(apiSvc: TeamAPIService());
 
 class EditTeam extends StatefulWidget {
   TeamRequest teamrequest ;
+  final String screenName = TEAM;
 
   EditTeam({Key key, @required this.teamrequest}) : super(key: key);
 

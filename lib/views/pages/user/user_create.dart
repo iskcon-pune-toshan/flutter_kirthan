@@ -19,6 +19,7 @@ class _UserWriteState extends State<UserWrite> {
 
   final _formKey = GlobalKey<FormState>();
   UserRequest userrequest = new UserRequest();
+  final String screenName = REGISTER_USER;
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   //UserRequest newuserrequest = new UserRequest();
   List<String> _states = [ "Andhra Pradesh",

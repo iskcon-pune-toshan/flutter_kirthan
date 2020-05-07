@@ -3,13 +3,15 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
 import 'package:flutter_kirthan/services/data_services.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/user/user_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 
 class UserRequestsListItem extends StatelessWidget {
   final UserRequest userrequest;
-  final IKirthanRestApi apiSvc = new RestAPIServices();
-  UserRequestsListItem({@required this.userrequest});
+  final UserPageViewModel userPageVM;
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
+  UserRequestsListItem({@required this.userrequest,this.userPageVM});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class UserRequestsListItem extends StatelessWidget {
             processrequestmap["approvalstatus"] = "Approved";
             processrequestmap["approvalcomments"] = "ApprovalComments";
             processrequestmap["usertype"] = userrequest?.userType;
-            apiSvc?.processUserRequest(processrequestmap);
+            userPageVM.processUserRequest(processrequestmap);
             SnackBar mysnackbar = SnackBar(
               content: Text("User $process $successful "),
               duration: new Duration(seconds: 4),
@@ -65,7 +67,7 @@ class UserRequestsListItem extends StatelessWidget {
           onPressed: () {
             Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
             processrequestmap["id"] = userrequest?.id;
-            apiSvc?.deleteUserRequest(processrequestmap);
+            userPageVM.deleteUserRequest(processrequestmap);
             SnackBar mysnackbar = SnackBar(
               content: Text("User $delete "),
               duration: new Duration(seconds: 4),
