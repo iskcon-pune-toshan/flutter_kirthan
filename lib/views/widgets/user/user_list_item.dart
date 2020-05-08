@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/user/user_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
@@ -10,7 +8,6 @@ import 'package:flutter_kirthan/common/constants.dart';
 class UserRequestsListItem extends StatelessWidget {
   final UserRequest userrequest;
   final UserPageViewModel userPageVM;
-  //final IKirthanRestApi apiSvc = new RestAPIServices();
   UserRequestsListItem({@required this.userrequest,this.userPageVM});
 
   @override
@@ -45,7 +42,7 @@ class UserRequestsListItem extends StatelessWidget {
           icon: Icon(Icons.sync),
           tooltip: "Process",
           iconSize: 25.0,
-          onPressed: () {
+          onPressed: userPageVM.accessTypes[ACCESS_TYPE_PROCESS] == true? () {
             Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
             processrequestmap["id"] = userrequest?.id;
             processrequestmap["approvalstatus"] = "Approved";
@@ -58,13 +55,13 @@ class UserRequestsListItem extends StatelessWidget {
               backgroundColor: Colors.green,
             );
             Scaffold.of(context).showSnackBar(mysnackbar);
-          },
+          }: null,
         ),
         IconButton(
           icon: Icon(Icons.delete),
           tooltip: "Delete",
           iconSize: 25.0,
-          onPressed: () {
+          onPressed: userPageVM.accessTypes[ACCESS_TYPE_DELETE] == true? () {
             Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
             processrequestmap["id"] = userrequest?.id;
             userPageVM.deleteUserRequest(processrequestmap);
@@ -74,19 +71,19 @@ class UserRequestsListItem extends StatelessWidget {
               backgroundColor: Colors.red,
             );
             Scaffold.of(context).showSnackBar(mysnackbar);
-          },
+          }:null,
         ),
         IconButton(
           icon: Icon(Icons.edit),
           tooltip: "Edit",
           iconSize: 25.0,
-          onPressed: () {
+          onPressed: userPageVM.accessTypes[ACCESS_TYPE_DELETE] == true? () {
             Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => UserEdit(userrequest: userrequest)),
             );
-          },
+          }:null,
         ),
       ],
     );

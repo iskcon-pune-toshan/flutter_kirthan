@@ -23,6 +23,22 @@ class UserView extends StatefulWidget {
 
 class _UserViewState extends State<UserView> {
   int _index;
+  SharedPreferences prefs;
+  List<String> access;
+  Map<String,bool> accessTypes = new Map<String,bool>();
+
+  void loadPref() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      access = prefs.getStringList(widget.screenName);
+      access.forEach((f) {
+        List<String> access = f.split(":");
+        accessTypes[access.elementAt(0)] =  access.elementAt(1).toLowerCase() == "true" ? true:false;
+      });
+      userPageVM.accessTypes = accessTypes;
+    });
+  }
+
   Future loadData() async {
     await userPageVM.setUserRequests("All");
   }
@@ -32,6 +48,7 @@ class _UserViewState extends State<UserView> {
     super.initState();
     loadData();
     _index = 1;
+    loadPref();
   }
 
   @override

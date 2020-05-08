@@ -1,16 +1,22 @@
-import 'package:flutter_kirthan/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CheckAccess {
+mixin CommonUtils {
+  /*
+  SharedPreferences prefs;
+  List<String> access;
+  Map<String,bool> accessTypes = new Map<String,bool>();
 
-  UserEntitlements getAccessForScreen(List<UserAccess> entitlements, UserLogin user, String screenName) {
-    UserEntitlements userEntitlements = UserEntitlements();
-    UserAccess userAccess = entitlements.singleWhere((access) => access.userType == user.usertype);
-    //Map<String,List<String>> userRole = userAccess.role;
 
-    userEntitlements.dataEntitlements = userAccess.dataEntitlement;
-    userEntitlements.screenName = screenName;
-    userEntitlements.screenAccess = userAccess.role[screenName];
-    return userEntitlements;
+  void loadPref() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      access = prefs.getStringList(widget.screenName);
+      access.forEach((f) {
+        List<String> access = f.split(":");
+        accessTypes[access.elementAt(0)] =  access.elementAt(1).toLowerCase() == "true" ? true:false;
+      });
+      eventPageVM.accessTypes = accessTypes;
+    });
   }
-
+*/
 }

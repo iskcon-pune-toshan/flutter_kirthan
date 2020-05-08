@@ -9,7 +9,7 @@ class UserPageViewModel extends Model {
   final IUserRestApi apiSvc;
 
   UserPageViewModel({@required this.apiSvc});
-
+  Map<String,bool> accessTypes;
 
   Future<List<UserRequest>> _userrequests;
   Future<List<UserRequest>> get userrequests => _userrequests;

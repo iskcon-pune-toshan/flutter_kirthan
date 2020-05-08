@@ -28,6 +28,21 @@ class _TeamViewState extends State<TeamView>
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
   String _selectedValue;
   int _index;
+  SharedPreferences prefs;
+  List<String> access;
+  Map<String,bool> accessTypes = new Map<String,bool>();
+
+  void loadPref() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      access = prefs.getStringList(widget.screenName);
+      access.forEach((f) {
+        List<String> access = f.split(":");
+        accessTypes[access.elementAt(0)] =  access.elementAt(1).toLowerCase() == "true" ? true:false;
+      });
+      teamPageVM.accessTypes = accessTypes;
+    });
+  }
 
   Future loadData() async {
     await teamPageVM.setTeamRequests("All");
@@ -38,6 +53,7 @@ class _TeamViewState extends State<TeamView>
     super.initState();
     _index = 2;
     loadData();
+    loadPref();
   }
 
   @override

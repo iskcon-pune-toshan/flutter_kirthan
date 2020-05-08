@@ -43,7 +43,7 @@ class EventRequestsListItem extends StatelessWidget {
           icon: Icon(Icons.sync),
           tooltip: "Process",
           iconSize: 25.0,
-          onPressed: () {
+          onPressed: eventPageVM.accessTypes[ACCESS_TYPE_PROCESS] == true? () {
             Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
             processrequestmap["id"] = eventrequest?.id;
             processrequestmap["approvalstatus"] = "Approved";
@@ -56,13 +56,13 @@ class EventRequestsListItem extends StatelessWidget {
               backgroundColor: Colors.green,
             );
             Scaffold.of(context).showSnackBar(mysnackbar);
-          },
+          }:null,
         ),
         IconButton(
           icon: Icon(Icons.delete),
           tooltip: "Delete",
           iconSize: 25.0,
-          onPressed: () {
+          onPressed: eventPageVM.accessTypes[ACCESS_TYPE_DELETE] == true? () {
             Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
             processrequestmap["id"] = eventrequest?.id;
             eventPageVM.deleteEventRequest(processrequestmap);
@@ -72,19 +72,19 @@ class EventRequestsListItem extends StatelessWidget {
               backgroundColor: Colors.red,
             );
             Scaffold.of(context).showSnackBar(mysnackbar);
-          },
+          } :null,
         ),
         IconButton(
           icon: Icon(Icons.edit),
           tooltip: "Edit",
           iconSize: 25.0,
-          onPressed: () {
+          onPressed: eventPageVM.accessTypes[ACCESS_TYPE_EDIT] == true?  () {
             Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => EditEvent(eventrequest: eventrequest)),
             );
-          },
+          }:null,
         ),
       ],
     );

@@ -1,9 +1,6 @@
-//import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:flutter_kirthan/interfaces/i_restapi_svcs.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/team/team_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
@@ -11,7 +8,6 @@ import 'package:flutter_kirthan/common/constants.dart';
 class TeamRequestsListItem extends StatelessWidget {
   final TeamRequest teamrequest;
   final TeamPageViewModel teamPageVM;
-  //final IKirthanRestApi apiSvc = new RestAPIServices();
   TeamRequestsListItem({@required this.teamrequest, @required this.teamPageVM});
 
   @override
@@ -39,12 +35,7 @@ class TeamRequestsListItem extends StatelessWidget {
           icon: Icon(Icons.sync),
           tooltip: "Process",
           iconSize: 25.0,
-
-          /*child: teamrequest.isProcessed
-                    ? const Text("Processed")
-                    : const Text("Not Processed"),
-                */
-          onPressed: () {
+          onPressed: teamPageVM.accessTypes[ACCESS_TYPE_PROCESS] == true? () {
             Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
             processrequestmap["id"] = teamrequest?.id;
             processrequestmap["approvalstatus"] = "Approved";
@@ -57,13 +48,13 @@ class TeamRequestsListItem extends StatelessWidget {
               backgroundColor: Colors.green,
             );
             Scaffold.of(context).showSnackBar(mysnackbar);
-          },
+          }:null,
         ),
         IconButton(
           icon: Icon(Icons.delete),
           tooltip: "Delete",
           iconSize: 25.0,
-          onPressed: () {
+          onPressed: teamPageVM.accessTypes[ACCESS_TYPE_DELETE] == true? () {
             Map<String, dynamic> teamrequestmap = new Map<String, dynamic>();
             teamrequestmap["id"] = teamrequest?.id;
             teamPageVM.deleteTeamRequest(teamrequestmap);
@@ -73,21 +64,21 @@ class TeamRequestsListItem extends StatelessWidget {
               backgroundColor: Colors.red,
             );
             Scaffold.of(context).showSnackBar(mysnackbar);
-          },
+          }:null,
         ),
         IconButton(
           //child: const Text("Edit"),
           icon: Icon(Icons.edit),
           tooltip: "Edit",
           iconSize: 25.0,
-          onPressed: () {
+          onPressed: teamPageVM.accessTypes[ACCESS_TYPE_EDIT] == true?  () {
             Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       EditTeam(teamrequest: teamrequest)),
             );
-          },
+          }:null,
         ),
       ],
     );

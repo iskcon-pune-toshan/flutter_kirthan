@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
-import 'package:flutter_kirthan/view_models/main_page_view_model.dart';
+import 'package:flutter_kirthan/junk/main_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/team/team_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';

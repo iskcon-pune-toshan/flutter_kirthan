@@ -8,6 +8,8 @@ class EventUserPageViewModel extends Model {
   Future<List<EventUser>> _eventUsers;
   final IEventUserRestApi apiSvc;
 
+  Map<String,bool> accessTypes;
+
   EventUserPageViewModel({@required this.apiSvc});
 
   Future<List<EventUser>> get eventUsers => _eventUsers;

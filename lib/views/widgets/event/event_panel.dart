@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/main_page_view_model.dart';
+import 'package:flutter_kirthan/junk/main_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -11,9 +11,10 @@ import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
 
 class EventsPanel extends StatelessWidget {
   String eventType;
+
   final String screenName = "Event";
 
-  EventsPanel({this.eventType});
+  EventsPanel({@required this.eventType});
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<EventPageViewModel>(

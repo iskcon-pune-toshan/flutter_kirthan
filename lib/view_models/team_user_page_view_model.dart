@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 class TeamUserPageViewModel extends Model {
   Future<List<TeamUser>> _teamUsers;
   final ITeamUserRestApi apiSvc;
+  Map<String,bool> accessTypes;
 
   TeamUserPageViewModel({@required this.apiSvc});
 

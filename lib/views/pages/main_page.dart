@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/view_models/main_page_view_model.dart';
+import 'package:flutter_kirthan/junk/main_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/user/user_panel.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:flutter_kirthan/views/widgets/team/team_panel.dart';

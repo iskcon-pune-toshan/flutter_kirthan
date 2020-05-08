@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
-import 'package:flutter_kirthan/view_models/main_page_view_model.dart';
+import 'package:flutter_kirthan/junk/data_services.dart';
+import 'package:flutter_kirthan/junk/main_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/user/login.dart';
 //import 'package:flutter_kirthan/views/pages/main_page.dart';
 

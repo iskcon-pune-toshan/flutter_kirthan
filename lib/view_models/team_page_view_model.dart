@@ -9,6 +9,8 @@ class TeamPageViewModel extends Model {
   Future<List<TeamRequest>> get teamrequests => _teamrequests;
   final ITeamRestApi apiSvc;
 
+  Map<String,bool> accessTypes;
+
   TeamPageViewModel({@required this.apiSvc});
 
   set teamrequests(Future<List<TeamRequest>> value) {

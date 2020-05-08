@@ -8,6 +8,8 @@ class EventPageViewModel extends Model {
   Future<List<EventRequest>> _eventrequests;
   final IEventRestApi apiSvc;
 
+  Map<String,bool> accessTypes;
+
   EventPageViewModel({@required this.apiSvc});
 
   Future<List<EventRequest>> get eventrequests => _eventrequests;
