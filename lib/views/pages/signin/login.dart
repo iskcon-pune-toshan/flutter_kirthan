@@ -52,7 +52,7 @@ class _LoginAppState extends State<LoginApp> {
     users = UserLogin.getUsers();
     entitlements = UserAccess.getUserEntitlements();
     loadPref();
-    print(entitlements);
+    //print(entitlements);
     //_userAccess = entitlements.singleWhere((access) => access.userType ==  _selecteduser.usertype);
   }
 
@@ -70,14 +70,16 @@ class _LoginAppState extends State<LoginApp> {
     prefs.setString("dataEnt", _userAccess.dataEntitlement);
   }
 
-  void populateUser(FirebaseUser user) {
-    List<String> firebaseUser = new List<String>();
-    firebaseUser.add(user.displayName);
-    firebaseUser.add(user.photoUrl);
-    firebaseUser.add(user.email);
-    firebaseUser.add(user.providerId);
-    firebaseUser.add(user.phoneNumber);
-    firebaseUser.add(user.uid);
+  void loggendInUser(FirebaseUser user) {
+    List<String> listofUserdetails = new List<String>();
+    listofUserdetails.add(user.displayName);
+    listofUserdetails.add(user.photoUrl);
+    listofUserdetails.add("email:" + user.email);
+    listofUserdetails.add("providerId:" + user.providerId);
+    //listofUserdetails.add("phoneNumber:" + (user.phoneNumber.isEmpty?0:1).toString());
+    listofUserdetails.add("uid:" + user.uid);
+    prefs.setStringList("LoginDetails", listofUserdetails);
+    print("LoginDetails Updated");
   }
 
   @override
@@ -270,7 +272,15 @@ class _LoginAppState extends State<LoginApp> {
                                 //print(_uname);
                                 //print(_password);
                                 //print(_selecteduser.usertype);
-                                populateData();
+                                signInService
+                                    .googSignIn(context)
+                                    .then((FirebaseUser user) =>
+                                        loggendInUser(user))
+                                    .catchError((e) => print(e));
+                                setState(() {
+                                  populateData();
+                                });
+
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -301,15 +311,27 @@ class _LoginAppState extends State<LoginApp> {
                               onPressed: () {
                                 signInService
                                     .googSignIn(context)
-                                    .then((FirebaseUser user) => print(user))
-                                    .catchError((e) => print(e));
+                                    //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+                                    .then((FirebaseUser user) {
+                                      print(user);
+                                      populateData();
+                                      loggendInUser(user);
+                                    })
+                                    .catchError((e) => print(e))
+                                    .whenComplete(() => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EventView())));
 
                                 populateData();
 
-                                Navigator.push(
+                                /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EventView()));
+
+                                 */
                               }),
                         ),
                       ],
@@ -333,7 +355,8 @@ class _LoginAppState extends State<LoginApp> {
                             onPressed: () {
                               signInService
                                   .facebookSignIn(context)
-                                  .then((FirebaseUser user) => print(user))
+                                  .then((FirebaseUser user) =>
+                                      loggendInUser(user))
                                   .catchError((e) => print(e));
 
                               populateData();

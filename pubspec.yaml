@@ -21,6 +21,11 @@ dependencies:
   firebase_core: ^0.4.4+3
   flutter_facebook_login: ^3.0.0
   flutter_auth_buttons: ^0.8.0
+  provider: ^4.0.5+1
+  screen: ^0.0.5
+  table_calendar: ^2.2.3
+  google_fonts: ^1.0.0
+  rating_dialog: ^1.0.0
 
 dev_dependencies:
   flutter_test:
