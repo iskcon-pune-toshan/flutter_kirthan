@@ -79,7 +79,7 @@ class _LoginAppState extends State<LoginApp> {
     //listofUserdetails.add("phoneNumber:" + (user.phoneNumber.isEmpty?0:1).toString());
     listofUserdetails.add("uid:" + user.uid);
     prefs.setStringList("LoginDetails", listofUserdetails);
-    print("LoginDetails Updated");
+    //print("LoginDetails Updated");
   }
 
   @override
@@ -313,7 +313,7 @@ class _LoginAppState extends State<LoginApp> {
                                     .googSignIn(context)
                                     //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
                                     .then((FirebaseUser user) {
-                                      print(user);
+                                      //print(user);
                                       populateData();
                                       loggendInUser(user);
                                     })
@@ -324,7 +324,7 @@ class _LoginAppState extends State<LoginApp> {
                                             builder: (context) =>
                                                 EventView())));
 
-                                populateData();
+                                //populateData();
 
                                 /*Navigator.push(
                                     context,

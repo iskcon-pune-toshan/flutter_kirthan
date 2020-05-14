@@ -6,10 +6,15 @@ import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
@@ -114,17 +119,16 @@ class _EventViewState extends State<EventView>
                             fit: BoxFit.scaleDown,
                           ),
                   ),
-
-                Expanded(
-                  child: Text(
-                     name !=null ? name: "AA",
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      name != null ? name : "AA",
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
                 ],
               ),
               trailing: Icon(FontAwesomeIcons.signOutAlt),
@@ -147,10 +151,10 @@ class _EventViewState extends State<EventView>
             child: ListTile(
               title: Text("Settings"),
               trailing: Icon(Icons.settings),
-              onTap: null,
-              /*(){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MySettingsApp()));
-                  },*/
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MySettingsApp()));
+              },
             ),
           ),
           Card(
@@ -195,25 +199,27 @@ class _EventViewState extends State<EventView>
                     barrierDismissible:
                         true, // set to false if you want to force a rating
                     builder: (context) {
-                      /* return RatingDialog(
-                            icon: Icon(Icons.rate_review),
-                            title: "Rate Us",
-                            description:
+                      return RatingDialog(
+                        icon: Icon(Icons.rate_review),
+                        title: "Rate Us",
+                        description:
                             "Tap a star to set your rating. Add more description here if you want.",
-                            submitButton: "SUBMIT",
-                            alternativeButton: "Contact us instead?", // optional
-                            positiveComment: "We are so happy to hear :)", // optional
-                            negativeComment: "We're sad to hear :(", // optional
-                            accentColor: Colors.red, // optional
-                            onSubmitPressed: (int rating) {
-                              print("onSubmitPressed: rating = $rating");
-                            },
-                            onAlternativePressed: () {
-                              print("onAlternativePressed: do something");
-                            },
-                          );*/
+                        submitButton: "SUBMIT",
+                        alternativeButton: "Contact us instead?", // optional
+                        positiveComment:
+                            "We are so happy to hear :)", // optional
+                        negativeComment: "We're sad to hear :(", // optional
+                        accentColor: Colors.red, // optional
+                        onSubmitPressed: (int rating) {
+                          print("onSubmitPressed: rating = $rating");
+                        },
+                        onAlternativePressed: () {
+                          print("onAlternativePressed: do something");
+                        },
+                      );
                     });
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => RateUsApp()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RateUsApp()));
               },
             ),
           ),
@@ -221,20 +227,20 @@ class _EventViewState extends State<EventView>
             child: ListTile(
               title: Text("About Us"),
               trailing: Icon(Icons.info),
-              onTap:
-                  null, /*(){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AboutUsApp()));
-                  },*/
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AboutUsApp()));
+              },
             ),
           ),
           Card(
             child: ListTile(
               title: Text("FAQs"),
               trailing: Icon(Icons.question_answer),
-              onTap: null,
-              /*(){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => FaqApp()));
-                  },*/
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => FaqApp()));
+              },
             ),
           ),
           Card(
@@ -265,7 +271,9 @@ class _EventViewState extends State<EventView>
                                   SizedBox(
                                     width: 320.0,
                                     child: RaisedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+
+                                      },
                                       child: Text(
                                         "yes",
                                         style: TextStyle(
