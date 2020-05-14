@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
@@ -131,7 +132,7 @@ class _EventViewState extends State<EventView>
                   ),
                 ],
               ),
-              trailing: Icon(FontAwesomeIcons.signOutAlt),
+              trailing: null,
               onTap: () {},
             ),
           ),
@@ -272,7 +273,6 @@ class _EventViewState extends State<EventView>
                                     width: 320.0,
                                     child: RaisedButton(
                                       onPressed: () {
-
                                       },
                                       child: Text(
                                         "yes",

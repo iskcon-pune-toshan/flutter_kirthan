@@ -44,7 +44,7 @@ class _MyAppState extends State<MySettingsApp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-           /* Consumer<ThemeNotifier>(
+            /* Consumer<ThemeNotifier>(
               builder: (context, notifier, child) => SwitchListTile(
                 title: Text("Dark Mode",
                 style: TextStyle(
@@ -58,7 +58,7 @@ class _MyAppState extends State<MySettingsApp> {
               ),
             ),*/
             //Divider(),
-           /* new Text(
+            /* new Text(
               "Brightness:",
                   style: TextStyle(fontSize:MySettingsApp.custFontSize),
             ),
@@ -90,7 +90,7 @@ class _MyAppState extends State<MySettingsApp> {
               },
               child: Text('Change size'),
             ),*/
-           /* Text("TextSize :",
+            /* Text("TextSize :",
               style: TextStyle(fontSize:MyPrefSettingsApp.custFontSize),
             ),
             Card(
@@ -119,26 +119,33 @@ class _MyAppState extends State<MySettingsApp> {
             ),*/
             Divider(),
             Card(
-              child:ListTile(
+              child: ListTile(
                 trailing: Icon(Icons.keyboard_arrow_right),
-                title: Text("Preference Settings",
+                title: Text(
+                  "Preference Settings",
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
-                  ),),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyPrefSettingsApp()));
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyPrefSettingsApp()));
                 },
                 selected: true,
               ),
             ),
-             Divider(),
+            Divider(),
             Card(
-              child:ListTile(
-                title: Text("Notifications",
+              child: ListTile(
+                title: Text(
+                  "Notifications",
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
-                  ),),
-                onTap: (){
+                  ),
+                ),
+                onTap: () {
                   _showMaterialDialog();
                 },
                 selected: true,
@@ -200,7 +207,6 @@ class _MyAppState extends State<MySettingsApp> {
                 selected: true,
               ),
             ),*/
-
           ],
         ),
       ),
@@ -211,22 +217,22 @@ class _MyAppState extends State<MySettingsApp> {
     showDialog(
         context: context,
         builder: (_) => new AlertDialog(
-          title: new Text("Notifications"),
-          content: new Text("Do you want to get notifications on phone?"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Yes'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ));
+              title: new Text("Notifications"),
+              content: new Text("Do you want to get notifications on phone?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Yes'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
   }
 }

@@ -65,17 +65,28 @@ class EventsPanel extends StatelessWidget {
                           ),
                         ],
                       ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount:
-                            eventRequests == null ? 0 : eventRequests.length,
-                        itemBuilder: (_, int index) {
-                          var eventrequest = eventRequests[index];
-                          return EventRequestsListItem(
-                            eventrequest: eventrequest,
-                            eventPageVM: model,
-                          );
-                        },
+                      Expanded(
+                        child: Scrollbar(
+                          controller: ScrollController(
+                            initialScrollOffset: 2,
+                            keepScrollOffset: false,
+                          ),
+                          child: Center(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: eventRequests == null
+                                  ? 0
+                                  : eventRequests.length,
+                              itemBuilder: (_, int index) {
+                                var eventrequest = eventRequests[index];
+                                return EventRequestsListItem(
+                                  eventrequest: eventrequest,
+                                  eventPageVM: model,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   );
