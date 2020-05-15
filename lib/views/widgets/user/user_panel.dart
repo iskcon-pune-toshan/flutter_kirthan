@@ -69,17 +69,21 @@ class UsersPanel extends StatelessWidget {
                           ),*/
                         ],
                       ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount:
-                            userRequests == null ? 0 : userRequests.length,
-                        itemBuilder: (_, int index) {
-                          var userrequest = userRequests[index];
-                          return UserRequestsListItem(
-                            userrequest: userrequest,
-                            userPageVM: model,
-                          );
-                        },
+                      Expanded(
+                        child: Scrollbar(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount:
+                                userRequests == null ? 0 : userRequests.length,
+                            itemBuilder: (_, int index) {
+                              var userrequest = userRequests[index];
+                              return UserRequestsListItem(
+                                userrequest: userrequest,
+                                userPageVM: model,
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   );

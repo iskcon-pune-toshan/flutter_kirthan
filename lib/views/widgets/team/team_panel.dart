@@ -79,17 +79,19 @@ class TeamsPanel extends StatelessWidget {
 */
                         ],
                       ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount:
-                            teamRequests == null ? 0 : teamRequests.length,
-                        itemBuilder: (_, int index) {
-                          var teamrequest = teamRequests[index];
-                          return TeamRequestsListItem(
-                            teamrequest: teamrequest,
-                            teamPageVM: model
-                          );
-                        },
+                      Expanded(
+                        child: Scrollbar(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount:
+                                teamRequests == null ? 0 : teamRequests.length,
+                            itemBuilder: (_, int index) {
+                              var teamrequest = teamRequests[index];
+                              return TeamRequestsListItem(
+                                  teamrequest: teamrequest, teamPageVM: model);
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   );

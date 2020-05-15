@@ -7,11 +7,24 @@ import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+class Choice {
+  const Choice({this.id, this.description});
+
+  final int id;
+  final String description;
+}
+
 class EventRequestsListItem extends StatelessWidget {
   final EventRequest eventrequest;
   final EventPageViewModel eventPageVM;
 
   EventRequestsListItem({@required this.eventrequest, this.eventPageVM});
+
+  List<Choice> popupList = [
+    Choice(id: 1, description: "Process"),
+    Choice(id: 2, description: "Edit"),
+    Choice(id: 3, description: "Delete"),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -44,39 +57,24 @@ class EventRequestsListItem extends StatelessWidget {
           ),
         ),
         Container(
-          child: PopupMenuButton(
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 1,
-                child: Text("Process",
-                    style: TextStyle(
-                      fontSize: MyPrefSettingsApp.custFontSize,
-                    )),
-              ),
-              PopupMenuItem(
-                value: 2,
-                child: Text("Edit",
-                    style: TextStyle(
-                      fontSize: MyPrefSettingsApp.custFontSize,
-                    )),
-              ),
-              PopupMenuItem(
-                value: 3,
-                child: Text("Delete",
-                    style: TextStyle(
-                      fontSize: MyPrefSettingsApp.custFontSize,
-                    )),
-              ),
-            ],
-            onSelected: (int menu) {
-              if (menu == 2) {
+          child: PopupMenuButton<Choice>(
+            itemBuilder: (BuildContext context) {
+              return popupList.map((f) {
+                return PopupMenuItem<Choice>(
+                  child: Text(f.description),
+                  value: f,
+                );
+              }).toList();
+            },
+            onSelected: (choice) {
+              if (choice.id == 2) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           EditEvent(eventrequest: eventrequest)),
                 );
-              } else if (menu == 1) {
+              } else if (choice.id == 1) {
                 Map<String, dynamic> processrequestmap =
                     new Map<String, dynamic>();
                 processrequestmap["id"] = eventrequest?.id;
@@ -90,7 +88,7 @@ class EventRequestsListItem extends StatelessWidget {
                   backgroundColor: Colors.green,
                 );
                 Scaffold.of(context).showSnackBar(mysnackbar);
-              } else if (menu == 3) {
+              } else if (choice.id == 3) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
