@@ -7,7 +7,7 @@ import 'package:screen/screen.dart';
 
 class MyPrefSettingsApp extends StatefulWidget {
   @override
-  static double custFontSize = 12;
+  static double custFontSize = 16;
   _MyAppState createState() => new _MyAppState();
 }
 
