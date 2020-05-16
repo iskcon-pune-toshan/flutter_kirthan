@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
@@ -38,7 +39,7 @@ class _EventViewState extends State<EventView>
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
-  List<String> userdetails;
+  //List<String> userdetails;
   String photoUrl;
   String name;
 
@@ -52,10 +53,14 @@ class _EventViewState extends State<EventView>
             access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       eventPageVM.accessTypes = accessTypes;
-      userdetails = prefs.getStringList("LoginDetails");
-      photoUrl = userdetails.elementAt(1);
-      name = userdetails.elementAt(0);
-      print(userdetails.length);
+      //userdetails = prefs.getStringList("LoginDetails");
+      SignInService().firebaseAuth.currentUser().then((onValue) {
+        photoUrl = onValue.photoUrl;
+        name = onValue.displayName;
+        print(name);
+        print(photoUrl);
+      });
+      //print(userdetails.length);
     });
   }
 
@@ -69,6 +74,9 @@ class _EventViewState extends State<EventView>
     _index = 0;
     loadData();
     loadPref();
+    //print("in Event");
+    //print(SignInService().firebaseAuth.currentUser().then((onValue) => print(onValue.displayName)));
+
   }
 
   @override
@@ -273,6 +281,8 @@ class _EventViewState extends State<EventView>
                                     width: 320.0,
                                     child: RaisedButton(
                                       onPressed: () {
+                                        SignInService().signOut();
+                                        Navigator.pop(context);
                                       },
                                       child: Text(
                                         "yes",

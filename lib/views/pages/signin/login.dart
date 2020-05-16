@@ -28,6 +28,7 @@ class LoginApp extends StatefulWidget {
 
 class _LoginAppState extends State<LoginApp> {
   final _formKey = GlobalKey<FormState>();
+  final _passwordcontroller = new TextEditingController();
   String _uname, _password;
   List<UserLogin> users;
   List<UserAccess> entitlements;
@@ -35,15 +36,11 @@ class _LoginAppState extends State<LoginApp> {
   UserAccess _userAccess;
   SharedPreferences prefs;
 
-  SignInService signInService = new SignInService();
-  //FirebaseUser user;
-  //final MainPageViewModel mainPageVM;
-
-  //_LoginAppState({this.mainPageVM});
+  SignInService signInService = SignInService();
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
-    prefs.setString("My Name", "Manjunath Bijinepalli");
+    //prefs.setString("My Name", "Manjunath Bijinepalli");
   }
 
   @override
@@ -52,17 +49,12 @@ class _LoginAppState extends State<LoginApp> {
     users = UserLogin.getUsers();
     entitlements = UserAccess.getUserEntitlements();
     loadPref();
-    //print(entitlements);
-    //_userAccess = entitlements.singleWhere((access) => access.userType ==  _selecteduser.usertype);
   }
 
   void populateData() {
-    //print(prefs.getString("My Name"));
     _userAccess = entitlements
         .singleWhere((access) => access.userType == _selecteduser.usertype);
     _userAccess.role.forEach((k, v) {
-      //print("Key: $k");
-      //print("Values: $v");
       prefs.setStringList(k, v);
     });
     prefs.setString("userName", _selecteduser.username);
@@ -70,7 +62,7 @@ class _LoginAppState extends State<LoginApp> {
     prefs.setString("dataEnt", _userAccess.dataEntitlement);
   }
 
-  void loggendInUser(FirebaseUser user) {
+  /* void loggendInUser(FirebaseUser user) {
     List<String> listofUserdetails = new List<String>();
     listofUserdetails.add(user.displayName);
     listofUserdetails.add(user.photoUrl);
@@ -80,7 +72,7 @@ class _LoginAppState extends State<LoginApp> {
     listofUserdetails.add("uid:" + user.uid);
     prefs.setStringList("LoginDetails", listofUserdetails);
     //print("LoginDetails Updated");
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -94,283 +86,301 @@ class _LoginAppState extends State<LoginApp> {
             child: Container(
               alignment: Alignment.center,
               width: 300,
-              height: 1000,
+              height: 1500,
               //color: Color.alphaBlend(BlendMode.color, BlendMode.colorDodge),
               child: Form(
                 key: _formKey,
-                child: Column(
-                  verticalDirection: VerticalDirection.down,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          width: 300.0,
-                          height: 50.0,
-                          child: Image(
-                            image: AssetImage('assets/images/login_user.jpg'),
-                            //centerSlice: Rect.fromCircle(
-                            //  center: const Offset(1.0, 2.0), radius: 5.0),
-                            //height: 50,
-                            //width: 50,
-                            //alignment: Alignment.center,
-                            //fit: BoxFit.fill,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 50.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Container(
-                            width: 300.0,
+                child: Center(
+                  child: Column(
+                    verticalDirection: VerticalDirection.down,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            width: 300,
                             height: 50.0,
-                            child: DropdownButtonFormField<UserLogin>(
-                              itemHeight: 50.0,
-                              value: _selecteduser,
-                              items: users
-                                  .map((user) => DropdownMenuItem<UserLogin>(
-                                      child: Text(user.username), value: user))
-                                  .toList(),
-                              onChanged: (input) {
-                                setState(() {
-                                  _selecteduser = input;
-                                });
-                              },
-                            )
-                            /*TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: "Please enter your Username",
-                              labelText: "User Name*",
+                            child: Image(
+                              image: AssetImage('assets/images/login_user.jpg'),
+                              //centerSlice: Rect.fromCircle(
+                              //  center: const Offset(1.0, 2.0), radius: 5.0),
+                              //height: 50,
+                              //width: 50,
+                              //alignment: Alignment.center,
+                              //fit: BoxFit.fill,
                             ),
-                            validator: (input) =>
-                                input.contains("*") ? "Not a Valid User" : null,
-                            onSaved: (input) => _uname = input,
-                          ),*/
-                            ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Container(
-                          width: 300.0,
-                          height: 50.0,
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: "Please enter your Password",
-                              labelText: "Password*",
-                            ),
-                            validator: (input) => input.contains("*")
-                                ? "Not a Valid Password"
-                                : null,
-                            onSaved: (input) => _password = input,
-                            obscureText: true,
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          width: 150,
-                          height: 50,
-                          child: FlatButton(
-                            child: Text("New User?"),
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                print(_uname);
-                                print(_password);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UserWrite()));
-                              }
-                            },
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Divider(
+                            thickness: 50.0,
                           ),
-                        ),
-                        Container(
-                          width: 150,
-                          height: 50,
-                          child: FlatButton(
-                            child: Text("Forgot Password?"),
-                            onPressed: null,
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Container(
+                              width: 300,
+                              height: 50.0,
+                              child: DropdownButtonFormField<UserLogin>(
+                                itemHeight: 50.0,
+                                value: _selecteduser,
+                                items: users
+                                    .map((user) => DropdownMenuItem<UserLogin>(
+                                        child: Text(user.username),
+                                        value: user))
+                                    .toList(),
+                                onChanged: (input) {
+                                  setState(() {
+                                    _selecteduser = input;
+                                  });
+                                },
+                              )
+                              /*TextFormField(
+                              decoration: const InputDecoration(
+                                hintText: "Please enter your Username",
+                                labelText: "User Name*",
+                              ),
+                              validator: (input) =>
+                                  input.contains("*") ? "Not a Valid User" : null,
+                              onSaved: (input) => _uname = input,
+                            ),*/
+                              ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Divider(
+                            thickness: 100.0,
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Container(
+                            width: 300,
+                            height: 50.0,
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                hintText: "Please enter your Password",
+                                labelText: "Password*",
+                              ),
+                              controller: _passwordcontroller,
+                              validator: (input) => input.contains("*")
+                                  ? "Not a Valid Password"
+                                  : null,
+                              onSaved: (input) => _password = input,
+                              obscureText: true,
                             ),
-                            //color: Color(0xffffffff),
-                            color: Colors.lightBlueAccent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Icon(
-                                  FontAwesomeIcons.solidEnvelope,
-                                  color: Color(0xffCE107C),
-                                ),
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text(
-                                  'Sign in with Email',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18.0),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                //   _formKey.currentState.save();
-                                //print(_uname);
-                                //print(_password);
-                                //print(_selecteduser.usertype);
-                                signInService
-                                    .googSignIn(context)
-                                    .then((FirebaseUser user) =>
-                                        loggendInUser(user))
-                                    .catchError((e) => print(e));
-                                setState(() {
-                                  populateData();
-                                });
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Divider(
+                            thickness: 100.0,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            width: 150,
+                            height: 50,
+                            child: FlatButton(
+                              child: Text("SignUp"),
+                              onPressed: () {
+                                if (_formKey.currentState.validate()) {
+                                  _uname = _selecteduser.username;
+                                  //print(_uname);
+                                  //print(_passwordcontroller.text);
+                                  //_formKey.currentState.save();
+                                  signInService
+                                      .signUpWithEmail(_uname, _passwordcontroller.text)
+                                      .then(
+                                          (FirebaseUser user) => populateData())
+                                      .catchError((e) => print(e))
+                                      .whenComplete(() => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EventView())));
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => EventView()));
-                              }
-                            },
+                                  /*Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => UserWrite()));
+
+                                   */
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50,
-                          child: GoogleSignInButton(
-                              darkMode: true,
-                              borderRadius: 20,
+                          Container(
+                            width: 150,
+                            height: 50,
+                            child: FlatButton(
+                              child: Text("Forgot Password?"),
+                              onPressed: null,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Divider(
+                            thickness: 100.0,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            width: 300,
+                            height: 50,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              //color: Color(0xffffffff),
+                              color: Colors.lightBlueAccent,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Icon(
+                                    FontAwesomeIcons.solidEnvelope,
+                                    color: Color(0xffCE107C),
+                                  ),
+                                  SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Text(
+                                    'Sign in with Email',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 18.0),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {
+                                if (_formKey.currentState.validate()) {
+                                  _uname = _selecteduser.username;
+                                  _password = _passwordcontroller.text;
+                                  //   _formKey.currentState.save();
+                                  print(_selecteduser.username);
+                                  print(_password);
+                                  //print(_selecteduser.usertype);
+                                  signInService
+                                      .signInWithEmail(_uname, _password)
+                                      .then(
+                                          (FirebaseUser user) => populateData())
+                                      .catchError((e) => print(e))
+                                      .whenComplete(() => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EventView())));
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Divider(
+                            thickness: 100.0,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            width: 300,
+                            height: 50,
+                            child: GoogleSignInButton(
+                                darkMode: true,
+                                borderRadius: 20,
+                                onPressed: () {
+                                  //print("Before");
+                                  //print(signInService.firebaseAuth.currentUser() == null?true:false);
+                                  //print(signInService.firebaseAuth
+                                    //  .currentUser()
+                                      //.then((onValue) =>
+                                        //  print(onValue.displayName)));
+
+                                  signInService
+                                      .googSignIn(context)
+                                      //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+                                      .then(
+                                          (FirebaseUser user) => populateData())
+                                      .catchError((e) => print(e))
+                                      .whenComplete(() => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EventView())));
+
+                                  //populateData();
+
+                                  /*Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EventView()));
+
+                                   */
+                                }),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Divider(
+                            thickness: 100.0,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            width: 300,
+                            height: 50,
+                            child: FacebookSignInButton(
+                              borderRadius: 10,
                               onPressed: () {
                                 signInService
-                                    .googSignIn(context)
-                                    //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
-                                    .then((FirebaseUser user) {
-                                      //print(user);
-                                      populateData();
-                                      loggendInUser(user);
-                                    })
+                                    .facebookSignIn(context)
+                                    .then((FirebaseUser user) => populateData())
                                     .catchError((e) => print(e))
                                     .whenComplete(() => Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 EventView())));
-
-                                //populateData();
-
-                                /*Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => EventView()));
-
-                                 */
-                              }),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50,
-                          child: FacebookSignInButton(
-                            borderRadius: 10,
-                            onPressed: () {
-                              signInService
-                                  .facebookSignIn(context)
-                                  .then((FirebaseUser user) =>
-                                      loggendInUser(user))
-                                  .catchError((e) => print(e));
-
-                              populateData();
-
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EventView()));
-                            },
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

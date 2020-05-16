@@ -8,22 +8,47 @@ class SignInService {
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   final FacebookLogin facebookLogin = FacebookLogin();
 
-  Future<FirebaseUser> googSignIn(BuildContext context) async {
+  static final SignInService _internal = SignInService.internal();
 
+  factory SignInService() => _internal;
+
+  SignInService.internal();
+
+  Future<FirebaseUser> signUpWithEmail(String email, String password) async {
+    FirebaseUser user = (await firebaseAuth.createUserWithEmailAndPassword(
+            email: email, password: password))
+        .user;
+
+    return user;
+  }
+
+  Future<FirebaseUser> signInWithEmail(String email, String password) async {
+
+    AuthResult authResult = await firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+
+    print(authResult.additionalUserInfo.providerId);
+
+    FirebaseUser user = authResult.user;
+
+    return user;
+
+  }
+
+  Future<FirebaseUser> googSignIn(BuildContext context) async {
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
-    await googleUser.authentication;
-
+        await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-    FirebaseUser userDetails =
+    FirebaseUser user =
         (await firebaseAuth.signInWithCredential(credential)).user;
 
-    return userDetails;
+    return user;
   }
 
   Future<FirebaseUser> facebookSignIn(BuildContext context) async {
@@ -33,15 +58,28 @@ class SignInService {
       accessToken: result.accessToken.token,
     );
 
-    FirebaseUser userDetails;
+    FirebaseUser user;
 
     if (result.status == FacebookLoginStatus.loggedIn) {
-      userDetails = (await firebaseAuth.signInWithCredential(credential)).user;
-      print(userDetails.displayName);
+      user = (await firebaseAuth.signInWithCredential(credential)).user;
+      print(user.displayName);
     }
-    return userDetails;
+    return user;
+  }
+
+  void signOut() async {
+    firebaseAuth.currentUser() != null
+        ? firebaseAuth.signOut()
+        : print("User not signed in FIrebase");
+    googleSignIn.isSignedIn().then((onValue) => onValue == true
+        ? googleSignIn.signOut()
+        : print("User not signed in Google"));
+    facebookLogin.isLoggedIn.then((onValue) => onValue == true
+        ? facebookLogin.logOut()
+        : print("User not signed in Facebook"));
   }
 }
+
 class UserDetails {
   final String provderDetails;
   final String UserName;

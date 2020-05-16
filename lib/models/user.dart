@@ -28,21 +28,21 @@ class UserLogin {
   static List<UserLogin> getUsers() {
     List<UserLogin> users = List<UserLogin>();
     users.add(
-        UserLogin(username: "manjunath_biji", password: "", usertype: "Admin"));
+        UserLogin(username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
     users.add(
-        UserLogin(username: "Srinivasa_naik", password: "", usertype: "Admin"));
+        UserLogin(username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
     users.add(
-        UserLogin(username: "kashyap_kale", password: "", usertype: "Team"));
+        UserLogin(username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
     users
-        .add(UserLogin(username: "anuj_kakde", password: "", usertype: "User"));
+        .add(UserLogin(username: "writetoanuka@gmail.com", password: "", usertype: "User"));
     users.add(
-        UserLogin(username: "janice_m", password: "", usertype: "Local Admin"));
+        UserLogin(username: "janicem995@gmail.com", password: "", usertype: "Local Admin"));
     users.add(
-        UserLogin(username: "vardhan_biji", password: "", usertype: "User"));
+        UserLogin(username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
     users.add(
-        UserLogin(username: "toshan_nimai", password: "", usertype: "User"));
+        UserLogin(username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
     users.add(
-        UserLogin(username: "parth_prabhu", password: "", usertype: "User"));
+        UserLogin(username: "parthprandas.rns@gmail.com", password: "", usertype: "User"));
     return users;
   }
 }
