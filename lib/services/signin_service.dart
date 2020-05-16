@@ -15,11 +15,35 @@ class SignInService {
   SignInService.internal();
 
   Future<FirebaseUser> signUpWithEmail(String email, String password) async {
-    FirebaseUser user = (await firebaseAuth.createUserWithEmailAndPassword(
-            email: email, password: password))
-        .user;
 
-    return user;
+    AuthResult authResult = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+
+    if (authResult != null) {
+      UserUpdateInfo updateInfo = UserUpdateInfo();
+      updateInfo.displayName = email;
+      updateInfo.photoUrl = 'assets/images/vardhan.jpeg';
+
+      FirebaseUser firebaseUser = authResult.user;
+
+      if(firebaseUser != null) {
+
+        await firebaseUser.updateProfile(updateInfo);
+
+        await firebaseUser.reload();
+
+        FirebaseUser currentuser = await firebaseAuth.currentUser();
+
+        print("Manju You are there");
+        print(firebaseUser.uid);
+
+        return currentuser;
+      }
+
+    }
+
+
+    return null;
   }
 
   Future<FirebaseUser> signInWithEmail(String email, String password) async {
@@ -27,11 +51,18 @@ class SignInService {
     AuthResult authResult = await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 
-    print(authResult.additionalUserInfo.providerId);
+    if (authResult != null) {
+      FirebaseUser firebaseUser = authResult.user;
 
-    FirebaseUser user = authResult.user;
+      if(firebaseUser != null) {
+        print("Manju You are there");
+        print(firebaseUser.uid);
+      }
 
-    return user;
+    }
+
+
+    return null;
 
   }
 

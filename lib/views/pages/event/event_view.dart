@@ -120,6 +120,7 @@ class _EventViewState extends State<EventView>
                   CircleAvatar(
                     child: photoUrl != null
                         ? Image.network(
+
                             photoUrl,
                             fit: BoxFit.contain,
                           )
