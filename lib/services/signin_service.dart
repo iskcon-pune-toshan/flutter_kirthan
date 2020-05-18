@@ -15,55 +15,44 @@ class SignInService {
   SignInService.internal();
 
   Future<FirebaseUser> signUpWithEmail(String email, String password) async {
-
     AuthResult authResult = await firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
 
     if (authResult != null) {
       UserUpdateInfo updateInfo = UserUpdateInfo();
       updateInfo.displayName = email;
-      updateInfo.photoUrl = 'assets/images/vardhan.jpeg';
+      //updateInfo.photoUrl = 'assets/images/vardhan.jpeg';
 
       FirebaseUser firebaseUser = authResult.user;
 
-      if(firebaseUser != null) {
-
+      if (firebaseUser != null) {
         await firebaseUser.updateProfile(updateInfo);
 
         await firebaseUser.reload();
 
         FirebaseUser currentuser = await firebaseAuth.currentUser();
 
-        print("Manju You are there");
-        print(firebaseUser.uid);
+        //print("Manju You are there");
+        //print(firebaseUser.uid);
 
         return currentuser;
       }
-
     }
-
-
     return null;
   }
 
   Future<FirebaseUser> signInWithEmail(String email, String password) async {
-
     AuthResult authResult = await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 
     if (authResult != null) {
       FirebaseUser firebaseUser = authResult.user;
 
-      if(firebaseUser != null) {
-        print("Manju You are there");
-        print(firebaseUser.uid);
+      if (firebaseUser != null) {
+        return firebaseUser;
       }
-
     }
-
-
     return null;
-
   }
 
   Future<FirebaseUser> googSignIn(BuildContext context) async {
@@ -98,16 +87,19 @@ class SignInService {
     return user;
   }
 
-  void signOut() async {
+  Future<bool> signOut() async {
+    bool signout = true;
     firebaseAuth.currentUser() != null
         ? firebaseAuth.signOut()
-        : print("User not signed in FIrebase");
+        : print("User not signed in Firebase");
     googleSignIn.isSignedIn().then((onValue) => onValue == true
         ? googleSignIn.signOut()
         : print("User not signed in Google"));
     facebookLogin.isLoggedIn.then((onValue) => onValue == true
         ? facebookLogin.logOut()
         : print("User not signed in Facebook"));
+
+    return signout;
   }
 }
 

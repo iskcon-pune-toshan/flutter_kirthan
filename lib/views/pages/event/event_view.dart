@@ -5,6 +5,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
+import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
@@ -76,7 +77,6 @@ class _EventViewState extends State<EventView>
     loadPref();
     //print("in Event");
     //print(SignInService().firebaseAuth.currentUser().then((onValue) => print(onValue.displayName)));
-
   }
 
   @override
@@ -120,7 +120,6 @@ class _EventViewState extends State<EventView>
                   CircleAvatar(
                     child: photoUrl != null
                         ? Image.network(
-
                             photoUrl,
                             fit: BoxFit.contain,
                           )
@@ -256,7 +255,10 @@ class _EventViewState extends State<EventView>
           Card(
             child: ListTile(
                 title: Text("Logout"),
-                trailing: Icon(Icons.remove_circle_outline),
+                trailing: Icon(
+                  Icons.settings_power,
+                  color: Colors.lightBlue,
+                ),
                 onTap: () {
                   showDialog(
                       context: context,
@@ -282,8 +284,15 @@ class _EventViewState extends State<EventView>
                                     width: 320.0,
                                     child: RaisedButton(
                                       onPressed: () {
-                                        SignInService().signOut();
-                                        Navigator.pop(context);
+                                        SignInService()
+                                            .signOut()
+                                            .then((onValue) => print(onValue))
+                                            .whenComplete(() => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginApp())));
+                                        //Navigator.pop(context);
                                       },
                                       child: Text(
                                         "yes",

@@ -133,16 +133,17 @@ class _TeamUserViewState extends State<TeamUserView> {
     //usercehckmap = new Map<String,bool>();
   }
 
-  List<Widget> populateChildren(int teamid) {
+  //List<Widget> populateChildren(int teamid) {
+  List<Widget> populateChildren(String teamName) {
     List<Widget> children = new List<Widget>();
     List<TeamUser> listofusers =
-        listofteamusers.where((user) => user.teamId == teamid).toList();
+        listofteamusers.where((user) => user.teamName == teamName).toList();
     for (var user in listofusers) {
       //print(user.teamId.toString()+"TU"+user.userId.toString());
       children.add(Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text(user.userId.toString()),
+          //Text(user.userId.toString()),
           Checkbox(
             value: usercehckmap[
                 (user.teamId.toString() + "TU" + user.userId.toString())
@@ -160,6 +161,7 @@ class _TeamUserViewState extends State<TeamUserView> {
               });
             },
           ),
+          Text(user.userName),
         ],
       ));
     }
@@ -180,9 +182,9 @@ class _TeamUserViewState extends State<TeamUserView> {
           ScrollConfiguration(
             behavior: ScrollBehavior(),
             child: Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Scrollbar(
+                //scrollDirection: Axis.vertical,
+                //padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: FutureBuilder<List<TeamUser>>(
                     future: teamusers,
                     builder: (BuildContext context,
@@ -199,8 +201,8 @@ class _TeamUserViewState extends State<TeamUserView> {
                             listofteamusers = snapshot.data;
                             listofteamusers
                                 .sort((a, b) => b.teamId.compareTo(a.teamId));
-                            List<int> setofTeams = listofteamusers
-                                .map((user) => user.teamId)
+                            List<String> setofTeams = listofteamusers
+                                .map((user) => user.teamName)
                                 .toSet()
                                 .toList();
                             //setofTeams.reversed;
@@ -210,8 +212,8 @@ class _TeamUserViewState extends State<TeamUserView> {
                                 itemBuilder: (context, index) {
                                   return ExpansionTile(
                                     title:
-                                        Text("Team Name: ${setofTeams[index]}"),
-                                    subtitle: Text("Hello Manjunath"),
+                                        Text(setofTeams[index]),
+                                    //subtitle: Text("Hello Manjunath"),
                                     children:
                                         populateChildren(setofTeams[index]),
                                   );

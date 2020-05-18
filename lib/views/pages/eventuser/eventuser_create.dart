@@ -113,8 +113,8 @@ class _EventUserCreateState extends State<EventUserCreate> {
       sortColumnIndex: 0,
       columns: [
         DataColumn(
-            label: Text("Team Name"),
-            numeric: false,
+            label: Text("Team Name",overflow: TextOverflow.ellipsis,),
+            //numeric: false,
             onSort: (columnIndex, ascending) {
               setState(() {
                 sort = !sort;
@@ -129,7 +129,7 @@ class _EventUserCreateState extends State<EventUserCreate> {
               //onSortColum(columnIndex, ascending);
             }),
         DataColumn(
-          label: Text("User Name"),
+          label: Text("User Name",overflow: TextOverflow.ellipsis,),
           numeric: false,
         ),
         DataColumn(
@@ -146,13 +146,13 @@ class _EventUserCreateState extends State<EventUserCreate> {
                 },
                 cells: [
                   DataCell(
-                    Text(teamuser.teamId.toString()),
+                    Text(teamuser.teamName.toString(), overflow: TextOverflow.ellipsis,),
                     onTap: () {
                       print('Selected ${teamuser.teamId.toString()}');
                     },
                   ),
                   DataCell(
-                    Text(teamuser.userId.toString()),
+                    Text(teamuser.userName.toString(),overflow: TextOverflow.ellipsis,),
                   ),
                   DataCell(
                     Text(teamuser.id.toString()),

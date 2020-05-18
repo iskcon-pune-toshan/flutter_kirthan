@@ -6,6 +6,9 @@ class TeamUser {
   String createTime;
   String updatedBy;
   String updateTime;
+  String teamName;
+  String userName;
+
 
 //Typically called form service layer to create a new user
   TeamUser(
@@ -15,7 +18,9 @@ class TeamUser {
       this.createdBy,
       this.updatedBy,
       this.createTime,
-      this.updateTime});
+      this.updateTime,
+      this.userName,
+      this.teamName});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory TeamUser.fromJson(Map<String, dynamic> data) {
@@ -27,6 +32,8 @@ class TeamUser {
       updatedBy: data['updatedBy'],
       updateTime: data['updateTime'],
       createTime: data['createTime'],
+      userName: data['userName'],
+      teamName: data['teamName'],
     );
   }
 
@@ -39,6 +46,8 @@ class TeamUser {
       updatedBy: map['updatedBy'],
       updateTime: map['updateTime'],
       createTime: map['createTime'],
+      userName: map['userName'],
+      teamName: map['teamName'],
     );
   }
 
@@ -51,6 +60,9 @@ class TeamUser {
     data['updatedBy'] = this.updatedBy;
     data['updateTime'] = this.updateTime;
     data['createTime'] = this.createTime;
+    data['userName'] = this.userName;
+    data['teamName'] = this.teamName;
+
     return data;
   }
 
@@ -63,6 +75,8 @@ class TeamUser {
       "updatedBy": this.updatedBy,
       "updateTime": this.updateTime,
       "createTime": this.createTime,
+      "userName": this.userName,
+      "teamName": this.teamName
     };
   }
 }
