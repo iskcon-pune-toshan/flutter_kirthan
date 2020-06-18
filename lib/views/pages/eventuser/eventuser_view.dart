@@ -133,16 +133,15 @@ class _EventUserViewState extends State<EventUserView> {
     //usercehckmap = new Map<String,bool>();
   }
 
-  List<Widget> populateChildren(int eventid) {
+  List<Widget> populateChildren(String eventname) {
     List<Widget> children = new List<Widget>();
     List<EventUser> listofusers =
-        listofeventusers.where((user) => user.eventId == eventid).toList();
+        listofeventusers.where((user) => user.eventName == eventname).toList();
     for (var user in listofusers) {
       //print(user.teamId.toString()+"TU"+user.userId.toString());
       children.add(Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text(user.userId.toString() + "from" + user.teamId.toString()),
           Checkbox(
             value: usercehckmap[(user.eventId.toString() +
                     "E" +
@@ -165,6 +164,7 @@ class _EventUserViewState extends State<EventUserView> {
               });
             },
           ),
+          Text(user.userName.toString() + " [from] " + user.teamName.toString()),
         ],
       ));
     }
@@ -185,9 +185,9 @@ class _EventUserViewState extends State<EventUserView> {
           ScrollConfiguration(
             behavior: ScrollBehavior(),
             child: Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Scrollbar(
+                //scrollDirection: Axis.vertical,
+                //padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: FutureBuilder<List<EventUser>>(
                     future: eventusers,
                     builder: (BuildContext context,
@@ -204,8 +204,8 @@ class _EventUserViewState extends State<EventUserView> {
                             listofeventusers = snapshot.data;
                             listofeventusers
                                 .sort((a, b) => b.eventId.compareTo(a.eventId));
-                            List<int> setofEvents = listofeventusers
-                                .map((user) => user.eventId)
+                            List<String> setofEvents = listofeventusers
+                                .map((user) => user.eventName)
                                 .toSet()
                                 .toList();
                             //setofTeams.reversed;
