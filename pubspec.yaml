@@ -4,7 +4,8 @@ description: Kirthan project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
+  flutter: ">=1.12.0 <2.0.0"
 
 dependencies:
   flutter:
@@ -27,10 +28,21 @@ dependencies:
   table_calendar: ^2.2.3
   google_fonts: ^1.0.0
   rating_dialog: ^1.0.0
+  google_maps_flutter: ^0.5.11
+  location: ^2.3.5
+  flutter_google_places: ^0.1.4
+  geolocator: 5.0.1
+  geocoder:
+  geolocation:
+  autocomplete_textfield:
+  flutter_polyline_points:
+  flutter_spinkit:
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 
 # For information on the generic Dart part of this file, see the
