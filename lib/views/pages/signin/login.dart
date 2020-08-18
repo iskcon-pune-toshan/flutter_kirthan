@@ -2,15 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
-import 'package:flutter_kirthan/views/pages/user/user_create.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
-import 'package:flutter_kirthan/views/pages/signin/kirthan_signin.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+
+import 'package:flutter_kirthan/services/notification_service.dart';
 //final MainPageViewModel mainPageVM =
 //  MainPageViewModel(apiSvc: RestAPIServices());
 
@@ -35,9 +34,7 @@ class _LoginAppState extends State<LoginApp> {
   UserLogin _selecteduser;
   UserAccess _userAccess;
   SharedPreferences prefs;
-
   SignInService signInService = SignInService();
-
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     //prefs.setString("My Name", "Manjunath Bijinepalli");
@@ -49,6 +46,8 @@ class _LoginAppState extends State<LoginApp> {
     users = UserLogin.getUsers();
     entitlements = UserAccess.getUserEntitlements();
     loadPref();
+    NotificationManager _config = new NotificationManager();
+    _config.initMessageHandler(context);
   }
 
   void populateData() {
@@ -130,7 +129,8 @@ class _LoginAppState extends State<LoginApp> {
                           Container(
                               width: 300,
                               height: 50.0,
-                              child: DropdownButtonFormField<UserLogin>(
+                              child: DropdownButtonFormField<UserLogin>( // Shouldnt this be a text field? Or are we planning on storing all
+                                // the logged in users email at all times?
                                 itemHeight: 50.0,
                                 value: _selecteduser,
                                 items: users
@@ -176,7 +176,7 @@ class _LoginAppState extends State<LoginApp> {
                                 labelText: "Password*",
                               ),
                               controller: _passwordcontroller,
-                              validator: (input) => input.contains("*")
+                              validator: (input) => input.contains("*") // need to hold a help icon if the password rule beomes too complicated
                                   ? "Not a Valid Password"
                                   : null,
                               onSaved: (input) => _password = input,

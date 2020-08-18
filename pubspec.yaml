@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^0.1.2
+  cupertino_icons : ^0.1.2
   scoped_model: ^0.3.0
   font_awesome_flutter: ^8.0.1
   flutter_form_builder: ^3.8.1
@@ -27,7 +27,8 @@ dependencies:
   table_calendar: ^2.2.3
   google_fonts: ^1.0.0
   rating_dialog: ^1.0.0
-
+  firebase_messaging : ^6.0.16
+  flutter_local_notifications: ^1.4.4+2
 dev_dependencies:
   flutter_test:
     sdk: flutter

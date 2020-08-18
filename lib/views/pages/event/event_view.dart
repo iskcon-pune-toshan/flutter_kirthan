@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
@@ -13,11 +11,11 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
+import 'package:flutter_kirthan/views/pages/notifications/notification.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
@@ -25,7 +23,6 @@ final EventPageViewModel eventPageVM =
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
-
   EventView({Key key}) : super(key: key);
 
   @override
@@ -40,9 +37,11 @@ class _EventViewState extends State<EventView>
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
+
   //List<String> userdetails;
   String photoUrl;
   String name;
+
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
@@ -75,6 +74,7 @@ class _EventViewState extends State<EventView>
     _index = 0;
     loadData();
     loadPref();
+
     //print("in Event");
     //print(SignInService().firebaseAuth.currentUser().then((onValue) => print(onValue.displayName)));
   }
@@ -214,11 +214,14 @@ class _EventViewState extends State<EventView>
                         description:
                             "Tap a star to set your rating. Add more description here if you want.",
                         submitButton: "SUBMIT",
-                        alternativeButton: "Contact us instead?", // optional
-                        positiveComment:
-                            "We are so happy to hear :)", // optional
-                        negativeComment: "We're sad to hear :(", // optional
-                        accentColor: Colors.red, // optional
+                        alternativeButton: "Contact us instead?",
+                        // optional
+                        positiveComment: "We are so happy to hear :)",
+                        // optional
+                        negativeComment: "We're sad to hear :(",
+                        // optional
+                        accentColor: Colors.red,
+                        // optional
                         onSubmitPressed: (int rating) {
                           print("onSubmitPressed: rating = $rating");
                         },
@@ -368,7 +371,10 @@ class _EventViewState extends State<EventView>
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
             case 3:
-              break;
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => new NotificationView()),
+              );
           }
         },
         currentIndex: _index,
