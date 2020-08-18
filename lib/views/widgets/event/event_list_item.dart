@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_kirthan/location/home.dart';
 import 'package:flutter_kirthan/models/event.dart';
+
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
 import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_kirthan/views/pages/event/event_location.dart';
+
 
 class Choice {
   const Choice({this.id, this.description});
@@ -24,6 +28,7 @@ class EventRequestsListItem extends StatelessWidget {
     Choice(id: 1, description: "Process"),
     Choice(id: 2, description: "Edit"),
     Choice(id: 3, description: "Delete"),
+    //Choice(id: 4, description: "Location"),
   ];
 
   @override
@@ -76,7 +81,7 @@ class EventRequestsListItem extends StatelessWidget {
                 );
               } else if (choice.id == 1) {
                 Map<String, dynamic> processrequestmap =
-                    new Map<String, dynamic>();
+                new Map<String, dynamic>();
                 processrequestmap["id"] = eventrequest?.id;
                 processrequestmap["approvalstatus"] = "Approved";
                 processrequestmap["approvalcomments"] = "ApprovalComments";
@@ -88,14 +93,16 @@ class EventRequestsListItem extends StatelessWidget {
                   backgroundColor: Colors.green,
                 );
                 Scaffold.of(context).showSnackBar(mysnackbar);
-              } else if (choice.id == 3) {
+              }
+
+              else if (choice.id == 3) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(20.0)), //this right here
+                            BorderRadius.circular(20.0)), //this right here
                         child: Container(
                           height: 200,
                           child: Padding(
@@ -114,7 +121,7 @@ class EventRequestsListItem extends StatelessWidget {
                                   child: RaisedButton(
                                     onPressed: () {
                                       Map<String, dynamic> processrequestmap =
-                                          new Map<String, dynamic>();
+                                      new Map<String, dynamic>();
                                       processrequestmap["id"] =
                                           eventrequest?.id;
                                       eventPageVM.deleteEventRequest(
@@ -131,7 +138,7 @@ class EventRequestsListItem extends StatelessWidget {
                                       "yes",
                                       style: TextStyle(
                                           fontSize:
-                                              MyPrefSettingsApp.custFontSize,
+                                          MyPrefSettingsApp.custFontSize,
                                           color: Colors.white),
                                     ),
                                     color: const Color(0xFF1BC0C5),
@@ -147,7 +154,7 @@ class EventRequestsListItem extends StatelessWidget {
                                       "No",
                                       style: TextStyle(
                                           fontSize:
-                                              MyPrefSettingsApp.custFontSize,
+                                          MyPrefSettingsApp.custFontSize,
                                           color: Colors.white),
                                     ),
                                     color: const Color(0xFF1BC0C5),
@@ -198,6 +205,11 @@ class EventRequestsListItem extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: MyPrefSettingsApp.custFontSize,
                     )),
+                Text("Location: "+eventrequest.city,
+                    style: GoogleFonts.openSans(
+                      fontWeight: FontWeight.bold,
+                      fontSize: MyPrefSettingsApp.custFontSize,
+                    )),
               ],
             ),
 
@@ -228,6 +240,23 @@ class EventRequestsListItem extends StatelessWidget {
                     ),
                   ),
                 ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+
+                  child: IconButton(icon: Icon(Icons.location_on),
+                    onPressed:  () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Location (eventrequest: eventrequest)),
+                        //MapView(eventrequest: eventrequest)),
+
+                        //do something
+                      )
+                    },),
+                ),
+
               ],
             ),
             //Divider(color: Colors.blue),
@@ -237,3 +266,4 @@ class EventRequestsListItem extends StatelessWidget {
     );
   }
 }
+
