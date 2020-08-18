@@ -52,7 +52,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     if (eventType == "bmg") {
       requestBody = '{"id":"4"}';
     } else {
-      requestBody = '{"city":"Pune"}';
+      requestBody = '{"state":"MH"}';
     }
 
     print(requestBody);
