@@ -46,7 +46,7 @@ class NotificationViewState extends State<NotificationView> {
     print(addAction);
     return Center(
         child: Card(
-          shadowColor: Colors.blueAccent,
+          //shadowColor: Colors.blueAccent,
           color: Colors.blue,
           margin: EdgeInsets.all(10),
           child: Column(
