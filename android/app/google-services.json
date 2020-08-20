@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "638627243036",
+    "firebase_url": "https://iskconkirthan.firebaseio.com",
+    "project_id": "iskconkirthan",
+    "storage_bucket": "iskconkirthan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638627243036:android:0a65f85988b608730e2bd9",
+        "android_client_info": {
+          "package_name": "org.iskcon.flutter_kirthan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638627243036-9tjrrdhbgp7gmd7hrp73m4p03utrrqht.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "4b96b5ef05cbbe794448e5048f263ee2e95b9fd5"
+          }
+        },
+        {
+          "client_id": "638627243036-rcudqhc9m1d9rgpj3bmgvl3f1cbmdc65.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXohJaMpv8JqywiPZoXydUG4mmqZTxxNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638627243036-rcudqhc9m1d9rgpj3bmgvl3f1cbmdc65.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

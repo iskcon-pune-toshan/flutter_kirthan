@@ -28,9 +28,34 @@ const double spaceXL = 32.0;
 
 // Assets
 const String usersJsonPath = 'assets/data/user.json';
-const String userdetailsJsonPath = 'assets/data/userdetails.json';
+const String userdetailsJsonPath = 'assets/data/userrequests.json';
 const String markdownPath = 'assets/markdown/';
 
 // Routes
 const String initialRoute = '/';
 const String categoryRoute = '/category';
+
+//error messages
+const String successful = "Successfully";
+const String delete = "Deleted";
+const String process = "Processed";
+
+//Screen Names
+const String SCR_REGISTER_USER = "Register User";
+const String SCR_FORGOT_PASSWORD = "Forgot password";
+const String SCR_LOGIN_SCREEN = "Login screen";
+const String SCR_TEAM = "Team";
+const String SCR_EVENT = "Event";
+const String SCR_TEAM_USER = "Team-user";
+const String SCR_EVENT_USER = "Event-User";
+const String SCR_NOTIFICATION_HUB = "Notification Hub";
+
+const String ACCESS_TYPE_CREATE = "Create";
+const String ACCESS_TYPE_EDIT = "Edit";
+const String ACCESS_TYPE_DELETE = "Delete";
+const String ACCESS_TYPE_VIEW = "View";
+const String ACCESS_TYPE_PROCESS = "Process";
+
+
+
+

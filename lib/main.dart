@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/services/data_services.dart';
-import 'package:flutter_kirthan/view_models/main_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/main_page.dart';
+import 'package:flutter_kirthan/services/notification_service.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/signin/login.dart';
+import 'package:provider/provider.dart';
 
-final MainPageViewModel mainPageVM = MainPageViewModel(apiSvc: RestAPIServices());
+void main() => runApp(KirthanApp());
 
-void main() => runApp(KirthanApp(mainPageVM: mainPageVM));
-
-class KirthanApp extends StatelessWidget {
-  final MainPageViewModel mainPageVM;
-
-  KirthanApp({@required this.mainPageVM});
-
+class KirthanApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Kirthan Application',
-      theme: new ThemeData(
-        primaryColor: Color(0xff070707),
-        primaryColorLight: Color(0xff0a0a0a),
-        primaryColorDark: Color(0xff000000),
-      ),
-      home: MainPage(viewModel: mainPageVM),
-      debugShowCheckedModeBanner: false,
+    NotificationManager _notification = new NotificationManager();
+    return ChangeNotifierProvider(
+        create: (_) => ThemeNotifier(),
+        child: Consumer<ThemeNotifier>(
+            builder: (context, ThemeNotifier notifier, child) {
+              return new MaterialApp(
+                title: 'Kirthan Application',
+                theme: new ThemeData(
+                  primaryColor: Color(0xff070707),
+                  primaryColorLight: Color(0xff0a0a0a),
+                  primaryColorDark: Color(0xff000000),
+                ),
+                home: LoginApp(),
+                //home:SignInApp() ,
+                debugShowCheckedModeBanner: false,
+              );
+            }
+        )
     );
   }
 }
