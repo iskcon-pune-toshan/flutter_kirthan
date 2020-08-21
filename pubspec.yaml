@@ -55,7 +55,7 @@ flutter:
   assets:
     - assets/
     - assets/data/
-    - assets/markdown/
+    #- assets/markdown/
     - assets/fonts/
     - assets/images/
   fonts:
