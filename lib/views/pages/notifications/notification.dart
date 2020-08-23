@@ -1,5 +1,5 @@
 
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,37 +9,45 @@ import 'dart:convert' as convert;
 /* The view for the notifications */
 
 class NotificationView extends StatefulWidget {
-
   final String title = "Notifications";
   @override
   State<StatefulWidget> createState() {
     return new NotificationViewState();
   }
-
 }
 
 class NotificationViewState extends State<NotificationView> {
+  static String url = "http://192.168.43.4:8080/";
+
   Future<Map<String, dynamic>> _getData() async {
     int userId = 4;
     _http.Response response = await _http.get(
-        "http://192.168.43.4:8080/" + userId.toString() + "/notifications");
+        url + userId.toString() + "/notifications");
     var data = convert.jsonDecode(response.body);
     print(data);
     return data;
   }
 
-  Future<bool> _respondToNotification(String id, bool response) async {
-    String url = "http://192.168.43.4:8080/4/notifications/" + id;
-    print(url);
-    Map<String, Object> data = {"response": response ? 1 : 0, "userId": 3};
+  Future<bool> _respondToNotification(String id, bool response,BuildContext context) async {
+    String tempUrl = url+"4/notifications/" + id;
+    print(tempUrl);
+    Map<String, Object> data = {"response": response ? 1 : 0, "userId": 4};
     var body = convert.jsonEncode(data);
-    _http.Response resp = await _http
-        .put(url, body: body, headers: {"Content-Type": "application/json"});
-    var respData = convert.jsonDecode(resp.body);
-    print("Notification update request sent.  Response is :  " +
-        resp.statusCode.toString() +
-        respData.toString());
-    return Future.value(resp.statusCode == 200);
+    try {
+      _http.Response resp = await _http
+          .put(
+          tempUrl, body: body, headers: {"Content-Type": "application/json"});
+      (resp.statusCode == 200)
+        ?  setState((){_getData();})
+        : print("Following Error occured while updating notification response");
+      Navigator.pop(context);
+      return Future.value(true);
+    }
+    catch(Exception){
+      print("Error Uploading data");
+      return Future.value(false);
+    }
+
   }
 
   Widget _showDetailedNotificationAsCard(Map<String, Object> data, bool addAction) {
@@ -78,11 +86,11 @@ class NotificationViewState extends State<NotificationView> {
                     RaisedButton(
                         child: Text("Approve"),
                         onPressed: () =>
-                            _respondToNotification(data["id"], true)),
+                            _respondToNotification(data["id"], true,context)),
                     RaisedButton(
                         child: Text("Reject"),
                         onPressed: () =>
-                            _respondToNotification(data["id"], false)),
+                            _respondToNotification(data["id"], false,context)),
                   ])
                   : Row(),
               Divider(),
@@ -104,19 +112,10 @@ class NotificationViewState extends State<NotificationView> {
                 setAction
                     ? FlatButton(
                   child: Text("Approve"), onPressed: () {
-                   Future<bool> responseFromUpdate =  _respondToNotification(
-                        message["id"], true);
-                  responseFromUpdate.then((value) {
-                    if (!value) Scaffold.of(context).showSnackBar(SnackBar(content: Text("Error Updating information")));
-                    setState((){_getData();});
-                    Navigator.pop(context);
+                    _respondToNotification(
+                        message["id"], true,context);
                   })
-                   .catchError((onError){
-                     print("Following Error occured while updating notification respone"+onError.toString());
-                     Scaffold.of(context).showSnackBar(SnackBar(content: Text("Error Updating information")));
-                     Navigator.pop(context);
-                   });
-                  })
+
                     : FlatButton(
                   child: Text("View"),
                   onPressed: () {
@@ -131,19 +130,10 @@ class NotificationViewState extends State<NotificationView> {
                 setAction
                     ? FlatButton(
                   child: Text("Reject"),
-                  onPressed: () {
-                    Future<bool> responseFromUpdate = _respondToNotification(
-                        message["id"], false);
-                    responseFromUpdate.then((value) {
-                      if (!value) Scaffold.of(context).showSnackBar(SnackBar(content: Text("Error Updating information")));
-                      setState((){_getData();});
-                      Navigator.pop(context);
-                    }).catchError((onError){
-                      print("Following Error occured while updating notification respone"+onError.toString());
-                      Scaffold.of(context).showSnackBar(SnackBar(content: Text("Error Updating information")));
-                      Navigator.pop(context);
-                    });
-                  })
+                  onPressed: () =>
+                      _respondToNotification(
+                        message["id"], false,context)
+                  )
                     : FlatButton(
                   child: Text("Discard"),
                   onPressed: () => Navigator.pop(context),
