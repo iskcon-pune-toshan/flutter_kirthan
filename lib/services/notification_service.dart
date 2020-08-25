@@ -5,9 +5,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as _http;
 import 'dart:convert' as convert;
+import 'package:flutter_kirthan/services/base_service.dart';
 
-class NotificationManager {
-  String url = "http://192.168.43.4:8080/";
+class NotificationManager extends BaseAPIService {
   static final NotificationManager _nm = NotificationManager.internal();
 
   factory NotificationManager() {
@@ -46,56 +46,57 @@ class NotificationManager {
           "deviceToken": deviceToken,
         };
         var bodyData = convert.jsonEncode(body);
-        /*_http.post(
-           "http://192.168.43.4:8080/tokens",
-           body: bodyData, headers: {"Content-Type": "application/json"});*/
-        print(_http
-                .put("http://192.168.43.4:8080/tokens",
+        _http.put("$baseUrl/tokens",
                     headers: {"Content-Type": "application/json"},
-                    body: bodyData)
-                .toString() +
-            "Updated");
+                    body: bodyData);
       });
     } catch (Exception) {
       print("Error uploading token");
     }
   }
 
-  void _respondToNotification(
+  Future<Map<String, dynamic>> getData() async {
+    _http.Response response = await _http.get("$baseUrl/$userId/notifications");
+    var data = convert.jsonDecode(response.body);
+    print(data);
+    return data;
+  }
+
+  void respondToNotification(var callback,
       String id, bool response, BuildContext context) async {
-    String tempUrl = url + "/4/notifications/" + id;
+    String tempUrl = "$baseUrl/$userId/notifications/$id";
     print(tempUrl);
     Map<String, Object> data = {"response": response ? 1 : 0, "userId": 3};
     var body = convert.jsonEncode(data);
     _http.Response resp = await _http.put(tempUrl,
         body: body, headers: {"Content-Type": "application/json"});
     var respData = convert.jsonDecode(resp.body);
-    print("Notification update request sent.  Response is :  " +
-        resp.statusCode.toString() +
-        respData);
+    if(callback != null)
+      callback();
     Navigator.pop(context);
   }
 
-  void _showNotification(BuildContext context, Map<String, dynamic> message) {
+  void showNotification(BuildContext context, Map<String, dynamic> message,var callback) {
+    print("Method called");
     bool setAction = false;
-    print("message:"+message.toString());
-    if (message["action"] != null) setAction = true;
+    print("message:" + message.toString());
+    if (message["action"] == "WAIT") setAction = true;
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text("New Notifications"),
-              content: message["message"],
+          content: Text(message["notification"] == null ? message["message"]:message["notification"]["body"]),
+          title: Text("New Notifications"),
               actions: <Widget>[
                 setAction
                     ? FlatButton(
                         child: Text("Approve"),
-                        onPressed: () => _respondToNotification(
-                            message["data"]["id"], true, context))
+                        onPressed: () =>
+                            respondToNotification(callback,message["id"], true, context))
                     : FlatButton(
                         child: Text("View"),
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => NotificationView()));
@@ -104,8 +105,8 @@ class NotificationManager {
                 setAction
                     ? FlatButton(
                         child: Text("Reject"),
-                        onPressed: () => _respondToNotification(
-                            message["data"]["id"], false, context),
+                        onPressed: () => respondToNotification(
+                            callback,message["id"], false, context),
                       )
                     : FlatButton(
                         child: Text("Discard"),
@@ -120,7 +121,8 @@ class NotificationManager {
     _fcm.requestNotificationPermissions();
     _fcm.configure(
         onMessage: (Map<String, dynamic> message) async {
-          _showNotification(context, message);
+          print("Configuration Called : Here");
+          showNotification(context, message,null);
           return Future.value(null);
         },
         onBackgroundMessage: null,
@@ -130,10 +132,9 @@ class NotificationManager {
           return Future.value(null);
         },
         onResume: (Map<String, Object> message) {
-          print(message);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => NotificationView()));
-          _showNotification(context, message);
+
+          Navigator.push(context,MaterialPageRoute(builder: (context)=> NotificationView()));
+      //    showNotification(context, message,null);
           return Future.value(null);
         });
   }
