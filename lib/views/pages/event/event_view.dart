@@ -15,7 +15,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.d
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
-import 'package:flutter_kirthan/views/pages/notifications/notification.dart';
+import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
