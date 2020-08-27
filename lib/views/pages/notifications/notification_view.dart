@@ -1,6 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_kirthan/services/notification_service.dart';
+import 'package:flutter_kirthan/services/notification_service_impl.dart';
 
 
 /* The view for the notifications */
@@ -11,6 +12,7 @@ class NotificationView extends StatefulWidget {
   State<StatefulWidget> createState() {
     return new NotificationViewState();
   }
+
 }
 
 class NotificationViewState extends State<NotificationView> {
@@ -37,7 +39,8 @@ class NotificationViewState extends State<NotificationView> {
           subtitle: Text("CreatedBy " + data["creatorId"].toString()),
           trailing: icon == null ? null : Icon(icon),
           onTap: () {
-            _nm.showNotification(context, data,(){setState(() {
+            //_nm.showNotification(context, data,(){setState(() {
+              showNotification(context, data,(){setState(() {
               _nm.getData();
             });});
           }),
@@ -81,5 +84,51 @@ class NotificationViewState extends State<NotificationView> {
             }
           }),
     );
+  }
+
+
+
+  void showNotification(BuildContext context, Map<String, dynamic> message,var callback) {
+    print("Method called");
+    bool setAction = false;
+    print("message:" + message.toString());
+    if (message["action"] == "WAIT") setAction = true;
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(message["notification"] == null ? message["message"]:message["notification"]["body"]),
+          title: Text("New Notifications"),
+          actions: <Widget>[
+            setAction
+                ? FlatButton(
+                child: Text("Approve"),
+                onPressed: () {
+                  _nm.respondToNotification(callback,message["id"], true);
+                  Navigator.pop(context);
+                })
+                : FlatButton(
+              child: Text("View"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationView()));
+              },
+            ),
+            setAction
+                ? FlatButton(
+                child: Text("Reject"),
+                onPressed: () {
+                  _nm.respondToNotification(callback, message["id"], false);
+                  Navigator.pop(context);
+                }
+            )
+                : FlatButton(
+              child: Text("Discard"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ));
   }
 }

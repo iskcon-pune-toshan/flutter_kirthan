@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/services/notification_service.dart';
+import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:provider/provider.dart';
