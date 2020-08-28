@@ -37,6 +37,11 @@ dependencies:
   autocomplete_textfield:
   flutter_polyline_points:
   flutter_spinkit:
+  dio:
+  equatable: ^0.2.6
+  great_circle_distance:
+  flutter_bloc: ^4.0.0
+  bloc:
 
 
 dev_dependencies:
