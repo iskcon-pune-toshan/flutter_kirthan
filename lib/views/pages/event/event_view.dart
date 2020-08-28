@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
@@ -23,6 +25,7 @@ final EventPageViewModel eventPageVM =
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
+
   EventView({Key key}) : super(key: key);
 
   @override
@@ -41,7 +44,6 @@ class _EventViewState extends State<EventView>
   //List<String> userdetails;
   String photoUrl;
   String name;
-
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
@@ -379,7 +381,7 @@ class _EventViewState extends State<EventView>
         },
         currentIndex: _index,
         selectedItemColor: Colors.orange,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
@@ -393,9 +395,45 @@ class _EventViewState extends State<EventView>
             title: Text('Team'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
-          ),
+            title: Text("Notification"),
+            icon: ScopedModel<NotificationViewModel>(
+              model: NotificationViewModel(),
+              child: ScopedModelDescendant<NotificationViewModel>(
+                  builder: (context, child, model) {
+                    FirebaseMessageService fms  = new FirebaseMessageService();
+                    fms.initMessageHandler(context);
+                print(model.newNotificationCount);
+                bool visibilty = true;
+                if(model.newNotificationCount == 0 ) visibilty = false;
+                return Stack(
+                  alignment: Alignment.topRight,
+                  children: <Widget>[
+                    Icon(Icons.notifications),
+                    if(visibilty) Positioned(
+                      child: Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: new BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        constraints: BoxConstraints(
+                          minHeight: 8,
+                          minWidth: 8,
+                        ),
+                        child: Text(
+                          model.newNotificationCount.toString(),
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                        ),
+                      ),
+                    ) ,
+                  ],
+                );
+              }),
+            ),
+          )
         ],
       ),
     );

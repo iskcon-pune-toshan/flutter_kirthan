@@ -42,7 +42,6 @@ class NotificationManager extends BaseAPIService implements INotificationRestApi
   Future<Map<String, dynamic>> getData() async {
     _http.Response response = await _http.get("$baseUrl/$userId/notifications");
     var data = convert.jsonDecode(response.body);
-    print(data);
     return data;
   }
 

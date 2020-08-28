@@ -2,7 +2,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:scoped_model/scoped_model.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 class FirebaseMessageService {
 
   static final FirebaseMessageService _internal = FirebaseMessageService.internal();
@@ -13,16 +15,22 @@ class FirebaseMessageService {
 
   FirebaseMessageService.internal();
 
-
   void initMessageHandler(BuildContext context) {
     //FirebaseMessaging _fcm = new FirebaseMessaging();
-    _fcm.requestNotificationPermissions();
+    print(context);
+      _fcm.requestNotificationPermissions();
     _fcm.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("Configuration Called : Here");
-          // THIS NEEDS TO BE HANDLED
-          //showNotification(context, message, null);
-          return Future.value(null);
+          try {
+            NotificationViewModel _temp = ScopedModel.of<NotificationViewModel>(
+                context);
+            _temp.notificationCount = _temp.newNotificationCount+1;
+          }
+          catch(Exception) {
+            print(Exception);
+          }
+            return Future.value(null);
         },
         onBackgroundMessage: null,
         onLaunch: (Map<String, Object> message) async {
@@ -59,6 +67,4 @@ class FirebaseMessageService {
       print("Error uploading token");
     }
   }
-
-
 }

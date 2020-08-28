@@ -1,10 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_kirthan/models/notification.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
+import 'package:flutter_kirthan/view_models/notification_view_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 
 /* The view for the notifications */
+final NotificationViewModel notificationPageVM =
+NotificationViewModel(apiSvc: NotificationManager());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
@@ -16,14 +21,13 @@ class NotificationView extends StatefulWidget {
 }
 
 class NotificationViewState extends State<NotificationView> {
-  NotificationManager _nm = new NotificationManager();
 
-  Widget _buildNotification(Map<String, dynamic> data) {
+  Widget _buildNotification(NotificationModel data) {
     IconData icon;
-    if (data["action"] == null) {
+    if (data.action == null) {
       icon = null;
     } else {
-      String val = data["action"];
+      String val = data.action;
       val = val.toLowerCase();
       if (val == "rejected")
         icon = Icons.close;
@@ -35,20 +39,26 @@ class NotificationViewState extends State<NotificationView> {
     return Column(children: [
       ListTile(
           contentPadding: EdgeInsets.all(10),
-          title: Text(data["message"]),
-          subtitle: Text("CreatedBy " + data["creatorId"].toString()),
+          title: Text(data.message),
+          subtitle: Text("CreatedBy " + data.creatorId.toString()),
           trailing: icon == null ? null : Icon(icon),
           onTap: () {
             //_nm.showNotification(context, data,(){setState(() {
               showNotification(context, data,(){setState(() {
-              _nm.getData();
+              notificationPageVM.getNotifications();
             });});
           }),
       Divider(),
     ]);
   }
 
-
+  @override
+  void initState(){
+    super.initState();
+  //  print(context);
+   //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
+   //_nvm.notificationCount = 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,22 +70,13 @@ class NotificationViewState extends State<NotificationView> {
         child: Center(child: Text("Drawer placeholder")),
       ),
       body: FutureBuilder(
-          future: _nm.getData(),
+          future: notificationPageVM.getNotifications(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var ListData = [];
-              var dataNtf = snapshot.data["ntf"];
-              var dataAppr = snapshot.data["ntf_appr"];
-              if (dataNtf != null) {
-                ListData.addAll(dataNtf);
-              }
-              if (dataAppr != null) {
-                ListData.addAll(dataAppr);
-              }
               return ListView.builder(
                   itemBuilder: (context, itemCount) =>
-                      _buildNotification(ListData[itemCount]),
-                  itemCount: ListData.length);
+                      _buildNotification(snapshot.data[itemCount]),
+                  itemCount: snapshot.data.length);
             } else if (snapshot.hasError) {
               print(snapshot.error);
               return Center(child: Text('Error loading notifications'));
@@ -88,22 +89,20 @@ class NotificationViewState extends State<NotificationView> {
 
 
 
-  void showNotification(BuildContext context, Map<String, dynamic> message,var callback) {
-    print("Method called");
+  void showNotification(BuildContext context,NotificationModel notification,var callback) {
     bool setAction = false;
-    print("message:" + message.toString());
-    if (message["action"] == "WAIT") setAction = true;
+    if (notification.action == "WAIT") setAction = true;
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: Text(message["notification"] == null ? message["message"]:message["notification"]["body"]),
+          content: Text(notification.message),
           title: Text("New Notifications"),
           actions: <Widget>[
             setAction
                 ? FlatButton(
                 child: Text("Approve"),
                 onPressed: () {
-                  _nm.respondToNotification(callback,message["id"], true);
+                  notificationPageVM.updateNotifications(callback,notification.id, true);
                   Navigator.pop(context);
                 })
                 : FlatButton(
@@ -120,7 +119,7 @@ class NotificationViewState extends State<NotificationView> {
                 ? FlatButton(
                 child: Text("Reject"),
                 onPressed: () {
-                  _nm.respondToNotification(callback, message["id"], false);
+                  notificationPageVM.updateNotifications(callback, notification.id, false);
                   Navigator.pop(context);
                 }
             )

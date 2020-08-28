@@ -49,9 +49,6 @@ class _LoginAppState extends State<LoginApp> {
     entitlements = UserAccess.getUserEntitlements();
     loadPref();
 
-    FirebaseMessageService fms = new FirebaseMessageService();
-    fms.initMessageHandler(context);
-
 //    NotificationManager _config = new NotificationManager();
 //    _config.initMessageHandler(context);
 
