@@ -2,7 +2,6 @@ import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.d
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
-import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
@@ -39,8 +37,6 @@ class _EventViewState extends State<EventView>
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
   String _selectedValue;
   int _index;
-  final EventRequest eventrequest;
-  _EventViewState({@required this.eventrequest});
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
@@ -92,17 +88,6 @@ class _EventViewState extends State<EventView>
       appBar: AppBar(
         title: Text("Events"),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed:  () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                         Search(eventrequest:eventrequest) ),
-                          )
-            },
-          ),
           PopupMenuButton(
               icon: Icon(Icons.tune),
               onSelected: (input) {
@@ -121,7 +106,6 @@ class _EventViewState extends State<EventView>
                   );
                 }).toList();
               }),
-
         ],
       ),
       drawer: Drawer(
