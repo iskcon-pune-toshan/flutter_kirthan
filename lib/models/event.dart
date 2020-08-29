@@ -45,7 +45,7 @@ class EventRequest {
         this.createTime,
         this.updateTime,
         this.approvalStatus,
-        this.approvalComments });
+        this.approvalComments, });
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventRequest.fromJson(Map<String, dynamic> data) {
@@ -130,7 +130,6 @@ class EventRequest {
     data['createTime']=this.createTime;
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
-
     return data;
   }
 
@@ -159,7 +158,7 @@ class EventRequest {
       "updateTime":this.updateTime,
       "createTime":this.createTime,
       "approvalStatus":this.approvalStatus,
-      "approvalComments":this.approvalComments
+      "approvalComments":this.approvalComments,
     };
 
   }

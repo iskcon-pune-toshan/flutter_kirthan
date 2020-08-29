@@ -43,6 +43,8 @@ class UserLogin {
         UserLogin(username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
     users.add(
         UserLogin(username: "parthprandas.rns@gmail.com", password: "", usertype: "User"));
+    users.add(
+        UserLogin(username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
     return users;
   }
 }

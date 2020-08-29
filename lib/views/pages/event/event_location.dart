@@ -119,6 +119,7 @@ class LocationMark extends State<Location>
 
             child: GoogleMap(
               myLocationEnabled: true,
+              myLocationButtonEnabled: true,
               mapType: MapType.normal,
               initialCameraPosition: CameraPosition(
               target: LatLng(0.0,0.0), zoom: 16),
@@ -136,15 +137,17 @@ class LocationMark extends State<Location>
   //final Map<String, Marker> _markerss = {};
   Future<void> _onMapCreated(GoogleMapController controller) async {
 
-    var title = widget.eventrequest?.eventTitle;
-    final query = widget.eventrequest?.addLineOne +
-        widget.eventrequest?.addLineTwo + widget.eventrequest?.locality +
-        widget.eventrequest?.city + widget.eventrequest.state;
-    var addresses = await Geocoder.local.findAddressesFromQuery(query);
-    var first = addresses.first;
-    double lat = first.coordinates.latitude;
-    double long = first.coordinates.longitude;
-    _destination = LatLng(lat,long);
+      var title = widget.eventrequest?.eventTitle;
+
+      final query = widget.eventrequest?.addLineOne +
+          widget.eventrequest?.addLineTwo + widget.eventrequest?.locality +
+          widget.eventrequest?.city + widget.eventrequest.state;
+      var addresses = await Geocoder.local.findAddressesFromQuery(query);
+      var first = addresses.first;
+      print(query);
+      double lat = first.coordinates.latitude;
+      double long = first.coordinates.longitude;
+      _destination = LatLng(lat,long);
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(lat, long), zoom: 16, tilt: 50.0,
           bearing: 45.0,))
@@ -202,16 +205,15 @@ class LocationMark extends State<Location>
         infoWindow: InfoWindow(
           title: title,
         ),
-        //icon: destinationIcon
+        //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
       ),
       );
-      _markers.add(Marker(markerId: MarkerId('Your location'),
+     /* _markers.add(Marker(markerId: MarkerId('Your location'),
       position: LatLng(position.latitude,position.longitude),
       infoWindow: InfoWindow(title: 'Your Location'),
-        //icon:
-
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       ),
-      );
+      );*/
       await createPolylines(startCoordinates, destinationCoordinates);
      for (int i = 0; i < polylineCoordinates.length - 1; i++) {
        totalDistance += _coordinateDistance(
@@ -258,7 +260,7 @@ class LocationMark extends State<Location>
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     }
-setState(() {
+    setState(() {
   PolylineId id = PolylineId('poly');
 
   // Polyline
@@ -285,4 +287,3 @@ setState(() {
 
   }
 }
-

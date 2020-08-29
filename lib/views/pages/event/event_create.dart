@@ -1,24 +1,29 @@
 import 'dart:async';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
 
 
 class EventWrite extends StatefulWidget {
-  EventWrite({Key key}) : super(key: key);
+ // EventWrite({Key key}) : super(key: key);
   final String screenName = SCR_EVENT;
+EventRequest eventrequest;
 
   @override
   _EventWriteState createState() => _EventWriteState();
 
+  EventWrite({@required this.eventrequest});
 }
 class _EventWriteState extends State<EventWrite> {
 
@@ -72,6 +77,34 @@ class _EventWriteState extends State<EventWrite> {
   String _selectedState;
   String _selectedCountry;
 
+
+  List type=["Stationary","Moving"];
+
+  String select;
+  Row addRadioButton(int btnValue, String title) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+
+        Radio(
+          activeColor: Theme.of(context).primaryColor,
+          value: type[btnValue],
+          groupValue: select,
+          onChanged: (value){
+            setState(() {
+              print(value);
+              select=value;
+            });
+
+          },
+    ),
+
+
+        Text(title)
+      ],
+    );
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -244,8 +277,30 @@ class _EventWriteState extends State<EventWrite> {
                       ),
                       elevation: 5,
                     ),
+                  /*    Card(
+                        child: Container(
+                          padding: new EdgeInsets.all(10),
+                          child: RaisedButton.icon(
+                            onPressed: (){ Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddLocation(eventrequest: eventrequest,)
+                                )
+                            ); },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                            label: Text('Add Location',
+                              style: TextStyle(color: Colors.black),),
+                            icon: Icon(Icons.location_on, color:Colors.black,),
+                            textColor: Colors.black,
+                            splashColor: Colors.red,
+                            color: Colors.white,
+                          ),
 
-                    Card(
+                        ),
+                        elevation: 5,
+                      ),*/
+                   /* Card(
                       child: Container(
                         padding: new EdgeInsets.all(10),
                         child:TextFormField(
@@ -267,7 +322,7 @@ class _EventWriteState extends State<EventWrite> {
                         ),
                       ),
                       elevation: 5,
-                    ),
+                    ),*/
                     Card(
                       child: Container(
                         padding: new EdgeInsets.all(10),
@@ -317,6 +372,61 @@ class _EventWriteState extends State<EventWrite> {
                     Card(
                       child: Column(
                         children: <Widget>[
+                          Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                addRadioButton(0, 'Stationary'),
+                                addRadioButton(1, 'Moving'),
+
+                              ],
+                            ),
+
+                          /*RaisedButton.icon(
+                                 onPressed: (){ Navigator.push(
+                                     context,
+                                     MaterialPageRoute(
+                                         builder: (context) => AddLocation(eventrequest: eventrequest,)
+                                     )
+                                 ); },
+
+                                 shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                                 label: Text('Add Location',
+                                   style: TextStyle(color: Colors.black),),
+                                 icon: Icon(Icons.location_on, color:Colors.black,),
+                                 textColor: Colors.black,
+                                 splashColor: Colors.red,
+                                 color: Colors.white,
+                               ),*/
+
+                          ]),
+
+
+                          RaisedButton.icon(
+                            onPressed: () {
+                              Navigator.push( context,MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider(
+                                      create: (BuildContext context) => MapsBloc(),
+                                      child: AddLocation(),
+                                    ),
+                              ),);
+
+
+                            },
+
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                            label: Text('Add Location',
+                              style: TextStyle(color: Colors.black),),
+                            icon: Icon(Icons.location_on,
+                              color:Colors.black,),
+                            textColor: Colors.black,
+                            splashColor: Colors.red,
+                            color: Colors.white,
+                          ),
                           TextFormField(
                             //attribute: "Address",
                             decoration: InputDecoration(
@@ -532,9 +642,6 @@ class _EventWriteState extends State<EventWrite> {
         );}
       ),
     );
-
-
   }
-
 }
 

@@ -1,22 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/junk/main_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
+
 import 'package:flutter_kirthan/views/pages/eventuser/eventuser_view.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
+import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 
 class EventsPanel extends StatelessWidget {
   String eventType;
+  EventRequest eventRequest;
 
   final String screenName = "Event";
 
-  EventsPanel({@required this.eventType});
+  EventsPanel({@required this.eventType,@required this.eventRequest});
   @override
   Widget build(BuildContext context) {
+    String dropdownValue=eventRequest?.city;
     return ScopedModelDescendant<EventPageViewModel>(
       builder: (context, child, model) {
         return FutureBuilder<List<EventRequest>>(
@@ -53,6 +61,15 @@ class EventsPanel extends StatelessWidget {
                                       builder: (context) => TeamUserView()));
                             },
                           ),
+                          /*RaisedButton(
+                            child: const Text("Map v"),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TeamUserView()));
+                            },
+                          ),*/
                           RaisedButton(
                             //child: const Text("This Week"),
                             child: const Text("Event-User View"),
@@ -65,7 +82,46 @@ class EventsPanel extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Expanded(
+                      new  Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                      Container(
+                        height: 65,
+                        decoration: new BoxDecoration(
+                        image: new DecorationImage(
+                        image: new AssetImage('assets/images/map.jpg'),
+                        fit: BoxFit.cover,
+                        ),
+                        ),
+
+                        child: FlatButton(
+                          //child: const Text("This Week"),
+                          child: Center(child: Text('Map')),
+
+                          // child: const Text("Map"),
+                          onPressed: () {
+                            Navigator.push( context,MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider(
+                                      create: (BuildContext context) => MapsBloc(),
+                                      child: Maps(),
+                                    ),
+                            ),);
+
+
+                          },
+                          //child: Image.asset("assets/images/map.jpg")
+
+                        ),
+
+                      ),
+            //          ),
+            ],
+                      ),
+
+
+                       Expanded(
                         child: Scrollbar(
                           controller: ScrollController(
                             initialScrollOffset: 2,
@@ -88,6 +144,7 @@ class EventsPanel extends StatelessWidget {
                           ),
                         ),
                       ),
+                      
                     ],
                   );
                 } else if (snapshot.hasError) {
