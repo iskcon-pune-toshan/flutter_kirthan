@@ -2,9 +2,14 @@ import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
+import 'package:flutter_kirthan/views/pages/event/event_search.dart';
+import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
@@ -25,8 +30,8 @@ final EventPageViewModel eventPageVM =
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
-
-  EventView({Key key}) : super(key: key);
+EventRequest eventrequest;
+  EventView({Key key,@required this.eventrequest}) : super(key: key);
 
   @override
   _EventViewState createState() => _EventViewState();
@@ -88,6 +93,15 @@ class _EventViewState extends State<EventView>
       appBar: AppBar(
         title: Text("Events"),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => {
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) =>
+            Search ()),
+          ),}),
           PopupMenuButton(
               icon: Icon(Icons.tune),
               onSelected: (input) {
@@ -95,7 +109,7 @@ class _EventViewState extends State<EventView>
                 print(input);
                 eventPageVM.setEventRequests("All");
               },
-              itemBuilder: (BuildContext context) {
+    itemBuilder: (BuildContext context) {
                 return eventTime.map((f) {
                   return CheckedPopupMenuItem<String>(
                     child: Text(f),
@@ -106,6 +120,7 @@ class _EventViewState extends State<EventView>
                   );
                 }).toList();
               }),
+
         ],
       ),
       drawer: Drawer(
@@ -368,12 +383,14 @@ class _EventViewState extends State<EventView>
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
             case 3:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => NotificationView()));
               break;
           }
         },
         currentIndex: _index,
         selectedItemColor: Colors.orange,
-        items: const <BottomNavigationBarItem>[
+        items:  <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
@@ -387,9 +404,47 @@ class _EventViewState extends State<EventView>
             title: Text('Team'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
+            title: Text("Notification"),
+            icon: ScopedModel<NotificationViewModel>(
+              model: NotificationViewModel(),
+              child: ScopedModelDescendant<NotificationViewModel>(
+                  builder: (context, child, model) {
+                    FirebaseMessageService fms  = new FirebaseMessageService();
+                    fms.initMessageHandler(context);
+                    print(model.newNotificationCount);
+                    bool visibilty = true;
+                    if(model.newNotificationCount == 0 ) visibilty = false;
+                    return Stack(
+                      alignment: Alignment.topRight,
+                      children: <Widget>[
+                        Icon(Icons.notifications),
+                        if(visibilty) Positioned(
+                          child: Container(
+                            padding: EdgeInsets.all(1),
+                            decoration: new BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            constraints: BoxConstraints(
+                              minHeight: 8,
+                              minWidth: 8,
+                            ),
+                            child: Text(
+                              model.newNotificationCount.toString(),
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                              ),
+                            ),
+                          ),
+                        ) ,
+                      ],
+                    );
+                  }),
+            ),
           ),
+
+
         ],
       ),
     );
