@@ -1,13 +1,15 @@
-import 'dart:ffi';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'dart:ffi';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/firebasemessage_service.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
@@ -16,7 +18,7 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
@@ -28,8 +30,8 @@ final EventPageViewModel eventPageVM =
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
-
-  EventView({Key key}) : super(key: key);
+EventRequest eventrequest;
+  EventView({Key key,@required this.eventrequest}) : super(key: key);
 
   @override
   _EventViewState createState() => _EventViewState();
@@ -91,6 +93,15 @@ class _EventViewState extends State<EventView>
       appBar: AppBar(
         title: Text("Events"),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => {
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) =>
+            Search ()),
+          ),}),
           PopupMenuButton(
               icon: Icon(Icons.tune),
               onSelected: (input) {
