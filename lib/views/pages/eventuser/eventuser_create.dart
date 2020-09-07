@@ -94,6 +94,7 @@ class _EventUserCreateState extends State<EventUserCreate> {
                     ),
                   ),
                 );
+
               } else {
                 return Container(
                   width: 20.0,

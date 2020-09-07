@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'dart:math' show cos, sqrt, asin;
 

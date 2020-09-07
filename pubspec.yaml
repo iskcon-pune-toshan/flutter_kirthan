@@ -44,6 +44,9 @@ dependencies:
   great_circle_distance:
   flutter_bloc: ^4.0.0
   bloc:
+  card_settings:
+  image_picker: ^0.5.3+1
+  firebase_storage:
 
 
 dev_dependencies:
@@ -60,7 +63,6 @@ flutter:
   assets:
     - assets/
     - assets/data/
-    - assets/markdown/
     - assets/fonts/
     - assets/images/
   fonts:

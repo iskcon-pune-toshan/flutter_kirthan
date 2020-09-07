@@ -17,11 +17,7 @@ class KirthanApp extends StatelessWidget {
             builder: (context, ThemeNotifier notifier, child) {
               return new MaterialApp(
                 title: 'Kirthan Application',
-                theme: new ThemeData(
-                  primaryColor: Color(0xff070707),
-                  primaryColorLight: Color(0xff0a0a0a),
-                  primaryColorDark: Color(0xff000000),
-                ),
+                theme: notifier.darkTheme ? dark : light,
                 home: LoginApp(),
                 //home:SignInApp() ,
                 debugShowCheckedModeBanner: false,

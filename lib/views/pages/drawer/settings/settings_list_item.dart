@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/perferences_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 
 class MySettingsApp extends StatefulWidget {
   @override
@@ -121,8 +123,52 @@ class _MyAppState extends State<MySettingsApp> {
             Card(
               child: ListTile(
                 trailing: Icon(Icons.keyboard_arrow_right),
+                leading: Icon(Icons.perm_contact_calendar),
+
                 title: Text(
-                  "Preference Settings",
+                  'Profile',
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyProfileSettings()));
+                },
+                selected: true,
+              ),
+            ),
+            Divider(),
+            Card(
+              child: ListTile(
+                trailing: Icon(Icons.keyboard_arrow_right),
+                leading: Icon(Icons.check_circle_outline),
+
+                title: Text(
+                  "Perferences",
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PerferenceSettings()));
+                },
+                selected: true,
+              ),
+            ),
+            Divider(),
+            Card(
+              child: ListTile(
+                trailing: Icon(Icons.keyboard_arrow_right),
+                leading: Icon(Icons.brightness_4),
+
+                title: Text(
+                  "Display",
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
                   ),
@@ -139,14 +185,18 @@ class _MyAppState extends State<MySettingsApp> {
             Divider(),
             Card(
               child: ListTile(
+                leading: Icon(Icons.notifications_active),
+
                 title: Text(
                   "Notifications",
+
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
                   ),
                 ),
                 onTap: () {
                   _showMaterialDialog();
+
                 },
                 selected: true,
               ),
@@ -214,25 +264,29 @@ class _MyAppState extends State<MySettingsApp> {
   }
 
   _showMaterialDialog() {
+
     showDialog(
         context: context,
         builder: (_) => new AlertDialog(
-              title: new Text("Notifications"),
-              content: new Text("Do you want to get notifications on phone?"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Yes'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                FlatButton(
-                  child: Text('No'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ));
+          title: new Text("Notifications"),
+          content: new Text("Do you want to get notifications on phone?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ));
+
+
+
   }
 }
