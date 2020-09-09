@@ -18,7 +18,10 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
+
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_kirthan/view_models/admin_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
@@ -30,8 +33,9 @@ final EventPageViewModel eventPageVM =
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
-EventRequest eventrequest;
-  EventView({Key key,@required this.eventrequest}) : super(key: key);
+  EventRequest eventrequest;
+
+  EventView({Key key, @required this.eventrequest}) : super(key: key);
 
   @override
   _EventViewState createState() => _EventViewState();
@@ -45,6 +49,7 @@ class _EventViewState extends State<EventView>
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
+
   //List<String> userdetails;
   String photoUrl;
   String name;
@@ -94,14 +99,13 @@ class _EventViewState extends State<EventView>
         title: Text("Events"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => {
-            Navigator.push(
-            context,
-            MaterialPageRoute(
-            builder: (context) =>
-            Search ()),
-          ),}),
+              icon: Icon(Icons.search),
+              onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Search()),
+                    ),
+                  }),
           PopupMenuButton(
               icon: Icon(Icons.tune),
               onSelected: (input) {
@@ -182,6 +186,18 @@ class _EventViewState extends State<EventView>
           ),
           Card(
             child: ListTile(
+              title: Text("Admin View"),
+              trailing: Icon(Icons.assignment),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdminView()),
+                );
+              },
+            ),
+          ),
+          Card(
+            child: ListTile(
               title: Text("Share app"),
               trailing: Icon(Icons.share),
               onTap: () {
@@ -228,11 +244,14 @@ class _EventViewState extends State<EventView>
                         description:
                             "Tap a star to set your rating. Add more description here if you want.",
                         submitButton: "SUBMIT",
-                        alternativeButton: "Contact us instead?", // optional
-                        positiveComment:
-                            "We are so happy to hear :)", // optional
-                        negativeComment: "We're sad to hear :(", // optional
-                        accentColor: Colors.red, // optional
+                        alternativeButton: "Contact us instead?",
+                        // optional
+                        positiveComment: "We are so happy to hear :)",
+                        // optional
+                        negativeComment: "We're sad to hear :(",
+                        // optional
+                        accentColor: Colors.red,
+                        // optional
                         onSubmitPressed: (int rating) {
                           print("onSubmitPressed: rating = $rating");
                         },
@@ -382,8 +401,8 @@ class _EventViewState extends State<EventView>
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
             case 3:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => NotificationView()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationView()));
               break;
           }
         },
@@ -408,38 +427,39 @@ class _EventViewState extends State<EventView>
               model: NotificationViewModel(),
               child: ScopedModelDescendant<NotificationViewModel>(
                   builder: (context, child, model) {
-                    FirebaseMessageService fms  = new FirebaseMessageService();
-                    fms.initMessageHandler(context);
-                    print(model.newNotificationCount);
-                    bool visibilty = true;
-                    if(model.newNotificationCount == 0 ) visibilty = false;
-                    return Stack(
-                      alignment: Alignment.topRight,
-                      children: <Widget>[
-                        Icon(Icons.notifications),
-                        if(visibilty) Positioned(
-                          child: Container(
-                            padding: EdgeInsets.all(1),
-                            decoration: new BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            constraints: BoxConstraints(
-                              minHeight: 8,
-                              minWidth: 8,
-                            ),
-                            child: Text(
-                              model.newNotificationCount.toString(),
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
+                FirebaseMessageService fms = new FirebaseMessageService();
+                fms.initMessageHandler(context);
+                print(model.newNotificationCount);
+                bool visibilty = true;
+                if (model.newNotificationCount == 0) visibilty = false;
+                return Stack(
+                  alignment: Alignment.topRight,
+                  children: <Widget>[
+                    Icon(Icons.notifications),
+                    if (visibilty)
+                      Positioned(
+                        child: Container(
+                          padding: EdgeInsets.all(1),
+                          decoration: new BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          constraints: BoxConstraints(
+                            minHeight: 8,
+                            minWidth: 8,
+                          ),
+                          child: Text(
+                            model.newNotificationCount.toString(),
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
                             ),
                           ),
-                        ) ,
-                      ],
-                    );
-                  }),
+                        ),
+                      ),
+                  ],
+                );
+              }),
             ),
           ),
         ],

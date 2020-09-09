@@ -17,7 +17,14 @@ class TeamPageViewModel extends Model {
     _teamrequests = value;
     notifyListeners();
   }
-
+  Future<List<int>> getTeamsCount() async {
+    List<int> result = await  apiSvc?.getTeamsCount();
+    return result;
+  }
+  Future<List<TeamRequest>> getTeamForApproval(String status){
+    Future<List<TeamRequest>> teamsreqs = apiSvc?.getTeamRequestByStatus(status);
+    return teamsreqs;
+  }
   Future<bool> setTeamRequests(String teamTitle) async {
     teamrequests = apiSvc?.getTeamRequests(teamTitle);
     return teamrequests != null;

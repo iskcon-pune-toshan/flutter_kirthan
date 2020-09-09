@@ -7,7 +7,8 @@ abstract class IEventRestApi {
 
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap);
-
+  Future<List<int>> getEventCount();
+  Future<List<EventRequest>> getData(String status);
   Future<bool> processEventRequest(Map<String, dynamic> processrequestmap);
 
   Future<bool> deleteEventRequest(Map<String, dynamic> processrequestmap);

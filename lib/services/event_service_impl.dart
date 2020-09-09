@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_interface.dart';
-
+import 'package:http/http.dart' as _http;
 class EventAPIService extends BaseAPIService implements IEventRestApi  {
 
   static final EventAPIService _internal = EventAPIService.internal();
@@ -11,6 +11,30 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
   factory EventAPIService() => _internal;
 
   EventAPIService.internal();
+
+  @override
+  Future<List<int>> getEventCount() async {
+    _http.Response response =  await _http.get("$baseUrl/event/count");
+    if(response.statusCode == 200 ) {
+      List<dynamic> data = json.decode(response.body);
+      List<int> resultData = [];
+      for (int i = 0; i < 3; i++)
+        resultData.add((data[i]));
+      return (resultData);
+    }
+    else{
+      print("Error fetching data");
+      return [0,0,0];
+    }
+  }
+
+  @override
+  Future<List<EventRequest>> getData(String status) async {
+    _http.Response response =  await _http.get("$baseUrl/event?status=$status");
+    List<dynamic> data = json.decode(response.body);
+    List<EventRequest> newData =  data.map((e) => EventRequest.fromMap(e)).toList();
+    return Future.value(newData);
+  }
 
   Future<bool> processEventRequest(
       Map<String, dynamic> processrequestmap) async {

@@ -3,6 +3,9 @@ import 'package:flutter_kirthan/models/team.dart';
 
 abstract class ITeamRestApi {
 //team
+  Future<List<int>> getTeamsCount();
+
+  Future<List<TeamRequest>> getTeamRequestByStatus(String status);
   Future<List<TeamRequest>> getTeamRequests(String teamTitle);
 
   Future<TeamRequest> submitNewTeamRequest(Map<String, dynamic> teamrequestmap);

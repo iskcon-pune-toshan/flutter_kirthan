@@ -43,7 +43,7 @@ class NotificationModel {
 
   factory NotificationModel.fromJson(Map<String, dynamic> data) {
     return NotificationModel(
-        createdAt: data["createdAt"],
+        createdAt: DateTime.parse(data["timeOfCreation"]),
         creatorId: data["creatorId"],
         id: data["id"],
         message: data["message"],
