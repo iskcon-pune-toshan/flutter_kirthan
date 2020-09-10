@@ -5,7 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/user_service_interface.dart';
-
+import 'package:http/http.dart' as _http;
 class UserAPIService extends BaseAPIService implements IUserRestApi {
   static final UserAPIService _internal = UserAPIService.internal();
 
@@ -13,6 +13,37 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
 
   UserAPIService.internal();
 
+  @override
+  Future<List<int>> getUserCount() async {
+    _http.Response response =  await _http.get("$baseUrl/users/count");
+    if(response.statusCode == 200 ) {
+      List<dynamic> data = json.decode(response.body);
+      List<int> resultData = [];
+      for (int i = 0; i < 3; i++)
+        resultData.add((data[i]));
+      return (resultData);
+    }
+    else{
+      print("Error fetching data");
+      return [0,0,0];
+    }
+  }
+
+  @override
+  Future<List<UserRequest>> getNewUserRequests(String status,String city) async {
+    String finalUrl = '$baseUrl/users?status=$status&city=$city';//needs to adjust this to temple
+    print(finalUrl);
+    var response = await client1.get(finalUrl);
+    if (response.statusCode == 200) {
+      List<dynamic> userrequestsData = json.decode(response.body);
+      List<UserRequest> userrequests = userrequestsData
+          .map((userrequestsData) => UserRequest.fromMap(userrequestsData))
+          .toList();
+      return userrequests;
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
   Future<List<UserRequest>> getUserRequests(String userType) async {
     String requestBody = '{"locality":"Warje"}';
     //adding a test comment

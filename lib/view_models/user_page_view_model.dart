@@ -19,6 +19,16 @@ class UserPageViewModel extends Model {
     notifyListeners();
   }
 
+  Future<List<int>> getUserCount() async {
+    List<int> result = await  apiSvc?.getUserCount();
+    return result;
+  }
+
+  Future<List<UserRequest>> getUserForApproval(String status){
+    Future<List<UserRequest>> usersreqs = apiSvc?.getNewUserRequests(status,"Pune");
+    print(usersreqs);
+    return usersreqs;
+  }
 
   Future<bool> setUserRequests(String userType) async {
     userrequests = apiSvc?.getUserRequests(userType);

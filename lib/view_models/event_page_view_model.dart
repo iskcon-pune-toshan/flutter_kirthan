@@ -19,6 +19,16 @@ class EventPageViewModel extends Model {
     notifyListeners();
   }
 
+  Future<List<int>> getEventCount() async {
+    List<int> result = await  apiSvc?.getEventCount();
+    return result;
+  }
+
+  Future<void> getData(status) async {
+    eventrequests = apiSvc?.getData(status);
+    return eventrequests;
+  }
+
   Future<bool> setEventRequests(String eventType) async {
     eventrequests = apiSvc?.getEventRequests(eventType);
     return eventrequests != null;
