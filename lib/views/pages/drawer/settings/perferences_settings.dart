@@ -10,6 +10,7 @@ class PerferenceSettings extends StatefulWidget {
 
 class _PerferenceSettingsState extends State<PerferenceSettings> {
   String dropdownValue = '';
+  String arg1 = null;
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +66,14 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                   setState(() {
                     dropdownValue = _value;
                     print(_value);
+                    arg1 = _value;
                   });
 
                   //notifier.selectArea();
                 },
                 //value: notifier.area,
                 hint: Text(
-                  'Area',
+                  arg1 == null ? 'Area' : arg1,
                   style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
                 ),
               ),

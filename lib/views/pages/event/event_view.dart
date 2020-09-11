@@ -19,9 +19,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
-
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_kirthan/view_models/admin_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
