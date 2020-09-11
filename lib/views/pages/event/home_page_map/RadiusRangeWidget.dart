@@ -15,7 +15,7 @@ class  RangeRadius  extends  StatefulWidget {
 }
 
 class  _RangeRadiusState  extends  State < RangeRadius > {
-  double _radius =  100 ;
+  double _radius =  2000 ;
   MapsBloc _mapsBloc;
   @override
   void  initState () {
@@ -44,12 +44,12 @@ class  _RangeRadiusState  extends  State < RangeRadius > {
                   children :  < Widget > [
                     Text (_radius.toInt (). toString () +  'Mtrs' ),
                     Slider (
-                      max :  2100 ,
-                      min :  100 ,
+                      max :  10000 ,
+                      min :  1000 ,
                       value : _radius,
                       activeColor :  Colors .red,
                       inactiveColor :  Colors .grey,
-                      divisions :  20 ,
+                      divisions :  9 ,
                       onChanged : ( double value) {
                         if ( ! widget.isRadiusFixed) {
                           _mapsBloc.add(UpdateRangeValues(radius: value));

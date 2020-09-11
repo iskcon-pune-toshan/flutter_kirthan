@@ -7,6 +7,7 @@ import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
+import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
@@ -40,6 +41,7 @@ EventRequest eventrequest;
 class _EventViewState extends State<EventView>
     with SingleTickerProviderStateMixin {
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
+
   String _selectedValue;
   int _index;
   SharedPreferences prefs;
@@ -93,21 +95,23 @@ class _EventViewState extends State<EventView>
       appBar: AppBar(
         title: Text("Events"),
         actions: <Widget>[
-          IconButton(
+        IconButton(
             icon: Icon(Icons.search),
+
             onPressed: () => {
             Navigator.push(
             context,
             MaterialPageRoute(
             builder: (context) =>
             Search ()),
-          ),}),
+          ),}
+        ),
           PopupMenuButton(
               icon: Icon(Icons.tune),
               onSelected: (input) {
                 _selectedValue = input;
                 print(input);
-                eventPageVM.setEventRequests("All");
+                eventPageVM.setEventRequests(widget.eventrequest?.eventTitle);
               },
     itemBuilder: (BuildContext context) {
                 return eventTime.map((f) {
@@ -386,6 +390,9 @@ class _EventViewState extends State<EventView>
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => NotificationView()));
               break;
+            case 4:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Calendar()));
           }
         },
         currentIndex: _index,
@@ -443,7 +450,11 @@ class _EventViewState extends State<EventView>
                   }),
             ),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            title: Text('Calendar'),
 
+          ),
 
         ],
       ),

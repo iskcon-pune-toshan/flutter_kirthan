@@ -23,7 +23,9 @@ class EventRequest {
   String updateTime;
   String approvalStatus;
   String approvalComments;
-
+  String latitude;
+  String longitude;
+  String statmoving;
 
 //Typically called form service layer to create a new user
   EventRequest(
@@ -45,7 +47,10 @@ class EventRequest {
         this.createTime,
         this.updateTime,
         this.approvalStatus,
-        this.approvalComments, });
+        this.approvalComments,
+      this.longitude,
+      this.latitude,
+      this.statmoving,});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventRequest.fromJson(Map<String, dynamic> data) {
@@ -73,7 +78,9 @@ class EventRequest {
       createTime: data['createTime'],
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
-    );
+      latitude: data['latitude'],
+      longitude: data['longitude'],
+      statmoving: data['statmoving']);
   }
 
   factory EventRequest.fromMap(Map<String, dynamic> map) {
@@ -101,6 +108,9 @@ class EventRequest {
       createTime: map['createTime'],
       approvalStatus: map['approvalStatus'],
       approvalComments: map['approvalComments'],
+      longitude: map['longitude'],
+      latitude: map['latitude'],
+      statmoving: map['statmoving']
     );
   }
 
@@ -130,6 +140,9 @@ class EventRequest {
     data['createTime']=this.createTime;
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
+    data['latitude']=this.latitude;
+    data['longitude']=this.longitude;
+    data['statmoving']=this.statmoving;
     return data;
   }
 
@@ -159,6 +172,9 @@ class EventRequest {
       "createTime":this.createTime,
       "approvalStatus":this.approvalStatus,
       "approvalComments":this.approvalComments,
+      "longitude":this.longitude,
+      "latitude":this.latitude,
+      "statmoving":this.statmoving,
     };
 
   }

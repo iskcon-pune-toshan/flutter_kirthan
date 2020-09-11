@@ -44,7 +44,7 @@ dependencies:
   great_circle_distance:
   flutter_bloc: ^4.0.0
   bloc:
-
+  syncfusion_flutter_calendar: 18.2.57
 
 dev_dependencies:
   flutter_test:

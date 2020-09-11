@@ -76,6 +76,8 @@ class UserRequest {
   String updateTime;
   String approvalStatus;
   String approvalComments;
+  String latitude;
+  String longitude;
 
 //Typically called form service layer to create a new user
   UserRequest(
@@ -103,7 +105,9 @@ class UserRequest {
       this.updatedBy,
       this.updateTime,
       this.approvalStatus,
-      this.approvalComments});
+      this.approvalComments,
+      this.latitude,
+      this.longitude,});
 //Typically called from the data_source layer after getting data from an external source.
   factory UserRequest.fromJson(Map<String, dynamic> data) {
     return UserRequest(
@@ -132,6 +136,8 @@ class UserRequest {
       updateTime: data['updateTime'],
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
+      latitude: data['latitude'],
+      longitude: data['longitude'],
     );
   }
   factory UserRequest.fromMap(Map<String, dynamic> map) {
@@ -161,6 +167,8 @@ class UserRequest {
       updateTime: map['updateTime'],
       approvalStatus: map['approvalStatus'],
       approvalComments: map['approvalComments'],
+      latitude: map['latitude'],
+      longitude: map['longitude'],
     );
   }
 
@@ -194,7 +202,8 @@ class UserRequest {
     data['updateTime'] = this.updateTime;
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
-
+    data['latitude']=this.latitude;
+    data['longitude']=this.longitude;
     return data;
   }
 
@@ -225,7 +234,9 @@ class UserRequest {
       "updateTime": this.updateTime,
       "createTime": this.createTime,
       "approvalStatus": this.approvalStatus,
-      "approvalComments": this.approvalComments
+      "approvalComments": this.approvalComments,
+      "latitude":this.latitude,
+      "longitude":this.longitude,
     };
   }
 }

@@ -99,17 +99,27 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
   Stream<MapsState> _mapUpdateRangeValues(double _radius) async* {
     yield Loading();
     double _zoom;
-    if (_radius > 100 && _radius < 220) {
+    if (_radius >= 1000 && _radius < 2000) {
       _zoom = 17;
-    } else if (_radius >= 220 && _radius < 420) {
+    } else if (_radius >= 2000 && _radius < 3000) {
+      _zoom = 16.5;
+    } else if (_radius >= 3000 && _radius<4000) {
       _zoom = 16;
-    } else if (_radius > 420) {
+    }else if (_radius >= 4000 && _radius<5000) {
+      _zoom = 15.5;
+    } else if (_radius >= 5000 && _radius<6000){
       _zoom = 15;
-    } else if (_radius > 620){
-      _zoom = 18;
-    } else{
-      _zoom = 20;
+    } else if (_radius >= 6000 && _radius < 7000){
+      _zoom = 14.5;
+    } else if (_radius >= 7000 && _radius < 8000) {
+      _zoom = 14;
+    } else if (_radius>= 8000 && _radius <9000) {
+      _zoom = 13.5;
+    } else if (_radius>= 9000 && _radius <10000) {
+      _zoom = 13;
     }
+      else
+      _zoom=12.5;
     yield RadiusUpdate(radius: _radius, zoom: _zoom);
   }
 

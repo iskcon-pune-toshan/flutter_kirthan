@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_kirthan/models/event.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
@@ -26,6 +31,7 @@ EventRequest eventrequest;
   EventWrite({@required this.eventrequest});
 }
 class _EventWriteState extends State<EventWrite> {
+
 
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
@@ -94,6 +100,8 @@ class _EventWriteState extends State<EventWrite> {
             setState(() {
               print(value);
               select=value;
+              eventrequest.statmoving=value;
+              print('saved statmoving');
             });
 
           },
@@ -247,9 +255,6 @@ class _EventWriteState extends State<EventWrite> {
                             ),
 
                           ],
-
-
-
                         ),
                       ),
                       elevation: 5,
@@ -383,34 +388,17 @@ class _EventWriteState extends State<EventWrite> {
                               ],
                             ),
 
-                          /*RaisedButton.icon(
-                                 onPressed: (){ Navigator.push(
-                                     context,
-                                     MaterialPageRoute(
-                                         builder: (context) => AddLocation(eventrequest: eventrequest,)
-                                     )
-                                 ); },
-
-                                 shape: RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                                 label: Text('Add Location',
-                                   style: TextStyle(color: Colors.black),),
-                                 icon: Icon(Icons.location_on, color:Colors.black,),
-                                 textColor: Colors.black,
-                                 splashColor: Colors.red,
-                                 color: Colors.white,
-                               ),*/
-
                           ]),
 
 
                           RaisedButton.icon(
                             onPressed: () {
-                              Navigator.push( context,MaterialPageRoute(
+                             Navigator.push( context,MaterialPageRoute(
                                 builder: (context) =>
                                     BlocProvider(
                                       create: (BuildContext context) => MapsBloc(),
-                                      child: AddLocation(),
+                                      child:
+                                      AddLocation(),
                                     ),
                               ),);
 
@@ -642,6 +630,119 @@ class _EventWriteState extends State<EventWrite> {
         );}
       ),
     );
+  }
+  bool mapToggle = false;
+  List<Marker> myMarker=[];
+  List<Marker> get markers => myMarker;
+
+
+  GoogleMapController mapController;
+
+  LatLng tappedPoint1;
+  LatLng get tappedPoint=>tappedPoint1;
+
+  @override
+  location(){
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Location'),
+          actions: <Widget>[
+            IconButton(
+
+              icon: Icon(Icons.refresh),
+              onPressed:  () => {
+                setState(() {
+                  markers.clear();
+                }),//setState
+              },//onpressed
+            ),
+
+            IconButton(
+              icon: Icon(Icons.done),
+              onPressed: (){
+                print('saved');
+
+                // onsaved();
+
+                // widget.eventrequest.eventLocation=tappedPoint1.toString();
+              },
+              //onpressed
+            ),
+
+          ],
+
+
+
+        ),
+        body: Column(
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Container(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height - 80.0,
+                    width: double.infinity,
+                    child: !mapToggle
+                        ? GoogleMap(
+                      myLocationButtonEnabled: true,
+                      myLocationEnabled: true,
+                      compassEnabled: true,
+                      onMapCreated: onMapCreated,
+                      onTap: handleTap,
+                      markers:
+
+                      Set.from(myMarker),
+
+                      initialCameraPosition: CameraPosition(
+                          target: LatLng(0.0, 0.0), zoom: 16),
+
+                    )
+                        : Center(
+                        child: Text(
+                          'Loading.. Please wait..',
+                          style: TextStyle(fontSize: 20.0),
+                        ))),
+
+
+
+
+
+              ],
+            )
+          ],
+        ));
+
+  }
+  handleTap(LatLng tappedPoint1) async{
+    print(tappedPoint1);
+    print('latitude is '+tappedPoint1.latitude.toString());
+    print('longitude is '+tappedPoint1.longitude.toString());
+/*    eventrequest.latitude=tappedPoint1.latitude.toString();
+    eventrequest.longitude=tappedPoint1.longitude.toString();*/
+    setState(() {
+
+      myMarker=[];
+
+      myMarker.add(
+        Marker(markerId: MarkerId(tappedPoint1.toString()),
+          infoWindow: InfoWindow(
+              title: 'Event Location') ,
+          position: tappedPoint1,
+        ),
+      );
+      eventrequest.latitude=tappedPoint1.latitude.toString();
+      eventrequest.longitude=tappedPoint1.longitude.toString();
+      print('saved');
+
+    });
+  }
+
+  void onMapCreated(controller) {
+    setState(() {
+      mapController = controller;
+    });
   }
 }
 
