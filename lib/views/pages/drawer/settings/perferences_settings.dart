@@ -115,10 +115,11 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                 setState(() {
                   dropdownValue = _value;
                   print(_value);
+                  arg1 = _value;
                 });
               },
               hint: Text(
-                'Local Admin',
+                arg1 == null ? 'Local Admin' : arg1,
                 style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
               ),
             )),
@@ -152,10 +153,11 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                 setState(() {
                   dropdownValue = _value;
                   print(_value);
+                  arg1 = _value;
                 });
               },
               hint: Text(
-                'Kirthan Duration',
+                arg1 ==null ?'Kirthan Duration' : arg1,
                 style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
               ),
             )),
@@ -189,10 +191,11 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                 setState(() {
                   dropdownValue = _value;
                   print(_value);
+                  arg1 = _value;
                 });
               },
               hint: Text(
-                'Request Acceptance',
+                arg1 == null ? 'Request Acceptance' : arg1,
                 style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
               ),
             )),
