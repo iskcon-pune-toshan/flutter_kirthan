@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_kirthan/views/pages/drawer/settings/impl_perferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/impl_perferences.dart';
 import 'package:provider/provider.dart';
 
 class PerferenceSettings extends StatefulWidget {
@@ -10,7 +11,12 @@ class PerferenceSettings extends StatefulWidget {
 
 class _PerferenceSettingsState extends State<PerferenceSettings> {
   String dropdownValue = '';
-  String arg1 = null;
+  String arg1 = null ;
+
+  String arg2 = null ;
+  String arg3 = null ;
+  String arg4 = null ;
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +32,8 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
           children: <Widget>[
             Divider(),
             Card(
-                child: /*Consumer<PerferenceNotifier>(
-              builder: (context, notifier, child) =>*/ DropdownButton<String>(
+                child: Consumer<SettingsNotifier>(
+              builder: (context, notifier, child) => DropdownButton<String>(
                 items: [
                   DropdownMenuItem<String>(
                     value: "NVCC",
@@ -62,22 +68,25 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                     ),
                   ),
                 ],
-                onChanged: (_value) {
-                  setState(() {
+                onChanged: (val) {
+                  /*setState(() {
                     dropdownValue = _value;
                     print(_value);
                     arg1 = _value;
                   });
 
-                  //notifier.selectArea();
-                },
-                //value: notifier.area,
+                   */
+
+                  notifier.selectArea();
+                  print(val);
+                  arg1 = val;
+                }, value: notifier.area,
                 hint: Text(
                   arg1 == null ? 'Area' : arg1,
                   style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
                 ),
               ),
-            ),
+                )),
             Divider(),
             Card(
                 child: DropdownButton<String>(
@@ -115,11 +124,11 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                 setState(() {
                   dropdownValue = _value;
                   print(_value);
-                  arg1 = _value;
+                  arg2 = _value;
                 });
               },
               hint: Text(
-                arg1 == null ? 'Local Admin' : arg1,
+                arg2 == null ? 'Local Admin' : arg2,
                 style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
               ),
             )),
@@ -153,11 +162,11 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                 setState(() {
                   dropdownValue = _value;
                   print(_value);
-                  arg1 = _value;
+                  arg3 = _value;
                 });
               },
               hint: Text(
-                arg1 ==null ?'Kirthan Duration' : arg1,
+                arg3 ==null ?'Kirthan Duration' : arg3,
                 style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
               ),
             )),
@@ -191,11 +200,11 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                 setState(() {
                   dropdownValue = _value;
                   print(_value);
-                  arg1 = _value;
+                  arg4 = _value;
                 });
               },
               hint: Text(
-                arg1 == null ? 'Request Acceptance' : arg1,
+                arg4 == null ? 'Request Acceptance' : arg4,
                 style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
               ),
             )),

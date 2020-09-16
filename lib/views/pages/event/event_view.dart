@@ -1,12 +1,14 @@
 //import 'dart:ffi';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/impl_perferences.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/event/event_search.dart';
@@ -19,9 +21,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
-
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
@@ -54,6 +53,10 @@ class _EventViewState extends State<EventView>
   String photoUrl;
   String name;
 
+
+
+
+
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -85,6 +88,7 @@ class _EventViewState extends State<EventView>
     _index = 0;
     loadData();
     loadPref();
+
     //print("in Event");
     //print(SignInService().firebaseAuth.currentUser().then((onValue) => print(onValue.displayName)));
   }
@@ -94,6 +98,7 @@ class _EventViewState extends State<EventView>
     //accessTypes.containsKey(ACCESS_TYPE_CREATE)
     //print("Accesstype: C: $accessTypes.containsKey(ACCESS_TYPE_CREATE)");
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
+    print($_area);
     return Scaffold(
       appBar: AppBar(
         title: Text("Events"),

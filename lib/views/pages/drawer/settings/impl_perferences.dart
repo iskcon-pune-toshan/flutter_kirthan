@@ -19,7 +19,7 @@ class SettingsNotifier extends ChangeNotifier {
   final String key = "settings";
   SharedPreferences _sharedPref;
   String _area;
-  bool _darkTheme;
+  bool _darkTheme = false ;
 
   String get area => _area;
   bool get darkTheme => _darkTheme;
