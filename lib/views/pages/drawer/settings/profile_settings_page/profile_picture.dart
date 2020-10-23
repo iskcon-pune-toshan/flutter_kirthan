@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path/path.dart';
@@ -56,6 +57,19 @@ class _profilePictureState extends State<profilePicture> {
       });
     }
 
+    Future deletePic(BuildContext context) async
+  {
+
+    String fileName = basename(_image.path);
+    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("profiles/").child(fileName);
+    await firebaseStorageRef.delete();
+    setState(() {
+      print("Profile Picture deleted");
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
+    });
+  }
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -63,10 +77,38 @@ class _profilePictureState extends State<profilePicture> {
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(
-          child: Stack(
+          child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 100,
+                      backgroundColor: Color(0xff476cfb),
+                      child: ClipOval(
+                        child: new SizedBox(
+                          width: 180.0,
+                          height: 180.0,
+                          child: (_image!=null)?Image.file(
+                            _image,
+                            fit: BoxFit.fill,
+                          ):Image.asset("assets/images/default_profile_picture.png",
+                          fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
               Card(
-                margin: const EdgeInsets.only(top: 200.0),
+                //margin: const EdgeInsets.only(top: 200.0),
                 child: SizedBox(
                     height: 300.0,
                     child: Padding(
@@ -104,7 +146,8 @@ class _profilePictureState extends State<profilePicture> {
                               //padding: EdgeInsets.only(left: 00.0,top: 10.0,right: 10.0,bottom: 0.0),
                               color: Colors.greenAccent,
                               onPressed: () {
-                                Image.asset('assets/images/default_profile_picture.png');
+                                //Image.asset('assets/images/default_profile_picture.png');
+                                deletePic(context);
                               },
                             ),
                             Row(
@@ -132,35 +175,12 @@ class _profilePictureState extends State<profilePicture> {
                       ),
                     )),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: CircleAvatar(
-                    radius: 100.0,
-                    backgroundColor: Colors.blue,
-                    child: ClipOval(
-                      child: SizedBox(
-                        width: 180.0,
-                        height: 180.0,
-                        child: (_image != null)
-                            ? Image.file(
-                          _image,
-                          fit: BoxFit.fill,
-                        )
-                            : Image.asset(
-                          "assets/images/default_profile_picture.png",
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+        ],
           ),
         ),
       ),
     );
   }
 }
+
+// "assets/images/default_profile_picture.png",

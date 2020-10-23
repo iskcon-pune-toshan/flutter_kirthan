@@ -27,6 +27,7 @@ class SettingsNotifier extends ChangeNotifier {
   _initSettings() async {
     if (_sharedPref == null) {
       _sharedPref = await SharedPreferences.getInstance();
+
     }
   }
 
@@ -38,6 +39,7 @@ class SettingsNotifier extends ChangeNotifier {
   selectArea() {
     _area != area;
     _saveArea();
+
     notifyListeners();
   }
 
@@ -51,9 +53,10 @@ class SettingsNotifier extends ChangeNotifier {
   _saveArea() async {
     await _initSettings();
     _sharedPref.setString(key, _area);
+    print(_sharedPref.get(key));
   }
 
-  ThemeNotifier() {
+  SettingsNotifier() {
     _loadFromPrefs();
   }
 

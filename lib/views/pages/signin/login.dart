@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 //final MainPageViewModel mainPageVM =
@@ -37,10 +37,32 @@ class _LoginAppState extends State<LoginApp> {
   UserAccess _userAccess;
   SharedPreferences prefs;
   SignInService signInService = SignInService();
+  AutheticationAPIService authenticateService = AutheticationAPIService();
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     //prefs.setString("My Name", "Manjunath Bijinepalli");
   }
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+
+
+   getCurrentUID() async{
+    final FirebaseUser user = await auth.currentUser();
+    final String uid = user.uid;
+    print(uid);
+    return uid;
+  }
+
+  getCurrentUser() async {
+     final FirebaseUser user = await auth.currentUser();
+     final String email = user.email;
+     print(email);
+     return email;
+
+  }
+
+
 
   @override
   void initState() {
@@ -54,7 +76,6 @@ class _LoginAppState extends State<LoginApp> {
 
 //    NotificationView _config = new NotificationView();
 //    _config.initMessageHandler(context);
-
   }
 
   void populateData() {
@@ -136,7 +157,8 @@ class _LoginAppState extends State<LoginApp> {
                           Container(
                               width: 300,
                               height: 50.0,
-                              child: DropdownButtonFormField<UserLogin>( // Shouldnt this be a text field? Or are we planning on storing all
+                              child: DropdownButtonFormField<UserLogin>(
+                                // Shouldnt this be a text field? Or are we planning on storing all
                                 // the logged in users email at all times?
                                 itemHeight: 50.0,
                                 value: _selecteduser,
@@ -183,7 +205,8 @@ class _LoginAppState extends State<LoginApp> {
                                 labelText: "Password*",
                               ),
                               controller: _passwordcontroller,
-                              validator: (input) => input.contains("*") // need to hold a help icon if the password rule beomes too complicated
+                              validator: (input) => input.contains(
+                                      "*") // need to hold a help icon if the password rule becomes too complicated
                                   ? "Not a Valid Password"
                                   : null,
                               onSaved: (input) => _password = input,
@@ -215,7 +238,8 @@ class _LoginAppState extends State<LoginApp> {
                                   //print(_passwordcontroller.text);
                                   //_formKey.currentState.save();
                                   signInService
-                                      .signUpWithEmail(_uname, _passwordcontroller.text)
+                                      .signUpWithEmail(
+                                          _uname, _passwordcontroller.text)
                                       .then(
                                           (FirebaseUser user) => populateData())
                                       .catchError((e) => print(e))
@@ -295,11 +319,14 @@ class _LoginAppState extends State<LoginApp> {
                                       .then(
                                           (FirebaseUser user) => populateData())
                                       .catchError((e) => print(e))
-                                      .whenComplete(() => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EventView())));
+                                      .whenComplete(() => authenticateService
+                                          .autheticate()
+                                          .whenComplete(() => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EventView()))));
+
                                 }
                               },
                             ),
@@ -327,9 +354,9 @@ class _LoginAppState extends State<LoginApp> {
                                   //print("Before");
                                   //print(signInService.firebaseAuth.currentUser() == null?true:false);
                                   //print(signInService.firebaseAuth
-                                    //  .currentUser()
-                                      //.then((onValue) =>
-                                        //  print(onValue.displayName)));
+                                  //  .currentUser()
+                                  //.then((onValue) =>
+                                  //  print(onValue.displayName)));
 
                                   signInService
                                       .googSignIn(context)
@@ -337,11 +364,12 @@ class _LoginAppState extends State<LoginApp> {
                                       .then(
                                           (FirebaseUser user) => populateData())
                                       .catchError((e) => print(e))
-                                      .whenComplete(() => Navigator.push(
+                                      .whenComplete(() => authenticateService
+                                      .autheticate().whenComplete(()  => Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  EventView())));
+                                                  EventView()))));
 
                                   //populateData();
 

@@ -53,18 +53,33 @@ class _EventViewState extends State<EventView>
   String photoUrl;
   String name;
 
+  SharedPreferences _sharedPref;
+
+  _initSettings() async {
+    //print("Entered init");
+
+    if (_sharedPref == null) {
+      _sharedPref = await SharedPreferences.getInstance();
+
+    }
+    //print(_sharedPref.get("settings"));
+    //print("Exit init");
+  }
 
 
 
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
+    print("placeholder");
     setState(() {
       access = prefs.getStringList(widget.screenName);
       access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
             access.elementAt(1).toLowerCase() == "true" ? true : false;
+        //print("print sp");
+        //print(prefs);
       });
       eventPageVM.accessTypes = accessTypes;
       //userdetails = prefs.getStringList("LoginDetails");
@@ -76,6 +91,7 @@ class _EventViewState extends State<EventView>
       });
       //print(userdetails.length);
     });
+    //print("exit");
   }
 
   Future loadData() async {
@@ -88,6 +104,7 @@ class _EventViewState extends State<EventView>
     _index = 0;
     loadData();
     loadPref();
+    _initSettings();
 
     //print("in Event");
     //print(SignInService().firebaseAuth.currentUser().then((onValue) => print(onValue.displayName)));
@@ -98,7 +115,7 @@ class _EventViewState extends State<EventView>
     //accessTypes.containsKey(ACCESS_TYPE_CREATE)
     //print("Accesstype: C: $accessTypes.containsKey(ACCESS_TYPE_CREATE)");
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
-    print($_area);
+    //print(_sharedPref);
     return Scaffold(
       appBar: AppBar(
         title: Text("Events"),

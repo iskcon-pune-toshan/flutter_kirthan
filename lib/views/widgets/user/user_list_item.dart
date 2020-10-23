@@ -28,7 +28,7 @@ class UserRequestsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var title = Text(
-      userrequest?.userId,
+      userrequest?.roleId.toString(),
       style: GoogleFonts.openSans(
         //color: KirthanStyles.titleColor,
         fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class UserRequestsListItem extends StatelessWidget {
                 processrequestmap["id"] = userrequest?.id;
                 processrequestmap["approvalstatus"] = "Approved";
                 processrequestmap["approvalcomments"] = "ApprovalComments";
-                processrequestmap["usertype"] = userrequest?.userType;
+                processrequestmap["usertype"] = userrequest?.roleId;
                 userPageVM.processUserRequest(processrequestmap);
                 SnackBar mysnackbar = SnackBar(
                   content: Text("User $process $successful "),

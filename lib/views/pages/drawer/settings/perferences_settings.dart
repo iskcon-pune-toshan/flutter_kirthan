@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/impl_perferences.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PerferenceSettings extends StatefulWidget {
   @override
@@ -10,6 +11,11 @@ class PerferenceSettings extends StatefulWidget {
 }
 
 class _PerferenceSettingsState extends State<PerferenceSettings> {
+
+
+  SharedPreferences sp ;
+
+
   String dropdownValue = '';
   String arg1 = null ;
 

@@ -56,6 +56,7 @@ class _MyAppState extends State<MyPrefSettingsApp> {
                   notifier.toggleTheme();
                 },
                 value: notifier.darkTheme,
+
               ),
             ),
             Divider(),

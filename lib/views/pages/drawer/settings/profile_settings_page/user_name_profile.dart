@@ -79,10 +79,12 @@ class _userName_profileState extends State<userName_profile> {
                         onPressed: () {},
                       ),
                       RaisedButton(
-                        child: Text('Reset'),
+                        child: Text('Cancel'),
                         color: Colors.redAccent,
                         //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
                       ),
                     ],
                   ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:http/http.dart' as _http;
@@ -14,7 +15,7 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
   TeamAPIService.internal();
   @override
   Future<List<int>> getTeamsCount() async {
-    _http.Response response =  await _http.get("$baseUrl/team/count");
+    _http.Response response =  await _http.get("$baseUrl/api/team/count");
     if(response.statusCode == 200 ) {
       List<dynamic> data = json.decode(response.body);
       List<int> resultData = [];
@@ -27,13 +28,16 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
       return [0,0,0];
     }
   }
+
+  //updateTeam
   Future<bool> submitUpdateTeamRequest(String teamrequestmap) async {
     print(teamrequestmap);
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);
 
-    var response = await client1.put('$baseUrl/submitupdateteamrequest',
-        headers: {"Content-Type": "application/json"}, body: teamrequestmap);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/team/updateteam',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: teamrequestmap);
 
     if (response.statusCode == 200) {
       print(response.body);
@@ -42,14 +46,18 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
     }
   }
 
+  //addTeam
+
   Future<TeamRequest> submitNewTeamRequest(
       Map<String, dynamic> eventrequestmap) async {
     print(eventrequestmap);
     String requestBody = json.encode(eventrequestmap);
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/submitnewteamrequest',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token = AutheticationAPIService().sessionJWTToken;
+
+    var response = await client1.put('$baseUrl/api/team/addteam',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       //team respteamrequest = json.decode(response.body);
@@ -65,13 +73,15 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
     }
   }
 
+  //deleteTeam
   Future<bool> deleteTeamRequest(Map<String, dynamic> processrequestmap) async {
     print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/deleteteamrequest',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/team/deleteteam',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       print(response.body);
@@ -82,6 +92,7 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
     }
   }
 
+  //getTeam
   Future<List<TeamRequest>> getTeamRequests(String teamTitle) async {
     String requestBody = '{"approvalStatus":"approved"}';
 
@@ -91,8 +102,9 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
 
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/getteamrequests',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/team/getteam',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -110,14 +122,16 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
     }
   }
 
+  //processteam
   Future<bool> processTeamRequest(
       Map<String, dynamic> processrequestmap) async {
     print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/processteamrequest',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/tea/processteam',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       print(response.body);

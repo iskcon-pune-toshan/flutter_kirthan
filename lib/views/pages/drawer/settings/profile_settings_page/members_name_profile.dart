@@ -29,9 +29,8 @@ class _members_profileState extends State<members_profile> {
                     //color: Colors.black26,
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-
                       decoration: InputDecoration(
-                        icon: Icon(Icons.people_outline),
+                          icon: Icon(Icons.people_outline),
                           labelText: "Member 1",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
@@ -94,9 +93,11 @@ class _members_profileState extends State<members_profile> {
                   children: [
                     RaisedButton.icon(
                       label: Text('Add'),
-                      icon:const Icon(Icons.add_circle),
+                      icon: const Icon(Icons.add_circle),
                       color: Colors.green,
-                      onPressed: () {},
+                      onPressed: () {
+                                addmember();
+                      },
                     ),
                     RaisedButton(
                       child: Text('Get Approved'),
@@ -113,4 +114,27 @@ class _members_profileState extends State<members_profile> {
       ),
     );
   }
-}
+
+    //print("Entered");
+    List<Widget> addmember () {
+      //Divider();
+      Card(
+        child: Container(
+          //color: Colors.black26,
+          padding: const EdgeInsets.all(10),
+          child: TextFormField(
+            decoration: InputDecoration(
+                icon: Icon(Icons.people_outline),
+                labelText: "Member 3",
+                hintText: "Please enter the name of the member",
+                labelStyle: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+      );
+
+  }
+
+  }
+

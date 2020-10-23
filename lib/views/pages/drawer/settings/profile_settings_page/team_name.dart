@@ -31,7 +31,7 @@ class _teamNameState extends State<teamName> {
                       },
                     ),
                     CardSettingsText(
-                      label: 'Team User Name',
+                      label: 'Team Admin Name',
                       validator: (value) {
                         if (value == null || value.isEmpty)
                           return 'Field is required';
@@ -48,9 +48,11 @@ class _teamNameState extends State<teamName> {
                       onPressed: () {},
                     ),
                     CardSettingsButton(
-                      label: 'Reset',
+                      label: 'Cancel',
                       backgroundColor: Colors.redAccent,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                     ),
                   ]),
             ],

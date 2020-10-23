@@ -50,9 +50,11 @@ class _description_profileState extends State<description_profile> {
             CardSettingsSection(
               children: [
                 CardSettingsButton(
-                  label: 'Reset',
+                  label: 'Cancel',
                   backgroundColor: Colors.redAccent,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               ],
             ),

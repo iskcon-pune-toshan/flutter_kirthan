@@ -45,16 +45,20 @@ class UserLogin {
         UserLogin(username: "parthprandas.rns@gmail.com", password: "", usertype: "User"));
     users.add(
         UserLogin(username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
+
+    users.add(
+        UserLogin(username: "nisha.khandelwal1225@gmail.com", password: "", usertype: "Admin"));
     return users;
   }
 }
 
 class UserRequest {
   final int id;
-  String userId;
+  //String userId;
+  int roleId;
   String userName;
   String password;
-  String userType;
+  //String userType;
   String firstName;
   String lastName;
   String email;
@@ -80,10 +84,10 @@ class UserRequest {
 //Typically called form service layer to create a new user
   UserRequest(
       {this.id,
-      this.userId,
+      //this.userId,
       this.userName,
       this.password,
-      this.userType,
+      this.roleId,
       this.firstName,
       this.lastName,
       this.email,
@@ -108,10 +112,10 @@ class UserRequest {
   factory UserRequest.fromJson(Map<String, dynamic> data) {
     return UserRequest(
       id: data['id'],
-      userId: data['userId'],
+      //userId: data['userId'],
       userName: data['userName'],
       password: data['password'],
-      userType: data['userType'],
+      roleId: data['roleId'],
       firstName: data['firstName'],
       lastName: data['lastName'],
       email: data['email'],
@@ -137,10 +141,10 @@ class UserRequest {
   factory UserRequest.fromMap(Map<String, dynamic> map) {
     return UserRequest(
       id: map['id'],
-      userId: map['userId'],
+      //userId: map['userId'],
       userName: map['userName'],
       password: map['password'],
-      userType: map['userType'],
+      roleId: map['roleId'],
       firstName: map['firstName'],
       lastName: map['lastName'],
       email: map['email'],
@@ -169,10 +173,10 @@ class UserRequest {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['userId'] = this.userId;
+    //data['userId'] = this.userId;
     data['userName'] = this.userName;
     data['password'] = this.password;
-    data['userType'] = this.userType;
+    data['roleId'] = this.roleId;
     data['firstName'] = this.firstName;
     data['lastName'] = this.lastName;
     data['email'] = this.email;
@@ -201,9 +205,9 @@ class UserRequest {
   Map toStrJson() {
     return {
       "id": this.id,
-      "userId": this.userId,
+      //"userId": this.userId,
       "userName": this.userName,
-      "userType": this.userType,
+      "roleId": this.roleId,
       "password": this.password,
       "firstName": this.firstName,
       "lastName": this.lastName,

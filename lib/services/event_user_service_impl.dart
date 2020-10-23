@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_kirthan/models/eventuser.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/event_user_service_interface.dart';
 
@@ -19,8 +20,10 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
     String requestBody = json.encode(listofeventusermap);
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/submitneweventteamusermapping',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/eventteamuser/addeventteamuser',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       List<dynamic> eventusermappingData = json.decode(response.body);
@@ -47,8 +50,9 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
 
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/geteventteamusermappings',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/eventteamuser/geteventteamusers',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -73,9 +77,11 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
     String requestBody = json.encode(listofeventusermap);
     print(requestBody);
 
+    String token = AutheticationAPIService().sessionJWTToken;
+
     var response = await client1.put(
-        '$baseUrl/submitdeleteeventteamusermapping',
-        headers: {"Content-Type": "application/json"},
+        '$baseUrl/api/eventeamuser/submitdeleteeventteamuser',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"},
         body: requestBody);
 
     if (response.statusCode == 200) {
