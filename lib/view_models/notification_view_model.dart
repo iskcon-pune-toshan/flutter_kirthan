@@ -20,15 +20,16 @@ class NotificationViewModel extends Model {
     notifyListeners();
   }
 
-  Future<void> getNotifications() async{
-
-    Future<Map<String,dynamic>> data = apiSvc?.getData();
+  Future<List<NotificationModel>> getNotifications() async{
+    //print("get Notifications method called");
+    Map<String,dynamic> data = await apiSvc?.getData();
     List<NotificationModel> notifications = <NotificationModel>[];
-    await data.then((value){
-     List<NotificationModel> ntf = value["ntf"]
+    //print(data["ntf"]);
+    List<NotificationModel> ntf = data["ntf"]
          .map<NotificationModel>((e) => NotificationModel.fromJson(e))
          .toList();
-     List<NotificationModel> ntfAppr = value["ntf_appr"]
+
+     List<NotificationModel> ntfAppr = data["ntf_appr"]
          .map<NotificationModel>((e) => NotificationModel.fromJson(e))
          .toList();
      int size = 0;
@@ -57,8 +58,7 @@ class NotificationViewModel extends Model {
        }
        size+=1;
      }
-    });
-  return notifications;
+  return Future.value(notifications);
   }
 
   Future<bool> updateNotifications(var callback, String id, bool response){

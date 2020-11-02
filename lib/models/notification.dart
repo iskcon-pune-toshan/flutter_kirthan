@@ -34,21 +34,20 @@ class NotificationModel {
   Map toJson() {
     Map<String, dynamic> data = new Map<String, dynamic>();
     data["id"] = this._type;
-    data["creatorId"] = this._creatorId;
-    data["createdAt"] = this._createdAt;
-    data["id"] = this._id;
+    data["createdBy"] = this._creatorId;
+    data["createdTime"] = this._createdAt;
+    data["uuid"] = this._id;
     data["action"] = this._action;
     data["message"] = this._message;
   }
 
   factory NotificationModel.fromJson(Map<String, dynamic> data) {
     return NotificationModel(
-        createdAt: DateTime.parse(data["timeOfCreation"]),
-        creatorId: data["creatorId"],
-        id: data["id"],
+        createdAt: DateTime.parse(data["createdTime"]),
+        creatorId: (data["createdBy"]),
+        id: data["uuid"],
         message: data["message"],
-        type: data["type"],
-        action: data["action"]
-    );
+        type: data["targetType"],
+        action: data["action"]);
   }
 }

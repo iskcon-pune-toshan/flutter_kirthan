@@ -393,6 +393,7 @@ class _EventViewState extends State<EventView>
           ? FloatingActionButton(
               child: Icon(Icons.add),
               backgroundColor: Colors.green,
+              heroTag: "button01",
               //tooltip: accessTypes["Create"].toString(),
               onPressed: () {
                 Navigator.push(context,
@@ -402,6 +403,7 @@ class _EventViewState extends State<EventView>
           : FloatingActionButton(
               child: Icon(Icons.add),
               backgroundColor: Colors.grey,
+              heroTag: "button02",
               onPressed: null,
             ),
       bottomNavigationBar: BottomNavigationBar(
