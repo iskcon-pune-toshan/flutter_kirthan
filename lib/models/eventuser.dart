@@ -4,9 +4,9 @@ class EventUser {
   int teamId;
   int userId;
   String createdBy;
-  String createTime;
+  String createdTime;
   String updatedBy;
-  String updateTime;
+  String updatedTime;
   String teamName;
   String userName;
   String eventName;
@@ -20,8 +20,8 @@ class EventUser {
       this.userId,
       this.createdBy,
       this.updatedBy,
-      this.createTime,
-      this.updateTime,
+      this.createdTime,
+      this.updatedTime,
       this.teamName,
       this.userName,
       this.eventName});
@@ -35,8 +35,8 @@ class EventUser {
       userId: data['userId'],
       createdBy: data['createdBy'],
       updatedBy: data['updatedBy'],
-      updateTime: data['updateTime'],
-      createTime: data['createTime'],
+      updatedTime: data['updatedTime'],
+      createdTime: data['createdTime'],
       teamName: data['teamName'],
       userName: data['userName'],
       eventName: data['eventName'],
@@ -51,8 +51,8 @@ class EventUser {
       userId: map['userId'],
       createdBy: map['createdBy'],
       updatedBy: map['updatedBy'],
-      updateTime: map['updateTime'],
-      createTime: map['createTime'],
+      updatedTime: map['updatedTime'],
+      createdTime: map['createdTime'],
       teamName: map['teamName'],
       userName: map['userName'],
       eventName: map['eventName'],
@@ -67,8 +67,8 @@ class EventUser {
     data['userId'] = this.userId;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
-    data['updateTime'] = this.updateTime;
-    data['createTime'] = this.createTime;
+    data['updatedTime'] = this.updatedTime;
+    data['createdTime'] = this.createdTime;
     data['teamName'] = this.teamName;
     data['userName'] = this.userName;
     data['eventName'] = this.eventName;
@@ -83,8 +83,8 @@ class EventUser {
       "teamId": this.teamId,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
-      "updateTime": this.updateTime,
-      "createTime": this.createTime,
+      "updatedTime": this.updatedTime,
+      "createdTime": this.createdTime,
       "teamName": this.teamName,
       "userName": this.userName,
       "eventName": this.eventName,

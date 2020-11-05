@@ -28,9 +28,9 @@ class UserLogin {
   static List<UserLogin> getUsers() {
     List<UserLogin> users = List<UserLogin>();
     users.add(
-        UserLogin(username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
+        UserLogin(username: "manjunath_biji@yahoo.com", password: "", usertype: "Super Admin"));
     users.add(
-        UserLogin(username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
+        UserLogin(username: "srinivasvn84@gmail.com", password: "", usertype: "Super Admin"));
     users.add(
         UserLogin(username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
     users
@@ -44,17 +44,17 @@ class UserLogin {
     users.add(
         UserLogin(username: "parthprandas.rns@gmail.com", password: "", usertype: "User"));
     users.add(
-        UserLogin(username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
+        UserLogin(username: "afrah.17u278@viit.ac.in", password: "", usertype: "Super Admin"));
     return users;
   }
 }
 
 class UserRequest {
   final int id;
-  String userId;
+  //String userId;
   String userName;
   String password;
-  String userType;
+  //String userType;
   String firstName;
   String lastName;
   String email;
@@ -77,13 +77,14 @@ class UserRequest {
   String approvalStatus;
   String approvalComments;
 
+
 //Typically called form service layer to create a new user
   UserRequest(
       {this.id,
-      this.userId,
+      //this.userId,
       this.userName,
       this.password,
-      this.userType,
+      //this.userType,
       this.firstName,
       this.lastName,
       this.email,
@@ -108,10 +109,10 @@ class UserRequest {
   factory UserRequest.fromJson(Map<String, dynamic> data) {
     return UserRequest(
       id: data['id'],
-      userId: data['userId'],
+      //userId: data['userId'],
       userName: data['userName'],
       password: data['password'],
-      userType: data['userType'],
+      //userType: data['userType'],
       firstName: data['firstName'],
       lastName: data['lastName'],
       email: data['email'],
@@ -137,10 +138,10 @@ class UserRequest {
   factory UserRequest.fromMap(Map<String, dynamic> map) {
     return UserRequest(
       id: map['id'],
-      userId: map['userId'],
+      //userId: map['userId'],
       userName: map['userName'],
       password: map['password'],
-      userType: map['userType'],
+      //userType: map['userType'],
       firstName: map['firstName'],
       lastName: map['lastName'],
       email: map['email'],
@@ -169,10 +170,10 @@ class UserRequest {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['userId'] = this.userId;
+    //data['userId'] = this.userId;
     data['userName'] = this.userName;
     data['password'] = this.password;
-    data['userType'] = this.userType;
+    //data['userType'] = this.userType;
     data['firstName'] = this.firstName;
     data['lastName'] = this.lastName;
     data['email'] = this.email;
@@ -201,9 +202,9 @@ class UserRequest {
   Map toStrJson() {
     return {
       "id": this.id,
-      "userId": this.userId,
+      //"userId": this.userId,
       "userName": this.userName,
-      "userType": this.userType,
+      //"userType": this.userType,
       "password": this.password,
       "firstName": this.firstName,
       "lastName": this.lastName,
@@ -513,7 +514,7 @@ class UserAccess {
   static List<UserAccess> getUserEntitlements() {
     List<UserAccess> entitlements = List<UserAccess>();
     entitlements.add(UserAccess(
-        userType: "Admin", role: _adminRole, dataEntitlement: "global"));
+        userType: "Super Admin", role: _adminRole, dataEntitlement: "global"));
     entitlements.add(UserAccess(
         userType: "Local Admin",
         role: _localAdminRole,

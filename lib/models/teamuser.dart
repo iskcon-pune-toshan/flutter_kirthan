@@ -3,9 +3,9 @@ class TeamUser {
   int teamId;
   int userId;
   String createdBy;
-  String createTime;
+  String createdTime;
   String updatedBy;
-  String updateTime;
+  String updatedTime;
   String teamName;
   String userName;
 
@@ -17,8 +17,8 @@ class TeamUser {
       this.userId,
       this.createdBy,
       this.updatedBy,
-      this.createTime,
-      this.updateTime,
+      this.createdTime,
+      this.updatedTime,
       this.userName,
       this.teamName});
 
@@ -30,8 +30,8 @@ class TeamUser {
       userId: data['userId'],
       createdBy: data['createdBy'],
       updatedBy: data['updatedBy'],
-      updateTime: data['updateTime'],
-      createTime: data['createTime'],
+      updatedTime: data['updatedTime'],
+      createdTime: data['createdTime'],
       userName: data['userName'],
       teamName: data['teamName'],
     );
@@ -44,8 +44,8 @@ class TeamUser {
       userId: map['userId'],
       createdBy: map['createdBy'],
       updatedBy: map['updatedBy'],
-      updateTime: map['updateTime'],
-      createTime: map['createTime'],
+      updatedTime: map['updatedTime'],
+      createdTime: map['createdTime'],
       userName: map['userName'],
       teamName: map['teamName'],
     );
@@ -58,8 +58,8 @@ class TeamUser {
     data['userId'] = this.userId;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
-    data['updateTime'] = this.updateTime;
-    data['createTime'] = this.createTime;
+    data['updatedTime'] = this.updatedTime;
+    data['createdTime'] = this.createdTime;
     data['userName'] = this.userName;
     data['teamName'] = this.teamName;
 
@@ -73,8 +73,8 @@ class TeamUser {
       "teamId": this.teamId,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
-      "updateTime": this.updateTime,
-      "createTime": this.createTime,
+      "updatedTime": this.updatedTime,
+      "createdTime": this.createdTime,
       "userName": this.userName,
       "teamName": this.teamName
     };

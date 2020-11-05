@@ -12,7 +12,10 @@ class SignInService {
 
   factory SignInService() => _internal;
 
+
   SignInService.internal();
+
+    FirebaseUser fireUser = null;
 
   Future<FirebaseUser> signUpWithEmail(String email, String password) async {
     AuthResult authResult = await firebaseAuth.createUserWithEmailAndPassword(
@@ -68,6 +71,7 @@ class SignInService {
     FirebaseUser user =
         (await firebaseAuth.signInWithCredential(credential)).user;
 
+    fireUser = user;
     return user;
   }
 

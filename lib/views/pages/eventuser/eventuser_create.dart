@@ -195,9 +195,9 @@ class _EventUserCreateState extends State<EventUserCreate> {
                         eventUser.createdBy = "SYSTEM";
                         String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                             .format(DateTime.now());
-                        eventUser.createTime = dt;
+                        eventUser.createdTime = dt;
                         eventUser.updatedBy = "SYSTEM";
-                        eventUser.updateTime = dt;
+                        eventUser.updatedTime = dt;
                         listofEventUsers.add(eventUser);
                       }
                       //Map<String,dynamic> teamusermap = teamUser.toJson();

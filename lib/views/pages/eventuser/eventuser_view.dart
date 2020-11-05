@@ -106,6 +106,7 @@ class _EventUserViewState extends State<EventUserView> {
   @override
   void initState() {
     eventusers = eventUserPageVM.getEventTeamUserMappings("SA");
+    print("initstate: eventusers");
     eventusers.then((neweventusers) {
       neweventusers.forEach((eventuser) => usercehckmap[
               eventuser.eventId.toString() +

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_kirthan/models/user.dart';
@@ -44,8 +45,11 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
       throw Exception('Failed to get data');
     }
   }
+
+  //getuser
   Future<List<UserRequest>> getUserRequests(String userType) async {
-    String requestBody = '{"locality":"Warje"}';
+    String requestBody = '{"locality":["Warje"]}';
+    requestBody = '{"city":"Pune"}';
     //adding a test comment
     if (userType == "SA") {
       requestBody = '{"userType":"SuperAdmin"}';
@@ -57,8 +61,11 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
 
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/getuserrequests',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token =AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/user/getuser',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -76,14 +83,16 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     }
   }
 
+  //updateuser
   Future<UserRequest> submitNewUserRequest(
       Map<String, dynamic> userrequestmap) async {
     print(userrequestmap);
     String requestBody = json.encode(userrequestmap);
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/submitnewuserrequest',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/user/updateuser',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       //UserRequest respuserrequest = json.decode(response.body);
@@ -98,14 +107,16 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     }
   }
 
+  //processuser
   Future<bool> processUserRequest(
       Map<String, dynamic> processrequestmap) async {
     print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/processuserrequest',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/user/processuser',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       print(response.body);
@@ -120,8 +131,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    var response = await client1.put('$baseUrl/deleteuserrequest',
-        headers: {"Content-Type": "application/json"}, body: requestBody);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/user/deleteuser',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       print(response.body);
@@ -133,8 +145,10 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   }
 
   Future<List<UserRequest>> getDummyUserRequests() async {
-    var response = await client1.get('$baseUrl/getdummyuserrequest',
-        headers: {"Content-Type": "application/json"});
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.get('$baseUrl/api/user/getdummyuser',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"});
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -165,7 +179,7 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);
 
-    var response = await client1.put('$baseUrl/submitupdateuserrequest',
+    var response = await client1.put('$baseUrl/api/user/submitupdateuserrequest',
         headers: {"Content-Type": "application/json"}, body: userrequestmap);
 
     if (response.statusCode == 200) {

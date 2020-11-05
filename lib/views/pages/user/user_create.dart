@@ -494,13 +494,13 @@ class _UserWriteState extends State<UserWrite> {
                             _formKey2.currentState.save();
                             _formKey3.currentState.save();
                             */
-                      userrequest.userId = userrequest.firstName +
+                      //userrequest.userId = userrequest.firstName +
                           '_' +
                           userrequest.lastName;
                       userrequest.city = "Pune";
                       userrequest.state = "Maharashtra";
                       userrequest.country = "IND";
-                      userrequest.userType = "Admin";
+                      //userrequest.userType = "Admin";
                       userrequest.isProcessed = false;
                       userrequest.createdBy = "SYSTEM";
                       String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
