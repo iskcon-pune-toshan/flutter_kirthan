@@ -44,16 +44,20 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
   }
 
   Future<List<TeamUser>> getTeamUserMappings(String teamMapping) async {
-    String requestBody = '{"createdBy":"SYSTEM"}';
+    //String requestBody = '{"createdBy":"SYSTEM"}';
     /*String requestBody = '{"eventdate":"sysdate()"}'; //today
     requestBody = '{"eventdate":"sysdate()+1"}'; //tomorrow
     requestBody = '{"eventdate":"sysdate()+7"}'; //week
     requestBody = '{"eventdate":"sysdate()+30"}'; //month
 */
+
+    String requestBody = "";
     print(requestBody);
 
+
+
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/teamuser/getteamusers',
+    var response = await client1.put('$baseUrl/api/teamuser/getteamuserswithdescription',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {

@@ -134,6 +134,8 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/deleteuser',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+    print(response.body);
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       print(response.body);

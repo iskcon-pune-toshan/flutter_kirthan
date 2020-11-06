@@ -49,6 +49,10 @@ const String SCR_EVENT = "Event";
 const String SCR_TEAM_USER = "Team-user";
 const String SCR_EVENT_USER = "Event-User";
 const String SCR_NOTIFICATION_HUB = "Notification Hub";
+const String SCR_TEMPLE = "Temple";
+const String SCR_ROLES = "Roles";
+const String SCR_USER_TEMPLE = "User_Temple";
+const String SCR_ROLE_SCREEN = "Role_Screen";
 
 const String ACCESS_TYPE_CREATE = "Create";
 const String ACCESS_TYPE_EDIT = "Edit";

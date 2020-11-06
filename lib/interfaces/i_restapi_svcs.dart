@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'package:flutter_kirthan/models/roles.dart';
+import 'package:flutter_kirthan/models/rolescreen.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
+import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/eventuser.dart';
+import 'package:flutter_kirthan/models/usertemple.dart';
 
 abstract class IKirthanRestApi {
   //Sample
@@ -48,4 +52,25 @@ abstract class IKirthanRestApi {
 //Future<void> submitUpdateTeamRequest(String teamrequestmap);
 //Future<bool> processTeamRequest(Map<String,dynamic> processrequestmap);
 
+  //TempleMapping
+  Future<List<Temple>> getTempleMappings(String templeMapping);
+  Future<List<Temple>> submitNewTempleMapping(List<Temple> listoftemplemap);
+  Future<List<Temple>> submitDeleteTempleMapping(List<Temple> listoftemplemap);
+//Future<void> submitUpdateTeamRequest(String teamrequestmap);
+//Future<bool> processTeamRequest(Map<String,dynamic> processrequestmap);
+
+//RolesMapping
+  Future<List<Roles>> getRolesMappings(String rolesMapping);
+  Future<List<Roles>> submitNewRolesMapping(List<Roles> listofrolesmap);
+  Future<List<Roles>> submitDeleteRolesMapping(List<Roles> listofrolesmap);
+
+  //UserTempleMapping
+  Future<List<UserTemple>> getUserTempleMappings(String usertempleMapping);
+  Future<List<UserTemple>> submitNewUserTempleMapping(List<UserTemple> listofusertemplemap);
+  Future<List<UserTemple>> submitDeleteUserTempleMapping(List<UserTemple> listofusertemplemap);
+
+  //RolesScreenmapping
+  Future<List<RoleScreen>> getRoleScreenMappings(String rolescreenMapping);
+  Future<List<RoleScreen>> submitNewRoleScreenMapping(List<RoleScreen> listofrolescreenmap);
+  Future<List<RoleScreen>> submitDeleteRoleScreenMapping(List<RoleScreen> listofrolescreenmap);
 }

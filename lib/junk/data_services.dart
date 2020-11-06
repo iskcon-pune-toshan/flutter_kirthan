@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_kirthan/models/roles.dart';
+import 'package:flutter_kirthan/models/rolescreen.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/eventuser.dart';
+import 'package:flutter_kirthan/models/temple.dart';
+import 'package:flutter_kirthan/models/usertemple.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_kirthan/common/constants.dart';
@@ -518,6 +522,280 @@ class MyRestAPIServices implements IKirthanRestApi {
     } else {
       throw Exception('Failed to get data');
     }
+  }
+  Future<List<Temple>> submitDeleteTempleMapping(List<Temple> listoftemplemap) async {
+    print(listoftemplemap);
+    String requestBody = json.encode(listoftemplemap);
+    print(requestBody);
+
+    var response = await _client.put('$_baseUrl/submitdeletetemplemapping', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      List<dynamic> eventusermappingData = json.decode(response.body);
+      List<Temple> eventusers = eventusermappingData.map((eventusermappingData) =>  Temple.fromMap(eventusermappingData)).toList();
+//      TeamUser.fromMap(teamusermappingData);
+      print(eventusers);
+      return eventusers;
+
+      List<dynamic> userrequestsData = json.decode(response.body);
+      //print(userdetailsData);
+      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
+
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<Temple>> submitNewTempleMapping(List<Temple> listoftemplemap) async {
+    print(listoftemplemap);
+    String requestBody = json.encode(listoftemplemap);
+    print(requestBody);
+
+    var response = await _client.put('$_baseUrl/submitnewtemplemapping', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      List<dynamic> templemappingData = json.decode(response.body);
+      List<Temple> templerequests = templemappingData.map((teamusermappingData) =>  Temple.fromMap(teamusermappingData)).toList();
+//      TeamUser.fromMap(templemappingData);
+      print(templerequests);
+      return templerequests;
+
+      List<dynamic> userrequestsData = json.decode(response.body);
+      //print(userdetailsData);
+      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
+
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<Temple>> getTempleMappings(String eventMapping) async {
+    String requestBody = '';
+
+    //print(requestBody);
+
+    var response = await _client.put('$_baseUrl/gettemplemappings', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      //print(response.body);
+      List<dynamic> eventtsermappingData = json.decode(response.body);
+      // print(teamtsermappingData);
+      List<Temple> eventusermappings = eventtsermappingData.map((eventtsermappingData) => Temple.fromMap(eventtsermappingData)).toList();
+      //print(teamusermappings);
+      //print(userdetails);
+
+      return eventusermappings;
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<Roles>> submitDeleteRolesMapping(List<Roles> listofrolesmap) async {
+    print(listofrolesmap);
+    String requestBody = json.encode(listofrolesmap);
+    print(requestBody);
+
+    var response = await _client.put('$_baseUrl/submitdeleterolesmapping', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      List<dynamic> rolesmappingData = json.decode(response.body);
+      List<Roles> roles = rolesmappingData.map((rolesmappingData) =>  Roles.fromMap(rolesmappingData)).toList();
+//      TeamUser.fromMap(teamusermappingData);
+      print(roles);
+      return roles;
+
+      List<dynamic> userrequestsData = json.decode(response.body);
+      //print(userdetailsData);
+      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
+
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<Roles>> submitNewRolesMapping(List<Roles> listofrolesmap) async {
+    print(listofrolesmap);
+    String requestBody = json.encode(listofrolesmap);
+    print(requestBody);
+
+    var response = await _client.put('$_baseUrl/submitnewrolesmapping', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      List<dynamic> rolesmappingData = json.decode(response.body);
+      List<Roles> rolesrequests = rolesmappingData.map((rolesmappingData) =>  Roles.fromMap(rolesmappingData)).toList();
+//      TeamUser.fromMap(templemappingData);
+      print(rolesrequests);
+      return rolesrequests;
+
+      List<dynamic> userrequestsData = json.decode(response.body);
+      //print(userdetailsData);
+      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
+
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<Roles>> getRolesMappings(String roleMapping) async {
+    String requestBody = '';
+
+    //print(requestBody);
+
+    var response = await _client.put('$_baseUrl/getrolesmappings', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      //print(response.body);
+      List<dynamic> rolesmappingData = json.decode(response.body);
+      // print(teamtsermappingData);
+      List<Roles> rolesmappings = rolesmappingData.map((rolesmappingData) => Roles.fromMap(rolesmappingData)).toList();
+      //print(teamusermappings);
+      //print(userdetails);
+
+      return rolesmappings;
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+
+  //userTemple
+  Future<List<UserTemple>> submitDeleteUserTempleMapping(List<UserTemple> listofusertemplemap) async {
+    print(listofusertemplemap);
+    String requestBody = json.encode(listofusertemplemap);
+    print(requestBody);
+
+    var response = await _client.put('$_baseUrl/submitdeleteusertemplemapping', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      List<dynamic> eventusermappingData = json.decode(response.body);
+      List<UserTemple> usertemple = eventusermappingData.map((eventusermappingData) =>  UserTemple.fromMap(eventusermappingData)).toList();
+//      TeamUser.fromMap(teamusermappingData);
+      print(usertemple);
+      return usertemple;
+
+      List<dynamic> userrequestsData = json.decode(response.body);
+      //print(userdetailsData);
+      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
+
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<UserTemple>> submitNewUserTempleMapping(List<UserTemple> listofusertemplemap) async {
+    print(listofusertemplemap);
+    String requestBody = json.encode(listofusertemplemap);
+    print(requestBody);
+
+    var response = await _client.put('$_baseUrl/submitnewusertemplemapping', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      List<dynamic> templemappingData = json.decode(response.body);
+      List<UserTemple> usertemplerequests = templemappingData.map((teamusermappingData) =>  UserTemple.fromMap(teamusermappingData)).toList();
+//      TeamUser.fromMap(templemappingData);
+      print(usertemplerequests);
+      return usertemplerequests;
+
+      List<dynamic> userrequestsData = json.decode(response.body);
+      //print(userdetailsData);
+      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
+
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<UserTemple>> getUserTempleMappings(String usertempleMapping) async {
+    String requestBody = '';
+
+    //print(requestBody);
+
+    var response = await _client.put('$_baseUrl/getusertemplemappings',
+        headers: {"Content-Type": "application/json"}, body: requestBody);
+
+    if (response.statusCode == 200) {
+      //print(response.body);
+      List<dynamic> eventtsermappingData = json.decode(response.body);
+      // print(teamtsermappingData);
+      List<UserTemple> usertemplemapping = eventtsermappingData.map((
+          eventtsermappingData) => UserTemple.fromMap(eventtsermappingData))
+          .toList();
+      //print(teamusermappings);
+      //print(userdetails);
+
+      return usertemplemapping;
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+
+    //rolescreen
+    Future<List<RoleScreen>> submitDeleteRoleScreenMapping(List<RoleScreen> listofrolescreenmap) async {
+      print(listofrolescreenmap);
+      String requestBody = json.encode(listofrolescreenmap);
+      print(requestBody);
+
+      var response = await _client.put('$_baseUrl/submitdeleterolescreenmappings', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+      if (response.statusCode == 200) {
+        List<dynamic> rolescreenmappingdata = json.decode(response.body);
+        List<RoleScreen> roleScreen = rolescreenmappingdata.map((rolescreenmappingdata) =>  RoleScreen.fromMap(rolescreenmappingdata)).toList();
+//      TeamUser.fromMap(teamusermappingData);
+        print(roleScreen);
+        return roleScreen;
+
+        List<dynamic> userrequestsData = json.decode(response.body);
+        //print(userdetailsData);
+        List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
+
+
+      } else {
+        throw Exception('Failed to get data');
+      }
+    }
+    Future<List<RoleScreen>> submitNewRoleScreenMapping(List<RoleScreen> listofrolescreenmap) async {
+      print(listofrolescreenmap);
+      String requestBody = json.encode(listofrolescreenmap);
+      print(requestBody);
+
+      var response = await _client.put('$_baseUrl/submitnewrolescreenmapping', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+      if (response.statusCode == 200) {
+        List<dynamic> rolescreenmappingdata = json.decode(response.body);
+        List<RoleScreen> rolescreenrequest = rolescreenmappingdata.map((rolescreenmappingdata) =>  RoleScreen.fromMap(rolescreenmappingdata)).toList();
+//      TeamUser.fromMap(templemappingData);
+        print(rolescreenrequest);
+        return rolescreenrequest;
+
+        List<dynamic> userrequestsData = json.decode(response.body);
+        //print(userdetailsData);
+        List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
+
+
+      } else {
+        throw Exception('Failed to get data');
+      }
+    }
+    Future<List<RoleScreen>> getRoleScreenMappings(String rolescreenMapping) async {
+      String requestBody = '';
+
+      //print(requestBody);
+
+      var response = await _client.put('$_baseUrl/getrolescreenmappings', headers: {"Content-Type": "application/json"}, body: requestBody);
+
+      if (response.statusCode == 200) {
+        //print(response.body);
+        List<dynamic> rolescreenmappingData = json.decode(response.body);
+        // print(teamtsermappingData);
+        List<RoleScreen> rolescreenMapping = rolescreenmappingData.map((rolescreenmappingData) => RoleScreen.fromMap(rolescreenmappingData)).toList();
+        //print(teamusermappings);
+        //print(userdetails);
+
+        return rolescreenMapping;
+
+      } else {
+        throw Exception('Failed to get data');
+      }
   }
 }
 
