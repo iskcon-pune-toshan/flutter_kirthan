@@ -50,11 +50,9 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
     requestBody = '{"eventdate":"sysdate()+7"}'; //week
     requestBody = '{"eventdate":"sysdate()+30"}'; //month
 */
+    //print(requestBody);
 
     String requestBody = "";
-    print(requestBody);
-
-
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/teamuser/getteamuserswithdescription',

@@ -47,17 +47,17 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
 
   Future<List<EventUser>> getEventTeamUserMappings(String eventMapping) async {
     //String requestBody = '{"createdBy":"SYSTEM"}';
-    String requestBody= "";
+
+    String requestBody = "";
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/eventteamuser/geteventteamuserswithdescription',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
-    print(response.body);
-    print(response.statusCode);
+
 
     if (response.statusCode == 200) {
-      //print(response.body);
+      print(response.body);
       List<dynamic> eventtsermappingData = json.decode(response.body);
       // print(teamtsermappingData);
       List<EventUser> eventusermappings = eventtsermappingData
@@ -77,12 +77,13 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
       List<EventUser> listofeventusermap) async {
     print(listofeventusermap);
     String requestBody = json.encode(listofeventusermap);
+    print("I am in submitDeleteEventTeamUserMapping");
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
 
     var response = await client1.put(
-        '$baseUrl/api/eventeamuser/submitdeleteeventteamuser',
+        '$baseUrl/api/eventteamuser/deleteeventteamuser',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"},
         body: requestBody);
 

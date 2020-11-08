@@ -141,9 +141,9 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
                       teamUser.createdBy = "SYSTEM";
                       String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                           .format(DateTime.now());
-                      teamUser.createTime = dt;
+                      teamUser.createdTime = dt;
                       teamUser.updatedBy = "SYSTEM";
-                      teamUser.updateTime = dt;
+                      teamUser.updatedTime = dt;
                       listofTeamUsers.add(teamUser);
                     }
                     //Map<String,dynamic> teamusermap = teamUser.toJson();

@@ -13,14 +13,14 @@ class TeamUser {
 //Typically called form service layer to create a new user
   TeamUser(
       {this.id,
-        this.teamId,
-        this.userId,
-        this.createdBy,
-        this.updatedBy,
-        this.createdTime,
-        this.updatedTime,
-        this.userName,
-        this.teamName});
+      this.teamId,
+      this.userId,
+      this.createdBy,
+      this.updatedBy,
+      this.createdTime,
+      this.updatedTime,
+      this.userName,
+      this.teamName});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory TeamUser.fromJson(Map<String, dynamic> data) {
