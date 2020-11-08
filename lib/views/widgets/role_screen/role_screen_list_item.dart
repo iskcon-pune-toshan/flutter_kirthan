@@ -39,7 +39,7 @@ class RoleScreenRequestsListItem extends StatelessWidget {
     //popupList.
     //teamPageVM.accessTypes.keys
     var title = Text(
-      rolescreenrequest?.role_id.toString(),
+      rolescreenrequest?.roleId.toString(),
       style: GoogleFonts.openSans(
         //color: KirthanStyles.titleColor,
         fontWeight: FontWeight.bold,
@@ -48,7 +48,7 @@ class RoleScreenRequestsListItem extends StatelessWidget {
       ),
     );
     var city = Text(
-      rolescreenrequest?.create.toString(),
+      rolescreenrequest?.isCreated.toString(),
       style: GoogleFonts.openSans(
         fontWeight: FontWeight.bold,
         fontSize: MyPrefSettingsApp.custFontSize,
@@ -61,7 +61,7 @@ class RoleScreenRequestsListItem extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(left: 4.0),
           child: Text(
-            rolescreenrequest?.screen_id.toString(),
+            rolescreenrequest?.screenId.toString(),
             style: TextStyle(
               color: KirthanStyles.subTitleColor,
               fontSize: MyPrefSettingsApp.custFontSize,

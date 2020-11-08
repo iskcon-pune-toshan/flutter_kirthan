@@ -52,13 +52,13 @@ class _EditRoleScreenState extends State<EditRoleScreen> {
 
   @override
   void initState() {
-    _roleController.text = widget.rolescreenrequest.role_id.toString();
-    _screenController.text = widget.rolescreenrequest.screen_id.toString();
-    _createController.text = widget.rolescreenrequest.create.toString();
-    _updateController.text = widget.rolescreenrequest.update.toString();
-    _deleteController.text = widget.rolescreenrequest.delete.toString();
-    _viewController.text = widget.rolescreenrequest.view.toString();
-    _processController.text = widget.rolescreenrequest.process.toString();
+    _roleController.text = widget.rolescreenrequest.roleId.toString();
+    _screenController.text = widget.rolescreenrequest.screenId.toString();
+    _createController.text = widget.rolescreenrequest.isCreated.toString();
+    _updateController.text = widget.rolescreenrequest.isUpdated.toString();
+    _deleteController.text = widget.rolescreenrequest.isDeleted.toString();
+    _viewController.text = widget.rolescreenrequest.isViewd.toString();
+    _processController.text = widget.rolescreenrequest.isProcessed.toString();
 
     return super.initState();
   }

@@ -1,13 +1,8 @@
 import 'dart:async';
 import 'package:flutter_kirthan/models/rolescreen.dart';
-import 'package:flutter_kirthan/models/usertemple.dart';
 import 'package:flutter_kirthan/services/role_screen_service_interface.dart';
-import 'package:flutter_kirthan/services/user_temple_service_interface.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_kirthan/services/temple_service_interface.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/models/temple.dart';
-
 
 class RoleScreenViewPageModel extends Model {
   final IRoleScreenRestApi apiSvc;

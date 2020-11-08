@@ -3,17 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/junk/main_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/event/home_page_map.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
-
 import 'package:flutter_kirthan/views/pages/eventuser/eventuser_view.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
-import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 
 class EventsPanel extends StatelessWidget {
   String eventType;

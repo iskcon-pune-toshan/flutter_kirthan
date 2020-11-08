@@ -46,13 +46,15 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
   }
 
   Future<List<EventUser>> getEventTeamUserMappings(String eventMapping) async {
-    String requestBody = '{"createdBy":"SYSTEM"}';
-
+    //String requestBody = '{"createdBy":"SYSTEM"}';
+    String requestBody= "";
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/eventteamuser/geteventteamusers',
+    var response = await client1.put('$baseUrl/api/eventteamuser/geteventteamuserswithdescription',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+    print(response.body);
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       //print(response.body);

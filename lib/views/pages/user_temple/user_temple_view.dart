@@ -3,11 +3,13 @@ import 'package:flutter_kirthan/services/user_temple_service_impl.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
+import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
 import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/pages/user_temple/user_temple_create.dart';
 //import 'package:flutter_kirthan/views/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/widgets/temple/temple_panel.dart';
 import 'package:flutter_kirthan/views/widgets/user_temple/user_temple_panel.dart';
@@ -73,6 +75,14 @@ class _UserTempleViewState extends State<UserTempleView> {
           usertempleType: "All",
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => UserTempleCreate()));
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         onTap: (newIndex) {
@@ -97,6 +107,14 @@ class _UserTempleViewState extends State<UserTempleView> {
               break;
             case 4:
               Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => UserTempleView() ));
+              break;
+            case 5:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => RoleScreenView() ));
+              break;
+            /*case 4:
+              Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Calendar()));
               break;
             case 5:
@@ -106,11 +124,15 @@ class _UserTempleViewState extends State<UserTempleView> {
             case 6:
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => RolesView() ));
-              break;
-            case 7:
+              break;*/
+            /*case 7:
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => UserTempleView() ));
               break;
+            case 8:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => RoleScreenView() ));
+              break;*/
           }
         },
         currentIndex: _index,
@@ -132,17 +154,21 @@ class _UserTempleViewState extends State<UserTempleView> {
             icon: Icon(Icons.notifications),
             title: Text('Notifications'),
           ),
-          BottomNavigationBarItem(
+         /* BottomNavigationBarItem(
             icon: Icon(Icons.title),
             title: Text('Temple'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
             title: Text('Roles'),
-          ),
+          ),*/
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
             title: Text('User Temple'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            title: Text('Role Screens'),
           ),
         ],
       ),

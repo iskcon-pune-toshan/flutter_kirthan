@@ -5,6 +5,7 @@ import 'package:flutter_kirthan/view_models/role_screen_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
+import 'package:flutter_kirthan/views/pages/role_screen/role_screen_create.dart';
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_edit.dart';
 import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
@@ -23,14 +24,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 //import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 
-final RoleScreenViewPageModel userScreenPageVM =
+final RoleScreenViewPageModel roleScreenPageVM =
 RoleScreenViewPageModel(apiSvc: RoleScreenAPIService());
 
 class RoleScreenView extends StatefulWidget {
   RoleScreenView({Key key}) : super(key: key);
 
   final String title = "RoleScreen";
-  final String screenName = SCR_USER_TEMPLE;
+  final String screenName = SCR_ROLE_SCREEN;
 
   @override
   _RoleScreenViewState createState() => _RoleScreenViewState();
@@ -77,6 +78,14 @@ class _RoleScreenViewState extends State<RoleScreenView> {
         child: RoleScreensPanel(
           rolescreenType: "All",
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => RoleScreenWrite()));
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

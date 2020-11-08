@@ -1,34 +1,34 @@
 
 class RoleScreen {
   final int id;
-   int role_id;
-   int screen_id;
-  bool create;
-  bool update;
-  bool delete;
-  bool view;
-  bool process;
+   int roleId;
+   int screenId;
+  bool isCreated;
+  bool isUpdated;
+  bool isDeleted;
+  bool isViewd;
+  bool isProcessed;
 
 
 //Typically called form service layer
-  RoleScreen({this.id, this.role_id, this.screen_id, this.create,
-    this.update,
-    this.delete,
-    this.view,
-    this.process,
+  RoleScreen({this.id, this.roleId, this.screenId, this.isCreated,
+    this.isUpdated,
+    this.isDeleted,
+    this.isViewd,
+    this.isProcessed,
     });
 
 //Typically called from the data_source layer after getting data from an external source.
   factory RoleScreen.fromJson(Map<String, dynamic> data) {
     return RoleScreen(
       id: data['id'],
-      role_id: data['role_id'],
-      screen_id: data['screen_id'],
-      create: data['create'],
-      update: data['update'],
-      delete: data['delete'],
-      view: data['view'],
-      process: data['process'],
+      roleId: data['roleId'],
+      screenId: data['screenId'],
+      isCreated: data['isCreated'],
+      isUpdated: data['isUpdated'],
+      isDeleted: data['isDeleted'],
+      isViewd: data['isViewd'],
+      isProcessed: data['isProcessed'],
 
     );
   }
@@ -36,39 +36,39 @@ class RoleScreen {
   factory RoleScreen.fromMap(Map<String, dynamic> map) {
     return RoleScreen(
       id: map['id'],
-      role_id: map['role_id'],
-      screen_id: map['screnn_id'],
-      create: map['create'],
-      update: map['update'],
-      delete: map['delete'],
-      view: map['view'],
-      process: map['process'],
+      roleId: map['roleId'],
+      screenId: map['screenId'],
+      isCreated: map['isCreated'],
+      isUpdated: map['isUpdated'],
+      isDeleted: map['isDeleted'],
+      isViewd: map['isViewd'],
+      isProcessed: map['isProcessed'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['role_id'] = this.role_id;
-    data['screen_id'] = this.screen_id;
-    data['create'] = this.create;
-    data['update'] = this.update;
-    data['delete'] = this.delete;
-    data['view'] = this.view;
-    data['process'] = this.process;
+    data['roleId'] = this.roleId;
+    data['screenId'] = this.screenId;
+    data['isCreated'] = this.isCreated;
+    data['isUpdated'] = this.isUpdated;
+    data['isDeleted'] = this.isDeleted;
+    data['isViewd'] = this.isViewd;
+    data['isProcessed'] = this.isProcessed;
        return data;
   }
 
   Map toStrJson() {
     return {
       "id": this.id,
-      "role_id":this.role_id,
-      "screen_id": this.screen_id,
-      "create": this.create,
-      "update": this.update,
-      "delete": this.delete,
-      "view": this.view,
-      "process": this.process,
+      "roleId":this.roleId,
+      "screenId": this.screenId,
+      "isCreated": this.isCreated,
+      "isUpdated": this.isUpdated,
+      "isUpdated": this.isDeleted,
+      "isViewd": this.isViewd,
+      "isProcessed": this.isProcessed,
     };
   }
 

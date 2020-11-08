@@ -10,8 +10,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
-
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class TeamView extends StatefulWidget {
   final String title = "Teams";
@@ -30,7 +29,7 @@ class _TeamViewState extends State<TeamView>
   int _index;
   SharedPreferences prefs;
   List<String> access;
-  Map<String,bool> accessTypes = new Map<String,bool>();
+  Map<String, bool> accessTypes = new Map<String, bool>();
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
@@ -38,7 +37,8 @@ class _TeamViewState extends State<TeamView>
       access = prefs.getStringList(widget.screenName);
       access.forEach((f) {
         List<String> access = f.split(":");
-        accessTypes[access.elementAt(0)] =  access.elementAt(1).toLowerCase() == "true" ? true:false;
+        accessTypes[access.elementAt(0)] =
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       teamPageVM.accessTypes = accessTypes;
     });
@@ -58,7 +58,6 @@ class _TeamViewState extends State<TeamView>
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Teams"),
@@ -86,10 +85,7 @@ class _TeamViewState extends State<TeamView>
         backgroundColor: Colors.green,
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      TeamWrite()));
+              context, MaterialPageRoute(builder: (context) => TeamWrite()));
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -97,10 +93,10 @@ class _TeamViewState extends State<TeamView>
         onTap: (newIndex) {
           setState(() => _index = newIndex);
           print(newIndex);
-          switch(newIndex) {
+          switch (newIndex) {
             case 0:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => EventView()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EventView()));
               break;
             case 1:
               Navigator.push(
@@ -110,7 +106,8 @@ class _TeamViewState extends State<TeamView>
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
-            case 3: break;
+            case 3:
+              break;
           }
         },
         currentIndex: _index,

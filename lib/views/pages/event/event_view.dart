@@ -397,6 +397,10 @@ class _EventViewState extends State<EventView>
               break;
             case 4:
               Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
+              break;
+            case 5:
+              Navigator.push(
                   context, MaterialPageRoute(builder: (context) => RoleScreenView()));
               break;/*
             case 4:
@@ -489,6 +493,10 @@ class _EventViewState extends State<EventView>
             icon: Icon(Icons.people),
             title: Text('Roles'),
           ),*/
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment_turned_in),
+            title: Text('User Temple'),
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.assignment_turned_in),
             title: Text('Role Screen'),
