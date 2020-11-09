@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter_kirthan/models/notification.dart';
+import 'package:flutter_kirthan/services/notification_service_interface.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class NotificationViewModel extends Model {
   Future<List<NotificationModel>> _notifications;
-  final apiSvc;
+  final INotificationRestApi apiSvc;
   NotificationViewModel({this.apiSvc});
   Future<List> get notifications => _notifications;
   int _unreadNotificationCount = 0;
