@@ -47,6 +47,7 @@ dependencies:
   card_settings:
   image_picker: ^0.5.3+1
   firebase_storage:
+  syncfusion_flutter_calendar:
 
 
 dev_dependencies:

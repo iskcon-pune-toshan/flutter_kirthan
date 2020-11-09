@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'package:flutter_kirthan/models/permissions.dart';
+import 'package:flutter_kirthan/models/screens.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/eventuser.dart';
+import 'package:flutter_kirthan/models/temple.dart';
+import 'package:flutter_kirthan/models/roles.dart';
 
 abstract class IKirthanRestApi {
   //Sample
@@ -35,9 +39,10 @@ abstract class IKirthanRestApi {
 
 
   //TeamUserMapping
-  Future<List<TeamUser>> getTeamUserMappings(String teamMapping);
-  Future<List<TeamUser>> submitNewTeamUserMapping(List<TeamUser> listofteamusermap);
-  Future<List<TeamUser>> submitDeleteTeamUserMapping(List<TeamUser> listofteamusermap);
+  Future<List<Temple>> getTeamUserMappings(String teamMapping);
+  Future<List<Temple>> submitNewTeamUserMapping(List<Temple> listofteamusermap);
+  Future<List<Temple>> submitDeleteTeamUserMapping(List<Temple> listofteamusermap);
+
   //Future<void> submitUpdateTeamRequest(String teamrequestmap);
   //Future<bool> processTeamRequest(Map<String,dynamic> processrequestmap);
 
@@ -47,5 +52,31 @@ abstract class IKirthanRestApi {
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(List<EventUser> listofeventsermap);
 //Future<void> submitUpdateTeamRequest(String teamrequestmap);
 //Future<bool> processTeamRequest(Map<String,dynamic> processrequestmap);
+
+  //TempleMapping
+  Future<List<Temple>> getTempleMappings(String templeMapping);
+  Future<List<Temple>> submitNewTempleMapping(List<Temple> listoftemplemap);
+  Future<List<Temple>> submitDeleteTempleMapping(List<Temple> listoftemplemap);
+//Future<void> submitUpdateTempleRequest(String templerequestmap);
+//Future<bool> processTeamRequest(Map<String,dynamic> processrequestmap);
+
+//RolesMapping
+  Future<List<Roles>> getRolesMappings(String rolesMapping);
+  Future<List<Roles>> submitNewRolesMapping(List<Roles> listofrolesmap);
+  Future<List<Roles>> submitDeleteRolesMapping(List<Roles> listofrolesmap);
+  //Future<void> submitUpdateRolesRequest(String rolesrequestmap);
+
+//Permissions
+  Future<List<Permissions>> getPermissionsMappings(String permissionsMapping);
+  Future<List<Permissions>> submitNewPermissionsMapping(List<Permissions> listofpermissionsmap);
+  Future<List<Permissions>> submitDeletePermissionsMapping(List<Permissions> listofpermissionsmap);
+//Future<void> submitUpdateRolesRequest(String rolesrequestmap);
+
+
+  //Screens
+  Future<List<Screens>> getScreensMappings(String screensMapping);
+  Future<List<Screens>> submitNewScreensMapping(List<Screens> listofscreensmap);
+  Future<List<Screens>> submitDeleteScreensMapping(List<Screens> listofscreensmap);
+//Future<void> submitUpdateRolesRequest(String rolesrequestmap);
 
 }

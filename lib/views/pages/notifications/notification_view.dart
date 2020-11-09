@@ -53,7 +53,7 @@ class NotificationViewState extends State<NotificationView> {
                         Container(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            'CreatedBy' + data.creatorId.toString(),
+                            'CreatedBy' + data.createdBy.toString(),
                             style: TextStyle(fontWeight: FontWeight.w300),
                           ),
                         ),
@@ -70,7 +70,7 @@ class NotificationViewState extends State<NotificationView> {
                         child: Text('Approve'),
                         onPressed: () {
                           notificationPageVM.updateNotifications(
-                              callback, data.id, true);
+                              callback, data.uuid, true);
                         },
                       ),
                       FlatButton(
@@ -79,7 +79,7 @@ class NotificationViewState extends State<NotificationView> {
                         child: Text('Reject'),
                         onPressed: () {
                           notificationPageVM.updateNotifications(
-                              callback, data.id, false);
+                              callback, data.uuid, false);
                         },
                       ),
                     ],
@@ -128,7 +128,7 @@ class NotificationViewState extends State<NotificationView> {
             dense: false,
             contentPadding: EdgeInsets.all(10),
             title: Text(data.message),
-            subtitle: Text("CreatedBy " + data.creatorId.toString()),
+            subtitle: Text("CreatedBy " + data.createdBy),
             isThreeLine: true,
             trailing: icon == Icons.pause ? actions : Icon(icon),
             onTap: () {
@@ -192,7 +192,7 @@ class NotificationViewState extends State<NotificationView> {
                         child: Text("Approve"),
                         onPressed: () {
                           notificationPageVM.updateNotifications(
-                              callback, notification.id, true);
+                              callback, notification.uuid, true);
                           Navigator.pop(context);
                         })
                     : FlatButton(
@@ -210,7 +210,7 @@ class NotificationViewState extends State<NotificationView> {
                         child: Text("Reject"),
                         onPressed: () {
                           notificationPageVM.updateNotifications(
-                              callback, notification.id, false);
+                              callback, notification.uuid, false);
                           Navigator.pop(context);
                         })
                     : FlatButton(

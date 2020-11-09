@@ -7,11 +7,14 @@ import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
+import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/event/event_search.dart';
+import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
+import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
@@ -404,6 +407,19 @@ class _EventViewState extends State<EventView>
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => NotificationView()));
               break;
+            case 4:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Calendar()));
+              break;
+            case 5:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => TempleView() ));
+              break;
+            case 6:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => RolesView() ));
+              break;
+
           }
         },
         currentIndex: _index,
@@ -462,6 +478,18 @@ class _EventViewState extends State<EventView>
               }),
             ),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            title: Text('Calendar'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.title),
+            title: Text('Temple'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            title: Text('Roles'),
+          )
         ],
       ),
     );
