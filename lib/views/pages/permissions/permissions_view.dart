@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/view_models/roles_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/permissions_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
-import 'package:flutter_kirthan/views/pages/permissions/permissions_view.dart';
 import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-import 'package:flutter_kirthan/views/widgets/roles/roles_panel.dart';
+import 'package:flutter_kirthan/views/widgets/permissions/permissions_panel.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/services/roles_service_impl.dart';
+import 'package:flutter_kirthan/services/permissions_service_impl.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_create.dart';
+import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
+import 'package:flutter_kirthan/views/pages/permissions/permissions_create.dart';
 
-final RolesPageViewModel rolesPageVM =
-RolesPageViewModel(apiSvc: RolesAPIService());
+final PermissionsPageViewModel permissionsPageVM =
+PermissionsPageViewModel(apiSvc: PermissionsAPIService());
 
-class RolesView extends StatefulWidget {
-  RolesView({Key key}) : super(key: key);
+class PermissionsView extends StatefulWidget {
+  PermissionsView({Key key}) : super(key: key);
 
-  final String title = "Roles";
-  final String screenName = SCR_ROLES;
+  final String title = "Permissionss";
+  final String screenName = SCR_PERMISSIONS;
 
   @override
-  _RolesViewState createState() => _RolesViewState();
+  _PermissionsViewState createState() => _PermissionsViewState();
 }
 
-class _RolesViewState extends State<RolesView> {
+class _PermissionsViewState extends State<PermissionsView> {
   int _index;
   SharedPreferences prefs;
   List<String> access;
@@ -42,12 +42,12 @@ class _RolesViewState extends State<RolesView> {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =  access.elementAt(1).toLowerCase() == "true" ? true:false;
       });
-      rolesPageVM.accessTypes = accessTypes;
+      permissionsPageVM.accessTypes = accessTypes;
     });
   }
 
   Future loadData() async {
-    await rolesPageVM.setRoles("All");
+    await permissionsPageVM.setPermissions("All");
   }
 
   @override
@@ -62,22 +62,22 @@ class _RolesViewState extends State<RolesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Roles"),
+        title: Text("Permissions"),
       ),
-      body: ScopedModel<RolesPageViewModel>(
-        model: rolesPageVM,
-        child: RolesPanel(
-          rolesType: "All",
+      body: ScopedModel<PermissionsPageViewModel>(
+        model: permissionsPageVM,
+        child: PermissionsPanel(
+          permissionsType: "All",
         ),
       ),
-      /*floatingActionButton: accessTypes[ACCESS_TYPE_CREATE] == true
+     /* floatingActionButton: accessTypes[ACCESS_TYPE_CREATE] == true
           ? FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.green,
         //tooltip: accessTypes["Create"].toString(),
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => RolesWrite()));
+              MaterialPageRoute(builder: (context) => PermissionsWrite()));
         },
       )
           : FloatingActionButton(
@@ -93,7 +93,7 @@ class _RolesViewState extends State<RolesView> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      RolesWrite()));
+                      PermissionsWrite()));
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -121,7 +121,7 @@ class _RolesViewState extends State<RolesView> {
               break;
             case 4:
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => ScreensView()));
+                context, MaterialPageRoute(builder: (context) => ScreensView()));
               break;
           }
         },
@@ -147,7 +147,7 @@ class _RolesViewState extends State<RolesView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.fullscreen),
             title: Text('Screens'),
-          ),
+    ),
         ],
       ),
     );

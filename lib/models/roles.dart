@@ -1,18 +1,18 @@
 
 class Roles {
   final int id;
-  String role_name;
+  String roleName;
 
 
 //Typically called form service layer
-  Roles({this.id, this.role_name,
+  Roles({this.id, this.roleName,
   });
 
 //Typically called from the data_source layer after getting data from an external source.
   factory Roles.fromJson(Map<String, dynamic> data) {
     return Roles(
       id: data['id'],
-      role_name: data['role_name']
+      roleName: data['roleName'],
 
     );
   }
@@ -20,21 +20,21 @@ class Roles {
   factory Roles.fromMap(Map<String, dynamic> map) {
     return Roles(
       id: map['id'],
-      role_name: map['role_name'],
+      roleName: map['roleName'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['role_name']=this.role_name;
+    data['roleName']=this.roleName;
     return data;
   }
 
   Map toStrJson() {
     return {
       "id": this.id,
-      "role_name":this.role_name
+      "roleName":this.roleName,
 
     };
   }

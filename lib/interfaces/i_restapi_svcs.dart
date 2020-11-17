@@ -1,13 +1,9 @@
 import 'dart:async';
-import 'package:flutter_kirthan/models/roles.dart';
-import 'package:flutter_kirthan/models/rolescreen.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
-import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/eventuser.dart';
-import 'package:flutter_kirthan/models/usertemple.dart';
 
 abstract class IKirthanRestApi {
   //Sample
@@ -73,4 +69,18 @@ abstract class IKirthanRestApi {
   Future<List<RoleScreen>> getRoleScreenMappings(String rolescreenMapping);
   Future<List<RoleScreen>> submitNewRoleScreenMapping(List<RoleScreen> listofrolescreenmap);
   Future<List<RoleScreen>> submitDeleteRoleScreenMapping(List<RoleScreen> listofrolescreenmap);
+
+  //Permissions
+  Future<List<Permissions>> getPermissionsMappings(String permissionsMapping);
+  Future<List<Permissions>> submitNewPermissionsMapping(List<Permissions> listofpermissionsmap);
+  Future<List<Permissions>> submitDeletePermissionsMapping(List<Permissions> listofpermissionsmap);
+//Future<void> submitUpdateRolesRequest(String rolesrequestmap);
+
+
+  //Screens
+  Future<List<Screens>> getScreensMappings(String screensMapping);
+  Future<List<Screens>> submitNewScreensMapping(List<Screens> listofscreensmap);
+  Future<List<Screens>> submitDeleteScreensMapping(List<Screens> listofscreensmap);
+//Future<void> submitUpdateRolesRequest(String rolesrequestmap);
+
 }

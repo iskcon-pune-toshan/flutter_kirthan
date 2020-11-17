@@ -1,42 +1,31 @@
 class NotificationModel {
-  String _id;
-  String _type;
+  String _uuid;
+  String _targetType;
   String _message;
   String _action;
   DateTime _createdAt;
-  int _creatorId;
+  String _createdBy;
 
-  String get id => _id;
-
-  String get type => _type;
-
-  String get message => _message;
-
-  DateTime get createdAt => _createdAt;
-
-  int get creatorId => _creatorId;
-
-  String get action => _action;
   NotificationModel(
       {DateTime createdAt,
-      int creatorId,
+      String createdBy,
       String id,
       String message,
       String type,String action}) {
-    this._type = type;
+    this._targetType = type;
     this._action = action;
-    this._creatorId = creatorId;
+    this._createdBy = createdBy;
     this._createdAt = createdAt;
-    this._id = id;
+    this._uuid = id;
     this._message = message;
   }
 
   Map toJson() {
     Map<String, dynamic> data = new Map<String, dynamic>();
-    data["id"] = this._type;
-    data["createdBy"] = this._creatorId;
+    data["id"] = this._targetType;
+    data["createdBy"] = this._createdBy;
     data["createdTime"] = this._createdAt;
-    data["uuid"] = this._id;
+    data["uuid"] = this._uuid;
     data["action"] = this._action;
     data["message"] = this._message;
   }
@@ -44,10 +33,24 @@ class NotificationModel {
   factory NotificationModel.fromJson(Map<String, dynamic> data) {
     return NotificationModel(
         createdAt: DateTime.parse(data["createdTime"]),
-        creatorId: (data["createdBy"]),
+        createdBy: (data["createdBy"]),
         id: data["uuid"],
         message: data["message"],
         type: data["targetType"],
         action: data["action"]);
   }
+
+  String get createdBy => _createdBy;
+
+  String get uuid => _uuid;
+
+  String get targetType => _targetType;
+
+  DateTime get createdAt => _createdAt;
+
+  String get action => _action;
+
+  String get message => _message;
+
+
 }

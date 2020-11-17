@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/temple.dart';
+import 'package:flutter_kirthan/models/permissions.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/permissions_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_edit.dart';
+import 'package:flutter_kirthan/views/pages/permissions/permissions_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,10 +14,10 @@ class Choice {
   final String description;
 }
 
-class TempleRequestsListItem extends StatelessWidget {
-  final Temple templerequest;
-  final TemplePageViewModel templePageVM;
-  TempleRequestsListItem({@required this.templerequest, @required this.templePageVM});
+class PermissionsRequestsListItem extends StatelessWidget {
+  final Permissions permissionsrequest;
+  final PermissionsPageViewModel permissionsPageVM;
+  PermissionsRequestsListItem({@required this.permissionsrequest, @required this.permissionsPageVM});
 
   List<Choice> popupList = [
    // Choice(id: 1, description: "Process"),
@@ -32,7 +32,7 @@ class TempleRequestsListItem extends StatelessWidget {
     //popupList.
     //teamPageVM.accessTypes.keys
     var title = Text(
-      templerequest?.templeName,
+      permissionsrequest?.name,
       style: GoogleFonts.openSans(
         //color: KirthanStyles.titleColor,
         fontWeight: FontWeight.bold,
@@ -40,26 +40,12 @@ class TempleRequestsListItem extends StatelessWidget {
         //fontSize: KirthanStyles.titleFontSize,
       ),
     );
-    var city = Text(
-    templerequest?.city,
-    style: GoogleFonts.openSans(
-    fontWeight: FontWeight.bold,
-    fontSize: MyPrefSettingsApp.custFontSize,
-    ),
-    );
+
 
     var subTitle = Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        Container(
-          margin: const EdgeInsets.only(left: 4.0),
-          child: Text(
-            templerequest?.city,
-            style: TextStyle(
-              color: KirthanStyles.subTitleColor,
-              fontSize: MyPrefSettingsApp.custFontSize,
-            ),
-          ),),
+
         Container(
           child: PopupMenuButton<Choice>(
             itemBuilder: (BuildContext context) {
@@ -76,7 +62,7 @@ class TempleRequestsListItem extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          EditTemple(templerequest: templerequest)),
+                          EditPermissions(permissionsrequest: permissionsrequest)),
                 );
               } else  if (choice.id == 3) {
                 showDialog(
@@ -105,11 +91,11 @@ class TempleRequestsListItem extends StatelessWidget {
                                     onPressed: () {
                                       Map<String, dynamic> teamrequestmap =
                                       new Map<String, dynamic>();
-                                      teamrequestmap["id"] = templerequest?.id;
-                                      templePageVM
-                                          .deleteTemple(teamrequestmap);
+                                      teamrequestmap["id"] = permissionsrequest?.id;
+                                      permissionsPageVM
+                                          .deletePermissions(teamrequestmap);
                                       SnackBar mysnackbar = SnackBar(
-                                        content: Text("temple $delete "),
+                                        content: Text("Permissions $delete "),
                                         duration: new Duration(seconds: 4),
                                         backgroundColor: Colors.red,
                                       );

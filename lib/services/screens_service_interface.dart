@@ -1,8 +1,7 @@
-/*
 import 'dart:async';
 import 'package:flutter_kirthan/models/screens.dart';
 
-abstract class IScreenRestApi {
+abstract class IScreensRestApi {
   //Sample
 
 
@@ -11,12 +10,11 @@ abstract class IScreenRestApi {
 
   //Future<List<Permissions>> getDummyUserRequests();
 
-  Future<Screens> submitNewScreen(Map<String, dynamic> screenmap);
+  Future<Screens> submitNewScreens(Map<String, dynamic> screenmap);
 
   //Future<bool> processPermissions(Map<String, dynamic> processrequestmap);
 
-  Future<bool> deleteScreen(Map<String, dynamic> processrequestmap);
+  Future<bool> deleteScreens(Map<String, dynamic> processrequestmap);
 
-  Future<bool> submitUpdateScreen(String rolescreenrequestmap);
+  Future<bool> submitUpdateScreens(String rolescreenrequestmap);
 }
-*/

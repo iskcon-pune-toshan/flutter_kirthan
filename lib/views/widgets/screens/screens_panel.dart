@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/roles.dart';
+import 'package:flutter_kirthan/models/screens.dart';
 import 'package:flutter_kirthan/junk/main_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/roles_page_view_model.dart';
-import 'package:flutter_kirthan/views/widgets/roles/roles_list_item.dart';
+import 'package:flutter_kirthan/view_models/screens_page_view_model.dart';
+import 'package:flutter_kirthan/views/widgets/screens/screens_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
 
-class RolesPanel extends StatelessWidget {
-  String rolesType;
-  final String screenName = "Roles";
-  RolesPanel({this.rolesType});
+class ScreensPanel extends StatelessWidget {
+  String screenType;
+  final String screenName = "Screens";
+  ScreensPanel({this.screenType});
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<RolesPageViewModel>(
+    return ScopedModelDescendant<ScreensPageViewModel>(
       //rebuildOnChange: true,
       builder: (context, child, model) {
-        return FutureBuilder<List<Roles>>(
-          future: model.rolesrequests,
-          builder: (_, AsyncSnapshot<List<Roles>> snapshot) {
+        return FutureBuilder<List<Screens>>(
+          future: model.screensrequests,
+          builder: (_, AsyncSnapshot<List<Screens>> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.active:
@@ -28,7 +28,7 @@ class RolesPanel extends StatelessWidget {
                 return Center(child: const CircularProgressIndicator());
               case ConnectionState.done:
                 if (snapshot.hasData) {
-                  var rolesRequests = snapshot.data;
+                  var templeRequests = snapshot.data;
                   return new Column(
                     //mainAxisAlignment: MainAxisAlignment.center,
                     //mainAxisSize: MainAxisSize.max,
@@ -66,11 +66,11 @@ class RolesPanel extends StatelessWidget {
                           child: ListView.builder(
                             shrinkWrap: true,
                             itemCount:
-                            rolesRequests == null ? 0 : rolesRequests.length,
+                            templeRequests == null ? 0 : templeRequests.length,
                             itemBuilder: (_, int index) {
-                              var rolesrequest = rolesRequests[index];
-                              return RolesRequestsListItem(
-                                  rolesrequest: rolesrequest, rolesPageVM: model);
+                              var teamrequest = templeRequests[index];
+                              return ScreensRequestsListItem(
+                                  screensrequest: teamrequest, screensPageVM: model);
                             },
                           ),
                         ),
@@ -80,7 +80,7 @@ class RolesPanel extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return NoInternetConnection(
                     action: () async {
-                      await model.setRoles("All");
+                      await model.setScreens("All");
                     },
                   );
                 }

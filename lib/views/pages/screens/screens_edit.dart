@@ -1,28 +1,29 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/roles.dart';
-import 'package:flutter_kirthan/services/roles_service_impl.dart';
-import 'package:flutter_kirthan/view_models/roles_page_view_model.dart';
+import 'package:flutter_kirthan/models/screens.dart';
+import 'package:flutter_kirthan/services/screens_service_impl.dart';
+import 'package:flutter_kirthan/view_models/screens_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:screen/screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-final RolesPageViewModel rolesPageVM =
-RolesPageViewModel(apiSvc: RolesAPIService());
+final ScreensPageViewModel screensPageVM =
+ScreensPageViewModel(apiSvc: ScreensAPIService());
 
 
-class EditRoles extends StatefulWidget {
-  Roles rolesrequest ;
-  final String screenName = SCR_ROLES;
+class EditScreens extends StatefulWidget {
+  Screens screensrequest ;
+  final String screenName = SCR_SCREENS;
 
-  EditRoles({ @required this.rolesrequest}) ;
+  EditScreens({ @required this.screensrequest}) ;
 
   @override
-  _EditRolesState createState() => new _EditRolesState();
+  _EditScreensState createState() => new _EditScreensState();
 }
 
-class _EditRolesState extends State<EditRoles> {
+class _EditScreensState extends State<EditScreens> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   //EventRequest eventrequestobj = new EventRequest();
   //_EditProfileViewState({Key key, @required this.eventrequest}) ;
@@ -31,15 +32,15 @@ class _EditRolesState extends State<EditRoles> {
   String state;
   var _states = ["GOA","GUJ","MAH"];
   // controllers for form text controllers
-  final TextEditingController _RolesNameController = new TextEditingController();
-  String role_name ;
+  final TextEditingController _screenNameController = new TextEditingController();
+  String screenName ;
 
 
 
 
   @override
   void initState() {
-    _RolesNameController.text = widget.rolesrequest.roleName;
+    _screenNameController.text = widget.screensrequest.screenName;
 
 
     return super.initState();
@@ -64,13 +65,13 @@ class _EditRolesState extends State<EditRoles> {
                   // _handleSubmitted();
                   _formKey.currentState.save();
                   Navigator.pop(context);
-                  print(role_name);
+                  print(screenName);
 
                   //print(widget.eventrequest.eventDescription);
                   //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
                   //String eventmap = widget.eventrequest.toStrJsonJson();
-                  String eventrequestStr = jsonEncode(widget.rolesrequest.toStrJson());
-                  rolesPageVM.submitUpdateRoles(eventrequestStr);
+                  String eventrequestStr = jsonEncode(widget.screensrequest.toStrJson());
+                  screensPageVM.submitUpdateScreens(eventrequestStr);
                 },
               ))
         ]),
@@ -85,11 +86,11 @@ class _EditRolesState extends State<EditRoles> {
 
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Role Name", hintText: "What do people call this event?"),
+                    decoration: const InputDecoration(labelText: "Screen Name", hintText: "What do people call this event?"),
                     autocorrect: false,
-                    controller: _RolesNameController,
+                    controller: _screenNameController,
                     onSaved: (String value) {
-                      role_name = value;
+                      screenName = value;
                     },
                   ),
                 ),

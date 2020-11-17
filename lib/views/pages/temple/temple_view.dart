@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-//import 'package:flutter_kirthan/views/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/widgets/temple/temple_panel.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_kirthan/views/pages/temple/temple_create.dart';
 import 'package:flutter_kirthan/services/temple_service_impl.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
-//import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
+import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
+import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
 
 final TemplePageViewModel templePageVM =
 TemplePageViewModel(apiSvc: TempleAPIService());
@@ -43,6 +43,7 @@ class _TempleViewState extends State<TempleView> {
       });
       templePageVM.accessTypes = accessTypes;
     });
+    print(accessTypes);
   }
 
   Future loadData() async {
@@ -69,6 +70,34 @@ class _TempleViewState extends State<TempleView> {
           templeType: "All",
         ),
       ),
+      /*floatingActionButton: accessTypes[ACCESS_TYPE_CREATE] == true
+          ? FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+        //tooltip: accessTypes["Create"].toString(),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => TempleWrite()));
+        },
+      )
+          : FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.grey,
+        onPressed: null,
+
+      ),*/
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      TempleWrite()));
+        },
+      ),
+
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         onTap: (newIndex) {
@@ -79,29 +108,18 @@ class _TempleViewState extends State<TempleView> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => EventView()));
               break;
+
             case 1:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserView()));
-              break;
-            case 2:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TeamView()));
-              break;
-            case 3:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => NotificationView()));
-              break;
-            case 4:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Calendar()));
-              break;
-            case 5:
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => TempleView() ));
               break;
-            case 6:
+            case 2:
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => RolesView() ));
+            break;
+            case 3:
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => RolesView() ));
+                  context, MaterialPageRoute(builder: (context) => ScreensView() ));
               break;
           }
         },
@@ -112,18 +130,7 @@ class _TempleViewState extends State<TempleView> {
             icon: Icon(Icons.home),
             title: Text('Home'),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Users'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            title: Text('Team'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
-          ),
+
           BottomNavigationBarItem(
             icon: Icon(Icons.title),
             title: Text('Temple'),
@@ -132,8 +139,13 @@ class _TempleViewState extends State<TempleView> {
             icon: Icon(Icons.people),
             title: Text('Roles'),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fullscreen),
+            title: Text('Screens'),
+          ),
         ],
       ),
     );
+
   }
 }

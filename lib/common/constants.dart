@@ -53,6 +53,9 @@ const String SCR_TEMPLE = "Temple";
 const String SCR_ROLES = "Roles";
 const String SCR_USER_TEMPLE = "User_Temple";
 const String SCR_ROLE_SCREEN = "Role_Screen";
+const String SCR_PERMISSIONS = "Permissions";
+const String SCR_SCREENS = "Screens";
+
 
 const String ACCESS_TYPE_CREATE = "Create";
 const String ACCESS_TYPE_EDIT = "Edit";

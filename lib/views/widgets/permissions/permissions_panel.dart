@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/roles.dart';
+import 'package:flutter_kirthan/models/permissions.dart';
 import 'package:flutter_kirthan/junk/main_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/roles_page_view_model.dart';
-import 'package:flutter_kirthan/views/widgets/roles/roles_list_item.dart';
+import 'package:flutter_kirthan/view_models/permissions_page_view_model.dart';
+import 'package:flutter_kirthan/views/widgets/permissions/permissions_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
 
-class RolesPanel extends StatelessWidget {
-  String rolesType;
-  final String screenName = "Roles";
-  RolesPanel({this.rolesType});
+class PermissionsPanel extends StatelessWidget {
+  String permissionsType;
+  final String screenName = "Permissions";
+  PermissionsPanel({this.permissionsType});
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<RolesPageViewModel>(
+    return ScopedModelDescendant<PermissionsPageViewModel>(
       //rebuildOnChange: true,
       builder: (context, child, model) {
-        return FutureBuilder<List<Roles>>(
-          future: model.rolesrequests,
-          builder: (_, AsyncSnapshot<List<Roles>> snapshot) {
+        return FutureBuilder<List<Permissions>>(
+          future: model.permissionsrequests,
+          builder: (_, AsyncSnapshot<List<Permissions>> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.active:
@@ -69,8 +69,8 @@ class RolesPanel extends StatelessWidget {
                             rolesRequests == null ? 0 : rolesRequests.length,
                             itemBuilder: (_, int index) {
                               var rolesrequest = rolesRequests[index];
-                              return RolesRequestsListItem(
-                                  rolesrequest: rolesrequest, rolesPageVM: model);
+                              return PermissionsRequestsListItem(
+                                  permissionsrequest: rolesrequest, permissionsPageVM: model);
                             },
                           ),
                         ),
@@ -80,7 +80,7 @@ class RolesPanel extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return NoInternetConnection(
                     action: () async {
-                      await model.setRoles("All");
+                      await model.setPermissions("All");
                     },
                   );
                 }

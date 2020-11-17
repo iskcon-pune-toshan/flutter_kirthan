@@ -1,4 +1,3 @@
-/*
 import 'dart:async';
 import 'package:flutter_kirthan/models/permissions.dart';
 
@@ -17,6 +16,5 @@ abstract class IPermissionsRestApi {
 
   Future<bool> deletePermissions(Map<String, dynamic> processrequestmap);
 
-  Future<bool> submitUpdatePermissions(String userrequestmap);
+  Future<bool> submitUpdatePermissions(String permissionsrequestmap);
 }
-*/

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/temple.dart';
+import 'package:flutter_kirthan/junk/main_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/temple/temple_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_kirthan/views/pages/team/team_create.dart';
+import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
+import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
 
 class TemplesPanel extends StatelessWidget {
   String templeType;

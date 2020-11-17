@@ -1,28 +1,28 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/roles.dart';
-import 'package:flutter_kirthan/services/roles_service_impl.dart';
-import 'package:flutter_kirthan/view_models/roles_page_view_model.dart';
+import 'package:flutter_kirthan/models/permissions.dart';
+import 'package:flutter_kirthan/services/permissions_service_impl.dart';
+import 'package:flutter_kirthan/view_models/permissions_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-final RolesPageViewModel rolesPageVM =
-RolesPageViewModel(apiSvc: RolesAPIService());
+final PermissionsPageViewModel permissionsPageVM =
+PermissionsPageViewModel(apiSvc: PermissionsAPIService());
 
 
-class EditRoles extends StatefulWidget {
-  Roles rolesrequest ;
-  final String screenName = SCR_ROLES;
+class EditPermissions extends StatefulWidget {
+  Permissions permissionsrequest ;
+  final String screenName = SCR_PERMISSIONS;
 
-  EditRoles({ @required this.rolesrequest}) ;
+  EditPermissions({ @required this.permissionsrequest}) ;
 
   @override
-  _EditRolesState createState() => new _EditRolesState();
+  _EditPermissionsState createState() => new _EditPermissionsState();
 }
 
-class _EditRolesState extends State<EditRoles> {
+class _EditPermissionsState extends State<EditPermissions> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   //EventRequest eventrequestobj = new EventRequest();
   //_EditProfileViewState({Key key, @required this.eventrequest}) ;
@@ -31,15 +31,15 @@ class _EditRolesState extends State<EditRoles> {
   String state;
   var _states = ["GOA","GUJ","MAH"];
   // controllers for form text controllers
-  final TextEditingController _RolesNameController = new TextEditingController();
-  String role_name ;
+  final TextEditingController _PermissionsNameController = new TextEditingController();
+  String name ;
 
 
 
 
   @override
   void initState() {
-    _RolesNameController.text = widget.rolesrequest.roleName;
+    _PermissionsNameController.text = widget.permissionsrequest.name;
 
 
     return super.initState();
@@ -64,13 +64,13 @@ class _EditRolesState extends State<EditRoles> {
                   // _handleSubmitted();
                   _formKey.currentState.save();
                   Navigator.pop(context);
-                  print(role_name);
+                  print(name);
 
                   //print(widget.eventrequest.eventDescription);
                   //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
                   //String eventmap = widget.eventrequest.toStrJsonJson();
-                  String eventrequestStr = jsonEncode(widget.rolesrequest.toStrJson());
-                  rolesPageVM.submitUpdateRoles(eventrequestStr);
+                  String eventrequestStr = jsonEncode(widget.permissionsrequest.toStrJson());
+                  permissionsPageVM.submitUpdatePermissions(eventrequestStr);
                 },
               ))
         ]),
@@ -85,11 +85,11 @@ class _EditRolesState extends State<EditRoles> {
 
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Role Name", hintText: "What do people call this event?"),
+                    decoration: const InputDecoration(labelText: "Permissions Name", hintText: "What do people call this event?"),
                     autocorrect: false,
-                    controller: _RolesNameController,
+                    controller: _PermissionsNameController,
                     onSaved: (String value) {
-                      role_name = value;
+                      name = value;
                     },
                   ),
                 ),
