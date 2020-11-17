@@ -19,7 +19,7 @@ class UserTemplesPanel extends StatelessWidget {
       //rebuildOnChange: true,
       builder: (context, child, model) {
         return FutureBuilder<List<UserTemple>>(
-          future: model.usertemplerequests,
+          future: model.userTemples,
           builder: (_, AsyncSnapshot<List<UserTemple>> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
@@ -30,35 +30,11 @@ class UserTemplesPanel extends StatelessWidget {
                 if (snapshot.hasData) {
                   var usertempleRequests = snapshot.data;
                   return new Column(
-                    //mainAxisAlignment: MainAxisAlignment.center,
-                    //mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          /*                        RaisedButton(
-                            child: const Text("All Teams"),
-                            onPressed: () {
-                              print("All Teams");
-                              model.setTeamRequests("AE");
-                            },
-                          ),
-*/
 
-
-                          /*                        Expanded(
-                            child: RaisedButton(
-                              child: const Text("Create a Team"),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            TeamWrite()));
-                              },
-                          ),
-                          ),
-*/
                         ],
                       ),
                       Expanded(
@@ -68,9 +44,9 @@ class UserTemplesPanel extends StatelessWidget {
                             itemCount:
                             usertempleRequests == null ? 0 : usertempleRequests.length,
                             itemBuilder: (_, int index) {
-                              var teamrequest = usertempleRequests[index];
+                              var usertemplerequest = usertempleRequests[index];
                               return UserTempleRequestsListItem(
-                                  usertemplerequest: teamrequest, userTemplePageVM: model);
+                                  usertemplerequest: usertemplerequest, userTemplePageVM: model);
                             },
                           ),
                         ),
@@ -80,7 +56,7 @@ class UserTemplesPanel extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return NoInternetConnection(
                     action: () async {
-                      await model.setUserTemples("All");
+                      await model.getUserTempleMapping("");
                     },
                   );
                 }

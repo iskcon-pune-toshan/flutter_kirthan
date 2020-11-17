@@ -83,7 +83,7 @@ class RoleScreensPanel extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return NoInternetConnection(
                     action: () async {
-                      await model.setRoleScreen("All");
+                      await model.getRoleScreenMaping("All");
                     },
                   );
                 }

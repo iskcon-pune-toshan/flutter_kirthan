@@ -10,6 +10,5 @@ abstract class ITeamUserRestApi {
 
   Future<List<TeamUser>> submitDeleteTeamUserMapping(
       List<TeamUser> listofteamusermap);
-//Future<void> submitUpdateTeamRequest(String teamrequestmap);
-//Future<bool> processTeamRequest(Map<String,dynamic> processrequestmap);
+
 }

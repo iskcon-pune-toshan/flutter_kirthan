@@ -4,11 +4,12 @@ class UserTemple {
   int templeId;
    int roleId;
    int userId;
-   //int screen_id;
+   String templeName;
+   String userName;
 
 
 //Typically called form service layer
-  UserTemple({this.id, this.userId,this.roleId,this.templeId
+  UserTemple({this.id, this.userId,this.roleId,this.templeId,this.templeName,this.userName
     });
 
 //Typically called from the data_source layer after getting data from an external source.
@@ -17,7 +18,9 @@ class UserTemple {
       id: data['id'],
       roleId: data['roleId'],
       userId: data['userId'],
-      templeId: data['templeId']
+      templeId: data['templeId'],
+      templeName: data['templeName'],
+      userName: data['userName']
     );
   }
 
@@ -26,7 +29,9 @@ class UserTemple {
       id: map['id'],
         roleId: map['roleId'],
         userId: map['userId'],
-        templeId: map['templeId']
+        templeId: map['templeId'],
+        templeName: map['templeName'],
+        userName: map['userName']
     );
   }
 
@@ -36,6 +41,8 @@ class UserTemple {
     data['roleId'] = this.roleId;
     data['userId'] = this.userId;
     data['templeId'] = this.templeId;
+    data['templeName'] = this.templeName;
+    data['userName'] = this.userName;
        return data;
   }
 
@@ -44,7 +51,9 @@ class UserTemple {
       "id": this.id,
       "roleId": this.roleId,
       "userId": this.userId,
-      "templeId": this.templeId
+      "templeId": this.templeId,
+      "templeName" : this.templeName,
+      "userName" : this.userName
     };
   }
 

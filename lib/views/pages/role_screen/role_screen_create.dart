@@ -219,10 +219,10 @@ class _RoleScreenWriteState extends State<RoleScreenWrite> {
                                 roleScreen.isDeleted = false;
                                 roleScreen.isViewd = false;
 
-                                Map<String,dynamic> roleScreenmap = roleScreen.toJson();
-                                RoleScreen newroleScreenrequest =await roleScreenPageVM.submitNewRoleScreen(roleScreenmap);
-                                print(newroleScreenrequest.id);
-                                String uid = newroleScreenrequest.id.toString();
+                                List<RoleScreen> roleScreenmap = roleScreen.toJson() as List<RoleScreen>;
+                                List<RoleScreen> newroleScreenrequest =await roleScreenPageVM.submitNewRoleScreenMapping(roleScreenmap);
+                                //print(newroleScreenrequest.id);
+                                //String uid = newroleScreenrequest.id.toString();
                                 SnackBar mysnackbar = SnackBar (
                                   content: Text("Role Screen added $successful "),
                                   duration: new Duration(seconds: 4),

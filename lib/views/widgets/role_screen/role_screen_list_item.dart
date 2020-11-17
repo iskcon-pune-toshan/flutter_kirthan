@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/rolescreen.dart';
-import 'package:flutter_kirthan/models/temple.dart';
-import 'package:flutter_kirthan/models/usertemple.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/role_screen_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
-import 'package:flutter_kirthan/views/pages/role_screen/role_screen_edit.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_edit.dart';
-import 'package:flutter_kirthan/views/pages/user_temple/user_temple_edit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//import 'package:flutter_kirthan/views/temple/temple_edit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Choice {
@@ -68,7 +59,7 @@ class RoleScreenRequestsListItem extends StatelessWidget {
             ),
           ),
         ),
-        Container(
+    /*    Container(
           child: PopupMenuButton<Choice>(
             itemBuilder: (BuildContext context) {
               return popupList.map((f) {
@@ -160,7 +151,7 @@ class RoleScreenRequestsListItem extends StatelessWidget {
               }
             },
           ),
-        ),
+        ),*/
       ],
     );
 

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
@@ -7,15 +5,12 @@ import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
-import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
@@ -23,12 +18,10 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
-//import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
@@ -494,11 +487,11 @@ class _EventViewState extends State<EventView>
             title: Text('Roles'),
           ),*/
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_turned_in),
+            icon: Icon(Icons.map),
             title: Text('User Temple'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_turned_in),
+            icon: Icon(Icons.arrow_drop_down_circle),
             title: Text('Role Screen'),
           ),
           ],

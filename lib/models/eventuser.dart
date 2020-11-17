@@ -16,15 +16,15 @@ class EventUser {
   EventUser(
       {this.id,
         this.eventId,
-      this.teamId,
-      this.userId,
-      this.createdBy,
-      this.updatedBy,
-      this.createdTime,
-      this.updatedTime,
-      this.teamName,
-      this.userName,
-      this.eventName});
+        this.teamId,
+        this.userId,
+        this.createdBy,
+        this.updatedBy,
+        this.createdTime,
+        this.updatedTime,
+        this.teamName,
+        this.userName,
+        this.eventName});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventUser.fromJson(Map<String, dynamic> data) {

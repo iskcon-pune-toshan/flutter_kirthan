@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
+import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
+import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
 import 'package:flutter_kirthan/views/widgets/user/user_panel.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
@@ -82,6 +84,12 @@ class _UserViewState extends State<UserView> {
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
             case 3:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
+              break;
+            case 4:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => RoleScreenView()));
               break;
           }
         },
@@ -103,6 +111,14 @@ class _UserViewState extends State<UserView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             title: Text('Notifications'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            title: Text('User Temple'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_drop_down_circle),
+            title: Text('Role Screen'),
           ),
         ],
       ),

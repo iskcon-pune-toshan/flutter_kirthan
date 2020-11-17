@@ -8,6 +8,8 @@ class RoleScreen {
   bool isDeleted;
   bool isViewd;
   bool isProcessed;
+  String roleName;
+  String screenName;
 
 
 //Typically called form service layer
@@ -16,6 +18,8 @@ class RoleScreen {
     this.isDeleted,
     this.isViewd,
     this.isProcessed,
+    this.roleName,
+    this.screenName,
     });
 
 //Typically called from the data_source layer after getting data from an external source.
@@ -29,6 +33,8 @@ class RoleScreen {
       isDeleted: data['isDeleted'],
       isViewd: data['isViewd'],
       isProcessed: data['isProcessed'],
+      roleName: data['roleName'],
+      screenName: data['screenName'],
 
     );
   }
@@ -43,6 +49,8 @@ class RoleScreen {
       isDeleted: map['isDeleted'],
       isViewd: map['isViewd'],
       isProcessed: map['isProcessed'],
+      roleName: map['roleName'],
+      screenName: map['screenName']
     );
   }
 
@@ -56,6 +64,8 @@ class RoleScreen {
     data['isDeleted'] = this.isDeleted;
     data['isViewd'] = this.isViewd;
     data['isProcessed'] = this.isProcessed;
+    data['roleName'] = this.roleName;
+    data['screenName'] = this.screenName;
        return data;
   }
 
@@ -69,6 +79,8 @@ class RoleScreen {
       "isUpdated": this.isDeleted,
       "isViewd": this.isViewd,
       "isProcessed": this.isProcessed,
+      "roleName": this.roleName,
+      "screenName": this.screenName
     };
   }
 

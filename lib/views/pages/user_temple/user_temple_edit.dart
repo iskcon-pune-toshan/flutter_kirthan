@@ -1,3 +1,4 @@
+/*
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,6 @@ class EditUserTemple extends StatefulWidget {
 
 class _EditUserTempleState extends State<EditUserTemple> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  //EventRequest eventrequestobj = new EventRequest();
-  //_EditProfileViewState({Key key, @required this.eventrequest}) ;
-  //final IKirthanRestApi apiSvc = new RestAPIServices();
   String _selectedState;
   int  temple_id;
   var _states = 3;
@@ -82,7 +80,7 @@ class _EditUserTempleState extends State<EditUserTemple> {
                   //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
                   //String eventmap = widget.eventrequest.toStrJsonJson();
                   String eventrequestStr = jsonEncode(widget.usertemplerequest.toStrJson());
-                  userTemplePageVM.submitUpdateUserTemple(eventrequestStr);
+                  userTemplePageVM.submitNewTeamUserMapping(List<UserTemple> eventrequestStr);
                 },
               ))
         ]),
@@ -137,4 +135,4 @@ class _EditUserTempleState extends State<EditUserTemple> {
               ],
             ))));
   }
-}
+}*/

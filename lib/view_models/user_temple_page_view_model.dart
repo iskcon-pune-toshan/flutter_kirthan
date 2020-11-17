@@ -4,51 +4,38 @@ import 'package:flutter_kirthan/services/user_temple_service_interface.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_kirthan/services/temple_service_interface.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/models/temple.dart';
 
 
 class UserTemplePageViewModel extends Model {
+  Future<List<UserTemple>> _userTemples;
   final IUserTempleRestApi apiSvc;
-
-  UserTemplePageViewModel({@required this.apiSvc});
   Map<String,bool> accessTypes;
 
-  Future<List<UserTemple>> _usertemplerequests;
-  Future<List<UserTemple>> get usertemplerequests => _usertemplerequests;
+  UserTemplePageViewModel({@required this.apiSvc});
 
-  set usertemplerequests(Future<List<UserTemple>> value) {
-    _usertemplerequests = value;
+  Future<List<UserTemple>> get userTemples => _userTemples;
+
+  set userTemple(Future<List<UserTemple>> value) {
+    _userTemples = value;
     notifyListeners();
   }
 
-
-  Future<bool> setUserTemples(String userType) async {
-    usertemplerequests = apiSvc?.getUserTemples(userType);
-    return usertemplerequests != null;
+  Future<List<UserTemple>> getUserTempleMapping(String userTempleMapping) {
+    Future<List<UserTemple>> usertemples = apiSvc?.getUserTempleMapping(userTempleMapping);
+    return usertemples;
   }
 
-  Future<List<UserTemple>> getUserTemples(String userType) {
-    Future<List<UserTemple>> usersreqs = apiSvc?.getUserTemples(userType);
-    return usersreqs;
+  Future<List<UserTemple>> submitNewUserTempleMapping(
+      List<UserTemple> listofusertemplemap) {
+    Future<List<UserTemple>> usertemples =
+    apiSvc?.submitNewUserTempleMapping(listofusertemplemap);
+    return usertemples;
   }
 
-
-  Future<UserTemple> submitNewUserTemple(Map<String, dynamic> userrequestmap) {
-    Future<UserTemple> userrequest = apiSvc?.submitNewUserTemple(userrequestmap);
-    return userrequest;
+  Future<List<UserTemple>> submitDeleteUserTempleMapping(
+      List<UserTemple> listofusertemplemap) {
+    Future<List<UserTemple>> usertemples =
+    apiSvc?.submitDeleteUserTempleMapping(listofusertemplemap);
+    return usertemples;
   }
-
-
-  Future<bool> deleteUserTemple(Map<String, dynamic> processrequestmap) {
-    Future<bool> deleteFlag = apiSvc?.deleteUserTemple(processrequestmap);
-    return deleteFlag;
-  }
-
-
-  Future<bool> submitUpdateUserTemple(String userrequestmap) {
-    Future<bool> updateFlag = apiSvc?.submitUpdateUserTemple(userrequestmap);
-    return updateFlag;
-  }
-
-
 }

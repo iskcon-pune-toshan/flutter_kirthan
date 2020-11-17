@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
+import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
+import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
 import 'package:flutter_kirthan/views/widgets/team/team_panel.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -106,8 +108,15 @@ class _TeamViewState extends State<TeamView>
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
-            case 3:
+            case 2:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
               break;
+            case 2:
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => RoleScreenView()));
+              break;
+
           }
         },
         currentIndex: _index,
@@ -128,6 +137,14 @@ class _TeamViewState extends State<TeamView>
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             title: Text('Notifications'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            title: Text('User Temple'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_drop_down_circle),
+            title: Text('Role Screen'),
           ),
         ],
       ),

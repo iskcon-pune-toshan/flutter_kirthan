@@ -2,19 +2,14 @@ import 'dart:async';
 import 'package:flutter_kirthan/models/usertemple.dart';
 
 abstract class IUserTempleRestApi {
-  //Sample
 
 
-  //permissions
-  Future<List<UserTemple>> getUserTemples(String userType);
+  Future<List<UserTemple>> getUserTempleMapping(String userTempleMapping);
 
-  //Future<List<Permissions>> getDummyUserRequests();
 
-  Future<UserTemple> submitNewUserTemple(Map<String, dynamic> usertemplemap);
+  Future<List<UserTemple>> submitNewUserTempleMapping(List<UserTemple> listofusertemplemap);
 
-  //Future<bool> processPermissions(Map<String, dynamic> processrequestmap);
 
-  Future<bool> deleteUserTemple(Map<String, dynamic> processrequestmap);
+  Future<List<UserTemple>> submitDeleteUserTempleMapping(List<UserTemple> listofusertemplemap);
 
-  Future<bool> submitUpdateUserTemple(String UserTemplerequestmap);
 }

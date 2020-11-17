@@ -19,33 +19,25 @@ class RoleScreenViewPageModel extends Model {
   }
 
 
-  Future<bool> setRoleScreen(String roleId) async {
-    rolescreenrequests = apiSvc?.getRoleScreens(roleId);
-    return rolescreenrequests != null;
-  }
-
-  Future<List<RoleScreen>> getRoleScreen(String roleId) {
-    Future<List<RoleScreen>> rolescreenreqs = apiSvc?.getRoleScreens(roleId);
+  Future<List<RoleScreen>> getRoleScreenMaping(String roleId) {
+    Future<List<RoleScreen>> rolescreenreqs = apiSvc?.getRoleScreenMapping(roleId);
     return rolescreenreqs;
   }
 
 
-  Future<RoleScreen> submitNewRoleScreen(Map<String, dynamic> rolescreenrequestmap) {
-    Future<RoleScreen> rolescreenrequest = apiSvc?.submitNewRoleScreen(rolescreenrequestmap);
+  Future<List<RoleScreen>> submitNewRoleScreenMapping(List<RoleScreen> listroleScreen) {
+    Future<List<RoleScreen>> rolescreenrequest = apiSvc?.submitNewRoleScreenMapping(listroleScreen);
     return rolescreenrequest;
   }
 
 
-  Future<bool> deleteRoleScreen(Map<String, dynamic> processrequestmap) {
-    Future<bool> deleteFlag = apiSvc?.deleteRoleScreen(processrequestmap);
-    return deleteFlag;
+  Future<List<RoleScreen>> submitDeleteRoleScreenMapping(
+      List<RoleScreen> listofrolescreenmap) {
+    Future<List<RoleScreen>> rolescreens =
+    apiSvc?.submitDeleteRoleScreenMapping(listofrolescreenmap);
+    return rolescreens;
   }
 
-
-  Future<bool> submitUpdateRoleScreen(String userrequestmap) {
-    Future<bool> updateFlag = apiSvc?.submitUpdateRoleScreen(userrequestmap);
-    return updateFlag;
-  }
 
 
 }

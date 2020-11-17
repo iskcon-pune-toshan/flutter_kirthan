@@ -132,6 +132,14 @@ class _TempleViewState extends State<RolesView> {
             icon: Icon(Icons.people),
             title: Text('Roles'),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            title: Text('User Temple'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_drop_down_circle),
+            title: Text('Role Screen'),
+          ),
         ],
       ),
     );
