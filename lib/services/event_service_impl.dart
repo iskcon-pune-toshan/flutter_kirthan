@@ -179,6 +179,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     var response = await client1.put('$baseUrl/api/event/updateevent',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: eventrequestmap);
 
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.body);
     } else {
