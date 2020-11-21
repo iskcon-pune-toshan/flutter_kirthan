@@ -44,7 +44,7 @@ class _EventWriteState extends State<EventWrite> {
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
   //final IKirthanRestApi apiSvc = new RestAPIServices();
-  List<String> _states = [ "Andhra Pradesh",
+  List<String> _states = [ "Kant","Andhra Pradesh",
     "Arunachal Pradesh",
     "Assam",
     "Bihar",
@@ -81,7 +81,8 @@ class _EventWriteState extends State<EventWrite> {
     "Lakshadweep",
     "Puducherry"];
 
-  List<String> _cities = ['Adilabad',
+  List<String> _cities = ['Kant','Adilabad','Delhi',
+    'Ahmednagar',
     'Anantapur',
     'Chittoor',
     'Kakinada',
@@ -561,6 +562,7 @@ class _EventWriteState extends State<EventWrite> {
                             ),
                             onSaved: (input){
                               eventrequest.addLineOne = input;
+                              eventrequest.eventLocation = input;
                             },
                             validator: (value) {
                               if(value.isEmpty) {
@@ -689,7 +691,7 @@ class _EventWriteState extends State<EventWrite> {
                             value: _selectedCountry,
                             icon: const Icon(Icons.location_city),
                             hint: Text('Select Country'),
-                            items: ['IND']
+                            items: ['IND','Kyrgyzstan']
                                 .map((country) => DropdownMenuItem(
                               value: country,
                               child: Text(country),
@@ -734,12 +736,18 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.updatedTime = dt;
                                 eventrequest.approvalStatus = "Approved";
                                 eventrequest.approvalComments = "AAA";
-                                Map<String,dynamic> eventmap = eventrequest.toJson();
-                                EventRequest neweventrequest =await eventPageVM.submitNewEventRequest(eventmap);
-                                print(neweventrequest.id);
-                                String uid = neweventrequest.id.toString();
+                                Map<String, dynamic> teammap =
+                                eventrequest.toJson();
+                                //TeamRequest newteamrequest = await apiSvc
+                                //  ?.submitNewTeamRequest(teammap);
+                                EventRequest newteamrequest = await eventPageVM
+                                    .submitNewEventRequest(teammap);
+
+                                print(newteamrequest.id);
+                                String eid = newteamrequest.id.toString();
+
                                 SnackBar mysnackbar = SnackBar (
-                                  content: Text("Event registered $successful "),
+                                  content: Text("Event registered $successful with $eid"),
                                   duration: new Duration(seconds: 4),
                                   backgroundColor: Colors.green,
                                 );

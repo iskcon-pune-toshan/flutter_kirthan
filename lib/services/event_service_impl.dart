@@ -48,7 +48,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/event/processevent',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.body);
 
@@ -81,7 +81,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     if (eventType == ["bmg"]) {
       requestBody = '{"id":"4"}';
     } else {
-      requestBody = '{"state":["MH"]}';
+      requestBody = '{"country":["IND"]}';
     }
 
     print(requestBody);
@@ -131,7 +131,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl//api/eventaddevent',
+    var response = await client1.put('$baseUrl/api/event/addevent',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
