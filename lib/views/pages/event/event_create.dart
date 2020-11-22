@@ -3,6 +3,7 @@ import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
@@ -26,6 +27,19 @@ EventRequest eventrequest;
   EventWrite({@required this.eventrequest});
 }
 class _EventWriteState extends State<EventWrite> {
+  bool mapToggle = false;
+  bool locationToggle = false;
+  bool resetToggle = false;
+
+  List<Marker> myMarker=[];
+  List<Marker> get markers => myMarker;
+
+  TextEditingController locationController = TextEditingController();
+
+  GoogleMapController mapController;
+
+  LatLng tappedPoint1,tappedPoint2;
+
 
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
@@ -77,6 +91,40 @@ class _EventWriteState extends State<EventWrite> {
   String _selectedState;
   String _selectedCountry;
 
+  handleTap(LatLng tappedPoint1){
+    print(tappedPoint1);
+    //print(tappedPoint2);
+    setState(() {
+
+      myMarker=[];
+
+      myMarker.add(
+        Marker(markerId: MarkerId(tappedPoint1.toString()),
+          infoWindow: InfoWindow(
+              title: 'Event Location') ,
+          position: tappedPoint1,
+        ),
+      );
+      /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
+      infoWindow: InfoWindow(
+        title: 'End Point') ,
+      position: tappedPoint2,
+      ),
+      );*/
+
+
+
+    });
+  }
+
+  void onMapCreated(controller) {
+    setState(() {
+      mapController = controller;
+    });
+
+  }
+
+
 
   List type=["Stationary","Moving"];
 
@@ -93,6 +141,7 @@ class _EventWriteState extends State<EventWrite> {
           onChanged: (value){
             setState(() {
               print(value);
+              eventrequest.eventMobility=select;
               select=value;
             });
 
@@ -410,7 +459,83 @@ class _EventWriteState extends State<EventWrite> {
                                 builder: (context) =>
                                     BlocProvider(
                                       create: (BuildContext context) => MapsBloc(),
-                                      child: AddLocation(),
+                                      child: Scaffold(
+                                          appBar: AppBar(
+                                            title: Text('Location'),
+                                            actions: <Widget>[
+                                              IconButton(
+
+                                                icon: Icon(Icons.refresh),
+                                                onPressed:  () => {
+                                                  setState(() {
+                                                    markers.clear();
+                                                  }),//setState
+                                                },//onpressed
+                                              ),
+
+                                              IconButton(
+                                                icon: Icon(Icons.done),
+                                                onPressed: (){
+
+                                                  handleTap(tappedPoint1);
+                                                  eventrequest.sourceLongitude=tappedPoint1.longitude;
+                                                  eventrequest.sourceLatitude=tappedPoint1.latitude;
+                                                  print(eventrequest.sourceLongitude);
+                                                  print(eventrequest.sourceLatitude);
+                                                  handleTap(tappedPoint2);
+                                                  //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                  //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
+
+                                                  // widget.eventrequest.eventLocation=tappedPoint1.toString();
+                                                },
+                                                //onpressed
+                                              ),
+
+                                            ],
+
+
+
+                                          ),
+                                          body: Column(
+                                            children: <Widget>[
+                                              Stack(
+                                                children: <Widget>[
+                                                  Container(
+                                                      height: MediaQuery
+                                                          .of(context)
+                                                          .size
+                                                          .height - 80.0,
+                                                      width: double.infinity,
+                                                      child: !mapToggle
+                                                          ? GoogleMap(
+                                                        myLocationButtonEnabled: true,
+                                                        myLocationEnabled: true,
+                                                        compassEnabled: true,
+                                                        onMapCreated: onMapCreated,
+                                                        onTap: handleTap,
+                                                        markers:
+
+                                                        Set.from(myMarker),
+
+                                                        initialCameraPosition: CameraPosition(
+                                                            target: LatLng(0.0, 0.0), zoom: 16),
+
+                                                      )
+                                                          : Center(
+                                                          child: Text(
+                                                            'Loading.. Please wait..',
+                                                            style: TextStyle(fontSize: 20.0),
+                                                          ))),
+
+
+
+
+
+                                                ],
+                                              )
+                                            ],
+                                          )),
+
                                     ),
                               ),);
 
@@ -503,7 +628,7 @@ class _EventWriteState extends State<EventWrite> {
                               hintText: "",
                             ),
                             onSaved: (input){
-                              eventrequest.pinCode = int.parse(input);
+                              eventrequest.pincode = int.parse(input);
                             },
                             validator: (value) {
                               if(value.isEmpty) {
@@ -604,9 +729,9 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.isProcessed = false;
                                 eventrequest.createdBy = "SYSTEM";
                                 String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                                eventrequest.createTime =  dt;
+                                eventrequest.createdTime =  dt;
                                 eventrequest.updatedBy = "SYSTEM";
-                                eventrequest.updateTime = dt;
+                                eventrequest.updatedTime = dt;
                                 eventrequest.approvalStatus = "Approved";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String,dynamic> eventmap = eventrequest.toJson();

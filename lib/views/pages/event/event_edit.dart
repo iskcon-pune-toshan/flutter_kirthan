@@ -51,6 +51,8 @@ class _EditEventState extends State<EditEvent> {
   String city;
   final TextEditingController _pincodeController = new TextEditingController();
   String pinCode;
+  final TextEditingController _createdTimeController = new TextEditingController();
+  String createdTime;
 
 
   @override
@@ -63,9 +65,12 @@ class _EditEventState extends State<EditEvent> {
     _eventDurationController.text = widget.eventrequest.eventDuration;
     _linetwoController.text = widget.eventrequest.addLineTwo;
     _linethreeController.text = widget.eventrequest.addLineThree;
-    _pincodeController.text = widget.eventrequest.pinCode.toString();
+    _pincodeController.text = widget.eventrequest.pincode.toString();
     _selectedState="GUJ";
     _cityController.text=widget.eventrequest.city;
+    _createdTimeController.text = widget.eventrequest.createdTime;
+    print("createdTime");
+    print(widget.eventrequest.createdTime);
     return super.initState();
   }
 
@@ -86,6 +91,8 @@ class _EditEventState extends State<EditEvent> {
                 child: new Text('Save'),
                 onPressed: () {
                   // _handleSubmitted();
+                  //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+                  //_createTimeController.text = dt;
                   _formKey.currentState.save();
                   Navigator.pop(context);
                   print(eventTitle);
@@ -234,6 +241,18 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
+
+                new Container(
+                  child: new TextFormField(
+                    decoration: const InputDecoration(labelText: "CreatedTime"),
+                    autocorrect: false,
+                    controller: _createdTimeController,
+                    onSaved: (String value) {
+                      createdTime = value;
+                    },
+                  ),
+                ),
+
 
                 DropdownButtonFormField<String>(
                   value: _selectedState,
