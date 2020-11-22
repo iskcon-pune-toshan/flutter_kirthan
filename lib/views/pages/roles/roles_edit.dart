@@ -89,7 +89,7 @@ class _EditRolesState extends State<EditRoles> {
                     autocorrect: false,
                     controller: _RolesNameController,
                     onSaved: (String value) {
-                      role_name = value;
+                      widget.rolesrequest.roleName = value;
                     },
                   ),
                 ),

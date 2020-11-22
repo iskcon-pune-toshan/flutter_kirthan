@@ -1,16 +1,23 @@
+//import 'dart:ffi';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/firebasemessage_service.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
+import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
-import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/pages/event/event_search.dart';
+import 'package:flutter_kirthan/views/pages/permissions/permissions_view.dart';
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
+import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
+import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
+import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
@@ -18,6 +25,10 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
+
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
@@ -30,7 +41,8 @@ class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
   EventRequest eventrequest;
-  EventView({Key key,@required this.eventrequest}) : super(key: key);
+
+  EventView({Key key, @required this.eventrequest}) : super(key: key);
 
   @override
   _EventViewState createState() => _EventViewState();
@@ -39,12 +51,12 @@ class EventView extends StatefulWidget {
 class _EventViewState extends State<EventView>
     with SingleTickerProviderStateMixin {
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
-
   String _selectedValue;
   int _index;
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
+
   //List<String> userdetails;
   String photoUrl;
   String name;
@@ -95,21 +107,18 @@ class _EventViewState extends State<EventView>
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.search),
-
               onPressed: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          Search ()),
-                ),}
-          ),
+                  MaterialPageRoute(builder: (context) => Search()),
+                ),
+              }),
           PopupMenuButton(
               icon: Icon(Icons.tune),
               onSelected: (input) {
                 _selectedValue = input;
                 print(input);
-                eventPageVM.setEventRequests(widget.eventrequest?.eventTitle);
+                eventPageVM.setEventRequests("All");
               },
               itemBuilder: (BuildContext context) {
                 return eventTime.map((f) {
@@ -122,7 +131,6 @@ class _EventViewState extends State<EventView>
                   );
                 }).toList();
               }),
-
         ],
       ),
       drawer: Drawer(
@@ -185,6 +193,18 @@ class _EventViewState extends State<EventView>
               ),
               Card(
                 child: ListTile(
+                  title: Text("Admin View"),
+                  trailing: Icon(Icons.assignment),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AdminView()),
+                    );
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
                   title: Text("Share app"),
                   trailing: Icon(Icons.share),
                   onTap: () {
@@ -231,11 +251,14 @@ class _EventViewState extends State<EventView>
                             description:
                             "Tap a star to set your rating. Add more description here if you want.",
                             submitButton: "SUBMIT",
-                            alternativeButton: "Contact us instead?", // optional
-                            positiveComment:
-                            "We are so happy to hear :)", // optional
-                            negativeComment: "We're sad to hear :(", // optional
-                            accentColor: Colors.red, // optional
+                            alternativeButton: "Contact us instead?",
+                            // optional
+                            positiveComment: "We are so happy to hear :)",
+                            // optional
+                            negativeComment: "We're sad to hear :(",
+                            // optional
+                            accentColor: Colors.red,
+                            // optional
                             onSubmitPressed: (int rating) {
                               print("onSubmitPressed: rating = $rating");
                             },
@@ -385,8 +408,8 @@ class _EventViewState extends State<EventView>
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
             case 3:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => NotificationView()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationView()));
               break;
             case 4:
               Navigator.push(
@@ -394,33 +417,18 @@ class _EventViewState extends State<EventView>
               break;
             case 5:
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => RoleScreenView()));
-              break;/*
-            case 4:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Calendar()));
-              break;
-            case 5:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TempleView() ));
+                  context, MaterialPageRoute(builder: (context) => RoleScreenView() ));
               break;
             case 6:
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => RolesView() ));
+                  context, MaterialPageRoute(builder: (context) => PermissionsView() ));
               break;
-            case 7:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
-              break;
-            case 8:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => RoleScreenView()));
-              break;*/
+
           }
         },
         currentIndex: _index,
         selectedItemColor: Colors.orange,
-        items:  <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
@@ -439,62 +447,55 @@ class _EventViewState extends State<EventView>
               model: NotificationViewModel(),
               child: ScopedModelDescendant<NotificationViewModel>(
                   builder: (context, child, model) {
-                    FirebaseMessageService fms  = new FirebaseMessageService();
+                    FirebaseMessageService fms = new FirebaseMessageService();
                     fms.initMessageHandler(context);
                     print(model.newNotificationCount);
                     bool visibilty = true;
-                    if(model.newNotificationCount == 0 ) visibilty = false;
+                    if (model.newNotificationCount == 0) visibilty = false;
                     return Stack(
                       alignment: Alignment.topRight,
                       children: <Widget>[
                         Icon(Icons.notifications),
-                        if(visibilty) Positioned(
-                          child: Container(
-                            padding: EdgeInsets.all(1),
-                            decoration: new BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            constraints: BoxConstraints(
-                              minHeight: 8,
-                              minWidth: 8,
-                            ),
-                            child: Text(
-                              model.newNotificationCount.toString(),
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
+                        if (visibilty)
+                          Positioned(
+                            child: Container(
+                              padding: EdgeInsets.all(1),
+                              decoration: new BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              constraints: BoxConstraints(
+                                minHeight: 8,
+                                minWidth: 8,
+                              ),
+                              child: Text(
+                                model.newNotificationCount.toString(),
+                                style: new TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
                               ),
                             ),
                           ),
-                        ) ,
                       ],
                     );
                   }),
             ),
           ),
-          /*BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            title: Text('Calendar'),
-
+            title: Text('UserTemple'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.title),
-            title: Text('Temple'),
+            title: Text('RoleScreen'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
-            title: Text('Roles'),
-          ),*/
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text('User Temple'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_drop_down_circle),
-            title: Text('Role Screen'),
-          ),
-          ],
+            title: Text('Permissions'),
+          )
+
+        ],
       ),
     );
   }

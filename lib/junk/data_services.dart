@@ -506,6 +506,7 @@ class MyRestAPIServices implements IKirthanRestApi {
       throw Exception('Failed to get data');
     }
   }
+
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(List<EventUser> listofeventusermap) async {
     print(listofeventusermap);
     String requestBody = json.encode(listofeventusermap);
@@ -529,141 +530,6 @@ class MyRestAPIServices implements IKirthanRestApi {
       throw Exception('Failed to get data');
     }
   }
-  Future<List<Temple>> submitDeleteTempleMapping(List<Temple> listoftemplemap) async {
-    print(listoftemplemap);
-    String requestBody = json.encode(listoftemplemap);
-    print(requestBody);
-
-    var response = await _client.put('$_baseUrl/submitdeletetemplemapping', headers: {"Content-Type": "application/json"}, body: requestBody);
-
-    if (response.statusCode == 200) {
-      List<dynamic> eventusermappingData = json.decode(response.body);
-      List<Temple> eventusers = eventusermappingData.map((eventusermappingData) =>  Temple.fromMap(eventusermappingData)).toList();
-//      TeamUser.fromMap(teamusermappingData);
-      print(eventusers);
-      return eventusers;
-
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
-
-
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-  Future<List<Temple>> submitNewTempleMapping(List<Temple> listoftemplemap) async {
-    print(listoftemplemap);
-    String requestBody = json.encode(listoftemplemap);
-    print(requestBody);
-
-    var response = await _client.put('$_baseUrl/submitnewtemplemapping', headers: {"Content-Type": "application/json"}, body: requestBody);
-
-    if (response.statusCode == 200) {
-      List<dynamic> templemappingData = json.decode(response.body);
-      List<Temple> templerequests = templemappingData.map((teamusermappingData) =>  Temple.fromMap(teamusermappingData)).toList();
-//      TeamUser.fromMap(templemappingData);
-      print(templerequests);
-      return templerequests;
-
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
-
-
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-  Future<List<Temple>> getTempleMappings(String eventMapping) async {
-    String requestBody = '';
-
-    //print(requestBody);
-
-    var response = await _client.put('$_baseUrl/gettemplemappings', headers: {"Content-Type": "application/json"}, body: requestBody);
-
-    if (response.statusCode == 200) {
-      //print(response.body);
-      List<dynamic> eventtsermappingData = json.decode(response.body);
-      // print(teamtsermappingData);
-      List<Temple> eventusermappings = eventtsermappingData.map((eventtsermappingData) => Temple.fromMap(eventtsermappingData)).toList();
-      //print(teamusermappings);
-      //print(userdetails);
-
-      return eventusermappings;
-
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-  Future<List<Roles>> submitDeleteRolesMapping(List<Roles> listofrolesmap) async {
-    print(listofrolesmap);
-    String requestBody = json.encode(listofrolesmap);
-    print(requestBody);
-
-    var response = await _client.put('$_baseUrl/submitdeleterolesmapping', headers: {"Content-Type": "application/json"}, body: requestBody);
-
-    if (response.statusCode == 200) {
-      List<dynamic> rolesmappingData = json.decode(response.body);
-      List<Roles> roles = rolesmappingData.map((rolesmappingData) =>  Roles.fromMap(rolesmappingData)).toList();
-//      TeamUser.fromMap(teamusermappingData);
-      print(roles);
-      return roles;
-
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
-
-
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-  Future<List<Roles>> submitNewRolesMapping(List<Roles> listofrolesmap) async {
-    print(listofrolesmap);
-    String requestBody = json.encode(listofrolesmap);
-    print(requestBody);
-
-    var response = await _client.put('$_baseUrl/submitnewrolesmapping', headers: {"Content-Type": "application/json"}, body: requestBody);
-
-    if (response.statusCode == 200) {
-      List<dynamic> rolesmappingData = json.decode(response.body);
-      List<Roles> rolesrequests = rolesmappingData.map((rolesmappingData) =>  Roles.fromMap(rolesmappingData)).toList();
-//      TeamUser.fromMap(templemappingData);
-      print(rolesrequests);
-      return rolesrequests;
-
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData.map((userrequestsData) => UserRequest.fromMap(userrequestsData)).toList();
-
-
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-  Future<List<Roles>> getRolesMappings(String roleMapping) async {
-    String requestBody = '';
-
-    //print(requestBody);
-
-    var response = await _client.put('$_baseUrl/getrolesmappings', headers: {"Content-Type": "application/json"}, body: requestBody);
-
-    if (response.statusCode == 200) {
-      //print(response.body);
-      List<dynamic> rolesmappingData = json.decode(response.body);
-      // print(teamtsermappingData);
-      List<Roles> rolesmappings = rolesmappingData.map((rolesmappingData) => Roles.fromMap(rolesmappingData)).toList();
-      //print(teamusermappings);
-      //print(userdetails);
-
-      return rolesmappings;
-
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-
   //userTemple
   Future<List<UserTemple>> submitDeleteUserTempleMapping(List<UserTemple> listofusertemplemap) async {
     print(listofusertemplemap);
@@ -1071,5 +937,7 @@ class MyRestAPIServices implements IKirthanRestApi {
       throw Exception('Failed to get data');
     }
   }
+
+
 }
 

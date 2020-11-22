@@ -95,7 +95,7 @@ class _EditTempleState extends State<EditTemple> {
                     autocorrect: false,
                     controller: _templeNameController,
                     onSaved: (String value) {
-                      templeName = value;
+                      widget.templerequest.templeName = value;
                     },
                   ),
                 ),
@@ -107,7 +107,7 @@ class _EditTempleState extends State<EditTemple> {
                     autocorrect: false,
                     controller: _cityController,
                     onSaved: (String value) {
-                      city = value;
+                      widget.templerequest.city = value;
                     },
                   ),
                 ),
@@ -119,7 +119,7 @@ class _EditTempleState extends State<EditTemple> {
                     autocorrect: false,
                     controller: _areaController,
                     onSaved: (String value) {
-                      area = value;
+                      widget.templerequest.area = value;
                     },
                   ),
                 ),

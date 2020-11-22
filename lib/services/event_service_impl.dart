@@ -1,4 +1,4 @@
-import 'dart:async';
+ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
@@ -78,11 +78,11 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
 
 
 
-    if (eventType == ["bmg"]) {
+    /*if (eventType == ["bmg"]) {
       requestBody = '{"id":"4"}';
     } else {
       requestBody = '{"state":["MH"]}';
-    }
+    }*/
 
     print(requestBody);
 

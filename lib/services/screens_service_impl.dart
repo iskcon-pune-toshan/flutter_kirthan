@@ -33,7 +33,7 @@ class ScreensAPIService extends BaseAPIService implements IScreensRestApi  {
 
     String requestBody = '';
 
-    requestBody = '{"screenName":["Register User","Forget password","Login screen","Team","Team-user","Event-User","Notification Hub","Register User"]}';
+    requestBody = '{"screenName":["Register User","Register User01","Forget password","Login screen","Team","Team-user","Event-User","Notification Hub","Register User"]}';
     // All Events [Select * from event_request]
     // One Single events [Select * from event_request where id=?]
     // Events on datewise [Today/Tomorrow/This week/This month]

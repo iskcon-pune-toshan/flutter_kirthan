@@ -32,18 +32,7 @@ class RolesAPIService extends BaseAPIService implements IRolesRestApi  {
 
 
     String requestBody = '';
-    requestBody = '{"roleName":["Super Admin","Team","Local Admin"]}';
-    // All Events [Select * from event_request]
-    // One Single events [Select * from event_request where id=?]
-    // Events on datewise [Today/Tomorrow/This week/This month]
-    // Events at City wise [City='Pune']
-    // Events at Statewise [State='MH']
-    // Events isprocessed = 0 or 1
-    // Events on event Type = Free or Premium
-    // Events public or private
-
-    // Events on duration
-
+    requestBody = '{"roleName":["Super Admin","Team","Local Admin","Super Admin01"]}';
 
     String token = AutheticationAPIService().sessionJWTToken;
 
@@ -94,6 +83,9 @@ class RolesAPIService extends BaseAPIService implements IRolesRestApi  {
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/roles/addroles',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+
+    print(response.body);
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       //EventRequest respeventrequest = json.decode(response.body);

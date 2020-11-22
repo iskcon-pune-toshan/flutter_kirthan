@@ -56,19 +56,19 @@ class TeamRequestsListItem extends StatelessWidget {
             },
             onSelected: (choice) {
               if (choice.id == 2) {
-                teamPageVM.accessTypes[ACCESS_TYPE_EDIT] == true
-                    ? () {
+                /*teamPageVM.accessTypes[ACCESS_TYPE_EDIT] == true
+                    ? () {*/
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   EditTeam(teamrequest: teamrequest)),
                         );
-                      }
-                    : null;
+                     /* }
+                    : null;*/
               } else if (choice.id == 1) {
-                teamPageVM.accessTypes[ACCESS_TYPE_PROCESS] == true
-                    ? () {
+                /*teamPageVM.accessTypes[ACCESS_TYPE_PROCESS] == true
+                    ? () {*/
                         Map<String, dynamic> processrequestmap =
                             new Map<String, dynamic>();
                         processrequestmap["id"] = teamrequest?.id;
@@ -84,8 +84,8 @@ class TeamRequestsListItem extends StatelessWidget {
                         );
                         Scaffold.of(context).showSnackBar(mysnackbar);
                       }
-                    : null;
-              } else if (choice.id == 3) {
+                    /*: null;
+              }*/ else if (choice.id == 3) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {

@@ -245,7 +245,7 @@ class _TeamUserViewState extends State<TeamUserView> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                EventUserCreate(selectedTeamUsers: selectedTeamUsers)));
+                                EventUserCreate(selectedTeamUsers : selectedTeamUsers)));
                   },
                 ),
               ),

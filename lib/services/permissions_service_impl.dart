@@ -32,7 +32,7 @@ class PermissionsAPIService extends BaseAPIService implements IPermissionsRestAp
 
 
     String requestBody = '';
-    requestBody = '{"name":["Create","Update","Edit","Delete","Process","View"]}';
+    requestBody = '{"name":["Create","Update","Edit","Delete","Process","View","Create001"]}';
     // All Events [Select * from event_request]
     // One Single events [Select * from event_request where id=?]
     // Events on datewise [Today/Tomorrow/This week/This month]

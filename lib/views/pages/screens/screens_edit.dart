@@ -57,7 +57,7 @@ class _EditScreensState extends State<EditScreens> {
         appBar: new AppBar(title: const Text('Edit Profile'), actions: <Widget>[
           new Container(
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
-              child: new MaterialButton(
+              child: new RaisedButton(
                 color: themeData.primaryColor,
                 textColor: themeData.secondaryHeaderColor,
                 child: new Text('Save'),
@@ -90,7 +90,7 @@ class _EditScreensState extends State<EditScreens> {
                     autocorrect: false,
                     controller: _screenNameController,
                     onSaved: (String value) {
-                      screenName = value;
+                      widget.screensrequest.screenName = value;
                     },
                   ),
                 ),

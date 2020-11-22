@@ -89,7 +89,7 @@ class _EditPermissionsState extends State<EditPermissions> {
                     autocorrect: false,
                     controller: _PermissionsNameController,
                     onSaved: (String value) {
-                      name = value;
+                      widget.permissionsrequest.name = value;
                     },
                   ),
                 ),

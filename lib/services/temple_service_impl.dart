@@ -49,17 +49,6 @@ class TempleAPIService extends BaseAPIService implements ITempleRestApi  {
 
 
     String requestBody = '';
-
-    // All Events [Select * from event_request]
-    // One Single events [Select * from event_request where id=?]
-    // Events on datewise [Today/Tomorrow/This week/This month]
-    // Events at City wise [City='Pune']
-    // Events at Statewise [State='MH']
-    // Events isprocessed = 0 or 1
-    // Events on event Type = Free or Premium
-    // Events public or private
-
-    // Events on duration
     requestBody = '{"city":["Pune","Mumbai"]}';
 
 

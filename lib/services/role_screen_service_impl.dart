@@ -48,6 +48,9 @@ class RoleScreenAPIService extends BaseAPIService implements IRoleScreenRestApi 
     var response = await client1.put('$baseUrl/api/rolescreen/addrolescreen',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
+    print(response.body);
+    print(response.statusCode);
+
     if (response.statusCode == 200) {
       List<dynamic> rolescreenmappingData = json.decode(response.body);
       List<RoleScreen> usertemplerequests = rolescreenmappingData
@@ -68,8 +71,11 @@ class RoleScreenAPIService extends BaseAPIService implements IRoleScreenRestApi 
     print(requestBody);
 
 
-    var response = await client1.put('$baseUrl/api/rolescreen/deleterolescreenr',
+    var response = await client1.put('$baseUrl/api/rolescreen/deleterolescreen',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+
+    print(response.body);
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       List<dynamic> rolescreenmappingData = json.decode(response.body);

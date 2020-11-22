@@ -1,32 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/rolescreen.dart';
-import 'package:flutter_kirthan/models/teamuser.dart';
-import 'package:flutter_kirthan/models/usertemple.dart';
 import 'package:flutter_kirthan/services/role_screen_service_impl.dart';
-import 'package:flutter_kirthan/services/team_user_service_impl.dart';
-import 'package:flutter_kirthan/services/user_temple_service_impl.dart';
 import 'package:flutter_kirthan/view_models/role_screen_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
-import 'package:flutter_kirthan/views/pages/eventuser/eventuser_create.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_create.dart';
-import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
-import 'package:flutter_kirthan/views/pages/user_temple/user_temple_create.dart';
 import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 final RoleScreenViewPageModel roleScreenPageVM =
-RoleScreenViewPageModel(apiSvc: RoleScreenAPIService());
-
+    RoleScreenViewPageModel(apiSvc: RoleScreenAPIService());
 
 class RoleScreenView extends StatefulWidget {
   final String title = "Role Screen";
@@ -46,23 +31,21 @@ class _RoleScreenViewState extends State<RoleScreenView> {
     rolescreen = roleScreenPageVM.getRoleScreenMaping("All");
     rolescreen.then((newrolescreen) {
       newrolescreen.forEach((rolescreen) => usercheckmap[
-      rolescreen.roleId.toString() +
-          "RS" +
-          rolescreen.screenId.toString()] = false
-        //usercehckmap.putIfAbsent(, () => )
-      );
+              rolescreen.roleId.toString() +
+                  "RS" +
+                  rolescreen.screenId.toString()] = false
+          //usercehckmap.putIfAbsent(, () => )
+          );
     });
 
     super.initState();
     _index = 1;
-
   }
-
 
   List<Widget> populateChildren(String roleName) {
     List<Widget> children = new List<Widget>();
     List<RoleScreen> listofscreens =
-    listofrolescreen.where((user) => user.roleName == roleName).toList();
+        listofrolescreen.where((user) => user.roleName == roleName).toList();
     for (var user in listofscreens) {
       //print(user.templeName+"UT"+user.userId.toString());
       children.add(Row(
@@ -71,12 +54,12 @@ class _RoleScreenViewState extends State<RoleScreenView> {
           //Text(user.userId.toString()),
           Checkbox(
             value: usercheckmap[
-            (user.roleId.toString() + "RS" + user.screenId.toString())
-                .toString()],
+                (user.roleId.toString() + "RS" + user.screenId.toString())
+                    .toString()],
             onChanged: (input) {
               setState(() {
                 usercheckmap[user.roleId.toString() +
-                    "TU" +
+                    "RS" +
                     user.screenId.toString()] = input;
                 if (input == true)
                   selectedRoleScreen.add(user);
@@ -86,13 +69,83 @@ class _RoleScreenViewState extends State<RoleScreenView> {
               });
             },
           ),
+
           Text(user.screenName),
+          Checkbox(
+            value: user.isCreated,
+            onChanged: (input) {
+              setState(() {
+               user.isCreated = input;
+                if (input == true)
+                  selectedRoleScreen.add(user);
+                else
+                  selectedRoleScreen.remove(user);
+                //print(input);
+              });
+            },
+          ),
+          Text('Create'),
+          Checkbox(
+            value: user.isUpdated,
+            onChanged: (input) {
+              setState(() {
+                user.isUpdated = input;
+                if (input == true)
+                  selectedRoleScreen.add(user);
+                else
+                  selectedRoleScreen.remove(user);
+                //print(input);
+              });
+            },
+          ),
+          Text('Update'),
+          Checkbox(
+            value: user.isDeleted,
+            onChanged: (input) {
+              setState(() {
+                user.isDeleted = input;
+                if (input == true)
+                  selectedRoleScreen.add(user);
+                else
+                  selectedRoleScreen.remove(user);
+                //print(input);
+              });
+            },
+          ),
+          Text('Delete'),
+          Checkbox(
+            value: user.isViewd,
+            onChanged: (input) {
+              setState(() {
+                user.isViewd = input;
+                if (input == true)
+                  selectedRoleScreen.add(user);
+                else
+                  selectedRoleScreen.remove(user);
+                //print(input);
+              });
+            },
+          ),
+          Text('View'),
+          Checkbox(
+            value: user.isProcessed,
+            onChanged: (input) {
+              setState(() {
+                user.isProcessed = input;
+                if (input == true)
+                  selectedRoleScreen.add(user);
+                else
+                  selectedRoleScreen.remove(user);
+                //print(input);
+              });
+            },
+          ),
+          Text('Process'),
         ],
       ));
     }
     return children;
   }
-
 
   int _index;
   @override
@@ -117,7 +170,7 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                     builder: (BuildContext context,
                         AsyncSnapshot<List<RoleScreen>> snapshot) {
                       switch (snapshot.connectionState) {
-                      // ignore: missing_return
+                        // ignore: missing_return
                         case ConnectionState.none:
                         case ConnectionState.active:
                         case ConnectionState.waiting:
@@ -138,11 +191,11 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                                 itemCount: setofTeams.length,
                                 itemBuilder: (context, index) {
                                   return ExpansionTile(
-                                    title:
-                                    Text(setofTeams[index]),
+                                    title: Text(setofTeams[index]),
+
                                     //subtitle: Text("Hello Manjunath"),
                                     children:
-                                    populateChildren(setofTeams[index]),
+                                        populateChildren(setofTeams[index]),
                                   );
                                 });
                           } else {
@@ -172,7 +225,7 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                RoleScreenWrite(roleScreenrequest: null)));
+                                RoleScreenCreate(selectedScreens : selectedRoleScreen)));
                   },
                 ),
               ),
@@ -182,7 +235,8 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                   child: Text('DELETE SELECTED ${selectedRoleScreen.length}'),
                   onPressed: () {
                     print(selectedRoleScreen);
-                    roleScreenPageVM.submitDeleteRoleScreenMapping(selectedRoleScreen);
+                    roleScreenPageVM
+                        .submitDeleteRoleScreenMapping(selectedRoleScreen);
                   },
                 ),
               ),
@@ -209,19 +263,17 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
             case 3:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => NotificationView()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationView()));
               break;
             case 4:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UserTempleView()));
               break;
             case 5:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => RoleScreenView()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => RoleScreenView()));
               break;
-
-
           }
         },
         currentIndex: _index,
