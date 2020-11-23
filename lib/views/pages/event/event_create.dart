@@ -106,6 +106,9 @@ class _EventWriteState extends State<EventWrite> {
           position: tappedPoint1,
         ),
       );
+
+      eventrequest.sourceLongitude=tappedPoint1.longitude;
+      eventrequest.sourceLatitude=tappedPoint1.latitude;
       /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
       infoWindow: InfoWindow(
         title: 'End Point') ,
@@ -117,7 +120,34 @@ class _EventWriteState extends State<EventWrite> {
 
     });
   }
+  handleTap2(LatLng tappedPoint1){
+    print(tappedPoint1);
+    //print(tappedPoint2);
+    setState(() {
 
+      myMarker=[];
+
+      myMarker.add(
+        Marker(markerId: MarkerId(tappedPoint1.toString()),
+          infoWindow: InfoWindow(
+              title: 'Event Location') ,
+          position: tappedPoint1,
+        ),
+      );
+
+      eventrequest.destinationLongitude=tappedPoint1.longitude;
+      eventrequest.destinationLatitude=tappedPoint1.latitude;
+      /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
+      infoWindow: InfoWindow(
+        title: 'End Point') ,
+      position: tappedPoint2,
+      ),
+      );*/
+
+
+
+    });
+  }
   void onMapCreated(controller) {
     setState(() {
       mapController = controller;
@@ -142,7 +172,7 @@ class _EventWriteState extends State<EventWrite> {
           onChanged: (value){
             setState(() {
               print(value);
-              eventrequest.eventMobility=select;
+              eventrequest.eventMobility=value;
               select=value;
             });
 
@@ -453,7 +483,6 @@ class _EventWriteState extends State<EventWrite> {
 
                           ]),
 
-
                           RaisedButton.icon(
                             onPressed: () {
                               Navigator.push( context,MaterialPageRoute(
@@ -545,7 +574,106 @@ class _EventWriteState extends State<EventWrite> {
 
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                            label: Text('Add Location',
+                            label: Text('Add Source Location',
+                              style: TextStyle(color: Colors.black),),
+                            icon: Icon(Icons.location_on,
+                              color:Colors.black,),
+                            textColor: Colors.black,
+                            splashColor: Colors.red,
+                            color: Colors.white,
+                          ),
+                          RaisedButton.icon(
+                            onPressed: () {
+                              Navigator.push( context,MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider(
+                                      create: (BuildContext context) => MapsBloc(),
+                                      child: Scaffold(
+                                          appBar: AppBar(
+                                            title: Text('Location'),
+                                            actions: <Widget>[
+                                              IconButton(
+
+                                                icon: Icon(Icons.refresh),
+                                                onPressed:  () => {
+                                                  setState(() {
+                                                    markers.clear();
+                                                  }),//setState
+                                                },//onpressed
+                                              ),
+
+                                              IconButton(
+                                                icon: Icon(Icons.done),
+                                                onPressed: (){
+
+                                                  handleTap2(tappedPoint2);
+                                                  eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                  eventrequest.destinationLatitude=tappedPoint1.latitude;
+                                                  print(eventrequest.destinationLongitude);
+                                                  print(eventrequest.destinationLatitude);
+
+                                                  //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                  //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
+
+                                                  // widget.eventrequest.eventLocation=tappedPoint1.toString();
+                                                },
+                                                //onpressed
+                                              ),
+
+                                            ],
+
+
+
+                                          ),
+                                          body: Column(
+                                            children: <Widget>[
+                                              Stack(
+                                                children: <Widget>[
+                                                  Container(
+                                                      height: MediaQuery
+                                                          .of(context)
+                                                          .size
+                                                          .height - 80.0,
+                                                      width: double.infinity,
+                                                      child: !mapToggle
+                                                          ? GoogleMap(
+                                                        myLocationButtonEnabled: true,
+                                                        myLocationEnabled: true,
+                                                        compassEnabled: true,
+                                                        onMapCreated: onMapCreated,
+                                                        onTap: handleTap,
+                                                        markers:
+
+                                                        Set.from(myMarker),
+
+                                                        initialCameraPosition: CameraPosition(
+                                                            target: LatLng(0.0, 0.0), zoom: 16),
+
+                                                      )
+                                                          : Center(
+                                                          child: Text(
+                                                            'Loading.. Please wait..',
+                                                            style: TextStyle(fontSize: 20.0),
+                                                          ))),
+
+
+
+
+
+                                                ],
+                                              )
+                                            ],
+                                          )),
+
+                                    ),
+                              ),);
+
+
+                            },
+
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                            label: Text('Add Destination Location',
                               style: TextStyle(color: Colors.black),),
                             icon: Icon(Icons.location_on,
                               color:Colors.black,),

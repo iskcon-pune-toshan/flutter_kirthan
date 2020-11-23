@@ -9,7 +9,7 @@ import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
-
+import 'package:intl/intl.dart';
 
 class Choice {
   const Choice({this.id, this.description});
@@ -239,9 +239,9 @@ class EventRequestsListItem extends StatelessWidget {
               children: <Widget>[
                 //Text("Date:"),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                  margin: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
-                    eventrequest?.eventDate,
+                    eventrequest?.eventDate.substring(0,16),
                     style: TextStyle(
                       fontSize: MyPrefSettingsApp.custFontSize,
                       //    color: KirthanStyles.subTitleColor,
@@ -249,6 +249,7 @@ class EventRequestsListItem extends StatelessWidget {
                   ),
                 ),
                 //Text("Duration:"),
+
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Text(
