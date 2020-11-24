@@ -4,8 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_kirthan/models/notification.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
-import 'package:scoped_model/scoped_model.dart';
-
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 
 /* The view for the notifications */
@@ -41,15 +39,16 @@ class NotificationViewState extends State<NotificationView> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Container(
-                            padding: EdgeInsets.only(left: 10),
-                            child:Text(
-                              data.message,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
-                              softWrap: true,
-                              overflow: TextOverflow.fade,
-                            ),),
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            data.message,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                            softWrap: true,
+                            overflow: TextOverflow.fade,
+                          ),
+                        ),
                         Container(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
@@ -168,6 +167,7 @@ class NotificationViewState extends State<NotificationView> {
                       _buildNotification(snapshot.data[itemCount]),
                   itemCount: snapshot.data.length);
             } else if (snapshot.hasError) {
+              print(snapshot);
               print(snapshot.error.toString() + " Error ");
               return Center(child: Text('Error loading notifications'));
             } else {
