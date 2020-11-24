@@ -1,5 +1,3 @@
-//import 'dart:ffi';
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
@@ -9,12 +7,9 @@ import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
-import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
@@ -37,7 +32,6 @@ class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
   EventRequest eventrequest;
-
   EventView({Key key, @required this.eventrequest}) : super(key: key);
 
   @override
@@ -47,12 +41,12 @@ class EventView extends StatefulWidget {
 class _EventViewState extends State<EventView>
     with SingleTickerProviderStateMixin {
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
+
   String _selectedValue;
   int _index;
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
-
   //List<String> userdetails;
   String photoUrl;
   String name;
@@ -88,7 +82,7 @@ class _EventViewState extends State<EventView>
     _index = 0;
     loadData();
     loadPref();
-    NotificationManager ntfManager = new NotificationManager();
+    NotificationManager ntfManger = NotificationManager();
     //print("in Event");
     //print(SignInService().firebaseAuth.currentUser().then((onValue) => print(onValue.displayName)));
   }
@@ -107,7 +101,8 @@ class _EventViewState extends State<EventView>
               onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Search()),
+                      MaterialPageRoute(
+                          builder: (context) => EventSearchView()),
                     ),
                   }),
           PopupMenuButton(
@@ -115,7 +110,7 @@ class _EventViewState extends State<EventView>
               onSelected: (input) {
                 _selectedValue = input;
                 print(input);
-                eventPageVM.setEventRequests("All");
+                eventPageVM.setEventRequests(widget.eventrequest?.eventTitle);
               },
               itemBuilder: (BuildContext context) {
                 return eventTime.map((f) {
@@ -190,18 +185,6 @@ class _EventViewState extends State<EventView>
           ),
           Card(
             child: ListTile(
-              title: Text("Admin View"),
-              trailing: Icon(Icons.assignment),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AdminView()),
-                );
-              },
-            ),
-          ),
-          Card(
-            child: ListTile(
               title: Text("Share app"),
               trailing: Icon(Icons.share),
               onTap: () {
@@ -248,14 +231,11 @@ class _EventViewState extends State<EventView>
                         description:
                             "Tap a star to set your rating. Add more description here if you want.",
                         submitButton: "SUBMIT",
-                        alternativeButton: "Contact us instead?",
-                        // optional
-                        positiveComment: "We are so happy to hear :)",
-                        // optional
-                        negativeComment: "We're sad to hear :(",
-                        // optional
-                        accentColor: Colors.red,
-                        // optional
+                        alternativeButton: "Contact us instead?", // optional
+                        positiveComment:
+                            "We are so happy to hear :)", // optional
+                        negativeComment: "We're sad to hear :(", // optional
+                        accentColor: Colors.red, // optional
                         onSubmitPressed: (int rating) {
                           print("onSubmitPressed: rating = $rating");
                         },
