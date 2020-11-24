@@ -1,34 +1,31 @@
-//import 'dart:ffi';
-//import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:ffi';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/firebasemessage_service.dart';
-import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
-import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
+import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
+import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
@@ -248,14 +245,11 @@ class _EventViewState extends State<EventView>
                         description:
                             "Tap a star to set your rating. Add more description here if you want.",
                         submitButton: "SUBMIT",
-                        alternativeButton: "Contact us instead?",
-                        // optional
-                        positiveComment: "We are so happy to hear :)",
-                        // optional
-                        negativeComment: "We're sad to hear :(",
-                        // optional
-                        accentColor: Colors.red,
-                        // optional
+                        alternativeButton: "Contact us instead?", // optional
+                        positiveComment:
+                            "We are so happy to hear :)", // optional
+                        negativeComment: "We're sad to hear :(", // optional
+                        accentColor: Colors.red, // optional
                         onSubmitPressed: (int rating) {
                           print("onSubmitPressed: rating = $rating");
                         },
@@ -405,21 +399,22 @@ class _EventViewState extends State<EventView>
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
             case 3:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationView()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => NotificationView()));
               break;
             case 4:
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Calendar()));
               break;
             case 5:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TempleView()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => TempleView() ));
               break;
             case 6:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => RolesView()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => RolesView() ));
               break;
+
           }
         },
         currentIndex: _index,

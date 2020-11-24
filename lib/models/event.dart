@@ -13,16 +13,21 @@ class EventRequest {
   String addLineThree;
   String locality;
   String city;
-  int pinCode;
+  int pincode;
   String state;
   String country;
   bool isProcessed;
   String createdBy;
-  String createTime;
+  String createdTime;
   String updatedBy;
-  String updateTime;
+  String updatedTime;
   String approvalStatus;
   String approvalComments;
+  double sourceLongitude;
+  double sourceLatitude;
+  double destinationLongitude;
+  double destinationLatitude;
+  String eventMobility;
 
 
 //Typically called form service layer to create a new user
@@ -36,16 +41,21 @@ class EventRequest {
         this.addLineThree,
         this.locality,
         this.city,
-        this.pinCode,
+        this.pincode,
         this.state,
         this.country,
         this.isProcessed,
         this.createdBy,
         this.updatedBy,
-        this.createTime,
-        this.updateTime,
+        this.createdTime,
+        this.updatedTime,
         this.approvalStatus,
-        this.approvalComments, });
+        this.approvalComments,
+        this.sourceLongitude,
+        this.sourceLatitude,
+        this.destinationLongitude,
+        this.destinationLatitude,
+        this.eventMobility,});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventRequest.fromJson(Map<String, dynamic> data) {
@@ -63,16 +73,21 @@ class EventRequest {
       addLineThree: data['addLineThree'],
       locality: data['locality'],
       city: data['city'],
-      pinCode: data['pinCode'],
+      pincode: data['pincode'],
       state: data['state'],
       country: data['country'],
       isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
       updatedBy: data['updatedBy'],
-      updateTime: data['updateTime'],
-      createTime: data['createTime'],
+      updatedTime: data['updatedTime'],
+      createdTime: data['createdTime'],
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
+      sourceLongitude: data['sourceLongitude'],
+      sourceLatitude: data['sourceLatitude'],
+      destinationLongitude: data['destinationLongitude'],
+      destinationLatitude: data['destinationLatitude'],
+      eventMobility: data['eventMobility'],
     );
   }
 
@@ -91,16 +106,21 @@ class EventRequest {
       addLineThree: map['addLineThree'],
       locality: map['locality'],
       city: map['city'],
-      pinCode: map['pinCode'],
+      pincode: map['pincode'],
       state: map['state'],
       country: map['country'],
       isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
       updatedBy: map['updatedBy'],
-      updateTime: map['updateTime'],
-      createTime: map['createTime'],
+      updatedTime: map['updatedTime'],
+      createdTime: map['createdTime'],
       approvalStatus: map['approvalStatus'],
       approvalComments: map['approvalComments'],
+      sourceLongitude: map['sourceLongitude'],
+      sourceLatitude: map['sourceLatitude'],
+      destinationLongitude: map['destinationLongitude'],
+      destinationLatitude: map['destinationLatitude'],
+      eventMobility: map['eventMobility'],
     );
   }
 
@@ -120,16 +140,21 @@ class EventRequest {
     data['addLineThree'] = this.addLineThree;
     data['locality'] = this.locality;
     data['city'] = this.city;
-    data['pinCode'] = this.pinCode;
+    data['pincode'] = this.pincode;
     data['state'] = this.state;
     data['country'] = this.country;
     data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
-    data['updateTime'] = this.updateTime;
-    data['createTime']=this.createTime;
+    data['updatedTime'] = this.updatedTime;
+    data['createdTime']=this.createdTime;
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
+    data['sourceLongitude'] = this.sourceLongitude;
+    data['sourceLatitude'] = this.sourceLatitude;
+    data['destinationLongitude'] = this.destinationLongitude;
+    data['destinationLatitude'] = this.destinationLatitude;
+    data['eventMobility'] = this.eventMobility;
     return data;
   }
 
@@ -149,16 +174,21 @@ class EventRequest {
       "addLineThree":this.addLineThree,
       "locality":this.locality,
       "city":this.city,
-      "pinCode":this.pinCode,
+      "pincode":this.pincode,
       "state":this.state,
       "country":this.country,
       "isProcessed":this.isProcessed,
       "createdBy":this.createdBy,
       "updatedBy":this.updatedBy,
-      "updateTime":this.updateTime,
-      "createTime":this.createTime,
+      "updatedTime":this.updatedTime,
+      "createdTime":this.createdTime,
       "approvalStatus":this.approvalStatus,
       "approvalComments":this.approvalComments,
+      "sourceLongitude":this.sourceLongitude,
+      "sourceLatitude":this.sourceLatitude,
+      "destinationLongitude":this.destinationLongitude,
+      "destinationLatitude":this.destinationLatitude,
+      "eventMobility":this.eventMobility,
     };
 
   }

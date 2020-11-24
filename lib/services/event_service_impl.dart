@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_interface.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as _http;
+class EventAPIService extends BaseAPIService implements IEventRestApi  {
 
-class EventAPIService extends BaseAPIService implements IEventRestApi {
   static final EventAPIService _internal = EventAPIService.internal();
 
   factory EventAPIService() => _internal;
@@ -16,24 +16,25 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
   @override
   Future<List<int>> getEventCount() async {
-    _http.Response response = await _http.get("$baseUrl/event/count");
-    if (response.statusCode == 200) {
+    _http.Response response =  await _http.get("$baseUrl/event/count");
+    if(response.statusCode == 200 ) {
       List<dynamic> data = json.decode(response.body);
       List<int> resultData = [];
-      for (int i = 0; i < 3; i++) resultData.add((data[i]));
+      for (int i = 0; i < 3; i++)
+        resultData.add((data[i]));
       return (resultData);
-    } else {
+    }
+    else{
       print("Error fetching data");
-      return [0, 0, 0];
+      return [0,0,0];
     }
   }
 
   @override
   Future<List<EventRequest>> getData(String status) async {
-    _http.Response response = await _http.get("$baseUrl/event?status=$status");
+    _http.Response response =  await _http.get("$baseUrl/event?status=$status");
     List<dynamic> data = json.decode(response.body);
-    List<EventRequest> newData =
-        data.map((e) => EventRequest.fromMap(e)).toList();
+    List<EventRequest> newData =  data.map((e) => EventRequest.fromMap(e)).toList();
     return Future.value(newData);
   }
 
@@ -46,12 +47,8 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/event/processevent',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
-
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.body);
 
@@ -79,23 +76,20 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     // Events on duration
     requestBody = '{"city":["Pune","Mumbai"]}';
 
-/*
+
+
     if (eventType == ["bmg"]) {
       requestBody = '{"id":"4"}';
     } else {
-      requestBody = '{"state":["MH"]}';
-    }*/
+      requestBody = '{"country":["IND"]}';
+    }
 
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     print("entered getEvents");
     var response = await client1.put('$baseUrl/api/event/getevents',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
     if (response.statusCode == 200) {
       //print(response.body);
       List<dynamic> eventrequestsData = json.decode(response.body);
@@ -137,12 +131,8 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl//api/eventaddevent',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
+    var response = await client1.put('$baseUrl/api/event/addevent',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       //EventRequest respeventrequest = json.decode(response.body);
@@ -157,7 +147,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       throw Exception('Failed to get data');
     }
   }
-
   //deleteEvents
   Future<bool> deleteEventRequest(
       Map<String, dynamic> processrequestmap) async {
@@ -165,13 +154,9 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-    String token = AutheticationAPIService().sessionJWTToken;
+    String token  = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/event/deleteevent',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       print(response.body);
@@ -192,12 +177,9 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/event/updateevent',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: eventrequestmap);
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: eventrequestmap);
 
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.body);
     } else {
@@ -205,3 +187,4 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     }
   }
 }
+
