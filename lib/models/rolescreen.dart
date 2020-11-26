@@ -3,21 +3,21 @@ class RoleScreen {
   final int id;
    int roleId;
    int screenId;
-  bool isCreated;
-  bool isUpdated;
-  bool isDeleted;
-  bool isViewd;
-  bool isProcessed;
+  bool createFlag;
+  bool updateFlag;
+  bool deleteFlag;
+  bool viewFlag;
+  bool processFlag;
   String roleName;
   String screenName;
 
 
 //Typically called form service layer
-  RoleScreen({this.id, this.roleId, this.screenId, this.isCreated,
-    this.isUpdated,
-    this.isDeleted,
-    this.isViewd,
-    this.isProcessed,
+  RoleScreen({this.id, this.roleId, this.screenId, this.createFlag,
+    this.updateFlag,
+    this.deleteFlag,
+    this.viewFlag,
+    this.processFlag,
     this.roleName,
     this.screenName,
     });
@@ -28,11 +28,11 @@ class RoleScreen {
       id: data['id'],
       roleId: data['roleId'],
       screenId: data['screenId'],
-      isCreated: data['isCreated'],
-      isUpdated: data['isUpdated'],
-      isDeleted: data['isDeleted'],
-      isViewd: data['isViewd'],
-      isProcessed: data['isProcessed'],
+      createFlag: data['createFlag'],
+      updateFlag: data['updateFlag'],
+      deleteFlag: data['deleteFlag'],
+      viewFlag: data['viewFlag'],
+      processFlag: data['processFlag'],
       roleName: data['roleName'],
       screenName: data['screenName'],
 
@@ -44,11 +44,11 @@ class RoleScreen {
       id: map['id'],
       roleId: map['roleId'],
       screenId: map['screenId'],
-      isCreated: map['isCreated'],
-      isUpdated: map['isUpdated'],
-      isDeleted: map['isDeleted'],
-      isViewd: map['isViewd'],
-      isProcessed: map['isProcessed'],
+      createFlag: map['createFlag'],
+      updateFlag: map['updateFlag'],
+      deleteFlag: map['deleteFlag'],
+      viewFlag: map['viewFlag'],
+      processFlag: map['processFlag'],
       roleName: map['roleName'],
       screenName: map['screenName']
     );
@@ -59,11 +59,11 @@ class RoleScreen {
     data['id'] = this.id;
     data['roleId'] = this.roleId;
     data['screenId'] = this.screenId;
-    data['isCreated'] = this.isCreated;
-    data['isUpdated'] = this.isUpdated;
-    data['isDeleted'] = this.isDeleted;
-    data['isViewd'] = this.isViewd;
-    data['isProcessed'] = this.isProcessed;
+    data['createFlag'] = this.createFlag;
+    data['updateFlag'] = this.updateFlag;
+    data['deleteFlag'] = this.deleteFlag;
+    data['viewFlag'] = this.viewFlag;
+    data['processFlag'] = this.processFlag;
     data['roleName'] = this.roleName;
     data['screenName'] = this.screenName;
        return data;
@@ -74,11 +74,11 @@ class RoleScreen {
       "id": this.id,
       "roleId":this.roleId,
       "screenId": this.screenId,
-      "isCreated": this.isCreated,
-      "isUpdated": this.isUpdated,
-      "isUpdated": this.isDeleted,
-      "isViewd": this.isViewd,
-      "isProcessed": this.isProcessed,
+      "createFlag": this.createFlag,
+      "updateFlag": this.updateFlag,
+      "deleteFlag": this.deleteFlag,
+      "viewFlag": this.viewFlag,
+      "processFlag": this.processFlag,
       "roleName": this.roleName,
       "screenName": this.screenName
     };

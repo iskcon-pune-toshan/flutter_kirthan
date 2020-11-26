@@ -53,7 +53,7 @@ class RoleScreenAPIService extends BaseAPIService implements IRoleScreenRestApi 
 
     if (response.statusCode == 200) {
       List<dynamic> rolescreenmappingData = json.decode(response.body);
-      List<RoleScreen> usertemplerequests = rolescreenmappingData
+      List<RoleScreen> rolescreenrequests = rolescreenmappingData
           .map((rolescreenmappingData) => RoleScreen.fromMap(rolescreenmappingData))
           .toList();
       print(rolescreenmappingData);

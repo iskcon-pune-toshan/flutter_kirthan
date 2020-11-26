@@ -52,6 +52,7 @@ class _RoleScreenViewState extends State<RoleScreenView> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           //Text(user.userId.toString()),
+
           Checkbox(
             value: usercheckmap[
                 (user.roleId.toString() + "RS" + user.screenId.toString())
@@ -72,24 +73,24 @@ class _RoleScreenViewState extends State<RoleScreenView> {
 
           Text(user.screenName),
           Checkbox(
-            value: user.isCreated,
+            value: user.createFlag,
             onChanged: (input) {
               setState(() {
-               user.isCreated = input;
+               user.createFlag = input;
                 if (input == true)
                   selectedRoleScreen.add(user);
                 else
                   selectedRoleScreen.remove(user);
-                //print(input);
+                print(input);
               });
             },
           ),
           Text('Create'),
           Checkbox(
-            value: user.isUpdated,
+            value: user.updateFlag,
             onChanged: (input) {
               setState(() {
-                user.isUpdated = input;
+                user.updateFlag = input;
                 if (input == true)
                   selectedRoleScreen.add(user);
                 else
@@ -100,10 +101,10 @@ class _RoleScreenViewState extends State<RoleScreenView> {
           ),
           Text('Update'),
           Checkbox(
-            value: user.isDeleted,
+            value: user.deleteFlag,
             onChanged: (input) {
               setState(() {
-                user.isDeleted = input;
+                user.deleteFlag = input;
                 if (input == true)
                   selectedRoleScreen.add(user);
                 else
@@ -114,10 +115,10 @@ class _RoleScreenViewState extends State<RoleScreenView> {
           ),
           Text('Delete'),
           Checkbox(
-            value: user.isViewd,
+            value: user.viewFlag,
             onChanged: (input) {
               setState(() {
-                user.isViewd = input;
+                user.viewFlag = input;
                 if (input == true)
                   selectedRoleScreen.add(user);
                 else
@@ -128,10 +129,10 @@ class _RoleScreenViewState extends State<RoleScreenView> {
           ),
           Text('View'),
           Checkbox(
-            value: user.isProcessed,
+            value: user.processFlag,
             onChanged: (input) {
               setState(() {
-                user.isProcessed = input;
+                user.processFlag = input;
                 if (input == true)
                   selectedRoleScreen.add(user);
                 else
@@ -255,22 +256,10 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                   MaterialPageRoute(builder: (context) => EventView()));
               break;
             case 1:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserView()));
-              break;
-            case 2:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TeamView()));
-              break;
-            case 3:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationView()));
-              break;
-            case 4:
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => UserTempleView()));
               break;
-            case 5:
+            case 2:
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => RoleScreenView()));
               break;
@@ -282,18 +271,6 @@ class _RoleScreenViewState extends State<RoleScreenView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Users'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            title: Text('Team'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.map),

@@ -24,8 +24,8 @@ UserPageViewModel(apiSvc: UserAPIService());
 
 
 class UserTempleCreate extends StatefulWidget {
-  UserTempleCreate({this.selectedUsers, userTempleRequest}) : super();
-  List<UserRequest> selectedUsers;
+  UserTempleCreate({this.selectedUsers}) : super();
+  List<UserTemple> selectedUsers;
 
   final String screenName = SCR_USER_TEMPLE;
   final String title = "User Temple Mapping";
@@ -38,18 +38,18 @@ class UserTempleCreate extends StatefulWidget {
 
 class _UserTempleCreateState extends State<UserTempleCreate> {
   final _formKey = GlobalKey<FormState>();
-  List<UserRequest> selectedUsers;
+  List<UserTemple> selectedUsers;
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   _UserTempleCreateState({this.selectedUsers});
   UserTemple userTemple = new UserTemple();
   Future<List<UserRequest>> users;
 
-  List<UserRequest> _users = [
+  /*List<UserRequest> _users = [
     UserRequest(id: 1, roleId: 1),
     UserRequest(id: 2, roleId: 2),
     UserRequest(id: 3, roleId: 3),
     UserRequest(id: 4,roleId: 4),
-  ];
+  ];*/
   UserRequest _selectedUser;
 
   @override
@@ -78,7 +78,7 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
                     child: DropdownButtonFormField<UserRequest>(
                       value: _selectedUser,
                       icon: const Icon(Icons.supervisor_account),
-                      hint: Text('Select Team'),
+                      hint: Text('Select User'),
                       items: snapshot.data
                           .map((user) =>
                           DropdownMenuItem<UserRequest>(
@@ -125,8 +125,8 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
               itemCount: selectedUsers == null ? 0 : selectedUsers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: Text(selectedUsers[index].firstName),
-                  subtitle: Text(selectedUsers[index].lastName),
+                  title: Text(selectedUsers[index].templeName),
+                  subtitle: Text(selectedUsers[index].templeId.toString()),
                 );
               }),
           Row(
@@ -142,15 +142,15 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
                     for (var user in selectedUsers) {
                       
                       UserTemple userTemple = new UserTemple();
-                      userTemple.templeId = user.id;
-                      print(user.id);
-                      
+                      userTemple.templeId = user.templeId;
                       userTemple.userId = _selectedUser.id;
+                      userTemple.roleId = user.roleId;
+                      userTemple.userName = _selectedUser.userName;
+                      userTemple.templeName = user.templeName;
                       
                       
                       listofUserTemples.add(userTemple);
                     }
-                    //Map<String,dynamic> teamusermap = teamUser.toJson();
                     print(listofUserTemples);
                     userTemplePageVM.submitNewUserTempleMapping(listofUserTemples);
                   },

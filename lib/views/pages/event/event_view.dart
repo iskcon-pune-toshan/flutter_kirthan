@@ -11,10 +11,12 @@ import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
+import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -394,13 +396,9 @@ class _EventViewState extends State<EventView>
               break;
             case 4:
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Calendar()));
+                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
               break;
             case 5:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TempleView() ));
-              break;
-            case 6:
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => RolesView() ));
               break;
@@ -461,13 +459,10 @@ class _EventViewState extends State<EventView>
                   }),
             ),
           ),
+
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            title: Text('Calendar'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.title),
-            title: Text('Temple'),
+            icon: Icon(Icons.map),
+            title: Text('User Temple'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),

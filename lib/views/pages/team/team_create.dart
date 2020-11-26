@@ -110,8 +110,8 @@ class _TeamWriteState extends State<TeamWrite> {
                                 teamrequest.createTime = dt;
                                 teamrequest.updatedBy = "SYSTEM";
                                 teamrequest.updateTime = dt;
-                                teamrequest.approvalStatus = "Approved";
-                                teamrequest.approvalComments = "AAA";
+                                teamrequest.approvalStatus = null;
+                                teamrequest.approvalComments = null;
                                 Map<String, dynamic> teammap =
                                     teamrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc

@@ -39,7 +39,7 @@ class RoleScreenRequestsListItem extends StatelessWidget {
       ),
     );
     var city = Text(
-      rolescreenrequest?.isCreated.toString(),
+      rolescreenrequest?.createFlag.toString(),
       style: GoogleFonts.openSans(
         fontWeight: FontWeight.bold,
         fontSize: MyPrefSettingsApp.custFontSize,

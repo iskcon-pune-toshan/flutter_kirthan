@@ -2,20 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/roles.dart';
 import 'package:flutter_kirthan/models/rolescreen.dart';
-import 'package:flutter_kirthan/models/screens.dart';
 import 'package:flutter_kirthan/services/role_screen_service_impl.dart';
 import 'package:flutter_kirthan/services/roles_service_impl.dart';
-import 'package:flutter_kirthan/services/team_service_impl.dart';
-import 'package:flutter_kirthan/services/team_user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/role_screen_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/roles_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_kirthan/models/teamuser.dart';
-import 'package:flutter_kirthan/models/team.dart';
-import 'package:flutter_kirthan/models/user.dart';
-import 'package:screen/screen.dart';
 
 final RoleScreenViewPageModel roleScreenPageVM =
 RoleScreenViewPageModel(apiSvc: RoleScreenAPIService());
@@ -143,14 +133,16 @@ class _RoleScreenCreateState extends State<RoleScreenCreate> {
                     for (var screen in selectedScreens) {
                       RoleScreen roleScreen = new RoleScreen();
 
-                      roleScreen.screenId = screen.id;
-                      //print(user.id);
+                      print(roleScreen.id);
+
+                      roleScreen.screenId = screen.screenId;
+                      print(screen.id);
                       roleScreen.roleId = _selectedRole.id;
-                      roleScreen.isCreated = false;
-                      roleScreen.isUpdated = false;
-                      roleScreen.isDeleted = false;
-                      roleScreen.isProcessed = false;
-                      roleScreen.isViewd = false;
+                      roleScreen.createFlag = screen.createFlag;
+                      roleScreen.updateFlag = screen.updateFlag;
+                      roleScreen.deleteFlag = screen.deleteFlag;
+                      roleScreen.processFlag = screen.processFlag;
+                      roleScreen.viewFlag = screen.viewFlag;
                       roleScreen.screenName = screen.screenName;
                       roleScreen.roleName = _selectedRole.roleName;
 

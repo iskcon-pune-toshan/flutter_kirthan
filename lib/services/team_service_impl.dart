@@ -96,10 +96,6 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
   Future<List<TeamRequest>> getTeamRequests(String teamTitle) async {
     String requestBody = '{"approvalStatus":"approved"}';
 
-    //if (teamType == "AE" ) {
-    //requestBody = '{"teamType":"All Teams"}';
-    //}
-
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;

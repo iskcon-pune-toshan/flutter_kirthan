@@ -71,7 +71,7 @@ class _UserTempleViewState extends State<UserTempleView> {
             onChanged: (input) {
               setState(() {
                 usercheckmap[user.templeId.toString() +
-                    "TU" +
+                    "UT" +
                     user.userId.toString()] = input;
                 if (input == true)
                   selectedUserTemple.add(user);
@@ -167,7 +167,7 @@ class _UserTempleViewState extends State<UserTempleView> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                UserTempleCreate(userTempleRequest: selectedUserTemple)));
+                                UserTempleCreate(selectedUsers : selectedUserTemple)));
                   },
                 ),
               ),
@@ -197,21 +197,9 @@ class _UserTempleViewState extends State<UserTempleView> {
               break;
             case 1:
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserView()));
-              break;
-            case 2:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TeamView()));
-              break;
-            case 3:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => NotificationView()));
-              break;
-            case 4:
-              Navigator.push(
                   context, MaterialPageRoute(builder: (context) => UserTempleView()));
               break;
-            case 5:
+            case 2:
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => RoleScreenView()));
               break;
@@ -226,25 +214,14 @@ class _UserTempleViewState extends State<UserTempleView> {
             icon: Icon(Icons.home),
             title: Text('Home'),
           ),
+
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Users'),
+            icon: Icon(Icons.map),
+            title: Text('User Temple'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            title: Text('Team'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.title),
-            title: Text('UserTemple'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            title: Text('RoleScreen'),
+            icon: Icon(Icons.arrow_drop_down_circle),
+            title: Text('Role Screen'),
           ),
         ],
       ),
