@@ -44,7 +44,7 @@ class _EventWriteState extends State<EventWrite> {
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
   //final IKirthanRestApi apiSvc = new RestAPIServices();
-  List<String> _states = [ "Andhra Pradesh",
+  List<String> _states = [ "Kant","Andhra Pradesh",
     "Arunachal Pradesh",
     "Assam",
     "Bihar",
@@ -81,7 +81,8 @@ class _EventWriteState extends State<EventWrite> {
     "Lakshadweep",
     "Puducherry"];
 
-  List<String> _cities = ['Adilabad',
+  List<String> _cities = ['Kant','Adilabad','Delhi',
+    'Ahmednagar',
     'Anantapur',
     'Chittoor',
     'Kakinada',
@@ -105,6 +106,9 @@ class _EventWriteState extends State<EventWrite> {
           position: tappedPoint1,
         ),
       );
+
+      eventrequest.sourceLongitude=tappedPoint1.longitude;
+      eventrequest.sourceLatitude=tappedPoint1.latitude;
       /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
       infoWindow: InfoWindow(
         title: 'End Point') ,
@@ -116,7 +120,34 @@ class _EventWriteState extends State<EventWrite> {
 
     });
   }
+  handleTap2(LatLng tappedPoint1){
+    print(tappedPoint1);
+    //print(tappedPoint2);
+    setState(() {
 
+      myMarker=[];
+
+      myMarker.add(
+        Marker(markerId: MarkerId(tappedPoint1.toString()),
+          infoWindow: InfoWindow(
+              title: 'Event Location') ,
+          position: tappedPoint1,
+        ),
+      );
+
+      eventrequest.destinationLongitude=tappedPoint1.longitude;
+      eventrequest.destinationLatitude=tappedPoint1.latitude;
+      /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
+      infoWindow: InfoWindow(
+        title: 'End Point') ,
+      position: tappedPoint2,
+      ),
+      );*/
+
+
+
+    });
+  }
   void onMapCreated(controller) {
     setState(() {
       mapController = controller;
@@ -141,7 +172,7 @@ class _EventWriteState extends State<EventWrite> {
           onChanged: (value){
             setState(() {
               print(value);
-              eventrequest.eventMobility=select;
+              eventrequest.eventMobility=value;
               select=value;
             });
 
@@ -452,7 +483,6 @@ class _EventWriteState extends State<EventWrite> {
 
                           ]),
 
-
                           RaisedButton.icon(
                             onPressed: () {
                               Navigator.push( context,MaterialPageRoute(
@@ -544,7 +574,106 @@ class _EventWriteState extends State<EventWrite> {
 
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                            label: Text('Add Location',
+                            label: Text('Add Source Location',
+                              style: TextStyle(color: Colors.black),),
+                            icon: Icon(Icons.location_on,
+                              color:Colors.black,),
+                            textColor: Colors.black,
+                            splashColor: Colors.red,
+                            color: Colors.white,
+                          ),
+                          RaisedButton.icon(
+                            onPressed: () {
+                              Navigator.push( context,MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider(
+                                      create: (BuildContext context) => MapsBloc(),
+                                      child: Scaffold(
+                                          appBar: AppBar(
+                                            title: Text('Location'),
+                                            actions: <Widget>[
+                                              IconButton(
+
+                                                icon: Icon(Icons.refresh),
+                                                onPressed:  () => {
+                                                  setState(() {
+                                                    markers.clear();
+                                                  }),//setState
+                                                },//onpressed
+                                              ),
+
+                                              IconButton(
+                                                icon: Icon(Icons.done),
+                                                onPressed: (){
+
+                                                  handleTap2(tappedPoint2);
+                                                  eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                  eventrequest.destinationLatitude=tappedPoint1.latitude;
+                                                  print(eventrequest.destinationLongitude);
+                                                  print(eventrequest.destinationLatitude);
+
+                                                  //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                  //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
+
+                                                  // widget.eventrequest.eventLocation=tappedPoint1.toString();
+                                                },
+                                                //onpressed
+                                              ),
+
+                                            ],
+
+
+
+                                          ),
+                                          body: Column(
+                                            children: <Widget>[
+                                              Stack(
+                                                children: <Widget>[
+                                                  Container(
+                                                      height: MediaQuery
+                                                          .of(context)
+                                                          .size
+                                                          .height - 80.0,
+                                                      width: double.infinity,
+                                                      child: !mapToggle
+                                                          ? GoogleMap(
+                                                        myLocationButtonEnabled: true,
+                                                        myLocationEnabled: true,
+                                                        compassEnabled: true,
+                                                        onMapCreated: onMapCreated,
+                                                        onTap: handleTap,
+                                                        markers:
+
+                                                        Set.from(myMarker),
+
+                                                        initialCameraPosition: CameraPosition(
+                                                            target: LatLng(0.0, 0.0), zoom: 16),
+
+                                                      )
+                                                          : Center(
+                                                          child: Text(
+                                                            'Loading.. Please wait..',
+                                                            style: TextStyle(fontSize: 20.0),
+                                                          ))),
+
+
+
+
+
+                                                ],
+                                              )
+                                            ],
+                                          )),
+
+                                    ),
+                              ),);
+
+
+                            },
+
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                            label: Text('Add Destination Location',
                               style: TextStyle(color: Colors.black),),
                             icon: Icon(Icons.location_on,
                               color:Colors.black,),
@@ -561,6 +690,7 @@ class _EventWriteState extends State<EventWrite> {
                             ),
                             onSaved: (input){
                               eventrequest.addLineOne = input;
+                              eventrequest.eventLocation = input;
                             },
                             validator: (value) {
                               if(value.isEmpty) {
@@ -689,7 +819,7 @@ class _EventWriteState extends State<EventWrite> {
                             value: _selectedCountry,
                             icon: const Icon(Icons.location_city),
                             hint: Text('Select Country'),
-                            items: ['IND']
+                            items: ['IND','Kyrgyzstan']
                                 .map((country) => DropdownMenuItem(
                               value: country,
                               child: Text(country),
@@ -734,12 +864,18 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.updatedTime = dt;
                                 eventrequest.approvalStatus = "Approved";
                                 eventrequest.approvalComments = "AAA";
-                                Map<String,dynamic> eventmap = eventrequest.toJson();
-                                EventRequest neweventrequest =await eventPageVM.submitNewEventRequest(eventmap);
-                                print(neweventrequest.id);
-                                String uid = neweventrequest.id.toString();
+                                Map<String, dynamic> teammap =
+                                eventrequest.toJson();
+                                //TeamRequest newteamrequest = await apiSvc
+                                //  ?.submitNewTeamRequest(teammap);
+                                EventRequest newteamrequest = await eventPageVM
+                                    .submitNewEventRequest(teammap);
+
+                                print(newteamrequest.id);
+                                String eid = newteamrequest.id.toString();
+
                                 SnackBar mysnackbar = SnackBar (
-                                  content: Text("Event registered $successful "),
+                                  content: Text("Event registered $successful with $eid"),
                                   duration: new Duration(seconds: 4),
                                   backgroundColor: Colors.green,
                                 );

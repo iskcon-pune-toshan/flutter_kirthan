@@ -29,7 +29,43 @@ class _EditEventState extends State<EditEvent> {
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   String _selectedState;
   String state;
-  var _states = ["GOA","GUJ","MAH"];
+
+  var _states = ["Kant","Andhra Pradesh", "MH",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jammu and Kashmir",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttarakhand",
+    "Uttar Pradesh",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli",
+    "Daman and Diu",
+    "Delhi",
+    "Lakshadweep",
+    "Puducherry"];
   // controllers for form text controllers
   final TextEditingController _eventTitleController = new TextEditingController();
   String eventTitle ;
@@ -39,8 +75,8 @@ class _EditEventState extends State<EditEvent> {
   String eventDate ;
   final TextEditingController _eventDescriptionController = new TextEditingController();
   String eventDescription ;
-  final TextEditingController _eventAddressController = new TextEditingController();
-  String address ;
+  final TextEditingController _lineoneController = new TextEditingController();
+  String lineOne ;
   final TextEditingController _eventDurationController = new TextEditingController();
   String eventDuration ;
   final TextEditingController _linetwoController = new TextEditingController();
@@ -53,7 +89,8 @@ class _EditEventState extends State<EditEvent> {
   String pinCode;
   final TextEditingController _createdTimeController = new TextEditingController();
   String createdTime;
-
+  final TextEditingController _stateController = new TextEditingController();
+  //String createdTime;
 
   @override
   void initState() {
@@ -61,12 +98,12 @@ class _EditEventState extends State<EditEvent> {
     _eventTypeController.text = widget.eventrequest.eventType;
     _eventDateController.text = widget.eventrequest.eventDate;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
-    _eventAddressController.text = widget.eventrequest.addLineOne;
+    _lineoneController.text = widget.eventrequest.addLineOne;
     _eventDurationController.text = widget.eventrequest.eventDuration;
     _linetwoController.text = widget.eventrequest.addLineTwo;
     _linethreeController.text = widget.eventrequest.addLineThree;
     _pincodeController.text = widget.eventrequest.pincode.toString();
-    _selectedState="GUJ";
+    _stateController.text=widget.eventrequest.state;
     _cityController.text=widget.eventrequest.city;
     _createdTimeController.text = widget.eventrequest.createdTime;
     print("createdTime");
@@ -121,7 +158,7 @@ class _EditEventState extends State<EditEvent> {
                     autocorrect: false,
                     controller: _eventTitleController,
                     onSaved: (String value) {
-                      eventTitle = value;
+                      widget.eventrequest.eventTitle = value;
                     },
                   ),
                 ),
@@ -145,7 +182,7 @@ class _EditEventState extends State<EditEvent> {
                     autocorrect: false,
                     controller: _eventDateController,
                     onSaved: (String value) {
-                      eventDate = value;
+                      widget.eventrequest.eventDate = value;
                     },
                   ),
                 ),
@@ -157,7 +194,7 @@ class _EditEventState extends State<EditEvent> {
                     autocorrect: false,
                     controller: _eventDurationController,
                     onSaved: (String value) {
-                      eventDuration = value;
+                      widget.eventrequest.eventDuration = value;
                     },
                   ),
                 ),
@@ -178,9 +215,9 @@ class _EditEventState extends State<EditEvent> {
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "Address"),
                     autocorrect: false,
-                    controller: _eventAddressController,
+                    controller: _lineoneController,
                     onSaved: (String value) {
-                      address = value;
+                      widget.eventrequest.addLineOne = value;
                     },
                   ),
                 ),
@@ -192,7 +229,7 @@ class _EditEventState extends State<EditEvent> {
                     autocorrect: false,
                     controller: _linetwoController,
                     onSaved: (String value) {
-                      lineTwo = value;
+                      widget.eventrequest.addLineTwo = value;
                     },
                   ),
                 ),
@@ -204,18 +241,18 @@ class _EditEventState extends State<EditEvent> {
                     autocorrect: false,
                     controller: _linethreeController,
                     onSaved: (String value) {
-                      lineThree = value;
+                      widget.eventrequest.addLineThree= value;
                     },
                   ),
                 ),
 
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "PinCode"),
+                    decoration: const InputDecoration(labelText: "Pincode"),
                     autocorrect: false,
                     controller: _pincodeController,
                     onSaved: (String value) {
-                      pinCode = value;
+                    //  widget.eventrequest.pincode = value;
                     },
                   ),
                 ),
@@ -237,7 +274,7 @@ class _EditEventState extends State<EditEvent> {
                     autocorrect: false,
                     controller: _cityController,
                     onSaved: (String value) {
-                      city = value;
+                      widget.eventrequest.city = value;
                     },
                   ),
                 ),
@@ -248,14 +285,14 @@ class _EditEventState extends State<EditEvent> {
                     autocorrect: false,
                     controller: _createdTimeController,
                     onSaved: (String value) {
-                      createdTime = value;
+                      widget.eventrequest.createdTime = value;
                     },
                   ),
                 ),
 
 
                 DropdownButtonFormField<String>(
-                  value: _selectedState,
+                  value: widget.eventrequest.state,
                   icon: const Icon(Icons.location_city),
                   hint: Text('Select State'),
                   items: _states
@@ -269,7 +306,7 @@ class _EditEventState extends State<EditEvent> {
                     });
                   },
                   onSaved: (input) {
-                    state = input;
+                    widget.eventrequest.state = input;
                   },
 
                 ),

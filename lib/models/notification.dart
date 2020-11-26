@@ -11,7 +11,8 @@ class NotificationModel {
       String createdBy,
       String id,
       String message,
-      String type,String action}) {
+      String type,
+      String action}) {
     this._targetType = type;
     this._action = action;
     this._createdBy = createdBy;
@@ -32,7 +33,9 @@ class NotificationModel {
 
   factory NotificationModel.fromJson(Map<String, dynamic> data) {
     return NotificationModel(
-        createdAt: DateTime.parse(data["createdTime"]),
+        createdAt: data["createdTime"] == null
+            ? null
+            : DateTime.parse(data["createdTime"]),
         createdBy: (data["createdBy"]),
         id: data["uuid"],
         message: data["message"],
@@ -51,6 +54,4 @@ class NotificationModel {
   String get action => _action;
 
   String get message => _message;
-
-
 }

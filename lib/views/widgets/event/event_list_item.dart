@@ -9,7 +9,7 @@ import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
-
+import 'package:intl/intl.dart';
 
 class Choice {
   const Choice({this.id, this.description});
@@ -83,9 +83,28 @@ class EventRequestsListItem extends StatelessWidget {
                 Map<String, dynamic> processrequestmap =
                 new Map<String, dynamic>();
                 processrequestmap["id"] = eventrequest?.id;
-                processrequestmap["approvalstatus"] = "Approved";
-                processrequestmap["approvalcomments"] = "ApprovalComments";
+                processrequestmap["approvalStatus"] = "Approved";
+                processrequestmap["approvalComments"] = "ApprovalComments";
                 processrequestmap["eventType"] = eventrequest?.eventType;
+                processrequestmap["addLineOne"]  = eventrequest?.addLineOne;
+                processrequestmap["city"] = eventrequest?.city;
+                processrequestmap["country"]  = eventrequest?.country;
+                processrequestmap["phoneNumber"] = eventrequest?.phoneNumber;
+                processrequestmap["pincode"] = eventrequest?.pincode;
+                processrequestmap["eventTitle"] = eventrequest?.eventTitle;
+                processrequestmap["eventDescription"] = eventrequest?.eventDescription;
+                processrequestmap["eventDate"] = eventrequest?.eventDate;
+                processrequestmap["eventDuration"] = eventrequest?.eventDuration;
+                processrequestmap["eventLocation"] = eventrequest?.eventLocation;
+                processrequestmap["locality"] = eventrequest?.locality;
+                processrequestmap["state"] = eventrequest?.state;
+                processrequestmap["isProcessed"] = eventrequest?.isProcessed;
+                processrequestmap["createdBy"] = eventrequest?.createdBy;
+                processrequestmap["createdTime"] = eventrequest?.createdTime;
+
+
+
+
                 eventPageVM.processEventRequest(processrequestmap);
                 SnackBar mysnackbar = SnackBar(
                   content: Text("Event $process $successful "),
@@ -220,9 +239,9 @@ class EventRequestsListItem extends StatelessWidget {
               children: <Widget>[
                 //Text("Date:"),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                  margin: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
-                    eventrequest?.eventDate,
+                    eventrequest?.eventDate.substring(0,16),
                     style: TextStyle(
                       fontSize: MyPrefSettingsApp.custFontSize,
                       //    color: KirthanStyles.subTitleColor,
@@ -230,6 +249,7 @@ class EventRequestsListItem extends StatelessWidget {
                   ),
                 ),
                 //Text("Duration:"),
+
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Text(

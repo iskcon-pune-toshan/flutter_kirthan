@@ -1,33 +1,29 @@
-import 'dart:ffi';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/firebasemessage_service.dart';
+import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
+import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
-import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
+import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
@@ -35,8 +31,8 @@ final EventPageViewModel eventPageVM =
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
-EventRequest eventrequest;
-  EventView({Key key,@required this.eventrequest}) : super(key: key);
+  EventRequest eventrequest;
+  EventView({Key key, @required this.eventrequest}) : super(key: key);
 
   @override
   _EventViewState createState() => _EventViewState();
@@ -86,6 +82,7 @@ class _EventViewState extends State<EventView>
     _index = 0;
     loadData();
     loadPref();
+    NotificationManager ntfManger = NotificationManager();
     //print("in Event");
     //print(SignInService().firebaseAuth.currentUser().then((onValue) => print(onValue.displayName)));
   }
@@ -99,17 +96,15 @@ class _EventViewState extends State<EventView>
       appBar: AppBar(
         title: Text("Events"),
         actions: <Widget>[
-        IconButton(
-            icon: Icon(Icons.search),
-
-            onPressed: () => {
-            Navigator.push(
-            context,
-            MaterialPageRoute(
-            builder: (context) =>
-            EventSearchView ()),
-          ),}
-        ),
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventSearchView()),
+                    ),
+                  }),
           PopupMenuButton(
               icon: Icon(Icons.tune),
               onSelected: (input) {
@@ -117,7 +112,7 @@ class _EventViewState extends State<EventView>
                 print(input);
                 eventPageVM.setEventRequests(widget.eventrequest?.eventTitle);
               },
-    itemBuilder: (BuildContext context) {
+              itemBuilder: (BuildContext context) {
                 return eventTime.map((f) {
                   return CheckedPopupMenuItem<String>(
                     child: Text(f),
@@ -128,7 +123,6 @@ class _EventViewState extends State<EventView>
                   );
                 }).toList();
               }),
-
         ],
       ),
       drawer: Drawer(
@@ -391,22 +385,26 @@ class _EventViewState extends State<EventView>
                   context, MaterialPageRoute(builder: (context) => TeamView()));
               break;
             case 3:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => NotificationView()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationView()));
               break;
             case 4:
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
+                  context, MaterialPageRoute(builder: (context) => Calendar()));
               break;
             case 5:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => RolesView() ));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TempleView()));
+              break;
+            case 6:
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => RolesView()));
               break;
           }
         },
         currentIndex: _index,
         selectedItemColor: Colors.orange,
-        items:  <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
@@ -425,44 +423,48 @@ class _EventViewState extends State<EventView>
               model: NotificationViewModel(),
               child: ScopedModelDescendant<NotificationViewModel>(
                   builder: (context, child, model) {
-                    FirebaseMessageService fms  = new FirebaseMessageService();
-                    fms.initMessageHandler(context);
-                    print(model.newNotificationCount);
-                    bool visibilty = true;
-                    if(model.newNotificationCount == 0 ) visibilty = false;
-                    return Stack(
-                      alignment: Alignment.topRight,
-                      children: <Widget>[
-                        Icon(Icons.notifications),
-                        if(visibilty) Positioned(
-                          child: Container(
-                            padding: EdgeInsets.all(1),
-                            decoration: new BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            constraints: BoxConstraints(
-                              minHeight: 8,
-                              minWidth: 8,
-                            ),
-                            child: Text(
-                              model.newNotificationCount.toString(),
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
+                FirebaseMessageService fms = new FirebaseMessageService();
+                fms.initMessageHandler(context);
+                print(model.newNotificationCount);
+                bool visibilty = true;
+                if (model.newNotificationCount == 0) visibilty = false;
+                return Stack(
+                  alignment: Alignment.topRight,
+                  children: <Widget>[
+                    Icon(Icons.notifications),
+                    if (visibilty)
+                      Positioned(
+                        child: Container(
+                          padding: EdgeInsets.all(1),
+                          decoration: new BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          constraints: BoxConstraints(
+                            minHeight: 8,
+                            minWidth: 8,
+                          ),
+                          child: Text(
+                            model.newNotificationCount.toString(),
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
                             ),
                           ),
-                        ) ,
-                      ],
-                    );
-                  }),
+                        ),
+                      ),
+                  ],
+                );
+              }),
             ),
           ),
-
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text('User Temple'),
+            icon: Icon(Icons.calendar_today),
+            title: Text('Calendar'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.title),
+            title: Text('Temple'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
