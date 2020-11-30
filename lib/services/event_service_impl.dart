@@ -74,7 +74,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     // Events public or private
 
     // Events on duration
-    requestBody = '{"city":["Pune","Mumbai"]}';
+    //requestBody = '{"city":["Pune","Mumbai"]}';
 
 
 
@@ -83,6 +83,8 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     } else {
       requestBody = '{"state":["MH"]}';
     }*/
+
+    requestBody = '{"approvalStatus" : "Approved"}';
 
     print(requestBody);
 

@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
@@ -31,6 +33,8 @@ class _EditTeamState extends State<EditTeam> {
   String teamTitle ;
   final TextEditingController _teamDescriptionController = new TextEditingController();
   String teamDescription ;
+  final TextEditingController _teamupdatedBy = new TextEditingController();
+  String teamupdatedBy ;
 
 
 
@@ -39,9 +43,19 @@ class _EditTeamState extends State<EditTeam> {
     _teamTitleController.text = widget.teamrequest.teamTitle;
     _teamDescriptionController.text = widget.teamrequest.teamDescription;
 
+    _teamupdatedBy.text = getCurrentUser().toString();
     return super.initState();
   }
 
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  getCurrentUser() async {
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    widget.teamrequest.updatedBy=email;
+    print(email);
+    return email;
+
+  }
 
 
   @override
@@ -63,6 +77,11 @@ class _EditTeamState extends State<EditTeam> {
                   Navigator.pop(context);
                   print(widget.teamrequest.teamTitle);
                   print(widget.teamrequest.teamDescription);
+                 //teamrequest.updatedTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+                  _teamupdatedBy.text=widget.teamrequest.updatedTime=dt;
+
+                  _formKey.currentState.save();
                   String teamrequestStr = jsonEncode(widget.teamrequest.toStrJson());
                   teamPageVM.submitUpdateTeamRequest(teamrequestStr);
                   //apiSvc?.submitUpdateTeamRequest(teamrequestStr);

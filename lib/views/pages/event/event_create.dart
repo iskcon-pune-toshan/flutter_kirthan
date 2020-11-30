@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
+import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +20,16 @@ EventPageViewModel(apiSvc: EventAPIService());
 
 
 class EventWrite extends StatefulWidget {
- // EventWrite({Key key}) : super(key: key);
+  // EventWrite({Key key}) : super(key: key);
   final String screenName = SCR_EVENT;
-EventRequest eventrequest;
-
+  EventRequest eventrequest;
+  UserRequest userRequest;
+  UserLogin userLogin;
+  UserDetail userDetail;
   @override
   _EventWriteState createState() => _EventWriteState();
 
-  EventWrite({@required this.eventrequest});
+  EventWrite({@required this.eventrequest,@required this.userLogin});
 }
 class _EventWriteState extends State<EventWrite> {
   bool mapToggle = false;
@@ -43,6 +48,7 @@ class _EventWriteState extends State<EventWrite> {
 
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
+
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   List<String> _states = [ "Kant","Andhra Pradesh",
     "Arunachal Pradesh",
@@ -177,7 +183,7 @@ class _EventWriteState extends State<EventWrite> {
             });
 
           },
-    ),
+        ),
 
 
         Text(title)
@@ -357,7 +363,7 @@ class _EventWriteState extends State<EventWrite> {
                       ),
                       elevation: 5,
                     ),
-                  /*    Card(
+                    /*    Card(
                         child: Container(
                           padding: new EdgeInsets.all(10),
                           child: RaisedButton.icon(
@@ -380,7 +386,7 @@ class _EventWriteState extends State<EventWrite> {
                         ),
                         elevation: 5,
                       ),*/
-                   /* Card(
+                    /* Card(
                       child: Container(
                         padding: new EdgeInsets.all(10),
                         child:TextFormField(
@@ -453,17 +459,17 @@ class _EventWriteState extends State<EventWrite> {
                       child: Column(
                         children: <Widget>[
                           Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                addRadioButton(0, 'Stationary'),
-                                addRadioButton(1, 'Moving'),
+                                Row(
+                                  children: <Widget>[
+                                    addRadioButton(0, 'Stationary'),
+                                    addRadioButton(1, 'Moving'),
 
-                              ],
-                            ),
+                                  ],
+                                ),
 
-                          /*RaisedButton.icon(
+                                /*RaisedButton.icon(
                                  onPressed: (){ Navigator.push(
                                      context,
                                      MaterialPageRoute(
@@ -481,7 +487,7 @@ class _EventWriteState extends State<EventWrite> {
                                  color: Colors.white,
                                ),*/
 
-                          ]),
+                              ]),
 
                           RaisedButton.icon(
                             onPressed: () {
@@ -855,13 +861,22 @@ class _EventWriteState extends State<EventWrite> {
                             onPressed: () async{
 
                               if (_formKey.currentState.validate()) {
+                                getCurrentUser() async {
+                                  final FirebaseUser user = await auth.currentUser();
+                                  final String email = user.email;
+                                  eventrequest.createdBy=email;
+                                  print("created by " + eventrequest.createdBy);
+                                  print(email);
+                                  return email;
+                                }
                                 _formKey.currentState.save();
                                 eventrequest.isProcessed = false;
-                                eventrequest.createdBy = "afrah.17u278@viit.ac.in";
+                                // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
+                                // print(eventrequest.createdBy);
                                 String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
                                 eventrequest.createdTime =  dt;
-                                eventrequest.updatedBy = "SYSTEM";
-                                eventrequest.updatedTime = dt;
+                                eventrequest.updatedBy = null;
+                                eventrequest.updatedTime = null;
                                 eventrequest.approvalStatus = "";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
@@ -904,5 +919,15 @@ class _EventWriteState extends State<EventWrite> {
       ),
     );
   }
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  getCurrentUser() async {
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    eventrequest.createdBy=email;
+    print("created by " + eventrequest.createdBy);
+    print(email);
+    return email;
+  }
+
 }
 

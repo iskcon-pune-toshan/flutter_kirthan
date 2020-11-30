@@ -5,9 +5,9 @@ class TeamRequest {
   String teamDescription;
   bool isProcessed;
   String createdBy;
-  String createTime;
+  String createdTime;
   String updatedBy;
-  String updateTime;
+  String updatedTime;
   String approvalStatus;
   String approvalComments;
 
@@ -16,8 +16,8 @@ class TeamRequest {
   TeamRequest({this.id, this.teamTitle, this.teamDescription, this.isProcessed,
     this.createdBy,
     this.updatedBy,
-    this.createTime,
-    this.updateTime,
+    this.createdTime,
+    this.updatedTime,
     this.approvalStatus,
     this.approvalComments });
 
@@ -30,8 +30,8 @@ class TeamRequest {
       isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
       updatedBy: data['updatedBy'],
-      updateTime: data['updateTime'],
-      createTime: data['createTime'],
+      updatedTime: data['updatedTime'],
+      createdTime: data['createdTime'],
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
     );
@@ -45,8 +45,8 @@ class TeamRequest {
       isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
       updatedBy: map['updatedBy'],
-      updateTime: map['updateTime'],
-      createTime: map['createTime'],
+      updatedTime: map['updatedTime'],
+      createdTime: map['createdTime'],
       approvalStatus: map['approvalStatus'],
       approvalComments: map['approvalComments'],
     );
@@ -60,8 +60,8 @@ class TeamRequest {
     data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
-    data['updateTime'] = this.updateTime;
-    data['createTime'] = this.createTime;
+    data['updatedTime'] = this.updatedTime;
+    data['createdTime'] = this.createdTime;
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
 
@@ -79,8 +79,8 @@ class TeamRequest {
       "isProcessed": this.isProcessed,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
-      "updateTime": this.updateTime,
-      "createTime": this.createTime,
+      "updatedTime": this.updatedTime,
+      "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
       "approvalComments": this.approvalComments
     };

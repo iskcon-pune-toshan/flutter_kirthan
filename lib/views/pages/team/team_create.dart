@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
@@ -23,8 +24,6 @@ class _TeamWriteState extends State<TeamWrite> {
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
   //final IKirthanRestApi apiSvc = new RestAPIServices();
-
-  UserRequest user = new UserRequest();
 
   @override
   Widget build(BuildContext context) {
@@ -103,19 +102,21 @@ class _TeamWriteState extends State<TeamWrite> {
                             color: Colors.blue,
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
+                                final FirebaseAuth auth = FirebaseAuth.instance;
+                                final FirebaseUser user = await auth.currentUser();
+                                final String email = user.email;
+                                String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
                                 _formKey.currentState.save();
 
+                                final String teamTitle = teamrequest.teamTitle;
                                 teamrequest.isProcessed = false;
-                                teamrequest.createdBy = "SYSTEM";
-
-                                String dt =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
-                                teamrequest.createTime = dt;
-                                teamrequest.updatedBy = "SYSTEM";
-                                teamrequest.updateTime = dt;
+                                teamrequest.createdBy = email;
+                                print(teamrequest.createdBy);
+                                teamrequest.createdTime = dt;
+                                teamrequest.updatedBy = null;
+                                teamrequest.updatedTime = null;
                                 teamrequest.approvalStatus = null;
-                                teamrequest.approvalComments = null;
+                                teamrequest.approvalComments = "Approved $teamTitle";
                                 Map<String, dynamic> teammap =
                                     teamrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc

@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/views/pages/signin/login.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -14,9 +18,10 @@ EventPageViewModel(apiSvc: EventAPIService());
 
 class EditEvent extends StatefulWidget {
   EventRequest eventrequest ;
+  LoginApp loginApp;
   final String screenName = SCR_EVENT;
-
-  EditEvent({Key key, @required this.eventrequest}) : super(key: key);
+  UserRequest userrequest;
+  EditEvent({Key key, @required this.eventrequest,@required this.loginApp}) : super(key: key);
 
   @override
   _EditEventState createState() => new _EditEventState();
@@ -90,6 +95,10 @@ class _EditEventState extends State<EditEvent> {
   final TextEditingController _createdTimeController = new TextEditingController();
   String createdTime;
   final TextEditingController _stateController = new TextEditingController();
+  final TextEditingController _updatedByController = new TextEditingController();
+  String updatedBy;
+  final TextEditingController _updatedTimeController = new TextEditingController();
+  String updatedTime;
   //String createdTime;
 
   @override
@@ -106,12 +115,23 @@ class _EditEventState extends State<EditEvent> {
     _stateController.text=widget.eventrequest.state;
     _cityController.text=widget.eventrequest.city;
     _createdTimeController.text = widget.eventrequest.createdTime;
+    _updatedByController.text =getCurrentUser().toString();
+    _updatedByController.text = widget.eventrequest.updatedTime;
     print("createdTime");
     print(widget.eventrequest.createdTime);
+
     return super.initState();
   }
 
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  getCurrentUser() async {
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    widget.eventrequest.updatedBy=email;
+    print(email);
+    return email;
 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +151,9 @@ class _EditEventState extends State<EditEvent> {
                   //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
                   //_createTimeController.text = dt;
                   _formKey.currentState.save();
+                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+                  _updatedTimeController.text=widget.eventrequest.updatedTime=dt;
+
                   Navigator.pop(context);
                   print(eventTitle);
                   print(eventDate);
@@ -252,7 +275,7 @@ class _EditEventState extends State<EditEvent> {
                     autocorrect: false,
                     controller: _pincodeController,
                     onSaved: (String value) {
-                    //  widget.eventrequest.pincode = value;
+                      //  widget.eventrequest.pincode = value;
                     },
                   ),
                 ),
