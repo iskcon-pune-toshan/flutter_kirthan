@@ -857,12 +857,12 @@ class _EventWriteState extends State<EventWrite> {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
                                 eventrequest.isProcessed = false;
-                                eventrequest.createdBy = "SYSTEM";
+                                eventrequest.createdBy = "afrah.17u278@viit.ac.in";
                                 String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
                                 eventrequest.createdTime =  dt;
                                 eventrequest.updatedBy = "SYSTEM";
                                 eventrequest.updatedTime = dt;
-                                eventrequest.approvalStatus = "Approved";
+                                eventrequest.approvalStatus = "";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
                                 eventrequest.toJson();
