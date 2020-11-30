@@ -38,8 +38,8 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
           children: <Widget>[
             Divider(),
             Card(
-                child: Consumer<SettingsNotifier>(
-              builder: (context, notifier, child) => DropdownButton<String>(
+                child: /*Consumer<SettingsNotifier>(
+              builder: (context, notifier, child) =>*/ DropdownButton<String>(
                 items: [
                   DropdownMenuItem<String>(
                     value: "NVCC",
@@ -83,16 +83,16 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
 
                    */
 
-                  notifier.selectArea();
+                  //notifier.selectArea();
                   print(val);
                   arg1 = val;
-                }, value: notifier.area,
+                }, value: arg1,//notifier.area,
                 hint: Text(
                   arg1 == null ? 'Area' : arg1,
                   style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
                 ),
               ),
-                )),
+                ),
             Divider(),
             Card(
                 child: DropdownButton<String>(

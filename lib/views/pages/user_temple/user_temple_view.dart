@@ -141,6 +141,7 @@ class _UserTempleViewState extends State<UserTempleView> {
                                   );
                                 });
                           } else {
+                            print("Rolescreen View unavailable");
                             return Container(
                               width: 20.0,
                               height: 10.0,

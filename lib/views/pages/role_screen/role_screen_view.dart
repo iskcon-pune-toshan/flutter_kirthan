@@ -182,29 +182,31 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                             listofrolescreen = snapshot.data;
                             listofrolescreen
                                 .sort((a, b) => b.roleId.compareTo(a.roleId));
-                            List<String> setofTeams = listofrolescreen
+                            List<String> setofRoles = listofrolescreen
                                 .map((user) => user.roleName)
                                 .toSet()
                                 .toList();
                             //setofTeams.reversed;
                             return ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: setofTeams.length,
+                                itemCount: setofRoles.length,
                                 itemBuilder: (context, index) {
                                   return ExpansionTile(
-                                    title: Text(setofTeams[index]),
+                                    title: Text(setofRoles[index]),
 
                                     //subtitle: Text("Hello Manjunath"),
                                     children:
-                                        populateChildren(setofTeams[index]),
+                                        populateChildren(setofRoles[index]),
                                   );
                                 });
                           } else {
+                            print('RoleScreenView unavailable');
                             return Container(
                               width: 20.0,
                               height: 10.0,
                               child: Center(
                                 child: CircularProgressIndicator(),
+
                               ),
                             );
                           }

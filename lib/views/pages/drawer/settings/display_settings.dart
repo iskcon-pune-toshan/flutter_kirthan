@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/impl_perferences.dart';
 //import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyPrefSettingsApp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Consumer<SettingsNotifier>(
+            Consumer<ThemeNotifier>(
               builder: (context, notifier, child) => SwitchListTile(
                 title: Text("Dark Mode",
                     style: TextStyle(

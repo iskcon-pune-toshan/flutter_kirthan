@@ -59,6 +59,9 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
     var response = await client1.put('$baseUrl/api/team/addteam',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
+    print("Team add status");
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
       //team respteamrequest = json.decode(response.body);
       //print(respteamrequest);
@@ -82,6 +85,9 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/team/deleteteam',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+
+    print(response.statusCode);
+    print(response.body);
 
     if (response.statusCode == 200) {
       print(response.body);

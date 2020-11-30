@@ -15,6 +15,7 @@ import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
 import 'package:flutter_kirthan/views/pages/event/event_search.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
 import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
@@ -398,7 +399,7 @@ class _EventViewState extends State<EventView>
               break;
             case 6:
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => RolesView()));
+                  MaterialPageRoute(builder: (context) => RoleScreenView()));
               break;
           }
         },
@@ -467,9 +468,9 @@ class _EventViewState extends State<EventView>
             title: Text('Temple'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            title: Text('Roles'),
-          )
+            icon: Icon(Icons.map),
+            title: Text('User Temple'),
+          ),
         ],
       ),
     );
