@@ -48,8 +48,9 @@ class _RoleScreenViewState extends State<RoleScreenView> {
         listofrolescreen.where((user) => user.roleName == roleName).toList();
     for (var user in listofscreens) {
       //print(user.templeName+"UT"+user.userId.toString());
-      children.add(Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      children.add(
+          Row(
+          //direction: Axis.horizontal,
         children: <Widget>[
           //Text(user.userId.toString()),
 
@@ -189,6 +190,7 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                             //setofTeams.reversed;
                             return ListView.builder(
                                 shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
                                 itemCount: setofRoles.length,
                                 itemBuilder: (context, index) {
                                   return ExpansionTile(

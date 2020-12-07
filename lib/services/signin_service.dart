@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
+
+
 class SignInService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
@@ -12,20 +14,21 @@ class SignInService {
 
   factory SignInService() => _internal;
 
-
   SignInService.internal();
 
-    FirebaseUser fireUser = null;
+  FirebaseUser fireUser = null;
 
   Future<FirebaseUser> signUpWithEmail(String email, String password) async {
     AuthResult authResult = await firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
 
+    String url = 'https://banner2.cleanpng.com/20180331/eow/kisspng-computer-icons-user-clip-art-user-5abf13db298934.2968784715224718991702.jpg';
+    //String  url = 'assets/images/default_icon.png';
+
     if (authResult != null) {
       UserUpdateInfo updateInfo = UserUpdateInfo();
       updateInfo.displayName = email;
-      //updateInfo.photoUrl = 'assets/images/vardhan.jpeg';
-
+      updateInfo.photoUrl = url ;
       FirebaseUser firebaseUser = authResult.user;
 
       if (firebaseUser != null) {
@@ -35,8 +38,6 @@ class SignInService {
 
         FirebaseUser currentuser = await firebaseAuth.currentUser();
 
-        //print("Manju You are there");
-        //print(firebaseUser.uid);
 
         return currentuser;
       }
@@ -48,14 +49,32 @@ class SignInService {
     AuthResult authResult = await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 
-    if (authResult != null) {
-      FirebaseUser firebaseUser = authResult.user;
+    FirebaseUser firebaseUser;
+
+    /*if (authResult != null) {
+       firebaseUser = await firebaseAuth.currentUser();
 
       if (firebaseUser != null) {
         return firebaseUser;
       }
-    }
-    return null;
+    }*/
+
+    assert(email !=
+        null); //its a way to check the condition & returns a boolean by the result of which further execution proceeds
+    assert(password != null);
+
+    final AuthCredential auth = EmailAuthProvider.getCredential(
+        email: email,
+        password:
+            password); // to fetch the user Credential by signInwithemailandpassword method
+
+    FirebaseUser user = (await firebaseAuth.signInWithCredential(auth)).user;
+
+    fireUser =
+        user; //once onComplete returning the user to able to fetch the credentials
+    return user;
+
+    //return null;
   }
 
   Future<FirebaseUser> googSignIn(BuildContext context) async {

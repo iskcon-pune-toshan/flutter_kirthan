@@ -5,6 +5,7 @@ import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
@@ -30,6 +31,7 @@ class LoginApp extends StatefulWidget {
 class _LoginAppState extends State<LoginApp> {
   final _formKey = GlobalKey<FormState>();
   final _passwordcontroller = new TextEditingController();
+  final TextEditingController username = new TextEditingController();
   String _uname, _password;
   List<UserLogin> users;
   List<UserAccess> entitlements;
@@ -157,7 +159,7 @@ class _LoginAppState extends State<LoginApp> {
                           Container(
                               width: 300,
                               height: 50.0,
-                              child: DropdownButtonFormField<UserLogin>(
+                              child: /*DropdownButtonFormField<UserLogin>(
                                 // Shouldnt this be a text field? Or are we planning on storing all
                                 // the logged in users email at all times?
                                 itemHeight: 50.0,
@@ -172,16 +174,17 @@ class _LoginAppState extends State<LoginApp> {
                                     _selecteduser = input;
                                   });
                                 },
-                              )
-                              /*TextFormField(
+                              )*/
+                              TextFormField(
                               decoration: const InputDecoration(
                                 hintText: "Please enter your Username",
                                 labelText: "User Name*",
                               ),
+                              controller: username,
                               validator: (input) =>
                                   input.contains("*") ? "Not a Valid User" : null,
-                              onSaved: (input) => _uname = input,
-                            ),*/
+                              //onSaved: (input) => _uname = input,
+                            ),
                               ),
                         ],
                       ),
@@ -232,7 +235,7 @@ class _LoginAppState extends State<LoginApp> {
                             child: FlatButton(
                               child: Text("SignUp"),
                               onPressed: () {
-                                if (_formKey.currentState.validate()) {
+                               /* if (_formKey.currentState.validate()) {
                                   _uname = _selecteduser.username;
                                   //print(_uname);
                                   //print(_passwordcontroller.text);
@@ -247,16 +250,15 @@ class _LoginAppState extends State<LoginApp> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  EventView())));
+                                                  SignUp())));*/
 
-                                  /*Navigator.push(
+                                  Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => UserWrite()));
+                                          builder: (context) => SignUp()));
 
-                                   */
                                 }
-                              },
+
                             ),
                           ),
                           Container(
@@ -308,12 +310,14 @@ class _LoginAppState extends State<LoginApp> {
                               ),
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  _uname = _selecteduser.username;
+                                  _uname = username.text;
                                   _password = _passwordcontroller.text;
                                   //   _formKey.currentState.save();
-                                  print(_selecteduser.username);
+                                  print(_uname);
                                   print(_password);
                                   //print(_selecteduser.usertype);
+                                  print("Entered siginIn email");
+
                                   signInService
                                       .signInWithEmail(_uname, _password)
                                       .then(
@@ -326,6 +330,7 @@ class _LoginAppState extends State<LoginApp> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       EventView()))));
+                                  print("Exit signIn email service");
 
                                 }
                               },

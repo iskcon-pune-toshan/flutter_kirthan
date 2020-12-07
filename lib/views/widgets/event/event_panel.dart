@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
@@ -17,10 +18,10 @@ class EventsPanel extends StatelessWidget {
 
   final String screenName = "Event";
 
-  EventsPanel({@required this.eventType,@required this.eventRequest});
+  EventsPanel({@required this.eventType, @required this.eventRequest});
   @override
   Widget build(BuildContext context) {
-    String dropdownValue=eventRequest?.city;
+    String dropdownValue = eventRequest?.city;
     return ScopedModelDescendant<EventPageViewModel>(
       builder: (context, child, model) {
         return FutureBuilder<List<EventRequest>>(
@@ -78,46 +79,49 @@ class EventsPanel extends StatelessWidget {
                           ),
                         ],
                       ),
-                      new  Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                      Container(
-                        height: 65,
-                        decoration: new BoxDecoration(
-                        image: new DecorationImage(
-                        image: new AssetImage('assets/images/map.jpg'),
-                        fit: BoxFit.cover,
-                        ),
-                        ),
+                      new Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Container(
+                            height: 65,
+                            decoration: new BoxDecoration(
+                              image: new DecorationImage(
+                                image: new AssetImage('assets/images/map.jpg'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: FlatButton(
+                              //child: const Text("This Week"),
+                              child: Center(
+                                  child: Text(
+                                'Map',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: MyPrefSettingsApp.custFontSize),
+                              )),
 
-                        child: FlatButton(
-                          //child: const Text("This Week"),
-                          child: Center(child: Text('Map')),
-
-                          // child: const Text("Map"),
-                          onPressed: () {
-                            Navigator.push( context,MaterialPageRoute(
-                                builder: (context) =>
-                                    BlocProvider(
-                                      create: (BuildContext context) => MapsBloc(),
+                              // child: const Text("Map"),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BlocProvider(
+                                      create: (BuildContext context) =>
+                                          MapsBloc(),
                                       child: Maps(),
                                     ),
-                            ),);
-
-
-                          },
-                          //child: Image.asset("assets/images/map.jpg")
-
-                        ),
-
+                                  ),
+                                );
+                              },
+                              //child: Image.asset("assets/images/map.jpg")
+                            ),
+                          ),
+                          //          ),
+                        ],
                       ),
-            //          ),
-            ],
-                      ),
-
-
-                       Expanded(
+                      Expanded(
                         child: Scrollbar(
                           controller: ScrollController(
                             initialScrollOffset: 2,
@@ -140,7 +144,6 @@ class EventsPanel extends StatelessWidget {
                           ),
                         ),
                       ),
-                      
                     ],
                   );
                 } else if (snapshot.hasError) {

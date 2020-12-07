@@ -352,21 +352,15 @@ class _EventViewState extends State<EventView>
           eventType: "All",
         ),
       ),
-      floatingActionButton: accessTypes[ACCESS_TYPE_CREATE] == true
-          ? FloatingActionButton(
-              child: Icon(Icons.add),
-              backgroundColor: Colors.green,
-              //tooltip: accessTypes["Create"].toString(),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EventWrite()));
-              },
-            )
-          : FloatingActionButton(
-              child: Icon(Icons.add),
-              backgroundColor: Colors.grey,
-              onPressed: null,
-            ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+        //tooltip: accessTypes["Create"].toString(),
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => EventWrite()));
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         onTap: (newIndex) {

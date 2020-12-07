@@ -505,7 +505,7 @@ class _UserWriteState extends State<UserWrite> {
                       userrequest.createdBy = "SYSTEM";
                       String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                           .format(DateTime.now());
-                      userrequest.createTime = dt;
+                      userrequest.createdTime = dt;
                       userrequest.updatedBy = "SYSTEM";
                       userrequest.updateTime = dt;
                       userrequest.approvalStatus = "Approved";

@@ -17,7 +17,7 @@ class KirthanApp extends StatelessWidget {
             theme: notifier.darkTheme ? dark : light,
             home: LoginApp(),
             //home:SignInApp() ,
-            debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: false,
           );
         }));
   }

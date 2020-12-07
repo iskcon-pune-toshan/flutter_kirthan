@@ -75,7 +75,7 @@ class UserRequest {
   String govtId;
   bool isProcessed;
   String createdBy;
-  String createTime;
+  String createdTime;
   String updatedBy;
   String updateTime;
   String approvalStatus;
@@ -193,7 +193,7 @@ class UserRequest {
     data['govtId'] = this.govtId;
     data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
-    data['createTime'] = this.createTime;
+    data['createdTime'] = this.createdTime;
     data['updatedBy'] = this.updatedBy;
     data['updateTime'] = this.updateTime;
     data['approvalStatus'] = this.approvalStatus;
@@ -227,7 +227,7 @@ class UserRequest {
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
       "updateTime": this.updateTime,
-      "createTime": this.createTime,
+      "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
       "approvalComments": this.approvalComments
     };

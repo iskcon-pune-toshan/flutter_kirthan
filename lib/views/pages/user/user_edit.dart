@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final UserPageViewModel userPageVM =
@@ -57,6 +59,8 @@ class _UserEditState extends State<UserEdit> {
   String city;
   final TextEditingController _pincodeController = new TextEditingController();
   String pinCode;
+  final TextEditingController _userupdatedBy = new TextEditingController();
+  String userupdatedBy ;
 
   @override
   void initState() {
@@ -72,7 +76,18 @@ class _UserEditState extends State<UserEdit> {
     _pincodeController.text = widget.userrequest.pinCode.toString();
     _selectedState = "GUJ";
     _cityController.text = widget.userrequest.city;
+    _userupdatedBy.text = getCurrentUser().toString();
     return super.initState();
+  }
+
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  getCurrentUser() async {
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    widget.userrequest.updatedBy = email;
+    print(email);
+    return email;
   }
 
   @override
@@ -97,6 +112,9 @@ class _UserEditState extends State<UserEdit> {
                   print(firstName);
                   print(lastName);
                   print(address);
+
+                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+                  _userupdatedBy.text = widget.userrequest.updateTime = dt;
                   String userrequestStr =
                       jsonEncode(widget.userrequest.toStrJson());
                   userPageVM.submitUpdateUserRequest(userrequestStr);
@@ -174,7 +192,7 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Address"),
+                    decoration: const InputDecoration(labelText: "Line 1"),
                     autocorrect: false,
                     controller: _userAddressController,
                     onSaved: (String value) {

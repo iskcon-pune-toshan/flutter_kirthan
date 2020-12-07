@@ -66,6 +66,7 @@ flutter:
     - assets/data/
     - assets/fonts/
     - assets/images/
+    - assets/images/default_icon.png
   fonts:
     - family: Distant Galaxy
       fonts:

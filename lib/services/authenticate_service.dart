@@ -20,11 +20,14 @@ class AutheticationAPIService extends BaseAPIService {
 
     print(SignInService().fireUser.email);
     print(SignInService().fireUser.uid);
-    print(SignInService().fireUser.hashCode);
+    //print(SignInService().fireUser.hashCode);
 
     String email = SignInService().fireUser.email;
     String uid = SignInService().fireUser.uid;
-    int hashCode  = SignInService().fireUser.hashCode;
+    //int hashCode  = SignInService().fireUser.hashCode;
+
+
+
 
     print("Entered singleton");
 

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
@@ -225,7 +224,7 @@ class _EventWriteState extends State<EventWrite> {
                         ),
                         onSaved: (input){
                           eventrequest.id = input;
-                        },
+                        },=
                         validator: (value) {
                           if(value.isEmpty) {
                             return "Please enter some text";

@@ -98,6 +98,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     var response = await client1.put('$baseUrl/api/user/adduser',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
+    print(response.body);
+    print(response.statusCode);
+
     if (response.statusCode == 200) {
       //UserRequest respuserrequest = json.decode(response.body);
       //print(respuserrequest);
@@ -118,9 +121,14 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
+
+
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/processuser',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+
+    print(response.statusCode);
+    print(response.body);
 
     if (response.statusCode == 200) {
       print(response.body);
@@ -187,6 +195,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
 
     var response = await client1.put('$baseUrl/api/user/submitupdateuserrequest',
         headers: {"Content-Type": "application/json"}, body: userrequestmap);
+
+    print(response.statusCode);
+    print(response.body);
 
     if (response.statusCode == 200) {
       print(response.body);

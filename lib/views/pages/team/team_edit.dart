@@ -77,11 +77,10 @@ class _EditTeamState extends State<EditTeam> {
                   Navigator.pop(context);
                   print(widget.teamrequest.teamTitle);
                   print(widget.teamrequest.teamDescription);
-                 //teamrequest.updatedTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
                   String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
                   _teamupdatedBy.text=widget.teamrequest.updatedTime=dt;
 
-                  _formKey.currentState.save();
+
                   String teamrequestStr = jsonEncode(widget.teamrequest.toStrJson());
                   teamPageVM.submitUpdateTeamRequest(teamrequestStr);
                   //apiSvc?.submitUpdateTeamRequest(teamrequestStr);
