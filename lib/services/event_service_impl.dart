@@ -133,7 +133,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl//api/eventaddevent',
+    var response = await client1.put('$baseUrl/api/addevent',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {

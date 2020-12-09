@@ -94,7 +94,7 @@ class _SignUpState extends State<SignUp> {
       user.createdBy = _emailcontroller.text;
       user.updatedBy = "";
       user.createdTime = dt;
-      user.updateTime = null;
+      user.updatedTime = null;
 
       Map<String, dynamic> usermap = user.toJson();
       UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap);

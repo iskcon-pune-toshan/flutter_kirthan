@@ -61,6 +61,7 @@ class _UserEditState extends State<UserEdit> {
   String pinCode;
   final TextEditingController _userupdatedBy = new TextEditingController();
   String userupdatedBy ;
+  final TextEditingController _createdTime = new TextEditingController();
 
   @override
   void initState() {
@@ -76,6 +77,8 @@ class _UserEditState extends State<UserEdit> {
     _pincodeController.text = widget.userrequest.pinCode.toString();
     _selectedState = "GUJ";
     _cityController.text = widget.userrequest.city;
+    _createdTime.text = widget.userrequest.createdTime;
+    print(widget.userrequest.createdTime);
     _userupdatedBy.text = getCurrentUser().toString();
     return super.initState();
   }
@@ -102,19 +105,20 @@ class _UserEditState extends State<UserEdit> {
               child: new MaterialButton(
                 color: themeData.primaryColor,
                 textColor: themeData.secondaryHeaderColor,
+                hoverColor: Colors.white,
                 child: new Text('Save'),
                 onPressed: () {
                   // _handleSubmitted();
                   _formKey.currentState.save();
                   Navigator.pop(context);
-                  print(userName);
-                  print(password);
-                  print(firstName);
-                  print(lastName);
-                  print(address);
+                  print(widget.userrequest.userName);
+                  print(widget.userrequest.password);
+                  print(widget.userrequest.firstName);
+                  print(widget.userrequest.lastName);
+
 
                   String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                  _userupdatedBy.text = widget.userrequest.updateTime = dt;
+                  _userupdatedBy.text = widget.userrequest.updatedTime = dt;
                   String userrequestStr =
                       jsonEncode(widget.userrequest.toStrJson());
                   userPageVM.submitUpdateUserRequest(userrequestStr);
@@ -145,7 +149,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _userPasswordController,
                     onSaved: (String value) {
-                      password = value;
+                      widget.userrequest.password = value;
                     },
                   ),
                 ),
@@ -155,7 +159,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _userFirstNameController,
                     onSaved: (String value) {
-                      firstName = value;
+                      widget.userrequest.firstName = value;
                     },
                   ),
                 ),
@@ -165,7 +169,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _userLastNameController,
                     onSaved: (String value) {
-                      lastName = value;
+                      widget.userrequest.lastName = value;
                     },
                   ),
                 ),
@@ -175,7 +179,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _userEmailController,
                     onSaved: (String value) {
-                      email = value;
+                      widget.userrequest.email = value;
                     },
                   ),
                 ),
@@ -186,7 +190,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _userPhoneNumberController,
                     onSaved: (String value) {
-                      phoneNumber = value;
+                      widget.userrequest.phoneNumber = int.parse(value);
                     },
                   ),
                 ),
@@ -196,7 +200,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _userAddressController,
                     onSaved: (String value) {
-                      address = value;
+                      widget.userrequest.addLineTwo = value;
                     },
                   ),
                 ),
@@ -206,7 +210,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _linetwoController,
                     onSaved: (String value) {
-                      lineTwo = value;
+                      widget.userrequest.addLineTwo = value;
                     },
                   ),
                 ),
@@ -216,7 +220,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _linethreeController,
                     onSaved: (String value) {
-                      lineThree = value;
+                      widget.userrequest.addLineThree = value;
                     },
                   ),
                 ),
@@ -226,7 +230,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _pincodeController,
                     onSaved: (String value) {
-                      pinCode = value;
+                      widget.userrequest.pinCode = int.parse(value);
                     },
                   ),
                 ),
@@ -236,7 +240,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _cityController,
                     onSaved: (String value) {
-                      city = value;
+                      widget.userrequest.city = value;
                     },
                   ),
                 ),
@@ -256,9 +260,10 @@ class _UserEditState extends State<UserEdit> {
                     });
                   },
                   onSaved: (input) {
-                    state = input;
+                    widget.userrequest.state = input;
                   },
                 ),
+
               ],
             )));
   }

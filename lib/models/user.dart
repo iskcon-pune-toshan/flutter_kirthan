@@ -1,5 +1,3 @@
-
-
 class UserLogin {
   String username;
   String password;
@@ -27,27 +25,33 @@ class UserLogin {
 
   static List<UserLogin> getUsers() {
     List<UserLogin> users = List<UserLogin>();
-    users.add(
-        UserLogin(username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
-    users.add(
-        UserLogin(username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
-    users.add(
-        UserLogin(username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
-    users
-        .add(UserLogin(username: "writetoanuka@gmail.com", password: "", usertype: "User"));
-    users.add(
-        UserLogin(username: "janicem995@gmail.com", password: "", usertype: "Local Admin"));
-    users.add(
-        UserLogin(username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
-    users.add(
-        UserLogin(username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
-    users.add(
-        UserLogin(username: "parthprandas.rns@gmail.com", password: "", usertype: "User"));
-    users.add(
-        UserLogin(username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
+    users.add(UserLogin(
+        username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
+    users.add(UserLogin(
+        username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
+    users.add(UserLogin(
+        username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
+    users.add(UserLogin(
+        username: "writetoanuka@gmail.com", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "janicem995@gmail.com",
+        password: "",
+        usertype: "Local Admin"));
+    users.add(UserLogin(
+        username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "parthprandas.rns@gmail.com",
+        password: "",
+        usertype: "User"));
+    users.add(UserLogin(
+        username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
 
-    users.add(
-        UserLogin(username: "nisha.khandelwal1225@gmail.com", password: "", usertype: "Admin"));
+    users.add(UserLogin(
+        username: "nisha.khandelwal1225@gmail.com",
+        password: "",
+        usertype: "Admin"));
     return users;
   }
 }
@@ -77,7 +81,7 @@ class UserRequest {
   String createdBy;
   String createdTime;
   String updatedBy;
-  String updateTime;
+  String updatedTime;
   String approvalStatus;
   String approvalComments;
 
@@ -104,8 +108,9 @@ class UserRequest {
       this.govtId,
       this.isProcessed,
       this.createdBy,
+      this.createdTime,
       this.updatedBy,
-      this.updateTime,
+      this.updatedTime,
       this.approvalStatus,
       this.approvalComments});
 //Typically called from the data_source layer after getting data from an external source.
@@ -132,8 +137,9 @@ class UserRequest {
       govtId: data['govtId'],
       isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
+      createdTime: data['createdTime'],
       updatedBy: data['updatedBy'],
-      updateTime: data['updateTime'],
+      updatedTime: data['updatedTime'],
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
     );
@@ -161,8 +167,9 @@ class UserRequest {
       govtId: map['govtId'],
       isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
+      createdTime: map['createdTime'],
       updatedBy: map['updatedBy'],
-      updateTime: map['updateTime'],
+      updatedTime: map['updatedTime'],
       approvalStatus: map['approvalStatus'],
       approvalComments: map['approvalComments'],
     );
@@ -195,7 +202,7 @@ class UserRequest {
     data['createdBy'] = this.createdBy;
     data['createdTime'] = this.createdTime;
     data['updatedBy'] = this.updatedBy;
-    data['updateTime'] = this.updateTime;
+    data['updatedTime'] = this.updatedTime;
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
 
@@ -226,7 +233,7 @@ class UserRequest {
       "isProcessed": this.isProcessed,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
-      "updateTime": this.updateTime,
+      "updatedTime": this.updatedTime,
       "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
       "approvalComments": this.approvalComments

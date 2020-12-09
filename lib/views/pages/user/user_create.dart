@@ -507,7 +507,7 @@ class _UserWriteState extends State<UserWrite> {
                           .format(DateTime.now());
                       userrequest.createdTime = dt;
                       userrequest.updatedBy = "SYSTEM";
-                      userrequest.updateTime = dt;
+                      //userrequest.updateTime = dt;
                       userrequest.approvalStatus = "Approved";
                       userrequest.approvalComments = "AAA";
 

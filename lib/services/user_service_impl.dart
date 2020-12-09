@@ -193,8 +193,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);
 
-    var response = await client1.put('$baseUrl/api/user/submitupdateuserrequest',
-        headers: {"Content-Type": "application/json"}, body: userrequestmap);
+    String token =AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/user/updateuser',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: userrequestmap);
 
     print(response.statusCode);
     print(response.body);
