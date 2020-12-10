@@ -58,53 +58,54 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
         future: teams,
         builder:
             (BuildContext context, AsyncSnapshot<List<TeamRequest>> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.active:
-                case ConnectionState.waiting:
-                  return Center(child: const CircularProgressIndicator());
-                case ConnectionState.done:
-                  if (snapshot.hasData) {
-                    return Container(
-                      //width: 20.0,
-                      //height: 10.0,
-                      child: Center(
-                        child: DropdownButtonFormField<TeamRequest>(
-                          value: _selectedTeam,
-                          icon: const Icon(Icons.supervisor_account),
-                          hint: Text('Select Team'),
-                          items: snapshot.data
-                              .map((team) =>
-                              DropdownMenuItem<TeamRequest>(
-                                value: team,
-                                child: Text(team.teamDescription),
-                              ))
-                              .toList(),
-                          onChanged: (input) {
-                            setState(() {
-                              _selectedTeam = input;
-                            });
-                          },
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      width: 20.0,
-                      height: 10.0,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return Center(child: const CircularProgressIndicator());
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return Container(
+                  //width: 20.0,
+                  //height: 10.0,
+                  child: Center(
+                    child: DropdownButtonFormField<TeamRequest>(
+                      value: _selectedTeam,
+                      icon: const Icon(Icons.supervisor_account),
+                      hint: Text('Select Team'),
+                      items: snapshot.data
+                          .map((team) =>
+                          DropdownMenuItem<TeamRequest>(
+                            value: team,
+                            child: Text(team.teamDescription),
+                          ))
+                          .toList(),
+                      onChanged: (input) {
+                        setState(() {
+                          _selectedTeam = input;
+                        });
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                return Container(
+                  width: 20.0,
+                  height: 10.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               }
-            });
+          }
+        });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     //print(selectedUsers.length);
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -145,6 +146,13 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
                       teamUser.updatedBy = "SYSTEM";
                       teamUser.updatedTime = dt;
                       listofTeamUsers.add(teamUser);
+                      SnackBar mysnackbar = SnackBar (
+                        content: Text("Team-User registered $successful "),
+                        duration: new Duration(seconds: 4),
+                        backgroundColor: Colors.green,
+                      );
+                      // Scaffold.of(context).showSnackBar(mysnackbar);
+                      _scaffoldKey.currentState.showSnackBar(mysnackbar);
                     }
                     //Map<String,dynamic> teamusermap = teamUser.toJson();
                     print(listofTeamUsers);

@@ -190,9 +190,11 @@ class _EventWriteState extends State<EventWrite> {
     );
 
   }
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       body: Builder(builder: (context){
         return SingleChildScrollView(
@@ -860,14 +862,13 @@ class _EventWriteState extends State<EventWrite> {
                             onPressed: () async{
 
                               if (_formKey.currentState.validate()) {
-                                getCurrentUser() async {
-                                  final FirebaseUser user = await auth.currentUser();
-                                  final String email = user.email;
-                                  eventrequest.createdBy=email;
-                                  print("created by " + eventrequest.createdBy);
-                                  print(email);
-                                  return email;
-                                }
+
+                                final FirebaseUser user = await auth.currentUser();
+                                final String email = user.email;
+                                eventrequest.createdBy=email;
+                                print("created by " + eventrequest.createdBy);
+                                print(email);
+
                                 _formKey.currentState.save();
                                 eventrequest.isProcessed = false;
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
@@ -893,7 +894,10 @@ class _EventWriteState extends State<EventWrite> {
                                   duration: new Duration(seconds: 4),
                                   backgroundColor: Colors.green,
                                 );
-                                Scaffold.of(context).showSnackBar(mysnackbar);
+
+                                // Scaffold.of(context).showSnackBar(mysnackbar);
+                                _scaffoldKey.currentState.showSnackBar(mysnackbar);
+                                // Scaffold.of(context).showSnackBar(mysnackbar);
                               }
                               //String s = jsonEncode(userrequest.mapToJson());
                               //service.registerUser(s);

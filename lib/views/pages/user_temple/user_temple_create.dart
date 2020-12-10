@@ -106,11 +106,12 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
           }
         });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     //print(selectedUsers.length);
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -140,16 +141,23 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
                   onPressed: () {
                     List<UserTemple> listofUserTemples = new List<UserTemple>();
                     for (var user in selectedUsers) {
-                      
+
                       UserTemple userTemple = new UserTemple();
                       userTemple.templeId = user.templeId;
                       userTemple.userId = _selectedUser.id;
                       userTemple.roleId = user.roleId;
                       userTemple.userName = _selectedUser.userName;
                       userTemple.templeName = user.templeName;
-                      
-                      
+
+
                       listofUserTemples.add(userTemple);
+                      SnackBar mysnackbar = SnackBar (
+                        content: Text("User-Temple registered $successful "),
+                        duration: new Duration(seconds: 4),
+                        backgroundColor: Colors.green,
+                      );
+                      // Scaffold.of(context).showSnackBar(mysnackbar);
+                      _scaffoldKey.currentState.showSnackBar(mysnackbar);
                     }
                     print(listofUserTemples);
                     userTemplePageVM.submitNewUserTempleMapping(listofUserTemples);

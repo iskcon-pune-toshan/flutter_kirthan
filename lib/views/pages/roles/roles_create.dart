@@ -149,10 +149,12 @@ class _RolesWriteState extends State<RolesWrite> {
         ? stepperType = StepperType.vertical
         : stepperType = StepperType.horizontal);
   }
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(title: const Text('Register Role'), actions: <Widget>[
         new Container(
           padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
@@ -195,8 +197,8 @@ class _RolesWriteState extends State<RolesWrite> {
                         duration: new Duration(seconds: 4),
                         backgroundColor: Colors.green,
                       );
-                      Scaffold.of(context).showSnackBar(mysnackbar);
-
+                      //Scaffold.of(context).showSnackBar(mysnackbar);
+                      _scaffoldKey.currentState.showSnackBar(mysnackbar);
                       //String s = jsonEncode(userrequest.mapToJson());
                       //service.registerUser(s);
                       //print(s);

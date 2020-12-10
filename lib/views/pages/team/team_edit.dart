@@ -68,7 +68,7 @@ class _EditTeamState extends State<EditTeam> {
           new Container(
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
               child: new MaterialButton(
-                color: themeData.primaryColor,
+                color: Colors.blue,
                 textColor: themeData.secondaryHeaderColor,
                 child: new Text('Save'),
                 onPressed: () {
@@ -85,7 +85,7 @@ class _EditTeamState extends State<EditTeam> {
                   teamPageVM.submitUpdateTeamRequest(teamrequestStr);
                   //apiSvc?.submitUpdateTeamRequest(teamrequestStr);
                 },
-              ))
+              )),
         ]),
 
         body: new Form(
@@ -118,6 +118,13 @@ class _EditTeamState extends State<EditTeam> {
                       widget.teamrequest.teamDescription = value;
                     },
                   ),
+                ),
+                MaterialButton(
+                  color: Colors.blueGrey,
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
 
 

@@ -72,9 +72,12 @@ class TeamRequestsListItem extends StatelessWidget {
                         Map<String, dynamic> processrequestmap =
                             new Map<String, dynamic>();
                         processrequestmap["id"] = teamrequest?.id;
-                        processrequestmap["approvalstatus"] = "Approved";
-                        processrequestmap["approvalcomments"] =
-                            "ApprovalComments";
+                        processrequestmap["approvalStatus"] = "Approved";
+                        processrequestmap["approvalComments"] = "ApprovalComments";
+                        processrequestmap["teamTitle"] = teamrequest?.teamTitle;
+                        processrequestmap["isProcessed"] = teamrequest?.isProcessed;
+                        processrequestmap["createdBy"] = teamrequest?.createdBy;
+
 
                         teamPageVM.processTeamRequest(processrequestmap);
                         SnackBar mysnackbar = SnackBar(

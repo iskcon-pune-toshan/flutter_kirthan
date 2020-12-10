@@ -82,9 +82,9 @@ class _EventUserCreateState extends State<EventUserCreate> {
                       hint: Text('Select Team'),
                       items: snapshot.data
                           .map((event) => DropdownMenuItem<EventRequest>(
-                                value: event,
-                                child: Text(event.eventTitle),
-                              ))
+                        value: event,
+                        child: Text(event.eventTitle),
+                      ))
                           .toList(),
                       onChanged: (input) {
                         setState(() {
@@ -107,14 +107,14 @@ class _EventUserCreateState extends State<EventUserCreate> {
           }
         });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   Widget rederDataTable() {
     return DataTable(
       sortAscending: sort,
       sortColumnIndex: 0,
       columns: [
         DataColumn(
-            label: Text("Team Name",overflow: TextOverflow.ellipsis,),
+            label: Text("Event Name",overflow: TextOverflow.ellipsis,),
             //numeric: false,
             onSort: (columnIndex, ascending) {
               setState(() {
@@ -141,25 +141,25 @@ class _EventUserCreateState extends State<EventUserCreate> {
       rows: selectedTeamUsers
           .map(
             (teamuser) => DataRow(
-                selected: selectedTeamUsers.contains(teamuser),
-                onSelectChanged: (b) {
-                  //onSelectedRow(b, teamuser);
+            selected: selectedTeamUsers.contains(teamuser),
+            onSelectChanged: (b) {
+              //onSelectedRow(b, teamuser);
+            },
+            cells: [
+              DataCell(
+                Text(teamuser.teamName.toString(), overflow: TextOverflow.ellipsis,),
+                onTap: () {
+                  print('Selected ${teamuser.teamId.toString()}');
                 },
-                cells: [
-                  DataCell(
-                    Text(teamuser.teamName.toString(), overflow: TextOverflow.ellipsis,),
-                    onTap: () {
-                      print('Selected ${teamuser.teamId.toString()}');
-                    },
-                  ),
-                  DataCell(
-                    Text(teamuser.userName.toString(),overflow: TextOverflow.ellipsis,),
-                  ),
-                  DataCell(
-                    Text(teamuser.id.toString()),
-                  ),
-                ]),
-          )
+              ),
+              DataCell(
+                Text(teamuser.userName.toString(),overflow: TextOverflow.ellipsis,),
+              ),
+              DataCell(
+                Text(teamuser.id.toString()),
+              ),
+            ]),
+      )
           .toList(),
     );
   }
@@ -167,6 +167,7 @@ class _EventUserCreateState extends State<EventUserCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -199,6 +200,13 @@ class _EventUserCreateState extends State<EventUserCreate> {
                         eventUser.updatedBy = "SYSTEM";
                         eventUser.updatedTime = dt;
                         listofEventUsers.add(eventUser);
+                        SnackBar mysnackbar = SnackBar (
+                          content: Text("Event-User registered $successful "),
+                          duration: new Duration(seconds: 4),
+                          backgroundColor: Colors.green,
+                        );
+                        // Scaffold.of(context).showSnackBar(mysnackbar);
+                        _scaffoldKey.currentState.showSnackBar(mysnackbar);
                       }
                       //Map<String,dynamic> teamusermap = teamUser.toJson();
                       print(listofEventUsers);

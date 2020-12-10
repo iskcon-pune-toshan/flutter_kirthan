@@ -96,11 +96,12 @@ class _RoleScreenCreateState extends State<RoleScreenCreate> {
           }
         });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     //print(selectedUsers.length);
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -110,7 +111,7 @@ class _RoleScreenCreateState extends State<RoleScreenCreate> {
         verticalDirection: VerticalDirection.down,
         children: <Widget>[
           getTeamWidget(),
-           ListView.builder(
+          ListView.builder(
               shrinkWrap: true,
               itemCount: selectedScreens == null ? 0 : selectedScreens.length,
 
@@ -147,10 +148,19 @@ class _RoleScreenCreateState extends State<RoleScreenCreate> {
                       roleScreen.roleName = _selectedRole.roleName;
 
                       listofRoleScreen.add(roleScreen);
+                      SnackBar mysnackbar = SnackBar (
+                        content: Text("Role-Screen registered $successful "),
+                        duration: new Duration(seconds: 4),
+                        backgroundColor: Colors.green,
+                      );
+                      // Scaffold.of(context).showSnackBar(mysnackbar);
+                      _scaffoldKey.currentState.showSnackBar(mysnackbar);
                     }
                     //Map<String,dynamic> teamusermap = teamUser.toJson();
                     print(listofRoleScreen);
                     roleScreenPageVM.submitNewRoleScreenMapping(listofRoleScreen);
+
+
                   },
                 ),
               ),

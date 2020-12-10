@@ -144,10 +144,11 @@ class _TempleWriteState extends State<TempleWrite> {
         ? stepperType = StepperType.vertical
         : stepperType = StepperType.horizontal);
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: new AppBar(title: const Text('Register Temple'), actions: <Widget>[
         new Container(
@@ -158,78 +159,79 @@ class _TempleWriteState extends State<TempleWrite> {
         children: <Widget>[
           complete
               ? Expanded(
-            child: Center(
-              child: AlertDialog(
-                title: new Text("Details Filled !"),
-                content: new Text(
-                  "Click Submit on top right corner of the screen.",
-                ),
-                actions: <Widget>[
-                  new FlatButton(
-                    child: new Text("Submit"),
-                    onPressed: () async {
+              child: Center(
+                child: AlertDialog(
+                    title: new Text("Details Filled !"),
+                    content: new Text(
+                      "Click Submit on top right corner of the screen.",
+                    ),
+                    actions: <Widget>[
+                      new FlatButton(
+                        child: new Text("Submit"),
+                        onPressed: () async {
 
-                      Map<String, dynamic> usermap = templerequest.toJson();
-                      print(usermap);
-                      Temple newtemplerequest =
-                      await templePageVM.submitNewTemple(usermap);
-                      print(newtemplerequest.id);
-                      String uid = newtemplerequest.id.toString();
-                      SnackBar mysnackbar = SnackBar(
-                        content: Text(
-                            "Temple registered $successful with id : $uid "),
-                        duration: new Duration(seconds: 4),
-                        backgroundColor: Colors.green,
-                      );
-                      Scaffold.of(context).showSnackBar(mysnackbar);
+                          Map<String, dynamic> usermap = templerequest.toJson();
+                          print(usermap);
+                          Temple newtemplerequest =
+                          await templePageVM.submitNewTemple(usermap);
+                          print(newtemplerequest.id);
+                          String uid = newtemplerequest.id.toString();
+                          SnackBar mysnackbar = SnackBar(
+                            content: Text(
+                                "Temple registered $successful with id : $uid "),
+                            duration: new Duration(seconds: 4),
+                            backgroundColor: Colors.green,
+                          );
 
-                      //String s = jsonEncode(userrequest.mapToJson());
-                      //service.registerUser(s);
-                      //print(s);
-                    },
-                  ),
-                  new FlatButton(
-                    child: new Text("Close"),
-                    onPressed: () {
-                      setState(() => complete = false);
-                    },
-                  ),
-            Card(
-              child: Column(
-                children: <Widget>[
+                          _scaffoldKey.currentState.showSnackBar(mysnackbar);
+
+                          //String s = jsonEncode(userrequest.mapToJson());
+                          //service.registerUser(s);
+                          //print(s);
+                        },
+                      ),
+                      new FlatButton(
+                        child: new Text("Close"),
+                        onPressed: () {
+                          setState(() => complete = false);
+                        },
+                      ),
+                      Card(
+                        child: Column(
+                          children: <Widget>[
 
 
 
 
-                  RaisedButton.icon(
-                    onPressed: () {
-                      Navigator.push( context,MaterialPageRoute(
-                        builder: (context) =>
-                            BlocProvider(
-                              create: (BuildContext context) => MapsBloc(),
-                              child:
-                              AddLocation(),
+                            RaisedButton.icon(
+                              onPressed: () {
+                                Navigator.push( context,MaterialPageRoute(
+                                  builder: (context) =>
+                                      BlocProvider(
+                                        create: (BuildContext context) => MapsBloc(),
+                                        child:
+                                        AddLocation(),
+                                      ),
+                                ),);
+
+
+                              },
+
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                              label: Text('Add Location',
+                                style: TextStyle(color: Colors.black),),
+                              icon: Icon(Icons.location_on,
+                                color:Colors.black,),
+                              textColor: Colors.black,
+                              splashColor: Colors.red,
+                              color: Colors.white,
+
                             ),
-                      ),);
-
-
-                    },
-
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    label: Text('Add Location',
-                      style: TextStyle(color: Colors.black),),
-                    icon: Icon(Icons.location_on,
-                      color:Colors.black,),
-                    textColor: Colors.black,
-                    splashColor: Colors.red,
-                    color: Colors.white,
-
-    ),
-                ],
-              ),
-            ),
-          ]),
+                          ],
+                        ),
+                      ),
+                    ]),
               )
           )
               : Expanded(

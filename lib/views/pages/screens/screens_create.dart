@@ -149,10 +149,11 @@ class _ScreensWriteState extends State<ScreensWrite> {
         ? stepperType = StepperType.vertical
         : stepperType = StepperType.horizontal);
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(title: const Text('Register Screen'), actions: <Widget>[
         new Container(
           padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
@@ -178,8 +179,8 @@ class _ScreensWriteState extends State<ScreensWrite> {
                             _formKey3.currentState.save();
                             */
                       //userrequest.userId = userrequest.firstName +
-                        //  '_' +
-                          //userrequest.lastName;
+                      //  '_' +
+                      //userrequest.lastName;
 
 
 
@@ -195,7 +196,7 @@ class _ScreensWriteState extends State<ScreensWrite> {
                         duration: new Duration(seconds: 4),
                         backgroundColor: Colors.green,
                       );
-                      Scaffold.of(context).showSnackBar(mysnackbar);
+                      _scaffoldKey.currentState.showSnackBar(mysnackbar);
 
                       //String s = jsonEncode(userrequest.mapToJson());
                       //service.registerUser(s);

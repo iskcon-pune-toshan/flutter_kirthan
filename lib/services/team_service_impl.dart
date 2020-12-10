@@ -131,9 +131,13 @@ class TeamAPIService extends BaseAPIService  implements ITeamRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
+
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/tea/processteam',
+    var response = await client1.put('$baseUrl/api/team/processteam',
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+
+    print(response.statusCode);
+    print(response.body);
 
     if (response.statusCode == 200) {
       print(response.body);

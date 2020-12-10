@@ -29,6 +29,10 @@ class _TeamWriteState extends State<TeamWrite> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
+        title: Text('Add Team'),
+
+      ),
       body: Builder(builder: (context) {
         return SingleChildScrollView(
           child: Container(
@@ -133,6 +137,8 @@ class _TeamWriteState extends State<TeamWrite> {
                                   backgroundColor: Colors.green,
                                 );
                                 Scaffold.of(context).showSnackBar(mysnackbar);
+
+
                               }
                               //String s = jsonEncode(userrequest.mapToJson());
                               //service.registerUser(s);
@@ -145,6 +151,13 @@ class _TeamWriteState extends State<TeamWrite> {
                           _fbKey.currentState.reset();
                         },
                       ),*/
+                        MaterialButton(
+                          color: Colors.indigo,
+                          child: Text("Cancel"),
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                        ),
                       ],
                     )
                   ],

@@ -77,9 +77,29 @@ class UserRequestsListItem extends StatelessWidget {
                 Map<String, dynamic> processrequestmap =
                     new Map<String, dynamic>();
                 processrequestmap["id"] = userrequest?.id;
-                processrequestmap["approvalstatus"] = "Approved";
-                processrequestmap["approvalcomments"] = "ApprovalComments";
-                processrequestmap["usertype"] = userrequest?.roleId;
+                processrequestmap["approvalStatus"] = "Approved";
+                processrequestmap["approvalComments"] = "ApprovalComments";
+                processrequestmap["roleId"] = userrequest?.roleId;
+                processrequestmap["firstName"] = userrequest?.firstName;
+                processrequestmap["lastName"] = userrequest?.lastName;
+                processrequestmap["email"] = userrequest?.email;
+                processrequestmap["userName"] = userrequest?.userName;
+                processrequestmap["password"] = userrequest?.password;
+                processrequestmap["phoneNumber"] = userrequest?.phoneNumber;
+                processrequestmap["addLineOne"] = userrequest?.addLineOne;
+                processrequestmap["locality"] = userrequest?.locality;
+                processrequestmap["city"] = userrequest?.city;
+                processrequestmap["pinCode"] = userrequest?.pinCode;
+                processrequestmap["state"] = userrequest?.state;
+                processrequestmap["country"] = userrequest?.country;
+                processrequestmap["govtIdType"] = userrequest?.govtIdType;
+                processrequestmap["govtId"] = userrequest?.govtId;
+                processrequestmap["isProcessed"] = userrequest?.isProcessed;
+                processrequestmap["createdBy"] = userrequest?.createdBy;
+                processrequestmap["createdTime"] = userrequest?.createdTime;
+
+
+
                 userPageVM.processUserRequest(processrequestmap);
                 SnackBar mysnackbar = SnackBar(
                   content: Text("User $process $successful "),
