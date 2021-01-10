@@ -9,7 +9,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 
 class TeamWrite extends StatefulWidget {
   TeamWrite({Key key}) : super(key: key);
@@ -99,6 +99,13 @@ class _TeamWriteState extends State<TeamWrite> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         MaterialButton(
+                          color: Colors.indigo,
+                          child: Text("Cancel"),
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                        ),
+                        MaterialButton(
                             child: Text(
                               "Submit",
                               style: TextStyle(color: Colors.white),
@@ -110,7 +117,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                 final FirebaseUser user = await auth.currentUser();
                                 final String email = user.email;
                                 String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                                _formKey.currentState.save();
+                                    _formKey.currentState.save();
 
                                 final String teamTitle = teamrequest.teamTitle;
                                 teamrequest.isProcessed = false;
@@ -120,12 +127,13 @@ class _TeamWriteState extends State<TeamWrite> {
                                 teamrequest.updatedBy = null;
                                 teamrequest.updatedTime = null;
                                 teamrequest.approvalStatus = null;
-                                teamrequest.approvalComments = "Approved $teamTitle";
+                                teamrequest.approvalComments = "Approved$teamTitle";
                                 Map<String, dynamic> teammap =
-                                    teamrequest.toJson();
+                                teamrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
-                                TeamRequest newteamrequest = await teamPageVM
+                                TeamRequest newteamrequest = await
+                                teamPageVM
                                     .submitNewTeamRequest(teammap);
 
                                 print(newteamrequest.id);
@@ -145,19 +153,14 @@ class _TeamWriteState extends State<TeamWrite> {
                               //print(s);
                             }),
                         /*MaterialButton(
-                        child: Text("Reset",style: TextStyle(color: Colors.white),),
+                        child: Text("Reset",style: TextStyle(color:
+Colors.white),),
                         color: Colors.pink,
                         onPressed: () {
                           _fbKey.currentState.reset();
                         },
                       ),*/
-                        MaterialButton(
-                          color: Colors.indigo,
-                          child: Text("Cancel"),
-                          onPressed: (){
-                            Navigator.pop(context);
-                          },
-                        ),
+
                       ],
                     )
                   ],
@@ -170,3 +173,4 @@ class _TeamWriteState extends State<TeamWrite> {
     );
   }
 }
+
