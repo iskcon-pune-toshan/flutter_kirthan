@@ -10,10 +10,10 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class EditTeam extends StatefulWidget {
-  TeamRequest teamrequest ;
+  TeamRequest teamrequest;
   final String screenName = SCR_TEAM;
 
   EditTeam({Key key, @required this.teamrequest}) : super(key: key);
@@ -24,19 +24,17 @@ class EditTeam extends StatefulWidget {
 
 class _EditTeamState extends State<EditTeam> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  TeamRequest teamrequest= new TeamRequest();
+  TeamRequest teamrequest = new TeamRequest();
   //final IKirthanRestApi apiSvc = new RestAPIServices();
 
-
-
-  final TextEditingController _teamTitleController = new TextEditingController();
-  String teamTitle ;
-  final TextEditingController _teamDescriptionController = new TextEditingController();
-  String teamDescription ;
+  final TextEditingController _teamTitleController =
+      new TextEditingController();
+  String teamTitle;
+  final TextEditingController _teamDescriptionController =
+      new TextEditingController();
+  String teamDescription;
   final TextEditingController _teamupdatedBy = new TextEditingController();
-  String teamupdatedBy ;
-
-
+  String teamupdatedBy;
 
   @override
   void initState() {
@@ -51,12 +49,10 @@ class _EditTeamState extends State<EditTeam> {
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
-    widget.teamrequest.updatedBy=email;
+    widget.teamrequest.updatedBy = email;
     print(email);
     return email;
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,29 +61,7 @@ class _EditTeamState extends State<EditTeam> {
 
     return new Scaffold(
         appBar: new AppBar(title: const Text('Edit Profile'), actions: <Widget>[
-          new Container(
-              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
-              child: new MaterialButton(
-                color: Colors.blue,
-                textColor: themeData.secondaryHeaderColor,
-                child: new Text('Save'),
-                onPressed: () {
-                  // _handleSubmitted();
-                  _formKey.currentState.save();
-                  Navigator.pop(context);
-                  print(widget.teamrequest.teamTitle);
-                  print(widget.teamrequest.teamDescription);
-                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                  _teamupdatedBy.text=widget.teamrequest.updatedTime=dt;
-
-
-                  String teamrequestStr = jsonEncode(widget.teamrequest.toStrJson());
-                  teamPageVM.submitUpdateTeamRequest(teamrequestStr);
-                  //apiSvc?.submitUpdateTeamRequest(teamrequestStr);
-                },
-              )),
         ]),
-
         body: new Form(
             key: _formKey,
             autovalidate: true,
@@ -95,11 +69,11 @@ class _EditTeamState extends State<EditTeam> {
             child: new ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               children: <Widget>[
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Team Title", hintText: "What do people call this event?"),
+                    decoration: const InputDecoration(
+                        labelText: "TeamTitle",
+                        hintText: "What do people call this event?"),
                     autocorrect: false,
                     controller: _teamTitleController,
                     onSaved: (String value) {
@@ -107,8 +81,6 @@ class _EditTeamState extends State<EditTeam> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(labelText: "Description"),
@@ -119,15 +91,44 @@ class _EditTeamState extends State<EditTeam> {
                     },
                   ),
                 ),
-                MaterialButton(
-                  color: Colors.blueGrey,
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MaterialButton(
+                      color: Colors.blueGrey,
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Container(
+                        padding:
+                            const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
+                        child: new MaterialButton(
+                          color: Colors.blue,
+                          textColor: themeData.secondaryHeaderColor,
+                          child: new Text('Save'),
+                          onPressed: () {
+                            // _handleSubmitted();
+                            _formKey.currentState.save();
+                            Navigator.pop(context);
+                            print(widget.teamrequest.teamTitle);
+                            print(widget.teamrequest.teamDescription);
+                            String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                .format(DateTime.now());
+
+                            _teamupdatedBy.text =
+                                widget.teamrequest.updatedTime = dt;
+
+                            String teamrequestStr =
+                                jsonEncode(widget.teamrequest.toStrJson());
+                            teamPageVM.submitUpdateTeamRequest(teamrequestStr);
+                            //apiSvc?.submitUpdateTeamRequest
+                            (teamrequestStr);
+                          },
+                        )),
+                  ],
                 ),
-
-
               ],
             )));
   }

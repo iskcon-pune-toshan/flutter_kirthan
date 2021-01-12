@@ -8,6 +8,7 @@ import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
@@ -245,8 +246,8 @@ class _EventViewState extends State<EventView>
                         },
                       );
                     });
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => RateUsApp()));
+               /* Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RateUsApp()));*/
               },
             ),
           ),
@@ -293,10 +294,17 @@ class _EventViewState extends State<EventView>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  TextField(
+                                  /*TextField(
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'Do you want to Logout?'),
+                                  ),*/
+                                  Center(
+                                    child: Text('Do you want to Logout?',style: TextStyle(
+                                      fontSize: MyPrefSettingsApp.custFontSize,
+                                      fontWeight: FontWeight.bold,
+
+                                    ),),
                                   ),
                                   SizedBox(
                                     width: 320.0,

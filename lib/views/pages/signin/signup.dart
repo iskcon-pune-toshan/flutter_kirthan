@@ -105,7 +105,13 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Sign-Up Page",
+      debugShowCheckedModeBanner: false,
+
       home: Scaffold(
+        appBar: AppBar(
+          title: Text("Sign-Up"),
+          backgroundColor: Colors.indigo,
+        ),
         body: Center(
           child: Container(
             alignment: Alignment.center,
@@ -121,161 +127,140 @@ class _SignUpState extends State<SignUp> {
                   //mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50.0,
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: "Please enter your Name",
-                              labelText: "Display Name:*",
-                            ),
-                            controller: _displaynamecontroller,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                // ignore: missing_return
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                            //onSaved: (input) => displayName = input,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50.0,
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: "Please enter your Email",
-                              labelText: "Email:*",
-                            ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom:15),
+                      child: TextFormField(
+                        decoration: buildInputDecoration(Icons.person,"Full Name","Full Name"),
 
-                            controller: _emailcontroller,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                            //onSaved: (input) => email = input,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50.0,
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: "Please enter Password",
-                              labelText: "Password:*",
-                            ),
-                            controller: _passwordcontroller,
-                            validator: (input) => input.contains(
-                                    "*") // need to hold a help icon if the password rule becomes too complicated
-                                ? "Not a Valid Password"
-                                : null,
-                            //onSaved: (input) => password = input,
-                            obscureText: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50.0,
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: "Please re-enter Password",
-                              labelText: "Re-enter Password:*",
-                            ),
-                            controller: _confirmpassword,
-                            validator: (val) {
-                              if (val.isEmpty) return 'Empty';
-                              if (val != _passwordcontroller.text)
-                                return "Not Match";
-                              return null;
-                            },
-                            onSaved: (input) => password = input,
-                            obscureText: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    RaisedButton(
-                      child: Text('Submit'),
-                      onPressed: () async {
 
-                        signIn
-                            .signUpWithEmail(
-                                _emailcontroller.text, _passwordcontroller.text)
-                            .then((FirebaseUser user) => populateData())
-                            .catchError((e) => print(e))
-                            .whenComplete(() => addUser())
-                            .whenComplete(() => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginApp())));
-                      },
-                      color: Colors.blue,
+                        controller: _displaynamecontroller,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            // ignore: missing_return
+                            return "Please enter some text";
+                          }
+                          return null;
+                        },
+                        //onSaved: (input) => displayName = input,
+                      ),
                     ),
-                  ],
+
+                    Padding(
+                      padding: const EdgeInsets.only(bottom:15),
+                      child: TextFormField(
+                        decoration:buildInputDecoration(Icons.email,"Email","Email"),
+
+                        controller: _emailcontroller,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter some text";
+                          }
+                          return null;
+                        },
+                        //onSaved: (input) => email = input,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom:15),
+                      child: TextFormField(
+                        decoration:buildInputDecoration(Icons.lock,"Must contain 8-30 characters","Password"),
+                        controller: _passwordcontroller,
+                        validator: (value) {
+                          // ignore: missing_return
+                          if(value.isEmpty)
+                            return 'Please enter a value';
+
+                          if(value.length < 8)
+                            return 'Must contain 8-30 characters';
+                          return null;
+
+                        },
+                        obscureText: true,
+                      )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom:15),
+                      child: TextFormField(
+
+                        decoration:buildInputDecoration(Icons.lock,"Confirm Password","Confirm Password"),
+                        controller: _confirmpassword,
+                        validator: (val) {
+                          if (val.isEmpty) return 'Empty';
+                          if (val != _passwordcontroller.text)
+                            return "Not Match";
+                          return null;
+                        },
+                        onSaved: (input) => password = input,
+                        obscureText: true,
+                      ),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Divider(
+                          thickness: 100.0,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 200,
+                      height: 50,
+                      child: RaisedButton(
+                        color: Colors.lightGreen,
+                        child: Text('Submit'),
+                        onPressed: () async {
+
+                          signIn
+                              .signUpWithEmail(
+                                  _emailcontroller.text, _passwordcontroller.text)
+                              .then((FirebaseUser user) => populateData())
+                              .catchError((e) => print(e))
+                              .whenComplete(() => addUser())
+                              .whenComplete(() => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginApp())));
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0),
+                            side: BorderSide(color: Colors.blue,width: 2)
+
+                      ),
+                    ),
+                    )],
                 ),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  InputDecoration buildInputDecoration(IconData icons,String hinttext,String labeltext) {
+    return InputDecoration(
+      labelText: labeltext,
+      hintText: hinttext,
+      
+      prefixIcon: Icon(icons),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(25.0),
+        borderSide: BorderSide(
+            color: Colors.green,
+            width: 1.5
+        ),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(25.0),
+        borderSide: BorderSide(
+          color: Colors.blue,
+          width: 1.5,
+        ),
+      ),
+      enabledBorder:OutlineInputBorder(
+        borderRadius: BorderRadius.circular(25.0),
+        borderSide: BorderSide(
+          color: Colors.blue,
+          width: 1.5,
         ),
       ),
     );
