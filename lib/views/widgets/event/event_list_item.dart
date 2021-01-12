@@ -33,17 +33,150 @@ class EventRequestsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = Text(
-      eventrequest?.eventTitle,
-      style: TextStyle(
-        color: KirthanStyles.titleColor,
-        fontWeight: FontWeight.bold,
-        fontSize: MyPrefSettingsApp.custFontSize,
-      ),
-    );
+    var title = Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children:<Widget>[Text(
+          eventrequest?.eventTitle,
+          style: TextStyle(
+            color: KirthanStyles.titleColor,
+            fontWeight: FontWeight.bold,
+            fontSize: MyPrefSettingsApp.custFontSize,
+          ),
+        ),
+          Container(
+            child:Align(
+              alignment:Alignment.bottomCenter,
+    //alignment: Alignment.topRight,
+           child: PopupMenuButton<Choice>(
+              tooltip: null,
+              itemBuilder: (BuildContext context) {
+                return popupList.map((f) {
+                  return PopupMenuItem<Choice>(
+                    child: Text(f.description),
+                    value: f,
+                  );
+                }).toList();
+              },
+              onSelected: (choice) {
+                if (choice.id == 2) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            EditEvent(eventrequest: eventrequest)),
+                  );
+                } else if (choice.id == 1) {
+                  Map<String, dynamic> processrequestmap =
+                  new Map<String, dynamic>();
+                  processrequestmap["id"] = eventrequest?.id;
+                  processrequestmap["approvalStatus"] = "Approved";
+                  processrequestmap["approvalComments"] = "ApprovalComments";
+                  processrequestmap["eventType"] = eventrequest?.eventType;
+                  processrequestmap["addLineOne"] = eventrequest?.addLineOne;
+                  processrequestmap["city"] = eventrequest?.city;
+                  processrequestmap["country"] = eventrequest?.country;
+                  processrequestmap["phoneNumber"] = eventrequest?.phoneNumber;
+                  processrequestmap["pincode"] = eventrequest?.pincode;
+                  processrequestmap["eventTitle"] = eventrequest?.eventTitle;
+                  processrequestmap["eventDescription"] =
+                      eventrequest?.eventDescription;
+                  processrequestmap["eventDate"] = eventrequest?.eventDate;
+                  processrequestmap["eventDuration"] =
+                      eventrequest?.eventDuration;
+                  processrequestmap["eventLocation"] =
+                      eventrequest?.eventLocation;
+                  processrequestmap["locality"] = eventrequest?.locality;
+                  processrequestmap["state"] = eventrequest?.state;
+                  processrequestmap["isProcessed"] = eventrequest?.isProcessed;
+                  processrequestmap["createdBy"] = eventrequest?.createdBy;
+                  processrequestmap["createdTime"] = eventrequest?.createdTime;
+
+                  eventPageVM.processEventRequest(processrequestmap);
+                  SnackBar mysnackbar = SnackBar(
+                    content: Text("Event $process $successful "),
+                    duration: new Duration(seconds: 4),
+                    backgroundColor: Colors.green,
+                  );
+                  Scaffold.of(context).showSnackBar(mysnackbar);
+                } else if (choice.id == 3) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.circular(20.0)), //this right here
+                          child: Container(
+                            height: 200,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextField(
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Do you want to delete?'),
+                                  ),
+                                  SizedBox(
+                                    width: 320.0,
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        Map<String, dynamic> processrequestmap =
+                                        new Map<String, dynamic>();
+                                        processrequestmap["id"] =
+                                            eventrequest?.id;
+                                        eventPageVM.deleteEventRequest(
+                                            processrequestmap);
+                                        SnackBar mysnackbar = SnackBar(
+                                          content: Text("Event $delete "),
+                                          duration: new Duration(seconds: 4),
+                                          backgroundColor: Colors.red,
+                                        );
+                                        Scaffold.of(context)
+                                            .showSnackBar(mysnackbar);
+                                      },
+                                      child: Text(
+                                        "yes",
+                                        style: TextStyle(
+                                            fontSize:
+                                            MyPrefSettingsApp.custFontSize,
+                                            color: Colors.white),
+                                      ),
+                                      color: const Color(0xFF1BC0C5),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 320.0,
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        "No",
+                                        style: TextStyle(
+                                            fontSize:
+                                            MyPrefSettingsApp.custFontSize,
+                                            color: Colors.white),
+                                      ),
+                                      color: const Color(0xFF1BC0C5),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                }
+              },
+            ),
+            ),
+          ),]);
 
     var subTitle = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         /*Icon(
           Icons.movie,
@@ -52,7 +185,7 @@ class EventRequestsListItem extends StatelessWidget {
         ),
         */
         Container(
-          margin: const EdgeInsets.only(left: 4.0),
+          //margin: const EdgeInsets.only(left: 4.0),
           child: Text(
             eventrequest?.eventDescription,
             style: TextStyle(
@@ -61,8 +194,9 @@ class EventRequestsListItem extends StatelessWidget {
             ),
           ),
         ),
-        Container(
+/*        Container(
           child: PopupMenuButton<Choice>(
+            tooltip: null,
             itemBuilder: (BuildContext context) {
               return popupList.map((f) {
                 return PopupMenuItem<Choice>(
@@ -81,29 +215,29 @@ class EventRequestsListItem extends StatelessWidget {
                 );
               } else if (choice.id == 1) {
                 Map<String, dynamic> processrequestmap =
-                new Map<String, dynamic>();
+                    new Map<String, dynamic>();
                 processrequestmap["id"] = eventrequest?.id;
                 processrequestmap["approvalStatus"] = "Approved";
                 processrequestmap["approvalComments"] = "ApprovalComments";
                 processrequestmap["eventType"] = eventrequest?.eventType;
-                processrequestmap["addLineOne"]  = eventrequest?.addLineOne;
+                processrequestmap["addLineOne"] = eventrequest?.addLineOne;
                 processrequestmap["city"] = eventrequest?.city;
-                processrequestmap["country"]  = eventrequest?.country;
+                processrequestmap["country"] = eventrequest?.country;
                 processrequestmap["phoneNumber"] = eventrequest?.phoneNumber;
                 processrequestmap["pincode"] = eventrequest?.pincode;
                 processrequestmap["eventTitle"] = eventrequest?.eventTitle;
-                processrequestmap["eventDescription"] = eventrequest?.eventDescription;
+                processrequestmap["eventDescription"] =
+                    eventrequest?.eventDescription;
                 processrequestmap["eventDate"] = eventrequest?.eventDate;
-                processrequestmap["eventDuration"] = eventrequest?.eventDuration;
-                processrequestmap["eventLocation"] = eventrequest?.eventLocation;
+                processrequestmap["eventDuration"] =
+                    eventrequest?.eventDuration;
+                processrequestmap["eventLocation"] =
+                    eventrequest?.eventLocation;
                 processrequestmap["locality"] = eventrequest?.locality;
                 processrequestmap["state"] = eventrequest?.state;
                 processrequestmap["isProcessed"] = eventrequest?.isProcessed;
                 processrequestmap["createdBy"] = eventrequest?.createdBy;
                 processrequestmap["createdTime"] = eventrequest?.createdTime;
-
-
-
 
                 eventPageVM.processEventRequest(processrequestmap);
                 SnackBar mysnackbar = SnackBar(
@@ -112,16 +246,14 @@ class EventRequestsListItem extends StatelessWidget {
                   backgroundColor: Colors.green,
                 );
                 Scaffold.of(context).showSnackBar(mysnackbar);
-              }
-
-              else if (choice.id == 3) {
+              } else if (choice.id == 3) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.circular(20.0)), //this right here
+                                BorderRadius.circular(20.0)), //this right here
                         child: Container(
                           height: 200,
                           child: Padding(
@@ -140,7 +272,7 @@ class EventRequestsListItem extends StatelessWidget {
                                   child: RaisedButton(
                                     onPressed: () {
                                       Map<String, dynamic> processrequestmap =
-                                      new Map<String, dynamic>();
+                                          new Map<String, dynamic>();
                                       processrequestmap["id"] =
                                           eventrequest?.id;
                                       eventPageVM.deleteEventRequest(
@@ -157,7 +289,7 @@ class EventRequestsListItem extends StatelessWidget {
                                       "yes",
                                       style: TextStyle(
                                           fontSize:
-                                          MyPrefSettingsApp.custFontSize,
+                                              MyPrefSettingsApp.custFontSize,
                                           color: Colors.white),
                                     ),
                                     color: const Color(0xFF1BC0C5),
@@ -173,7 +305,7 @@ class EventRequestsListItem extends StatelessWidget {
                                       "No",
                                       style: TextStyle(
                                           fontSize:
-                                          MyPrefSettingsApp.custFontSize,
+                                              MyPrefSettingsApp.custFontSize,
                                           color: Colors.white),
                                     ),
                                     color: const Color(0xFF1BC0C5),
@@ -188,11 +320,11 @@ class EventRequestsListItem extends StatelessWidget {
               }
             },
           ),
-        ),
+        ),*/
       ],
     );
 
-    return Card(
+    /*return Card(
       elevation: 10,
       child: Container(
         decoration: new BoxDecoration(
@@ -241,7 +373,10 @@ class EventRequestsListItem extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
-                    eventrequest?.eventDate.substring(0,16),
+                    eventrequest?.eventDate.substring(0,10),
+                    //0,10 date
+                    //11,16 time
+
                     style: TextStyle(
                       fontSize: MyPrefSettingsApp.custFontSize,
                       //    color: KirthanStyles.subTitleColor,
@@ -283,7 +418,166 @@ class EventRequestsListItem extends StatelessWidget {
           ],
         ),
       ),
-    );
+    );*/
+    return Card(
+        elevation: 10,
+        child: Container(
+          decoration: new BoxDecoration(
+              borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+              gradient: new LinearGradient(
+                  colors: [Colors.blue[100], Colors.blue],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  tileMode: TileMode.clamp)),
+          child: new Column(children: <Widget>[
+            new ListTile(
+             // contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+              //leading: Icon(Icons.event),
+              title: title,
+              subtitle: subTitle,
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text("Date:",
+                      style: GoogleFonts.openSans(
+                        color: KirthanStyles.titleColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: MyPrefSettingsApp.custFontSize,
+                      )),
+                  Text("Time:",
+                      style: GoogleFonts.openSans(
+                        color: KirthanStyles.titleColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: MyPrefSettingsApp.custFontSize,
+                      )),
+                  Text("Duration: ",
+                      style: GoogleFonts.openSans(
+                        color: KirthanStyles.titleColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: MyPrefSettingsApp.custFontSize,
+                      )),
+                ] ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                //Text("Date:"),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    eventrequest?.eventDate.substring(0,10),
+                    //0,10 date
+                    //11,16 time
+
+                    style: TextStyle(
+                      fontSize: MyPrefSettingsApp.custFontSize,
+
+                      //    color: KirthanStyles.subTitleColor,
+                    ),
+                  ),
+                ),
+                //Text("Duration:"),
+
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    eventrequest?.eventDate.substring(11,16),
+                    style: TextStyle(
+                      fontSize: MyPrefSettingsApp.custFontSize,
+                      //    color: KirthanStyles.subTitleColor,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    eventrequest?.eventDuration+"Hrs",
+                    style: TextStyle(
+                      fontSize: MyPrefSettingsApp.custFontSize,
+                      //    color: KirthanStyles.subTitleColor,
+                    ),
+                  ),
+                ),
+                /* Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+
+                      child: IconButton(icon: Icon(Icons.location_on),
+                        onPressed:  () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    Location (eventrequest: eventrequest)),
+                            //MapView(eventrequest: eventrequest)),
+
+                            //do something
+                          )
+                        },),
+                    ),*/
+
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+
+              children: <Widget>[
+                //Text("Date:"),
+               /* Text("Location:",
+                    style: GoogleFonts.openSans(
+                      color: KirthanStyles.titleColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: MyPrefSettingsApp.custFontSize,
+                    )),*/
+
+            FlatButton(
+
+            child: Text("Location",
+            style: TextStyle(color: KirthanStyles.subTitleColor),),
+          //color: KirthanStyles.subTitleColor,
+
+          onPressed: () {
+              Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Location (eventrequest: eventrequest)),
+            //MapView(eventrequest: eventrequest)),
+
+            //do something
+          );
+          },splashColor: Colors.red,
+                //shape: Border.all(width: 2.0, color: Colors.black)
+        ),
+
+
+
+
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+
+                  child:Icon(
+                    Icons.location_on,
+                    color: KirthanStyles.subTitleColor,
+
+
+                  ), /*Icon(icon: Icon(Icons.location_on),
+
+                   *//* onPressed:  () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Location (eventrequest: eventrequest)),
+                        //MapView(eventrequest: eventrequest)),
+
+                        //do something
+                      )
+                    },*//*),*/
+                ),
+
+              ],
+            ),
+          ]),
+        ));
   }
 }
-

@@ -84,7 +84,7 @@ class EventsPanel extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           Container(
-                            height: 65,
+                            height: 110,
                             decoration: new BoxDecoration(
                               image: new DecorationImage(
                                 image: new AssetImage('assets/images/map.jpg'),
@@ -95,12 +95,12 @@ class EventsPanel extends StatelessWidget {
                               //child: const Text("This Week"),
                               child: Center(
                                   child: Text(
-                                'Map',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: MyPrefSettingsApp.custFontSize),
-                              )),
+                                    'Map',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: MyPrefSettingsApp.custFontSize),
+                                  )),
 
                               // child: const Text("Map"),
                               onPressed: () {

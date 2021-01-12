@@ -6,6 +6,7 @@ import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
+import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
@@ -49,7 +50,7 @@ class _LoginAppState extends State<LoginApp> {
 
 
 
-   getCurrentUID() async{
+  getCurrentUID() async{
     final FirebaseUser user = await auth.currentUser();
     final String uid = user.uid;
     print(uid);
@@ -57,10 +58,10 @@ class _LoginAppState extends State<LoginApp> {
   }
 
   getCurrentUser() async {
-     final FirebaseUser user = await auth.currentUser();
-     final String email = user.email;
-     print(email);
-     return email;
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    print(email);
+    return email;
 
   }
 
@@ -157,9 +158,9 @@ class _LoginAppState extends State<LoginApp> {
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           Container(
-                              width: 300,
-                              height: 50.0,
-                              child: /*DropdownButtonFormField<UserLogin>(
+                            width: 300,
+                            height: 50.0,
+                            child: /*DropdownButtonFormField<UserLogin>(
                                 // Shouldnt this be a text field? Or are we planning on storing all
                                 // the logged in users email at all times?
                                 itemHeight: 50.0,
@@ -175,17 +176,17 @@ class _LoginAppState extends State<LoginApp> {
                                   });
                                 },
                               )*/
-                              TextFormField(
+                            TextFormField(
                               decoration: const InputDecoration(
                                 hintText: "Please enter your Username",
                                 labelText: "User Name*",
                               ),
                               controller: username,
                               validator: (input) =>
-                                  input.contains("*") ? "Not a Valid User" : null,
+                              input.contains("*") ? "Not a Valid User" : null,
                               //onSaved: (input) => _uname = input,
                             ),
-                              ),
+                          ),
                         ],
                       ),
                       Row(
@@ -209,7 +210,7 @@ class _LoginAppState extends State<LoginApp> {
                               ),
                               controller: _passwordcontroller,
                               validator: (input) => input.contains(
-                                      "*") // need to hold a help icon if the password rule becomes too complicated
+                                  "*") // need to hold a help icon if the password rule becomes too complicated
                                   ? "Not a Valid Password"
                                   : null,
                               onSaved: (input) => _password = input,
@@ -233,9 +234,9 @@ class _LoginAppState extends State<LoginApp> {
                             width: 150,
                             height: 50,
                             child: FlatButton(
-                              child: Text("SignUp"),
-                              onPressed: () {
-                               /* if (_formKey.currentState.validate()) {
+                                child: Text("SignUp"),
+                                onPressed: () {
+                                  /* if (_formKey.currentState.validate()) {
                                   _uname = _selecteduser.username;
                                   //print(_uname);
                                   //print(_passwordcontroller.text);
@@ -324,12 +325,12 @@ class _LoginAppState extends State<LoginApp> {
                                           (FirebaseUser user) => populateData())
                                       .catchError((e) => print(e))
                                       .whenComplete(() => authenticateService
-                                          .autheticate()
-                                          .whenComplete(() => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EventView()))));
+                                      .autheticate()
+                                      .whenComplete(() => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              App()))));
                                   print("Exit signIn email service");
 
                                 }
@@ -365,16 +366,16 @@ class _LoginAppState extends State<LoginApp> {
 
                                   signInService
                                       .googSignIn(context)
-                                      //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+                                  //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
                                       .then(
                                           (FirebaseUser user) => populateData())
                                       .catchError((e) => print(e))
                                       .whenComplete(() => authenticateService
                                       .autheticate().whenComplete(()  => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EventView()))));
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              App()))));
 
                                   //populateData();
 
@@ -387,6 +388,7 @@ class _LoginAppState extends State<LoginApp> {
                                 }),
                           ),
                         ],
+
                       ),
                       Row(
                         children: <Widget>[
@@ -410,10 +412,10 @@ class _LoginAppState extends State<LoginApp> {
                                     .then((FirebaseUser user) => populateData())
                                     .catchError((e) => print(e))
                                     .whenComplete(() => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                EventView())));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            App())));
                               },
                             ),
                           ),

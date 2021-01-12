@@ -53,7 +53,7 @@ class _TeamViewState extends State<TeamView>
   @override
   void initState() {
     super.initState();
-    _index = 2;
+_index=2;
     loadData();
     loadPref();
   }
@@ -83,6 +83,7 @@ class _TeamViewState extends State<TeamView>
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "team",
         child: Icon(Icons.add),
         backgroundColor: Colors.green,
         onPressed: () {
@@ -90,64 +91,7 @@ class _TeamViewState extends State<TeamView>
               context, MaterialPageRoute(builder: (context) => TeamWrite()));
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: (newIndex) {
-          setState(() => _index = newIndex);
-          print(newIndex);
-          switch (newIndex) {
-            case 0:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EventView()));
-              break;
-            case 1:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserView()));
-              break;
-            case 2:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TeamView()));
-              break;
-            case 2:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
-              break;
-            case 2:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => RoleScreenView()));
-              break;
 
-          }
-        },
-        currentIndex: _index,
-        selectedItemColor: Colors.orange,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Users'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            title: Text('Team'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text('User Temple'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_drop_down_circle),
-            title: Text('Role Screen'),
-          ),
-        ],
-      ),
     );
   }
 }

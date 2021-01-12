@@ -87,6 +87,7 @@ class _TempleViewState extends State<TempleView> {
 
       ),*/
       floatingActionButton: FloatingActionButton(
+        heroTag: "temple",
         child: Icon(Icons.add),
         backgroundColor: Colors.green,
         onPressed: () {
@@ -98,53 +99,7 @@ class _TempleViewState extends State<TempleView> {
         },
       ),
 
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: (newIndex) {
-          setState(() => _index = newIndex);
-          print(newIndex);
-          switch (newIndex) {
-            case 0:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EventView()));
-              break;
 
-            case 1:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TempleView() ));
-              break;
-            case 2:
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => RolesView() ));
-            break;
-            case 3:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => ScreensView() ));
-              break;
-          }
-        },
-        currentIndex: _index,
-        selectedItemColor: Colors.orange,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.title),
-            title: Text('Temple'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            title: Text('Roles'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fullscreen),
-            title: Text('Screens'),
-          ),
-        ],
-      ),
     );
 
   }

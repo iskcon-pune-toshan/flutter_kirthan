@@ -49,7 +49,7 @@ class _UserViewState extends State<UserView> {
   void initState() {
     super.initState();
     loadData();
-    _index = 1;
+
     loadPref();
   }
 
@@ -65,63 +65,7 @@ class _UserViewState extends State<UserView> {
           userType: "All",
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: (newIndex) {
-          setState(() => _index = newIndex);
-          print(newIndex);
-          switch (newIndex) {
-            case 0:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EventView()));
-              break;
-            case 1:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserView()));
-              break;
-            case 2:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TeamView()));
-              break;
-            case 3:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserTempleView()));
-              break;
-            case 4:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => RoleScreenView()));
-              break;
-          }
-        },
-        currentIndex: _index,
-        selectedItemColor: Colors.orange,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Users'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            title: Text('Team'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text('User Temple'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_drop_down_circle),
-            title: Text('Role Screen'),
-          ),
-        ],
-      ),
+
     );
   }
 }
