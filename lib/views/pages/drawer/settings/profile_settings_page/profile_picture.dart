@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path/path.dart';
@@ -15,62 +16,80 @@ class profilePicture extends StatefulWidget {
 class _profilePictureState extends State<profilePicture> {
   File _image;
 
-  @override
-  Widget build(BuildContext context) {
-    Future getImage() async {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-      setState(() {
-        _image = image;
-        print('Image Path $_image');
-      });
-    }
+    setState(() {
+      _image = image;
+      print('Image Path $_image');
+    });
 
-
+    return image.path;
+  }
 
 
-    /*Future uploadPic(BuildContext context) async{
-      String fileName = basename(_image.path);
-      //StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
-      FirebaseStorage fstorage = FirebaseStorage.instance;
-      String mainurl = "gs://fir-project-61838.appspot.com";
-      StorageReference storageReference = await fstorage.getReferenceFromUrl(mainurl);
-      //StorageReference ref = FirebaseStorage.
-      //var gsReference = storage.refFromURL('gs://bucket/images/stars.jpg');
-      StorageUploadTask uploadTask = storageReference.putFile(_image);
-      StorageTaskSnapshot taskSnapshot=await uploadTask.onComplete;
-      setState(() {
-        print("Profile Picture uploaded");
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
-      });
-    }
-  */
-
-    Future uploadPic(BuildContext context) async{
-      String fileName = basename(_image.path);
-      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("profiles/").child(fileName);
-      StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-      StorageTaskSnapshot taskSnapshot=await uploadTask.onComplete;
-      setState(() {
-        print("Profile Picture uploaded");
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
-      });
-    }
-
-    Future deletePic(BuildContext context) async
-  {
-
+  Future uploadPic(BuildContext context) async {
     String fileName = basename(_image.path);
-    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("profiles/").child(fileName);
+    print(fileName.toString());
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser s = await auth.currentUser();
+    String name = s.displayName;
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child("profiles/user/$name").child(fileName);
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    print("Uploading task");
+    var url = firebaseStorageRef.getDownloadURL().toString();
+    print(url);
+    setState(() {
+      print("Profile Picture uploaded");
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+    });
+
+    return url;
+  }
+
+  Future deletePic(BuildContext context) async {
+    String fileName = basename(_image.path);
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser s = await auth.currentUser();
+    String name = s.displayName;
+
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child("profiles/user/$name").child(fileName);
     await firebaseStorageRef.delete();
     setState(() {
       print("Profile Picture deleted");
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
     });
+
   }
 
 
 
+
+
+
+  path() async{
+
+    String s = basename(_image.path);
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser user = await auth.currentUser();
+    String name = user.displayName;
+    StorageReference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child("profiles/user/$name").child(s);
+    var url = firebaseStorageRef.getDownloadURL().toString();
+    print(url);
+
+    return url;
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Picture'),
@@ -94,19 +113,21 @@ class _profilePictureState extends State<profilePicture> {
                         child: new SizedBox(
                           width: 180.0,
                           height: 180.0,
-                          child: (_image!=null)?Image.file(
-                            _image,
-                            fit: BoxFit.fill,
-                          ):Image.asset("assets/images/default_profile_picture.png",
-                          fit: BoxFit.fill,
-                          ),
+                          child: (_image != null)
+                              ? Image.file(
+                                  _image,
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.asset(
+                                  "assets/images/default_profile_picture.png",
+                                  fit: BoxFit.fill,
+                                ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-
               Card(
                 //margin: const EdgeInsets.only(top: 200.0),
                 child: SizedBox(
@@ -148,6 +169,8 @@ class _profilePictureState extends State<profilePicture> {
                               onPressed: () {
                                 //Image.asset('assets/images/default_profile_picture.png');
                                 deletePic(context);
+                                _image = null;
+
                               },
                             ),
                             Row(
@@ -158,6 +181,10 @@ class _profilePictureState extends State<profilePicture> {
                                   color: Colors.blueGrey,
                                   onPressed: () {
                                     uploadPic(context);
+
+
+
+
                                   },
                                 ),
                                 RaisedButton(
@@ -175,12 +202,10 @@ class _profilePictureState extends State<profilePicture> {
                       ),
                     )),
               ),
-        ],
+            ],
           ),
         ),
       ),
     );
   }
 }
-
-// "assets/images/default_profile_picture.png",

@@ -106,7 +106,6 @@ class _SignUpState extends State<SignUp> {
     return MaterialApp(
       title: "Sign-Up Page",
       debugShowCheckedModeBanner: false,
-
       home: Scaffold(
         appBar: AppBar(
           title: Text("Sign-Up"),
@@ -128,10 +127,10 @@ class _SignUpState extends State<SignUp> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(bottom:15),
+                      padding: const EdgeInsets.only(bottom: 15),
                       child: TextFormField(
-                        decoration: buildInputDecoration(Icons.person,"Full Name","Full Name"),
-
+                        decoration: buildInputDecoration(
+                            Icons.person, "Full Name", "Full Name"),
 
                         controller: _displaynamecontroller,
                         validator: (value) {
@@ -144,11 +143,11 @@ class _SignUpState extends State<SignUp> {
                         //onSaved: (input) => displayName = input,
                       ),
                     ),
-
                     Padding(
-                      padding: const EdgeInsets.only(bottom:15),
+                      padding: const EdgeInsets.only(bottom: 15),
                       child: TextFormField(
-                        decoration:buildInputDecoration(Icons.email,"Email","Email"),
+                        decoration:
+                            buildInputDecoration(Icons.email, "Email", "Email"),
 
                         controller: _emailcontroller,
                         validator: (value) {
@@ -161,28 +160,26 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom:15),
-                      child: TextFormField(
-                        decoration:buildInputDecoration(Icons.lock,"Must contain 8-30 characters","Password"),
-                        controller: _passwordcontroller,
-                        validator: (value) {
-                          // ignore: missing_return
-                          if(value.isEmpty)
-                            return 'Please enter a value';
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: TextFormField(
+                          decoration: buildInputDecoration(Icons.lock,
+                              "Must contain 8-30 characters", "Password"),
+                          controller: _passwordcontroller,
+                          validator: (value) {
+                            // ignore: missing_return
+                            if (value.isEmpty) return 'Please enter a value';
 
-                          if(value.length < 8)
-                            return 'Must contain 8-30 characters';
-                          return null;
-
-                        },
-                        obscureText: true,
-                      )
-                    ),
+                            if (value.length < 8)
+                              return 'Must contain 8-30 characters';
+                            return null;
+                          },
+                          obscureText: true,
+                        )),
                     Padding(
-                      padding: const EdgeInsets.only(bottom:15),
+                      padding: const EdgeInsets.only(bottom: 15),
                       child: TextFormField(
-
-                        decoration:buildInputDecoration(Icons.lock,"Confirm Password","Confirm Password"),
+                        decoration: buildInputDecoration(
+                            Icons.lock, "Confirm Password", "Confirm Password"),
                         controller: _confirmpassword,
                         validator: (val) {
                           if (val.isEmpty) return 'Empty';
@@ -208,10 +205,9 @@ class _SignUpState extends State<SignUp> {
                         color: Colors.lightGreen,
                         child: Text('Submit'),
                         onPressed: () async {
-
                           signIn
-                              .signUpWithEmail(
-                                  _emailcontroller.text, _passwordcontroller.text)
+                              .signUpWithEmail(_emailcontroller.text,
+                                  _passwordcontroller.text)
                               .then((FirebaseUser user) => populateData())
                               .catchError((e) => print(e))
                               .whenComplete(() => addUser())
@@ -222,11 +218,10 @@ class _SignUpState extends State<SignUp> {
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0),
-                            side: BorderSide(color: Colors.blue,width: 2)
-
+                            side: BorderSide(color: Colors.blue, width: 2)),
                       ),
-                    ),
-                    )],
+                    )
+                  ],
                 ),
               ),
             ),
@@ -236,18 +231,15 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  InputDecoration buildInputDecoration(IconData icons,String hinttext,String labeltext) {
+  InputDecoration buildInputDecoration(
+      IconData icons, String hinttext, String labeltext) {
     return InputDecoration(
       labelText: labeltext,
       hintText: hinttext,
-      
       prefixIcon: Icon(icons),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(
-            color: Colors.green,
-            width: 1.5
-        ),
+        borderSide: BorderSide(color: Colors.green, width: 1.5),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(25.0),
@@ -256,7 +248,7 @@ class _SignUpState extends State<SignUp> {
           width: 1.5,
         ),
       ),
-      enabledBorder:OutlineInputBorder(
+      enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(25.0),
         borderSide: BorderSide(
           color: Colors.blue,
