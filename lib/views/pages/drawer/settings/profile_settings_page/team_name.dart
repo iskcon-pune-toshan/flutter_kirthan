@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:card_settings/card_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 
 class teamName extends StatefulWidget {
   @override
@@ -13,50 +13,97 @@ class _teamNameState extends State<teamName> {
       appBar: AppBar(
         title: Text('Team name'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          child: CardSettings.sectioned(
-            children: <CardSettingsSection>[
-              CardSettingsSection(
-                  header: CardSettingsHeader(
-                    label: 'Team Name',
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+                bottom: 20.0, top: 20.0, left: 10.0, right: 10.0),
+            child: TextFormField(
+              style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+              decoration: buildInputDecoration(Icons.group, "Enter the team name", "Team's Name")
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
+            child: TextFormField(
+              style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+              decoration:buildInputDecoration(Icons.person_pin, "Please enter the admin's name", "Team Admin Name")
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+              decoration: buildInputDecoration(Icons.add_circle_outline, "Please enter the no. of members", "No. of Team members")
+            ),
+          ),
+          Row(
+            children: [
+              Divider(
+                thickness: 100.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: SizedBox(
+                  width: 150,
+                  height: 50,
+                  child: RaisedButton(
+                    color: Colors.lightGreen,
+                    child: Text('Submit'),
+                    onPressed: () {},
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                        side: BorderSide(color: Colors.blue, width: 2)),
                   ),
-                  children: <CardSettingsWidget>[
-                    CardSettingsText(
-                      label: 'Name of the Team',
-                      validator: (value) {
-                        if (value == null || value.isEmpty)
-                          return 'Title is required.';
-                      },
-                    ),
-                    CardSettingsText(
-                      label: 'Team Admin Name',
-                      validator: (value) {
-                        if (value == null || value.isEmpty)
-                          return 'Field is required';
-                      },
-                    ),
-                    CardSettingsNumberPicker(
-                      label: 'Number of Team members',
-                      min: 1,
-                      max: 100,
-                    ),
-                    CardSettingsButton(
-                      label: 'Save',
-                      backgroundColor: Colors.greenAccent,
-                      onPressed: () {},
-                    ),
-                    CardSettingsButton(
-                      label: 'Cancel',
-                      backgroundColor: Colors.redAccent,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ]),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: SizedBox(
+                  width: 150,
+                  height: 50,
+                  child: RaisedButton(
+                    color: Colors.redAccent,
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                        side: BorderSide(color: Colors.blue, width: 2)),
+                  ),
+                ),
+              ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  InputDecoration buildInputDecoration(
+      IconData icons, String hinttext, String labeltext) {
+    return InputDecoration(
+      labelText: labeltext,
+      hintText: hinttext,
+      prefixIcon: Icon(icons),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(25.0),
+        borderSide: BorderSide(color: Colors.green, width: 1.5),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(25.0),
+        borderSide: BorderSide(
+          color: Colors.blue,
+          width: 1.5,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(25.0),
+        borderSide: BorderSide(
+          color: Colors.blue,
+          width: 1.5,
         ),
       ),
     );
