@@ -11,12 +11,12 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/roles_service_impl.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
+import '../event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/roles/roles_create.dart';
 
 final RolesPageViewModel rolesPageVM =
-RolesPageViewModel(apiSvc: RolesAPIService());
+    RolesPageViewModel(apiSvc: RolesAPIService());
 
 class RolesView extends StatefulWidget {
   RolesView({Key key}) : super(key: key);
@@ -32,7 +32,7 @@ class _RolesViewState extends State<RolesView> {
   int _index;
   SharedPreferences prefs;
   List<String> access;
-  Map<String,bool> accessTypes = new Map<String,bool>();
+  Map<String, bool> accessTypes = new Map<String, bool>();
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
@@ -40,7 +40,8 @@ class _RolesViewState extends State<RolesView> {
       access = prefs.getStringList(widget.screenName);
       access.forEach((f) {
         List<String> access = f.split(":");
-        accessTypes[access.elementAt(0)] =  access.elementAt(1).toLowerCase() == "true" ? true:false;
+        accessTypes[access.elementAt(0)] =
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       rolesPageVM.accessTypes = accessTypes;
     });
@@ -88,16 +89,12 @@ class _RolesViewState extends State<RolesView> {
       floatingActionButton: FloatingActionButton(
         heroTag: "roles",
         child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+        //backgroundColor: Colors.green,
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      RolesWrite()));
+              context, MaterialPageRoute(builder: (context) => RolesWrite()));
         },
       ),
-
     );
   }
 }

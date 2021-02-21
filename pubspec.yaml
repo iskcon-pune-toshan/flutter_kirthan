@@ -25,7 +25,7 @@ dependencies:
   flutter_auth_buttons: ^0.8.0
   provider: ^4.0.5+1
   screen: ^0.0.5
-  table_calendar: ^2.2.3
+  table_calendar:
   google_fonts: ^1.0.0
   rating_dialog: ^1.0.0
   firebase_messaging : ^6.0.16
@@ -46,7 +46,10 @@ dependencies:
   bloc:
   image_picker: ^0.5.3+1
   firebase_storage:
-  syncfusion_flutter_calendar:
+  flutter_svg:
+
+
+
 
 
 dev_dependencies:

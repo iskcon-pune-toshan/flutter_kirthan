@@ -10,8 +10,7 @@ import 'package:flutter_kirthan/models/temple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TemplePageViewModel templePageVM =
-TemplePageViewModel(apiSvc: TempleAPIService());
-
+    TemplePageViewModel(apiSvc: TempleAPIService());
 
 class TempleWrite extends StatefulWidget {
   TempleWrite({Key key}) : super(key: key);
@@ -38,8 +37,6 @@ class _TempleWriteState extends State<TempleWrite> {
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   //UserRequest newuserrequest = new UserRequest();
 
-
-
   List<Step> steps = [
     Step(
       title: const Text('New Temple'),
@@ -54,9 +51,24 @@ class _TempleWriteState extends State<TempleWrite> {
               maxLength: 30,
               //attribute: "Username",
               decoration: InputDecoration(
-                  icon: const Icon(Icons.tag_faces),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
+                  icon: const Icon(
+                    Icons.tag_faces,
+                    color: Colors.grey,
+                  ),
                   hintText: "",
-                  labelText: "Temple Name"),
+                  labelText: "Temple Name",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                  )),
               onChanged: (input) {
                 templerequest.templeName = input;
               },
@@ -70,10 +82,24 @@ class _TempleWriteState extends State<TempleWrite> {
             TextFormField(
               //attribute: "Password",
               decoration: InputDecoration(
-                icon: const Icon(Icons.location_on),
-                labelText: "Area",
-                hintText: "",
-              ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
+                  icon: const Icon(
+                    Icons.location_on,
+                    color: Colors.grey,
+                  ),
+                  labelText: "Area",
+                  hintText: "",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                  )),
               onChanged: (input) {
                 templerequest.area = input;
               },
@@ -87,10 +113,24 @@ class _TempleWriteState extends State<TempleWrite> {
             TextFormField(
               //attribute: "govtidtype",
               decoration: InputDecoration(
-                icon: const Icon(Icons.location_city),
-                labelText: "City",
-                hintText: "",
-              ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
+                  icon: const Icon(
+                    Icons.location_city,
+                    color: Colors.grey,
+                  ),
+                  labelText: "City",
+                  hintText: "",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                  )),
               onChanged: (input) {
                 templerequest.city = input;
               },
@@ -101,17 +141,10 @@ class _TempleWriteState extends State<TempleWrite> {
                 return null;
               },
             ),
-
-
           ],
-
         ),
-
       ),
     ),
-
-
-
   ];
 
   int currentStep = 0;
@@ -144,13 +177,15 @@ class _TempleWriteState extends State<TempleWrite> {
         ? stepperType = StepperType.vertical
         : stepperType = StepperType.horizontal);
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
-      appBar: new AppBar(title: const Text('Register Temple'), actions: <Widget>[
+      appBar:
+          new AppBar(title: const Text('Register Temple'), actions: <Widget>[
         new Container(
           padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
         )
@@ -159,95 +194,91 @@ class _TempleWriteState extends State<TempleWrite> {
         children: <Widget>[
           complete
               ? Expanded(
-              child: Center(
-                child: AlertDialog(
-                    title: new Text("Details Filled !"),
-                    content: new Text(
-                      "Click Submit on top right corner of the screen.",
-                    ),
-                    actions: <Widget>[
-                      new FlatButton(
-                        child: new Text("Submit"),
-                        onPressed: () async {
-
-                          Map<String, dynamic> usermap = templerequest.toJson();
-                          print(usermap);
-                          Temple newtemplerequest =
-                          await templePageVM.submitNewTemple(usermap);
-                          print(newtemplerequest.id);
-                          String uid = newtemplerequest.id.toString();
-                          SnackBar mysnackbar = SnackBar(
-                            content: Text(
-                                "Temple registered $successful with id : $uid "),
-                            duration: new Duration(seconds: 4),
-                            backgroundColor: Colors.green,
-                          );
-
-                          _scaffoldKey.currentState.showSnackBar(mysnackbar);
-
-                          //String s = jsonEncode(userrequest.mapToJson());
-                          //service.registerUser(s);
-                          //print(s);
-                        },
+                  child: Center(
+                  child: AlertDialog(
+                      title: new Text("Details Filled !"),
+                      content: new Text(
+                        "Click Submit on top right corner of the screen.",
                       ),
-                      new FlatButton(
-                        child: new Text("Close"),
-                        onPressed: () {
-                          setState(() => complete = false);
-                        },
-                      ),
-                      Card(
-                        child: Column(
-                          children: <Widget>[
+                      actions: <Widget>[
+                        new FlatButton(
+                          child: new Text("Submit"),
+                          onPressed: () async {
+                            Map<String, dynamic> usermap =
+                                templerequest.toJson();
+                            print(usermap);
+                            Temple newtemplerequest =
+                                await templePageVM.submitNewTemple(usermap);
+                            print(newtemplerequest.id);
+                            String uid = newtemplerequest.id.toString();
+                            SnackBar mysnackbar = SnackBar(
+                              content: Text(
+                                  "Temple registered $successful with id : $uid "),
+                              duration: new Duration(seconds: 4),
+                              backgroundColor: Colors.green,
+                            );
 
+                            _scaffoldKey.currentState.showSnackBar(mysnackbar);
 
-
-
-                            RaisedButton.icon(
-                              onPressed: () {
-                                Navigator.push( context,MaterialPageRoute(
-                                  builder: (context) =>
-                                      BlocProvider(
-                                        create: (BuildContext context) => MapsBloc(),
-                                        child:
-                                        AddLocation(),
-                                      ),
-                                ),);
-
-
-                              },
-
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                              label: Text('Add Location',
-                                style: TextStyle(color: Colors.black),),
-                              icon: Icon(Icons.location_on,
-                                color:Colors.black,),
-                              textColor: Colors.black,
-                              splashColor: Colors.red,
-                              color: Colors.white,
-
-                            ),
-                          ],
+                            //String s = jsonEncode(userrequest.mapToJson());
+                            //service.registerUser(s);
+                            //print(s);
+                          },
                         ),
-                      ),
-                    ]),
-              )
-          )
+                        new FlatButton(
+                          child: new Text("Close"),
+                          onPressed: () {
+                            setState(() => complete = false);
+                          },
+                        ),
+                        Card(
+                          child: Column(
+                            children: <Widget>[
+                              RaisedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BlocProvider(
+                                        create: (BuildContext context) =>
+                                            MapsBloc(),
+                                        child: AddLocation(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                label: Text(
+                                  'Add Location',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                icon: Icon(
+                                  Icons.location_on,
+                                  color: Colors.black,
+                                ),
+                                textColor: Colors.black,
+                                splashColor: Colors.red,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                ))
               : Expanded(
-            child: Stepper(
-              type: stepperType,
-              steps: steps,
-              currentStep: currentStep,
-              onStepContinue: next,
-              onStepTapped: (step) => goTo(step),
-              onStepCancel: cancel,
-            ),
-          ),
+                  child: Stepper(
+                    type: stepperType,
+                    steps: steps,
+                    currentStep: currentStep,
+                    onStepContinue: next,
+                    onStepTapped: (step) => goTo(step),
+                    onStepCancel: cancel,
+                  ),
+                ),
         ],
       ),
-
     );
-
   }
 }

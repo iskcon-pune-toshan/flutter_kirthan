@@ -30,12 +30,22 @@ class _members_profileState extends State<members_profile> {
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
                       decoration: InputDecoration(
-                          icon: Icon(Icons.people_outline),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          icon: Icon(Icons.people_outline, color: Colors.grey),
                           labelText: "Member 1",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
                               fontSize: MyPrefSettingsApp.custFontSize,
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          )),
                     ),
                   ),
                 ),
@@ -46,12 +56,23 @@ class _members_profileState extends State<members_profile> {
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
                       decoration: InputDecoration(
-                          icon: Icon(Icons.people_outline),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          icon: Icon(Icons.people_outline, color: Colors.grey),
                           labelText: "Member 2",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
-                              fontSize: MyPrefSettingsApp.custFontSize,
-                              fontWeight: FontWeight.bold)),
+                            fontSize: MyPrefSettingsApp.custFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          )),
                     ),
                   ),
                 ),
@@ -62,12 +83,23 @@ class _members_profileState extends State<members_profile> {
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
                       decoration: InputDecoration(
-                          icon: Icon(Icons.people_outline),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          icon: Icon(Icons.people_outline, color: Colors.grey),
                           labelText: "Member 3",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
-                              fontSize: MyPrefSettingsApp.custFontSize,
-                              fontWeight: FontWeight.bold)),
+                            fontSize: MyPrefSettingsApp.custFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          )),
                     ),
                   ),
                 ),
@@ -78,12 +110,23 @@ class _members_profileState extends State<members_profile> {
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
                       decoration: InputDecoration(
-                          icon: Icon(Icons.people_outline),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          icon: Icon(Icons.people_outline, color: Colors.grey),
                           labelText: "Member 4",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
-                              fontSize: MyPrefSettingsApp.custFontSize,
-                              fontWeight: FontWeight.bold)),
+                            fontSize: MyPrefSettingsApp.custFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          )),
                     ),
                   ),
                 ),
@@ -96,7 +139,7 @@ class _members_profileState extends State<members_profile> {
                       icon: const Icon(Icons.add_circle),
                       color: Colors.green,
                       onPressed: () {
-                                addmember();
+                        addmember();
                       },
                     ),
                     RaisedButton(
@@ -115,26 +158,34 @@ class _members_profileState extends State<members_profile> {
     );
   }
 
-    //print("Entered");
-    List<Widget> addmember () {
-      //Divider();
-      Card(
-        child: Container(
-          //color: Colors.black26,
-          padding: const EdgeInsets.all(10),
-          child: TextFormField(
-            decoration: InputDecoration(
-                icon: Icon(Icons.people_outline),
-                labelText: "Member 3",
-                hintText: "Please enter the name of the member",
-                labelStyle: TextStyle(
-                    fontSize: MyPrefSettingsApp.custFontSize,
-                    fontWeight: FontWeight.bold)),
-          ),
+  //print("Entered");
+  List<Widget> addmember() {
+    //Divider();
+    Card(
+      child: Container(
+        //color: Colors.black26,
+        padding: const EdgeInsets.all(10),
+        child: TextFormField(
+          decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.green),
+              ),
+              icon: Icon(Icons.people_outline, color: Colors.grey),
+              labelText: "Member 3",
+              hintText: "Please enter the name of the member",
+              labelStyle: TextStyle(
+                fontSize: MyPrefSettingsApp.custFontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+              hintStyle: TextStyle(
+                color: Colors.grey,
+              )),
         ),
-      );
-
+      ),
+    );
   }
-
-  }
-
+}

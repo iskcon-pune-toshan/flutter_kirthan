@@ -5,6 +5,8 @@ import 'package:flutter_kirthan/view_models/role_screen_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 class Choice {
   const Choice({this.id, this.description});
@@ -59,7 +61,7 @@ class RoleScreenRequestsListItem extends StatelessWidget {
             ),
           ),
         ),
-    /*    Container(
+        /*    Container(
           child: PopupMenuButton<Choice>(
             itemBuilder: (BuildContext context) {
               return popupList.map((f) {
@@ -157,25 +159,31 @@ class RoleScreenRequestsListItem extends StatelessWidget {
 
     return Card(
       elevation: 10,
-      child: Container(
-        decoration: new BoxDecoration(
+      child: Consumer<ThemeNotifier>(
+        builder: (context, notifier, child) => Container(
+          decoration: new BoxDecoration(
             borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
-            gradient: new LinearGradient(
-                colors: [Colors.blue[200], Colors.purpleAccent],
+            /* gradient: new LinearGradient(
+                colors: [
+                  KirthanStyles.colorPallete60,
+                  KirthanStyles.colorPallete60
+                ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                tileMode: TileMode.clamp)),
-        child: new Column(
-          children: <Widget>[
-            new ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-              leading: Icon(Icons.group),
-              title: title,
-              subtitle: subTitle,
-            ),
-          ],
+                tileMode: TileMode.clamp),*/
+          ),
+          child: new Column(
+            children: <Widget>[
+              new ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                leading: Icon(Icons.group),
+                title: title,
+                subtitle: subTitle,
+              ),
+            ],
+          ),
+          //Divider(color: Colors.blue),
         ),
-        //Divider(color: Colors.blue),
       ),
     );
   }

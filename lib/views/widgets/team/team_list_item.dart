@@ -6,6 +6,8 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dar
 import 'package:flutter_kirthan/views/pages/team/team_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 class Choice {
   const Choice({this.id, this.description});
@@ -24,8 +26,6 @@ class TeamRequestsListItem extends StatelessWidget {
     Choice(id: 2, description: "Edit"),
     Choice(id: 3, description: "Delete"),
   ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,37 +58,36 @@ class TeamRequestsListItem extends StatelessWidget {
               if (choice.id == 2) {
                 /*teamPageVM.accessTypes[ACCESS_TYPE_EDIT] == true
                     ? () {*/
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  EditTeam(teamrequest: teamrequest)),
-                        );
-                     /* }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditTeam(teamrequest: teamrequest)),
+                );
+                /* }
                     : null;*/
               } else if (choice.id == 1) {
                 /*teamPageVM.accessTypes[ACCESS_TYPE_PROCESS] == true
                     ? () {*/
-                        Map<String, dynamic> processrequestmap =
-                            new Map<String, dynamic>();
-                        processrequestmap["id"] = teamrequest?.id;
-                        processrequestmap["approvalStatus"] = "Approved";
-                        processrequestmap["approvalComments"] = "ApprovalComments";
-                        processrequestmap["teamTitle"] = teamrequest?.teamTitle;
-                        processrequestmap["isProcessed"] = teamrequest?.isProcessed;
-                        processrequestmap["createdBy"] = teamrequest?.createdBy;
+                Map<String, dynamic> processrequestmap =
+                    new Map<String, dynamic>();
+                processrequestmap["id"] = teamrequest?.id;
+                processrequestmap["approvalStatus"] = "Approved";
+                processrequestmap["approvalComments"] = "ApprovalComments";
+                processrequestmap["teamTitle"] = teamrequest?.teamTitle;
+                processrequestmap["isProcessed"] = teamrequest?.isProcessed;
+                processrequestmap["createdBy"] = teamrequest?.createdBy;
 
-
-                        teamPageVM.processTeamRequest(processrequestmap);
-                        SnackBar mysnackbar = SnackBar(
-                          content: Text("team $process "),
-                          duration: new Duration(seconds: 4),
-                          backgroundColor: Colors.green,
-                        );
-                        Scaffold.of(context).showSnackBar(mysnackbar);
-                      }
-                    /*: null;
-              }*/ else if (choice.id == 3) {
+                teamPageVM.processTeamRequest(processrequestmap);
+                SnackBar mysnackbar = SnackBar(
+                  content: Text("team $process "),
+                  duration: new Duration(seconds: 4),
+                  backgroundColor: Colors.green,
+                );
+                Scaffold.of(context).showSnackBar(mysnackbar);
+              }
+              /*: null;
+              }*/
+              else if (choice.id == 3) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -167,25 +166,23 @@ class TeamRequestsListItem extends StatelessWidget {
 
     return Card(
       elevation: 10,
-      child: Container(
-        decoration: new BoxDecoration(
+      child: Consumer<ThemeNotifier>(
+        builder: (context, notifier, child) => Container(
+          decoration: new BoxDecoration(
             borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
-            gradient: new LinearGradient(
-                colors: [Colors.blue[200], Colors.purpleAccent],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                tileMode: TileMode.clamp)),
-        child: new Column(
-          children: <Widget>[
-            new ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-              leading: Icon(Icons.group),
-              title: title,
-              subtitle: subTitle,
-            ),
-          ],
+          ),
+          child: new Column(
+            children: <Widget>[
+              new ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                leading: Icon(Icons.group),
+                title: title,
+                subtitle: subTitle,
+              ),
+            ],
+          ),
+          //Divider(color: Colors.blue),
         ),
-        //Divider(color: Colors.blue),
       ),
     );
   }

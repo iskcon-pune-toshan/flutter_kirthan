@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/perferences_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
@@ -30,10 +31,7 @@ class _MyAppState extends State<MySettingsApp> {
     print("Entered");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-
     return prefs.getBool(_allowNotification);
-
-
   }
 
   @override
@@ -53,17 +51,22 @@ class _MyAppState extends State<MySettingsApp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.perm_contact_calendar),
-
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.perm_contact_calendar,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'Profile',
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
                   ),
                 ),
                 onTap: () {
@@ -78,13 +81,19 @@ class _MyAppState extends State<MySettingsApp> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.check_circle_outline),
-
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.check_circle_outline,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   "Perferences",
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
                   ),
                 ),
                 onTap: () {
@@ -99,13 +108,19 @@ class _MyAppState extends State<MySettingsApp> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.brightness_4),
-
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.brightness_4,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   "Display",
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
                   ),
                 ),
                 onTap: () {
@@ -139,21 +154,25 @@ class _MyAppState extends State<MySettingsApp> {
                */
               child: SwitchListTile(
                 activeColor: Colors.cyan,
-                title: Text("Notifications",style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),),
+                title: Text(
+                  "Notifications",
+                  style: TextStyle(
+                      fontSize: MyPrefSettingsApp.custFontSize,
+                      color: KirthanStyles.colorPallete30),
+                ),
                 onChanged: (value) {
                   setState(() {
                     getNotification();
                     _v = value;
                   });
-
-
                 },
                 value: _v,
-                secondary: Icon(Icons.notifications_active),
+                secondary: Icon(
+                  Icons.notifications_active,
+                  color: KirthanStyles.colorPallete30,
+                ),
               ),
             ),
-
-
           ],
         ),
       ),
@@ -161,7 +180,6 @@ class _MyAppState extends State<MySettingsApp> {
   }
 
   _showMaterialDialog() {
-
     /*showDialog(
         context: context,
         builder: (_) => new AlertDialog(
@@ -185,8 +203,8 @@ class _MyAppState extends State<MySettingsApp> {
 
 
      */
-  bool _v = false;
-  /*return SwitchListTile(
+    bool _v = false;
+    /*return SwitchListTile(
     onChanged: (value) {
       setState(() {
         getNotification();
@@ -199,7 +217,5 @@ class _MyAppState extends State<MySettingsApp> {
 
   );
 */
-
   }
-
 }

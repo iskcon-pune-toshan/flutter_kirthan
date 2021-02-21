@@ -26,9 +26,15 @@ class _description_profileState extends State<description_profile> {
               decoration: InputDecoration(
                 labelText: 'Description',
                 hintText: 'Please enter the description',
-                prefixIcon: Icon(Icons.description),
-                hintStyle: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
-                labelStyle: TextStyle(fontSize: 22),
+                prefixIcon: Icon(
+                  Icons.description,
+                  color: Colors.grey,
+                ),
+                hintStyle: TextStyle(
+                  fontSize: MyPrefSettingsApp.custFontSize,
+                  color: Colors.grey,
+                ),
+                labelStyle: TextStyle(fontSize: 22, color: Colors.grey),
                 focusedBorder: OutlineInputBorder(
                   //borderRadius: BorderRadius.circular(25.0),
                   borderSide: BorderSide(color: Colors.indigo, width: 1.5),
@@ -58,9 +64,11 @@ class _description_profileState extends State<description_profile> {
               decoration: InputDecoration(
                 labelText: 'Type',
                 hintText: 'Please enter the type',
-                prefixIcon: Icon(Icons.trip_origin),
-                hintStyle: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
-                labelStyle: TextStyle(fontSize: 22),
+                prefixIcon: Icon(Icons.trip_origin, color: Colors.grey),
+                hintStyle: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    color: Colors.grey),
+                labelStyle: TextStyle(fontSize: 22, color: Colors.grey),
                 focusedBorder: OutlineInputBorder(
                   //borderRadius: BorderRadius.circular(25.0),
                   borderSide: BorderSide(color: Colors.indigo, width: 1.5),
@@ -127,18 +135,15 @@ class _description_profileState extends State<description_profile> {
   }
 }
 
-InputDecoration buildInputDecoration(IconData icons,String hinttext,String labeltext) {
+InputDecoration buildInputDecoration(
+    IconData icons, String hinttext, String labeltext) {
   return InputDecoration(
     labelText: labeltext,
     hintText: hinttext,
-
     prefixIcon: Icon(icons),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),
-      borderSide: BorderSide(
-          color: Colors.green,
-          width: 1.5
-      ),
+      borderSide: BorderSide(color: Colors.green, width: 1.5),
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),

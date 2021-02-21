@@ -60,7 +60,7 @@ class _UserEditState extends State<UserEdit> {
   final TextEditingController _pincodeController = new TextEditingController();
   String pinCode;
   final TextEditingController _userupdatedBy = new TextEditingController();
-  String userupdatedBy ;
+  String userupdatedBy;
   final TextEditingController _createdTime = new TextEditingController();
 
   @override
@@ -82,7 +82,6 @@ class _UserEditState extends State<UserEdit> {
     _userupdatedBy.text = getCurrentUser().toString();
     return super.initState();
   }
-
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   getCurrentUser() async {
@@ -116,8 +115,8 @@ class _UserEditState extends State<UserEdit> {
                   print(widget.userrequest.firstName);
                   print(widget.userrequest.lastName);
 
-
-                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                      .format(DateTime.now());
                   _userupdatedBy.text = widget.userrequest.updatedTime = dt;
                   String userrequestStr =
                       jsonEncode(widget.userrequest.toStrJson());
@@ -135,7 +134,20 @@ class _UserEditState extends State<UserEdit> {
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(
-                        labelText: "Username", hintText: "alternate name?"),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Username",
+                        hintText: "alternate name?",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _userUserNameController,
                     onSaved: (String value) {
@@ -145,7 +157,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Password"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Password",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _userPasswordController,
                     onSaved: (String value) {
@@ -155,7 +180,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "First name"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "First name",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _userFirstNameController,
                     onSaved: (String value) {
@@ -165,7 +203,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Last name"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Last name",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _userLastNameController,
                     onSaved: (String value) {
@@ -175,7 +226,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Email"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Email",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _userEmailController,
                     onSaved: (String value) {
@@ -185,8 +249,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: "Phone number"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Phone number",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _userPhoneNumberController,
                     onSaved: (String value) {
@@ -196,7 +272,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Line 1"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Line 1",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _userAddressController,
                     onSaved: (String value) {
@@ -206,7 +295,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Line 2"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Line 2",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _linetwoController,
                     onSaved: (String value) {
@@ -216,7 +318,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Line 3"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Line 3",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _linethreeController,
                     onSaved: (String value) {
@@ -226,7 +341,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "PinCode"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "PinCode",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _pincodeController,
                     onSaved: (String value) {
@@ -236,7 +364,20 @@ class _UserEditState extends State<UserEdit> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "City"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "City",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _cityController,
                     onSaved: (String value) {
@@ -263,7 +404,6 @@ class _UserEditState extends State<UserEdit> {
                     widget.userrequest.state = input;
                   },
                 ),
-
               ],
             )));
   }

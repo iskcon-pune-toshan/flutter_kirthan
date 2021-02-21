@@ -60,8 +60,8 @@ class _EditTeamState extends State<EditTeam> {
     final DateTime today = new DateTime.now();
 
     return new Scaffold(
-        appBar: new AppBar(title: const Text('Edit Profile'), actions: <Widget>[
-        ]),
+        appBar:
+            new AppBar(title: const Text('Edit Profile'), actions: <Widget>[]),
         body: new Form(
             key: _formKey,
             autovalidate: true,
@@ -72,8 +72,20 @@ class _EditTeamState extends State<EditTeam> {
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
                         labelText: "TeamTitle",
-                        hintText: "What do people call this event?"),
+                        hintText: "What do people call this event?",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _teamTitleController,
                     onSaved: (String value) {
@@ -83,7 +95,20 @@ class _EditTeamState extends State<EditTeam> {
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Description"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Description",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _teamDescriptionController,
                     onSaved: (String value) {

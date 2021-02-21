@@ -29,11 +29,26 @@ class _userName_profileState extends State<userName_profile> {
                       //color: Colors.black26,
                       child: TextFormField(
                         decoration: InputDecoration(
-                            icon: const Icon(Icons.account_circle),
-                            labelText: "Current Username",
-                            labelStyle: TextStyle(
-                                fontSize: MyPrefSettingsApp.custFontSize,
-                                fontWeight: FontWeight.bold)),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          icon: const Icon(
+                            Icons.account_circle,
+                            color: Colors.grey,
+                          ),
+                          labelText: "Current Username",
+                          labelStyle: TextStyle(
+                            fontSize: MyPrefSettingsApp.custFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -44,12 +59,27 @@ class _userName_profileState extends State<userName_profile> {
                       padding: const EdgeInsets.all(10),
                       child: TextFormField(
                         decoration: InputDecoration(
-                            icon: const Icon(Icons.perm_identity),
-                            labelText: "New Username",
-                            hintText: "Please enter new username",
-                            labelStyle: TextStyle(
-                                fontSize: MyPrefSettingsApp.custFontSize,
-                                fontWeight: FontWeight.bold)),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          icon: const Icon(
+                            Icons.perm_identity,
+                            color: Colors.grey,
+                          ),
+                          labelText: "New Username",
+                          hintText: "Please enter new username",
+                          labelStyle: TextStyle(
+                            fontSize: MyPrefSettingsApp.custFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -60,12 +90,26 @@ class _userName_profileState extends State<userName_profile> {
                       padding: const EdgeInsets.all(10),
                       child: TextFormField(
                         decoration: InputDecoration(
-                          icon: const Icon(Icons.offline_pin),
-                            labelText: "Confirm New Username",
-                            hintText: "Please confirm the New Username",
-                            labelStyle: TextStyle(
-                                fontSize: MyPrefSettingsApp.custFontSize,
-                                fontWeight: FontWeight.bold)),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          icon: const Icon(
+                            Icons.offline_pin,
+                            color: Colors.grey,
+                          ),
+                          labelText: "Confirm New Username",
+                          hintText: "Please confirm the New Username",
+                          labelStyle: TextStyle(
+                              fontSize: MyPrefSettingsApp.custFontSize,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
                   ),

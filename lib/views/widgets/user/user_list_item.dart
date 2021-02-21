@@ -6,6 +6,9 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dar
 import 'package:flutter_kirthan/views/pages/user/user_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/color_picker.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class Choice {
   const Choice({this.id, this.description});
@@ -51,7 +54,7 @@ class UserRequestsListItem extends StatelessWidget {
           child: Text(
             userrequest?.userName,
             style: TextStyle(
-              color: KirthanStyles.subTitleColor,
+              //color: KirthanStyles.subTitleColor,
               fontSize: MyPrefSettingsApp.custFontSize,
             ),
           ),
@@ -97,8 +100,6 @@ class UserRequestsListItem extends StatelessWidget {
                 processrequestmap["isProcessed"] = userrequest?.isProcessed;
                 processrequestmap["createdBy"] = userrequest?.createdBy;
                 processrequestmap["createdTime"] = userrequest?.createdTime;
-
-
 
                 userPageVM.processUserRequest(processrequestmap);
                 SnackBar mysnackbar = SnackBar(
@@ -186,24 +187,21 @@ class UserRequestsListItem extends StatelessWidget {
 
     return Card(
       elevation: 10,
-      child: Container(
-        decoration: new BoxDecoration(
-          borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
-          gradient: new LinearGradient(
-              colors: [Colors.blue[200], Colors.purpleAccent],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              tileMode: TileMode.clamp),
-        ),
-        child: new Column(
-          children: <Widget>[
-            new ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-              leading: Icon(Icons.account_circle),
-              title: title,
-              subtitle: subTitle,
-            ),
-          ],
+      child: Consumer<ThemeNotifier>(
+        builder: (context, notifier, child) => Container(
+          decoration: new BoxDecoration(
+            borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+          ),
+          child: new Column(
+            children: <Widget>[
+              new ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                leading: Icon(Icons.account_circle),
+                title: title,
+                subtitle: subTitle,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -42,7 +42,7 @@ class TabItem {
         key: key,
         onGenerateRoute: (routeSettings) {
           return MaterialPageRoute(
-            builder: (_) => _page,
+            builder: (context) => _page,
           );
         },
       ),

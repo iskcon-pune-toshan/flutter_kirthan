@@ -7,6 +7,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_pag
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/profile_picture.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/team_name.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/user_name_profile.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 
 class MyProfileSettings extends StatefulWidget {
   @override
@@ -28,11 +29,20 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.account_circle),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.account_circle,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'Profile Picture',
-                  style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -47,11 +57,20 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.people),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.people,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'Team Name',
-                  style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -59,8 +78,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                       MaterialPageRoute(
                         builder: (context) => teamName(),
                       ));
-
-
                 },
                 selected: true,
               ),
@@ -68,11 +85,20 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.perm_identity),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.perm_identity,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'User Name',
-                  style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -87,16 +113,27 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.content_paste),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.content_paste,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'Description/Type',
-                  style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
+                  ),
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => description_profile(),
-                  ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => description_profile(),
+                      ));
                 },
                 selected: true,
               ),
@@ -104,17 +141,27 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.group_add),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.group_add,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'Members',
-                  style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
+                  ),
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => members_profile(),
-
-                  ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => members_profile(),
+                      ));
                 },
                 selected: true,
               ),
@@ -122,18 +169,27 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.contacts),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.contacts,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'Contact Details',
-                  style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
+                  ),
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => contact_details_profile(),
-
-                  )
-                  );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => contact_details_profile(),
+                      ));
                 },
                 selected: true,
               ),
@@ -141,11 +197,20 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.my_location),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.my_location,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'Location',
-                  style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
+                  style: TextStyle(
+                    fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
+                  ),
                 ),
                 onTap: () {},
                 selected: true,
@@ -154,18 +219,25 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
-                leading: Icon(Icons.keyboard),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.keyboard,
+                  color: KirthanStyles.colorPallete30,
+                ),
                 title: Text(
                   'Password',
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
+                    color: KirthanStyles.colorPallete30,
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => password_profile()),
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => password_profile()),
                   );
                 },
                 selected: true,

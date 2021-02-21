@@ -30,6 +30,7 @@ class EventRequest {
   String eventMobility;
 
 
+
 //Typically called form service layer to create a new user
   EventRequest(
       {this.id, this.eventTitle, this.eventDescription, this.eventDate, this.eventDuration,

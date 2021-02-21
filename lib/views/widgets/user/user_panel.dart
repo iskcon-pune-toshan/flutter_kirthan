@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/user/user_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
@@ -36,6 +37,8 @@ class UsersPanel extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           RaisedButton(
+                            color: Colors.grey[400],
+                            highlightColor: KirthanStyles.colorPallete30,
                             child: const Text("Super Admin"),
                             onPressed: () {
                               print("Super Admin");
@@ -43,6 +46,8 @@ class UsersPanel extends StatelessWidget {
                             },
                           ),
                           RaisedButton(
+                            color: Colors.grey[400],
+                            highlightColor: KirthanStyles.colorPallete30,
                             child: const Text("Admin"),
                             onPressed: () {
                               print("Admin");
@@ -50,6 +55,8 @@ class UsersPanel extends StatelessWidget {
                             },
                           ),
                           RaisedButton(
+                            color: Colors.grey[400],
+                            highlightColor: KirthanStyles.colorPallete30,
                             child: const Text("Users"),
                             onPressed: () {
                               print("Users");

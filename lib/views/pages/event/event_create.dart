@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
@@ -15,8 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 final EventPageViewModel eventPageVM =
-EventPageViewModel(apiSvc: EventAPIService());
-
+    EventPageViewModel(apiSvc: EventAPIService());
 
 class EventWrite extends StatefulWidget {
   // EventWrite({Key key}) : super(key: key);
@@ -28,28 +28,31 @@ class EventWrite extends StatefulWidget {
   @override
   _EventWriteState createState() => _EventWriteState();
 
-  EventWrite({@required this.eventrequest,@required this.userLogin});
+  EventWrite({@required this.eventrequest, @required this.userLogin});
 }
+
 class _EventWriteState extends State<EventWrite> {
   bool mapToggle = false;
+  FocusNode myFocusNode = new FocusNode();
   bool locationToggle = false;
   bool resetToggle = false;
 
-  List<Marker> myMarker=[];
+  List<Marker> myMarker = [];
   List<Marker> get markers => myMarker;
 
   TextEditingController locationController = TextEditingController();
 
   GoogleMapController mapController;
 
-  LatLng tappedPoint1,tappedPoint2;
-
+  LatLng tappedPoint1, tappedPoint2;
 
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
 
   //final IKirthanRestApi apiSvc = new RestAPIServices();
-  List<String> _states = [ "Kant","Andhra Pradesh",
+  List<String> _states = [
+    "Kant",
+    "Andhra Pradesh",
     "Arunachal Pradesh",
     "Assam",
     "Bihar",
@@ -84,124 +87,129 @@ class _EventWriteState extends State<EventWrite> {
     "Daman and Diu",
     "Delhi",
     "Lakshadweep",
-    "Puducherry"];
+    "Puducherry"
+  ];
 
-  List<String> _cities = ['Kant','Adilabad','Delhi',
+  List<String> _cities = [
+    'Kant',
+    'Adilabad',
+    'Delhi',
     'Ahmednagar',
     'Anantapur',
     'Chittoor',
     'Kakinada',
     'Guntur',
-    'Hyderabad'];
+    'Hyderabad'
+  ];
   String _selectedCity;
   String _selectedState;
   String _selectedCountry;
 
-  handleTap(LatLng tappedPoint1){
+  handleTap(LatLng tappedPoint1) {
     print(tappedPoint1);
     //print(tappedPoint2);
     setState(() {
-
-      myMarker=[];
+      myMarker = [];
 
       myMarker.add(
-        Marker(markerId: MarkerId(tappedPoint1.toString()),
-          infoWindow: InfoWindow(
-              title: 'Event Location') ,
+        Marker(
+          markerId: MarkerId(tappedPoint1.toString()),
+          infoWindow: InfoWindow(title: 'Event Location'),
           position: tappedPoint1,
         ),
       );
 
-      eventrequest.sourceLongitude=tappedPoint1.longitude;
-      eventrequest.sourceLatitude=tappedPoint1.latitude;
+      eventrequest.sourceLongitude = tappedPoint1.longitude;
+      eventrequest.sourceLatitude = tappedPoint1.latitude;
       /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
       infoWindow: InfoWindow(
         title: 'End Point') ,
       position: tappedPoint2,
       ),
       );*/
-
-
-
     });
   }
-  handleTap2(LatLng tappedPoint1){
+
+  handleTap2(LatLng tappedPoint1) {
     print(tappedPoint1);
     //print(tappedPoint2);
     setState(() {
-
-      myMarker=[];
+      myMarker = [];
 
       myMarker.add(
-        Marker(markerId: MarkerId(tappedPoint1.toString()),
-          infoWindow: InfoWindow(
-              title: 'Event Location') ,
+        Marker(
+          markerId: MarkerId(tappedPoint1.toString()),
+          infoWindow: InfoWindow(title: 'Event Location'),
           position: tappedPoint1,
         ),
       );
 
-      eventrequest.destinationLongitude=tappedPoint1.longitude;
-      eventrequest.destinationLatitude=tappedPoint1.latitude;
+      eventrequest.destinationLongitude = tappedPoint1.longitude;
+      eventrequest.destinationLatitude = tappedPoint1.latitude;
       /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
       infoWindow: InfoWindow(
         title: 'End Point') ,
       position: tappedPoint2,
       ),
       );*/
-
-
-
     });
   }
+
   void onMapCreated(controller) {
     setState(() {
       mapController = controller;
     });
-
   }
 
-
-
-  List type=["Stationary","Moving"];
+  List type = ["Stationary", "Moving"];
 
   String select;
   Row addRadioButton(int btnValue, String title) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-
         Radio(
           activeColor: Theme.of(context).primaryColor,
           value: type[btnValue],
           groupValue: select,
-          onChanged: (value){
+          onChanged: (value) {
             setState(() {
               print(value);
-              eventrequest.eventMobility=value;
-              select=value;
+              eventrequest.eventMobility = value;
+              select = value;
             });
-
           },
         ),
-
-
         Text(title)
       ],
     );
-
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
-      body: Builder(builder: (context){
+
+        appBar: AppBar(
+          elevation: 0.0,
+          iconTheme: IconThemeData(
+            color: KirthanStyles.colorPallete60, //change your color here
+          ),
+          backgroundColor: KirthanStyles.colorPallete30,
+        title: Text('Create Event',
+    style: TextStyle(color: KirthanStyles.colorPallete60)
+        )
+        ),
+      body: Builder(builder: (context) {
         return SingleChildScrollView(
           child: Container(
-            color: Colors.redAccent,
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
+            color: KirthanStyles.colorPallete60,
             child: Center(
-              child:Form(
+              child: Form(
                 // context,
                 key: _formKey,
                 autovalidate: true,
@@ -209,9 +217,16 @@ class _EventWriteState extends State<EventWrite> {
                 child: Column(
                   //crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+
                     new Container(
-                        margin: const EdgeInsets.only(top: 50)
-                    ),
+
+                      alignment: Alignment.centerLeft,
+                       // margin: const EdgeInsets.only(top: 30),
+                      child: new Text("About Event",
+                        style: new TextStyle(
+                          fontSize: 17.0,
+                            color: KirthanStyles.colorPallete30
+                      ),)),
 
                     /* Card(
                     child: Container(
@@ -238,53 +253,72 @@ class _EventWriteState extends State<EventWrite> {
                     elevation: 5,
                   ),*/
 
-                    Card(
-                      child: Container(
-                        padding: new EdgeInsets.all(10),
-                        child:TextFormField(
+                     Container(
+                        //padding: new EdgeInsets.all(10),
+                        child: TextFormField(
+                          focusNode: myFocusNode,
                           //attribute: "eventTitle",
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.title),
-                            labelText: "Title",
-                            hintText: "",
-                          ),
-                          onSaved: (input){
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              //icon: const Icon(Icons.title, color: Colors.grey),
+                              labelText: "Title",
+                              hintText: "Type title of Event",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                  color: myFocusNode.hasFocus ? Colors.black : Colors.grey
+                              )),
+                          onSaved: (input) {
                             eventrequest.eventTitle = input;
                           },
                           validator: (value) {
-                            if(value.isEmpty) {
+                            if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },
                         ),
                       ),
-                      elevation: 5,
-                    ),
 
-                    Card(
-                      child: Container(
-                        padding: new EdgeInsets.all(10),
-                        child:TextFormField(
+                     Container(
+                        //padding: new EdgeInsets.all(10),
+                        child: TextFormField(
                           //attribute: "Description",
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.description),
-                            labelText: "Description",
-                            hintText: "",
-                          ),
-                          onSaved: (input){
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              //icon: const Icon(Icons.description,
+                               //   color: Colors.grey),
+                              labelText: "Description",
+                              hintText: "Type Description of event",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
                             eventrequest.eventDescription = input;
                           },
                           validator: (value) {
-                            if(value.isEmpty) {
+                            if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },
                         ),
                       ),
-                      elevation: 5,
-                    ),
+
                     /*Card(
                     child: Container(
                       padding: new EdgeInsets.all(10),
@@ -308,12 +342,12 @@ class _EventWriteState extends State<EventWrite> {
                     ),
                     elevation: 5,
                   ),*/
-                    Card(
-                      child: Container(
+                     Container(
                         padding: new EdgeInsets.all(10),
                         child: Column(
+                          //mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text("Select Event Date"),
+                            Text("Event Date",textAlign: TextAlign.start,),
                             DateTimeField(
                               format: DateFormat("yyyy-MM-dd"),
                               onShowPicker: (context, currentValue) {
@@ -321,49 +355,58 @@ class _EventWriteState extends State<EventWrite> {
                                     context: context,
                                     firstDate: DateTime.now(),
                                     initialDate: currentValue ?? DateTime.now(),
-                                    lastDate: DateTime(2100));},
-                              onSaved: (input){
-                                eventrequest.eventDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(input).toString();
+                                    lastDate: DateTime(2100));
+                              },
+                              onSaved: (input) {
+                                eventrequest.eventDate =
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        .format(input)
+                                        .toString();
                               },
                               validator: (value) {
-                                if(value.toString().isEmpty) {
+                                if (value.toString().isEmpty) {
                                   return "Please enter some text";
                                 }
                                 return null;
                               },
                             ),
-
                           ],
-
-
-
                         ),
                       ),
-                      elevation: 5,
-                    ),
-                    Card(
-                      child: Container(
-                        padding: new EdgeInsets.all(10),
-                        child:TextFormField(
+
+                    Container(
+                        //padding: new EdgeInsets.all(10),
+                        child: TextFormField(
                           //attribute: "Duration",
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.timelapse),
-                            labelText: "Duration",
-                            hintText: "",
-                          ),
-                          onSaved: (input){
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              //icon: const Icon(Icons.timelapse,
+                                //  color: Colors.grey),
+                              labelText: "Duration",
+                              hintText: "Duration of event in hrs",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
                             eventrequest.eventDuration = input;
                           },
                           validator: (value) {
-                            if(value.isEmpty) {
+                            if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },
                         ),
                       ),
-                      elevation: 5,
-                    ),
+
                     /*    Card(
                         child: Container(
                           padding: new EdgeInsets.all(10),
@@ -410,297 +453,330 @@ class _EventWriteState extends State<EventWrite> {
                       ),
                       elevation: 5,
                     ),*/
-                    Card(
-                      child: Container(
-                        padding: new EdgeInsets.all(10),
-                        child:TextFormField(
+                    Container(
+                        //padding: new EdgeInsets.all(10),
+                        child: TextFormField(
+                          focusNode: myFocusNode,
                           //attribute: "Type",
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.low_priority),
-                            labelText: "Type",
-                            hintText: "",
-                          ),
-                          onSaved: (input){
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                             // icon: const Icon(Icons.low_priority,
+                               //   color: Colors.grey),
+                              labelText: "Event Type",
+
+                              hintText: "Event Type eg: Bhajan",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: myFocusNode.hasFocus ? Colors.black : Colors.grey
+                              )),
+                          onSaved: (input) {
                             eventrequest.eventType = input;
                           },
                           validator: (value) {
-                            if(value.isEmpty) {
+                            if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },
                         ),
                       ),
-                      elevation: 5,
-                    ),
-                    Card(
-                      child: Container(
-                        padding: new EdgeInsets.all(10),
-                        child:TextFormField(
+
+                     Container(
+                        //padding: new EdgeInsets.all(10),
+                        child: TextFormField(
                           //attribute: "PhoneNumber",
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.phone_iphone),
-                            labelText: "PhoneNumber",
-                            hintText: "",
-                          ),
-                          onSaved: (input){
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                             // icon: const Icon(Icons.phone_iphone,
+                               //   color: Colors.grey),
+                              labelText: "Phone Number",
+                              hintText: "Type Phone Number",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
                             eventrequest.phoneNumber = int.parse(input);
                           },
                           validator: (value) {
-                            if(value.isEmpty) {
+                            if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },
                         ),
                       ),
-                      elevation: 5,
-                    ),
-                    Card(
-                      child: Column(
+                    new Container(
+
+                        alignment: Alignment.centerLeft,
+                         margin: const EdgeInsets.only(top: 20),
+                        child: new Text("About Event Venue",
+                          style: new TextStyle(
+                              fontSize: 17.0,
+                              color: KirthanStyles.colorPallete30
+                          ),)),
+
+                   Column(
                         children: <Widget>[
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Row(
                                   children: <Widget>[
                                     addRadioButton(0, 'Stationary'),
                                     addRadioButton(1, 'Moving'),
-
-                                  ],
-                                ),
-
-                                /*RaisedButton.icon(
-                                 onPressed: (){ Navigator.push(
-                                     context,
-                                     MaterialPageRoute(
-                                         builder: (context) => AddLocation(eventrequest: eventrequest,)
-                                     )
-                                 ); },
-
-                                 shape: RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                                 label: Text('Add Location',
-                                   style: TextStyle(color: Colors.black),),
-                                 icon: Icon(Icons.location_on, color:Colors.black,),
-                                 textColor: Colors.black,
-                                 splashColor: Colors.red,
-                                 color: Colors.white,
-                               ),*/
-
                               ]),
-
-                          RaisedButton.icon(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children:<Widget>[
+                              RaisedButton.icon(
                             onPressed: () {
-                              Navigator.push( context,MaterialPageRoute(
-                                builder: (context) =>
-                                    BlocProvider(
-                                      create: (BuildContext context) => MapsBloc(),
-                                      child: Scaffold(
-                                          appBar: AppBar(
-                                            title: Text('Location'),
-                                            actions: <Widget>[
-                                              IconButton(
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (BuildContext context) =>
+                                        MapsBloc(),
+                                    child: Scaffold(
+                                        appBar: AppBar(
+                                          title: Text('Location'),
+                                          actions: <Widget>[
+                                            IconButton(
+                                              icon: Icon(Icons.refresh),
+                                              onPressed: () => {
+                                                setState(() {
+                                                  markers.clear();
+                                                }), //setState
+                                              }, //onpressed
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.done),
+                                              onPressed: () {
+                                                handleTap(tappedPoint1);
+                                                eventrequest.sourceLongitude =
+                                                    tappedPoint1.longitude;
+                                                eventrequest.sourceLatitude =
+                                                    tappedPoint1.latitude;
+                                                print(eventrequest
+                                                    .sourceLongitude);
+                                                print(eventrequest
+                                                    .sourceLatitude);
+                                                handleTap(tappedPoint2);
+                                                //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
 
-                                                icon: Icon(Icons.refresh),
-                                                onPressed:  () => {
-                                                  setState(() {
-                                                    markers.clear();
-                                                  }),//setState
-                                                },//onpressed
-                                              ),
-
-                                              IconButton(
-                                                icon: Icon(Icons.done),
-                                                onPressed: (){
-
-                                                  handleTap(tappedPoint1);
-                                                  eventrequest.sourceLongitude=tappedPoint1.longitude;
-                                                  eventrequest.sourceLatitude=tappedPoint1.latitude;
-                                                  print(eventrequest.sourceLongitude);
-                                                  print(eventrequest.sourceLatitude);
-                                                  handleTap(tappedPoint2);
-                                                  //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
-                                                  //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
-
-                                                  // widget.eventrequest.eventLocation=tappedPoint1.toString();
-                                                },
-                                                //onpressed
-                                              ),
-
-                                            ],
-
-
-
-                                          ),
-                                          body: Column(
-                                            children: <Widget>[
-                                              Stack(
-                                                children: <Widget>[
-                                                  Container(
-                                                      height: MediaQuery
-                                                          .of(context)
-                                                          .size
-                                                          .height - 80.0,
-                                                      width: double.infinity,
-                                                      child: !mapToggle
-                                                          ? GoogleMap(
-                                                        myLocationButtonEnabled: true,
-                                                        myLocationEnabled: true,
-                                                        compassEnabled: true,
-                                                        onMapCreated: onMapCreated,
-                                                        onTap: handleTap,
-                                                        markers:
-
-                                                        Set.from(myMarker),
-
-                                                        initialCameraPosition: CameraPosition(
-                                                            target: LatLng(0.0, 0.0), zoom: 16),
-
-                                                      )
-                                                          : Center(
-                                                          child: Text(
+                                                // widget.eventrequest.eventLocation=tappedPoint1.toString();
+                                              },
+                                              //onpressed
+                                            ),
+                                          ],
+                                        ),
+                                        body: Column(
+                                          children: <Widget>[
+                                            Stack(
+                                              children: <Widget>[
+                                                Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height -
+                                                            80.0,
+                                                    width: double.infinity,
+                                                    child: !mapToggle
+                                                        ? GoogleMap(
+                                                            myLocationButtonEnabled:
+                                                                true,
+                                                            myLocationEnabled:
+                                                                true,
+                                                            compassEnabled:
+                                                                true,
+                                                            onMapCreated:
+                                                                onMapCreated,
+                                                            onTap: handleTap,
+                                                            markers: Set.from(
+                                                                myMarker),
+                                                            initialCameraPosition:
+                                                                CameraPosition(
+                                                                    target:
+                                                                        LatLng(
+                                                                            0.0,
+                                                                            0.0),
+                                                                    zoom: 16),
+                                                          )
+                                                        : Center(
+                                                            child: Text(
                                                             'Loading.. Please wait..',
-                                                            style: TextStyle(fontSize: 20.0),
+                                                            style: TextStyle(
+                                                                fontSize: 20.0),
                                                           ))),
-
-
-
-
-
-                                                ],
-                                              )
-                                            ],
-                                          )),
-
-                                    ),
-                              ),);
-
-
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  ),
+                                ),
+                              );
                             },
-
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                            label: Text('Add Source Location',
-                              style: TextStyle(color: Colors.black),),
-                            icon: Icon(Icons.location_on,
-                              color:Colors.black,),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+
+                            label: Text(
+                              'Add Source Location',
+                              style: TextStyle(color: Colors.black,fontSize:12.5),
+                            ),
+                            icon: Icon(
+                              Icons.location_on,
+                              color: Colors.black,
+                            ),
                             textColor: Colors.black,
                             splashColor: Colors.red,
                             color: Colors.white,
                           ),
                           RaisedButton.icon(
                             onPressed: () {
-                              Navigator.push( context,MaterialPageRoute(
-                                builder: (context) =>
-                                    BlocProvider(
-                                      create: (BuildContext context) => MapsBloc(),
-                                      child: Scaffold(
-                                          appBar: AppBar(
-                                            title: Text('Location'),
-                                            actions: <Widget>[
-                                              IconButton(
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (BuildContext context) =>
+                                        MapsBloc(),
+                                    child: Scaffold(
+                                        appBar: AppBar(
+                                          title: Text('Location'),
+                                          actions: <Widget>[
+                                            IconButton(
+                                              icon: Icon(Icons.refresh),
+                                              onPressed: () => {
+                                                setState(() {
+                                                  markers.clear();
+                                                }), //setState
+                                              }, //onpressed
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.done),
+                                              onPressed: () {
+                                                handleTap2(tappedPoint2);
+                                                eventrequest
+                                                        .destinationLongitude =
+                                                    tappedPoint1.longitude;
+                                                eventrequest
+                                                        .destinationLatitude =
+                                                    tappedPoint1.latitude;
+                                                print(eventrequest
+                                                    .destinationLongitude);
+                                                print(eventrequest
+                                                    .destinationLatitude);
 
-                                                icon: Icon(Icons.refresh),
-                                                onPressed:  () => {
-                                                  setState(() {
-                                                    markers.clear();
-                                                  }),//setState
-                                                },//onpressed
-                                              ),
+                                                //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
 
-                                              IconButton(
-                                                icon: Icon(Icons.done),
-                                                onPressed: (){
-
-                                                  handleTap2(tappedPoint2);
-                                                  eventrequest.destinationLongitude=tappedPoint1.longitude;
-                                                  eventrequest.destinationLatitude=tappedPoint1.latitude;
-                                                  print(eventrequest.destinationLongitude);
-                                                  print(eventrequest.destinationLatitude);
-
-                                                  //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
-                                                  //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
-
-                                                  // widget.eventrequest.eventLocation=tappedPoint1.toString();
-                                                },
-                                                //onpressed
-                                              ),
-
-                                            ],
-
-
-
-                                          ),
-                                          body: Column(
-                                            children: <Widget>[
-                                              Stack(
-                                                children: <Widget>[
-                                                  Container(
-                                                      height: MediaQuery
-                                                          .of(context)
-                                                          .size
-                                                          .height - 80.0,
-                                                      width: double.infinity,
-                                                      child: !mapToggle
-                                                          ? GoogleMap(
-                                                        myLocationButtonEnabled: true,
-                                                        myLocationEnabled: true,
-                                                        compassEnabled: true,
-                                                        onMapCreated: onMapCreated,
-                                                        onTap: handleTap,
-                                                        markers:
-
-                                                        Set.from(myMarker),
-
-                                                        initialCameraPosition: CameraPosition(
-                                                            target: LatLng(0.0, 0.0), zoom: 16),
-
-                                                      )
-                                                          : Center(
-                                                          child: Text(
+                                                // widget.eventrequest.eventLocation=tappedPoint1.toString();
+                                              },
+                                              //onpressed
+                                            ),
+                                          ],
+                                        ),
+                                        body: Column(
+                                          children: <Widget>[
+                                            Stack(
+                                              children: <Widget>[
+                                                Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height -
+                                                            80.0,
+                                                    width: double.infinity,
+                                                    child: !mapToggle
+                                                        ? GoogleMap(
+                                                            myLocationButtonEnabled:
+                                                                true,
+                                                            myLocationEnabled:
+                                                                true,
+                                                            compassEnabled:
+                                                                true,
+                                                            onMapCreated:
+                                                                onMapCreated,
+                                                            onTap: handleTap,
+                                                            markers: Set.from(
+                                                                myMarker),
+                                                            initialCameraPosition:
+                                                                CameraPosition(
+                                                                    target:
+                                                                        LatLng(
+                                                                            0.0,
+                                                                            0.0),
+                                                                    zoom: 16),
+                                                          )
+                                                        : Center(
+                                                            child: Text(
                                                             'Loading.. Please wait..',
-                                                            style: TextStyle(fontSize: 20.0),
+                                                            style: TextStyle(
+                                                                fontSize: 20.0),
                                                           ))),
-
-
-
-
-
-                                                ],
-                                              )
-                                            ],
-                                          )),
-
-                                    ),
-                              ),);
-
-
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  ),
+                                ),
+                              );
                             },
-
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                            label: Text('Add Destination Location',
-                              style: TextStyle(color: Colors.black),),
-                            icon: Icon(Icons.location_on,
-                              color:Colors.black,),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            label: Text(
+                              'Add Destination Location',
+                              style: TextStyle(color: Colors.black,fontSize: 12.5),
+                            ),
+                            icon: Icon(
+                              Icons.location_on,
+                              color: Colors.black,
+                            ),
                             textColor: Colors.black,
                             splashColor: Colors.red,
                             color: Colors.white,
                           ),
+            ]),
+
                           TextFormField(
                             //attribute: "Address",
                             decoration: InputDecoration(
-                              icon: const Icon(Icons.home),
-                              labelText: "Address",
-                              hintText: "",
-                            ),
-                            onSaved: (input){
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                icon:
+                                    const Icon(Icons.home, color: Colors.grey),
+                                labelText: "Address",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
                               eventrequest.addLineOne = input;
                               eventrequest.eventLocation = input;
                             },
                             validator: (value) {
-                              if(value.isEmpty) {
+                              if (value.isEmpty) {
                                 return "Please enter some text";
                               }
                               return null;
@@ -709,15 +785,25 @@ class _EventWriteState extends State<EventWrite> {
                           TextFormField(
                             //attribute: "line2",
                             decoration: InputDecoration(
-
-                              labelText: "Line 2",
-                              hintText: "",
-                            ),
-                            onSaved: (input){
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "Line 2",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
                               eventrequest.addLineTwo = input;
                             },
                             validator: (value) {
-                              if(value.isEmpty) {
+                              if (value.isEmpty) {
                                 return "Please enter some text";
                               }
                               return null;
@@ -726,33 +812,52 @@ class _EventWriteState extends State<EventWrite> {
                           TextFormField(
                             //attribute: "line3",
                             decoration: InputDecoration(
-
-                              labelText: "Line 3",
-                              hintText: "",
-                            ),
-                            onSaved: (input){
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "Line 3",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
                               eventrequest.addLineThree = input;
                             },
                             validator: (value) {
-                              if(value.isEmpty) {
+                              if (value.isEmpty) {
                                 return "Please enter some text";
                               }
                               return null;
                             },
-
                           ),
                           TextFormField(
                             //attribute: "locality",
                             decoration: InputDecoration(
-
-                              labelText: "Locality",
-                              hintText: "",
-                            ),
-                            onSaved: (input){
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "Locality",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
                               eventrequest.locality = input;
                             },
                             validator: (value) {
-                              if(value.isEmpty) {
+                              if (value.isEmpty) {
                                 return "Please enter some text";
                               }
                               return null;
@@ -761,14 +866,25 @@ class _EventWriteState extends State<EventWrite> {
                           TextFormField(
                             //attribute: "PinCode",
                             decoration: InputDecoration(
-                              labelText: "PinCode",
-                              hintText: "",
-                            ),
-                            onSaved: (input){
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "PinCode",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
                               eventrequest.pincode = int.parse(input);
                             },
                             validator: (value) {
-                              if(value.isEmpty) {
+                              if (value.isEmpty) {
                                 return "Please enter some text";
                               }
                               return null;
@@ -776,13 +892,8 @@ class _EventWriteState extends State<EventWrite> {
                           ),
                         ],
                       ),
-                      elevation: 5,
-                    ),
 
-
-
-                    Card(
-                      child: Column(
+                    Column(
                         children: <Widget>[
                           DropdownButtonFormField<String>(
                             value: _selectedCity,
@@ -790,10 +901,10 @@ class _EventWriteState extends State<EventWrite> {
                             hint: Text('Select City'),
                             items: _cities
                                 .map((city) => DropdownMenuItem<String>(
-                              value: city,
-                              child: Text(city),
-                            )).toList(),
-
+                                      value: city,
+                                      child: Text(city),
+                                    ))
+                                .toList(),
                             onChanged: (input) {
                               setState(() {
                                 _selectedCity = input;
@@ -809,9 +920,10 @@ class _EventWriteState extends State<EventWrite> {
                             hint: Text('Select State'),
                             items: _states
                                 .map((state) => DropdownMenuItem(
-                              value: state,
-                              child: Text(state),
-                            )).toList(),
+                                      value: state,
+                                      child: Text(state),
+                                    ))
+                                .toList(),
                             onChanged: (input) {
                               setState(() {
                                 _selectedState = input;
@@ -820,17 +932,17 @@ class _EventWriteState extends State<EventWrite> {
                             onSaved: (input) {
                               eventrequest.state = input;
                             },
-
                           ),
                           DropdownButtonFormField<String>(
                             value: _selectedCountry,
                             icon: const Icon(Icons.location_city),
                             hint: Text('Select Country'),
-                            items: ['IND','Kyrgyzstan']
+                            items: ['IND', 'Kyrgyzstan']
                                 .map((country) => DropdownMenuItem(
-                              value: country,
-                              child: Text(country),
-                            )).toList(),
+                                      value: country,
+                                      child: Text(country),
+                                    ))
+                                .toList(),
                             onChanged: (input) {
                               setState(() {
                                 _selectedCountry = input;
@@ -840,32 +952,33 @@ class _EventWriteState extends State<EventWrite> {
                               eventrequest.country = input;
                             },
                           ),
-
                         ],
                       ),
-                      elevation: 5,
-                    ),
 
-
-
-
-                    new Container(
-                        margin: const EdgeInsets.only(top: 40)
-                    ),
+                    new Container(margin: const EdgeInsets.only(top: 40)),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         MaterialButton(
-                            child: Text("Submit",style: TextStyle(color: Colors.white),),
-                            color: Colors.blue,
-                            onPressed: () async{
-
+                          color: KirthanStyles.colorPallete60,
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        MaterialButton(
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: KirthanStyles.colorPallete30,
+                            onPressed: () async {
                               if (_formKey.currentState.validate()) {
-
-                                final FirebaseUser user = await auth.currentUser();
+                                final FirebaseUser user =
+                                    await auth.currentUser();
                                 final String email = user.email;
-                                eventrequest.createdBy=email;
+                                eventrequest.createdBy = email;
                                 print("created by " + eventrequest.createdBy);
                                 print(email);
 
@@ -873,14 +986,16 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.isProcessed = false;
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
                                 // print(eventrequest.createdBy);
-                                String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                                eventrequest.createdTime =  dt;
+                                String dt =
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        .format(DateTime.now());
+                                eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
                                 eventrequest.approvalStatus = "";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
-                                eventrequest.toJson();
+                                    eventrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
                                 EventRequest newteamrequest = await eventPageVM
@@ -889,21 +1004,22 @@ class _EventWriteState extends State<EventWrite> {
                                 print(newteamrequest.id);
                                 String eid = newteamrequest.id.toString();
 
-                                SnackBar mysnackbar = SnackBar (
-                                  content: Text("Event registered $successful with $eid"),
+                                SnackBar mysnackbar = SnackBar(
+                                  content: Text(
+                                      "Event registered $successful with $eid"),
                                   duration: new Duration(seconds: 4),
                                   backgroundColor: Colors.green,
                                 );
 
                                 // Scaffold.of(context).showSnackBar(mysnackbar);
-                                _scaffoldKey.currentState.showSnackBar(mysnackbar);
+                                _scaffoldKey.currentState
+                                    .showSnackBar(mysnackbar);
                                 // Scaffold.of(context).showSnackBar(mysnackbar);
                               }
                               //String s = jsonEncode(userrequest.mapToJson());
                               //service.registerUser(s);
                               //print(s);
-                            }
-                        ),
+                            }),
                         /*MaterialButton(
                         child: Text("Reset",style: TextStyle(color: Colors.white),),
                         color: Colors.pink,
@@ -918,19 +1034,18 @@ class _EventWriteState extends State<EventWrite> {
               ),
             ),
           ),
-        );}
-      ),
+        );
+      }),
     );
   }
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
-    eventrequest.createdBy=email;
+    eventrequest.createdBy = email;
     print("created by " + eventrequest.createdBy);
     print(email);
     return email;
   }
-
 }
-

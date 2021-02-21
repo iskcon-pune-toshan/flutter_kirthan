@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
@@ -50,7 +51,13 @@ class EventsPanel extends StatelessWidget {
                             },
                           ),*/
                           RaisedButton(
-                            child: const Text("Event-User Add"),
+                            color: KirthanStyles.colorPallete30,
+                            child: const Text(
+                              "Event-User Add",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -69,7 +76,13 @@ class EventsPanel extends StatelessWidget {
                           ),*/
                           RaisedButton(
                             //child: const Text("This Week"),
-                            child: const Text("Event-User View"),
+                            color: KirthanStyles.colorPallete30,
+                            child: const Text(
+                              "Event-User View",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -95,12 +108,12 @@ class EventsPanel extends StatelessWidget {
                               //child: const Text("This Week"),
                               child: Center(
                                   child: Text(
-                                    'Map',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: MyPrefSettingsApp.custFontSize),
-                                  )),
+                                'Map',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: MyPrefSettingsApp.custFontSize),
+                              )),
 
                               // child: const Text("Map"),
                               onPressed: () {

@@ -10,11 +10,11 @@ import 'package:flutter_kirthan/views/pages/screens/screens_create.dart';
 import 'package:flutter_kirthan/services/screens_service_impl.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
+import '../event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 
 final ScreensPageViewModel screensPageVM =
-ScreensPageViewModel(apiSvc: ScreensAPIService());
+    ScreensPageViewModel(apiSvc: ScreensAPIService());
 
 class ScreensView extends StatefulWidget {
   ScreensView({Key key}) : super(key: key);
@@ -30,7 +30,7 @@ class _ScreensViewState extends State<ScreensView> {
   int _index;
   SharedPreferences prefs;
   List<String> access;
-  Map<String,bool> accessTypes = new Map<String,bool>();
+  Map<String, bool> accessTypes = new Map<String, bool>();
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
@@ -38,7 +38,8 @@ class _ScreensViewState extends State<ScreensView> {
       access = prefs.getStringList(widget.screenName);
       access.forEach((f) {
         List<String> access = f.split(":");
-        accessTypes[access.elementAt(0)] =  access.elementAt(1).toLowerCase() == "true" ? true:false;
+        accessTypes[access.elementAt(0)] =
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       screensPageVM.accessTypes = accessTypes;
     });
@@ -86,16 +87,12 @@ class _ScreensViewState extends State<ScreensView> {
       floatingActionButton: FloatingActionButton(
         heroTag: "screens",
         child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+        //backgroundColor: Colors.green,
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ScreensWrite()));
+              context, MaterialPageRoute(builder: (context) => ScreensWrite()));
         },
       ),
-
     );
   }
 }

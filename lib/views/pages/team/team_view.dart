@@ -53,7 +53,7 @@ class _TeamViewState extends State<TeamView>
   @override
   void initState() {
     super.initState();
-_index=2;
+    _index = 2;
     loadData();
     loadPref();
   }
@@ -85,13 +85,12 @@ _index=2;
       floatingActionButton: FloatingActionButton(
         heroTag: "team",
         child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+        //backgroundColor: Colors.green,
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => TeamWrite()));
         },
       ),
-
     );
   }
 }
