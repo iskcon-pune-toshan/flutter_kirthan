@@ -7,28 +7,16 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
-import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
-import 'event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
-
-import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
-import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
-import 'package:flutter_kirthan/views/pages/user/user_view.dart';
-
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -58,17 +46,13 @@ String datetomm;
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
-  //List<String> userdetails;
+
   String photoUrl;
   String name;
   List<String> event;
   List<String> tempList = List<String>();
   bool isLoading = false;
   int length;
-
-  //final baseUrl = 'http://172.20.10.2:8085'; //Manjunath Sir
-  //final baseUrl = 'http://164.52.202.127:8080'; //Rahul
-
   http.Client client1 = http.Client();
   Future getevent() async{
     String requestBody = '';
@@ -85,8 +69,6 @@ String datetomm;
       List<dynamic> eventrequestsData = json.decode(response.body);
       //print(eventrequestsData);
       List<String> events = eventrequestsData.map((event) => event.toString()).toList();
-      print(events);
-      print(events);
       event=events;
       print(event);
       int len=event.length;
@@ -164,7 +146,6 @@ datetomm=tomorrow;
     NotificationManager ntfManger = NotificationManager();
     getevent();
 geteventbyday();
-    //eventPageVM.getEventByDate(now.toString());
     print(now.substring(0,10));
     print(date);
 
@@ -480,116 +461,6 @@ geteventbyday();
               context, MaterialPageRoute(builder: (context) => EventWrite()));
         },
       ),
-/*     bottomNavigationBar: BottomNavigationBar(
-        //iconSize: 30,
-        type: BottomNavigationBarType.fixed,
-        onTap: (newIndex) {
-
-          setState(() => _index = newIndex);
-          print(newIndex);
-          switch (newIndex) {
-            case 0:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EventView()));
-              break;
-            case 1:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserView()));
-              break;
-            case 2:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TeamView()));
-              break;
-            case 3:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationView()));
-              break;
-            case 4:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Calendar()));
-              break;
-            case 5:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TempleView()));
-              break;
-            case 6:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => RoleScreenView()));
-              break;
-          }
-        },
-        currentIndex: _index,
-        selectedItemColor: Colors.orange,
-        items: <BottomNavigationBarItem>[
-
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Users'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            title: Text('Team'),
-          ),
-          BottomNavigationBarItem(
-            title: Text("Notification"),
-            icon: ScopedModel<NotificationViewModel>(
-              model: NotificationViewModel(),
-              child: ScopedModelDescendant<NotificationViewModel>(
-                  builder: (context, child, model) {
-                FirebaseMessageService fms = new FirebaseMessageService();
-                fms.initMessageHandler(context);
-                print(model.newNotificationCount);
-                bool visibilty = true;
-                if (model.newNotificationCount == 0) visibilty = false;
-                return Stack(
-                  alignment: Alignment.topRight,
-                  children: <Widget>[
-                    Icon(Icons.notifications),
-                    if (visibilty)
-                      Positioned(
-                        child: Container(
-                          padding: EdgeInsets.all(1),
-                          decoration: new BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          constraints: BoxConstraints(
-                            minHeight: 8,
-                            minWidth: 8,
-                          ),
-                          child: Text(
-                            model.newNotificationCount.toString(),
-                            style: new TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              }),
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            title: Text('Calendar'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.title),
-            title: Text('Temple'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text('User Temple'),
-          ),
-        ],
-      ),*/
     );
   }
 }
