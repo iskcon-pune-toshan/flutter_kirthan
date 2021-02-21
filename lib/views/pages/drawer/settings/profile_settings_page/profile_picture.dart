@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class profilePicture extends StatefulWidget {
   @override
@@ -117,21 +119,23 @@ class _profilePictureState extends State<profilePicture> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Username:    ',
-                                  style: TextStyle(
-                                      fontSize: MyPrefSettingsApp.custFontSize),
-                                ),
-                                Text(
-                                  'User 1',
-                                  style: TextStyle(
-                                      fontSize: MyPrefSettingsApp.custFontSize,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                            Consumer<ThemeNotifier>(
+                              builder: (context, notifier, child) => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Username:    ',
+                                    style: TextStyle(
+                                        fontSize: notifier.custFontSize),
+                                  ),
+                                  Text(
+                                    'User 1',
+                                    style: TextStyle(
+                                        fontSize: notifier.custFontSize,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
                             FlatButton(
                               child: Text('Change Profile Picture'),

@@ -31,20 +31,24 @@ class RoleScreenRequestsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     //popupList.
     //teamPageVM.accessTypes.keys
-    var title = Text(
-      rolescreenrequest?.roleId.toString(),
-      style: GoogleFonts.openSans(
-        //color: KirthanStyles.titleColor,
-        fontWeight: FontWeight.bold,
-        fontSize: MyPrefSettingsApp.custFontSize,
-        //fontSize: KirthanStyles.titleFontSize,
+    var title = Consumer<ThemeNotifier>(
+      builder: (context, notifier, child) => Text(
+        rolescreenrequest?.roleId.toString(),
+        style: GoogleFonts.openSans(
+          //color: KirthanStyles.titleColor,
+          fontWeight: FontWeight.bold,
+          fontSize: notifier.custFontSize,
+          //fontSize: KirthanStyles.titleFontSize,
+        ),
       ),
     );
-    var city = Text(
-      rolescreenrequest?.createFlag.toString(),
-      style: GoogleFonts.openSans(
-        fontWeight: FontWeight.bold,
-        fontSize: MyPrefSettingsApp.custFontSize,
+    var city = Consumer<ThemeNotifier>(
+      builder: (context, notifier, child) => Text(
+        rolescreenrequest?.createFlag.toString(),
+        style: GoogleFonts.openSans(
+          fontWeight: FontWeight.bold,
+          fontSize: notifier.custFontSize,
+        ),
       ),
     );
 
@@ -53,11 +57,13 @@ class RoleScreenRequestsListItem extends StatelessWidget {
       children: <Widget>[
         Container(
           margin: const EdgeInsets.only(left: 4.0),
-          child: Text(
-            rolescreenrequest?.screenId.toString(),
-            style: TextStyle(
-              color: KirthanStyles.subTitleColor,
-              fontSize: MyPrefSettingsApp.custFontSize,
+          child: Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Text(
+              rolescreenrequest?.screenId.toString(),
+              style: TextStyle(
+                color: KirthanStyles.subTitleColor,
+                fontSize: notifier.custFontSize,
+              ),
             ),
           ),
         ),
@@ -158,7 +164,6 @@ class RoleScreenRequestsListItem extends StatelessWidget {
     );
 
     return Card(
-      elevation: 10,
       child: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
           decoration: new BoxDecoration(
@@ -171,7 +176,11 @@ class RoleScreenRequestsListItem extends StatelessWidget {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 tileMode: TileMode.clamp),*/
+            color: notifier.currentColorStatus
+                ? notifier.currentColor
+                : Theme.of(context).cardColor,
           ),
+
           child: new Column(
             children: <Widget>[
               new ListTile(

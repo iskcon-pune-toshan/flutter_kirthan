@@ -30,13 +30,15 @@ class UserRequestsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = Text(
-      userrequest?.roleId.toString(),
-      style: GoogleFonts.openSans(
-        //color: KirthanStyles.titleColor,
-        fontWeight: FontWeight.bold,
-        fontSize: MyPrefSettingsApp.custFontSize,
-        //fontSize: KirthanStyles.titleFontSize,
+    var title = Consumer<ThemeNotifier>(
+      builder: (context, notifier, child) => Text(
+        userrequest?.roleId.toString(),
+        style: GoogleFonts.openSans(
+          //color: KirthanStyles.titleColor,
+          fontWeight: FontWeight.bold,
+          fontSize: notifier.custFontSize,
+          //fontSize: KirthanStyles.titleFontSize,
+        ),
       ),
     );
 
@@ -51,11 +53,13 @@ class UserRequestsListItem extends StatelessWidget {
         */
         Container(
           margin: const EdgeInsets.only(left: 4.0),
-          child: Text(
-            userrequest?.userName,
-            style: TextStyle(
-              //color: KirthanStyles.subTitleColor,
-              fontSize: MyPrefSettingsApp.custFontSize,
+          child: Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Text(
+              userrequest?.userName,
+              style: TextStyle(
+                //color: KirthanStyles.subTitleColor,
+                fontSize: notifier.custFontSize,
+              ),
             ),
           ),
         ),
@@ -146,12 +150,14 @@ class UserRequestsListItem extends StatelessWidget {
                                       Scaffold.of(context)
                                           .showSnackBar(mysnackbar);
                                     },
-                                    child: Text(
-                                      "yes",
-                                      style: TextStyle(
-                                          fontSize:
-                                              MyPrefSettingsApp.custFontSize,
-                                          color: Colors.white),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        "yes",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -162,12 +168,14 @@ class UserRequestsListItem extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text(
-                                      "No",
-                                      style: TextStyle(
-                                          fontSize:
-                                              MyPrefSettingsApp.custFontSize,
-                                          color: Colors.white),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        "No",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -186,11 +194,13 @@ class UserRequestsListItem extends StatelessWidget {
     );
 
     return Card(
-      elevation: 10,
       child: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
           decoration: new BoxDecoration(
             borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+            color: notifier.currentColorStatus
+                ? notifier.currentColor
+                : Theme.of(context).cardColor,
           ),
           child: new Column(
             children: <Widget>[

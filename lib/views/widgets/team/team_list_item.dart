@@ -31,13 +31,15 @@ class TeamRequestsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     //popupList.
     //teamPageVM.accessTypes.keys
-    var title = Text(
-      teamrequest?.teamTitle,
-      style: GoogleFonts.openSans(
-        //color: KirthanStyles.titleColor,
-        fontWeight: FontWeight.bold,
-        fontSize: MyPrefSettingsApp.custFontSize,
-        //fontSize: KirthanStyles.titleFontSize,
+    var title = Consumer<ThemeNotifier>(
+      builder: (context, notifier, child) => Text(
+        teamrequest?.teamTitle,
+        style: GoogleFonts.openSans(
+          //color: KirthanStyles.titleColor,
+          fontWeight: FontWeight.bold,
+          fontSize: notifier.custFontSize,
+          //fontSize: KirthanStyles.titleFontSize,
+        ),
       ),
     );
 
@@ -125,12 +127,14 @@ class TeamRequestsListItem extends StatelessWidget {
                                       Scaffold.of(context)
                                           .showSnackBar(mysnackbar);
                                     },
-                                    child: Text(
-                                      "yes",
-                                      style: TextStyle(
-                                          fontSize:
-                                              MyPrefSettingsApp.custFontSize,
-                                          color: Colors.white),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        "yes",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -141,12 +145,14 @@ class TeamRequestsListItem extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text(
-                                      "No",
-                                      style: TextStyle(
-                                          fontSize:
-                                              MyPrefSettingsApp.custFontSize,
-                                          color: Colors.white),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        "No",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -165,11 +171,13 @@ class TeamRequestsListItem extends StatelessWidget {
     );
 
     return Card(
-      elevation: 10,
       child: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
           decoration: new BoxDecoration(
             borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+            color: notifier.currentColorStatus
+                ? notifier.currentColor
+                : Theme.of(context).cardColor,
           ),
           child: new Column(
             children: <Widget>[

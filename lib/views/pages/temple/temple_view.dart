@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/widgets/temple/temple_panel.dart';
+import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/views/pages/temple/temple_create.dart';
 import 'package:flutter_kirthan/services/temple_service_impl.dart';
@@ -13,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 
 final TemplePageViewModel templePageVM =
     TemplePageViewModel(apiSvc: TempleAPIService());
@@ -61,40 +64,46 @@ class _TempleViewState extends State<TempleView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Temple"),
-      ),
-      body: ScopedModel<TemplePageViewModel>(
-        model: templePageVM,
-        child: TemplesPanel(
-          templeType: "All",
+    return Consumer<ThemeNotifier>(
+      builder:(content, notifier,child)=> Scaffold(
+        appBar: AppBar(
+          title: Text("Temple",
+          style: TextStyle(
+            fontSize: notifier.custFontSize,
+          ),),
         ),
-      ),
-      /*floatingActionButton: accessTypes[ACCESS_TYPE_CREATE] == true
-          ? FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
-        //tooltip: accessTypes["Create"].toString(),
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TempleWrite()));
-        },
-      )
-          : FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.grey,
-        onPressed: null,
+        drawer: MyDrawer(),
+        body: ScopedModel<TemplePageViewModel>(
+          model: templePageVM,
+          child: TemplesPanel(
+            templeType: "All",
+          ),
+        ),
+        /*floatingActionButton: accessTypes[ACCESS_TYPE_CREATE] == true
+            ? FloatingActionButton(
+          child: Icon(Icons.add),
+          backgroundColor: Colors.green,
+          //tooltip: accessTypes["Create"].toString(),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TempleWrite()));
+          },
+        )
+            : FloatingActionButton(
+          child: Icon(Icons.add),
+          backgroundColor: Colors.grey,
+          onPressed: null,
 
-      ),*/
-      floatingActionButton: FloatingActionButton(
-        heroTag: "temple",
-        child: Icon(Icons.add),
-        //backgroundColor: Colors.green,
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => TempleWrite()));
-        },
+        ),*/
+        floatingActionButton: FloatingActionButton(
+          heroTag: "temple",
+          child: Icon(Icons.add),
+          //backgroundColor: Colors.green,
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => TempleWrite()));
+          },
+        ),
       ),
     );
   }

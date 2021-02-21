@@ -32,13 +32,15 @@ class RolesRequestsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     //popupList.
     //teamPageVM.accessTypes.keys
-    var title = Text(
-      rolesrequest?.roleName,
-      style: GoogleFonts.openSans(
-        //color: KirthanStyles.titleColor,
-        fontWeight: FontWeight.bold,
-        fontSize: MyPrefSettingsApp.custFontSize,
-        //fontSize: KirthanStyles.titleFontSize,
+    var title = Consumer<ThemeNotifier>(
+      builder: (context, notifier, child) => Text(
+        rolesrequest?.roleName,
+        style: GoogleFonts.openSans(
+          //color: KirthanStyles.titleColor,
+          fontWeight: FontWeight.bold,
+          fontSize: notifier.custFontSize,
+          //fontSize: KirthanStyles.titleFontSize,
+        ),
       ),
     );
 
@@ -100,12 +102,14 @@ class RolesRequestsListItem extends StatelessWidget {
                                       Scaffold.of(context)
                                           .showSnackBar(mysnackbar);
                                     },
-                                    child: Text(
-                                      "yes",
-                                      style: TextStyle(
-                                          fontSize:
-                                              MyPrefSettingsApp.custFontSize,
-                                          color: Colors.white),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        "yes",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -116,12 +120,14 @@ class RolesRequestsListItem extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text(
-                                      "No",
-                                      style: TextStyle(
-                                          fontSize:
-                                              MyPrefSettingsApp.custFontSize,
-                                          color: Colors.white),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        "No",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -140,7 +146,6 @@ class RolesRequestsListItem extends StatelessWidget {
     );
 
     return Card(
-      elevation: 10,
       child: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
           decoration: new BoxDecoration(
@@ -150,6 +155,9 @@ class RolesRequestsListItem extends StatelessWidget {
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   tileMode: TileMode.clamp)*/
+            color: notifier.currentColorStatus
+                ? notifier.currentColor
+                : Theme.of(context).cardColor,
           ),
           child: new Column(
             children: <Widget>[

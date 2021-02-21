@@ -1,23 +1,16 @@
 import 'dart:ui';
-
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 
 class FaqApp extends StatefulWidget {
   @override
-  static double custFontSize = 16;
   _FaqState createState() => new _FaqState();
 }
 
 class _FaqState extends State<FaqApp> {
   double _brightness = 1.0;
-
-  void changeFontSize() async {
-    setState(() {
-      FaqApp.custFontSize += 2;
-    });
-  }
 
   @override
   initState() {
@@ -49,20 +42,16 @@ class _FaqState extends State<FaqApp> {
                 child: Column(
                   children: <Widget>[
                     Text("Frequently Asked Questions",
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.red)
+                        style: TextStyle(fontSize: 30, color: Colors.red)),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Text(
+                          "\nQ1)How do we send invite to team?\n"
+                          "\n"
+                          ".........................",
+                          style: TextStyle(
+                              fontSize: notifier.custFontSize,
+                              color: Colors.red)),
                     ),
-
-                    Text("\nQ1)How do we send invite to team?\n"
-                        "\n"
-                        ".........................",
-                        style: TextStyle(
-                            fontSize: FaqApp.custFontSize,
-                            color: Colors.red)
-                    ),
-
-
                   ],
                 ),
               ),

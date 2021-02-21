@@ -7,46 +7,55 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/faq.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create.dart';
+import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
+import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
+import 'package:flutter_kirthan/views/pages/team/team_view.dart';
+import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
+import 'package:flutter_kirthan/views/pages/user/user_view.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
-
+EventPageViewModel(apiSvc: EventAPIService());
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
   EventRequest eventrequest;
   EventView({Key key, @required this.eventrequest}) : super(key: key);
-
   @override
   _EventViewState createState() => _EventViewState();
 }
-
 class _EventViewState extends State<EventView>
     with BaseAPIService{
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
-String date;
-String datetomm;
+  String date;
+  String datetomm;
   String _selectedValue;
   int _index;
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
-
   String photoUrl;
   String name;
   List<String> event;
@@ -76,13 +85,10 @@ String datetomm;
       length=len;
       //print(event);
 //print(eventrequests);
-
     } else {
       throw Exception('Failed to get data');
     }
   }
-
-
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -90,7 +96,7 @@ String datetomm;
       access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
-            access.elementAt(1).toLowerCase() == "true" ? true : false;
+        access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       eventPageVM.accessTypes = accessTypes;
       //userdetails = prefs.getStringList("LoginDetails");
@@ -104,40 +110,30 @@ String datetomm;
     });
   }
   final now = DateTime.now();
-
   Future loadData() async {
     await eventPageVM.setEventRequests("Pune");
   }
-
   geteventbyday(){
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     print(today);
     final yesterday = DateTime(now.year, now.month, now.day - 1);
     final tomorrow = DateTime(now.year, now.month, now.day + 1).toString().substring(0,10);
-
-datetomm=tomorrow;
-
+    datetomm=tomorrow;
     final todaydate=today.toString().substring(0,10);
     date=todaydate;
 /*
     final dateToCheck = widget.eventrequest.eventDate;
     final aDate = DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
     if(aDate == today) {
-
     } else if(aDate == week) {
-
     } else if(aDate == tomorrow) {
-
     } else if(aDate == month){
-
     }*/
   }
-
   @override
   void initState() {
-;
-
+    ;
     super.initState();
     _index = 0;
     final now = DateTime.now().toString();
@@ -145,19 +141,16 @@ datetomm=tomorrow;
     loadPref();
     NotificationManager ntfManger = NotificationManager();
     getevent();
-geteventbyday();
+    geteventbyday();
     print(now.substring(0,10));
     print(date);
-
   }
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
-
     setState(() {
-      eventPageVM.setEventRequests("");
+      loadData();
     });
-
     return null;
   }
   @override
@@ -165,11 +158,12 @@ geteventbyday();
     //accessTypes.containsKey(ACCESS_TYPE_CREATE)
     //print("Accesstype: C: $accessTypes.containsKey(ACCESS_TYPE_CREATE)");
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
-    return Scaffold(
+    return Consumer<ThemeNotifier>(
+        builder:(content,notifier,child)=> Scaffold(
       appBar: AppBar(
         title: Text(
           "Events",
-          //style: TextStyle(color: KirthanStyles.titleColor),
+          style: TextStyle(fontSize: notifier.custFontSize),
         ),
         actions: <Widget>[
           IconButton(
@@ -201,7 +195,8 @@ geteventbyday();
               itemBuilder: (BuildContext context) {
                 return eventTime.map((f) {
                   return CheckedPopupMenuItem<String>(
-                    child: Text(f),
+                    child: Text(f,
+                      style: TextStyle(fontSize: notifier.custFontSize,),),
                     value: f,
                     checked: _selectedValue == f ? true : false,
                     enabled: true,
@@ -214,231 +209,7 @@ geteventbyday();
       ),
 
 
-      drawer: Drawer(
-          child: ListView(
-        children: <Widget>[
-          Card(
-            child: ListTile(
-              // title: Text("Profile"),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  CircleAvatar(
-                    child: photoUrl != null
-                        ? Image.network(
-                            photoUrl,
-                            fit: BoxFit.contain,
-                          )
-                        : Image.network(
-                            'assets/images/login_user.jpg',
-                            fit: BoxFit.scaleDown,
-                          ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      name != null ? name : "AA",
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              trailing: null,
-              onTap: () {},
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Participated Teams"),
-              trailing: Icon(Icons.phone_in_talk),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Interested Events"),
-              trailing: Icon(Icons.event),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Settings"),
-              trailing: Icon(Icons.settings),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MySettingsApp()));
-              },
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Share app"),
-              trailing: Icon(Icons.share),
-              onTap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext bc) {
-                      return Container(
-                        child: new Wrap(
-                          children: <Widget>[
-                            new ListTile(
-                                leading: new Icon(Icons.apps),
-                                title: new Text('WhatsApp'),
-                                onTap: () => {}),
-                            new ListTile(
-                              leading: new Icon(Icons.mail),
-                              title: new Text('Mail'),
-                              onTap: () => {},
-                            ),
-                            new ListTile(
-                              leading: new Icon(Icons.message),
-                              title: new Text('Sms'),
-                              onTap: () => {},
-                            ),
-                          ],
-                        ),
-                      );
-                    });
-              },
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Rate Us"),
-              trailing: const Icon(Icons.rate_review),
-              onTap: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible:
-                        true, // set to false if you want to force a rating
-                    builder: (context) {
-                      return RatingDialog(
-                        icon: Icon(Icons.rate_review),
-                        title: "Rate Us",
-                        description:
-                            "Tap a star to set your rating. Add more description here if you want.",
-                        submitButton: "SUBMIT",
-                        alternativeButton: "Contact us instead?", // optional
-                        positiveComment:
-                            "We are so happy to hear :)", // optional
-                        negativeComment: "We're sad to hear :(", // optional
-                        accentColor: Colors.red, // optional
-                        onSubmitPressed: (int rating) {
-                          print("onSubmitPressed: rating = $rating");
-                        },
-                        onAlternativePressed: () {
-                          print("onAlternativePressed: do something");
-                        },
-                      );
-                    });
-                /*Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => RateUsApp()));*/
-              },
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("About Us"),
-              trailing: Icon(Icons.info),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AboutUsApp()));
-              },
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("FAQs"),
-              trailing: Icon(Icons.question_answer),
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => FaqApp()));
-              },
-            ),
-          ),
-          Card(
-            child: ListTile(
-                title: Text("Logout"),
-                trailing: Icon(
-                  Icons.settings_power,
-                  color: Colors.lightBlue,
-                ),
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  20.0)), //this right here
-                          child: Container(
-                            height: 200,
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      'Do you want to Logout?',
-                                      style: TextStyle(
-                                        fontSize:
-                                            MyPrefSettingsApp.custFontSize,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 320.0,
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        SignInService()
-                                            .signOut()
-                                            .then((onValue) => print(onValue))
-                                            .whenComplete(() => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LoginApp())));
-                                        //Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        "yes",
-                                        style: TextStyle(
-                                            //fontSize: MyPrefSettingsApp.custFontSize,
-                                            color: Colors.white),
-                                      ),
-                                      color: const Color(0xFF1BC0C5),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 320.0,
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        "No",
-                                        style: TextStyle(
-                                            //fontSize: MyPrefSettingsApp.custFontSize,
-                                            color: Colors.white),
-                                      ),
-                                      color: const Color(0xFF1BC0C5),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      });
-                }),
-          ),
-        ],
-      )),
+      drawer: MyDrawer(),
 
       body:
     RefreshIndicator(
@@ -461,7 +232,7 @@ geteventbyday();
               context, MaterialPageRoute(builder: (context) => EventWrite()));
         },
       ),
-    );
+    ),);
   }
 }
 class Search extends SearchDelegate {

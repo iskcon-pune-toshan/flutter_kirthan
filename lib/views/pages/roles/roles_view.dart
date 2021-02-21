@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/view_models/roles_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/permissions/permissions_view.dart';
 import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
@@ -65,6 +66,7 @@ class _RolesViewState extends State<RolesView> {
       appBar: AppBar(
         title: Text("Roles"),
       ),
+      //drawer: MyDrawer(),
       body: ScopedModel<RolesPageViewModel>(
         model: rolesPageVM,
         child: RolesPanel(

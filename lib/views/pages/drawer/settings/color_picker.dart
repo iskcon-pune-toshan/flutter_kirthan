@@ -39,10 +39,12 @@ class _MyColorPickerState extends State<MyColorPicker> {
               );
             },
             child: const Text('Pick card colour'),
-            color: curColor.currentColor,
-            textColor: useWhiteForeground(curColor.currentColor)
-                ? const Color(0xffffffff)
-                : const Color(0xff000000),
+          ),
+        ),
+        Consumer<ThemeNotifier>(
+          builder: (context, notifier, child) => RaisedButton(
+            onPressed: notifier.removeColor,
+            child: const Text('Remove card color'),
           ),
         ),
       ],

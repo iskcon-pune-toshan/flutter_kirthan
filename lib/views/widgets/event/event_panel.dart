@@ -10,8 +10,11 @@ import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/eventuser/eventuser_view.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class EventsPanel extends StatelessWidget {
   String eventType;
@@ -40,6 +43,9 @@ class EventsPanel extends StatelessWidget {
                     //mainAxisAlignment: MainAxisAlignment.center,
                     //mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
+                      SizedBox(
+                        height: 3,
+                      ),
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -50,6 +56,7 @@ class EventsPanel extends StatelessWidget {
                               model.setEventRequests("1");
                             },
                           ),*/
+
                           RaisedButton(
                             color: KirthanStyles.colorPallete30,
                             child: const Text(
@@ -92,6 +99,9 @@ class EventsPanel extends StatelessWidget {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 3,
+                      ),
                       new Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         mainAxisSize: MainAxisSize.max,
@@ -107,13 +117,15 @@ class EventsPanel extends StatelessWidget {
                             child: FlatButton(
                               //child: const Text("This Week"),
                               child: Center(
-                                  child: Text(
-                                'Map',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: MyPrefSettingsApp.custFontSize),
-                              )),
+                                child: Consumer<ThemeNotifier>(
+                                    builder: (context, notifier, child) => Text(
+                                          'Map',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: notifier.custFontSize),
+                                        )),
+                              ),
 
                               // child: const Text("Map"),
                               onPressed: () {

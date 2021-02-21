@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class members_profile extends StatefulWidget {
   @override
@@ -17,11 +19,12 @@ class _members_profileState extends State<members_profile> {
         child: Container(
           padding: const EdgeInsets.all(16.0),
           child: Form(
-            child: Column(
+              child: Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Column(
               children: [
                 Text("Members",
                     style: TextStyle(
-                        fontSize: MyPrefSettingsApp.custFontSize,
+                        fontSize: notifier.custFontSize,
                         fontWeight: FontWeight.bold)),
                 Divider(),
                 Card(
@@ -40,7 +43,7 @@ class _members_profileState extends State<members_profile> {
                           labelText: "Member 1",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
-                              fontSize: MyPrefSettingsApp.custFontSize,
+                              fontSize: notifier.custFontSize,
                               fontWeight: FontWeight.bold,
                               color: Colors.grey),
                           hintStyle: TextStyle(
@@ -66,7 +69,7 @@ class _members_profileState extends State<members_profile> {
                           labelText: "Member 2",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
-                            fontSize: MyPrefSettingsApp.custFontSize,
+                            fontSize: notifier.custFontSize,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,
                           ),
@@ -93,7 +96,7 @@ class _members_profileState extends State<members_profile> {
                           labelText: "Member 3",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
-                            fontSize: MyPrefSettingsApp.custFontSize,
+                            fontSize: notifier.custFontSize,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,
                           ),
@@ -120,7 +123,7 @@ class _members_profileState extends State<members_profile> {
                           labelText: "Member 4",
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
-                            fontSize: MyPrefSettingsApp.custFontSize,
+                            fontSize: notifier.custFontSize,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,
                           ),
@@ -152,7 +155,7 @@ class _members_profileState extends State<members_profile> {
                 ),
               ],
             ),
-          ),
+          )),
         ),
       ),
     );
@@ -162,28 +165,30 @@ class _members_profileState extends State<members_profile> {
   List<Widget> addmember() {
     //Divider();
     Card(
-      child: Container(
-        //color: Colors.black26,
-        padding: const EdgeInsets.all(10),
-        child: TextFormField(
-          decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.green),
-              ),
-              icon: Icon(Icons.people_outline, color: Colors.grey),
-              labelText: "Member 3",
-              hintText: "Please enter the name of the member",
-              labelStyle: TextStyle(
-                fontSize: MyPrefSettingsApp.custFontSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
-              ),
-              hintStyle: TextStyle(
-                color: Colors.grey,
-              )),
+      child: Consumer<ThemeNotifier>(
+        builder: (context, notifier, child) => Container(
+          //color: Colors.black26,
+          padding: const EdgeInsets.all(10),
+          child: TextFormField(
+            decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
+                ),
+                icon: Icon(Icons.people_outline, color: Colors.grey),
+                labelText: "Member 3",
+                hintText: "Please enter the name of the member",
+                labelStyle: TextStyle(
+                  fontSize: notifier.custFontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                )),
+          ),
         ),
       ),
     );
