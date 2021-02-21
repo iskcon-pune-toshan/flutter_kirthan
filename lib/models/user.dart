@@ -1,3 +1,13 @@
+/*class UserModel {
+  String uid = UserRequest().id.toString();
+  String displayName = UserRequest().userName;
+  String avatarUrl;
+
+  UserModel(this.uid, {this.displayName, this.avatarUrl});
+}*/
+
+import 'package:scoped_model/scoped_model.dart';
+
 class UserLogin {
   String username;
   String password;
@@ -5,12 +15,14 @@ class UserLogin {
 
 //Typically called form service layer to create a new user
   UserLogin({this.username, this.password, this.usertype});
+
 //Typically called from the data_source layer after getting data from an external source.
   UserLogin.fromJson(Map<String, dynamic> map) {
     username = map['username'];
     password = map['password'];
     usertype = map['usertype'];
   }
+
 //Typically called from service or data_source layer just before persisting data.
   //Here is the appropriate place to check data validity before persistence.
   Map<String, dynamic> toJson() {
@@ -56,12 +68,14 @@ class UserLogin {
   }
 }
 
-class UserRequest {
+class UserRequest extends Model{
   final int id;
-  //String userId;
+
+  String uid;
   int roleId;
   String userName;
   String password;
+
   //String userType;
   String firstName;
   String lastName;
@@ -84,40 +98,42 @@ class UserRequest {
   String updatedTime;
   String approvalStatus;
   String approvalComments;
+  String avatarUrl;
 
 //Typically called form service layer to create a new user
-  UserRequest(
-      {this.id,
-      //this.userId,
-      this.userName,
-      this.password,
-      this.roleId,
-      this.firstName,
-      this.lastName,
-      this.email,
-      this.phoneNumber,
-      this.addLineOne,
-      this.addLineTwo,
-      this.addLineThree,
-      this.locality,
-      this.city,
-      this.pinCode,
-      this.state,
-      this.country,
-      this.govtIdType,
-      this.govtId,
-      this.isProcessed,
-      this.createdBy,
-      this.createdTime,
-      this.updatedBy,
-      this.updatedTime,
-      this.approvalStatus,
-      this.approvalComments});
+  UserRequest( {this.id,
+    this.uid,
+    this.userName,
+    this.password,
+    this.roleId,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phoneNumber,
+    this.addLineOne,
+    this.addLineTwo,
+    this.addLineThree,
+    this.locality,
+    this.city,
+    this.pinCode,
+    this.state,
+    this.country,
+    this.govtIdType,
+    this.govtId,
+    this.isProcessed,
+    this.createdBy,
+    this.createdTime,
+    this.updatedBy,
+    this.updatedTime,
+    this.approvalStatus,
+    this.approvalComments,
+    this.avatarUrl});
+
 //Typically called from the data_source layer after getting data from an external source.
   factory UserRequest.fromJson(Map<String, dynamic> data) {
     return UserRequest(
       id: data['id'],
-      //userId: data['userId'],
+      uid: data['uid'],
       userName: data['userName'],
       password: data['password'],
       roleId: data['roleId'],
@@ -142,45 +158,49 @@ class UserRequest {
       updatedTime: data['updatedTime'],
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
+      avatarUrl: data['avatarUrl'],
     );
   }
+
   factory UserRequest.fromMap(Map<String, dynamic> map) {
     return UserRequest(
-      id: map['id'],
-      //userId: map['userId'],
-      userName: map['userName'],
-      password: map['password'],
-      roleId: map['roleId'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      email: map['email'],
-      phoneNumber: map['phoneNumber'],
-      addLineOne: map['addLineOne'],
-      addLineTwo: map['addLineTwo'],
-      addLineThree: map['addLineThree'],
-      locality: map['locality'],
-      city: map['city'],
-      pinCode: map['pinCode'],
-      state: map['state'],
-      country: map['country'],
-      govtIdType: map['govtIdType'],
-      govtId: map['govtId'],
-      isProcessed: map['isProcessed'],
-      createdBy: map['createdBy'],
-      createdTime: map['createdTime'],
-      updatedBy: map['updatedBy'],
-      updatedTime: map['updatedTime'],
-      approvalStatus: map['approvalStatus'],
-      approvalComments: map['approvalComments'],
+        id: map['id'],
+        uid: map['uid'],
+        userName: map['userName'],
+        password: map['password'],
+        roleId: map['roleId'],
+        firstName: map['firstName'],
+        lastName: map['lastName'],
+        email: map['email'],
+        phoneNumber: map['phoneNumber'],
+        addLineOne: map['addLineOne'],
+        addLineTwo: map['addLineTwo'],
+        addLineThree: map['addLineThree'],
+        locality: map['locality'],
+        city: map['city'],
+        pinCode: map['pinCode'],
+        state: map['state'],
+        country: map['country'],
+        govtIdType: map['govtIdType'],
+        govtId: map['govtId'],
+        isProcessed: map['isProcessed'],
+        createdBy: map['createdBy'],
+        createdTime: map['createdTime'],
+        updatedBy: map['updatedBy'],
+        updatedTime: map['updatedTime'],
+        approvalStatus: map['approvalStatus'],
+        approvalComments: map['approvalComments'],
+        avatarUrl: map['avatarUrl']
     );
   }
+
 
 //Typically called from service or data_source layer just before persisting data.
   //Here is the appropriate place to check data validity before persistence.
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    //data['userId'] = this.userId;
+    data['uid'] = this.uid;
     data['userName'] = this.userName;
     data['password'] = this.password;
     data['roleId'] = this.roleId;
@@ -205,14 +225,14 @@ class UserRequest {
     data['updatedTime'] = this.updatedTime;
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
-
+    data['avatarUrl'] = this.avatarUrl;
     return data;
   }
 
   Map toStrJson() {
     return {
       "id": this.id,
-      //"userId": this.userId,
+      "uid": this.uid,
       "userName": this.userName,
       "roleId": this.roleId,
       "password": this.password,
@@ -236,7 +256,8 @@ class UserRequest {
       "updatedTime": this.updatedTime,
       "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
-      "approvalComments": this.approvalComments
+      "approvalComments": this.approvalComments,
+      "avatarUrl":this.avatarUrl
     };
   }
 }
@@ -281,6 +302,7 @@ class UserAccess {
     "Event-User",
     "Notification Hub"
   ];
+
   //List<String> roles = [];
   //List<Map<String,List<String>>> roles;
   static Map<String, List<String>> _userRole = {
