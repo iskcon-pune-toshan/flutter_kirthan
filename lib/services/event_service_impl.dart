@@ -1,15 +1,17 @@
- import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_kirthan/models/eventsearch.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_interface.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map/LocationModel.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as _http;
 class EventAPIService extends BaseAPIService implements IEventRestApi  {
 
   static final EventAPIService _internal = EventAPIService.internal();
-
+EventRequest eventRequest;
   factory EventAPIService() => _internal;
 
   EventAPIService.internal();
@@ -75,16 +77,25 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
 
     // Events on duration
     //requestBody = '{"city":["Pune","Mumbai"]}';
-
-
-
-    /*if (eventType == ["bmg"]) {
-      requestBody = '{"id":"4"}';
-    } else {
-      requestBody = '{"state":["MH"]}';
-    }*/
-
-    requestBody = '{"approvalStatus" : "Approved"}';
+    final now = DateTime.now();
+print(now);
+    final tomorrow = DateTime(now.year, now.month, now.day + 1).toString().substring(0,10);
+    final today = DateTime(now.year, now.month, now.day);
+    final todaydate=today.toString().substring(0,10);
+  /*final dateinterval=TODAY;//TOM,THISWEEK,THISMONTH
+    eventDate = today;*/
+    print(todaydate);
+    if(eventType == "$todaydate")
+      {
+        requestBody = '{"eventDate" : "$todaydate"}';
+      }
+    else if(eventType == "$tomorrow")
+      requestBody = '{"eventDate" : "$tomorrow"}';
+    else
+      {
+        requestBody = '{"approvalStatus" : "Approved"}';
+      }
+   // requestBody = '{"eventDate": "2021-02-17T00:00:00.000+0000"}';
 
     print(requestBody);
 
@@ -95,14 +106,74 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
     if (response.statusCode == 200) {
       //print(response.body);
       List<dynamic> eventrequestsData = json.decode(response.body);
-      //print(userdetailsData);
+      print(eventrequestsData);
       List<EventRequest> eventrequests = eventrequestsData
           .map((eventrequestsData) => EventRequest.fromMap(eventrequestsData))
           .toList();
 
-      //print(userdetails);
-
+//print(eventrequests);
       return eventrequests;
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<EventRequest>> getEventTitle(String eventType) async {
+    //print("I am in Service: getEventRequests");
+
+    String requestBody = '';
+
+
+    requestBody = '{"approvalStatus" : "Approved"}';
+
+    //print(requestBody);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    print("search service");
+    var response = await client1.put('$baseUrl/api/event/geteventtitle',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      List<dynamic> eventrequestsData = json.decode(response.body);
+      //print(eventrequestsData);
+      List<EventRequest> eventrequests = eventrequestsData
+          .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
+          .toList();
+      List<String> events = eventrequests.map((event) => event.toString()).toList();
+      print(events);
+//print(eventrequests);
+print("before return");
+      return eventrequests;
+
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+  Future<List<EventRequest>> getEventByDate(String request) async {
+    //print("I am in Service: getEventRequests");
+
+    String requestBody ='';
+request =DateTime.now().toString();
+    requestBody = '{"eventDate" : "2020-04-20T05:50:02.000+0000"}';
+
+    //print(requestBody);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+
+    var response = await client1.put('$baseUrl/api/event/geteventbydate',
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      List<dynamic> eventrequestsData = json.decode(response.body);
+      print(eventrequestsData);
+      List<EventRequest> eventrequests = eventrequestsData
+          .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
+          .toList();
+      List<String> events = eventrequests.map((event) => event.toString()).toList();
+      print(events);
+//print(eventrequests);
+      print("before return");
+      return eventrequests;
+
     } else {
       throw Exception('Failed to get data');
     }
@@ -144,6 +215,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi  {
       Map<String, dynamic> eventrequestsData = json.decode(response.body);
       EventRequest eventrequests = EventRequest.fromMap(eventrequestsData);
       print(eventrequests);
+
       return eventrequests;
     } else {
       throw Exception('Failed to get data');

@@ -7,8 +7,7 @@ import 'package:flutter_kirthan/models/roles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final RolesPageViewModel permissionssPageVM =
-RolesPageViewModel(apiSvc: RolesAPIService());
-
+    RolesPageViewModel(apiSvc: RolesAPIService());
 
 class RolesWrite extends StatefulWidget {
   RolesWrite({Key key}) : super(key: key);
@@ -34,8 +33,6 @@ class _RolesWriteState extends State<RolesWrite> {
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   //UserRequest newuserrequest = new UserRequest();
 
-
-
   List<Step> steps = [
     Step(
       title: const Text('New Role'),
@@ -50,9 +47,24 @@ class _RolesWriteState extends State<RolesWrite> {
               maxLength: 30,
               //attribute: "Username",
               decoration: InputDecoration(
-                  icon: const Icon(Icons.tag_faces),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
+                  icon: const Icon(
+                    Icons.tag_faces,
+                    color: Colors.grey,
+                  ),
                   hintText: "",
-                  labelText: "Role Name"),
+                  labelText: "Role Name",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                  )),
               onChanged: (input) {
                 permissionsrequest.roleName = input;
               },
@@ -63,12 +75,10 @@ class _RolesWriteState extends State<RolesWrite> {
                 return null;
               },
             ),
-
           ],
         ),
       ),
     ),
-
 
     /*Step(
       isActive: false,
@@ -149,6 +159,7 @@ class _RolesWriteState extends State<RolesWrite> {
         ? stepperType = StepperType.vertical
         : stepperType = StepperType.horizontal);
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -164,66 +175,65 @@ class _RolesWriteState extends State<RolesWrite> {
         children: <Widget>[
           complete
               ? Expanded(
-            child: Center(
-              child: AlertDialog(
-                title: new Text("Details Filled !"),
-                content: new Text(
-                  "Click Submit on top right corner of the screen.",
-                ),
-                actions: <Widget>[
-                  new FlatButton(
-                    child: new Text("Submit"),
-                    onPressed: () async {
-                      /*_formKey.currentState.save();
+                  child: Center(
+                    child: AlertDialog(
+                      title: new Text("Details Filled !"),
+                      content: new Text(
+                        "Click Submit on top right corner of the screen.",
+                      ),
+                      actions: <Widget>[
+                        new FlatButton(
+                          child: new Text("Submit"),
+                          onPressed: () async {
+                            /*_formKey.currentState.save();
                             _formKey1.currentState.save();
                             _formKey2.currentState.save();
                             _formKey3.currentState.save();
                             */
-                      //userrequest.userId = userrequest.firstName +
-                      //  '_' +
-                      //userrequest.lastName;
+                            //userrequest.userId = userrequest.firstName +
+                            //  '_' +
+                            //userrequest.lastName;
 
-
-
-                      Map<String, dynamic> usermap = permissionsrequest.toJson();
-                      print(usermap);
-                      Roles newscreensrequest =
-                      await permissionssPageVM.submitNewRoles(usermap);
-                      print(newscreensrequest.id);
-                      String uid = newscreensrequest.id.toString();
-                      SnackBar mysnackbar = SnackBar(
-                        content: Text(
-                            "Roles registered $successful with id : $uid "),
-                        duration: new Duration(seconds: 4),
-                        backgroundColor: Colors.green,
-                      );
-                      //Scaffold.of(context).showSnackBar(mysnackbar);
-                      _scaffoldKey.currentState.showSnackBar(mysnackbar);
-                      //String s = jsonEncode(userrequest.mapToJson());
-                      //service.registerUser(s);
-                      //print(s);
-                    },
+                            Map<String, dynamic> usermap =
+                                permissionsrequest.toJson();
+                            print(usermap);
+                            Roles newscreensrequest = await permissionssPageVM
+                                .submitNewRoles(usermap);
+                            print(newscreensrequest.id);
+                            String uid = newscreensrequest.id.toString();
+                            SnackBar mysnackbar = SnackBar(
+                              content: Text(
+                                  "Roles registered $successful with id : $uid "),
+                              duration: new Duration(seconds: 4),
+                              backgroundColor: Colors.green,
+                            );
+                            //Scaffold.of(context).showSnackBar(mysnackbar);
+                            _scaffoldKey.currentState.showSnackBar(mysnackbar);
+                            //String s = jsonEncode(userrequest.mapToJson());
+                            //service.registerUser(s);
+                            //print(s);
+                          },
+                        ),
+                        new FlatButton(
+                          child: new Text("Close"),
+                          onPressed: () {
+                            setState(() => complete = false);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  new FlatButton(
-                    child: new Text("Close"),
-                    onPressed: () {
-                      setState(() => complete = false);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          )
+                )
               : Expanded(
-            child: Stepper(
-              type: stepperType,
-              steps: steps,
-              currentStep: currentStep,
-              onStepContinue: next,
-              onStepTapped: (step) => goTo(step),
-              onStepCancel: cancel,
-            ),
-          ),
+                  child: Stepper(
+                    type: stepperType,
+                    steps: steps,
+                    currentStep: currentStep,
+                    onStepContinue: next,
+                    onStepTapped: (step) => goTo(step),
+                    onStepCancel: cancel,
+                  ),
+                ),
         ],
       ),
       /*floatingActionButton: FloatingActionButton(

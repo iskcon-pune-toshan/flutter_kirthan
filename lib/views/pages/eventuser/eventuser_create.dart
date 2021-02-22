@@ -79,7 +79,7 @@ class _EventUserCreateState extends State<EventUserCreate> {
                     child: DropdownButtonFormField<EventRequest>(
                       value: _selectedEvent,
                       icon: const Icon(Icons.supervisor_account),
-                      hint: Text('Select Team'),
+                      hint: Text('Select Event'),
                       items: snapshot.data
                           .map((event) => DropdownMenuItem<EventRequest>(
                         value: event,
@@ -114,7 +114,7 @@ class _EventUserCreateState extends State<EventUserCreate> {
       sortColumnIndex: 0,
       columns: [
         DataColumn(
-            label: Text("Event Name",overflow: TextOverflow.ellipsis,),
+            label: Text("Team Name",overflow: TextOverflow.ellipsis,),
             //numeric: false,
             onSort: (columnIndex, ascending) {
               setState(() {

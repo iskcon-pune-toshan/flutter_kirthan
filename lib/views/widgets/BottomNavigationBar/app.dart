@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
@@ -40,17 +41,17 @@ class AppState extends State<App> {
       icon: Icons.people,
       page: TeamView(),
     ),
-    TabItem(
+    /*TabItem(
       tabName: "Temple",
       icon: Icons.title,
       page: TempleView(),
-    ),
+    ),*/
     TabItem(
       tabName: "Notifications",
       icon: Icons.notifications,
       page: NotificationView(),
     ),
-    TabItem(
+    /*TabItem(
       tabName: "Screens",
       icon: Icons.fullscreen,
       page: ScreensView(),
@@ -64,12 +65,9 @@ class AppState extends State<App> {
       tabName: "RoleScreen",
       icon: Icons.fullscreen_exit,
       page: RoleScreenView(),
-    ),
-    TabItem(
-      tabName: "User Temple",
-      icon: Icons.account_box,
-      page: UserTempleView(),
-    ),
+    ),*/
+
+
   ];
 
   AppState() {

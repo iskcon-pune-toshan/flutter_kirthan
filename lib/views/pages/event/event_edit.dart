@@ -11,17 +11,16 @@ import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 final EventPageViewModel eventPageVM =
-EventPageViewModel(apiSvc: EventAPIService());
-
+    EventPageViewModel(apiSvc: EventAPIService());
 
 class EditEvent extends StatefulWidget {
-  EventRequest eventrequest ;
+  EventRequest eventrequest;
   LoginApp loginApp;
   final String screenName = SCR_EVENT;
   UserRequest userrequest;
-  EditEvent({Key key, @required this.eventrequest,@required this.loginApp}) : super(key: key);
+  EditEvent({Key key, @required this.eventrequest, @required this.loginApp})
+      : super(key: key);
 
   @override
   _EditEventState createState() => new _EditEventState();
@@ -35,7 +34,10 @@ class _EditEventState extends State<EditEvent> {
   String _selectedState;
   String state;
 
-  var _states = ["Kant","Andhra Pradesh", "MH",
+  var _states = [
+    "Kant",
+    "Andhra Pradesh",
+    "MH",
     "Arunachal Pradesh",
     "Assam",
     "Bihar",
@@ -70,34 +72,44 @@ class _EditEventState extends State<EditEvent> {
     "Daman and Diu",
     "Delhi",
     "Lakshadweep",
-    "Puducherry"];
+    "Puducherry"
+  ];
   // controllers for form text controllers
-  final TextEditingController _eventTitleController = new TextEditingController();
-  String eventTitle ;
-  final TextEditingController _eventTypeController = new TextEditingController();
-  String eventType ;
-  final TextEditingController _eventDateController = new TextEditingController();
-  String eventDate ;
-  final TextEditingController _eventDescriptionController = new TextEditingController();
-  String eventDescription ;
+  final TextEditingController _eventTitleController =
+      new TextEditingController();
+  String eventTitle;
+  final TextEditingController _eventTypeController =
+      new TextEditingController();
+  String eventType;
+  final TextEditingController _eventDateController =
+      new TextEditingController();
+  String eventDate;
+  final TextEditingController _eventDescriptionController =
+      new TextEditingController();
+  String eventDescription;
   final TextEditingController _lineoneController = new TextEditingController();
-  String lineOne ;
-  final TextEditingController _eventDurationController = new TextEditingController();
-  String eventDuration ;
+  String lineOne;
+  final TextEditingController _eventDurationController =
+      new TextEditingController();
+  String eventDuration;
   final TextEditingController _linetwoController = new TextEditingController();
   String lineTwo;
-  final TextEditingController _linethreeController = new TextEditingController();
+  final TextEditingController _linethreeController =
+      new TextEditingController();
   String lineThree;
   final TextEditingController _cityController = new TextEditingController();
   String city;
   final TextEditingController _pincodeController = new TextEditingController();
   String pinCode;
-  final TextEditingController _createdTimeController = new TextEditingController();
+  final TextEditingController _createdTimeController =
+      new TextEditingController();
   String createdTime;
   final TextEditingController _stateController = new TextEditingController();
-  final TextEditingController _updatedByController = new TextEditingController();
+  final TextEditingController _updatedByController =
+      new TextEditingController();
   String updatedBy;
-  final TextEditingController _updatedTimeController = new TextEditingController();
+  final TextEditingController _updatedTimeController =
+      new TextEditingController();
   String updatedTime;
   //String createdTime;
 
@@ -112,10 +124,10 @@ class _EditEventState extends State<EditEvent> {
     _linetwoController.text = widget.eventrequest.addLineTwo;
     _linethreeController.text = widget.eventrequest.addLineThree;
     _pincodeController.text = widget.eventrequest.pincode.toString();
-    _stateController.text=widget.eventrequest.state;
-    _cityController.text=widget.eventrequest.city;
+    _stateController.text = widget.eventrequest.state;
+    _cityController.text = widget.eventrequest.city;
     _createdTimeController.text = widget.eventrequest.createdTime;
-    _updatedByController.text =getCurrentUser().toString();
+    _updatedByController.text = getCurrentUser().toString();
     _updatedByController.text = widget.eventrequest.updatedTime;
     print("createdTime");
     print(widget.eventrequest.createdTime);
@@ -127,10 +139,9 @@ class _EditEventState extends State<EditEvent> {
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
-    widget.eventrequest.updatedBy=email;
+    widget.eventrequest.updatedBy = email;
     print(email);
     return email;
-
   }
 
   @override
@@ -151,8 +162,10 @@ class _EditEventState extends State<EditEvent> {
                   //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
                   //_createTimeController.text = dt;
                   _formKey.currentState.save();
-                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                  _updatedTimeController.text=widget.eventrequest.updatedTime=dt;
+                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                      .format(DateTime.now());
+                  _updatedTimeController.text =
+                      widget.eventrequest.updatedTime = dt;
 
                   Navigator.pop(context);
                   print(eventTitle);
@@ -161,7 +174,8 @@ class _EditEventState extends State<EditEvent> {
                   print(widget.eventrequest.eventDescription);
                   //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
                   //String eventmap = widget.eventrequest.toStrJsonJson();
-                  String eventrequestStr = jsonEncode(widget.eventrequest.toStrJson());
+                  String eventrequestStr =
+                      jsonEncode(widget.eventrequest.toStrJson());
                   eventPageVM.submitUpdateEventRequest(eventrequestStr);
                 },
               ))
@@ -173,11 +187,23 @@ class _EditEventState extends State<EditEvent> {
             child: new ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               children: <Widget>[
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Event Title", hintText: "What do people call this event?"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Event Title",
+                        hintText: "What do people call this event?",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _eventTitleController,
                     onSaved: (String value) {
@@ -185,11 +211,23 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Event Type"),
+                    decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                      labelText: "Event Type",
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                      ),
+                      labelStyle: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
                     autocorrect: false,
                     controller: _eventTypeController,
                     onSaved: (String value) {
@@ -197,11 +235,22 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Date"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Date",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _eventDateController,
                     onSaved: (String value) {
@@ -209,11 +258,22 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Event Duration"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Event Duration",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _eventDurationController,
                     onSaved: (String value) {
@@ -221,11 +281,22 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Description"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Description",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _eventDescriptionController,
                     onSaved: (String value) {
@@ -233,10 +304,22 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Address"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Address",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _lineoneController,
                     onSaved: (String value) {
@@ -244,11 +327,22 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Line 2"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Line 2",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _linetwoController,
                     onSaved: (String value) {
@@ -256,22 +350,45 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Line 3"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Line 3",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _linethreeController,
                     onSaved: (String value) {
-                      widget.eventrequest.addLineThree= value;
+                      widget.eventrequest.addLineThree = value;
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Pincode"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Pincode",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _pincodeController,
                     onSaved: (String value) {
@@ -293,7 +410,20 @@ class _EditEventState extends State<EditEvent> {
 */
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "City"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "City",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _cityController,
                     onSaved: (String value) {
@@ -301,10 +431,22 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "CreatedTime"),
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "CreatedTime",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
                     autocorrect: false,
                     controller: _createdTimeController,
                     onSaved: (String value) {
@@ -312,17 +454,16 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
-
                 DropdownButtonFormField<String>(
                   value: widget.eventrequest.state,
                   icon: const Icon(Icons.location_city),
                   hint: Text('Select State'),
                   items: _states
                       .map((state) => DropdownMenuItem(
-                    value: state,
-                    child: Text(state),
-                  )).toList(),
+                            value: state,
+                            child: Text(state),
+                          ))
+                      .toList(),
                   onChanged: (input) {
                     setState(() {
                       _selectedState = input;
@@ -331,9 +472,7 @@ class _EditEventState extends State<EditEvent> {
                   onSaved: (input) {
                     widget.eventrequest.state = input;
                   },
-
                 ),
-
               ],
             )));
   }

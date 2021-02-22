@@ -7,8 +7,7 @@ import 'package:flutter_kirthan/models/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final ScreensPageViewModel screensPageVM =
-ScreensPageViewModel(apiSvc: ScreensAPIService());
-
+    ScreensPageViewModel(apiSvc: ScreensAPIService());
 
 class ScreensWrite extends StatefulWidget {
   ScreensWrite({Key key}) : super(key: key);
@@ -34,8 +33,6 @@ class _ScreensWriteState extends State<ScreensWrite> {
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   //UserRequest newuserrequest = new UserRequest();
 
-
-
   List<Step> steps = [
     Step(
       title: const Text('New Screen'),
@@ -50,9 +47,21 @@ class _ScreensWriteState extends State<ScreensWrite> {
               maxLength: 30,
               //attribute: "Username",
               decoration: InputDecoration(
-                  icon: const Icon(Icons.tag_faces),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
+                  icon: const Icon(Icons.tag_faces, color: Colors.grey),
                   hintText: "",
-                  labelText: "Screen Name"),
+                  labelText: "Screen Name",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                  )),
               onChanged: (input) {
                 screensrequest.screenName = input;
               },
@@ -63,12 +72,10 @@ class _ScreensWriteState extends State<ScreensWrite> {
                 return null;
               },
             ),
-
           ],
         ),
       ),
     ),
-
 
     /*Step(
       isActive: false,
@@ -149,12 +156,14 @@ class _ScreensWriteState extends State<ScreensWrite> {
         ? stepperType = StepperType.vertical
         : stepperType = StepperType.horizontal);
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: new AppBar(title: const Text('Register Screen'), actions: <Widget>[
+      appBar:
+          new AppBar(title: const Text('Register Screen'), actions: <Widget>[
         new Container(
           padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
         )
@@ -163,66 +172,65 @@ class _ScreensWriteState extends State<ScreensWrite> {
         children: <Widget>[
           complete
               ? Expanded(
-            child: Center(
-              child: AlertDialog(
-                title: new Text("Details Filled !"),
-                content: new Text(
-                  "Click Submit on top right corner of the screen.",
-                ),
-                actions: <Widget>[
-                  new FlatButton(
-                    child: new Text("Submit"),
-                    onPressed: () async {
-                      /*_formKey.currentState.save();
+                  child: Center(
+                    child: AlertDialog(
+                      title: new Text("Details Filled !"),
+                      content: new Text(
+                        "Click Submit on top right corner of the screen.",
+                      ),
+                      actions: <Widget>[
+                        new FlatButton(
+                          child: new Text("Submit"),
+                          onPressed: () async {
+                            /*_formKey.currentState.save();
                             _formKey1.currentState.save();
                             _formKey2.currentState.save();
                             _formKey3.currentState.save();
                             */
-                      //userrequest.userId = userrequest.firstName +
-                      //  '_' +
-                      //userrequest.lastName;
+                            //userrequest.userId = userrequest.firstName +
+                            //  '_' +
+                            //userrequest.lastName;
 
+                            Map<String, dynamic> usermap =
+                                screensrequest.toJson();
+                            print(usermap);
+                            Screens newscreensrequest =
+                                await screensPageVM.submitNewScreens(usermap);
+                            print(newscreensrequest.id);
+                            String uid = newscreensrequest.id.toString();
+                            SnackBar mysnackbar = SnackBar(
+                              content: Text(
+                                  "Screen registered $successful with id : $uid "),
+                              duration: new Duration(seconds: 4),
+                              backgroundColor: Colors.green,
+                            );
+                            _scaffoldKey.currentState.showSnackBar(mysnackbar);
 
-
-                      Map<String, dynamic> usermap = screensrequest.toJson();
-                      print(usermap);
-                      Screens newscreensrequest =
-                      await screensPageVM.submitNewScreens(usermap);
-                      print(newscreensrequest.id);
-                      String uid = newscreensrequest.id.toString();
-                      SnackBar mysnackbar = SnackBar(
-                        content: Text(
-                            "Screen registered $successful with id : $uid "),
-                        duration: new Duration(seconds: 4),
-                        backgroundColor: Colors.green,
-                      );
-                      _scaffoldKey.currentState.showSnackBar(mysnackbar);
-
-                      //String s = jsonEncode(userrequest.mapToJson());
-                      //service.registerUser(s);
-                      //print(s);
-                    },
+                            //String s = jsonEncode(userrequest.mapToJson());
+                            //service.registerUser(s);
+                            //print(s);
+                          },
+                        ),
+                        new FlatButton(
+                          child: new Text("Close"),
+                          onPressed: () {
+                            setState(() => complete = false);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  new FlatButton(
-                    child: new Text("Close"),
-                    onPressed: () {
-                      setState(() => complete = false);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          )
+                )
               : Expanded(
-            child: Stepper(
-              type: stepperType,
-              steps: steps,
-              currentStep: currentStep,
-              onStepContinue: next,
-              onStepTapped: (step) => goTo(step),
-              onStepCancel: cancel,
-            ),
-          ),
+                  child: Stepper(
+                    type: stepperType,
+                    steps: steps,
+                    currentStep: currentStep,
+                    onStepContinue: next,
+                    onStepTapped: (step) => goTo(step),
+                    onStepCancel: cancel,
+                  ),
+                ),
         ],
       ),
       /*floatingActionButton: FloatingActionButton(

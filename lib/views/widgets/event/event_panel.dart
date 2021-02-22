@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
@@ -9,8 +10,11 @@ import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/eventuser/eventuser_view.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class EventsPanel extends StatelessWidget {
   String eventType;
@@ -39,6 +43,9 @@ class EventsPanel extends StatelessWidget {
                     //mainAxisAlignment: MainAxisAlignment.center,
                     //mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
+                      SizedBox(
+                        height: 3,
+                      ),
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -49,8 +56,15 @@ class EventsPanel extends StatelessWidget {
                               model.setEventRequests("1");
                             },
                           ),*/
+
                           RaisedButton(
-                            child: const Text("Event-User Add"),
+                            color: KirthanStyles.colorPallete30,
+                            child: const Text(
+                              "Event-User Add",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -69,7 +83,13 @@ class EventsPanel extends StatelessWidget {
                           ),*/
                           RaisedButton(
                             //child: const Text("This Week"),
-                            child: const Text("Event-User View"),
+                            color: KirthanStyles.colorPallete30,
+                            child: const Text(
+                              "Event-User View",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -78,6 +98,9 @@ class EventsPanel extends StatelessWidget {
                             },
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 3,
                       ),
                       new Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -94,13 +117,15 @@ class EventsPanel extends StatelessWidget {
                             child: FlatButton(
                               //child: const Text("This Week"),
                               child: Center(
-                                  child: Text(
-                                    'Map',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: MyPrefSettingsApp.custFontSize),
-                                  )),
+                                child: Consumer<ThemeNotifier>(
+                                    builder: (context, notifier, child) => Text(
+                                          'Map',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: notifier.custFontSize),
+                                        )),
+                              ),
 
                               // child: const Text("Map"),
                               onPressed: () {

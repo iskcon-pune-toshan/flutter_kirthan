@@ -46,6 +46,14 @@ dependencies:
   bloc:
   image_picker: ^0.5.3+1
   firebase_storage:
+  flutter_svg:
+  get_it: ^4.0.1
+  flutter_icons: ^1.0.0+1
+  firebase_helpers:
+  cloud_firestore:
+
+
+
   syncfusion_flutter_calendar:
   share: ^0.6.5+4
   draggable_fab: ^0.1.1

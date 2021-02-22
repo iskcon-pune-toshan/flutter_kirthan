@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-
-
+import 'package:flutter_kirthan/models/user.dart';
 
 class SignInService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -16,33 +15,39 @@ class SignInService {
 
   SignInService.internal();
 
-  FirebaseUser fireUser = null;
+  FirebaseUser fireUser;
 
   Future<FirebaseUser> signUpWithEmail(String email, String password) async {
     AuthResult authResult = await firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
 
-    String url = 'https://banner2.cleanpng.com/20180331/eow/kisspng-computer-icons-user-clip-art-user-5abf13db298934.2968784715224718991702.jpg';
-    //String  url = 'assets/images/default_icon.png';
+    // String url =
+    // 'https://banner2.cleanpng.com/20180331/eow/kisspng-computer-icons-user-clip-art-user-5abf13db298934.2968784715224718991702.jpg';
+    String url = 'assets/images/default_icon.png';
 
     if (authResult != null) {
       UserUpdateInfo updateInfo = UserUpdateInfo();
       updateInfo.displayName = email;
-      updateInfo.photoUrl = url ;
+      updateInfo.photoUrl = url;
       FirebaseUser firebaseUser = authResult.user;
 
       if (firebaseUser != null) {
         await firebaseUser.updateProfile(updateInfo);
-
         await firebaseUser.reload();
-
         FirebaseUser currentuser = await firebaseAuth.currentUser();
-
-
         return currentuser;
       }
     }
     return null;
+  }
+
+  Future<UserRequest> signInWithEmailAndPassword(
+      {String email, String password}) async {
+    var authResult = await firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+    return UserRequest(
+        uid: authResult.user.uid,
+        userName: authResult.user.displayName);
   }
 
   Future<FirebaseUser> signInWithEmail(String email, String password) async {
@@ -66,13 +71,12 @@ class SignInService {
     final AuthCredential auth = EmailAuthProvider.getCredential(
         email: email,
         password:
-            password); // to fetch the user Credential by signInwithemailandpassword method
+        password); // to fetch the user Credential by signInwithemailandpassword method
 
     FirebaseUser user = (await firebaseAuth.signInWithCredential(auth)).user;
 
     fireUser =
-        user; //once onComplete returning the user to able to fetch the credentials
-    return user;
+        user; //once onComplete returning the user to able to fetch the credentialsreturn user;
 
     //return null;
   }
@@ -81,7 +85,7 @@ class SignInService {
 
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -126,6 +130,39 @@ class SignInService {
 
     return signout;
   }
+
+  Future<UserRequest> getUser() async {
+    var firebaseUser = await firebaseAuth.currentUser();
+    return UserRequest(
+        uid: firebaseUser?.uid, userName: firebaseUser?.displayName);
+  }
+
+  Future<bool> validatePassword(String password) async {
+    var firebaseUser = await firebaseAuth.currentUser();
+
+    var authCredentials = EmailAuthProvider.getCredential(
+        email: firebaseUser.email, password: password);
+    try {
+      var authResult =
+      await firebaseUser.reauthenticateWithCredential(authCredentials);
+      return authResult.user != null;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<void> updatePassword(String password) async {
+    var firebaseUser = await firebaseAuth.currentUser();
+    firebaseUser.updatePassword(password);
+  }
+
+  Future<void> updateDisplayName(String displayName) async {
+    var user = await firebaseAuth.currentUser();
+    user.updateProfile(
+      UserUpdateInfo()..displayName = displayName,
+    );
+  }
 }
 
 class UserDetails {
@@ -141,5 +178,6 @@ class UserDetails {
 
 class ProviderDetails {
   final String providerDetails;
+
   ProviderDetails(this.providerDetails);
 }

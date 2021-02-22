@@ -18,20 +18,40 @@ class _password_profileState extends State<password_profile> {
           children: [
             Divider(),
             TextFormField(
-              decoration:InputDecoration(
-
+              decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
                   labelText: "New Password",
-                  hintText: "Enter new password"
-              ),
+                  hintText: "Enter new password",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                  )),
               obscureText: true,
             ),
             Divider(),
             TextFormField(
-              decoration:InputDecoration(
-
+              decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
                   labelText: "Confirm Password",
-                  hintText: "Confirm the password"
-              ),
+                  hintText: "Confirm the password",
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                  )),
               obscureText: true,
             ),
             Divider(),
@@ -51,7 +71,6 @@ class _password_profileState extends State<password_profile> {
                 ),
               ],
             ),
-
           ],
         ),
       ),

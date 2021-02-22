@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class profilePicture extends StatefulWidget {
   @override
@@ -26,9 +29,6 @@ class _profilePictureState extends State<profilePicture> {
       });
     }
 
-
-
-
     /*Future uploadPic(BuildContext context) async{
       String fileName = basename(_image.path);
       //StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
@@ -46,30 +46,30 @@ class _profilePictureState extends State<profilePicture> {
     }
   */
 
-    Future uploadPic(BuildContext context) async{
+    Future uploadPic(BuildContext context) async {
       String fileName = basename(_image.path);
-      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("profiles/").child(fileName);
+      StorageReference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child("profiles/").child(fileName);
       StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-      StorageTaskSnapshot taskSnapshot=await uploadTask.onComplete;
+      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
       setState(() {
         print("Profile Picture uploaded");
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
       });
     }
 
-    Future deletePic(BuildContext context) async
-    {
-
+    Future deletePic(BuildContext context) async {
       String fileName = basename(_image.path);
-      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("profiles/").child(fileName);
+      StorageReference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child("profiles/").child(fileName);
       await firebaseStorageRef.delete();
       setState(() {
         print("Profile Picture deleted");
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
       });
     }
-
-
 
     return Scaffold(
       appBar: AppBar(
@@ -94,19 +94,21 @@ class _profilePictureState extends State<profilePicture> {
                         child: new SizedBox(
                           width: 180.0,
                           height: 180.0,
-                          child: (_image!=null)?Image.file(
-                            _image,
-                            fit: BoxFit.fill,
-                          ):Image.asset("assets/images/default_profile_picture.png",
-                            fit: BoxFit.fill,
-                          ),
+                          child: (_image != null)
+                              ? Image.file(
+                                  _image,
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.asset(
+                                  "assets/images/default_profile_picture.png",
+                                  fit: BoxFit.fill,
+                                ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-
               Card(
                 //margin: const EdgeInsets.only(top: 200.0),
                 child: SizedBox(
@@ -117,34 +119,42 @@ class _profilePictureState extends State<profilePicture> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Username:    ',
-                                  style: TextStyle(
-                                      fontSize: MyPrefSettingsApp.custFontSize),
-                                ),
-                                Text(
-                                  'User 1',
-                                  style: TextStyle(
-                                      fontSize: MyPrefSettingsApp.custFontSize,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                            Consumer<ThemeNotifier>(
+                              builder: (context, notifier, child) => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Username:    ',
+                                    style: TextStyle(
+                                        fontSize: notifier.custFontSize),
+                                  ),
+                                  Text(
+                                    'User 1',
+                                    style: TextStyle(
+                                        fontSize: notifier.custFontSize,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
                             FlatButton(
                               child: Text('Change Profile Picture'),
-                              color: Colors.greenAccent,
                               onPressed: () {
                                 getImage();
                               },
                               highlightColor: Colors.amber,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              color: KirthanStyles.colorPallete30,
                             ),
                             FlatButton(
                               child: Text('Delete Profile Picture'),
                               //padding: EdgeInsets.only(left: 00.0,top: 10.0,right: 10.0,bottom: 0.0),
-                              color: Colors.greenAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              color: KirthanStyles.colorPallete30,
                               onPressed: () {
                                 //Image.asset('assets/images/default_profile_picture.png');
                                 deletePic(context);

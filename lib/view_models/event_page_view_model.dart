@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_kirthan/services/event_service_interface.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -34,9 +35,21 @@ class EventPageViewModel extends Model {
     return eventrequests != null;
   }
 
+
   Future<List<EventRequest>> getEventRequests(String userType) {
     Future<List<EventRequest>> eventRequests =
     apiSvc?.getEventRequests(userType);
+    return eventRequests;
+  }
+
+  Future<bool> setEventTitles(String eventtype) async {
+    eventrequests = apiSvc?.getEventTitle(eventtype);
+    return eventrequests != null;
+  }
+
+  Future<List<EventRequest>> getEventTitle(String userType) async {
+    Future<List<EventRequest>> eventRequests =
+    apiSvc?.getEventTitle(userType);
     return eventRequests;
   }
 

@@ -1,6 +1,7 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 
 class FaqApp extends StatefulWidget {
@@ -31,8 +32,6 @@ class _FaqState extends State<FaqApp> {
     });
   }
 
-  String dropdownValue = 'Select q';
-  bool pressed = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +39,31 @@ class _FaqState extends State<FaqApp> {
         title: Text('FAQs'),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Card(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: <Widget>[
+                    Text("Frequently Asked Questions",
+                        style: TextStyle(fontSize: 30, color: Colors.red)),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Text(
+                          "\nQ1)How do we send invite to team?\n"
+                          "\n"
+                          ".........................",
+                          style: TextStyle(
+                              fontSize: notifier.custFontSize,
+                              color: Colors.red)),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Expanded(
           child: Column(

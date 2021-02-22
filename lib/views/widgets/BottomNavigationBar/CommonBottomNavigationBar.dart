@@ -1,3 +1,4 @@
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/tabItem.dart';
@@ -17,11 +18,11 @@ class BottomNavigation extends StatelessWidget {
       items: tabs
           .map(
             (e) => _buildItem(
-          index: e.getIndex(),
-          icon: e.icon,
-          tabName: e.tabName,
-        ),
-      )
+              index: e.getIndex(),
+              icon: e.icon,
+              tabName: e.tabName,
+            ),
+          )
           .toList(),
       onTap: (index) => onSelectTab(
         index,
@@ -47,6 +48,8 @@ class BottomNavigation extends StatelessWidget {
   }
 
   Color _tabColor({int index}) {
-    return AppState.currentTab == index ? Colors.cyan : Colors.grey;
+    return AppState.currentTab == index
+        ? KirthanStyles.colorPallete10
+        : Colors.grey;
   }
 }

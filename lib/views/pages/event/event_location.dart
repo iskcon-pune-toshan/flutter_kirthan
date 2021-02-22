@@ -11,6 +11,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class Location extends StatefulWidget {
   EventRequest eventrequest;
@@ -44,45 +46,54 @@ class LocationMark extends State<Location> {
   Map<PolylineId, Polyline> _polylines = {};
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Map"),
-      ),
-      body: Stack(
-        children: <Widget>[
-          _buildGoogleMap(),
-          SafeArea(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white70,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
+    return Consumer<ThemeNotifier>(
+      builder:(content, notifier,child)=> Scaffold(
+        appBar: AppBar(
+          title: Text("Map",
+          style: TextStyle(
+            fontSize: notifier.custFontSize,
+          ),),
+        ),
+        body: Stack(
+          children: <Widget>[
+            _buildGoogleMap(),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white70,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        SizedBox(height: 10),
-                        Text('DISTANCE: $_placeDistance km',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: MyPrefSettingsApp.custFontSize,
-                              color: Colors.black,
-                            )),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          SizedBox(height: 10),
+                          Consumer<ThemeNotifier>(
+                            builder: (context, notifier, child) => Text(
+                              'DISTANCE: $_placeDistance km',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: notifier.custFontSize,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

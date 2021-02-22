@@ -33,6 +33,9 @@ class TeamsPanel extends StatelessWidget {
                     //mainAxisAlignment: MainAxisAlignment.center,
                     //mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
+                      SizedBox(
+                        height: 3,
+                      ),
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -78,6 +81,9 @@ class TeamsPanel extends StatelessWidget {
                           ),
 */
                         ],
+                      ),
+                      SizedBox(
+                        height: 3,
                       ),
                       Expanded(
                         child: Scrollbar(

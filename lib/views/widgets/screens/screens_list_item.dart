@@ -3,9 +3,12 @@ import 'package:flutter_kirthan/models/screens.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/screens_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/screens/screens_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class Choice {
   const Choice({this.id, this.description});
@@ -17,35 +20,34 @@ class Choice {
 class ScreensRequestsListItem extends StatelessWidget {
   final Screens screensrequest;
   final ScreensPageViewModel screensPageVM;
-  ScreensRequestsListItem({@required this.screensrequest, @required this.screensPageVM});
+  ScreensRequestsListItem(
+      {@required this.screensrequest, @required this.screensPageVM});
 
   List<Choice> popupList = [
-   // Choice(id: 1, description: "Process"),
+    // Choice(id: 1, description: "Process"),
     Choice(id: 2, description: "Edit"),
     Choice(id: 3, description: "Delete"),
   ];
-
-
 
   @override
   Widget build(BuildContext context) {
     //popupList.
     //teamPageVM.accessTypes.keys
-    var title = Text(
-      screensrequest?.screenName,
-      style: GoogleFonts.openSans(
-        //color: KirthanStyles.titleColor,
-        fontWeight: FontWeight.bold,
-        fontSize: MyPrefSettingsApp.custFontSize,
-        //fontSize: KirthanStyles.titleFontSize,
+    var title = Consumer<ThemeNotifier>(
+      builder: (context, notifier, child) => Text(
+        screensrequest?.screenName,
+        style: GoogleFonts.openSans(
+          //color: KirthanStyles.titleColor,
+          fontWeight: FontWeight.bold,
+          fontSize: notifier.custFontSize,
+          //fontSize: KirthanStyles.titleFontSize,
+        ),
       ),
     );
-
 
     var subTitle = Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-
         Container(
           child: PopupMenuButton<Choice>(
             itemBuilder: (BuildContext context) {
@@ -64,14 +66,14 @@ class ScreensRequestsListItem extends StatelessWidget {
                       builder: (context) =>
                           EditScreens(screensrequest: screensrequest)),
                 );
-              } else  if (choice.id == 3) {
+              } else if (choice.id == 3) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.circular(20.0)), //this right here
+                                BorderRadius.circular(20.0)), //this right here
                         child: Container(
                           height: 200,
                           child: Padding(
@@ -90,7 +92,7 @@ class ScreensRequestsListItem extends StatelessWidget {
                                   child: RaisedButton(
                                     onPressed: () {
                                       Map<String, dynamic> teamrequestmap =
-                                      new Map<String, dynamic>();
+                                          new Map<String, dynamic>();
                                       teamrequestmap["id"] = screensrequest?.id;
                                       screensPageVM
                                           .deleteScreens(teamrequestmap);
@@ -102,12 +104,14 @@ class ScreensRequestsListItem extends StatelessWidget {
                                       Scaffold.of(context)
                                           .showSnackBar(mysnackbar);
                                     },
-                                    child: Text(
-                                      "yes",
-                                      style: TextStyle(
-                                          fontSize:
-                                          MyPrefSettingsApp.custFontSize,
-                                          color: Colors.white),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        "yes",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -118,12 +122,14 @@ class ScreensRequestsListItem extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text(
-                                      "No",
-                                      style: TextStyle(
-                                          fontSize:
-                                          MyPrefSettingsApp.custFontSize,
-                                          color: Colors.white),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        "No",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -142,27 +148,26 @@ class ScreensRequestsListItem extends StatelessWidget {
     );
 
     return Card(
-      elevation: 10,
-      child: Container(
-        decoration: new BoxDecoration(
+      child: Consumer<ThemeNotifier>(
+        builder: (context, notifier, child) => Container(
+          decoration: new BoxDecoration(
             borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
-            gradient: new LinearGradient(
-                colors: [Colors.blue[200], Colors.purpleAccent],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                tileMode: TileMode.clamp)),
-        child: new Column(
-          children: <Widget>[
-            new ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-              leading: Icon(Icons.group),
-              title: title,
-              subtitle: subTitle,
-            ),
-
-          ],
+            color: notifier.currentColorStatus
+                ? notifier.currentColor
+                : Theme.of(context).cardColor,
+          ),
+          child: new Column(
+            children: <Widget>[
+              new ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                leading: Icon(Icons.group),
+                title: title,
+                subtitle: subTitle,
+              ),
+            ],
+          ),
+          //Divider(color: Colors.blue),
         ),
-        //Divider(color: Colors.blue),
       ),
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/rolescreen.dart';
 import 'package:flutter_kirthan/services/role_screen_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/role_screen_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
@@ -9,6 +11,8 @@ import 'package:flutter_kirthan/views/pages/role_screen/role_screen_create.dart'
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 final RoleScreenViewPageModel roleScreenPageVM =
     RoleScreenViewPageModel(apiSvc: RoleScreenAPIService());
@@ -48,9 +52,8 @@ class _RoleScreenViewState extends State<RoleScreenView> {
         listofrolescreen.where((user) => user.roleName == roleName).toList();
     for (var user in listofscreens) {
       //print(user.templeName+"UT"+user.userId.toString());
-      children.add(
-          Row(
-          //direction: Axis.horizontal,
+      children.add(Row(
+        //direction: Axis.horizontal,
         children: <Widget>[
           //Text(user.userId.toString()),
 
@@ -77,7 +80,7 @@ class _RoleScreenViewState extends State<RoleScreenView> {
             value: user.createFlag,
             onChanged: (input) {
               setState(() {
-               user.createFlag = input;
+                user.createFlag = input;
                 if (input == true)
                   selectedRoleScreen.add(user);
                 else
@@ -156,6 +159,7 @@ class _RoleScreenViewState extends State<RoleScreenView> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
+      //drawer: MyDrawer(),
       body: Column(
         verticalDirection: VerticalDirection.down,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -194,7 +198,14 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                                 itemCount: setofRoles.length,
                                 itemBuilder: (context, index) {
                                   return ExpansionTile(
-                                    title: Text(setofRoles[index]),
+                                    title: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        setofRoles[index],
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize),
+                                      ),
+                                    ),
 
                                     //subtitle: Text("Hello Manjunath"),
                                     children:
@@ -208,7 +219,6 @@ class _RoleScreenViewState extends State<RoleScreenView> {
                               height: 10.0,
                               child: Center(
                                 child: CircularProgressIndicator(),
-
                               ),
                             );
                           }
@@ -224,20 +234,28 @@ class _RoleScreenViewState extends State<RoleScreenView> {
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: OutlineButton(
-                  child: Text('SELECTED ${selectedRoleScreen.length}'),
+                  child: Text(
+                    'SELECTED ${selectedRoleScreen.length}',
+                    style: TextStyle(
+                      color: KirthanStyles.colorPallete30,
+                    ),
+                  ),
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                RoleScreenCreate(selectedScreens : selectedRoleScreen)));
+                            builder: (context) => RoleScreenCreate(
+                                selectedScreens: selectedRoleScreen)));
                   },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: OutlineButton(
-                  child: Text('DELETE SELECTED ${selectedRoleScreen.length}'),
+                  child: Text(
+                    'DELETE SELECTED ${selectedRoleScreen.length}',
+                    style: TextStyle(color: KirthanStyles.colorPallete30),
+                  ),
                   onPressed: () {
                     print(selectedRoleScreen);
                     roleScreenPageVM
@@ -249,7 +267,6 @@ class _RoleScreenViewState extends State<RoleScreenView> {
           ),
         ],
       ),
-
     );
   }
 }

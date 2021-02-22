@@ -12,6 +12,8 @@ import 'package:flutter_kirthan/views/pages/event/event_location.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'int_item.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class Choice {
   const Choice({this.id, this.description});
@@ -37,6 +39,140 @@ class EventRequestsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var title = Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Consumer<ThemeNotifier>(
+                builder: (context, notifier, child) => Text(
+                  eventrequest?.eventTitle,
+                  style: TextStyle(
+                    //color: KirthanStyles.titleColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: notifier.custFontSize,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                padding: EdgeInsets.all(0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Location",
+                      style: TextStyle(
+                        color: KirthanStyles.colorPallete60,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(0),
+                      child: Icon(
+                        Icons.location_on,
+                        color: KirthanStyles.colorPallete60,
+                        size: 20,
+                      ),
+                      /*Icon(icon: Icon(Icons.location_on),
+
+                         */ /* onPressed:  () => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Location (eventrequest: eventrequest)),
+                              //MapView(eventrequest: eventrequest)),
+
+                              //do something
+                            )
+                          },*/ /*),*/
+                    ),
+                  ],
+                ),
+//color: KirthanStyles.subTitleColor,
+
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            Location(eventrequest: eventrequest)),
+//MapView(eventrequest: eventrequest)),
+
+//do something
+                  );
+                },
+                //splashColor: Colors.red,
+                color: KirthanStyles.colorPallete30,
+//shape: Border.all(width: 2.0, color: Colors.black)
+              ),
+              Container(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  //alignment: Alignment.topRight,
+                  child: PopupMenuButton<Choice>(
+                    tooltip: null,
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: KirthanStyles.colorPallete30,
+                    ),
+                    itemBuilder: (BuildContext context) {
+                      return popupList.map((f) {
+                        return PopupMenuItem<Choice>(
+                          child: Text(f.description),
+                          value: f,
+                        );
+                      }).toList();
+                    },
+                    onSelected: (choice) {
+                      if (choice.id == 2) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  EditEvent(eventrequest: eventrequest)),
+                        );
+                      } else if (choice.id == 1) {
+                        Map<String, dynamic> processrequestmap =
+                            new Map<String, dynamic>();
+                        processrequestmap["id"] = eventrequest?.id;
+                        processrequestmap["approvalStatus"] = "Approved";
+                        processrequestmap["approvalComments"] =
+                            "ApprovalComments";
+                        processrequestmap["eventType"] =
+                            eventrequest?.eventType;
+                        processrequestmap["addLineOne"] =
+                            eventrequest?.addLineOne;
+                        processrequestmap["city"] = eventrequest?.city;
+                        processrequestmap["country"] = eventrequest?.country;
+                        processrequestmap["phoneNumber"] =
+                            eventrequest?.phoneNumber;
+                        processrequestmap["pincode"] = eventrequest?.pincode;
+                        processrequestmap["eventTitle"] =
+                            eventrequest?.eventTitle;
+                        processrequestmap["eventDescription"] =
+                            eventrequest?.eventDescription;
+                        processrequestmap["eventDate"] =
+                            eventrequest?.eventDate;
+                        processrequestmap["eventDuration"] =
+                            eventrequest?.eventDuration;
+                        processrequestmap["eventLocation"] =
+                            eventrequest?.eventLocation;
+                        processrequestmap["locality"] = eventrequest?.locality;
+                        processrequestmap["state"] = eventrequest?.state;
+                        processrequestmap["isProcessed"] =
+                            eventrequest?.isProcessed;
+                        processrequestmap["createdBy"] =
+                            eventrequest?.createdBy;
+                        processrequestmap["createdTime"] =
+                            eventrequest?.createdTime;
     var title =
     Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Text(
@@ -245,6 +381,105 @@ class EventRequestsListItem extends StatelessWidget {
         ]),
       ),
     ]);
+                        eventPageVM.processEventRequest(processrequestmap);
+                        SnackBar mysnackbar = SnackBar(
+                          content: Text("Event $process $successful "),
+                          duration: new Duration(seconds: 4),
+                          backgroundColor: Colors.green,
+                        );
+                        Scaffold.of(context).showSnackBar(mysnackbar);
+                      } else if (choice.id == 3) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        20.0)), //this right here
+                                child: Container(
+                                  height: 200,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextField(
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText:
+                                                  'Do you want to delete?'),
+                                        ),
+                                        SizedBox(
+                                          width: 320.0,
+                                          child: RaisedButton(
+                                            onPressed: () {
+                                              Map<String, dynamic>
+                                                  processrequestmap =
+                                                  new Map<String, dynamic>();
+                                              processrequestmap["id"] =
+                                                  eventrequest?.id;
+                                              eventPageVM.deleteEventRequest(
+                                                  processrequestmap);
+                                              SnackBar mysnackbar = SnackBar(
+                                                content: Text("Event $delete "),
+                                                duration:
+                                                    new Duration(seconds: 4),
+                                                backgroundColor: Colors.red,
+                                              );
+                                              Scaffold.of(context)
+                                                  .showSnackBar(mysnackbar);
+                                            },
+                                            child: Consumer<ThemeNotifier>(
+                                              builder:
+                                                  (context, notifier, child) =>
+                                                      Text(
+                                                "yes",
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        notifier.custFontSize,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            color: const Color(0xFF1BC0C5),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 320.0,
+                                          child: RaisedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Consumer<ThemeNotifier>(
+                                              builder:
+                                                  (context, notifier, child) =>
+                                                      Text(
+                                                "No",
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        notifier.custFontSize,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            color: const Color(0xFF1BC0C5),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ]);
 
     var subTitle = Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -257,11 +492,13 @@ class EventRequestsListItem extends StatelessWidget {
         */
         Container(
           //margin: const EdgeInsets.only(left: 4.0),
-          child: Text(
-            eventrequest?.eventDescription,
-            style: TextStyle(
-              color: KirthanStyles.subTitleColor,
-              fontSize: MyPrefSettingsApp.custFontSize,
+          child: Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Text(
+              eventrequest?.eventDescription,
+              style: TextStyle(
+                // color: KirthanStyles.subTitleColor,
+                fontSize: notifier.custFontSize,
+              ),
             ),
           ),
         ),
@@ -504,6 +741,8 @@ class EventRequestsListItem extends StatelessWidget {
             new ListTile(
               // contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
               //leading: Icon(Icons.event),
+// contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+//leading: Icon(Icons.event),
               title: title,
               subtitle: subTitle,
             ),
@@ -539,25 +778,60 @@ class EventRequestsListItem extends StatelessWidget {
                     eventrequest?.eventDate.substring(0, 10),
                     //0,10 date
                     //11,16 time
+            Divider(),
+            Consumer<ThemeNotifier>(
+              builder: (context, notifier, child) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        Text(
+                          "Date",
+                          style: GoogleFonts.openSans(
+                            //color: KirthanStyles.titleColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: notifier.custFontSize,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 15),
+                          margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Text(
+                            eventrequest?.eventDate.substring(0, 10),
+//0,10 date
+//11,16 time
 
-                    style: TextStyle(
-                      fontSize: MyPrefSettingsApp.custFontSize,
-
-                      //    color: KirthanStyles.subTitleColor,
+                            style: TextStyle(
+                              fontSize: notifier.custFontSize,
+                              //color: KirthanStyles.subTitleColor,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                //Text("Duration:"),
-
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    eventrequest?.eventDate.substring(11, 16),
-                    style: TextStyle(
-                      fontSize: MyPrefSettingsApp.custFontSize,
-                      //    color: KirthanStyles.subTitleColor,
+                    Column(
+                      children: [
+                        Text(
+                          "Time",
+                          style: GoogleFonts.openSans(
+                            //color: KirthanStyles.titleColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: notifier.custFontSize,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 15),
+                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text(
+                            eventrequest?.eventDate.substring(11, 16),
+                            style: TextStyle(
+                              fontSize: notifier.custFontSize,
+                              //color: KirthanStyles.subTitleColor,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -569,23 +843,6 @@ class EventRequestsListItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                /* Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
-
-                      child: IconButton(icon: Icon(Icons.location_on),
-                        onPressed:  () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    Location (eventrequest: eventrequest)),
-                            //MapView(eventrequest: eventrequest)),
-
-                            //do something
-                          )
-                        },),
-                    ),*/
-              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -643,5 +900,37 @@ class EventRequestsListItem extends StatelessWidget {
             ),
           ]),
         ));
+                    Column(
+                      children: [
+                        Text(
+                          "Duration ",
+                          style: GoogleFonts.openSans(
+                            //color: KirthanStyles.titleColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: notifier.custFontSize,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 15),
+                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text(
+                            //notifier.duration
+                            eventrequest?.eventDuration == notifier.duration
+                                ? eventrequest?.eventDuration + "Hrs"
+                                : eventrequest?.eventDuration + "Hrs",
+                            style: TextStyle(
+                              fontSize: notifier.custFontSize,
+                              // color: KirthanStyles.subTitleColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]),
+            ),
+          ]),
+        ),
+      ),
+    );
   }
 }

@@ -9,7 +9,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class TeamWrite extends StatefulWidget {
   TeamWrite({Key key}) : super(key: key);
@@ -31,7 +31,6 @@ class _TeamWriteState extends State<TeamWrite> {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text('Add Team'),
-
       ),
       body: Builder(builder: (context) {
         return SingleChildScrollView(
@@ -53,10 +52,24 @@ class _TeamWriteState extends State<TeamWrite> {
                         child: TextFormField(
                           //attribute: "eventTitle",
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.title),
-                            labelText: "Title",
-                            hintText: "",
-                          ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              icon: const Icon(
+                                Icons.title,
+                                color: Colors.grey,
+                              ),
+                              labelText: "Title",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
                           onSaved: (input) {
                             teamrequest.teamTitle = input;
                           },
@@ -76,10 +89,24 @@ class _TeamWriteState extends State<TeamWrite> {
                         child: TextFormField(
                           //attribute: "Description",
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.description),
-                            labelText: "Description",
-                            hintText: "",
-                          ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),
+                              labelText: "Description",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
                           onSaved: (input) {
                             teamrequest.teamDescription = input;
                           },
@@ -101,7 +128,7 @@ class _TeamWriteState extends State<TeamWrite> {
                         MaterialButton(
                           color: Colors.indigo,
                           child: Text("Cancel"),
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.pop(context);
                           },
                         ),
@@ -114,10 +141,13 @@ class _TeamWriteState extends State<TeamWrite> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseAuth auth = FirebaseAuth.instance;
-                                final FirebaseUser user = await auth.currentUser();
+                                final FirebaseUser user =
+                                    await auth.currentUser();
                                 final String email = user.email;
-                                String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                                    _formKey.currentState.save();
+                                String dt =
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        .format(DateTime.now());
+                                _formKey.currentState.save();
 
                                 final String teamTitle = teamrequest.teamTitle;
                                 teamrequest.isProcessed = false;
@@ -127,13 +157,13 @@ class _TeamWriteState extends State<TeamWrite> {
                                 teamrequest.updatedBy = null;
                                 teamrequest.updatedTime = null;
                                 teamrequest.approvalStatus = null;
-                                teamrequest.approvalComments = "Approved$teamTitle";
+                                teamrequest.approvalComments =
+                                    "Approved$teamTitle";
                                 Map<String, dynamic> teammap =
-                                teamrequest.toJson();
+                                    teamrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
-                                TeamRequest newteamrequest = await
-                                teamPageVM
+                                TeamRequest newteamrequest = await teamPageVM
                                     .submitNewTeamRequest(teammap);
 
                                 print(newteamrequest.id);
@@ -145,8 +175,6 @@ class _TeamWriteState extends State<TeamWrite> {
                                   backgroundColor: Colors.green,
                                 );
                                 Scaffold.of(context).showSnackBar(mysnackbar);
-
-
                               }
                               //String s = jsonEncode(userrequest.mapToJson());
                               //service.registerUser(s);
@@ -160,7 +188,6 @@ Colors.white),),
                           _fbKey.currentState.reset();
                         },
                       ),*/
-
                       ],
                     )
                   ],
@@ -173,4 +200,3 @@ Colors.white),),
     );
   }
 }
-

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class userName_profile extends StatefulWidget {
   @override
@@ -27,13 +29,30 @@ class _userName_profileState extends State<userName_profile> {
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       //color: Colors.black26,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            icon: const Icon(Icons.account_circle),
+                      child: Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => TextFormField(
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.green),
+                            ),
+                            icon: const Icon(
+                              Icons.account_circle,
+                              color: Colors.grey,
+                            ),
                             labelText: "Current Username",
                             labelStyle: TextStyle(
-                                fontSize: MyPrefSettingsApp.custFontSize,
-                                fontWeight: FontWeight.bold)),
+                              fontSize: notifier.custFontSize,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -42,14 +61,31 @@ class _userName_profileState extends State<userName_profile> {
                     child: Container(
                       //color: Colors.black26,
                       padding: const EdgeInsets.all(10),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            icon: const Icon(Icons.perm_identity),
+                      child: Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => TextFormField(
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.green),
+                            ),
+                            icon: const Icon(
+                              Icons.perm_identity,
+                              color: Colors.grey,
+                            ),
                             labelText: "New Username",
                             hintText: "Please enter new username",
                             labelStyle: TextStyle(
-                                fontSize: MyPrefSettingsApp.custFontSize,
-                                fontWeight: FontWeight.bold)),
+                              fontSize: notifier.custFontSize,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -58,14 +94,30 @@ class _userName_profileState extends State<userName_profile> {
                     child: Container(
                       //color: Colors.black26,
                       padding: const EdgeInsets.all(10),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          icon: const Icon(Icons.offline_pin),
+                      child: Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => TextFormField(
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.green),
+                            ),
+                            icon: const Icon(
+                              Icons.offline_pin,
+                              color: Colors.grey,
+                            ),
                             labelText: "Confirm New Username",
                             hintText: "Please confirm the New Username",
                             labelStyle: TextStyle(
-                                fontSize: MyPrefSettingsApp.custFontSize,
-                                fontWeight: FontWeight.bold)),
+                                fontSize: notifier.custFontSize,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),

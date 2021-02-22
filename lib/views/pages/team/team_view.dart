@@ -30,6 +30,7 @@ class _TeamViewState extends State<TeamView>
   String _selectedValue;
   int _index;
   SharedPreferences prefs;
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
 
@@ -49,11 +50,20 @@ class _TeamViewState extends State<TeamView>
   Future loadData() async {
     await teamPageVM.setTeamRequests("All");
   }
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
 
+    setState(() {
+      loadData();
+    });
+
+    return null;
+  }
   @override
   void initState() {
     super.initState();
-_index=2;
+    _index = 2;
     loadData();
     loadPref();
   }
@@ -76,22 +86,26 @@ _index=2;
           ],
         ),
       ),
-      body: ScopedModel<TeamPageViewModel>(
-        model: teamPageVM,
-        child: TeamsPanel(
-          teamType: "All",
+      body:RefreshIndicator(
+        key: refreshKey,
+        child:ScopedModel<TeamPageViewModel>(
+          model: teamPageVM,
+          child: TeamsPanel(
+            teamType: "All",
+          ),
         ),
+        onRefresh: refreshList,
       ),
+
       floatingActionButton: FloatingActionButton(
         heroTag: "team",
         child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+        //backgroundColor: Colors.green,
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => TeamWrite()));
         },
       ),
-
     );
   }
 }

@@ -20,6 +20,7 @@ class NotificationView extends StatefulWidget {
 }
 
 class NotificationViewState extends State<NotificationView> {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
   Widget CustomTile(NotificationModel data, var callback) {
     return FlatButton(
         padding: EdgeInsets.all(0),
@@ -148,7 +149,16 @@ class NotificationViewState extends State<NotificationView> {
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
   }
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
 
+    setState(() {
+      notificationPageVM.getNotifications();
+    });
+
+    return null;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,22 +168,27 @@ class NotificationViewState extends State<NotificationView> {
       drawer: Drawer(
         child: Center(child: Text("Drawer placeholder")),
       ),
-      body: FutureBuilder(
-          future: notificationPageVM.getNotifications(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemBuilder: (context, itemCount) =>
-                      _buildNotification(snapshot.data[itemCount]),
-                  itemCount: snapshot.data.length);
-            } else if (snapshot.hasError) {
-              print(snapshot);
-              print(snapshot.error.toString() + " Error ");
-              return Center(child: Text('Error loading notifications'));
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          }),
+      body:RefreshIndicator(
+        key: refreshKey,
+        child:FutureBuilder(
+            future: notificationPageVM.getNotifications(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    itemBuilder: (context, itemCount) =>
+                        _buildNotification(snapshot.data[itemCount]),
+                    itemCount: snapshot.data.length);
+              } else if (snapshot.hasError) {
+                print(snapshot);
+                print(snapshot.error.toString() + " Error ");
+                return Center(child: Text('Error loading notifications'));
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            }),
+        onRefresh: refreshList,
+      ),
+
     );
   }
 
