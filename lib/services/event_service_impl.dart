@@ -77,26 +77,20 @@ EventRequest eventRequest;
 
     // Events on duration
     //requestBody = '{"city":["Pune","Mumbai"]}';
-    final now = DateTime.now();
-print(now);
-    final tomorrow = DateTime(now.year, now.month, now.day + 1).toString().substring(0,10);
-    final today = DateTime(now.year, now.month, now.day);
-    final todaydate=today.toString().substring(0,10);
-  /*final dateinterval=TODAY;//TOM,THISWEEK,THISMONTH
-    eventDate = today;*/
-    print(todaydate);
-    if(eventType == "$todaydate")
+    if(eventType == "TODAY")
       {
-        requestBody = '{"eventDate" : "$todaydate"}';
+        requestBody = '{"dateInterval" : "TODAY"}';
       }
-    else if(eventType == "$tomorrow")
-      requestBody = '{"eventDate" : "$tomorrow"}';
-    else
+    else if(eventType == "TOMORROW")
+      requestBody = '{"dateInterval" : "TOMORROW"}';
+    else if (eventType == "This Week")
       {
-        requestBody = '{"approvalStatus" : "Approved"}';
-      }
-   // requestBody = '{"eventDate": "2021-02-17T00:00:00.000+0000"}';
-
+        requestBody = '{"dateInterval" : "This Week"}';
+      }else if(eventType == "This Month") {
+      requestBody = '{"dateInterval": "This Month"}';
+    } else {
+      requestBody = '{"approvalStatus" : "Approved"}';
+    }
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;

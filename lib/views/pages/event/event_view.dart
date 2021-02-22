@@ -115,39 +115,17 @@ class _EventViewState extends State<EventView>
   }
   final now = DateTime.now();
   Future loadData() async {
-    await eventPageVM.setEventRequests("Pune");
+    await eventPageVM.setEventRequests("All");
   }
-  geteventbyday(){
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    print(today);
-    final yesterday = DateTime(now.year, now.month, now.day - 1);
-    final tomorrow = DateTime(now.year, now.month, now.day + 1).toString().substring(0,10);
-    datetomm=tomorrow;
-    final todaydate=today.toString().substring(0,10);
-    date=todaydate;
-/*
-    final dateToCheck = widget.eventrequest.eventDate;
-    final aDate = DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
-    if(aDate == today) {
-    } else if(aDate == week) {
-    } else if(aDate == tomorrow) {
-    } else if(aDate == month){
-    }*/
-  }
+
   @override
   void initState() {
-    ;
     super.initState();
     _index = 0;
-    final now = DateTime.now().toString();
     loadData();
     loadPref();
     NotificationManager ntfManger = NotificationManager();
     getevent();
-    geteventbyday();
-    print(now.substring(0,10));
-    print(date);
   }
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
@@ -190,11 +168,13 @@ class _EventViewState extends State<EventView>
                 _selectedValue = input;
                 print(input);
                 if(input=='Today')
-                eventPageVM.setEventRequests("$date");
+                eventPageVM.setEventRequests("TODAY");
                 else if(input=='Tomorrow')
-                  eventPageVM.setEventRequests("$datetomm");
+                  eventPageVM.setEventRequests("TOMORROW");
                 else if(input=='This Week')
-                  eventPageVM.setEventRequests("eventType");
+                  eventPageVM.setEventRequests("This Week");
+                else if(input=='This Month')
+                  eventPageVM.setEventRequests("This Month");
               },
               itemBuilder: (BuildContext context) {
                 return eventTime.map((f) {
