@@ -43,26 +43,6 @@ class _FaqState extends State<FaqApp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Card(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    Text("Frequently Asked Questions",
-                        style: TextStyle(fontSize: 30, color: Colors.red)),
-                    Consumer<ThemeNotifier>(
-                      builder: (context, notifier, child) => Text(
-                          "\nQ1)How do we send invite to team?\n"
-                          "\n"
-                          ".........................",
-                          style: TextStyle(
-                              fontSize: notifier.custFontSize,
-                              color: Colors.red)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
 
         Padding (
           padding : EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -72,12 +52,14 @@ class _FaqState extends State<FaqApp> {
             children: <Widget>[
               Card(
                 child: Container(
+
                   padding: EdgeInsets.all(10),
                   child: Column(
+
                     children: <Widget>[
                       Row(children: <Widget>[
                         Center(
-                          child: Text("   Frequently Asked Questions",
+                          child: Text("Frequently Asked Questions",
                               style: TextStyle(
                                 //fontFamily: 'Sacramento',
                                   fontSize: 25,

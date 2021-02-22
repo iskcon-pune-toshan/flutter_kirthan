@@ -1,48 +1,15 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/entitlements_settings.dart';
-import 'package:flutter_kirthan/views/pages/event/event_view.dart';
-import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
-import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
-import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
-import 'package:flutter_kirthan/views/pages/user/user_view.dart';
-import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
-import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/CommonBottomNavigationBar.dart';
-import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/tabItem.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/services/event_service_impl.dart';
-import 'package:flutter_kirthan/services/firebasemessage_service.dart';
-import 'package:flutter_kirthan/services/notification_service_impl.dart';
-import 'package:flutter_kirthan/services/signin_service.dart';
-import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/rateus.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/entitlements_settings.dart';
+import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
-import 'package:flutter_kirthan/views/pages/event/event_create.dart';
-//import 'package:flutter_kirthan/views/pages/event/event_search.dart';
-import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
-import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
-import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
-import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:share/share.dart';
 import 'faq.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -156,48 +123,12 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                   Card(
                     child: ListTile(
-                      title: Text(
-                        "Share app",
-                        style: TextStyle(fontSize: notifier.custFontSize),
-                      ),
+                      title: Text("Share app"),
                       trailing: Icon(Icons.share),
                       onTap: () {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext bc) {
-                              return Container(
-                                child: new Wrap(
-                                  children: <Widget>[
-                                    new ListTile(
-                                        leading: new Icon(Icons.apps),
-                                        title: new Text(
-                                          'WhatsApp',
-                                          style: TextStyle(
-                                              fontSize: notifier.custFontSize),
-                                        ),
-                                        onTap: () => {}),
-                                    new ListTile(
-                                      leading: new Icon(Icons.mail),
-                                      title: new Text(
-                                        'Mail',
-                                        style: TextStyle(
-                                            fontSize: notifier.custFontSize),
-                                      ),
-                                      onTap: () => {},
-                                    ),
-                                    new ListTile(
-                                      leading: new Icon(Icons.message),
-                                      title: new Text(
-                                        'Sms',
-                                        style: TextStyle(
-                                            fontSize: notifier.custFontSize),
-                                      ),
-                                      onTap: () => {},
-                                    ),
-                                  ],
-                                ),
-                              );
-                            });
+                        Share.share(
+                            "Please visit      https://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing",
+                            subject: "Kirtan App");
                       },
                     ),
                   ),

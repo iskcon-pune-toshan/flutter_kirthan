@@ -539,7 +539,7 @@ class _EventWriteState extends State<EventWrite> {
                                     addRadioButton(1, 'Moving'),
                               ]),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children:<Widget>[
                               RaisedButton.icon(
                             onPressed: () {
@@ -634,7 +634,7 @@ class _EventWriteState extends State<EventWrite> {
                                     BorderRadius.all(Radius.circular(10.0))),
 
                             label: Text(
-                              'Add Source Location',
+                              'Add Source',
                               style: TextStyle(color: Colors.black,fontSize:12.5),
                             ),
                             icon: Icon(
@@ -739,7 +739,7 @@ class _EventWriteState extends State<EventWrite> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                             label: Text(
-                              'Add Destination Location',
+                              'Add Destination',
                               style: TextStyle(color: Colors.black,fontSize: 12.5),
                             ),
                             icon: Icon(

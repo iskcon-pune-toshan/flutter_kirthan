@@ -53,12 +53,8 @@ dependencies:
   cloud_firestore:
   share: ^0.6.5+4
   draggable_fab: ^0.1.1
-
-
-
   syncfusion_flutter_calendar:
-  share: ^0.6.5+4
-  draggable_fab: ^0.1.1
+
 
 
 
