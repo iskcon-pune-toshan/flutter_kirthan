@@ -15,7 +15,7 @@ final UserPageViewModel userPageVM =
 class UserEdit extends StatefulWidget {
   final String screenName = SCR_REGISTER_USER;
   UserRequest userrequest;
-  UserEdit({Key key, @required this.userrequest}) : super(key: key);
+  UserEdit({@required this.userrequest});
 
   @override
   _UserEditState createState() => new _UserEditState();

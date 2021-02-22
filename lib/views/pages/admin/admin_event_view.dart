@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-
-
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
-
-
 import './admin_view.dart';
 
 

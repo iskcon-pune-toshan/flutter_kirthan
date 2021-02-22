@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +31,15 @@ class _TeamWriteState extends State<TeamWrite> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text('Add Team'),
+        elevation: 0.0,
+        iconTheme: IconThemeData(color: KirthanStyles.colorPallete60),
+        title: Text('Add Team',style: TextStyle(color: KirthanStyles.colorPallete60),),
+        backgroundColor: KirthanStyles.colorPallete30,
       ),
       body: Builder(builder: (context) {
         return SingleChildScrollView(
           child: Container(
-            color: Colors.redAccent,
+            color: Colors.white,
             child: Center(
               child: Form(
                 // context,
@@ -58,17 +62,17 @@ class _TeamWriteState extends State<TeamWrite> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                              icon: const Icon(
+                              /*icon: const Icon(
                                 Icons.title,
                                 color: Colors.grey,
-                              ),
+                              ),*/
                               labelText: "Title",
-                              hintText: "",
+                              hintText: "Add a title",
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                               )),
                           onSaved: (input) {
                             teamrequest.teamTitle = input;
@@ -95,17 +99,17 @@ class _TeamWriteState extends State<TeamWrite> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                              icon: const Icon(
+                              /*icon: const Icon(
                                 Icons.description,
                                 color: Colors.grey,
-                              ),
+                              ),*/
                               labelText: "Description",
-                              hintText: "",
+                              hintText: "Add a description",
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                               )),
                           onSaved: (input) {
                             teamrequest.teamDescription = input;
@@ -126,18 +130,19 @@ class _TeamWriteState extends State<TeamWrite> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         MaterialButton(
-                          color: Colors.indigo,
+                          color: Colors.white,
                           child: Text("Cancel"),
                           onPressed: () {
                             Navigator.pop(context);
                           },
+
                         ),
                         MaterialButton(
                             child: Text(
                               "Submit",
                               style: TextStyle(color: Colors.white),
                             ),
-                            color: Colors.blue,
+                            color: KirthanStyles.colorPallete30,
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseAuth auth = FirebaseAuth.instance;

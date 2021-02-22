@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter_kirthan/models/eventsearch.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/models/event.dart';

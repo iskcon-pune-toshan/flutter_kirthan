@@ -25,7 +25,7 @@ dependencies:
   flutter_auth_buttons: ^0.8.0
   provider: ^4.0.5+1
   screen: ^0.0.5
-  table_calendar:
+  table_calendar: ^2.2.3
   google_fonts: ^1.0.0
   rating_dialog: ^1.0.0
   firebase_messaging : ^6.0.16
@@ -53,7 +53,7 @@ dependencies:
   cloud_firestore:
   share: ^0.6.5+4
   draggable_fab: ^0.1.1
-
+  syncfusion_flutter_calendar:
 
 
 
@@ -79,3 +79,9 @@ flutter:
     - family: Distant Galaxy
       fonts:
         - asset: assets/fonts/DISTGRG_.ttf
+    - family: Sacramento
+      fonts:
+        - asset: assets/fonts/Sacramento-Regular.ttf
+    - family: OpenSans
+      fonts:
+          - asset: assets/fonts/OpenSans.ttf
