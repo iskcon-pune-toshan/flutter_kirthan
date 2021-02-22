@@ -36,6 +36,7 @@ import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/user/user_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -110,6 +111,19 @@ class _MyDrawerState extends State<MyDrawer> {
                       trailing: Icon(Icons.phone_in_talk),
                     ),
                   ),
+                  Card(
+                    child: ListTile(
+                      title: Text("Interested Events"),
+                      trailing: Icon(Icons.event),
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) => Interested_events()));
+                      },
+                    ),
+                  ),
+
                   Card(
                     child: ListTile(
                       title: Text(

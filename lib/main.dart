@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
-import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/event/int_item.dart';
 import 'package:provider/provider.dart';
 
