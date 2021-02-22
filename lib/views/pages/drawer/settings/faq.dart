@@ -1,6 +1,6 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 
@@ -62,9 +62,10 @@ class _FaqState extends State<FaqApp> {
                   ],
                 ),
               ),
-            )
-          ],
-        padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+            ),
+
+        Padding (
+          padding : EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,6 +231,6 @@ class _FaqState extends State<FaqApp> {
           ),
         ),
       ),
-    );
+    ])));
   }
 }

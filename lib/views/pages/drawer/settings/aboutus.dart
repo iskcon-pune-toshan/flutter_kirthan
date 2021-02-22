@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 
@@ -79,7 +80,8 @@ class _AboutUsState extends State<AboutUsApp> {
                             //color: Colors.white,
                             fontWeight: FontWeight.bold)),
                   ),
-                  Text(
+                Consumer<ThemeNotifier>(
+                    builder: (context, notifier, child) => Text(
                       "\nInternational Society For Krishna Consciousness:\n"
                           "\n"
                           "The society gives emphasis on four regulative principles as the basis of spiritual life. These principles are inspired from four legs of Dharma. These four principles are as follows:"
@@ -103,7 +105,7 @@ class _AboutUsState extends State<AboutUsApp> {
                           fontSize: AboutUsApp.custFontSize,
                           //color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                ]),
+                )]),
               ),
             ]),
           ),
