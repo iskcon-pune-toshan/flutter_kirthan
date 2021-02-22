@@ -111,6 +111,7 @@ class _LoginAppState extends State<LoginApp> {
     String pass = s.uid;
     String email = s.email;
     String userName = s.displayName;
+
     print("signup uid");
     print(pass);
     print(email);
@@ -125,7 +126,7 @@ class _LoginAppState extends State<LoginApp> {
       user.email = email;
       user.password = pass;
       user.phoneNumber = 12345678;
-      user.userName = email;
+      user.userName = userName;
       user.addLineOne = "xyz";
       user.addLineTwo = "abc";
       user.addLineThree = "pqr";
