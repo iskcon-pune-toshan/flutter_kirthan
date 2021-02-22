@@ -67,7 +67,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                 color: Colors.grey,
                               ),*/
                               labelText: "Title",
-                              hintText: "",
+                              hintText: "Add a title",
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                               ),
@@ -104,7 +104,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                 color: Colors.grey,
                               ),*/
                               labelText: "Description",
-                              hintText: "",
+                              hintText: "Add a description",
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                               ),
