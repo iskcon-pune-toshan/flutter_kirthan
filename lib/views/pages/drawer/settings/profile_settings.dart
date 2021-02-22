@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/contact_details_profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/description_profile_settings.dart';
@@ -7,9 +9,18 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_pag
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/profile_picture.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/team_name.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/user_name_profile.dart';
+import 'package:flutter_kirthan/views/widgets/user/user_list_item.dart';
+import 'package:flutter_kirthan/views/widgets/user/user_panel.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class MyProfileSettings extends StatefulWidget {
-  @override
+
+  final UserRequest Userrequest;
+  final UserPageViewModel userPageViewModel;
+
+   MyProfileSettings({@required this.Userrequest, this.userPageViewModel});
+
+   @override
   _MyProfileSettingsState createState() => _MyProfileSettingsState();
 }
 
@@ -129,11 +140,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                   style: TextStyle(fontSize: MyPrefSettingsApp.custFontSize),
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => contact_details_profile(),
 
-                  )
-                  );
                 },
                 selected: true,
               ),

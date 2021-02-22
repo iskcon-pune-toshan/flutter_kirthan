@@ -77,7 +77,7 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
                           .map((team) =>
                           DropdownMenuItem<TeamRequest>(
                             value: team,
-                            child: Text(team.teamDescription),
+                            child: Text(team.teamTitle),
                           ))
                           .toList(),
                       onChanged: (input) {

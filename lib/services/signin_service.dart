@@ -78,6 +78,7 @@ class SignInService {
   }
 
   Future<FirebaseUser> googSignIn(BuildContext context) async {
+
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -91,6 +92,7 @@ class SignInService {
         (await firebaseAuth.signInWithCredential(credential)).user;
 
     fireUser = user;
+    print(user);
     return user;
   }
 
@@ -116,7 +118,7 @@ class SignInService {
         ? firebaseAuth.signOut()
         : print("User not signed in Firebase");
     googleSignIn.isSignedIn().then((onValue) => onValue == true
-        ? googleSignIn.signOut()
+        ? googleSignIn.disconnect()
         : print("User not signed in Google"));
     facebookLogin.isLoggedIn.then((onValue) => onValue == true
         ? facebookLogin.logOut()

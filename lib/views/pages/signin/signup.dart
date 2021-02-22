@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
-import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +21,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailcontroller = new TextEditingController();
   String email;
   final TextEditingController _displaynamecontroller =
-      new TextEditingController();
+  new TextEditingController();
   String displayName;
   final TextEditingController _confirmpassword = new TextEditingController();
 
@@ -64,18 +63,19 @@ class _SignUpState extends State<SignUp> {
 
     FirebaseUser s = await auth.currentUser();
     String pass = s.uid;
+    String num = s.phoneNumber;
     print("signup uid");
     print(pass);
 
     if (_formKey.currentState.validate()) {
       String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
       user.firstName = _displaynamecontroller.text;
       user.lastName = _displaynamecontroller.text;
       user.email = _emailcontroller.text;
       user.password = pass;
-      user.phoneNumber = 12345678;
+      user.phoneNumber = 123456789;
       user.userName = _displaynamecontroller.text;
       user.addLineOne = "xyz";
       user.addLineTwo = "abc";
@@ -110,6 +110,10 @@ class _SignUpState extends State<SignUp> {
         appBar: AppBar(
           title: Text("Sign-Up"),
           backgroundColor: Colors.indigo,
+          leading: IconButton(
+          icon: Icon(Icons.arrow_back,),
+          onPressed: () => Navigator.of(context).pop()),
+
         ),
         body: Center(
           child: Container(
@@ -147,7 +151,7 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.only(bottom: 15),
                       child: TextFormField(
                         decoration:
-                            buildInputDecoration(Icons.email, "Email", "Email"),
+                        buildInputDecoration(Icons.email, "Email", "Email"),
 
                         controller: _emailcontroller,
                         validator: (value) {
@@ -207,14 +211,10 @@ class _SignUpState extends State<SignUp> {
                         onPressed: () async {
                           signIn
                               .signUpWithEmail(_emailcontroller.text,
-                                  _passwordcontroller.text)
+                              _passwordcontroller.text)
                               .then((FirebaseUser user) => populateData())
                               .catchError((e) => print(e))
-                              .whenComplete(() => addUser())
-                              .whenComplete(() => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginApp())));
+                              .whenComplete(() => addUser());
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0),
