@@ -13,7 +13,6 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 //final MainPageViewModel mainPageVM =
 //  MainPageViewModel(apiSvc: RestAPIServices());
@@ -401,7 +400,7 @@ class _LoginAppState extends State<LoginApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          toolbarHeight: 40.0,
+          //toolbarHeight: 40.0,
           backgroundColor: Color(0xFF61bcbc),
           shape: ContinuousRectangleBorder(
               borderRadius:
