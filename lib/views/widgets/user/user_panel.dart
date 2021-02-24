@@ -46,6 +46,7 @@ class UsersPanel extends StatelessWidget {
                             onPressed: () {
                               print("Super Admin");
                               model.setUserRequests("SA");
+                              print(model.setUserRequests("SA"));
                             },
                           ),
                           RaisedButton(
