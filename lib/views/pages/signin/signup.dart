@@ -221,10 +221,10 @@ class _SignUpState extends State<SignUp> {
                                 side: BorderSide(color: Colors.blue, width: 2)),
                           ),
                         ),
-                        SizedBox(
+                        /*SizedBox(
                           width: 140,
                           height: 50,
-                          child: ElevatedButton(
+                          child: (
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   KirthanStyles.colorPallete30),
@@ -245,7 +245,28 @@ class _SignUpState extends State<SignUp> {
                                   .whenComplete(() => addUser());
                             },
                           ),
-                        )
+                        )*/
+                        SizedBox(
+                          width: 140,
+                          height: 50,
+                          child: RaisedButton(
+                            color: KirthanStyles.colorPallete30,
+                            child: Text('Submit'),
+                            onPressed: () async {
+                              signIn
+                                  .signUpWithEmail(_emailcontroller.text,
+                                  _passwordcontroller.text)
+                                  .then((FirebaseUser user) => populateData())
+                                  .catchError((e) => print(e))
+                                  .whenComplete(() => addUser());
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0),
+                                side: BorderSide(color: Colors.blue, width: 2)),
+
+
+                          ),
+                        ),
                       ],
                     ),
                   ],
