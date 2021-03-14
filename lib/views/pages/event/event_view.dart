@@ -290,7 +290,6 @@ class Search extends SearchDelegate {
               leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
 
             );
-
         },
       );
   }
