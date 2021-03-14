@@ -22,7 +22,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailcontroller = new TextEditingController();
   String email;
   final TextEditingController _displaynamecontroller =
-  new TextEditingController();
+      new TextEditingController();
   String displayName;
   final TextEditingController _confirmpassword = new TextEditingController();
 
@@ -70,7 +70,7 @@ class _SignUpState extends State<SignUp> {
 
     if (_formKey.currentState.validate()) {
       String dt =
-      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
       user.firstName = _displaynamecontroller.text;
       user.lastName = _displaynamecontroller.text;
@@ -153,7 +153,7 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.only(bottom: 15),
                       child: TextFormField(
                         decoration:
-                        buildInputDecoration(Icons.email, "Email", "Email"),
+                            buildInputDecoration(Icons.email, "Email", "Email"),
 
                         controller: _emailcontroller,
                         validator: (value) {

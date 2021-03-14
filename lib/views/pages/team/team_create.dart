@@ -29,7 +29,7 @@ class _TeamWriteState extends State<TeamWrite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         elevation: 0.0,
         iconTheme: IconThemeData(color: KirthanStyles.colorPallete60),
@@ -52,6 +52,7 @@ class _TeamWriteState extends State<TeamWrite> {
                     new Container(margin: const EdgeInsets.only(top: 50)),
                     Card(
                       child: Container(
+                        //color: Colors.white,
                         padding: new EdgeInsets.all(10),
                         child: TextFormField(
                           //attribute: "eventTitle",
@@ -72,7 +73,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                 color: Colors.grey,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.black,
+                                color: Colors.grey,
                               )),
                           onSaved: (input) {
                             teamrequest.teamTitle = input;
@@ -89,9 +90,11 @@ class _TeamWriteState extends State<TeamWrite> {
                     ),
                     Card(
                       child: Container(
+                        //color: Colors.white,
                         padding: new EdgeInsets.all(10),
                         child: TextFormField(
                           //attribute: "Description",
+
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -109,7 +112,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                 color: Colors.grey,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.black,
+                                color: Colors.grey,
                               )),
                           onSaved: (input) {
                             teamrequest.teamDescription = input;

@@ -39,6 +39,30 @@
           }
         },
         {
+          "client_id": "638627243036-6p6ni5ekv1b70g4mthmglpd5almse3ap.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "f33ea0674f16679f77d1f54dfb6aacb1dc419ce1"
+          }
+        },
+        {
+          "client_id": "638627243036-74id3jol2234tiekphghheg5tfmbm760.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "69986a85185c0d112e8c8c0002fb166d40e7562f"
+          }
+        },
+        {
+          "client_id": "638627243036-7dron52bfnnlk65c79jsosm3nslmfojb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "055b9ab24a03cb536f935c51ed7147b6e05003d5"
+          }
+        },
+        {
           "client_id": "638627243036-9tjrrdhbgp7gmd7hrp73m4p03utrrqht.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -63,11 +87,51 @@
           }
         },
         {
+          "client_id": "638627243036-ffrolfohho14g51e4q07881lv8kgfmcn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "b4cd890c1cd51431f4fa910bb516c41ba968cb34"
+          }
+        },
+        {
+          "client_id": "638627243036-hqaa7qgqh0mdrc9ecai2dtebhb8itkua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "277f4138a8e051a21a340b7abb274d330cac90a1"
+          }
+        },
+        {
+          "client_id": "638627243036-jpmi078nolk52idln49cb7k68gt8co4g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "a6105c4f828c39a4dbbc764664ad4d48832bcd25"
+          }
+        },
+        {
           "client_id": "638627243036-jtfk5ogct1elucreb54cm4uh4k4hbd32.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "org.iskcon.flutter_kirthan",
             "certificate_hash": "d7f03fd616af0f0cabfdd2cfbf5ca8e4579cd259"
+          }
+        },
+        {
+          "client_id": "638627243036-ohk03v2pp002c721ebk3s4h6shd5louj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "ab9864a9fcc6374efb5dc7fd0eeab744eb0b30e8"
+          }
+        },
+        {
+          "client_id": "638627243036-p4pbehhdd5nt7bolsh16ujjmrvtq5qnd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "e0ab9a510011ba45f61d846bbaee0b2ab23feaf5"
           }
         },
         {
@@ -84,6 +148,22 @@
           "android_info": {
             "package_name": "org.iskcon.flutter_kirthan",
             "certificate_hash": "914f434b069bc3d38b15e6e69f11d9649769270b"
+          }
+        },
+        {
+          "client_id": "638627243036-tvkk07tullfjugub340062l9i68iletl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "e712b5fc07ce0663c5afbd6425b69c98e0af8c8f"
+          }
+        },
+        {
+          "client_id": "638627243036-vt78olpktng01usjfjn2r9lkoqmkmvs8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "4e4541ffbbf22167e30aa62275aa41fb8ea68073"
           }
         },
         {
