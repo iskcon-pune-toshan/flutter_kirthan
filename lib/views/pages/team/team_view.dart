@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
@@ -71,21 +72,11 @@ class _TeamViewState extends State<TeamView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Text("Teams"),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-              title: Text("One"),
-            ),
-            ListTile(
-              title: Text("Two"),
-            ),
-          ],
-        ),
-      ),
+      drawer: MyDrawer(),
       body:RefreshIndicator(
         key: refreshKey,
         child:ScopedModel<TeamPageViewModel>(

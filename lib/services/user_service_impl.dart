@@ -52,13 +52,14 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     requestBody = '{"city":"Pune"}';
     //adding a test comment
     if (userType == "SA") {
-      requestBody = '{"userType":"SuperAdmin"}';
+      requestBody = '{"roleId": 1}';
     } else if (userType == "A") {
-      requestBody = '{"userType":"Admin"}';
+      requestBody = '{"roleId": 2}';
     } else if (userType == "U") {
-      requestBody = '{"userType":"Users"}';
+      requestBody = '{"roleId": 3}';
     }
 
+    print("Instance of request");
     print(requestBody);
 
     String token =AutheticationAPIService().sessionJWTToken;
@@ -66,6 +67,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     print(response.body);
+    print("User sorting");
+    print(requestBody);
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       //print(response.body);

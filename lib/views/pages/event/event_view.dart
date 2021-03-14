@@ -223,8 +223,10 @@ class Search extends SearchDelegate {
 
   Search(this.listExample, {
     String hintText = "Search by Event Title",
+
   }) : super(
     searchFieldLabel: hintText,
+    searchFieldStyle: TextStyle(color: Colors.grey),
     keyboardType: TextInputType.text,
     textInputAction: TextInputAction.search,
   );
@@ -256,7 +258,8 @@ class Search extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     return Container(
       child: Center(
-        child: Text(selectedResult),
+        child: Text(selectedResult,
+            style:TextStyle(color: KirthanStyles.colorPallete10)),
       ),
     );
   }

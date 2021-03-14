@@ -5,6 +5,7 @@ import 'package:flutter_kirthan/models/notification.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
@@ -165,9 +166,7 @@ class NotificationViewState extends State<NotificationView> {
       appBar: AppBar(
         title: Text('Notifications'),
       ),
-      drawer: Drawer(
-        child: Center(child: Text("Drawer placeholder")),
-      ),
+      drawer: MyDrawer(),
       body:RefreshIndicator(
         key: refreshKey,
         child:FutureBuilder(

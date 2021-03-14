@@ -41,16 +41,17 @@ class AppState extends State<App> {
       icon: Icons.people,
       page: TeamView(),
     ),
-    /*TabItem(
-      tabName: "Temple",
-      icon: Icons.title,
-      page: TempleView(),
-    ),*/
     TabItem(
       tabName: "Notifications",
       icon: Icons.notifications,
       page: NotificationView(),
     ),
+    TabItem(
+      tabName: "Calendar",
+      icon: Icons.calendar_today,
+      page: CalendarPage(),
+    ),
+
     /*TabItem(
       tabName: "Screens",
       icon: Icons.fullscreen,

@@ -46,6 +46,7 @@ class UsersPanel extends StatelessWidget {
                             onPressed: () {
                               print("Super Admin");
                               model.setUserRequests("SA");
+                              print(model.setUserRequests("SA"));
                             },
                           ),
                           RaisedButton(
@@ -87,7 +88,7 @@ class UsersPanel extends StatelessWidget {
                           child: ListView.builder(
                             shrinkWrap: true,
                             itemCount:
-                                userRequests == null ? 0 : userRequests.length,
+                            userRequests == null ? 0 : userRequests.length,
                             itemBuilder: (_, int index) {
                               var userrequest = userRequests[index];
                               return UserRequestsListItem(
