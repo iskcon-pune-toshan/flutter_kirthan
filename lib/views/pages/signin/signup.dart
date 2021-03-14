@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailcontroller = new TextEditingController();
   String email;
   final TextEditingController _displaynamecontroller =
-  new TextEditingController();
+      new TextEditingController();
   String displayName;
   final TextEditingController _confirmpassword = new TextEditingController();
 
@@ -69,7 +70,7 @@ class _SignUpState extends State<SignUp> {
 
     if (_formKey.currentState.validate()) {
       String dt =
-      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
       user.firstName = _displaynamecontroller.text;
       user.lastName = _displaynamecontroller.text;
@@ -108,12 +109,13 @@ class _SignUpState extends State<SignUp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Sign-Up"),
-          backgroundColor: Colors.indigo,
+          title: Text("Sign Up"),
+          backgroundColor: KirthanStyles.colorPallete30,
           leading: IconButton(
-          icon: Icon(Icons.arrow_back,),
-          onPressed: () => Navigator.of(context).pop()),
-
+              icon: Icon(
+                Icons.arrow_back,
+              ),
+              onPressed: () => Navigator.of(context).pop()),
         ),
         body: Center(
           child: Container(
@@ -151,7 +153,7 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.only(bottom: 15),
                       child: TextFormField(
                         decoration:
-                        buildInputDecoration(Icons.email, "Email", "Email"),
+                            buildInputDecoration(Icons.email, "Email", "Email"),
 
                         controller: _emailcontroller,
                         validator: (value) {
@@ -202,25 +204,50 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      width: 200,
-                      height: 50,
-                      child: RaisedButton(
-                        color: Colors.lightGreen,
-                        child: Text('Submit'),
-                        onPressed: () async {
-                          signIn
-                              .signUpWithEmail(_emailcontroller.text,
-                              _passwordcontroller.text)
-                              .then((FirebaseUser user) => populateData())
-                              .catchError((e) => print(e))
-                              .whenComplete(() => addUser());
-                        },
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                            side: BorderSide(color: Colors.blue, width: 2)),
-                      ),
-                    )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: 140,
+                          height: 50,
+                          child: RaisedButton(
+                            color: Colors.white,
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0),
+                                side: BorderSide(color: Colors.blue, width: 2)),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 140,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  KirthanStyles.colorPallete30),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    side: BorderSide(
+                                        color: Colors.blue, width: 2)),
+                              ),
+                            ),
+                            child: Text('Submit'),
+                            onPressed: () async {
+                              signIn
+                                  .signUpWithEmail(_emailcontroller.text,
+                                      _passwordcontroller.text)
+                                  .then((FirebaseUser user) => populateData())
+                                  .catchError((e) => print(e))
+                                  .whenComplete(() => addUser());
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -236,22 +263,25 @@ class _SignUpState extends State<SignUp> {
     return InputDecoration(
       labelText: labeltext,
       hintText: hinttext,
-      prefixIcon: Icon(icons),
+      prefixIcon: Icon(icons,color: KirthanStyles.colorPallete30,),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.green, width: 1.5),
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: BorderSide(
+          color: Colors.green,
+          width: 1.5,
+        ),
       ),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.zero,
         borderSide: BorderSide(
-          color: Colors.blue,
+          color: KirthanStyles.colorPallete30,
           width: 1.5,
         ),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: Colors.blue,
+          color: KirthanStyles.colorPallete30,
           width: 1.5,
         ),
       ),

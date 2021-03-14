@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
@@ -179,7 +180,7 @@ class _LoginAppState extends State<LoginApp> {
                 contentPadding: EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: Color(0xFF61bcbc),
+                  color: KirthanStyles.colorPallete30,
                 ),
                 hintText: 'Email address',
                 hintStyle: kHintTextStyle,
