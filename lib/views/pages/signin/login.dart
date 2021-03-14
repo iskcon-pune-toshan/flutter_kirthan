@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
@@ -13,12 +14,13 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 //final MainPageViewModel mainPageVM =
 //  MainPageViewModel(apiSvc: RestAPIServices());
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class LoginApp extends StatefulWidget {
   //final MainPageViewModel viewModel;
@@ -118,7 +120,7 @@ class _LoginAppState extends State<LoginApp> {
 
     if (_formKey.currentState.validate()) {
       String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
       user.firstName = userName;
       user.lastName = userName;
@@ -178,14 +180,14 @@ class _LoginAppState extends State<LoginApp> {
                 contentPadding: EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: Color(0xFF61bcbc),
+                  color: KirthanStyles.colorPallete30,
                 ),
                 hintText: 'Email address',
                 hintStyle: kHintTextStyle,
               ),
               controller: username,
               validator: (input) =>
-                  input.contains("*") ? "Not a Valid User" : null,
+              input.contains("*") ? "Not a Valid User" : null,
             ),
           ),
           Divider(),
@@ -219,7 +221,7 @@ class _LoginAppState extends State<LoginApp> {
                   ),
                   controller: _passwordcontroller,
                   validator: (input) => input.contains(
-                          "*") // need to hold a help icon if the password rule becomes too complicated
+                      "*") // need to hold a help icon if the password rule becomes too complicated
                       ? "Not a Valid Password"
                       : null,
                   onSaved: (input) => _password = input,
@@ -265,9 +267,9 @@ class _LoginAppState extends State<LoginApp> {
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) => print(e))
                 .whenComplete(() => authenticateService
-                    .autheticate()
-                    .whenComplete(() => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => App()))));
+                .autheticate()
+                .whenComplete(() => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => App()))));
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -339,27 +341,27 @@ class _LoginAppState extends State<LoginApp> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildSocialBtn(
-            () => signInService
+                () => signInService
                 .facebookSignIn(context)
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) => print(e))
                 .whenComplete(() => Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => App()))),
+                context, MaterialPageRoute(builder: (context) => App()))),
             AssetImage(
               'assets/images/facebook.jpg',
             ),
           ),
           _buildSocialBtn(
-            () => signInService
+                () => signInService
                 .googSignIn(context)
-                //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+            //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) => print(e))
                 .whenComplete(() => addUser())
                 .whenComplete(() => authenticateService
-                    .autheticate()
-                    .whenComplete(() => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => App())))),
+                .autheticate()
+                .whenComplete(() => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => App())))),
             AssetImage(
               'assets/images/google.jpg',
             ),
@@ -401,11 +403,11 @@ class _LoginAppState extends State<LoginApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          //toolbarHeight: 40.0,
+          toolbarHeight: 40.0,
           backgroundColor: Color(0xFF61bcbc),
           shape: ContinuousRectangleBorder(
               borderRadius:
-            BorderRadius.only(topLeft: Radius.circular(100),topRight: Radius.circular(100) )
+              BorderRadius.only(topLeft: Radius.circular(100),topRight: Radius.circular(100) )
           )
       ),
       body: GestureDetector(
@@ -420,48 +422,48 @@ class _LoginAppState extends State<LoginApp> {
               ),
             ),
             Container(
-                height: double.infinity,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 30.0,
+              height: double.infinity,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 30.0,
 
-                    ),
-                  child: SingleChildScrollView(
-                    child: Column(
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
 
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: 80.0),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(top: 80.0),
+                      ),
+
+                      Text(
+                        'Welcome to ISKCON',
+                        style: TextStyle(
+                          color: Color(0xFF61bcbc),
+                          fontFamily: 'OpenSans',
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.w900,
                         ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 30.0),
+                      ),
 
-                        Text(
-                          'Welcome to ISKCON',
-                          style: TextStyle(
-                            color: Color(0xFF61bcbc),
-                            fontFamily: 'OpenSans',
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 30.0),
-                        ),
+                      _buildEmailTF(),
 
-                        _buildEmailTF(),
-
-                        //_buildPasswordTF(),
-                        _buildForgotPasswordBtn(),
-                        _buildLoginBtn(),
-                        _buildSignInWithText(),
-                        _buildSocialBtnRow(),
-                        _buildSignupBtn(),
-                      ],
-                    ),
+                      //_buildPasswordTF(),
+                      _buildForgotPasswordBtn(),
+                      _buildLoginBtn(),
+                      _buildSignInWithText(),
+                      _buildSocialBtnRow(),
+                      _buildSignupBtn(),
+                    ],
                   ),
                 ),
               ),
-            
+            ),
+
           ],
         ),
       ),
@@ -485,7 +487,7 @@ final kBoxDecorationStyle = BoxDecoration(
   color: Colors.white,
   border: Border.all(color:Color(0xFF61bcbc) ),
   borderRadius: BorderRadius.circular(10.0),
- /* boxShadow: [
+  /* boxShadow: [
     BoxShadow(
       color: Color(0xFF61bcbc),
       blurRadius: 6.0,
