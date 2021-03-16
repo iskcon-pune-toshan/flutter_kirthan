@@ -164,7 +164,6 @@ class CalendarPage extends StatefulWidget {
   CalendarClass createState() => CalendarClass();
 
 }
-Meeting _meeting;
 List<String> views = <String>[
   'Day',
   'Week',
@@ -178,7 +177,6 @@ class CalendarClass extends State<CalendarPage>
 
   @override
   void initState() {
-    // TODO: implement initState
     _calendarView = CalendarView.month;
     _datePicked = DateTime.now();
     _calendarDate = DateTime.now();
@@ -223,10 +221,12 @@ class CalendarClass extends State<CalendarPage>
         children: <Widget>[
           Expanded(
             child: SfCalendar(
+              showDatePickerButton: true,
               initialDisplayDate: _calendarDate,
-              view: _calendarView,
+              view: CalendarView.month,
               onViewChanged: _viewChanged,
               dataSource: _getCalendarDataSource(),
+              monthViewSettings: MonthViewSettings(showAgenda: true),
             ),
           ),
         ],

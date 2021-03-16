@@ -1,11 +1,20 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/models/preferences.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/services/preferences_service_impl.dart';
+import 'package:flutter_kirthan/services/temple_service_impl.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/preference_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 //import'package:flutter_kirthan/views/pages/drawer/settings/impl_perferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
@@ -15,12 +24,25 @@ import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 
-class PerferenceSettings extends StatefulWidget {
+final TemplePageViewModel templePageVM =
+    TemplePageViewModel(apiSvc: TempleAPIService());
+final PreferencesPageViewModel preferencesPageVM =
+    PreferencesPageViewModel(apiSvc: PreferencesAPIService());
+final UserPageViewModel userPageVM =
+    UserPageViewModel(apiSvc: UserAPIService());
+final EventPageViewModel eventPageVM =
+    EventPageViewModel(apiSvc: EventAPIService());
+
+class PreferenceSettings extends StatefulWidget {
+  // PreferenceSettings(
+  //     {@required this.preferencerequest, @required this.preferencePageVM});
+  final String screenName = "Preferences";
   @override
-  _PerferenceSettingsState createState() => _PerferenceSettingsState();
+  _PreferenceSettingsState createState() => _PreferenceSettingsState();
 }
 
-class _PerferenceSettingsState extends State<PerferenceSettings> {
+class _PreferenceSettingsState extends State<PreferenceSettings> {
+  final Preferences preferencesrequest = new Preferences();
   SharedPreferences prefs;
 
   String dropdownValue = '';
@@ -30,42 +52,31 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
   String arg3 = null;
   String arg4 = null;
 
-  List<String> event;
-  final baseUrl = 'http://164.52.202.127:8080'; //Rahul
+  List<String> access;
+  Map<String, bool> accessTypes = new Map<String, bool>();
 
-  http.Client client1 = http.Client();
+  void loadPref() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      access = prefs.getStringList(widget.screenName);
+      access.forEach((f) {
+        List<String> access = f.split(":");
+        accessTypes[access.elementAt(0)] =
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
+      });
+      preferencesPageVM.accessTypes = accessTypes;
+    });
+  }
 
-  final int userId = 4;
+  Future loadData() async {
+    await preferencesPageVM.setPreferences("19");
+  }
 
-  set client(http.Client value) => client1 = value;
-  Future getprefevent(String data) async {
-    String requestBody = '';
-    requestBody = '{"eventDuration" : "1"}';
-    String token = AutheticationAPIService().sessionJWTToken;
-    print("search service");
-    var response = await client1.put('$baseUrl/api/event/getevents',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
-    if (response.statusCode == 200) {
-      List<dynamic> eventrequestsData = json.decode(response.body);
-      //print(eventrequestsData);
-      List<String> events =
-          eventrequestsData.map((event) => event.toString()).toList();
-      //events = events.where((element) => element.contains(data));
-      // print(events);
-      // print(events);
-      // event = events;
-      // print(event);
-      // int len = event.length;
-      // print(len);
-      print(events);
-      return events;
-    } else {
-      throw Exception('Failed to get data');
-    }
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+    loadPref();
   }
 
   @override
@@ -120,10 +131,14 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                       print(_value);
                       arg1 = _value;
                       notifier.areaNotifier(arg1);
+                      preferencesrequest.area = _value;
                     });
                   }, //notifier.area,
                   hint: Text(
-                    arg1 == null ? 'Area' : arg1,
+                    // widget.preferencerequest.eventDuration == " "
+                    //     ? 'Area'
+                    //     : widget.preferencerequest.eventDuration,
+                    notifier.area == " " ? 'Area' : notifier.area,
                     style: TextStyle(fontSize: notifier.custFontSize),
                   ),
                 ),
@@ -133,46 +148,30 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
             Card(
               child: Consumer<ThemeNotifier>(
                   builder: (context, notifier, child) => DropdownButton<String>(
-                        items: [
-                          DropdownMenuItem<String>(
-                            value: "Local Admin 1",
-                            child: Text(
-                              "Local Admin 1",
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Local Admin 2",
-                            child: Text(
-                              "Local Admin 2",
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Local Admin 3",
-                            child: Text(
-                              "Local Admin 3",
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Local Admin 4",
-                            child: Text(
-                              "Local Admin 4",
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                            ),
-                          ),
-                        ],
+                        items: <String>[
+                          'Local Admin 1',
+                          'Local Admin 2',
+                          'Local Admin 3',
+                          'Local Admin 4'
+                        ].map((String value) {
+                          return new DropdownMenuItem<String>(
+                            value: value,
+                            child: new Text(value),
+                          );
+                        }).toList(),
                         onChanged: (_value) {
                           setState(() {
                             dropdownValue = _value;
                             print(_value);
                             arg2 = _value;
                             notifier.localAdminNotifier(arg2);
+                            preferencesrequest.localAdmin = _value;
                           });
                         },
                         hint: Text(
-                          arg2 == null ? 'Local Admin' : arg2,
+                          notifier.localAdmin == " "
+                              ? 'Local Admin'
+                              : notifier.localAdmin,
                           style: TextStyle(fontSize: notifier.custFontSize),
                         ),
                       )),
@@ -185,21 +184,28 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                     DropdownMenuItem<String>(
                       value: "1",
                       child: Text(
-                        "60 minutes",
+                        "1 hour",
                         style: TextStyle(fontSize: notifier.custFontSize),
                       ),
                     ),
                     DropdownMenuItem<String>(
                       value: "2",
                       child: Text(
-                        "120 minutes",
+                        "2 hours",
                         style: TextStyle(fontSize: notifier.custFontSize),
                       ),
                     ),
                     DropdownMenuItem<String>(
                       value: "0",
                       child: Text(
-                        "less 60 minutes",
+                        "less than 1 hour",
+                        style: TextStyle(fontSize: notifier.custFontSize),
+                      ),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: "2",
+                      child: Text(
+                        "greater than 1 hour",
                         style: TextStyle(fontSize: notifier.custFontSize),
                       ),
                     ),
@@ -207,13 +213,17 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                   onChanged: (_value) {
                     setState(() {
                       dropdownValue = _value;
-                      print(_value);
+                      //print(_value);
                       arg3 = _value;
                       notifier.durationNotifier(arg3);
+                      print(notifier.duration);
+                      preferencesrequest.eventDuration = int.parse(_value);
                     });
                   },
                   hint: Text(
-                    arg3 == null ? 'Kirthan Duration' : arg3,
+                    notifier.duration == " "
+                        ? 'Kirthan Duration'
+                        : notifier.duration,
                     style: TextStyle(fontSize: notifier.custFontSize),
                   ),
                 ),
@@ -252,10 +262,13 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
                             print(_value);
                             arg4 = _value;
                             notifier.requestAcceptanceNotifier(arg4);
+                            preferencesrequest.requestAcceptance = _value;
                           });
                         },
                         hint: Text(
-                          arg4 == null ? 'Request Acceptance' : arg4,
+                          notifier.requestAcceptance == " "
+                              ? 'Request Acceptance'
+                              : notifier.duration,
                           style: TextStyle(fontSize: notifier.custFontSize),
                         ),
                       )),
@@ -265,8 +278,14 @@ class _PerferenceSettingsState extends State<PerferenceSettings> {
               children: [
                 Consumer<ThemeNotifier>(
                   builder: (context, notifier, child) => RaisedButton(
-                    onPressed: () {
-                      Navigator.pop(context, notifier.duration);
+                    onPressed: () async {
+                      Map<String, dynamic> usermap =
+                          preferencesrequest.toJson();
+                      print(usermap);
+                      Preferences newscreensrequest =
+                          await preferencesPageVM.submitNewPreferences(usermap);
+                      print(newscreensrequest.id);
+                      print("Preference added");
                     },
                     child: Text('Submit'),
                     padding: const EdgeInsets.all(16.0),

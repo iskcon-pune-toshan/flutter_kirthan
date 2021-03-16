@@ -8,6 +8,8 @@ abstract class IEventRestApi {
 
   Future<List<EventRequest>> getEventTitle(String userType);
 
+  Future<List<EventRequest>> getEventDates(String userType);
+
   Future<EventRequest> submitNewEventRequest(Map<String, dynamic> eventrequestmap);
 
   Future<List<int>> getEventCount();
