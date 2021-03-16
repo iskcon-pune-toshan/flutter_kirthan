@@ -183,7 +183,7 @@ class _TempleWriteState extends State<TempleWrite> {
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomPadding: false,
+      //resizeToAvoidBottomPadding: false,
       appBar:
           new AppBar(title: const Text('Register Temple'), actions: <Widget>[
         new Container(

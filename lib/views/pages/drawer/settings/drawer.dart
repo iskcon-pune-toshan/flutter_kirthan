@@ -26,11 +26,19 @@ class _MyDrawerState extends State<MyDrawer> {
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
       photoUrl = onValue.photoUrl;
-      name = onValue.displayName;
-      print(name);
       print(photoUrl);
-    });
+    }
+    );
     //print(userdetails.length);
+  }
+
+  displayName() async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser s = await auth.currentUser();
+    print(name);
+    name = s.displayName;
+    print("Display Name");
+    print(name);
   }
 
   @override
@@ -106,8 +114,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                           ),
                           Expanded(
-                            child: Text(
-                              name != null ? name : "AA",
+                            child: Text(name != null ? name : "AA",
                               style: TextStyle(
                                 fontSize: notifier.custFontSize,
                                 decoration: TextDecoration.underline,
