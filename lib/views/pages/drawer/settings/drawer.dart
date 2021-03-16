@@ -11,6 +11,8 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'faq.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -20,6 +22,7 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   String photoUrl;
   String name;
+
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
       photoUrl = onValue.photoUrl;
@@ -31,6 +34,50 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   @override
+  Future<String> getEmail() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    var user = await auth.currentUser();
+    var email = user.email;
+    return email;
+  }
+
+  Widget ProfilePages() {
+    //  StorageReference ref = FirebaseStorage.instance.ref();
+    // profilePic= getCurrentUser() as String;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    //user =  auth.currentUser() ;
+    // final String email = user.email;
+
+    return FutureBuilder(
+        future: getEmail(), //ref.getDownloadURL(),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            // final String email = snapshot.data.toString();
+            String _email = snapshot.data + '.jpg';
+            print("\n\n\n\n\n\n\n\n\n\n\n" + _email + "\n\n\n\n\n\n\n\n");
+            final ref = FirebaseStorage.instance.ref().child(_email);
+            // var url = ref.getDownloadURL();
+            // print("\n\n\n\n\n\n\n" + snapshot.data + "\n\n\n\n\n\n");
+            //  var url =await ref.getDownloadURL();
+            return FutureBuilder(
+                future: ref.getDownloadURL(),
+                builder: (context, snapshot) {
+                  if (snapshot.data != null) {
+                    return new Image.network(snapshot.data, fit: BoxFit.fill);
+                  }
+                  return Image.asset(
+                    "assets/images/default_profile_picture.png",
+                    fit: BoxFit.fill,
+                  );
+                });
+          }
+          return Image.asset(
+            "assets/images/default_profile_picture.png",
+            fit: BoxFit.fill,
+          );
+        });
+  }
+
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Drawer(
@@ -43,15 +90,20 @@ class _MyDrawerState extends State<MyDrawer> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           CircleAvatar(
-                            child: photoUrl != null
-                                ? Image.network(
-                                    photoUrl,
-                                    fit: BoxFit.contain,
-                                  )
-                                : Image.network(
-                                    'assets/images/login_user.jpg',
-                                    fit: BoxFit.scaleDown,
-                                  ),
+                            radius: 15,
+                            backgroundColor: Color(0xf0000000),
+                            child: ClipOval(
+                              child: new SizedBox(
+                                width: 100.0,
+                                height: 100.0,
+                                child: (photoUrl != null)
+                                    ? Image.network(
+                                        photoUrl,
+                                        fit: BoxFit.contain,
+                                      )
+                                    : ProfilePages(),
+                              ),
+                            ),
                           ),
                           Expanded(
                             child: Text(
@@ -82,15 +134,14 @@ class _MyDrawerState extends State<MyDrawer> {
                     child: ListTile(
                       title: Text("Interested Events"),
                       trailing: Icon(Icons.event),
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                            builder: (context) => Interested_events()));
+                                builder: (context) => Interested_events()));
                       },
                     ),
                   ),
-
                   Card(
                     child: ListTile(
                       title: Text(
