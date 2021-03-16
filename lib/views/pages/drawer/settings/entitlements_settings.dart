@@ -9,6 +9,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
 import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
 import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
+import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
 import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
@@ -54,6 +55,33 @@ class _MyAppState extends State<Entitlements> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Divider(),
+            Card(
+              child: ListTile(
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.account_box,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                title: Consumer<ThemeNotifier>(
+                  builder: (context, notifier, child) => Text(
+                    "Temple",
+                    style: TextStyle(
+                      fontSize: notifier.custFontSize,
+                      color: KirthanStyles.colorPallete30,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TempleView()));
+                },
+                selected: true,
+              ),
+            ),
             Divider(),
             Card(
               child: ListTile(

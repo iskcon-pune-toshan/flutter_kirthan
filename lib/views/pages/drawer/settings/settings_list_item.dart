@@ -103,7 +103,7 @@ class _MyAppState extends State<MySettingsApp> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PerferenceSettings()));
+                          builder: (context) => PreferenceSettings()));
                 },
                 selected: true,
               ),

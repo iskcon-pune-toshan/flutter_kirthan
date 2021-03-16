@@ -39,8 +39,10 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
+
 final EventPageViewModel eventPageVM =
-EventPageViewModel(apiSvc: EventAPIService());
+    EventPageViewModel(apiSvc: EventAPIService());
+
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
@@ -49,8 +51,8 @@ class EventView extends StatefulWidget {
   @override
   _EventViewState createState() => _EventViewState();
 }
-class _EventViewState extends State<EventView>
-    with BaseAPIService{
+
+class _EventViewState extends State<EventView> with BaseAPIService {
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
   String date;
   String datetomm;
@@ -67,7 +69,7 @@ class _EventViewState extends State<EventView>
   bool isLoading = false;
   int length;
   http.Client client1 = http.Client();
-  Future getevent() async{
+  Future getevent() async {
     String requestBody = '';
     requestBody = '{"approvalStatus" : "Approved"}';
     print(requestBody);
@@ -77,22 +79,25 @@ class _EventViewState extends State<EventView>
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
-        }, body: requestBody);
+        },
+        body: requestBody);
     if (response.statusCode == 200) {
       List<dynamic> eventrequestsData = json.decode(response.body);
       //print(eventrequestsData);
-      List<String> events = eventrequestsData.map((event) => event.toString()).toList();
-      event=events;
+      List<String> events =
+          eventrequestsData.map((event) => event.toString()).toList();
+      event = events;
       print(event);
-      int len=event.length;
+      int len = event.length;
       print(len);
-      length=len;
+      length = len;
       //print(event);
 //print(eventrequests);
     } else {
       throw Exception('Failed to get data');
     }
   }
+
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -100,7 +105,7 @@ class _EventViewState extends State<EventView>
       access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
-        access.elementAt(1).toLowerCase() == "true" ? true : false;
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       eventPageVM.accessTypes = accessTypes;
       //userdetails = prefs.getStringList("LoginDetails");
@@ -113,6 +118,7 @@ class _EventViewState extends State<EventView>
       //print(userdetails.length);
     });
   }
+
   final now = DateTime.now();
   Future loadData() async {
     await eventPageVM.setEventRequests("All");
@@ -127,6 +133,7 @@ class _EventViewState extends State<EventView>
     NotificationManager ntfManger = NotificationManager();
     getevent();
   }
+
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -135,101 +142,109 @@ class _EventViewState extends State<EventView>
     });
     return null;
   }
+
   @override
   Widget build(BuildContext context) {
     //accessTypes.containsKey(ACCESS_TYPE_CREATE)
     //print("Accesstype: C: $accessTypes.containsKey(ACCESS_TYPE_CREATE)");
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
     return Consumer<ThemeNotifier>(
-        builder:(content,notifier,child)=> Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Events",
-          style: TextStyle(fontSize: notifier.custFontSize),
-        ),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(
-                Icons.search,
-              ),
-              onPressed: () => {
-              showSearch(context: context, delegate: Search(event),)
-                    /*Navigator.push(
+      builder: (content, notifier, child) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Events",
+            style: TextStyle(fontSize: notifier.custFontSize),
+          ),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(
+                  Icons.search,
+                ),
+                onPressed: () => {
+                      showSearch(
+                        context: context,
+                        delegate: Search(event),
+                      )
+                      /*Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => EventSearchView()),
                     ),*/
-                  }),
-          PopupMenuButton(
-              icon: Icon(
-                Icons.tune,
-              ),
-              onSelected: (input) {
-                _selectedValue = input;
-                print(input);
-                if(input=='Today')
-                eventPageVM.setEventRequests("TODAY");
-                else if(input=='Tomorrow')
-                  eventPageVM.setEventRequests("TOMORROW");
-                else if(input=='This Week')
-                  eventPageVM.setEventRequests("This Week");
-                else if(input=='This Month')
-                  eventPageVM.setEventRequests("This Month");
-              },
-              itemBuilder: (BuildContext context) {
-                return eventTime.map((f) {
-                  return CheckedPopupMenuItem<String>(
-                    child: Text(f,
-                      style: TextStyle(fontSize: notifier.custFontSize,),),
-                    value: f,
-                    checked: _selectedValue == f ? true : false,
-                    enabled: true,
-                    //checked: true,
-                  );
-                }).toList();
-              }),
-        ],
-        iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
-      ),
-
-
-      drawer: MyDrawer(),
-
-      body:
-    RefreshIndicator(
-    key: refreshKey,
-    child:ScopedModel<EventPageViewModel>(
-        model: eventPageVM,
-        child: EventsPanel(
-          eventType: "Pune",
+                    }),
+            PopupMenuButton(
+                icon: Icon(
+                  Icons.tune,
+                ),
+                onSelected: (input) {
+                  _selectedValue = input;
+                  print(input);
+                  if (input == 'Today')
+                    eventPageVM.setEventRequests("TODAY");
+                  else if (input == 'Tomorrow')
+                    eventPageVM.setEventRequests("TOMORROW");
+                  else if (input == 'This Week')
+                    eventPageVM.setEventRequests("This Week");
+                  else if (input == 'This Month')
+                    eventPageVM.setEventRequests("This Month");
+                  else if (notifier.duration != null) {
+                    eventPageVM.setEventRequests(notifier.duration);
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return eventTime.map((f) {
+                    return CheckedPopupMenuItem<String>(
+                      child: Text(
+                        f,
+                        style: TextStyle(
+                          fontSize: notifier.custFontSize,
+                        ),
+                      ),
+                      value: f,
+                      checked: _selectedValue == f ? true : false,
+                      enabled: true,
+                      //checked: true,
+                    );
+                  }).toList();
+                }),
+          ],
+          iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
+        ),
+        drawer: MyDrawer(),
+        body: RefreshIndicator(
+          key: refreshKey,
+          child: ScopedModel<EventPageViewModel>(
+            model: eventPageVM,
+            child: EventsPanel(
+              eventType: "Pune",
+            ),
+          ),
+          onRefresh: refreshList,
+        ),
+        floatingActionButton: FloatingActionButton(
+          heroTag: "event",
+          child: Icon(Icons.add),
+          backgroundColor: KirthanStyles.colorPallete10,
+          //tooltip: accessTypes["Create"].toString(),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => EventWrite()));
+          },
         ),
       ),
-      onRefresh: refreshList,
-    ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: "event",
-        child: Icon(Icons.add),
-        backgroundColor: KirthanStyles.colorPallete10,
-        //tooltip: accessTypes["Create"].toString(),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => EventWrite()));
-        },
-      ),
-    ),);
+    );
   }
 }
+
 class Search extends SearchDelegate {
-
-  Search(this.listExample, {
+  Search(
+    this.listExample, {
     String hintText = "Search by Event Title",
-
   }) : super(
-    searchFieldLabel: hintText,
-    searchFieldStyle: TextStyle(color: Colors.grey),
-    keyboardType: TextInputType.text,
-    textInputAction: TextInputAction.search,
-  );
+          searchFieldLabel: hintText,
+          searchFieldStyle: TextStyle(color: Colors.grey),
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
@@ -259,7 +274,7 @@ class Search extends SearchDelegate {
     return Container(
       child: Center(
         child: Text(selectedResult,
-            style:TextStyle(color: KirthanStyles.colorPallete10)),
+            style: TextStyle(color: KirthanStyles.colorPallete10)),
       ),
     );
   }
@@ -273,27 +288,22 @@ class Search extends SearchDelegate {
     query.isEmpty
         ? suggestionList = recentList //In the true case
         : suggestionList.addAll(listExample.where(
-      // In the false case
-          (element) => element.contains(query),
-    ));
+            // In the false case
+            (element) => element.contains(query),
+          ));
 
     return
-      //_widget();
-      ListView.builder(
-        itemCount: suggestionList.length,
-        itemBuilder: (context, index) {
-          return
-            ListTile(
-              title: Text(
-                suggestionList[index],
-              ),
-              leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-
-            );
-        },
-      );
+        //_widget();
+        ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(
+            suggestionList[index],
+          ),
+          leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
+        );
+      },
+    );
   }
 }
-
-
-

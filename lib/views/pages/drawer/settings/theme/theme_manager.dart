@@ -51,7 +51,10 @@ class ThemeNotifier extends ChangeNotifier {
   bool currentColorStatus = false;
 
   //Preference settings
-  String area, localAdmin, duration, requestAcceptance;
+  String area = " ";
+  String localAdmin = " ";
+  String requestAcceptance = " ";
+  String duration = " ";
 
   //Custom Text Size
   double custFontSize = 16;

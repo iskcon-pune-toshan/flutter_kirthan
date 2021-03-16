@@ -456,7 +456,7 @@ class _EventWriteState extends State<EventWrite> {
                     Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          focusNode: myFocusNode,
+                          //focusNode: myFocusNode,
                           //attribute: "Type",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
