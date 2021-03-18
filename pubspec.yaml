@@ -54,7 +54,7 @@ dependencies:
   share: ^0.6.5+4
   draggable_fab: ^0.1.1
   syncfusion_flutter_calendar:
-
+  datetime_picker_formfield:
 
 
 

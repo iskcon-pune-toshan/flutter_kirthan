@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_kirthan/location/home.dart';
 import 'package:flutter_kirthan/models/event.dart';
-
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';

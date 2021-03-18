@@ -6,9 +6,11 @@ import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/common/constants.dart';
@@ -104,6 +106,7 @@ class _EventWriteState extends State<EventWrite> {
   String _selectedCity;
   String _selectedState;
   String _selectedCountry;
+  bool selected;
 
   handleTap(LatLng tappedPoint1) {
     print(tappedPoint1);
@@ -169,7 +172,8 @@ class _EventWriteState extends State<EventWrite> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Radio(
-          activeColor: Theme.of(context).primaryColor,
+
+          activeColor: Colors.black,
           value: type[btnValue],
           groupValue: select,
           onChanged: (value) {
@@ -177,10 +181,14 @@ class _EventWriteState extends State<EventWrite> {
               print(value);
               eventrequest.eventMobility = value;
               select = value;
+
             });
           },
         ),
-        Text(title)
+        Text(title,style: TextStyle(
+            color:  Colors.black ,
+            fontWeight:
+             FontWeight.normal),)
       ],
     );
   }
@@ -256,6 +264,7 @@ class _EventWriteState extends State<EventWrite> {
                      Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
+                          style: TextStyle(color:KirthanStyles.titleColor,),
                           focusNode: myFocusNode,
                           //attribute: "eventTitle",
                           decoration: InputDecoration(
@@ -289,6 +298,7 @@ class _EventWriteState extends State<EventWrite> {
                      Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
+                          style: TextStyle(color:KirthanStyles.titleColor,),
                           //attribute: "Description",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -347,8 +357,10 @@ class _EventWriteState extends State<EventWrite> {
                         child: Column(
                           //mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text("Event Date",textAlign: TextAlign.start,),
+                            Text("Event Date",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey),),
+
                             DateTimeField(
+                              style: TextStyle(color:KirthanStyles.titleColor,),
                               format: DateFormat("yyyy-MM-dd"),
                               onShowPicker: (context, currentValue) {
                                 return showDatePicker(
@@ -370,6 +382,7 @@ class _EventWriteState extends State<EventWrite> {
                                 return null;
                               },
                             ),
+
                           ],
                         ),
                       ),
@@ -377,6 +390,7 @@ class _EventWriteState extends State<EventWrite> {
                     Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
+                          style: TextStyle(color:KirthanStyles.titleColor,),
                           //attribute: "Duration",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -456,6 +470,7 @@ class _EventWriteState extends State<EventWrite> {
                     Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
+                          style: TextStyle(color:KirthanStyles.titleColor,),
                           //focusNode: myFocusNode,
                           //attribute: "Type",
                           decoration: InputDecoration(
@@ -491,6 +506,7 @@ class _EventWriteState extends State<EventWrite> {
                      Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
+                          style: TextStyle(color:KirthanStyles.titleColor,),
                           //attribute: "PhoneNumber",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -753,6 +769,7 @@ class _EventWriteState extends State<EventWrite> {
             ]),
 
                           TextFormField(
+                            style: TextStyle(color:KirthanStyles.titleColor,),
                             //attribute: "Address",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -783,6 +800,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           TextFormField(
+                            style: TextStyle(color:KirthanStyles.titleColor,),
                             //attribute: "line2",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -810,6 +828,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           TextFormField(
+                            style: TextStyle(color:KirthanStyles.titleColor,),
                             //attribute: "line3",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -837,6 +856,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           TextFormField(
+                            style: TextStyle(color:KirthanStyles.titleColor,),
                             //attribute: "locality",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -864,6 +884,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           TextFormField(
+                            style: TextStyle(color:KirthanStyles.titleColor,),
                             //attribute: "PinCode",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -896,9 +917,10 @@ class _EventWriteState extends State<EventWrite> {
                     Column(
                         children: <Widget>[
                           DropdownButtonFormField<String>(
+                            style: TextStyle(color:KirthanStyles.titleColor,),
                             value: _selectedCity,
                             icon: const Icon(Icons.location_city),
-                            hint: Text('Select City'),
+                            hint: Text('Select City',style: TextStyle(color: Colors.grey)),
                             items: _cities
                                 .map((city) => DropdownMenuItem<String>(
                                       value: city,
@@ -915,9 +937,10 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           DropdownButtonFormField<String>(
+                            style: TextStyle(color:KirthanStyles.titleColor,),
                             value: _selectedState,
                             icon: const Icon(Icons.location_city),
-                            hint: Text('Select State'),
+                            hint: Text('Select State',style: TextStyle(color: Colors.grey),),
                             items: _states
                                 .map((state) => DropdownMenuItem(
                                       value: state,
@@ -934,9 +957,10 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           DropdownButtonFormField<String>(
+                            style: TextStyle(color:KirthanStyles.titleColor,),
                             value: _selectedCountry,
                             icon: const Icon(Icons.location_city),
-                            hint: Text('Select Country'),
+                            hint: Text('Select Country',style: TextStyle(color: Colors.grey)),
                             items: ['IND', 'Kyrgyzstan']
                                 .map((country) => DropdownMenuItem(
                                       value: country,
@@ -1045,6 +1069,8 @@ class _EventWriteState extends State<EventWrite> {
     final String email = user.email;
     eventrequest.createdBy = email;
     print("created by " + eventrequest.createdBy);
+
+
     print(email);
     return email;
   }

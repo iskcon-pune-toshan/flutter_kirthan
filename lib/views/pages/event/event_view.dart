@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'package:flutter_kirthan/services/base_service.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
@@ -53,7 +54,7 @@ class EventView extends StatefulWidget {
 }
 
 class _EventViewState extends State<EventView> with BaseAPIService {
-  List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month"];
+  List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month","Clear Filter"];
   String date;
   String datetomm;
   String _selectedValue;
@@ -153,7 +154,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
         appBar: AppBar(
           title: Text(
             "Events",
-            style: TextStyle(fontSize: notifier.custFontSize),
+            //style: TextStyle(fontSize: notifier.custFontSize),
           ),
           actions: <Widget>[
             IconButton(
@@ -165,11 +166,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                         context: context,
                         delegate: Search(event),
                       )
-                      /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EventSearchView()),
-                    ),*/
+
                     }),
             PopupMenuButton(
                 icon: Icon(
@@ -186,6 +183,8 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                     eventPageVM.setEventRequests("This Week");
                   else if (input == 'This Month')
                     eventPageVM.setEventRequests("This Month");
+                  else if(input == 'Clear Filter')
+                    eventPageVM.setEventRequests("All");
                   else if (notifier.duration != null) {
                     eventPageVM.setEventRequests(notifier.duration);
                   }
@@ -239,12 +238,25 @@ class Search extends SearchDelegate {
   Search(
     this.listExample, {
     String hintText = "Search by Event Title",
+
   }) : super(
           searchFieldLabel: hintText,
+
           searchFieldStyle: TextStyle(color: Colors.grey),
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.search,
         );
+  ThemeData appBarTheme(BuildContext context) {
+    assert(context != null);
+    final ThemeData theme = Theme.of(context);
+    assert(theme != null);
+    return theme.copyWith(
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+      primaryColorBrightness: Brightness.light,
+      primaryTextTheme: theme.textTheme,
+    );
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
@@ -289,7 +301,8 @@ class Search extends SearchDelegate {
         ? suggestionList = recentList //In the true case
         : suggestionList.addAll(listExample.where(
             // In the false case
-            (element) => element.contains(query),
+            (element) => element.toUpperCase().contains(query) || element.toLowerCase().contains(query),
+        
           ));
 
     return
