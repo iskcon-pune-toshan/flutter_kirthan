@@ -130,8 +130,10 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: OutlineButton(
-                  child: Text('SELECTED ${selectedUsers.length}'),
+                child: RaisedButton(
+                  color: Colors.green,
+                  //child: Text('SELECTED ${selectedUsers.length}'),
+                  child: Text('Submit'),
                   onPressed: () {
                     List<TeamUser> listofTeamUsers = new List<TeamUser>();
                     for (var user in selectedUsers) {
@@ -160,13 +162,13 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
                   },
                 ),
               ),
-              Padding(
+              /*Padding(
                 padding: EdgeInsets.all(20.0),
                 child: OutlineButton(
                   child: Text('DELETE SELECTED'),
                   onPressed: null,
                 ),
-              ),
+              ),*/
             ],
           ),
         ],

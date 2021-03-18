@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_create.dart';
 import 'package:flutter_kirthan/common/constants.dart';
@@ -151,8 +152,10 @@ class _UserSelectionState extends State<UserSelection> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: OutlineButton(
-                  child: Text('SELECTED ${selectedUsers.length}'),
+                child: RaisedButton(
+                  color: KirthanStyles.colorPallete30,
+                  //child: Text('SELECTED ${selectedUsers.length}'),
+                  child: Text("Next"),
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -162,7 +165,7 @@ class _UserSelectionState extends State<UserSelection> {
                   },
                 ),
               ),
-              Padding(
+              /*Padding(
                 padding: EdgeInsets.all(20.0),
                 child: OutlineButton(
                   child: Text('DELETE SELECTED'),
@@ -172,7 +175,7 @@ class _UserSelectionState extends State<UserSelection> {
                           //deleteSelected();
                         },
                 ),
-              ),
+              ),*/
             ],
           ),
         ],

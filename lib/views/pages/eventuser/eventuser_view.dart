@@ -217,7 +217,7 @@ class _EventUserViewState extends State<EventUserView> {
                                   return ExpansionTile(
                                     title: Text(
                                         "Event Name: ${setofEvents[index]}"),
-                                    subtitle: Text("Hello Manjunath"),
+                                    //subtitle: Text("Hello Manjunath"),
                                     children:
                                         populateChildren(setofEvents[index]),
                                   );
@@ -268,8 +268,9 @@ class _EventUserViewState extends State<EventUserView> {
               ),
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: OutlineButton(
-                  child: Text('DELETE SELECTED ${selectedEventUsers.length}'),
+                child: RaisedButton(
+                  color: Colors.redAccent,
+                  child: Text('Delete'),
                   onPressed: () {
                     print(selectedEventUsers);
                     eventUserPageVM.submitDeleteEventTeamUserMapping(selectedEventUsers);
