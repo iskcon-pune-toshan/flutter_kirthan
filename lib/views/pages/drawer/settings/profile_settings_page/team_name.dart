@@ -1,123 +1,211 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_kirthan/services/team_service_impl.dart';
+import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_kirthan/models/team.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
+final TeamPageViewModel teamPageVM =
+TeamPageViewModel(apiSvc: TeamAPIService());
+
 class teamName extends StatefulWidget {
+  teamName({Key key}) : super(key: key);
+
+  final String screenName = SCR_TEAM;
+
   @override
   _teamNameState createState() => _teamNameState();
 }
 
 class _teamNameState extends State<teamName> {
+  final _formKey = GlobalKey<FormState>();
+  TeamRequest teamrequest = new TeamRequest();
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text('Team name'),
+        elevation: 0.0,
+        iconTheme: IconThemeData(color: KirthanStyles.colorPallete60),
+        title: Text('Add Team',style: TextStyle(color: KirthanStyles.colorPallete60),),
+        backgroundColor: KirthanStyles.colorPallete30,
       ),
-      body: Consumer<ThemeNotifier>(
-        builder: (context, notifier, child) => Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  bottom: 20.0, top: 20.0, left: 10.0, right: 10.0),
-              child: TextFormField(
-                  style: TextStyle(fontSize: notifier.custFontSize),
-                  decoration: buildInputDecoration(
-                      Icons.group, "Enter the team name", "Team's Name")),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
-              child: TextFormField(
-                  style: TextStyle(fontSize: notifier.custFontSize),
-                  decoration: buildInputDecoration(Icons.person_pin,
-                      "Please enter the admin's name", "Team Admin Name")),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
-              child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  style: TextStyle(fontSize: notifier.custFontSize),
-                  decoration: buildInputDecoration(
-                      Icons.add_circle_outline,
-                      "Please enter the no. of members",
-                      "No. of Team members")),
-            ),
-            Row(
-              children: [
-                Divider(
-                  thickness: 100.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: SizedBox(
-                    width: 150,
-                    height: 50,
-                    child: RaisedButton(
-                      color: Colors.lightGreen,
-                      child: Text('Submit'),
-                      onPressed: () {},
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                          side: BorderSide(color: Colors.blue, width: 2)),
+      body: Builder(builder: (context) {
+        return SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            child: Center(
+              child: Form(
+                // context,
+                key: _formKey,
+                autovalidate: true,
+                // readonly: true,
+                child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Container(margin: const EdgeInsets.only(top: 50)),
+                    Card(
+                      child: Container(
+                        //color: Colors.white,
+                        padding: new EdgeInsets.all(10),
+                        child: TextFormField(
+                          //attribute: "eventTitle",
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              /*icon: const Icon(
+                                Icons.title,
+                                color: Colors.grey,
+                              ),*/
+                              labelText: "Title",
+                              hintText: "Add a title",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            teamrequest.teamTitle = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      elevation: 5,
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: SizedBox(
-                    width: 150,
-                    height: 50,
-                    child: RaisedButton(
-                      color: Colors.redAccent,
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                          side: BorderSide(color: Colors.blue, width: 2)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+                    Card(
+                      child: Container(
+                        //color: Colors.white,
+                        padding: new EdgeInsets.all(10),
+                        child: TextFormField(
+                          //attribute: "Description",
 
-  InputDecoration buildInputDecoration(
-      IconData icons, String hinttext, String labeltext) {
-    return InputDecoration(
-      labelText: labeltext,
-      labelStyle: TextStyle(color: Colors.grey),
-      hintText: hinttext,
-      hintStyle: TextStyle(color: Colors.grey),
-      prefixIcon: Icon(
-        icons,
-        color: Colors.grey,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.green, width: 1.5),
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(
-          color: Colors.blue,
-          width: 1.5,
-        ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(
-          color: Colors.blue,
-          width: 1.5,
-        ),
-      ),
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                              labelText: "Description",
+                              hintText: "Add a description",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            teamrequest.teamDescription = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      elevation: 5,
+                    ),
+                    new Container(margin: const EdgeInsets.only(top: 40)),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        MaterialButton(
+                          color: Colors.white,
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+
+                        ),
+                        MaterialButton(
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: KirthanStyles.colorPallete30,
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                final FirebaseAuth auth = FirebaseAuth.instance;
+                                final FirebaseUser user =
+                                await auth.currentUser();
+                                final String email = user.email;
+                                String dt =
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                    .format(DateTime.now());
+                                _formKey.currentState.save();
+
+                                final String teamTitle = teamrequest.teamTitle;
+                                teamrequest.isProcessed = false;
+                                teamrequest.createdBy = email;
+                                print(teamrequest.createdBy);
+                                teamrequest.createdTime = dt;
+                                teamrequest.updatedBy = null;
+                                teamrequest.updatedTime = null;
+                                teamrequest.approvalStatus = null;
+                                teamrequest.approvalComments =
+                                "Approved$teamTitle";
+                                Map<String, dynamic> teammap =
+                                teamrequest.toJson();
+                                //TeamRequest newteamrequest = await apiSvc
+                                //  ?.submitNewTeamRequest(teammap);
+                                TeamRequest newteamrequest = await teamPageVM
+                                    .submitNewTeamRequest(teammap);
+
+                                print(newteamrequest.id);
+                                String tid = newteamrequest.id.toString();
+                                SnackBar mysnackbar = SnackBar(
+                                  content: Text(
+                                      "Team registered $successful with $tid"),
+                                  duration: new Duration(seconds: 4),
+                                  backgroundColor: Colors.green,
+                                );
+                                Scaffold.of(context).showSnackBar(mysnackbar);
+                              }
+                              //String s = jsonEncode(userrequest.mapToJson());
+                              //service.registerUser(s);
+                              //print(s);
+                            }),
+                        /*MaterialButton(
+                        child: Text("Reset",style: TextStyle(color:
+Colors.white),),
+                        color: Colors.pink,
+                        onPressed: () {
+                          _fbKey.currentState.reset();
+                        },
+                      ),*/
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

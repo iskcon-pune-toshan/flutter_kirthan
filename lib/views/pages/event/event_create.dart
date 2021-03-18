@@ -186,14 +186,34 @@ class _EventWriteState extends State<EventWrite> {
           },
         ),
         Text(title,style: TextStyle(
-            color:  Colors.black ,
+            color:  KirthanStyles.colorPallete60 ,
             fontWeight:
              FontWeight.normal),)
       ],
     );
   }
-
+  String validateMobile(String value) {
+    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(patttern);
+    if (value.length == 0) {
+      return 'Please enter mobile number';
+    }
+    else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid mobile number';
+    }
+    return null;
+  }
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  ThemeData appBarTheme(BuildContext context) {
+    assert(context != null);
+    final ThemeData theme = Theme.of(context);
+    assert(theme != null);
+    return theme.copyWith(
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+      primaryColorBrightness: Brightness.light,
+      primaryTextTheme: theme.textTheme,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,9 +233,10 @@ class _EventWriteState extends State<EventWrite> {
       body: Builder(builder: (context) {
         return SingleChildScrollView(
           child: Container(
+
             margin: EdgeInsets.all(10),
             padding: EdgeInsets.all(5),
-            color: KirthanStyles.colorPallete60,
+            //color: Colors.black,
             child: Center(
               child: Form(
                 // context,
@@ -528,12 +549,13 @@ class _EventWriteState extends State<EventWrite> {
                           onSaved: (input) {
                             eventrequest.phoneNumber = int.parse(input);
                           },
-                          validator: (value) {
+                          validator: validateMobile
+                            /*  (value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
-                          },
+                          },*/
                         ),
                       ),
                     new Container(

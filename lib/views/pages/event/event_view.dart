@@ -14,7 +14,6 @@ import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
-
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'event_calendar.dart';
