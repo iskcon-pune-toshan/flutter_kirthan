@@ -12,7 +12,7 @@ class _userName_profileState extends State<userName_profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text('User name'),
       ),

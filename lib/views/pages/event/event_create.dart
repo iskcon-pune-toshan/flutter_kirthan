@@ -198,7 +198,7 @@ class _EventWriteState extends State<EventWrite> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomPadding: false,
+      //resizeToAvoidBottomInset: false,
 
         appBar: AppBar(
           elevation: 0.0,

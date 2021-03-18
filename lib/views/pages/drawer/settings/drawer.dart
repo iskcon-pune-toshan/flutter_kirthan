@@ -7,6 +7,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.d
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
+import 'package:flutter_kirthan/views/widgets/team/participated_team.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -128,6 +129,12 @@ class _MyDrawerState extends State<MyDrawer> {
                         style: TextStyle(fontSize: notifier.custFontSize),
                       ),
                       trailing: Icon(Icons.phone_in_talk),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Participated_Team()));
+                      },
                     ),
                   ),
                   Card(
