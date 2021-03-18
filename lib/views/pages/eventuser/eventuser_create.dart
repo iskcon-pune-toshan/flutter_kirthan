@@ -184,8 +184,10 @@ class _EventUserCreateState extends State<EventUserCreate> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(20.0),
-                  child: OutlineButton(
-                    child: Text('SELECTED ${selectedTeamUsers.length}'),
+                  child: RaisedButton(
+                    color: Colors.green,
+                    //child: Text('SELECTED ${selectedTeamUsers.length}'),
+                    child: Text("Submit"),
                     onPressed: () {
                       List<EventUser> listofEventUsers = new List<EventUser>();
                       for (var teamuser in selectedTeamUsers) {
@@ -214,13 +216,13 @@ class _EventUserCreateState extends State<EventUserCreate> {
                     },
                   ),
                 ),
-                Padding(
+                /*Padding(
                   padding: EdgeInsets.all(20.0),
                   child: OutlineButton(
                     child: Text('DELETE SELECTED'),
                     onPressed: null,
                   ),
-                ),
+                ),*/
               ],
             ),
           ]),

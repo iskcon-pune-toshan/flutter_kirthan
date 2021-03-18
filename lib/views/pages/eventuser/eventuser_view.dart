@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/eventuser.dart';
 import 'package:flutter_kirthan/services/event_user_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_user_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -217,7 +218,7 @@ class _EventUserViewState extends State<EventUserView> {
                                   return ExpansionTile(
                                     title: Text(
                                         "Event Name: ${setofEvents[index]}"),
-                                    subtitle: Text("Hello Manjunath"),
+                                    //subtitle: Text("Hello Manjunath"),
                                     children:
                                         populateChildren(setofEvents[index]),
                                   );
@@ -242,7 +243,8 @@ class _EventUserViewState extends State<EventUserView> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: OutlineButton(
+                child: RaisedButton(
+                  color: KirthanStyles.colorPallete30,
                   child: Text('SELECTED ${selectedEventUsers.length}'),
                   onPressed: () {
                     /*List<TeamUser> listofTeamUsers = new List<TeamUser>();
@@ -268,8 +270,9 @@ class _EventUserViewState extends State<EventUserView> {
               ),
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: OutlineButton(
-                  child: Text('DELETE SELECTED ${selectedEventUsers.length}'),
+                child: RaisedButton(
+                  color: Colors.redAccent,
+                  child: Text('Delete'),
                   onPressed: () {
                     print(selectedEventUsers);
                     eventUserPageVM.submitDeleteEventTeamUserMapping(selectedEventUsers);
