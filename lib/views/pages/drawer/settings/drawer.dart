@@ -7,6 +7,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.d
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
+import 'package:flutter_kirthan/views/widgets/team/participated_team.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -26,19 +27,11 @@ class _MyDrawerState extends State<MyDrawer> {
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
       photoUrl = onValue.photoUrl;
+      name = onValue.displayName;
+      print(name);
       print(photoUrl);
-    }
-    );
+    });
     //print(userdetails.length);
-  }
-
-  displayName() async{
-    FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseUser s = await auth.currentUser();
-    print(name);
-    name = s.displayName;
-    print("Display Name");
-    print(name);
   }
 
   @override
@@ -114,7 +107,8 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                           ),
                           Expanded(
-                            child: Text(name != null ? name : "AA",
+                            child: Text(
+                              name != null ? name : "AA",
                               style: TextStyle(
                                 fontSize: notifier.custFontSize,
                                 decoration: TextDecoration.underline,
@@ -135,6 +129,12 @@ class _MyDrawerState extends State<MyDrawer> {
                         style: TextStyle(fontSize: notifier.custFontSize),
                       ),
                       trailing: Icon(Icons.phone_in_talk),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Participated_Team()));
+                      },
                     ),
                   ),
                   Card(

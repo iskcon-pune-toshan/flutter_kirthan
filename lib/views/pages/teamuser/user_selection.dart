@@ -31,7 +31,7 @@ class _UserSelectionState extends State<UserSelection> {
   void initState() {
     sort = false;
     selectedUsers = [];
-    users = userPageVM.getUserRequests("SA");
+    users = userPageVM.getUserRequests("All");
     super.initState();
   }
 
