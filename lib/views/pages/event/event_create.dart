@@ -202,16 +202,6 @@ class _EventWriteState extends State<EventWrite> {
     return null;
   }
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  ThemeData appBarTheme(BuildContext context) {
-    assert(context != null);
-    final ThemeData theme = Theme.of(context);
-    assert(theme != null);
-    return theme.copyWith(
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.light,
-      primaryTextTheme: theme.textTheme,
-    );
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -283,7 +273,7 @@ class _EventWriteState extends State<EventWrite> {
                      Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          style: TextStyle(color:KirthanStyles.titleColor,),
+
                           focusNode: myFocusNode,
                           //attribute: "eventTitle",
                           decoration: InputDecoration(
@@ -317,7 +307,7 @@ class _EventWriteState extends State<EventWrite> {
                      Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          style: TextStyle(color:KirthanStyles.titleColor,),
+
                           //attribute: "Description",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -379,7 +369,7 @@ class _EventWriteState extends State<EventWrite> {
                             Text("Event Date",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey),),
 
                             DateTimeField(
-                              style: TextStyle(color:KirthanStyles.titleColor,),
+
                               format: DateFormat("yyyy-MM-dd"),
                               onShowPicker: (context, currentValue) {
                                 return showDatePicker(
@@ -409,7 +399,7 @@ class _EventWriteState extends State<EventWrite> {
                     Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          style: TextStyle(color:KirthanStyles.titleColor,),
+
                           //attribute: "Duration",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -489,7 +479,7 @@ class _EventWriteState extends State<EventWrite> {
                     Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          style: TextStyle(color:KirthanStyles.titleColor,),
+
                           //focusNode: myFocusNode,
                           //attribute: "Type",
                           decoration: InputDecoration(
@@ -525,7 +515,7 @@ class _EventWriteState extends State<EventWrite> {
                      Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          style: TextStyle(color:KirthanStyles.titleColor,),
+
                           //attribute: "PhoneNumber",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -789,7 +779,7 @@ class _EventWriteState extends State<EventWrite> {
             ]),
 
                           TextFormField(
-                            style: TextStyle(color:KirthanStyles.titleColor,),
+
                             //attribute: "Address",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -820,7 +810,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           TextFormField(
-                            style: TextStyle(color:KirthanStyles.titleColor,),
+
                             //attribute: "line2",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -848,7 +838,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           TextFormField(
-                            style: TextStyle(color:KirthanStyles.titleColor,),
+
                             //attribute: "line3",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -876,7 +866,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           TextFormField(
-                            style: TextStyle(color:KirthanStyles.titleColor,),
+
                             //attribute: "locality",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -904,7 +894,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           TextFormField(
-                            style: TextStyle(color:KirthanStyles.titleColor,),
+
                             //attribute: "PinCode",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -937,7 +927,7 @@ class _EventWriteState extends State<EventWrite> {
                     Column(
                         children: <Widget>[
                           DropdownButtonFormField<String>(
-                            style: TextStyle(color:KirthanStyles.titleColor,),
+
                             value: _selectedCity,
                             icon: const Icon(Icons.location_city),
                             hint: Text('Select City',style: TextStyle(color: Colors.grey)),
@@ -957,7 +947,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           DropdownButtonFormField<String>(
-                            style: TextStyle(color:KirthanStyles.titleColor,),
+
                             value: _selectedState,
                             icon: const Icon(Icons.location_city),
                             hint: Text('Select State',style: TextStyle(color: Colors.grey),),
@@ -977,7 +967,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                           ),
                           DropdownButtonFormField<String>(
-                            style: TextStyle(color:KirthanStyles.titleColor,),
+
                             value: _selectedCountry,
                             icon: const Icon(Icons.location_city),
                             hint: Text('Select Country',style: TextStyle(color: Colors.grey)),

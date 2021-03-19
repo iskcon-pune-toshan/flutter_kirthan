@@ -29,7 +29,16 @@ class _UserViewState extends State<UserView> {
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
 
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      loadData();
+    });
+    return null;
+  }
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -62,12 +71,16 @@ class _UserViewState extends State<UserView> {
         title: Text("User"),
       ),
       drawer: MyDrawer(),
-      body: ScopedModel<UserPageViewModel>(
+      body: RefreshIndicator(
+    key: refreshKey,
+    child:ScopedModel<UserPageViewModel>(
         model: userPageVM,
         child: UsersPanel(
           userType: "All",
         ),
+
       ),
-    );
+    onRefresh: refreshList,
+    ),);
   }
 }
