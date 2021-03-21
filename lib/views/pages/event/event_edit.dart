@@ -111,6 +111,7 @@ class _EditEventState extends State<EditEvent> {
   final TextEditingController _updatedTimeController =
       new TextEditingController();
   String updatedTime;
+  String approvalStatus;
   //String createdTime;
 
   @override
@@ -129,6 +130,7 @@ class _EditEventState extends State<EditEvent> {
     _createdTimeController.text = widget.eventrequest.createdTime;
     _updatedByController.text = getCurrentUser().toString();
     _updatedByController.text = widget.eventrequest.updatedTime;
+    approvalStatus = widget.eventrequest.approvalStatus;
     print("createdTime");
     print(widget.eventrequest.createdTime);
 
@@ -140,6 +142,7 @@ class _EditEventState extends State<EditEvent> {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     widget.eventrequest.updatedBy = email;
+
     print(email);
     return email;
   }

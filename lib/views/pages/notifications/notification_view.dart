@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/notification.dart';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
+import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
@@ -10,10 +13,12 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
     NotificationViewModel(apiSvc: NotificationManager());
+// //view for Event
+// final EventPageViewModel eventPageVM =
+//     EventPageViewModel(apiSvc: EventAPIService());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
-
   @override
   State<StatefulWidget> createState() {
     return new NotificationViewState();
@@ -22,6 +27,7 @@ class NotificationView extends StatefulWidget {
 
 class NotificationViewState extends State<NotificationView> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+
   Widget CustomTile(NotificationModel data, var callback) {
     return FlatButton(
         padding: EdgeInsets.all(0),
@@ -150,6 +156,7 @@ class NotificationViewState extends State<NotificationView> {
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
   }
+
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -160,6 +167,7 @@ class NotificationViewState extends State<NotificationView> {
 
     return null;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,9 +175,9 @@ class NotificationViewState extends State<NotificationView> {
         title: Text('Notifications'),
       ),
       drawer: MyDrawer(),
-      body:RefreshIndicator(
+      body: RefreshIndicator(
         key: refreshKey,
-        child:FutureBuilder(
+        child: FutureBuilder(
             future: notificationPageVM.getNotifications(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -187,7 +195,6 @@ class NotificationViewState extends State<NotificationView> {
             }),
         onRefresh: refreshList,
       ),
-
     );
   }
 
