@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 
 import 'package:flutter_kirthan/views/pages/admin/admin_event_view.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_team_view.dart';
@@ -20,12 +21,13 @@ class Stats extends Model {
 
   int get rejected => _rejectedCount;
 
-  set stats(List<int> data){
+  set stats(List<int> data) {
     _acceptedCount = data[0];
-    _waitingCount = data[1];
-    _rejectedCount = data[2];
+    _waitingCount = data[2];
+    _rejectedCount = data[1];
     notifyListeners();
   }
+
   set accepted(int count) {
     _acceptedCount = count;
     notifyListeners();
@@ -200,7 +202,17 @@ class _AdminViewState extends State<AdminView> {
                     },
                     items: <BottomNavigationBarItem>[
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.event), title: Text('Events')),
+                        icon: Icon(
+                          Icons.event,
+                          color: Colors.grey[600],
+                        ),
+                        title: Text(
+                          'Events',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ),
                       BottomNavigationBarItem(
                           icon: Icon(Icons.group), title: Text('Teams')),
                       BottomNavigationBarItem(

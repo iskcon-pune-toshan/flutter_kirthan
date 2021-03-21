@@ -9,14 +9,14 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 
 import './admin_view.dart';
 
-class UserAdminView extends StatefulWidget{
+class UserAdminView extends StatefulWidget {
   String status;
-  UserAdminView({this.status="NEW"});
+  UserAdminView({this.status});
   @override
-  State<UserAdminView> createState()=>_UserAdminView();
+  State<UserAdminView> createState() => _UserAdminView();
 }
 
-class _UserAdminView extends State<UserAdminView>{
+class _UserAdminView extends State<UserAdminView> {
   UserPageViewModel _userVM;
 
   void setStats() async {
@@ -28,15 +28,18 @@ class _UserAdminView extends State<UserAdminView>{
     _userVM = UserPageViewModel(apiSvc: UserAPIService());
     setStats();
   }
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return View(status: widget.status);
   }
 
-  Widget EditView({var page, var actions,String status}) {
+  Widget EditView({var page, var actions, String status}) {
     return Scaffold(
       body: page,
-      persistentFooterButtons: <Widget>[if(status.toLowerCase() == "new")actions],
+      persistentFooterButtons: <Widget>[
+        if (status.toLowerCase() == "new") actions
+      ],
     );
   }
 
@@ -75,40 +78,40 @@ class _UserAdminView extends State<UserAdminView>{
             return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, itemCount) => Card(
-                  child: Column(
-                    children: [
-                      FlatButton(
-                        padding: EdgeInsets.all(0),
-                        clipBehavior: Clip.none,
-                        child: UserRequestsListItem(
-                          userrequest: snapshot.data[itemCount],
-                          userPageVM: _userVM,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditView(
-                                    status: snapshot.data[itemCount].approvalStatus,
-                                    page: UserEdit(
-                                      userrequest:
-                                      snapshot.data[itemCount],
-                                    ),
-                                    actions: Actions(
-                                        _userVM.processUserRequest,
-                                        snapshot.data[itemCount]),
-                                  )));
-                        },
+                      child: Column(
+                        children: [
+                          FlatButton(
+                            padding: EdgeInsets.all(0),
+                            clipBehavior: Clip.none,
+                            child: UserRequestsListItem(
+                              userrequest: snapshot.data[itemCount],
+                              userPageVM: _userVM,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditView(
+                                            status: snapshot
+                                                .data[itemCount].approvalStatus,
+                                            page: UserEdit(
+                                              userrequest:
+                                                  snapshot.data[itemCount],
+                                            ),
+                                            actions: Actions(
+                                                _userVM.processUserRequest,
+                                                snapshot.data[itemCount]),
+                                          )));
+                            },
+                          ),
+                          if (status == "NEW")
+                            Actions(_userVM.processUserRequest,
+                                snapshot.data[itemCount]),
+                        ],
                       ),
-                      if (status == "NEW")
-                        Actions(_userVM.processUserRequest,
-                            snapshot.data[itemCount]),
-                    ],
-                  ),
-                ));
+                    ));
           }
           return Center(child: Text("No data found"));
         });
   }
-
 }

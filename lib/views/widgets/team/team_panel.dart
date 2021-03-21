@@ -104,7 +104,7 @@ class TeamsPanel extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return NoInternetConnection(
                     action: () async {
-                      await model.setTeamRequests("All");
+                      await model.setTeamRequests("Approved");
                     },
                   );
                 }

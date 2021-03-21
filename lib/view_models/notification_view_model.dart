@@ -31,4 +31,9 @@ class NotificationViewModel extends Model {
     apiSvc?.respondToNotification(callback, id, response);
     return Future.value(true);
   }
+
+  Future<bool> deleteNotification(Map<String, dynamic> processrequestmap) {
+    Future<bool> deleteFlag = apiSvc?.deleteNotification(processrequestmap);
+    return deleteFlag;
+  }
 }

@@ -8,26 +8,24 @@ import 'package:flutter_kirthan/models/team.dart';
 import './admin_view.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class TeamAdminView extends StatefulWidget{
-  
+class TeamAdminView extends StatefulWidget {
   String status;
-  TeamAdminView({this.status="NEW"});
+  TeamAdminView({this.status});
 
   @override
   State<StatefulWidget> createState() {
     return _TeamAdminView();
   }
-
 }
 
-class _TeamAdminView extends State<TeamAdminView>{
+class _TeamAdminView extends State<TeamAdminView> {
   TeamPageViewModel _teamVM;
 
   void setStats() async {
     ScopedModel.of<Stats>(context).stats = await _teamVM.getTeamsCount();
   }
 
-  void initState(){
+  void initState() {
     super.initState();
     _teamVM = TeamPageViewModel(apiSvc: TeamAPIService());
     setStats();
@@ -35,17 +33,19 @@ class _TeamAdminView extends State<TeamAdminView>{
 
   @override
   Widget build(BuildContext context) {
-   return View(status: widget.status);
+    return View(status: widget.status);
   }
-  Widget EditView({Widget page, Widget actions,String status}) {
+
+  Widget EditView({Widget page, Widget actions, String status}) {
     return Scaffold(
       body: page,
-      persistentFooterButtons: <Widget>[if(status.toLowerCase()=="NEW")actions],
+      persistentFooterButtons: <Widget>[
+        if (status.toLowerCase() == "NEW") actions
+      ],
     );
   }
 
   Widget Actions(var callback, TeamRequest data) {
-
     Map<String, dynamic> resultData = {
       "id": data.id,
       "usertype": "admin",
@@ -81,40 +81,39 @@ class _TeamAdminView extends State<TeamAdminView>{
             return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, itemCount) => Card(
-                  child: Column(
-                    children: [
-                      FlatButton(
-                        padding: EdgeInsets.all(0),
-                        clipBehavior: Clip.none,
-                        child: TeamRequestsListItem(
-                          teamrequest: snapshot.data[itemCount],
-                          teamPageVM: _teamVM,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditView(
-                                status: snapshot.data[itemCount].approvalStatus,
-                                page: EditTeam(
-                                    teamrequest: snapshot.data[itemCount]),
-                                actions: Actions(
-                                    _teamVM.processTeamRequest,
-                                    snapshot.data[itemCount]),
-                              ),
+                      child: Column(
+                        children: [
+                          FlatButton(
+                            padding: EdgeInsets.all(0),
+                            clipBehavior: Clip.none,
+                            child: TeamRequestsListItem(
+                              teamrequest: snapshot.data[itemCount],
+                              teamPageVM: _teamVM,
                             ),
-                          );
-                        },
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditView(
+                                    status:
+                                        snapshot.data[itemCount].approvalStatus,
+                                    page: EditTeam(
+                                        teamrequest: snapshot.data[itemCount]),
+                                    actions: Actions(_teamVM.processTeamRequest,
+                                        snapshot.data[itemCount]),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          if (status == "NEW")
+                            Actions(_teamVM.processTeamRequest,
+                                snapshot.data[itemCount]),
+                        ],
                       ),
-                      if (status == "NEW")
-                        Actions(_teamVM.processTeamRequest,
-                            snapshot.data[itemCount]),
-                    ],
-                  ),
-                ));
+                    ));
           }
           return Center(child: Text("No data found"));
         });
   }
-
 }

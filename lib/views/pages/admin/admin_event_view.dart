@@ -8,7 +8,7 @@ import './admin_view.dart';
 
 class EventAdminView extends StatefulWidget {
   String status;
-  EventAdminView({this.status = "NEW"});
+  EventAdminView({this.status});
   @override
   _EventAdminViewState createState() => _EventAdminViewState();
 }

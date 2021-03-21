@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/notification.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
@@ -13,9 +14,6 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
     NotificationViewModel(apiSvc: NotificationManager());
-// //view for Event
-// final EventPageViewModel eventPageVM =
-//     EventPageViewModel(apiSvc: EventAPIService());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
@@ -208,36 +206,26 @@ class NotificationViewState extends State<NotificationView> {
               content: Text(notification.message),
               title: Text("New Notifications"),
               actions: <Widget>[
-                setAction
-                    ? FlatButton(
-                        child: Text("Approve"),
-                        onPressed: () {
-                          notificationPageVM.updateNotifications(
-                              callback, notification.uuid, true);
-                          Navigator.pop(context);
-                        })
-                    : FlatButton(
-                        child: Text("View"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AdminView()));
-                        },
-                      ),
-                setAction
-                    ? FlatButton(
-                        child: Text("Reject"),
-                        onPressed: () {
-                          notificationPageVM.updateNotifications(
-                              callback, notification.uuid, false);
-                          Navigator.pop(context);
-                        })
-                    : FlatButton(
-                        child: Text("Discard"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                FlatButton(
+                  child: Text("View"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AdminView()));
+                  },
+                ),
+                FlatButton(
+                    child: Text("Discard"),
+                    onPressed: () {
+                      setState(() {
+                        Map<String, dynamic> processrequestmap =
+                            new Map<String, dynamic>();
+                        processrequestmap["uuid"] = notification.uuid;
+                        notificationPageVM
+                            .deleteNotification(processrequestmap);
+                        Navigator.pop(context);
+                      });
+                    }),
               ],
             ));
   }
