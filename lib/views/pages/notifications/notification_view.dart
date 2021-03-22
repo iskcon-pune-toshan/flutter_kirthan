@@ -58,7 +58,7 @@ class NotificationViewState extends State<NotificationView> {
                         Container(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            'CreatedBy' + data.createdBy.toString(),
+                            'by ' + data.createdBy.toString(),
                             style: TextStyle(fontWeight: FontWeight.w300),
                           ),
                         ),
@@ -133,7 +133,9 @@ class NotificationViewState extends State<NotificationView> {
             dense: false,
             contentPadding: EdgeInsets.all(10),
             title: Text(data.message),
-            subtitle: Text("CreatedBy " + data.createdBy),
+            subtitle: Text(
+              "by " + data.createdBy.toString(),
+            ),
             isThreeLine: true,
             trailing: icon == Icons.pause ? actions : Icon(icon),
             onTap: () {
@@ -204,7 +206,11 @@ class NotificationViewState extends State<NotificationView> {
         context: context,
         builder: (context) => AlertDialog(
               content: Text(notification.message),
-              title: Text("New Notifications"),
+              title: Center(
+                child: Text(
+                  "Notification Alert!",
+                ),
+              ),
               actions: <Widget>[
                 FlatButton(
                   child: Text("View"),
