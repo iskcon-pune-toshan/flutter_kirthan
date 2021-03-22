@@ -38,20 +38,20 @@ class NotificationManager extends BaseAPIService
 
   Future<List<NotificationModel>> getData() async {
     String token = AutheticationAPIService().sessionJWTToken;
-    print("Jwt token" + token);
+    //print("Jwt token" + token);
     _http.Response response = await _http.get("$baseUrl/api/notifications",
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
         });
-    print("here");
+    //print("here");
     List<dynamic> data = convert.jsonDecode(response.body);
-    print(data);
+    //print(data);
     // List<NotificationModel> expectedData =
-    print("Hello");
+    //print("Hello");
     List<NotificationModel> expectedData =
         data.map((element) => NotificationModel.fromJson(element)).toList();
-    print(expectedData.toString());
+    //print(expectedData.toString());
     return expectedData;
   }
 

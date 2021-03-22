@@ -16,11 +16,11 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
   Future<List<int>> getTeamsCount() async {
     List<TeamRequest> approved = await getTeamRequests("Approved");
     List<TeamRequest> rejected = await getTeamRequests("Rejected");
-    List<TeamRequest> allevents = await getTeamRequests("All");
+    List<TeamRequest> waiting = await getTeamRequests("Waiting");
     List<int> resultData = [];
     resultData.add(approved.length);
     resultData.add(rejected.length);
-    resultData.add(allevents.length - (approved.length + rejected.length));
+    resultData.add(waiting.length);
     return (resultData);
   }
 
@@ -113,8 +113,8 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
       requestBody = '{"approvalStatus":"approved"}';
     } else if (teamTitle == "Rejected") {
       requestBody = '{"approvalStatus":"rejected"}';
-    } else if (teamTitle == "All") {
-      requestBody = '{"updatedBy":"svn"}';
+    } else if (teamTitle == "Waiting") {
+      requestBody = '{"approvalStatus":"Waiting"}';
     }
     print(requestBody);
 
@@ -171,20 +171,6 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
 
   @override
   Future<List<TeamRequest>> getTeamRequestByStatus(String status) async {
-    print(status);
-    String finalUrl =
-        '$baseUrl/team?status=$status'; //needs to adjust this to temple
-    print(finalUrl);
-    var response = await client1.get(finalUrl);
-    if (response.statusCode == 200) {
-      List<dynamic> teamrequestsData = json.decode(response.body);
-      List<TeamRequest> teamrequests = teamrequestsData
-          .map((teamrequestsData) => TeamRequest.fromMap(teamrequestsData))
-          .toList();
-      print(teamrequests);
-      return teamrequests;
-    } else {
-      throw Exception('Failed to get data');
-    }
+    return await getTeamRequests("$status");
   }
 }

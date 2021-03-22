@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
@@ -67,7 +68,8 @@ class _EventAdminViewState extends State<EventAdminView> {
       ]);
   }
 
-  Widget View({String status = "NEW"}) {
+  Widget View({String status}) {
+    print(status);
     return FutureBuilder(
         future: _eventVM.getData(status),
         builder: (context, snapshot) {
@@ -77,6 +79,9 @@ class _EventAdminViewState extends State<EventAdminView> {
               itemBuilder: (context, itemCount) => Card(
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 15.0,
+                    ),
                     FlatButton(
                         padding: EdgeInsets.all(0),
                         clipBehavior: Clip.none,

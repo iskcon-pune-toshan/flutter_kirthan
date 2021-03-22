@@ -70,7 +70,7 @@ class _UserAdminView extends State<UserAdminView> {
     );
   }
 
-  Widget View({String status = "NEW"}) {
+  Widget View({String status}) {
     return FutureBuilder(
         future: _userVM.getUserForApproval(status),
         builder: (context, snapshot) {
@@ -80,6 +80,9 @@ class _UserAdminView extends State<UserAdminView> {
                 itemBuilder: (context, itemCount) => Card(
                       child: Column(
                         children: [
+                          SizedBox(
+                            height: 15.0,
+                          ),
                           FlatButton(
                             padding: EdgeInsets.all(0),
                             clipBehavior: Clip.none,

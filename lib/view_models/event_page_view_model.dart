@@ -9,7 +9,7 @@ class EventPageViewModel extends Model {
   Future<List<EventRequest>> _eventrequests;
   final IEventRestApi apiSvc;
 
-  Map<String,bool> accessTypes;
+  Map<String, bool> accessTypes;
 
   EventPageViewModel({@required this.apiSvc});
 
@@ -21,11 +21,11 @@ class EventPageViewModel extends Model {
   }
 
   Future<List<int>> getEventCount() async {
-    List<int> result = await  apiSvc?.getEventCount();
+    List<int> result = await apiSvc?.getEventCount();
     return result;
   }
 
-  Future<void> getData(status) async {
+  Future<List<EventRequest>> getData(status) async {
     eventrequests = apiSvc?.getData(status);
     return eventrequests;
   }
@@ -35,10 +35,9 @@ class EventPageViewModel extends Model {
     return eventrequests != null;
   }
 
-
   Future<List<EventRequest>> getEventRequests(String userType) {
     Future<List<EventRequest>> eventRequests =
-    apiSvc?.getEventRequests(userType);
+        apiSvc?.getEventRequests(userType);
     return eventRequests;
   }
 
@@ -48,8 +47,7 @@ class EventPageViewModel extends Model {
   }
 
   Future<List<EventRequest>> getEventTitle(String userType) async {
-    Future<List<EventRequest>> eventRequests =
-    apiSvc?.getEventTitle(userType);
+    Future<List<EventRequest>> eventRequests = apiSvc?.getEventTitle(userType);
     return eventRequests;
   }
 

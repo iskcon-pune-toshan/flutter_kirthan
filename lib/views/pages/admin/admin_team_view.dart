@@ -72,7 +72,7 @@ class _TeamAdminView extends State<TeamAdminView> {
     );
   }
 
-  Widget View({String status = "new"}) {
+  Widget View({String status}) {
     return FutureBuilder(
         future: _teamVM.getTeamForApproval(status),
         builder: (context, snapshot) {
@@ -83,6 +83,9 @@ class _TeamAdminView extends State<TeamAdminView> {
                 itemBuilder: (context, itemCount) => Card(
                       child: Column(
                         children: [
+                          SizedBox(
+                            height: 15.0,
+                          ),
                           FlatButton(
                             padding: EdgeInsets.all(0),
                             clipBehavior: Clip.none,

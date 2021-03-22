@@ -220,7 +220,8 @@ class NotificationViewState extends State<NotificationView> {
                       setState(() {
                         Map<String, dynamic> processrequestmap =
                             new Map<String, dynamic>();
-                        processrequestmap["uuid"] = notification.uuid;
+                        processrequestmap["id"] = notification.id;
+                        print(notification.id);
                         notificationPageVM
                             .deleteNotification(processrequestmap);
                         Navigator.pop(context);

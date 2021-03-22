@@ -19,30 +19,18 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   Future<List<int>> getUserCount() async {
     List<UserRequest> approved = await getUserRequests("Approved");
     List<UserRequest> rejected = await getUserRequests("Rejected");
-    List<UserRequest> allevents = await getUserRequests("All");
+    List<UserRequest> allevents = await getUserRequests("Waiting");
     List<int> resultData = [];
     resultData.add(approved.length);
     resultData.add(rejected.length);
-    resultData.add(allevents.length - (approved.length + rejected.length));
+    resultData.add(allevents.length);
     return (resultData);
   }
 
   @override
   Future<List<UserRequest>> getNewUserRequests(
       String status, String city) async {
-    String finalUrl =
-        '$baseUrl/users?status=$status&city=$city'; //needs to adjust this to temple
-    print(finalUrl);
-    var response = await client1.get(finalUrl);
-    if (response.statusCode == 200) {
-      List<dynamic> userrequestsData = json.decode(response.body);
-      List<UserRequest> userrequests = userrequestsData
-          .map((userrequestsData) => UserRequest.fromMap(userrequestsData))
-          .toList();
-      return userrequests;
-    } else {
-      throw Exception('Failed to get data');
-    }
+    return await getUserRequests("$status");
   }
 
   //getuser
@@ -60,8 +48,8 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
       requestBody = '{"approvalStatus":"approved"}';
     } else if (userType == "Rejected") {
       requestBody = '{"approvalStatus":"rejected"}';
-    } else if (userType == "All") {
-      requestBody = '{"updatedBy":"svn"}';
+    } else if (userType == "Waiting") {
+      requestBody = '{"approvalStatus":"Waiting"}';
     }
 
     print("Instance of request");

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 
@@ -73,49 +74,53 @@ class _AdminViewState extends State<AdminView> {
                     bottom: PreferredSize(
                       preferredSize: Size.fromHeight(50),
                       child: Container(
-                          color: Colors.blue,
+                          color: KirthanStyles.colorPallete30,
                           height: 50.0,
                           child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
+                                    padding: EdgeInsets.only(top: 5),
                                     child: FlatButton(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        model.accepted.toString(),
-                                        style: TextStyle(color: Colors.white),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            model.accepted.toString(),
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          Text(
+                                            'Accepted',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        'Accepted',
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    if (_currentIndex == 0)
-                                      setState(() {
-                                        _body =
-                                            EventAdminView(status: "Approved");
-                                      });
-                                    else if (_currentIndex == 1) {
-                                      setState(() {
-                                        _body =
-                                            TeamAdminView(status: "approved");
-                                      });
-                                    } else if (_currentIndex == 2) {
-                                      setState(() {
-                                        _body =
-                                            UserAdminView(status: "approved");
-                                      });
-                                    }
-                                  },
-                                )),
+                                      onPressed: () {
+                                        if (_currentIndex == 0)
+                                          setState(() {
+                                            _body = EventAdminView(
+                                                status: "Approved");
+                                          });
+                                        else if (_currentIndex == 1) {
+                                          setState(() {
+                                            _body = TeamAdminView(
+                                                status: "Approved");
+                                          });
+                                        } else if (_currentIndex == 2) {
+                                          setState(() {
+                                            _body = UserAdminView(
+                                                status: "Approved");
+                                          });
+                                        }
+                                      },
+                                    )),
                                 VerticalDivider(
                                   color: Colors.white,
                                 ),
                                 FlatButton(
+                                  padding: EdgeInsets.only(top: 5),
                                   child: Column(
                                     children: <Widget>[
                                       Text(
@@ -140,7 +145,7 @@ class _AdminViewState extends State<AdminView> {
                                     } else if (_currentIndex == 2) {
                                       setState(() {
                                         _body =
-                                            UserAdminView(status: "rejected");
+                                            UserAdminView(status: "Rejected");
                                       });
                                     }
                                   },
@@ -149,6 +154,7 @@ class _AdminViewState extends State<AdminView> {
                                   color: Colors.white,
                                 ),
                                 FlatButton(
+                                  padding: EdgeInsets.only(top: 5),
                                   child: Column(
                                     children: <Widget>[
                                       Text(
@@ -162,15 +168,21 @@ class _AdminViewState extends State<AdminView> {
                                   onPressed: () {
                                     if (_currentIndex == 0)
                                       setState(() {
-                                        _body = EventAdminView();
+                                        _body = EventAdminView(
+                                          status: "Waiting",
+                                        );
                                       });
                                     else if (_currentIndex == 1) {
                                       setState(() {
-                                        _body = TeamAdminView();
+                                        _body = TeamAdminView(
+                                          status: "Waiting",
+                                        );
                                       });
                                     } else if (_currentIndex == 2) {
                                       setState(() {
-                                        _body = UserAdminView();
+                                        _body = UserAdminView(
+                                          status: "Waiting",
+                                        );
                                       });
                                     }
                                   },
@@ -183,19 +195,19 @@ class _AdminViewState extends State<AdminView> {
                     onTap: (int index) {
                       if (index == 0) {
                         setState(() {
-                          _body = EventAdminView();
+                          _body = EventAdminView(status: "Approved");
                           _currentIndex = index;
                         });
                       }
                       if (index == 1) {
                         setState(() {
-                          _body = TeamAdminView();
+                          _body = TeamAdminView(status: "Approved");
                           _currentIndex = index;
                         });
                       }
                       if (index == 2) {
                         setState(() {
-                          _body = UserAdminView();
+                          _body = UserAdminView(status: "Approved");
                           _currentIndex = index;
                         });
                       }
@@ -204,13 +216,13 @@ class _AdminViewState extends State<AdminView> {
                       BottomNavigationBarItem(
                         icon: Icon(
                           Icons.event,
-                          color: Colors.grey[600],
+                          //color: Colors.grey[600],
                         ),
                         title: Text(
                           'Events',
                           style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
+                              //color: Colors.grey[600],
+                              ),
                         ),
                       ),
                       BottomNavigationBarItem(

@@ -19,21 +19,21 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
   Future<List<int>> getEventCount() async {
     List<EventRequest> approved = await getEventRequests("All");
     List<EventRequest> rejected = await getEventRequests("Rejected");
-    List<EventRequest> allevents = await getEventRequests("dS");
+    List<EventRequest> waiting = await getEventRequests("Waiting");
     List<int> resultData = [];
     resultData.add(approved.length);
     resultData.add(rejected.length);
-    resultData.add(allevents.length - (approved.length + rejected.length));
+    resultData.add(waiting.length);
     return (resultData);
   }
 
   @override
   Future<List<EventRequest>> getData(String status) async {
-    _http.Response response = await _http.get("$baseUrl/event?status=$status");
-    List<dynamic> data = json.decode(response.body);
-    List<EventRequest> newData =
-        data.map((e) => EventRequest.fromMap(e)).toList();
-    return Future.value(newData);
+    // _http.Response response = await _http.get("$baseUrl/event?status=$status");
+    // List<dynamic> data = json.decode(response.body);
+    // List<EventRequest> newData =
+    //     data.map((e) => EventRequest.fromMap(e)).toList();
+    return await getEventRequests("$status");
   }
 
   //processEvents
@@ -85,12 +85,14 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       requestBody = '{"dateInterval" : "This Week"}';
     } else if (eventType == "This Month") {
       requestBody = '{"dateInterval": "This Month"}';
-    } else if (eventType == "All" || eventType == "AA") {
+    } else if (eventType == "All" ||
+        eventType == "AA" ||
+        eventType == "Approved") {
       requestBody = '{"approvalStatus" : "Approved"}';
     } else if (eventType == "Rejected") {
       requestBody = '{"approvalStatus" : "Rejected"}';
-    } else if (eventType == "dS") {
-      requestBody = '{"destinationLongitude" : "2"}';
+    } else if (eventType == "Waiting") {
+      requestBody = '{"approvalStatus" : "Waiting"}';
     } else {
       requestBody = '{"eventDuration" : "$eventType"}';
     }
