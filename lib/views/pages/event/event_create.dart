@@ -1017,7 +1017,7 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
-                                eventrequest.approvalStatus = "";
+                                eventrequest.approvalStatus = "Waiting";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
                                     eventrequest.toJson();
