@@ -39,7 +39,7 @@ class _TeamWriteState extends State<TeamWrite> {
       body: Builder(builder: (context) {
         return SingleChildScrollView(
           child: Container(
-            color: Colors.white,
+
             child: Center(
               child: Form(
                 // context,
