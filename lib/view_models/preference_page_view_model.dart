@@ -18,13 +18,13 @@ class PreferencesPageViewModel extends Model {
     notifyListeners();
   }
 
-  Future<bool> setPreferences(String userType) async {
-    preferencesrequests = apiSvc?.getPreferences(userType);
+  Future<bool> setPreferences() async {
+    preferencesrequests = apiSvc?.getPreferences();
     return preferencesrequests != null;
   }
 
-  Future<List<Preferences>> getPreferences(String userType) {
-    Future<List<Preferences>> usersreqs = apiSvc?.getPreferences(userType);
+  Future<List<Preferences>> getPreferences() {
+    Future<List<Preferences>> usersreqs = apiSvc?.getPreferences();
     return usersreqs;
   }
 

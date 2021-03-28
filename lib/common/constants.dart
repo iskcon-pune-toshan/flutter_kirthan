@@ -56,14 +56,10 @@ const String SCR_ROLE_SCREEN = "Role_Screen";
 const String SCR_PERMISSIONS = "Permissions";
 const String SCR_SCREENS = "Screens";
 const String SCR_PREF = "Preferences";
-
+const String SCR_DISPLAY = "Display Settings";
 
 const String ACCESS_TYPE_CREATE = "Create";
 const String ACCESS_TYPE_EDIT = "Edit";
 const String ACCESS_TYPE_DELETE = "Delete";
 const String ACCESS_TYPE_VIEW = "View";
 const String ACCESS_TYPE_PROCESS = "Process";
-
-
-
-

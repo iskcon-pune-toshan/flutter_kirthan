@@ -62,6 +62,7 @@ class _UserEditState extends State<UserEdit> {
   final TextEditingController _userupdatedBy = new TextEditingController();
   String userupdatedBy;
   final TextEditingController _createdTime = new TextEditingController();
+  String approvalStatus;
 
   @override
   void initState() {
@@ -80,6 +81,7 @@ class _UserEditState extends State<UserEdit> {
     _createdTime.text = widget.userrequest.createdTime;
     print(widget.userrequest.createdTime);
     _userupdatedBy.text = getCurrentUser().toString();
+    approvalStatus = widget.userrequest.approvalStatus;
     return super.initState();
   }
 

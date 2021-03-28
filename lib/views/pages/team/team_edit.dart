@@ -35,6 +35,7 @@ class _EditTeamState extends State<EditTeam> {
   String teamDescription;
   final TextEditingController _teamupdatedBy = new TextEditingController();
   String teamupdatedBy;
+  String approvalStatus;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _EditTeamState extends State<EditTeam> {
     _teamDescriptionController.text = widget.teamrequest.teamDescription;
 
     _teamupdatedBy.text = getCurrentUser().toString();
+    approvalStatus = widget.teamrequest.approvalStatus;
     return super.initState();
   }
 

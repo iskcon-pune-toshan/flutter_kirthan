@@ -85,6 +85,7 @@ class _EventAdminViewState extends State<EventAdminView> {
                     FlatButton(
                         padding: EdgeInsets.all(0),
                         clipBehavior: Clip.none,
+                        //shows the list of events in adminPanel
                         child: EventRequestsListItem(
                           eventrequest: snapshot.data[itemCount],
                           eventPageVM: _eventVM,

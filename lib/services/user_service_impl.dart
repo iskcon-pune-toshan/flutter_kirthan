@@ -50,6 +50,8 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
       requestBody = '{"approvalStatus":"rejected"}';
     } else if (userType == "Waiting") {
       requestBody = '{"approvalStatus":"Waiting"}';
+    } else {
+      requestBody = '{"email":"$userType"}';
     }
 
     print("Instance of request");

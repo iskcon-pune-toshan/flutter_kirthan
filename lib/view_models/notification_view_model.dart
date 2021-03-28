@@ -23,7 +23,7 @@ class NotificationViewModel extends Model {
 
   Future<List<NotificationModel>> getNotifications() async {
     List<NotificationModel> expectedData = await apiSvc?.getData();
-    print(expectedData);
+    //print(expectedData);
     return expectedData;
   }
 

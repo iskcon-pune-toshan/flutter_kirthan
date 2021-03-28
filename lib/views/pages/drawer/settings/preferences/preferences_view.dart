@@ -17,6 +17,7 @@ import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 //import'package:flutter_kirthan/views/pages/drawer/settings/impl_perferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/perferences_create.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,69 +25,40 @@ import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 
-final TemplePageViewModel templePageVM =
-    TemplePageViewModel(apiSvc: TempleAPIService());
 final PreferencesPageViewModel preferencesPageVM =
     PreferencesPageViewModel(apiSvc: PreferencesAPIService());
-final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
-final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
 
-class PreferenceSettings extends StatefulWidget {
-  // PreferenceSettings(
-  //     {@required this.preferencerequest, @required this.preferencePageVM});
-  final String screenName = "Preferences";
+class PreferenceView extends StatefulWidget {
+  Preferences preferencesrequest;
+  PreferenceView({this.preferencesrequest});
   @override
-  _PreferenceSettingsState createState() => _PreferenceSettingsState();
+  _PreferenceViewState createState() => _PreferenceViewState();
 }
 
-class _PreferenceSettingsState extends State<PreferenceSettings> {
-  final Preferences preferencesrequest = new Preferences();
-  SharedPreferences prefs;
-
-  String dropdownValue = '';
-  String arg1 = null;
-
-  String arg2 = null;
-  String arg3 = null;
-  String arg4 = null;
-
-  List<String> access;
-  Map<String, bool> accessTypes = new Map<String, bool>();
-
-  void loadPref() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      access = prefs.getStringList(widget.screenName);
-      access.forEach((f) {
-        List<String> access = f.split(":");
-        accessTypes[access.elementAt(0)] =
-            access.elementAt(1).toLowerCase() == "true" ? true : false;
-      });
-      preferencesPageVM.accessTypes = accessTypes;
-    });
-  }
-
-  Future loadData() async {
-    await preferencesPageVM.setPreferences("19");
+class _PreferenceViewState extends State<PreferenceView> {
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _updatedByController =
+      new TextEditingController();
+  String updatedBy;
+  String arg1, arg2, arg3, arg4;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  getCurrentUser() async {
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    return email;
   }
 
   @override
   void initState() {
-    super.initState();
-    loadData();
-    loadPref();
+    _updatedByController.text = getCurrentUser().toString();
+    return super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Perferences'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+  Widget _buildPreferencesWithData(Preferences data) {
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,7 +66,8 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
             Divider(),
             Card(
               child: Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => DropdownButton<String>(
+                builder: (context, notifier, child) => DropdownButtonFormField(
+                  value: data.area,
                   items: [
                     DropdownMenuItem<String>(
                       value: "NVCC",
@@ -127,18 +100,16 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
                   ],
                   onChanged: (_value) {
                     setState(() {
-                      dropdownValue = _value;
-                      print(_value);
                       arg1 = _value;
                       notifier.areaNotifier(arg1);
-                      preferencesrequest.area = _value;
+                      //preferencesrequest.area = _value;
                     });
+                  },
+                  onSaved: (_value) {
+                    data.area = _value;
                   }, //notifier.area,
                   hint: Text(
-                    // widget.preferencerequest.eventDuration == " "
-                    //     ? 'Area'
-                    //     : widget.preferencerequest.eventDuration,
-                    notifier.area == " " ? 'Area' : notifier.area,
+                    'Area',
                     style: TextStyle(fontSize: notifier.custFontSize),
                   ),
                 ),
@@ -147,7 +118,9 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
             Divider(),
             Card(
               child: Consumer<ThemeNotifier>(
-                  builder: (context, notifier, child) => DropdownButton<String>(
+                  builder: (context, notifier, child) =>
+                      DropdownButtonFormField(
+                        value: data.localAdmin,
                         items: <String>[
                           'Local Admin 1',
                           'Local Admin 2',
@@ -161,17 +134,15 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
                         }).toList(),
                         onChanged: (_value) {
                           setState(() {
-                            dropdownValue = _value;
-                            print(_value);
                             arg2 = _value;
                             notifier.localAdminNotifier(arg2);
-                            preferencesrequest.localAdmin = _value;
                           });
                         },
+                        onSaved: (_value) {
+                          data.localAdmin = _value;
+                        },
                         hint: Text(
-                          notifier.localAdmin == " "
-                              ? 'Local Admin'
-                              : notifier.localAdmin,
+                          'Local Admin',
                           style: TextStyle(fontSize: notifier.custFontSize),
                         ),
                       )),
@@ -179,7 +150,8 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
             Divider(),
             Card(
               child: Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => DropdownButton<String>(
+                builder: (context, notifier, child) => DropdownButtonFormField(
+                  value: data.eventDuration.toString(),
                   items: [
                     DropdownMenuItem<String>(
                       value: "1",
@@ -203,7 +175,7 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
                       ),
                     ),
                     DropdownMenuItem<String>(
-                      value: "2",
+                      value: "3",
                       child: Text(
                         "greater than 1 hour",
                         style: TextStyle(fontSize: notifier.custFontSize),
@@ -212,18 +184,16 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
                   ],
                   onChanged: (_value) {
                     setState(() {
-                      dropdownValue = _value;
-                      //print(_value);
                       arg3 = _value;
                       notifier.durationNotifier(arg3);
-                      print(notifier.duration);
-                      preferencesrequest.eventDuration = int.parse(_value);
+                      // print(notifier.duration);
                     });
                   },
+                  onSaved: (_value) {
+                    data.eventDuration = int.parse(_value);
+                  },
                   hint: Text(
-                    notifier.duration == " "
-                        ? 'Kirthan Duration'
-                        : notifier.duration,
+                    'Kirthan Duration',
                     style: TextStyle(fontSize: notifier.custFontSize),
                   ),
                 ),
@@ -232,7 +202,9 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
             Divider(),
             Card(
               child: Consumer<ThemeNotifier>(
-                  builder: (context, notifier, child) => DropdownButton<String>(
+                  builder: (context, notifier, child) =>
+                      DropdownButtonFormField(
+                        value: data.requestAcceptance,
                         items: [
                           DropdownMenuItem<String>(
                             value: "One week before",
@@ -258,17 +230,15 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
                         ],
                         onChanged: (_value) {
                           setState(() {
-                            dropdownValue = _value;
-                            print(_value);
                             arg4 = _value;
                             notifier.requestAcceptanceNotifier(arg4);
-                            preferencesrequest.requestAcceptance = _value;
                           });
                         },
+                        onSaved: (_value) {
+                          data.requestAcceptance = _value;
+                        },
                         hint: Text(
-                          notifier.requestAcceptance == " "
-                              ? 'Request Acceptance'
-                              : notifier.duration,
+                          'Request Acceptance',
                           style: TextStyle(fontSize: notifier.custFontSize),
                         ),
                       )),
@@ -277,15 +247,18 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Consumer<ThemeNotifier>(
-                  builder: (context, notifier, child) => RaisedButton(
+                  builder: (context, notifier, child) => MaterialButton(
                     onPressed: () async {
-                      Map<String, dynamic> usermap =
-                          preferencesrequest.toJson();
-                      print(usermap);
-                      Preferences newscreensrequest =
-                          await preferencesPageVM.submitNewPreferences(usermap);
-                      print(newscreensrequest.id);
-                      print("Preference added");
+                      if (_formKey.currentState.validate()) {
+                        final FirebaseUser user = await auth.currentUser();
+                        final String email = user.email;
+                        data.userid = email;
+                        _formKey.currentState.save();
+                        String prefStr = jsonEncode(data.toStrJson());
+                        await preferencesPageVM
+                            .submitUpdatePreferences(prefStr);
+                        print("Preference updated");
+                      }
                     },
                     child: Text('Submit'),
                     padding: const EdgeInsets.all(16.0),
@@ -307,6 +280,39 @@ class _PreferenceSettingsState extends State<PreferenceSettings> {
           ],
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Perferences'),
+      ),
+      key: _scaffoldKey,
+      body: FutureBuilder(
+          future: preferencesPageVM.getPreferences(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return snapshot.data.isEmpty
+                  ? Future.delayed(Duration.zero, () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PreferenceWrite()));
+                    })
+                  : ListView.builder(
+                      itemBuilder: (context, int index) =>
+                          _buildPreferencesWithData(snapshot.data[0]),
+                      itemCount: 1);
+            } else if (snapshot.hasError) {
+              print(snapshot);
+              print(snapshot.error.toString() + " Error ");
+              return Center(child: Text('Error loading notifications'));
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 }
