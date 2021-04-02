@@ -420,7 +420,7 @@ class EventRequestsListItem extends StatelessWidget {
                           padding: EdgeInsets.only(bottom: 15),
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Text(
-                            eventrequest?.eventDate.substring(11, 16),
+                            eventrequest?.eventTime.substring(11, 16),
                             style: TextStyle(
                               fontSize: notifier.custFontSize,
                               //color: KirthanStyles.subTitleColor,

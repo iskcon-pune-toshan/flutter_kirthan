@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'file:///D:/AndroidStudioProjects/flutter_kirthan/lib/views/pages/drawer/settings/preferences/perferences_create.dart';
+
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';

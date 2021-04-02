@@ -62,7 +62,7 @@ class _AdminViewState extends State<AdminView> {
     _body = EventAdminView();
     _displayStat = new Stats();
   }
-
+int _selectedIndex=0;
   @override
   Widget build(BuildContext context) {
     return ScopedModel<Stats>(
@@ -202,34 +202,38 @@ class _AdminViewState extends State<AdminView> {
                       if (index == 1) {
                         setState(() {
                           _body = TeamAdminView(status: "Approved");
+                          _selectedIndex = index;
                           _currentIndex = index;
                         });
                       }
                       if (index == 2) {
                         setState(() {
                           _body = UserAdminView(status: "Approved");
+                          _selectedIndex = index;
                           _currentIndex = index;
                         });
                       }
                     },
                     items: <BottomNavigationBarItem>[
+
                       BottomNavigationBarItem(
                         icon: Icon(
-                          Icons.event,
-                          //color: Colors.grey[600],
+                          Icons.event
                         ),
                         title: Text(
                           'Events',
-                          style: TextStyle(
-                              //color: Colors.grey[600],
-                              ),
+
+
                         ),
                       ),
                       BottomNavigationBarItem(
+
                           icon: Icon(Icons.group), title: Text('Teams')),
                       BottomNavigationBarItem(
                           icon: Icon(Icons.person), title: Text('User')),
                     ],
+                    currentIndex: _selectedIndex,
+                    selectedItemColor: KirthanStyles.colorPallete10,
                   ),
                 )));
   }

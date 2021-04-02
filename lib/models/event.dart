@@ -28,6 +28,7 @@ class EventRequest {
   double destinationLongitude;
   double destinationLatitude;
   String eventMobility;
+  String eventTime;
 
 
 
@@ -56,7 +57,8 @@ class EventRequest {
         this.sourceLatitude,
         this.destinationLongitude,
         this.destinationLatitude,
-        this.eventMobility,});
+        this.eventMobility,
+      this.eventTime,});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventRequest.fromJson(Map<String, dynamic> data) {
@@ -89,6 +91,7 @@ class EventRequest {
       destinationLongitude: data['destinationLongitude'],
       destinationLatitude: data['destinationLatitude'],
       eventMobility: data['eventMobility'],
+      eventTime: data['eventTime'],
     );
   }
 
@@ -122,6 +125,7 @@ class EventRequest {
       destinationLongitude: map['destinationLongitude'],
       destinationLatitude: map['destinationLatitude'],
       eventMobility: map['eventMobility'],
+      eventTime: map['eventTime']
     );
   }
 
@@ -156,6 +160,7 @@ class EventRequest {
     data['destinationLongitude'] = this.destinationLongitude;
     data['destinationLatitude'] = this.destinationLatitude;
     data['eventMobility'] = this.eventMobility;
+    data['eventTime'] = this.eventTime;
     return data;
   }
 
@@ -190,6 +195,7 @@ class EventRequest {
       "destinationLongitude":this.destinationLongitude,
       "destinationLatitude":this.destinationLatitude,
       "eventMobility":this.eventMobility,
+      "eventTime" : this.eventTime,
     };
 
   }

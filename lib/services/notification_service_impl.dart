@@ -28,7 +28,7 @@ class NotificationManager extends BaseAPIService
           .then((value) => print("Channel Created"));
     try {
       fms.getFBToken().then((deviceToken) {
-        //print(deviceToken);
+        print(deviceToken);
         storeToken(deviceToken);
       });
     } catch (Exception) {
@@ -86,9 +86,9 @@ class NotificationManager extends BaseAPIService
 
   Future<bool> deleteNotification(
       Map<String, dynamic> processrequestmap) async {
-    //print(processrequestmap);
+    print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
-    //print(requestBody);
+    print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put(
@@ -100,7 +100,7 @@ class NotificationManager extends BaseAPIService
         body: requestBody);
 
     if (response.statusCode == 200) {
-      // print(response.body);
+      print(response.body);
       return true;
     } else {
       throw Exception('Failed to get data');
