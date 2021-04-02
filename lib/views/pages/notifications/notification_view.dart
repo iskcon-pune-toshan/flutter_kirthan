@@ -240,12 +240,19 @@ class NotificationViewState extends State<NotificationView> {
                             SizedBox(
                               height: 8,
                             ),
-                            Text(
-                              "Accepted",
-                              style: TextStyle(
-                                color: Colors.green,
-                              ),
-                            ),
+                            icon == Icons.close
+                                ? Text(
+                                    "Rejected",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  )
+                                : Text(
+                                    "Accepted",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                    ),
+                                  ),
                           ],
                         ),
                   onTap: () {
