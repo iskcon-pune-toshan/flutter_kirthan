@@ -27,18 +27,18 @@ class PreferencesAPIService extends BaseAPIService
   }
 
   //getPreferences
-  Future<List<Preferences>> getPreferences(String eventType) async {
+  Future<List<Preferences>> getPreferences() async {
     String requestBody = '';
 
     String token = AutheticationAPIService().sessionJWTToken;
 
-    var response = await client1.put(
+    //requestBody = '{"userid" : "$eventType"}';
+    var response = await client1.get(
         '$baseUrl/api/preferences/getpreferenceswithdescription',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
-        },
-        body: requestBody);
+        });
     print(response.statusCode);
     print(requestBody);
     if (response.statusCode == 200) {

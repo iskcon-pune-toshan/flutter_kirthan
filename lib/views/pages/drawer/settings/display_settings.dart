@@ -35,7 +35,7 @@ class _MyAppState extends State<MyPrefSettingsApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Preference Settings'),
+        title: Text('Display Settings'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

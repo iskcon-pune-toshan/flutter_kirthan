@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
@@ -6,21 +7,21 @@ import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
 import './admin_view.dart';
 
-
-class EventAdminView extends StatefulWidget{
+class EventAdminView extends StatefulWidget {
   String status;
-  EventAdminView({this.status="NEW"});
+  EventAdminView({this.status});
   @override
-  _EventAdminViewState createState()=> _EventAdminViewState();
+  _EventAdminViewState createState() => _EventAdminViewState();
 }
 
-class _EventAdminViewState extends State<EventAdminView>{
+class _EventAdminViewState extends State<EventAdminView> {
   EventPageViewModel _eventVM;
 
   void setStats() async {
     ScopedModel.of<Stats>(context).stats = await _eventVM.getEventCount();
   }
-  void initState()  {
+
+  void initState() {
     super.initState();
     _eventVM = EventPageViewModel(apiSvc: EventAPIService());
     setStats();
@@ -28,13 +29,15 @@ class _EventAdminViewState extends State<EventAdminView>{
 
   @override
   Widget build(BuildContext context) {
-    return View(status:widget.status);
+    return View(status: widget.status);
   }
 
-  Widget EditView({var page, var actions,String status}) {
+  Widget EditView({var page, var actions, String status}) {
     return Scaffold(
       body: page,
-      persistentFooterButtons: <Widget>[if(status.toLowerCase() =="NEW")actions],
+      persistentFooterButtons: <Widget>[
+        if (status.toLowerCase() == "NEW") actions
+      ],
     );
   }
 
@@ -49,22 +52,24 @@ class _EventAdminViewState extends State<EventAdminView>{
         FlatButton(
             child: Text('Approve'),
             onPressed: () {
-              resultData["approvalstatus"] = "approved";
-              resultData["approvalcomments"] = "approved";
+              resultData["approvalStatus"] = "Approved";
+              resultData["approvalComments"] = "Approved";
               callback(resultData);
+              print(resultData);
             }),
         FlatButton(
           child: Text('Reject'),
           onPressed: () {
-            resultData["approvalstatus"] = "rejected";
-            resultData["approvalcomments"] = "rejected";
+            resultData["approvalStatus"] = "Rejected";
+            resultData["approvalComments"] = "Rejected";
             callback(resultData);
           },
         ),
       ]);
   }
 
-  Widget View({String status = "NEW"}) {
+  Widget View({String status}) {
+    print(status);
     return FutureBuilder(
         future: _eventVM.getData(status),
         builder: (context, snapshot) {
@@ -74,6 +79,9 @@ class _EventAdminViewState extends State<EventAdminView>{
               itemBuilder: (context, itemCount) => Card(
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 15.0,
+                    ),
                     FlatButton(
                         padding: EdgeInsets.all(0),
                         clipBehavior: Clip.none,
@@ -86,10 +94,11 @@ class _EventAdminViewState extends State<EventAdminView>{
                               context,
                               MaterialPageRoute(
                                   builder: (context) => EditView(
-                                    status: snapshot.data[itemCount].approvalStatus,
+                                      status: snapshot
+                                          .data[itemCount].approvalStatus,
                                       page: EditEvent(
                                           eventrequest:
-                                          snapshot.data[itemCount]),
+                                              snapshot.data[itemCount]),
                                       actions: Actions(
                                           _eventVM.processEventRequest,
                                           snapshot.data[itemCount]))));
@@ -106,4 +115,3 @@ class _EventAdminViewState extends State<EventAdminView>{
         });
   }
 }
-

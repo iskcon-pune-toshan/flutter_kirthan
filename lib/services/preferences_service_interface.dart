@@ -5,7 +5,7 @@ abstract class IPreferencesRestApi {
   //Sample
 
   //preferences
-  Future<List<Preferences>> getPreferences(String userType);
+  Future<List<Preferences>> getPreferences();
 
   Future<Preferences> submitNewPreferences(Map<String, dynamic> preferencesmap);
 

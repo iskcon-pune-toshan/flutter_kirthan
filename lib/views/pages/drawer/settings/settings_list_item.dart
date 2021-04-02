@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/perferences_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/preferences_view.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/perferences_create.dart';
 
 class MySettingsApp extends StatefulWidget {
   @override
@@ -103,7 +104,7 @@ class _MyAppState extends State<MySettingsApp> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PreferenceSettings()));
+                          builder: (context) => PreferenceView()));
                 },
                 selected: true,
               ),

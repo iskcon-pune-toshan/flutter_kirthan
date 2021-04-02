@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 
 import 'package:flutter_kirthan/views/pages/admin/admin_event_view.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_team_view.dart';
@@ -20,12 +22,13 @@ class Stats extends Model {
 
   int get rejected => _rejectedCount;
 
-  set stats(List<int> data){
+  set stats(List<int> data) {
     _acceptedCount = data[0];
-    _waitingCount = data[1];
-    _rejectedCount = data[2];
+    _waitingCount = data[2];
+    _rejectedCount = data[1];
     notifyListeners();
   }
+
   set accepted(int count) {
     _acceptedCount = count;
     notifyListeners();
@@ -59,7 +62,7 @@ class _AdminViewState extends State<AdminView> {
     _body = EventAdminView();
     _displayStat = new Stats();
   }
-
+int _selectedIndex=0;
   @override
   Widget build(BuildContext context) {
     return ScopedModel<Stats>(
@@ -71,49 +74,53 @@ class _AdminViewState extends State<AdminView> {
                     bottom: PreferredSize(
                       preferredSize: Size.fromHeight(50),
                       child: Container(
-                          color: Colors.blue,
+                          color: KirthanStyles.colorPallete30,
                           height: 50.0,
                           child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
+                                    padding: EdgeInsets.only(top: 5),
                                     child: FlatButton(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        model.accepted.toString(),
-                                        style: TextStyle(color: Colors.white),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            model.accepted.toString(),
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          Text(
+                                            'Accepted',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        'Accepted',
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    if (_currentIndex == 0)
-                                      setState(() {
-                                        _body =
-                                            EventAdminView(status: "Approved");
-                                      });
-                                    else if (_currentIndex == 1) {
-                                      setState(() {
-                                        _body =
-                                            TeamAdminView(status: "approved");
-                                      });
-                                    } else if (_currentIndex == 2) {
-                                      setState(() {
-                                        _body =
-                                            UserAdminView(status: "approved");
-                                      });
-                                    }
-                                  },
-                                )),
+                                      onPressed: () {
+                                        if (_currentIndex == 0)
+                                          setState(() {
+                                            _body = EventAdminView(
+                                                status: "Approved");
+                                          });
+                                        else if (_currentIndex == 1) {
+                                          setState(() {
+                                            _body = TeamAdminView(
+                                                status: "Approved");
+                                          });
+                                        } else if (_currentIndex == 2) {
+                                          setState(() {
+                                            _body = UserAdminView(
+                                                status: "Approved");
+                                          });
+                                        }
+                                      },
+                                    )),
                                 VerticalDivider(
                                   color: Colors.white,
                                 ),
                                 FlatButton(
+                                  padding: EdgeInsets.only(top: 5),
                                   child: Column(
                                     children: <Widget>[
                                       Text(
@@ -138,7 +145,7 @@ class _AdminViewState extends State<AdminView> {
                                     } else if (_currentIndex == 2) {
                                       setState(() {
                                         _body =
-                                            UserAdminView(status: "rejected");
+                                            UserAdminView(status: "Rejected");
                                       });
                                     }
                                   },
@@ -147,6 +154,7 @@ class _AdminViewState extends State<AdminView> {
                                   color: Colors.white,
                                 ),
                                 FlatButton(
+                                  padding: EdgeInsets.only(top: 5),
                                   child: Column(
                                     children: <Widget>[
                                       Text(
@@ -160,15 +168,21 @@ class _AdminViewState extends State<AdminView> {
                                   onPressed: () {
                                     if (_currentIndex == 0)
                                       setState(() {
-                                        _body = EventAdminView();
+                                        _body = EventAdminView(
+                                          status: "Waiting",
+                                        );
                                       });
                                     else if (_currentIndex == 1) {
                                       setState(() {
-                                        _body = TeamAdminView();
+                                        _body = TeamAdminView(
+                                          status: "Waiting",
+                                        );
                                       });
                                     } else if (_currentIndex == 2) {
                                       setState(() {
-                                        _body = UserAdminView();
+                                        _body = UserAdminView(
+                                          status: "Waiting",
+                                        );
                                       });
                                     }
                                   },
@@ -181,31 +195,45 @@ class _AdminViewState extends State<AdminView> {
                     onTap: (int index) {
                       if (index == 0) {
                         setState(() {
-                          _body = EventAdminView();
+                          _body = EventAdminView(status: "Approved");
                           _currentIndex = index;
                         });
                       }
                       if (index == 1) {
                         setState(() {
-                          _body = TeamAdminView();
+                          _body = TeamAdminView(status: "Approved");
+                          _selectedIndex = index;
                           _currentIndex = index;
                         });
                       }
                       if (index == 2) {
                         setState(() {
-                          _body = UserAdminView();
+                          _body = UserAdminView(status: "Approved");
+                          _selectedIndex = index;
                           _currentIndex = index;
                         });
                       }
                     },
                     items: <BottomNavigationBarItem>[
+
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.event), title: Text('Events')),
+                        icon: Icon(
+                          Icons.event
+                        ),
+                        title: Text(
+                          'Events',
+
+
+                        ),
+                      ),
                       BottomNavigationBarItem(
+
                           icon: Icon(Icons.group), title: Text('Teams')),
                       BottomNavigationBarItem(
                           icon: Icon(Icons.person), title: Text('User')),
                     ],
+                    currentIndex: _selectedIndex,
+                    selectedItemColor: KirthanStyles.colorPallete10,
                   ),
                 )));
   }

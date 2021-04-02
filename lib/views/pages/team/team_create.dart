@@ -164,7 +164,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                 teamrequest.createdTime = dt;
                                 teamrequest.updatedBy = null;
                                 teamrequest.updatedTime = null;
-                                teamrequest.approvalStatus = null;
+                                teamrequest.approvalStatus = "Waiting";
                                 teamrequest.approvalComments =
                                     "Approved$teamTitle";
                                 Map<String, dynamic> teammap =

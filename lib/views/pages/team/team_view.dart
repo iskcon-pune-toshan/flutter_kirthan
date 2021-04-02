@@ -49,8 +49,9 @@ class _TeamViewState extends State<TeamView>
   }
 
   Future loadData() async {
-    await teamPageVM.setTeamRequests("All");
+    await teamPageVM.setTeamRequests("Approved");
   }
+
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -61,6 +62,7 @@ class _TeamViewState extends State<TeamView>
 
     return null;
   }
+
   @override
   void initState() {
     super.initState();
@@ -72,14 +74,13 @@ class _TeamViewState extends State<TeamView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Text("Teams"),
       ),
       drawer: MyDrawer(),
-      body:RefreshIndicator(
+      body: RefreshIndicator(
         key: refreshKey,
-        child:ScopedModel<TeamPageViewModel>(
+        child: ScopedModel<TeamPageViewModel>(
           model: teamPageVM,
           child: TeamsPanel(
             teamType: "All",
@@ -87,7 +88,6 @@ class _TeamViewState extends State<TeamView>
         ),
         onRefresh: refreshList,
       ),
-
       floatingActionButton: FloatingActionButton(
         heroTag: "team",
         child: Icon(Icons.add),

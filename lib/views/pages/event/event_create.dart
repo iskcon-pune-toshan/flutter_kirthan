@@ -4,6 +4,7 @@ import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -184,7 +185,7 @@ class _EventWriteState extends State<EventWrite> {
           },
         ),
         Text(title,style: TextStyle(
-            color:  KirthanStyles.colorPallete60 ,
+           //color:  KirthanStyles.titleColor ,
             fontWeight:
              FontWeight.normal),)
       ],
@@ -364,19 +365,20 @@ class _EventWriteState extends State<EventWrite> {
                      Container(
                         padding: new EdgeInsets.all(10),
                         child: Column(
-                          //mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Text("Event Date",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey),),
 
                             DateTimeField(
 
                               format: DateFormat("yyyy-MM-dd"),
-                              onShowPicker: (context, currentValue) {
-                                return showDatePicker(
+                              onShowPicker: (context, currentValue) async {
+                                final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime.now(),
                                     initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
+                                return date;
                               },
                               onSaved: (input) {
                                 eventrequest.eventDate =
@@ -395,7 +397,50 @@ class _EventWriteState extends State<EventWrite> {
                           ],
                         ),
                       ),
+                    Container(
+                      padding: new EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text("Event Time",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey),),
 
+                      DateTimeField(
+
+                        /*decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                        ),*/
+
+                        format: DateFormat("HH:mm"),
+                        onShowPicker: (context, currentValue) async {
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                          );
+                          return DateTimeField.convert(time);
+                        },
+                        onSaved: (input) {
+                          eventrequest.eventTime =
+                              DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                  .format(input)
+                                  .toString();
+                        },
+                        validator: (value) {
+                          if (value.toString().isEmpty) {
+                            return "Please enter some text";
+                          }
+                          return null;
+                        },
+                      ),
+
+
+                        ],
+                      ),
+                    ),
                     Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
@@ -575,10 +620,12 @@ class _EventWriteState extends State<EventWrite> {
                                   builder: (context) => BlocProvider(
                                     create: (BuildContext context) =>
                                         MapsBloc(),
+
                                     child: Scaffold(
                                         appBar: AppBar(
-                                          title: Text('Location'),
+
                                           actions: <Widget>[
+
                                             IconButton(
                                               icon: Icon(Icons.refresh),
                                               onPressed: () => {
@@ -1026,7 +1073,7 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
-                                eventrequest.approvalStatus = "";
+                                eventrequest.approvalStatus = "Waiting";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
                                     eventrequest.toJson();

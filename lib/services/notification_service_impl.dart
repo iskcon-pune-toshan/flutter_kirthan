@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_kirthan/models/notification.dart';
@@ -37,21 +38,21 @@ class NotificationManager extends BaseAPIService
 
   Future<List<NotificationModel>> getData() async {
     String token = AutheticationAPIService().sessionJWTToken;
-    print("Jwt token" + token);
-    _http.Response response = await _http.get("$baseUrl/notifications",
+    //print("Jwt token" + token);
+    _http.Response response = await _http.get("$baseUrl/api/notifications",
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
         });
-    print("here");
+    //print("here");
     List<dynamic> data = convert.jsonDecode(response.body);
-    print(data);
+    //print(data);
     // List<NotificationModel> expectedData =
-    print("Hello");
+    //print("Hello");
     List<NotificationModel> expectedData =
         data.map((element) => NotificationModel.fromJson(element)).toList();
-    print(expectedData.toString());
-    return Future.value(expectedData);
+    //print(expectedData.toString());
+    return expectedData;
   }
 
   void storeToken(String deviceToken) async {
@@ -71,7 +72,7 @@ class NotificationManager extends BaseAPIService
 
   void respondToNotification(var callback, String id, bool response) async {
     String token = AutheticationAPIService().sessionJWTToken;
-    String tempUrl = "$baseUrl/notifications/update";
+    String tempUrl = "$baseUrl/api/notifications/update";
     Map<String, Object> data = {"response": response ? 1 : 0, "ntfId": id};
     var body = convert.jsonEncode(data);
     _http.Response resp = await _http.put(tempUrl, body: body, headers: {
@@ -81,5 +82,28 @@ class NotificationManager extends BaseAPIService
     var respData = convert.jsonDecode(resp.body);
     print(resp.statusCode);
     if (callback != null) callback();
+  }
+
+  Future<bool> deleteNotification(
+      Map<String, dynamic> processrequestmap) async {
+    print(processrequestmap);
+    String requestBody = json.encode(processrequestmap);
+    print(requestBody);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put(
+        '$baseUrl/api/notifications/deletenotification',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return true;
+    } else {
+      throw Exception('Failed to get data');
+    }
   }
 }

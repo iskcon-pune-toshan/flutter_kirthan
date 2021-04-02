@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/notification.dart';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
+import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
@@ -13,7 +17,6 @@ final NotificationViewModel notificationPageVM =
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
-
   @override
   State<StatefulWidget> createState() {
     return new NotificationViewState();
@@ -22,6 +25,7 @@ class NotificationView extends StatefulWidget {
 
 class NotificationViewState extends State<NotificationView> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+
   Widget CustomTile(NotificationModel data, var callback) {
     return FlatButton(
         padding: EdgeInsets.all(0),
@@ -54,7 +58,7 @@ class NotificationViewState extends State<NotificationView> {
                         Container(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            'CreatedBy' + data.createdBy.toString(),
+                            'by ' + data.createdBy.toString(),
                             style: TextStyle(fontWeight: FontWeight.w300),
                           ),
                         ),
@@ -129,7 +133,9 @@ class NotificationViewState extends State<NotificationView> {
             dense: false,
             contentPadding: EdgeInsets.all(10),
             title: Text(data.message),
-            subtitle: Text("CreatedBy " + data.createdBy),
+            subtitle: Text(
+              "by " + data.createdBy.toString(),
+            ),
             isThreeLine: true,
             trailing: icon == Icons.pause ? actions : Icon(icon),
             onTap: () {
@@ -150,6 +156,7 @@ class NotificationViewState extends State<NotificationView> {
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
   }
+
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -160,6 +167,7 @@ class NotificationViewState extends State<NotificationView> {
 
     return null;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,9 +175,9 @@ class NotificationViewState extends State<NotificationView> {
         title: Text('Notifications'),
       ),
       drawer: MyDrawer(),
-      body:RefreshIndicator(
+      body: RefreshIndicator(
         key: refreshKey,
-        child:FutureBuilder(
+        child: FutureBuilder(
             future: notificationPageVM.getNotifications(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -187,7 +195,6 @@ class NotificationViewState extends State<NotificationView> {
             }),
         onRefresh: refreshList,
       ),
-
     );
   }
 
@@ -199,38 +206,33 @@ class NotificationViewState extends State<NotificationView> {
         context: context,
         builder: (context) => AlertDialog(
               content: Text(notification.message),
-              title: Text("New Notifications"),
+              title: Center(
+                child: Text(
+                  "Notification Alert!",
+                ),
+              ),
               actions: <Widget>[
-                setAction
-                    ? FlatButton(
-                        child: Text("Approve"),
-                        onPressed: () {
-                          notificationPageVM.updateNotifications(
-                              callback, notification.uuid, true);
-                          Navigator.pop(context);
-                        })
-                    : FlatButton(
-                        child: Text("View"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AdminView()));
-                        },
-                      ),
-                setAction
-                    ? FlatButton(
-                        child: Text("Reject"),
-                        onPressed: () {
-                          notificationPageVM.updateNotifications(
-                              callback, notification.uuid, false);
-                          Navigator.pop(context);
-                        })
-                    : FlatButton(
-                        child: Text("Discard"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                FlatButton(
+                  child: Text("View"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AdminView()));
+                  },
+                ),
+                FlatButton(
+                    child: Text("Discard"),
+                    onPressed: () {
+                      setState(() {
+                        Map<String, dynamic> processrequestmap =
+                            new Map<String, dynamic>();
+                        processrequestmap["id"] = notification.id;
+                        print(notification.id);
+                        notificationPageVM
+                            .deleteNotification(processrequestmap);
+                        Navigator.pop(context);
+                      });
+                    }),
               ],
             ));
   }

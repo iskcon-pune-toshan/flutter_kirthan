@@ -17,25 +17,23 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
   @override
   Future<List<int>> getEventCount() async {
-    _http.Response response = await _http.get("$baseUrl/event/count");
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-      List<int> resultData = [];
-      for (int i = 0; i < 3; i++) resultData.add((data[i]));
-      return (resultData);
-    } else {
-      print("Error fetching data");
-      return [0, 0, 0];
-    }
+    List<EventRequest> approved = await getEventRequests("All");
+    List<EventRequest> rejected = await getEventRequests("Rejected");
+    List<EventRequest> waiting = await getEventRequests("Waiting");
+    List<int> resultData = [];
+    resultData.add(approved.length);
+    resultData.add(rejected.length);
+    resultData.add(waiting.length);
+    return (resultData);
   }
 
   @override
   Future<List<EventRequest>> getData(String status) async {
-    _http.Response response = await _http.get("$baseUrl/event?status=$status");
-    List<dynamic> data = json.decode(response.body);
-    List<EventRequest> newData =
-        data.map((e) => EventRequest.fromMap(e)).toList();
-    return Future.value(newData);
+    // _http.Response response = await _http.get("$baseUrl/event?status=$status");
+    // List<dynamic> data = json.decode(response.body);
+    // List<EventRequest> newData =
+    //     data.map((e) => EventRequest.fromMap(e)).toList();
+    return await getEventRequests("$status");
   }
 
   //processEvents
@@ -87,8 +85,14 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       requestBody = '{"dateInterval" : "This Week"}';
     } else if (eventType == "This Month") {
       requestBody = '{"dateInterval": "This Month"}';
-    } else if (eventType == "All" || eventType == "AA") {
+    } else if (eventType == "All" ||
+        eventType == "AA" ||
+        eventType == "Approved") {
       requestBody = '{"approvalStatus" : "Approved"}';
+    } else if (eventType == "Rejected") {
+      requestBody = '{"approvalStatus" : "Rejected"}';
+    } else if (eventType == "Waiting") {
+      requestBody = '{"approvalStatus" : "Waiting"}';
     } else {
       requestBody = '{"eventDuration" : "$eventType"}';
     }
@@ -110,7 +114,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           .map((eventrequestsData) => EventRequest.fromMap(eventrequestsData))
           .toList();
 
-//print(eventrequests);
+      print(eventrequests.length);
       return eventrequests;
     } else {
       throw Exception('Failed to get data');

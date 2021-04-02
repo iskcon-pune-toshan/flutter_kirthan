@@ -82,8 +82,11 @@ class _EditEventState extends State<EditEvent> {
       new TextEditingController();
   String eventType;
   final TextEditingController _eventDateController =
-      new TextEditingController();
+  new TextEditingController();
   String eventDate;
+  final TextEditingController _eventTimeController =
+  new TextEditingController();
+  String eventTime;
   final TextEditingController _eventDescriptionController =
       new TextEditingController();
   String eventDescription;
@@ -111,13 +114,15 @@ class _EditEventState extends State<EditEvent> {
   final TextEditingController _updatedTimeController =
       new TextEditingController();
   String updatedTime;
+  String approvalStatus;
   //String createdTime;
 
   @override
   void initState() {
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
-    _eventDateController.text = widget.eventrequest.eventDate;
+    _eventDateController.text = widget.eventrequest.eventDate.substring(0,10);
+    _eventTimeController.text = widget.eventrequest.eventTime.substring(11,16);
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
     _lineoneController.text = widget.eventrequest.addLineOne;
     _eventDurationController.text = widget.eventrequest.eventDuration;
@@ -129,6 +134,7 @@ class _EditEventState extends State<EditEvent> {
     _createdTimeController.text = widget.eventrequest.createdTime;
     _updatedByController.text = getCurrentUser().toString();
     _updatedByController.text = widget.eventrequest.updatedTime;
+    approvalStatus = widget.eventrequest.approvalStatus;
     print("createdTime");
     print(widget.eventrequest.createdTime);
 
@@ -255,6 +261,29 @@ class _EditEventState extends State<EditEvent> {
                     controller: _eventDateController,
                     onSaved: (String value) {
                       widget.eventrequest.eventDate = value;
+                    },
+                  ),
+                ),
+                new Container(
+                  child: new TextFormField(
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Time",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
+                    autocorrect: false,
+                    controller: _eventTimeController,
+                    onSaved: (String value) {
+                      widget.eventrequest.eventTime = value;
                     },
                   ),
                 ),

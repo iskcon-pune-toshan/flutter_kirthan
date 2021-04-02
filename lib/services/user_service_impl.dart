@@ -7,6 +7,7 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/user_service_interface.dart';
 import 'package:http/http.dart' as _http;
+
 class UserAPIService extends BaseAPIService implements IUserRestApi {
   static final UserAPIService _internal = UserAPIService.internal();
 
@@ -16,34 +17,20 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
 
   @override
   Future<List<int>> getUserCount() async {
-    _http.Response response =  await _http.get("$baseUrl/users/count");
-    if(response.statusCode == 200 ) {
-      List<dynamic> data = json.decode(response.body);
-      List<int> resultData = [];
-      for (int i = 0; i < 3; i++)
-        resultData.add((data[i]));
-      return (resultData);
-    }
-    else{
-      print("Error fetching data");
-      return [0,0,0];
-    }
+    List<UserRequest> approved = await getUserRequests("Approved");
+    List<UserRequest> rejected = await getUserRequests("Rejected");
+    List<UserRequest> allevents = await getUserRequests("Waiting");
+    List<int> resultData = [];
+    resultData.add(approved.length);
+    resultData.add(rejected.length);
+    resultData.add(allevents.length);
+    return (resultData);
   }
 
   @override
-  Future<List<UserRequest>> getNewUserRequests(String status,String city) async {
-    String finalUrl = '$baseUrl/users?status=$status&city=$city';//needs to adjust this to temple
-    print(finalUrl);
-    var response = await client1.get(finalUrl);
-    if (response.statusCode == 200) {
-      List<dynamic> userrequestsData = json.decode(response.body);
-      List<UserRequest> userrequests = userrequestsData
-          .map((userrequestsData) => UserRequest.fromMap(userrequestsData))
-          .toList();
-      return userrequests;
-    } else {
-      throw Exception('Failed to get data');
-    }
+  Future<List<UserRequest>> getNewUserRequests(
+      String status, String city) async {
+    return await getUserRequests("$status");
   }
 
   //getuser
@@ -57,14 +44,26 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
       requestBody = '{"roleId": 2}';
     } else if (userType == "U") {
       requestBody = '{"roleId": 3}';
+    } else if (userType == "Approved") {
+      requestBody = '{"approvalStatus":"approved"}';
+    } else if (userType == "Rejected") {
+      requestBody = '{"approvalStatus":"rejected"}';
+    } else if (userType == "Waiting") {
+      requestBody = '{"approvalStatus":"Waiting"}';
+    } else {
+      requestBody = '{"email":"$userType"}';
     }
 
     print("Instance of request");
     print(requestBody);
 
-    String token =AutheticationAPIService().sessionJWTToken;
+    String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/getuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
 
     print(response.body);
     print("User sorting");
@@ -93,7 +92,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     print(userrequestmap);
     String requestBody = json.encode(userrequestmap);
     print(requestBody);
-
 
     String token = AutheticationAPIService().sessionJWTToken;
 /*    var response = await client1.put('$baseUrl/api/user/updateuser',
@@ -125,11 +123,13 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     String requestBody = json.encode(processrequestmap);
     print(requestBody);
 
-
-
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/processuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
 
     print(response.statusCode);
     print(response.body);
@@ -149,7 +149,11 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/deleteuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
     print(response.body);
     print(response.statusCode);
 
@@ -163,10 +167,12 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   }
 
   Future<List<UserRequest>> getDummyUserRequests() async {
-
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.get('$baseUrl/api/user/getdummyuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"});
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        });
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -197,9 +203,13 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);
 
-    String token =AutheticationAPIService().sessionJWTToken;
+    String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/updateuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: userrequestmap);
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: userrequestmap);
 
     print(response.statusCode);
     print(response.body);
