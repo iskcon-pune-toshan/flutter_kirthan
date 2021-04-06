@@ -28,14 +28,14 @@ class NotificationView extends StatefulWidget {
 class NotificationViewState extends State<NotificationView> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  //Get current date & compare
-  bool compareNotificationDate(NotificationModel data) {
-    String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
-    if (data.createdAt.toString().substring(0, 10) == now)
-      return true;
-    else
-      return false;
-  }
+  // //Get current date & compare for Today's notification (NOT USED)
+  // bool compareNotificationDate(NotificationModel data) {
+  //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
+  //   if (data.createdAt.toString().substring(0, 10) == now)
+  //     return true;
+  //   else
+  //     return false;
+  // }
 
   //Yet to be approved events
   Widget CustomTile(NotificationModel data, var callback) {
@@ -48,6 +48,7 @@ class NotificationViewState extends State<NotificationView> {
               borderRadius: BorderRadius.circular(10)),
           padding: EdgeInsets.only(top: 10, left: 20, bottom: 0, right: 20),
           onPressed: () {
+            Navigator.pop(context);
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => AdminView()));
           },
@@ -187,84 +188,196 @@ class NotificationViewState extends State<NotificationView> {
         icon = Icons.pause;
     }
     if (icon == Icons.pause)
-      return CustomTile(data, () {
-        setState(() {
-          notificationPageVM.getNotifications();
-        });
-      });
-    else
-      print(data.message);
-    //Column below for events that have been approved. Gives the created by user email. also the ntf that user recieves
-    return Container(
-      margin: EdgeInsets.all(5),
-      child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            FlatButton(
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      color: Colors.grey[400],
-                      width: 1,
-                      style: BorderStyle.solid),
-                  borderRadius: BorderRadius.circular(10)),
-              child: ListTile(
-                  dense: false,
-                  contentPadding: EdgeInsets.all(5),
-                  title: Text(data.message),
-                  subtitle: Text(
-                    "By " + data.createdBy.toString(),
-                  ),
-                  isThreeLine: true,
-                  trailing: icon == Icons.pause
-                      ? actions
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              data.createdAt.toString().substring(11, 16),
-                              style: TextStyle(
-                                color: Colors.grey[500],
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "Today",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          CustomTile(data, () {
+            setState(() {
+              notificationPageVM.getNotificationsBySpec("TODAY");
+            });
+          }),
+          Divider(),
+          Row(
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "Pending Notifications",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          CustomTile(data, () {
+            setState(() {
+              notificationPageVM.getNotificationsBySpec("NOT TODAY");
+            });
+          }),
+        ],
+      );
+    else if (icon == null)
+      //user accept, reject ntf layout
+      return Container(
+        margin: EdgeInsets.all(5),
+        child: Column(
+            //mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.grey[400],
+                        width: 1,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(10)),
+                child: ListTile(
+                    dense: false,
+                    contentPadding: EdgeInsets.all(5),
+                    title: Text(data.message),
+                    subtitle: Text(
+                      "By " + data.createdBy.toString(),
+                    ),
+                    isThreeLine: true,
+                    trailing: icon == Icons.pause
+                        ? actions
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                data.createdAt.toString().substring(11, 16),
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            Text(
-                              data.createdAt.toString().substring(0, 10),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                              Text(
+                                data.createdAt.toString().substring(0, 10),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            icon == Icons.close
-                                ? Text(
-                                    "Rejected",
-                                    style: TextStyle(
-                                      color: Colors.red,
+                              SizedBox(
+                                height: 8,
+                              ),
+                              data.message.contains("Rejected")
+                                  ? Text(
+                                      "Rejected",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Accepted",
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                      ),
                                     ),
-                                  )
-                                : Text(
-                                    "Accepted",
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                          ],
-                        ),
-                  onTap: () {
-                    showNotification(context, data, () {
-                      setState(() {
-                        notificationPageVM.getNotifications();
+                            ],
+                          ),
+                    onTap: () {
+                      showNotification(context, data, () {
+                        setState(() {
+                          notificationPageVM.getNotifications();
+                        });
                       });
-                    });
-                  }),
-            ),
-          ]),
-    );
+                    }),
+              ),
+            ]),
+      );
+    //Admin accept, reject ntf layout
+    else
+      return Container(
+        margin: EdgeInsets.all(5),
+        child: Column(
+            //mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.grey[400],
+                        width: 1,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(10)),
+                child: ListTile(
+                    dense: false,
+                    contentPadding: EdgeInsets.all(5),
+                    title: Text(data.message),
+                    subtitle: Text(
+                      "By " + data.createdBy.toString(),
+                    ),
+                    isThreeLine: true,
+                    trailing: icon == Icons.pause
+                        ? actions
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                data.createdAt.toString().substring(11, 16),
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                data.createdAt.toString().substring(0, 10),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              icon == Icons.close
+                                  ? Text(
+                                      "Rejected",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Accepted",
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                            ],
+                          ),
+                    onTap: () {
+                      showNotification(context, data, () {
+                        setState(() {
+                          notificationPageVM.getNotifications();
+                        });
+                      });
+                    }),
+              ),
+            ]),
+      );
   }
 
   @override
