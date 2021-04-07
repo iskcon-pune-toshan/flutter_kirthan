@@ -48,9 +48,10 @@ class NotificationViewState extends State<NotificationView> {
               borderRadius: BorderRadius.circular(10)),
           padding: EdgeInsets.only(top: 10, left: 20, bottom: 0, right: 20),
           onPressed: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AdminView()));
+            //Screen doesn't pop. User, team lead should be able to view admin panel until ntf is not accepted or declined
+            // Navigator.pop(context);
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => AdminView()));
           },
           child: Column(children: [
             Container(

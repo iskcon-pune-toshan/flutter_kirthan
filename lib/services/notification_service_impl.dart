@@ -60,11 +60,12 @@ class NotificationManager extends BaseAPIService
     print("I am in Service: getNotificationsBySpec");
 
     String requestBody = '';
-    if (ntfType == "TODAY") {
-      requestBody = '{"dateInterval" : "TODAY"}';
-    } else {
-      requestBody = '{"dateInterval" : "NOT TODAY"}';
-    }
+    requestBody = '{"dateInterval" : "$ntfType"}';
+    // if (ntfType == "TODAY") {
+    //   requestBody = '{"dateInterval" : "TODAY"}';
+    // } else {
+    //   requestBody = '{"dateInterval" : "NOT TODAY"}';
+    // }
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
@@ -118,9 +119,9 @@ class NotificationManager extends BaseAPIService
 
   Future<bool> deleteNotification(
       Map<String, dynamic> processrequestmap) async {
-    print(processrequestmap);
+    //print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
-    print(requestBody);
+    //print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put(
