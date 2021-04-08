@@ -76,11 +76,11 @@ class NotificationViewState extends State<NotificationView> {
                                       data.message,
                                       maxLines: 2,
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                       softWrap: true,
-                                      overflow: TextOverflow.fade,
+                                      overflow: TextOverflow.clip,
                                     ),
                                   ),
                                   Container(
@@ -88,7 +88,10 @@ class NotificationViewState extends State<NotificationView> {
                                       data.createdAt
                                           .toString()
                                           .substring(11, 16),
-                                      style: TextStyle(color: Colors.grey[500]),
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -101,9 +104,9 @@ class NotificationViewState extends State<NotificationView> {
                                     padding: EdgeInsets.only(left: 10),
                                     child: Text(
                                       'By ' + data.createdBy.toString(),
+                                      overflow: TextOverflow.clip,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w300,
-                                        color: Colors.grey[800],
                                       ),
                                     ),
                                   ),
@@ -112,6 +115,7 @@ class NotificationViewState extends State<NotificationView> {
                                       data.createdAt
                                           .toString()
                                           .substring(0, 10),
+                                      overflow: TextOverflow.clip,
                                       style: TextStyle(color: Colors.grey[500]),
                                     ),
                                   ),
@@ -189,52 +193,57 @@ class NotificationViewState extends State<NotificationView> {
         icon = Icons.pause;
     }
     if (icon == Icons.pause)
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                "Today",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          CustomTile(data, () {
-            setState(() {
-              notificationPageVM.getNotificationsBySpec("TODAY");
-            });
-          }),
-          Divider(),
-          Row(
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                "Pending Notifications",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          CustomTile(data, () {
-            setState(() {
-              notificationPageVM.getNotificationsBySpec("NOT TODAY");
-            });
-          }),
-        ],
-      );
+      return CustomTile(data, () {
+        setState(() {
+          notificationPageVM.getNotifications();
+        });
+      });
+    // return Column(
+    //   mainAxisAlignment: MainAxisAlignment.start,
+    //   crossAxisAlignment: CrossAxisAlignment.start,
+    //   children: [
+    //     SizedBox(
+    //       height: 10,
+    //     ),
+    //     Row(
+    //       children: [
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           "Today",
+    //           style: TextStyle(
+    //             fontWeight: FontWeight.bold,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //     CustomTile(data, () {
+    //       setState(() {
+    //         notificationPageVM.getNotificationsBySpec("TODAY");
+    //       });
+    //     }),
+    //     Divider(),
+    //     Row(
+    //       children: [
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           "Pending Notifications",
+    //           style: TextStyle(
+    //             fontWeight: FontWeight.bold,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //     CustomTile(data, () {
+    //       setState(() {
+    //         notificationPageVM.getNotificationsBySpec("NOT TODAY");
+    //       });
+    //     }),
+    //   ],
+    // );
     else if (icon == null)
       //user accept, reject ntf layout
       return Container(
@@ -257,7 +266,7 @@ class NotificationViewState extends State<NotificationView> {
                     subtitle: Text(
                       "By " + data.createdBy.toString(),
                     ),
-                    isThreeLine: true,
+                    //isThreeLine: true,
                     trailing: icon == Icons.pause
                         ? actions
                         : Column(
@@ -307,7 +316,7 @@ class NotificationViewState extends State<NotificationView> {
               ),
             ]),
       );
-    //Admin accept, reject ntf layout
+    //Team Admin accept, reject ntf layout
     else
       return Container(
         margin: EdgeInsets.all(5),
@@ -325,11 +334,14 @@ class NotificationViewState extends State<NotificationView> {
                 child: ListTile(
                     dense: false,
                     contentPadding: EdgeInsets.all(5),
-                    title: Text(data.message),
+                    title: Text(
+                      data.message,
+                      overflow: TextOverflow.clip,
+                    ),
                     subtitle: Text(
                       "By " + data.createdBy.toString(),
                     ),
-                    isThreeLine: true,
+                    //isThreeLine: true,
                     trailing: icon == Icons.pause
                         ? actions
                         : Column(

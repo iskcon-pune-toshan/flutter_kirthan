@@ -36,6 +36,7 @@ class _EditTeamState extends State<EditTeam> {
   final TextEditingController _teamupdatedBy = new TextEditingController();
   String teamupdatedBy;
   String approvalStatus;
+  String createdBy;
 
   @override
   void initState() {
@@ -141,6 +142,9 @@ class _EditTeamState extends State<EditTeam> {
                             Navigator.pop(context);
                             print(widget.teamrequest.teamTitle);
                             print(widget.teamrequest.teamDescription);
+                            //check if createdBy will be fetched in ntfs
+                            widget.teamrequest.createdBy =
+                                widget.teamrequest.createdBy;
                             String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                 .format(DateTime.now());
 

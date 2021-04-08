@@ -60,12 +60,12 @@ class NotificationManager extends BaseAPIService
     print("I am in Service: getNotificationsBySpec");
 
     String requestBody = '';
-    requestBody = '{"dateInterval" : "$ntfType"}';
-    // if (ntfType == "TODAY") {
-    //   requestBody = '{"dateInterval" : "TODAY"}';
-    // } else {
-    //   requestBody = '{"dateInterval" : "NOT TODAY"}';
-    // }
+    //requestBody = '{"dateInterval" : "$ntfType"}';
+    if (ntfType == "TODAY") {
+      requestBody = '{"dateInterval" : "TODAY"}';
+    } else {
+      requestBody = '{"dateInterval" : "NOT TODAY"}';
+    }
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
