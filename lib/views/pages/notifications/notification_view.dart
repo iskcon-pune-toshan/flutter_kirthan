@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -27,6 +29,8 @@ class NotificationView extends StatefulWidget {
 
 class NotificationViewState extends State<NotificationView> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+  final Firestore _db = Firestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
 
   // //Get current date & compare for Today's notification (NOT USED)
   // bool compareNotificationDate(NotificationModel data) {
@@ -262,50 +266,47 @@ class NotificationViewState extends State<NotificationView> {
                 child: ListTile(
                     dense: false,
                     contentPadding: EdgeInsets.all(5),
-                    title: Text(data.message),
-                    subtitle: Text(
-                      "By " + data.createdBy.toString(),
-                    ),
-                    //isThreeLine: true,
-                    trailing: icon == Icons.pause
-                        ? actions
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    title: data.message.contains("Rejected")
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                data.createdAt.toString().substring(11, 16),
+                                "Rejected",
                                 style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                data.createdAt.toString().substring(0, 10),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                                  color: Colors.red,
                                 ),
                               ),
                               SizedBox(
-                                height: 8,
+                                height: 10,
                               ),
-                              data.message.contains("Rejected")
-                                  ? Text(
-                                      "Rejected",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                    )
-                                  : Text(
-                                      "Accepted",
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    ),
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Accepted",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
                             ],
                           ),
+                    subtitle: Column(
+                      children: [
+                        Text(
+                          data.message + " by " + data.createdBy.toString(),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                    //isThreeLine: true,
+                    //trailing:
                     onTap: () {
                       showNotification(context, data, () {
                         setState(() {
