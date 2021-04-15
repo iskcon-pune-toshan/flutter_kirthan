@@ -23,18 +23,18 @@ import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-final EventTeamPageViewModel eventTeamPageVM =
-    EventTeamPageViewModel(apiSvc: EventTeamAPIService());
+/*final EventTeamPageViewModel eventTeamPageVM =
+    EventTeamPageViewModel(apiSvc: EventTeamAPIService());*/
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
 class EventDetails extends StatefulWidget {
   EventRequest eventrequest;
-  EventTeam eventTeam;
-  TeamRequest selectedteam;
+  //EventTeam eventTeam;
+  //TeamRequest selectedteam;
   LoginApp loginApp;
   final String screenName = SCR_EVENT;
   UserRequest userrequest;
-  EventDetails({Key key, @required this.eventrequest, @required this.loginApp,this.selectedteam,this.eventTeam})
+  EventDetails({Key key, @required this.eventrequest, @required this.loginApp})
       : super(key: key);
 
   @override
@@ -48,7 +48,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService{
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   String _selectedState;
   String state;
-String teamname;
+
   var _states = [
     "Kant",
     "Andhra Pradesh",
@@ -135,54 +135,15 @@ final TextEditingController _teamName = new TextEditingController();
 List<String> eventss;
   String radioItem = '';
   //String createdTime;
-  String eventteam;
+
   int t;
   Map<String, bool> usercehckmap = new Map<String, bool>();
-  Future<String> getteamname() async{
-    String requestBody = "";
-    t=widget.eventrequest.id;
-    requestBody = '{"eventId" : $t}';
-    String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/eventteam/geteventteams',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
-    if (response.statusCode == 200) {
-      //print(response.body);
-      List<dynamic> teamtsermappingData = json.decode(response.body);
 
-      /*var stringList =.join("");
-    print(stringList);*/
-      List<String> events =
-      teamtsermappingData.map((event) => event.toString()).toList();
-      eventss=events;
-     // print(eventss);
-      var stringlist = events.join("");
-
-      //print(stringlist);
-      teamname=stringlist;
-setState((){
-  teamname=stringlist;
-  stringlist=teamname;
-});
-      /*print(teamname);
-eventteam=teamname;*/
-
-      /*List<EventTeam> teamusermappings = teamtsermappingData
-        .map((teamtsermappingData) => EventTeam.fromMap(teamtsermappingData))
-        .toList();
-
-    print(teamusermappings);*/
-      //print(userdetails);
-//return teamname;
-
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
 
   @override
   void initState() {
-    getteamname();
+
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
     _eventDateController.text = widget.eventrequest.eventDate.substring(0, 10);
@@ -213,7 +174,7 @@ eventteam=teamname;*/
 //print(eventss);
 
 //print(eventteam);
-    print(teamname);
+
     //print(teamname);
     return super.initState();
 
@@ -265,7 +226,7 @@ eventteam=teamname;*/
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
               child: new IconButton(icon: Icon(Icons.edit),
                 onPressed: () {
-                print(teamname);
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -610,7 +571,7 @@ eventteam=teamname;*/
                     color: KirthanStyles.colorPallete10,
                     child: Text('Cancel Invite'),
                     onPressed: () {
-                      print(teamname);
+
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -768,6 +729,8 @@ eventteam=teamname;*/
                                                                             processrequestmap["id"] =
                                                                                 widget.eventrequest?.id;
                                                                             widget.eventrequest?.isProcessed=false;
+                                                                            widget.eventrequest?.approvalStatus="Cancelled";
+                                                                            widget.eventrequest?.status = 3;
                                                                             String eventrequestStr =
                                                                             jsonEncode(widget.eventrequest.toStrJson());
                                                                             eventPageVM.submitUpdateEventRequest(eventrequestStr);
