@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/models/team.dart';
@@ -51,17 +53,37 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
       Map<String, dynamic> eventrequestmap) async {
     print(eventrequestmap);
     String requestBody = json.encode(eventrequestmap);
+    //String teamRequest = json.encode(eventrequestmap);
+    //String teamUserRequest = json.encode(listofteamusermap);
+    // final Map<String, String> requestBody = new Map<String, String>();
+    // requestBody["teamData"] = teamRequest;
+    //requestBody["teamUserData"] = teamUserRequest;
+    // var requestParams = {
+    // "teamData" : teamRequest,
+    // "teamUserData" = teamUserRequest,
+    // };
+    // String queryString = Uri(queryParameters: requestBody).query;
+    //var endpointUrl = '$baseUrl/api/team/addteam';
+    // var requestUrl = endpointUrl + '?' + queryString;
     print(requestBody);
-
     String token = AutheticationAPIService().sessionJWTToken;
 
+    //  var uri = Uri.https('192.168.0.108:8080', '/api/team/addteam', requestBody);
+    //var uri =
+    //Uri.https('http://localhost:8080', '/api/team/addteam', requestBody);
+    // var response = await client1.put(
+    //   uri,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Authorization": "Bearer $token"
+    //   },
+    // );
     var response = await client1.put('$baseUrl/api/team/addteam',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
         body: requestBody);
-
     print("Team add status");
     print(response.statusCode);
     print(response.body);

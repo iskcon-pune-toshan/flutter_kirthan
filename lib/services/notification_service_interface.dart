@@ -8,4 +8,7 @@ abstract class INotificationRestApi {
   void respondToNotification(var callback, String id, bool response);
 
   Future<bool> deleteNotification(Map<String, dynamic> processrequestmap);
+
+  Future<bool> deleteNotificationApproval(
+      Map<String, dynamic> processrequestmap);
 }

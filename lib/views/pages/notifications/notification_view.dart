@@ -13,7 +13,13 @@ import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+//Discard notification bug fixed
+//Tile text color bug fixed
 
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
@@ -21,6 +27,7 @@ final NotificationViewModel notificationPageVM =
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
+  final String screenName = SCR_NTF;
   @override
   State<StatefulWidget> createState() {
     return new NotificationViewState();
@@ -29,9 +36,24 @@ class NotificationView extends StatefulWidget {
 
 class NotificationViewState extends State<NotificationView> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
-  final Firestore _db = Firestore.instance;
-  final FirebaseMessaging _fcm = FirebaseMessaging();
+  //final Firestore _db = Firestore.instance;
+  // final FirebaseMessaging _fcm = FirebaseMessaging();
+  SharedPreferences prefs;
+  List<String> access;
+  Map<String, bool> accessTypes = new Map<String, bool>();
 
+  void loadPref() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      access = prefs.getStringList(widget.screenName);
+      access.forEach((f) {
+        List<String> access = f.split(":");
+        accessTypes[access.elementAt(0)] =
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
+      });
+      notificationPageVM.accessTypes = accessTypes;
+    });
+  }
   // //Get current date & compare for Today's notification (NOT USED)
   // bool compareNotificationDate(NotificationModel data) {
   //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -76,15 +98,20 @@ class NotificationViewState extends State<NotificationView> {
                                 children: [
                                   Container(
                                     padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      data.message,
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        data.message,
+                                        //maxLines: 2,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: notifier.darkTheme
+                                                ? Colors.white
+                                                : Colors.black),
+                                        softWrap: true,
+                                        overflow: TextOverflow.clip,
                                       ),
-                                      softWrap: true,
-                                      overflow: TextOverflow.clip,
                                     ),
                                   ),
                                   Container(
@@ -105,12 +132,18 @@ class NotificationViewState extends State<NotificationView> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      'By ' + data.createdBy.toString(),
-                                      overflow: TextOverflow.clip,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w300,
+                                    padding: EdgeInsets.only(left: 10, top: 3),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                        'By ' + data.createdBy.toString(),
+                                        overflow: TextOverflow.clip,
+                                        style: TextStyle(
+                                          //fontWeight: FontWeight.w300,
+                                          color: notifier.darkTheme
+                                              ? Colors.white
+                                              : Colors.grey[500],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -397,6 +430,8 @@ class NotificationViewState extends State<NotificationView> {
   @override
   void initState() {
     super.initState();
+    loadPref();
+    notificationPageVM.newNotificationCount;
     //  print(context);
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
@@ -473,8 +508,11 @@ class NotificationViewState extends State<NotificationView> {
                             new Map<String, dynamic>();
                         processrequestmap["id"] = notification.id;
                         print(notification.id);
-                        notificationPageVM
-                            .deleteNotification(processrequestmap);
+                        notification.message.contains("Your")
+                            ? notificationPageVM.deleteNotification(
+                                processrequestmap, false)
+                            : notificationPageVM.deleteNotification(
+                                processrequestmap, true);
                         Navigator.pop(context);
                       });
                     }),

@@ -57,6 +57,7 @@ const String SCR_PERMISSIONS = "Permissions";
 const String SCR_SCREENS = "Screens";
 const String SCR_PREF = "Preferences";
 const String SCR_DISPLAY = "Display Settings";
+const String SCR_NTF = "Notifications";
 
 const String ACCESS_TYPE_CREATE = "Create";
 const String ACCESS_TYPE_EDIT = "Edit";

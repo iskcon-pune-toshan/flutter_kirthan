@@ -6,7 +6,9 @@ import 'package:scoped_model/scoped_model.dart';
 class NotificationViewModel extends Model {
   Future<List<NotificationModel>> _notifications;
   final INotificationRestApi apiSvc;
+  Map<String, bool> accessTypes;
   NotificationViewModel({this.apiSvc});
+
   Future<List> get notifications => _notifications;
   int _unreadNotificationCount = 0;
 
@@ -40,8 +42,15 @@ class NotificationViewModel extends Model {
     return Future.value(true);
   }
 
-  Future<bool> deleteNotification(Map<String, dynamic> processrequestmap) {
-    Future<bool> deleteFlag = apiSvc?.deleteNotification(processrequestmap);
+  Future<bool> deleteNotification(
+      Map<String, dynamic> processrequestmap, bool response) {
+    Future<bool> deleteFlag;
+    //response = 0 => delete notification from notification table
+    //response = 1 => delete notification from notification approval table
+    if (response)
+      deleteFlag = apiSvc?.deleteNotificationApproval(processrequestmap);
+    else
+      deleteFlag = apiSvc?.deleteNotification(processrequestmap);
     return deleteFlag;
   }
 }

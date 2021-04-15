@@ -30,6 +30,7 @@ class NotificationManager extends BaseAPIService
       fms.getFBToken().then((deviceToken) {
         print(deviceToken);
         storeToken(deviceToken);
+        print("using firebase in ntf!");
       });
     } catch (Exception) {
       print("Error uploading token");
@@ -101,6 +102,10 @@ class NotificationManager extends BaseAPIService
           'Authorization': 'Bearer $token'
         },
         body: bodyData);
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else
+      print(response.statusCode);
   }
 
   void respondToNotification(var callback, String id, bool response) async {
@@ -115,6 +120,29 @@ class NotificationManager extends BaseAPIService
     var respData = convert.jsonDecode(resp.body);
     print(resp.statusCode);
     if (callback != null) callback();
+  }
+
+  Future<bool> deleteNotificationApproval(
+      Map<String, dynamic> processrequestmap) async {
+    //print(processrequestmap);
+    String requestBody = json.encode(processrequestmap);
+    //print(requestBody);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put(
+        '$baseUrl/api/notifications/deletenotificationapproval',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return true;
+    } else {
+      throw Exception('Failed to get data');
+    }
   }
 
   Future<bool> deleteNotification(
