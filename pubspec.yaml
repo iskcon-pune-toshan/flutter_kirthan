@@ -55,6 +55,7 @@ dependencies:
   draggable_fab: ^0.1.1
   syncfusion_flutter_calendar:
   datetime_picker_formfield:
+  flutter_speed_dial:
 
 
 

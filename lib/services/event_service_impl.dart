@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_interface.dart';
-import 'package:flutter_kirthan/views/pages/event/home_page_map/LocationModel.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as _http;
 
 class EventAPIService extends BaseAPIService implements IEventRestApi {
@@ -59,10 +58,14 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       throw Exception('Failed to get data');
     }
   }
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   //getEvent
   Future<List<EventRequest>> getEventRequests(String eventType) async {
     print("I am in Service: getEventRequests");
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    print(email);
 
     String requestBody = '';
 
@@ -86,13 +89,15 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     } else if (eventType == "This Month") {
       requestBody = '{"dateInterval": "This Month"}';
     } else if (eventType == "All" ||
-        eventType == "AA" ||
-        eventType == "Approved") {
-      requestBody = '{"approvalStatus" : "Approved"}';
+               eventType == "AA" ||
+               eventType == "Approved") {
+      requestBody = '{"isPublicEvent" : true , "approvalStatus" : "Approved"}';
     } else if (eventType == "Rejected") {
       requestBody = '{"approvalStatus" : "Rejected"}';
     } else if (eventType == "Waiting") {
-      requestBody = '{"approvalStatus" : "Waiting"}';
+      requestBody = '{"approvalStatus" : "Processing"}';
+    } else if (eventType == "MyEvent") {
+      requestBody = '{"createdBy" : ["$email"],"isProcessed" : true}';
     } else {
       requestBody = '{"eventDuration" : "$eventType"}';
     }

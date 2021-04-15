@@ -3,16 +3,16 @@ import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:flutter_kirthan/views/pages/event/event_create_invite.dart';
 import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/views/widgets/myevent/myeventdetails.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'Interested_events.dart';
-import 'int_item.dart';
-
+import 'package:flutter_kirthan/models/eventteam.dart';
 class Choice {
   const Choice({this.id, this.description});
 
@@ -20,11 +20,12 @@ class Choice {
   final String description;
 }
 
-class EventRequestsListItem extends StatelessWidget {
+class MyEventRequestsListItem extends StatelessWidget {
   final EventRequest eventrequest;
   final EventPageViewModel eventPageVM;
+  //final EventTeam eventteam;
   bool _isFavorited = false;
-  EventRequestsListItem({@required this.eventrequest, this.eventPageVM});
+  MyEventRequestsListItem({@required this.eventrequest, this.eventPageVM});
 
   List<Choice> popupList = [
     Choice(id: 1, description: "Process"),
@@ -37,6 +38,12 @@ class EventRequestsListItem extends StatelessWidget {
   // List<EventRequest> filtereMap = eventrequest
   //     .where((x) => x.eventDuration.contains(notifier.duration))
   //     .toList();
+  Color getcolor(){
+    if(eventrequest?.approvalStatus=="Approved")
+      return Colors.green;
+    else
+      return Colors.red;
+  }
   @override
   Widget build(BuildContext context) {
     var title = Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,7 +119,17 @@ class EventRequestsListItem extends StatelessWidget {
                 //splashColor: Colors.red,
                 color: KirthanStyles.colorPallete30,
 //shape: Border.all(width: 2.0, color: Colors.black)
-              ),
+              ),IconButton(icon: Icon(Icons.keyboard_arrow_right),onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          EventDetails(eventrequest: eventrequest)),
+//MapView(eventrequest: eventrequest)),
+
+//do something
+                );
+              },),
 /*              Container(
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -330,7 +347,7 @@ class EventRequestsListItem extends StatelessWidget {
 
     ]);
     var subTitle = Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         /*Icon(
           Icons.movie,
@@ -351,10 +368,41 @@ class EventRequestsListItem extends StatelessWidget {
           ),
         ),
 
+        Container(
+          alignment: Alignment.centerRight,
+          //margin: const EdgeInsets.only(left: 4.0),
+
+          child: Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Text(
+
+              eventrequest?.approvalStatus,
+
+              style: TextStyle(
+                color: getcolor(),
+                fontSize: notifier.custFontSize,
+              ),
+              textAlign: TextAlign.end,
+            ),
+          ),
+        ),
+
       ],
     );
 
-    return new Card(
+    return new GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    EventDetails(eventrequest: eventrequest)),
+//MapView(eventrequest: eventrequest)),
+
+//do something
+          );
+      print("Clicked on Card");
+    },
+    child: new Card(
       child: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
           decoration: new BoxDecoration(
@@ -459,7 +507,7 @@ class EventRequestsListItem extends StatelessWidget {
             ),
           ]),
         ),
-      ),
+      ),)
     );
   }
 }

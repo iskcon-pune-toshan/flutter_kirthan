@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
-import 'package:flutter_kirthan/views/pages/event/event_create_public.dart';
+import 'package:flutter_kirthan/views/widgets/myevent/myevent_panel.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -17,9 +18,9 @@ import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'event_calendar.dart';
+
 import 'package:flutter_kirthan/views/pages/event/event_create_invite.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -30,16 +31,16 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
 
-class EventView extends StatefulWidget {
-  final String title = "Events";
-  final String screenName = SCR_EVENT;
+class MyEventView extends StatefulWidget {
+  final String title = "My Events";
+  final String screenName = SCR_MYEVENT;
   EventRequest eventrequest;
-  EventView({Key key, @required this.eventrequest}) : super(key: key);
+  MyEventView({Key key, @required this.eventrequest}) : super(key: key);
   @override
-  _EventViewState createState() => _EventViewState();
+  _MyEventViewState createState() => _MyEventViewState();
 }
 
-class _EventViewState extends State<EventView> with BaseAPIService {
+class _MyEventViewState extends State<MyEventView> with BaseAPIService {
   List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month","Clear Filter"];
   String date;
   String datetomm;
@@ -58,7 +59,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
   http.Client client1 = http.Client();
   Future getevent() async {
     String requestBody = '';
-    requestBody = '{"isPublicEvent" : true , "approvalStatus" : "Approved"}';
+    requestBody = '{"approvalStatus" : "Approved"}';
     print(requestBody);
     String token = AutheticationAPIService().sessionJWTToken;
     print("search service");
@@ -105,10 +106,16 @@ class _EventViewState extends State<EventView> with BaseAPIService {
       //print(userdetails.length);
     });
   }
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  getCurrentUser() async {
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    print(email);
+    return email;
+  }
   final now = DateTime.now();
   Future loadData() async {
-    await eventPageVM.setEventRequests("All");
+    await eventPageVM.setEventRequests("MyEvent");
   }
 
   @override
@@ -119,7 +126,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     loadPref();
     NotificationManager ntfManger = NotificationManager();
     getevent();
-    print(event);
   }
 
   Future<Null> refreshList() async {
@@ -130,37 +136,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     });
     return null;
   }
-  SpeedDial buildSpeedDial() {
-    return SpeedDial(
-      animatedIcon: AnimatedIcons.add_event,
-      animatedIconTheme: IconThemeData(color: KirthanStyles.colorPallete60),
-      backgroundColor: KirthanStyles.colorPallete10,
-      visible: true,
-      curve: Curves.bounceInOut,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.event, color: Colors.white),
-          backgroundColor: KirthanStyles.colorPallete10,
-          onTap: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => EventWritePublic())),
-          label: 'Public Event',
-          labelStyle:
-          TextStyle(fontWeight: FontWeight.w500, color: KirthanStyles.colorPallete60),
-          labelBackgroundColor: KirthanStyles.colorPallete30,
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.event_note, color: Colors.white),
-          backgroundColor: KirthanStyles.colorPallete10,
-          onTap: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => EventWrite())),
-          label: 'Invite Team',
-          labelStyle:
-          TextStyle(fontWeight: FontWeight.w500, color: KirthanStyles.colorPallete60),
-          labelBackgroundColor: KirthanStyles.colorPallete30,
-        ),
-      ],
-    );
-  }
+
   @override
   Widget build(BuildContext context) {
     //accessTypes.containsKey(ACCESS_TYPE_CREATE)
@@ -168,25 +144,26 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
     return Consumer<ThemeNotifier>(
       builder: (content, notifier, child) => Scaffold(
+
         appBar: AppBar(
+
           title: Text(
-            "Events",
+            "My Events",
             //style: TextStyle(fontSize: notifier.custFontSize),
           ),
           actions: <Widget>[
-            IconButton(
+            /*IconButton(
                 icon: Icon(
                   Icons.search,
                 ),
                 onPressed: () => {
-                  print(event),
                       showSearch(
                         context: context,
                         delegate: Search(event),
                       )
 
-                    }),
-            PopupMenuButton(
+                    }),*/
+/*            PopupMenuButton(
                 icon: Icon(
                   Icons.tune,
                 ),
@@ -222,7 +199,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                       //checked: true,
                     );
                   }).toList();
-                }),
+                }),*/
           ],
           iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
         ),
@@ -231,14 +208,14 @@ class _EventViewState extends State<EventView> with BaseAPIService {
           key: refreshKey,
           child: ScopedModel<EventPageViewModel>(
             model: eventPageVM,
-            child: EventsPanel(
+            child: MyEventsPanel(
               eventType: "Pune",
             ),
           ),
           onRefresh: refreshList,
         ),
-        floatingActionButton:buildSpeedDial() /*FloatingActionButton(
-          heroTag: "event",
+        /*floatingActionButton: FloatingActionButton(
+          heroTag: "myevent",
           child: Icon(Icons.add),
           backgroundColor: KirthanStyles.colorPallete10,
           //tooltip: accessTypes["Create"].toString(),

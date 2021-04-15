@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
+import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
 import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
@@ -31,11 +32,11 @@ class AppState extends State<App> {
       icon: Icons.home,
       page: EventView(),
     ),
-    TabItem(
+    /*TabItem(
       tabName: "Users",
       icon: Icons.account_circle,
       page: UserView(),
-    ),
+    ),*/
   TabItem(
       tabName: "Teams",
       icon: Icons.people,
@@ -47,9 +48,9 @@ class AppState extends State<App> {
       page: NotificationView(),
     ),
     TabItem(
-      tabName: "Calendar",
+      tabName: "Events",
       icon: Icons.calendar_today,
-      page: CalendarPage(),
+      page: MyEventView(),
     ),
 
     /*TabItem(

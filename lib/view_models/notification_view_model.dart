@@ -2,6 +2,7 @@ import 'package:flutter_kirthan/models/notification.dart';
 import 'package:flutter_kirthan/services/notification_service_interface.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+//Modified for getNotificationsBySpec to seperate Today's & rest notifications.
 class NotificationViewModel extends Model {
   Future<List<NotificationModel>> _notifications;
   final INotificationRestApi apiSvc;
@@ -23,7 +24,14 @@ class NotificationViewModel extends Model {
 
   Future<List<NotificationModel>> getNotifications() async {
     List<NotificationModel> expectedData = await apiSvc?.getData();
-    print(expectedData);
+    //print(expectedData);
+    return expectedData;
+  }
+
+  //geting today's ntfs
+  Future<List<NotificationModel>> getNotificationsBySpec(String ntfType) async {
+    List<NotificationModel> expectedData =
+        await apiSvc?.getNotificationsBySpec(ntfType);
     return expectedData;
   }
 

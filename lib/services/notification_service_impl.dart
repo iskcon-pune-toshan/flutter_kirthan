@@ -55,6 +55,39 @@ class NotificationManager extends BaseAPIService
     return expectedData;
   }
 
+  //getNotification
+  Future<List<NotificationModel>> getNotificationsBySpec(String ntfType) async {
+    print("I am in Service: getNotificationsBySpec");
+
+    String requestBody = '';
+    //requestBody = '{"dateInterval" : "$ntfType"}';
+    if (ntfType == "TODAY") {
+      requestBody = '{"dateInterval" : "TODAY"}';
+    } else {
+      requestBody = '{"dateInterval" : "NOT TODAY"}';
+    }
+    print(requestBody);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/notifications/getntf',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
+    if (response.statusCode == 200) {
+      //print(response.body);
+      List<dynamic> data = json.decode(response.body);
+      print(data);
+      List<NotificationModel> expectedData =
+          data.map((element) => NotificationModel.fromJson(element)).toList();
+      //print(expectedData.toString());
+      return expectedData;
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+
   void storeToken(String deviceToken) async {
     String token = AutheticationAPIService().sessionJWTToken;
     Map<String, Object> body;
@@ -81,14 +114,15 @@ class NotificationManager extends BaseAPIService
     });
     var respData = convert.jsonDecode(resp.body);
     print(resp.statusCode);
+    print(callback);
     if (callback != null) callback();
   }
 
   Future<bool> deleteNotification(
       Map<String, dynamic> processrequestmap) async {
-    print(processrequestmap);
+    //print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
-    print(requestBody);
+    //print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put(
