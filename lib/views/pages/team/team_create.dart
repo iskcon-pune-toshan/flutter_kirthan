@@ -1,6 +1,8 @@
 import 'dart:core';
 
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/temple.dart';
@@ -49,14 +51,14 @@ class TeamWrite extends StatefulWidget {
 class _TeamWriteState extends State<TeamWrite> {
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
-
+  List<TeamUser> listofTeamUsers = new List<TeamUser>();
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
     super.initState();
   }
 
-  List<UserRequest> selectedUsers;
+  List<UserRequest> selectedUsers = new List<UserRequest>();
 
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
@@ -93,25 +95,15 @@ class _TeamWriteState extends State<TeamWrite> {
     'Sunday',
     'Anyday'
   ];
-  List<String> _availableTime = [
-    'Before 7am'
-        '7am - 10am',
-    '10am - 12pm',
-    '12pm - 3pm',
-    '3pm - 6pm',
-    '6pm - 9pm',
-    'After 9pm'
-  ];
   String _selectedCategory;
-  String _selectedAvailableTime;
   String _selectedWeekday;
   String _selectedLocation;
   String _selectedTeamLeadId;
   String _selectedTeamMember1;
   String _selectedTeamMember2;
   String _selectedTeamMember3;
-  String _selectedTeamMember4;
-  String _selectedTeamMember5;
+  // String _selectedTeamMember4;
+  // String _selectedTeamMember5;
   String validateMobile(String value) {
     String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = new RegExp(patttern);
@@ -123,48 +115,75 @@ class _TeamWriteState extends State<TeamWrite> {
     return null;
   }
 
+  //check if user in User is registered
+  bool containUserName(List<UserRequest> userList, String _selectedTeamMember) {
+    if (userList.contains(_selectedTeamMember)) {
+      //print("true");
+      return true;
+    } else {
+      //print("false");
+      return false;
+    }
+  }
+
+  //Add user if not registered
+  void addUser(String _selectedTeamMember) {
+    TeamUser teamUser = new TeamUser();
+    teamUser.userId = null;
+    teamUser.teamId = teamrequest.id;
+    teamUser.userName = _selectedTeamMember;
+    teamUser.createdBy = "SYSTEM";
+    String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+    teamUser.createdTime = dt;
+    teamUser.updatedBy = "SYSTEM";
+    teamUser.updatedTime = dt;
+    listofTeamUsers.add(teamUser);
+    //print("User Added");
+  }
+
+  void addRegisteredUser(
+      List<UserRequest> userList, String _selectedTeamMember) {
+    selectedUsers = selectedUsers +
+        userList
+            .where((element) => element.userName == _selectedTeamMember)
+            .toList();
+  }
+
   Widget addMember() {
     //Divider();
     String _selectedTeamMembernew;
-    return Column(
-      children: [
-        SizedBox(
-          height: 35,
-        ),
-        FutureBuilder<List<UserRequest>>(
-            future: Users,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<UserRequest>> snapshot) {
-              if (snapshot.data != null) {
-                userList = snapshot.data;
-                List<String> _teamMember =
-                    userList.map((user) => user.userName).toSet().toList();
-                print(userList);
-                DropdownButtonFormField<String>(
-                  value: _selectedTeamMembernew,
-                  icon: const Icon(Icons.account_circle),
-                  hint: Text('Select Team Member',
-                      style: TextStyle(color: Colors.grey)),
-                  items: _teamMember
-                      .map((teamMember) => DropdownMenuItem<String>(
-                            value: teamMember,
-                            child: Text(teamMember),
-                          ))
-                      .toList(),
-                  onChanged: (input) {
-                    setState(() {
-                      _selectedTeamMembernew = input;
-                    });
-                  },
-                  // onSaved: (input) {
-                  //   teamrequest.teamMember = input ;
-                  // },
-                );
-              }
-              return Container();
-            }),
-      ],
-    );
+    return FutureBuilder<List<UserRequest>>(
+        future: Users,
+        builder:
+            (BuildContext context, AsyncSnapshot<List<UserRequest>> snapshot) {
+          if (snapshot.data != null) {
+            userList = snapshot.data;
+            List<String> _teamMember =
+                userList.map((user) => user.userName).toSet().toList();
+            print(userList);
+            DropdownButtonFormField<String>(
+              value: _selectedTeamMembernew,
+              icon: const Icon(Icons.account_circle),
+              hint: Text('Select Team Member',
+                  style: TextStyle(color: Colors.grey)),
+              items: _teamMember
+                  .map((teamMember) => DropdownMenuItem<String>(
+                        value: teamMember,
+                        child: Text(teamMember),
+                      ))
+                  .toList(),
+              onChanged: (input) {
+                setState(() {
+                  _selectedTeamMembernew = input;
+                });
+              },
+              // onSaved: (input) {
+              //   teamrequest.teamMember = input ;
+              // },
+            );
+          }
+          return Container();
+        });
   }
 
   @override
@@ -459,25 +478,80 @@ class _TeamWriteState extends State<TeamWrite> {
                           SizedBox(
                             height: 35,
                           ),
-                          DropdownButtonFormField<String>(
-                            value: _selectedAvailableTime,
-                            icon: const Icon(Icons.timer),
-                            hint: Text('Select Available Time',
-                                style: TextStyle(color: Colors.grey)),
-                            items: _availableTime
-                                .map((availableTime) => DropdownMenuItem(
-                                      value: availableTime,
-                                      child: Text(availableTime),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedAvailableTime = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              teamrequest.availableTime = input;
-                            },
+                          Container(
+                            padding: new EdgeInsets.all(10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Text(
+                                  "Available From",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                DateTimeField(
+                                  format: DateFormat("HH:mm"),
+                                  onShowPicker: (context, currentValue) async {
+                                    final time = await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.fromDateTime(
+                                          currentValue ?? DateTime.now()),
+                                    );
+                                    return DateTimeField.convert(time);
+                                  },
+                                  onSaved: (input) {
+                                    teamrequest.availableFrom =
+                                        DateFormat("HH:mm")
+                                            .format(input)
+                                            .toString();
+                                  },
+                                  validator: (value) {
+                                    if (value.toString().isEmpty) {
+                                      return "Please enter some text";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                            padding: new EdgeInsets.all(10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Text(
+                                  "Available To",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                DateTimeField(
+                                  format: DateFormat("HH:mm"),
+                                  onShowPicker: (context, currentValue) async {
+                                    final time = await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.fromDateTime(
+                                          currentValue ?? DateTime.now()),
+                                    );
+                                    return DateTimeField.convert(time);
+                                  },
+                                  onSaved: (input) {
+                                    teamrequest.availableTo =
+                                        DateFormat("HH:mm")
+                                            .format(input)
+                                            .toString();
+                                  },
+                                  validator: (value) {
+                                    if (value.toString().isEmpty) {
+                                      return "Please enter some text";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(
                             height: 35,
@@ -487,37 +561,60 @@ class _TeamWriteState extends State<TeamWrite> {
                               builder: (BuildContext context,
                                   AsyncSnapshot<List<UserRequest>> snapshot) {
                                 if (snapshot.data != null) {
-                                  userList = snapshot.data;
-                                  List<String> _teamMember = userList
-                                      .map((user) => user.userName)
-                                      .toSet()
-                                      .toList();
                                   print(userList);
-                                  return DropdownButtonFormField<String>(
-                                    value: _selectedTeamMember1,
-                                    icon: const Icon(Icons.account_circle),
-                                    hint: Text('Select Team Member 1',
-                                        style: TextStyle(color: Colors.grey)),
-                                    items: _teamMember
-                                        .map((teamMember) =>
-                                            DropdownMenuItem<String>(
-                                              value: teamMember,
-                                              child: Text(teamMember),
-                                            ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedTeamMember1 = input;
-                                        selectedUsers = userList
-                                            .where((element) =>
-                                                element.userName ==
-                                                _selectedTeamMember1)
-                                            .toList();
-                                      });
-                                    },
-                                    // onSaved: (input) {
-                                    //   teamrequest.teamMember = input  ;
-                                    // },
+                                  userList = snapshot.data;
+                                  return Card(
+                                    child: Container(
+                                      //color: Colors.white,
+                                      padding: new EdgeInsets.all(10),
+                                      child: TextFormField(
+                                        //attribute: "Description",
+
+                                        decoration: InputDecoration(
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.green),
+                                            ),
+                                            /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                                            labelText: "Add Team Member1",
+                                            hintText: "Add Team Member",
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            labelStyle: TextStyle(
+                                              color: Colors.grey,
+                                            )),
+                                        onChanged: (input) {
+                                          setState(() {
+                                            _selectedTeamMember1 = input;
+                                          });
+                                        },
+                                        onSaved: (input) {
+                                          setState(() {
+                                            _selectedTeamMember1 = input;
+                                            containUserName(userList,
+                                                    _selectedTeamMember1)
+                                                ? addRegisteredUser(userList,
+                                                    _selectedTeamMember1)
+                                                : addUser(_selectedTeamMember1);
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return "Please enter some text";
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                    elevation: 5,
                                   );
                                 }
                                 return Container();
@@ -531,37 +628,58 @@ class _TeamWriteState extends State<TeamWrite> {
                                   AsyncSnapshot<List<UserRequest>> snapshot) {
                                 if (snapshot.data != null) {
                                   userList = snapshot.data;
-                                  List<String> _teamMember = userList
-                                      .map((user) => user.userName)
-                                      .toSet()
-                                      .toList();
-                                  print(userList);
-                                  return DropdownButtonFormField<String>(
-                                    value: _selectedTeamMember2,
-                                    icon: const Icon(Icons.account_circle),
-                                    hint: Text('Select Team Member 2',
-                                        style: TextStyle(color: Colors.grey)),
-                                    items: _teamMember
-                                        .map((teamMember) =>
-                                            DropdownMenuItem<String>(
-                                              value: teamMember,
-                                              child: Text(teamMember),
-                                            ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedTeamMember2 = input;
-                                        selectedUsers = selectedUsers +
-                                            userList
-                                                .where((element) =>
-                                                    element.userName ==
+                                  return Card(
+                                    child: Container(
+                                      //color: Colors.white,
+                                      padding: new EdgeInsets.all(10),
+                                      child: TextFormField(
+                                        //attribute: "Description",
+
+                                        decoration: InputDecoration(
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.green),
+                                            ),
+                                            /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                                            labelText: "Add Team Member2",
+                                            hintText: "Add Team Member",
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            labelStyle: TextStyle(
+                                              color: Colors.grey,
+                                            )),
+                                        onChanged: (input) {
+                                          setState(() {
+                                            _selectedTeamMember2 = input;
+                                          });
+                                        },
+                                        onSaved: (input) {
+                                          setState(() {
+                                            _selectedTeamMember2 = input;
+                                            containUserName(userList,
                                                     _selectedTeamMember2)
-                                                .toList();
-                                      });
-                                    },
-                                    // onSaved: (input) {
-                                    //   teamrequest.teamMember = input ;
-                                    // },
+                                                ? addRegisteredUser(userList,
+                                                    _selectedTeamMember2)
+                                                : addUser(_selectedTeamMember2);
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return "Please enter some text";
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                    elevation: 5,
                                   );
                                 }
                                 return Container();
@@ -575,125 +693,61 @@ class _TeamWriteState extends State<TeamWrite> {
                                   AsyncSnapshot<List<UserRequest>> snapshot) {
                                 if (snapshot.data != null) {
                                   userList = snapshot.data;
-                                  List<String> _teamMember = userList
-                                      .map((user) => user.userName)
-                                      .toSet()
-                                      .toList();
                                   print(userList);
-                                  return DropdownButtonFormField<String>(
-                                    value: _selectedTeamMember3,
-                                    icon: const Icon(Icons.account_circle),
-                                    hint: Text('Select Team Member 3',
-                                        style: TextStyle(color: Colors.grey)),
-                                    items: _teamMember
-                                        .map((teamMember) =>
-                                            DropdownMenuItem<String>(
-                                              value: teamMember,
-                                              child: Text(teamMember),
-                                            ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedTeamMember3 = input;
-                                        selectedUsers = selectedUsers +
-                                            userList
-                                                .where((element) =>
-                                                    element.userName ==
+                                  return Card(
+                                    child: Container(
+                                      //color: Colors.white,
+                                      padding: new EdgeInsets.all(10),
+                                      child: TextFormField(
+                                        //attribute: "Description",
+
+                                        decoration: InputDecoration(
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.green),
+                                            ),
+                                            /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                                            labelText: "Add Team Member3",
+                                            hintText: "Add Team Member",
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            labelStyle: TextStyle(
+                                              color: Colors.grey,
+                                            )),
+                                        onChanged: (input) {
+                                          setState(() {
+                                            _selectedTeamMember3 = input;
+                                            print(selectedUsers);
+                                          });
+                                        },
+                                        onSaved: (input) {
+                                          setState(() {
+                                            _selectedTeamMember3 = input;
+                                            containUserName(userList,
                                                     _selectedTeamMember3)
-                                                .toList();
-                                      });
-                                    },
-                                    // onSaved: (input) {
-                                    //   teamrequest.teamMember = input  ;
-                                    // },
-                                  );
-                                }
-                                return Container();
-                              }),
-                          SizedBox(
-                            height: 35,
-                          ),
-                          FutureBuilder<List<UserRequest>>(
-                              future: Users,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<UserRequest>> snapshot) {
-                                if (snapshot.data != null) {
-                                  userList = snapshot.data;
-                                  List<String> _teamMember = userList
-                                      .map((user) => user.userName)
-                                      .toSet()
-                                      .toList();
-                                  print(userList);
-                                  return DropdownButtonFormField<String>(
-                                    value: _selectedTeamMember4,
-                                    icon: const Icon(Icons.account_circle),
-                                    hint: Text('Select Team Member 4',
-                                        style: TextStyle(color: Colors.grey)),
-                                    items: _teamMember
-                                        .map((teamMember) =>
-                                            DropdownMenuItem<String>(
-                                              value: teamMember,
-                                              child: Text(teamMember),
-                                            ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedTeamMember4 = input;
-                                        selectedUsers = selectedUsers +
-                                            userList
-                                                .where((element) =>
-                                                    element.userName ==
-                                                    _selectedTeamMember4)
-                                                .toList();
-                                      });
-                                    },
-                                    // onSaved: (input) {
-                                    //   teamrequest.teamMember = input ;
-                                    // },
-                                  );
-                                }
-                                return Container();
-                              }),
-                          SizedBox(
-                            height: 35,
-                          ),
-                          FutureBuilder<List<UserRequest>>(
-                              future: Users,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<UserRequest>> snapshot) {
-                                if (snapshot.data != null) {
-                                  userList = snapshot.data;
-                                  List<String> _teamMember = userList
-                                      .map((user) => user.userName)
-                                      .toSet()
-                                      .toList();
-                                  print(userList);
-                                  return DropdownButtonFormField<String>(
-                                    value: _selectedTeamMember5,
-                                    icon: const Icon(Icons.account_circle),
-                                    hint: Text('Select Team Member 5',
-                                        style: TextStyle(color: Colors.grey)),
-                                    items: _teamMember
-                                        .map((teamMember) =>
-                                            DropdownMenuItem<String>(
-                                              value: teamMember,
-                                              child: Text(teamMember),
-                                            ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedTeamMember5 = input;
-                                        selectedUsers = selectedUsers +
-                                            userList
-                                                .where((element) =>
-                                                    element.userName ==
-                                                    _selectedTeamMember5)
-                                                .toList();
-                                      });
-                                    },
-                                    // onSaved: (input) {
-                                    //   teamrequest.teamMember = input ;
-                                    // },
+                                                ? addRegisteredUser(userList,
+                                                    _selectedTeamMember3)
+                                                : addUser(_selectedTeamMember3);
+                                            //print(selectedUsers);
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return "Please enter some text";
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                    elevation: 5,
                                   );
                                 }
                                 return Container();
@@ -704,19 +758,13 @@ class _TeamWriteState extends State<TeamWrite> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // memberCount.length == 0
-                        //     ? new ListView.builder(
-                        //         itemCount: dynamicList.length,
-                        //         itemBuilder: (_, index) => dynamicList[index],
-                        //       )
-                        //     : Text("Failed"),
                         RaisedButton.icon(
                           label: Text('Add'),
                           icon: const Icon(Icons.add_circle),
                           color: Colors.green,
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
-                              return addMember();
+                              addMember();
                             });
                           },
                         ),
@@ -745,28 +793,29 @@ class _TeamWriteState extends State<TeamWrite> {
                                     final FirebaseUser user =
                                         await auth.currentUser();
                                     final String email = user.email;
-                                    List<TeamUser> listofTeamUsers =
+                                    List<TeamUser> listofRegisteredTeamUsers =
                                         new List<TeamUser>();
-                                    for (var user in selectedUsers) {
-                                      TeamUser teamUser = new TeamUser();
-                                      teamUser.userId = user.id;
-                                      teamUser.teamId = teamrequest.id;
-                                      teamUser.userName = user.userName;
-                                      teamUser.createdBy = "SYSTEM";
-                                      String dt = DateFormat(
-                                              "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                          .format(DateTime.now());
-                                      teamUser.createdTime = dt;
-                                      teamUser.updatedBy = "SYSTEM";
-                                      teamUser.updatedTime = dt;
-                                      listofTeamUsers.add(teamUser);
+                                    if (selectedUsers.isNotEmpty == true) {
+                                      for (var user in selectedUsers) {
+                                        TeamUser teamUser = new TeamUser();
+                                        teamUser.userId = user.id;
+                                        teamUser.teamId = teamrequest.id;
+                                        teamUser.userName = user.userName;
+                                        teamUser.createdBy = "SYSTEM";
+                                        String dt = DateFormat(
+                                                "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                            .format(DateTime.now());
+                                        teamUser.createdTime = dt;
+                                        teamUser.updatedBy = "SYSTEM";
+                                        teamUser.updatedTime = dt;
+                                        listofRegisteredTeamUsers.add(teamUser);
+                                      }
                                     }
                                     print(listofTeamUsers);
                                     String dt =
                                         DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                             .format(DateTime.now());
                                     _formKey.currentState.save();
-
                                     final String teamTitle =
                                         teamrequest.teamTitle;
                                     teamrequest.isProcessed = false;
