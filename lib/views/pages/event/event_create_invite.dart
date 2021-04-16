@@ -27,7 +27,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
-
+final TeamPageViewModel teamPageVM =
+    TeamPageViewModel(apiSvc: TeamAPIService());
 class EventWrite extends StatefulWidget {
   // EventWrite({Key key}) : super(key: key);
   //TeamUserCreate({this.selectedUsers}) : super();
@@ -120,15 +121,15 @@ TeamRequest _selectedTeam;
   String _selectedState;
   String _selectedCountry;
   bool selected;
-  //Future<List<TeamRequest>> teams;
+  Future<List<TeamRequest>> teams;
   void initState() {
 
     //events = eventPageVM.getEventRequests("AA");
-    //teams = teamPageVM.getTeamRequests("Approved");
+    teams = teamPageVM.getTeamRequests("Approved");
     super.initState();
     //_selectedTeam =  null;
   }
-/*  FutureBuilder getTeamsWidget() {
+  FutureBuilder getTeamsWidget() {
     return FutureBuilder<List<TeamRequest>>(
         future: teams,
         builder:
@@ -147,24 +148,32 @@ TeamRequest _selectedTeam;
                     child: DropdownButtonFormField<TeamRequest>(
                       value: _selectedTeam,
                       icon: const Icon(Icons.supervisor_account),
-                      hint: Text('Select Team',style:TextStyle(
+                      hint: Text('Event Type',style:TextStyle(
                         color: Colors.grey,
                       ),),
                       items: snapshot.data
                           .map((team) => DropdownMenuItem<TeamRequest>(
                         value: team,
-                        child: Text(team.teamTitle),
+                        child: Text(team.teamDescription),
                       ))
                           .toList(),
                       onChanged: (input) {
                         setState(() {
                           _selectedTeam = input;
+                          print(_selectedTeam.teamDescription);
                           //_selectedTeam=selectedTeamfor;
                           selectedTeam = _selectedTeam;
-                          print(_selectedTeam.id);
+                          eventrequest.eventType = _selectedTeam.teamDescription;
+                          print(eventrequest.eventType);
                         });
                       },
+                      onSaved: (input) {
+                        print(input);
+                        eventrequest.eventType = input.teamDescription.toString();
+                        print(input.teamDescription);
+                      },
                     ),
+
                   ),
                 );
 
@@ -179,7 +188,8 @@ TeamRequest _selectedTeam;
               }
           }
         });
-  }*/
+  }
+
   handleTap(LatLng tappedPoint1) {
     print(tappedPoint1);
     //print(tappedPoint2);
@@ -612,7 +622,8 @@ TeamRequest _selectedTeam;
                       ),
                       elevation: 5,
                     ),*/
-                    Container(
+                    getTeamsWidget(),
+                    /*Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
 
@@ -646,7 +657,7 @@ TeamRequest _selectedTeam;
                             return null;
                           },
                         ),
-                      ),
+                      ),*/
 
                      Container(
                         //padding: new EdgeInsets.all(10),
