@@ -13,6 +13,8 @@ class TeamRequest {
   String approvalStatus;
   String approvalComments;
   String availableTime;
+  String availableFrom;
+  String availableTo;
   String weekDay;
   String location;
   String category;
@@ -36,6 +38,8 @@ class TeamRequest {
       this.approvalStatus,
       this.approvalComments,
       this.availableTime,
+      this.availableFrom,
+      this.availableTo,
       this.weekDay,
       this.location,
       this.category,
@@ -60,6 +64,8 @@ class TeamRequest {
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
       availableTime: data['availableTime'],
+      availableFrom: data['availableFrom'],
+      availableTo: data['availableTo'],
       weekDay: data['weekDay'],
       location: data['location'],
       category: data['category'],
@@ -85,6 +91,8 @@ class TeamRequest {
       approvalStatus: map['approvalStatus'],
       approvalComments: map['approvalComments'],
       availableTime: map['availableTime'],
+      availableFrom: map['availableFrom'],
+      availableTo: map['availableTo'],
       weekDay: map['weekDay'],
       location: map['location'],
       category: map['category'],
@@ -109,6 +117,8 @@ class TeamRequest {
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
     data['availableTime'] = this.availableTime;
+    data['availableFrom'] = this.availableFrom;
+    data['availableTo'] = this.availableTo;
     data['weekDay'] = this.weekDay;
     data['location'] = this.location;
     data['category'] = this.category;

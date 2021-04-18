@@ -51,14 +51,14 @@ class TeamWrite extends StatefulWidget {
 class _TeamWriteState extends State<TeamWrite> {
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
-  List<TeamUser> listofTeamUsers = new List<TeamUser>();
+  // List<TeamUser> listofTeamUsers = new List<TeamUser>();
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
     super.initState();
   }
 
-  List<UserRequest> selectedUsers = new List<UserRequest>();
+  // List<UserRequest> selectedUsers = new List<UserRequest>();
 
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
@@ -102,8 +102,6 @@ class _TeamWriteState extends State<TeamWrite> {
   String _selectedTeamMember1;
   String _selectedTeamMember2;
   String _selectedTeamMember3;
-  // String _selectedTeamMember4;
-  // String _selectedTeamMember5;
   String validateMobile(String value) {
     String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = new RegExp(patttern);
@@ -116,38 +114,42 @@ class _TeamWriteState extends State<TeamWrite> {
   }
 
   //check if user in User is registered
-  bool containUserName(List<UserRequest> userList, String _selectedTeamMember) {
-    if (userList.contains(_selectedTeamMember)) {
-      //print("true");
-      return true;
-    } else {
-      //print("false");
-      return false;
-    }
-  }
+  // bool containUserName(List<UserRequest> userList, String _selectedTeamMember) {
+  //   if (userList
+  //       .where((element) => element.userName == _selectedTeamMember)
+  //       .toList()
+  //       .isNotEmpty) {
+  //     print("true");
+  //     return true;
+  //   } else {
+  //     print("false");
+  //     return false;
+  //   }
+  // }
 
   //Add user if not registered
-  void addUser(String _selectedTeamMember) {
-    TeamUser teamUser = new TeamUser();
-    teamUser.userId = null;
-    teamUser.teamId = teamrequest.id;
-    teamUser.userName = _selectedTeamMember;
-    teamUser.createdBy = "SYSTEM";
-    String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-    teamUser.createdTime = dt;
-    teamUser.updatedBy = "SYSTEM";
-    teamUser.updatedTime = dt;
-    listofTeamUsers.add(teamUser);
-    //print("User Added");
-  }
+  // void addUser(String _selectedTeamMember) {
+  //   TeamUser teamUser = new TeamUser();
+  //   teamUser.userId = 0;
+  //   teamUser.teamId = teamrequest.id;
+  //   teamUser.userName = _selectedTeamMember;
+  //   teamUser.createdBy = "SYSTEM";
+  //   String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+  //   teamUser.createdTime = dt;
+  //   teamUser.updatedBy = "SYSTEM";
+  //   teamUser.updatedTime = dt;
+  //   listofTeamUsers.add(teamUser);
+  //   print("add unregistered user executed");
+  // }
 
-  void addRegisteredUser(
-      List<UserRequest> userList, String _selectedTeamMember) {
-    selectedUsers = selectedUsers +
-        userList
-            .where((element) => element.userName == _selectedTeamMember)
-            .toList();
-  }
+  // void addRegisteredUser(
+  //     List<UserRequest> userList, String _selectedTeamMember) {
+  //   selectedUsers = selectedUsers +
+  //       userList
+  //           .where((element) => element.userName == _selectedTeamMember)
+  //           .toList();
+  //   print("add Registered user executed");
+  // }
 
   Widget addMember() {
     //Divider();
@@ -596,16 +598,18 @@ class _TeamWriteState extends State<TeamWrite> {
                                             _selectedTeamMember1 = input;
                                           });
                                         },
-                                        onSaved: (input) {
-                                          setState(() {
-                                            _selectedTeamMember1 = input;
-                                            containUserName(userList,
-                                                    _selectedTeamMember1)
-                                                ? addRegisteredUser(userList,
-                                                    _selectedTeamMember1)
-                                                : addUser(_selectedTeamMember1);
-                                          });
-                                        },
+                                        // onEditingComplete: () {
+                                        //   setState(() {
+                                        //     containUserName(userList,
+                                        //             _selectedTeamMember1)
+                                        //         ? selectedUsers = userList
+                                        //             .where((element) =>
+                                        //                 element.userName ==
+                                        //                 _selectedTeamMember1)
+                                        //             .toList()
+                                        //         : addUser(_selectedTeamMember1);
+                                        //   });
+                                        // },
                                         validator: (value) {
                                           if (value.isEmpty) {
                                             return "Please enter some text";
@@ -661,22 +665,21 @@ class _TeamWriteState extends State<TeamWrite> {
                                             _selectedTeamMember2 = input;
                                           });
                                         },
-                                        onSaved: (input) {
-                                          setState(() {
-                                            _selectedTeamMember2 = input;
-                                            containUserName(userList,
-                                                    _selectedTeamMember2)
-                                                ? addRegisteredUser(userList,
-                                                    _selectedTeamMember2)
-                                                : addUser(_selectedTeamMember2);
-                                          });
-                                        },
                                         validator: (value) {
                                           if (value.isEmpty) {
                                             return "Please enter some text";
                                           }
                                           return null;
                                         },
+                                        // onEditingComplete: () {
+                                        //   setState(() {
+                                        //     containUserName(userList,
+                                        //             _selectedTeamMember2)
+                                        //         ? addRegisteredUser(userList,
+                                        //             _selectedTeamMember2)
+                                        //         : addUser(_selectedTeamMember2);
+                                        //   });
+                                        // },
                                       ),
                                     ),
                                     elevation: 5,
@@ -725,20 +728,15 @@ class _TeamWriteState extends State<TeamWrite> {
                                         onChanged: (input) {
                                           setState(() {
                                             _selectedTeamMember3 = input;
-                                            print(selectedUsers);
                                           });
                                         },
-                                        onSaved: (input) {
-                                          setState(() {
-                                            _selectedTeamMember3 = input;
-                                            containUserName(userList,
-                                                    _selectedTeamMember3)
-                                                ? addRegisteredUser(userList,
-                                                    _selectedTeamMember3)
-                                                : addUser(_selectedTeamMember3);
-                                            //print(selectedUsers);
-                                          });
-                                        },
+                                        // onEditingComplete: () {
+                                        //   containUserName(userList,
+                                        //           _selectedTeamMember3)
+                                        //       ? addRegisteredUser(userList,
+                                        //           _selectedTeamMember3)
+                                        //       : addUser(_selectedTeamMember3);
+                                        // },
                                         validator: (value) {
                                           if (value.isEmpty) {
                                             return "Please enter some text";
@@ -787,31 +785,33 @@ class _TeamWriteState extends State<TeamWrite> {
                                 ),
                                 color: KirthanStyles.colorPallete30,
                                 onPressed: () async {
+                                  List<String> selectedMembers = [
+                                    _selectedTeamMember1,
+                                    _selectedTeamMember2,
+                                    _selectedTeamMember3
+                                  ];
+                                  print(selectedMembers);
                                   if (_formKey.currentState.validate()) {
                                     final FirebaseAuth auth =
                                         FirebaseAuth.instance;
                                     final FirebaseUser user =
                                         await auth.currentUser();
                                     final String email = user.email;
-                                    List<TeamUser> listofRegisteredTeamUsers =
-                                        new List<TeamUser>();
-                                    if (selectedUsers.isNotEmpty == true) {
-                                      for (var user in selectedUsers) {
-                                        TeamUser teamUser = new TeamUser();
-                                        teamUser.userId = user.id;
-                                        teamUser.teamId = teamrequest.id;
-                                        teamUser.userName = user.userName;
-                                        teamUser.createdBy = "SYSTEM";
-                                        String dt = DateFormat(
-                                                "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                            .format(DateTime.now());
-                                        teamUser.createdTime = dt;
-                                        teamUser.updatedBy = "SYSTEM";
-                                        teamUser.updatedTime = dt;
-                                        listofRegisteredTeamUsers.add(teamUser);
-                                      }
-                                    }
-                                    print(listofTeamUsers);
+                                    // for (var user in selectedUsers) {
+                                    //   TeamUser teamUser = new TeamUser();
+                                    //   teamUser.userId = user.id;
+                                    //   teamUser.teamId = teamrequest.id;
+                                    //   teamUser.userName = user.userName;
+                                    //   teamUser.createdBy = "SYSTEM";
+                                    //   String dt = DateFormat(
+                                    //           "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                    //       .format(DateTime.now());
+                                    //   teamUser.createdTime = dt;
+                                    //   teamUser.updatedBy = "SYSTEM";
+                                    //   teamUser.updatedTime = dt;
+                                    //   listofTeamUsers.add(teamUser);
+                                    // }
+                                    // print(listofTeamUsers);
                                     String dt =
                                         DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                             .format(DateTime.now());
@@ -827,15 +827,18 @@ class _TeamWriteState extends State<TeamWrite> {
                                     teamrequest.approvalStatus = "approved";
                                     teamrequest.approvalComments =
                                         "Approved$teamTitle";
-                                    teamrequest.listOfTeamMembers =
-                                        listofTeamUsers;
+                                    // teamrequest.listOfTeamMembers =
+                                    //     listofTeamUsers;
                                     setState(() {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 TeamLocalAdmin(
-                                                    teamrequest: teamrequest)),
+                                                  teamrequest: teamrequest,
+                                                  selectedMembers:
+                                                      selectedMembers,
+                                                )),
                                       );
                                     });
                                   }

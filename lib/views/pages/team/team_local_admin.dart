@@ -38,7 +38,10 @@ final UserTemplePageViewModel userTemplePageVM =
 
 class TeamLocalAdmin extends StatefulWidget {
   TeamRequest teamrequest;
-  TeamLocalAdmin({Key key, @required this.teamrequest}) : super(key: key);
+  List<String> selectedMembers;
+  TeamLocalAdmin(
+      {Key key, @required this.teamrequest, @required this.selectedMembers})
+      : super(key: key);
 
   final String screenName = SCR_TEAM;
 
@@ -48,6 +51,7 @@ class TeamLocalAdmin extends StatefulWidget {
 
 class _TeamLocalAdminState extends State<TeamLocalAdmin> {
   Future<List<UserRequest>> Users;
+  List<UserRequest> selectedUsers = new List<UserRequest>();
   Future<List<Temple>> Temples;
   Future<List<UserTemple>> UserTemples;
   List<UserRequest> userList = new List<UserRequest>();
@@ -62,11 +66,42 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
     super.initState();
   }
 
-  List<UserRequest> selectedUsers;
   List<UserTemple> userTemples;
   final _formKey = GlobalKey<FormState>();
   String _selectedTempleArea;
   String _selectedLocalAdmin;
+  List<TeamUser> listofTeamUsers = new List<TeamUser>();
+
+  void addUser(
+      List<UserRequest> userList, String _selectedTeamMember, int index) {
+    if (userList
+        .where((element) => element.userName == _selectedTeamMember)
+        .toList()
+        .isNotEmpty) {
+      if (index == 0) {
+        selectedUsers = userList
+            .where((element) => element.userName == _selectedTeamMember)
+            .toList();
+      } else {
+        selectedUsers = selectedUsers +
+            userList
+                .where((element) => element.userName == _selectedTeamMember)
+                .toList();
+      }
+    } else {
+      TeamUser teamUser = new TeamUser();
+      teamUser.userId = 0;
+      teamUser.teamId = widget.teamrequest.id;
+      teamUser.userName = _selectedTeamMember;
+      teamUser.createdBy = "SYSTEM";
+      String dt =
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      teamUser.createdTime = dt;
+      teamUser.updatedBy = "SYSTEM";
+      teamUser.updatedTime = dt;
+      listofTeamUsers.add(teamUser);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,33 +239,71 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            MaterialButton(
-                                child: Text(
-                                  "Send",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                color: KirthanStyles.colorPallete30,
-                                onPressed: () async {
-                                  if (_formKey.currentState.validate()) {
-                                    _formKey.currentState.save();
+                            FutureBuilder<List<UserRequest>>(
+                                future: Users,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<UserRequest>> snapshot) {
+                                  if (snapshot.data != null) {
+                                    userList = snapshot.data;
+                                    return MaterialButton(
+                                        child: Text(
+                                          "Send",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: KirthanStyles.colorPallete30,
+                                        onPressed: () async {
+                                          if (_formKey.currentState
+                                              .validate()) {
+                                            _formKey.currentState.save();
+                                            int i = 0;
+                                            for (var member
+                                                in widget.selectedMembers) {
+                                              addUser(userList, member, i);
+                                              i++;
+                                            }
+                                            for (var user in selectedUsers) {
+                                              TeamUser teamUser =
+                                                  new TeamUser();
+                                              teamUser.userId = user.id;
+                                              teamUser.teamId =
+                                                  widget.teamrequest.id;
+                                              teamUser.userName = user.userName;
+                                              teamUser.createdBy = "SYSTEM";
+                                              String dt = DateFormat(
+                                                      "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                                  .format(DateTime.now());
+                                              teamUser.createdTime = dt;
+                                              teamUser.updatedBy = "SYSTEM";
+                                              teamUser.updatedTime = dt;
+                                              listofTeamUsers.add(teamUser);
+                                            }
+                                            print(listofTeamUsers);
+                                            widget.teamrequest
+                                                    .listOfTeamMembers =
+                                                listofTeamUsers;
+                                            Map<String, dynamic> teammap =
+                                                widget.teamrequest.toJson();
+                                            TeamRequest newteamrequest =
+                                                await teamPageVM
+                                                    .submitNewTeamRequest(
+                                                        teammap);
 
-                                    Map<String, dynamic> teammap =
-                                        widget.teamrequest.toJson();
-                                    TeamRequest newteamrequest =
-                                        await teamPageVM
-                                            .submitNewTeamRequest(teammap);
-
-                                    print(newteamrequest.id);
-                                    String tid = newteamrequest.id.toString();
-                                    SnackBar mysnackbar = SnackBar(
-                                      content: Text(
-                                          "Team registered $successful with $tid"),
-                                      duration: new Duration(seconds: 4),
-                                      backgroundColor: Colors.green,
-                                    );
-                                    Scaffold.of(context)
-                                        .showSnackBar(mysnackbar);
+                                            print(newteamrequest.id);
+                                            String tid =
+                                                newteamrequest.id.toString();
+                                            SnackBar mysnackbar = SnackBar(
+                                              content: Text(
+                                                  "Team registered $successful with $tid"),
+                                              duration:
+                                                  new Duration(seconds: 4),
+                                              backgroundColor: Colors.green,
+                                            );
+                                            Scaffold.of(context)
+                                                .showSnackBar(mysnackbar);
+                                          }
+                                        });
                                   }
+                                  return Container();
                                 }),
                           ],
                         )
