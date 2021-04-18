@@ -29,8 +29,9 @@ class EventRequest {
   double destinationLatitude;
   String eventMobility;
   String eventTime;
-
-
+  bool isPublicEvent;
+  int status;
+  String cancelReason;
 
 //Typically called form service layer to create a new user
   EventRequest(
@@ -58,7 +59,10 @@ class EventRequest {
         this.destinationLongitude,
         this.destinationLatitude,
         this.eventMobility,
-      this.eventTime,});
+      this.eventTime,
+      this.isPublicEvent,
+      this.status,
+      this.cancelReason});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventRequest.fromJson(Map<String, dynamic> data) {
@@ -92,6 +96,9 @@ class EventRequest {
       destinationLatitude: data['destinationLatitude'],
       eventMobility: data['eventMobility'],
       eventTime: data['eventTime'],
+      isPublicEvent: data['isPublicEvent'],
+      status: data['status'],
+      cancelReason: data['cancelReason'],
     );
   }
 
@@ -125,7 +132,10 @@ class EventRequest {
       destinationLongitude: map['destinationLongitude'],
       destinationLatitude: map['destinationLatitude'],
       eventMobility: map['eventMobility'],
-      eventTime: map['eventTime']
+      eventTime: map['eventTime'],
+      isPublicEvent: map['isPublicEvent'],
+      status: map['status'],
+      cancelReason: map['cancelReason'],
     );
   }
 
@@ -161,6 +171,9 @@ class EventRequest {
     data['destinationLatitude'] = this.destinationLatitude;
     data['eventMobility'] = this.eventMobility;
     data['eventTime'] = this.eventTime;
+    data['isPublicEvent'] = this.isPublicEvent;
+    data['status'] = this.status;
+    data['cancelReason'] = this.cancelReason;
     return data;
   }
 
@@ -196,6 +209,9 @@ class EventRequest {
       "destinationLatitude":this.destinationLatitude,
       "eventMobility":this.eventMobility,
       "eventTime" : this.eventTime,
+      "isPublicEvent" : this.isPublicEvent,
+      "status" : this.status,
+      "cancelReason" : this.cancelReason,
     };
 
   }

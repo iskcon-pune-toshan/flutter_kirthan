@@ -9,6 +9,7 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'event_team_service_interface.dart';
 
 class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
+
   static final EventTeamAPIService _internal = EventTeamAPIService.internal();
 
   factory EventTeamAPIService() => _internal;
@@ -23,11 +24,7 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/eventteam/addeventteam',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       List<dynamic> teamusermappingData = json.decode(response.body);
@@ -59,20 +56,17 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
 //print(teamMapping);
     String requestBody = "";
 
-    requestBody = '{"eventId" : $teamMapping}';
+
+  requestBody = '{"eventId" : $teamMapping}';
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/eventteam/geteventteams',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       //print(response.body);
       List<dynamic> teamtsermappingData = json.decode(response.body);
-      //print(teamtsermappingData);
+       //print(teamtsermappingData);
       List<EventTeam> teamusermappings = teamtsermappingData
           .map((teamtsermappingData) => EventTeam.fromMap(teamtsermappingData))
           .toList();
@@ -93,11 +87,7 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/eventteam/deleteeventteam',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
+        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
 
     if (response.statusCode == 200) {
       List<dynamic> teamusermappingData = json.decode(response.body);

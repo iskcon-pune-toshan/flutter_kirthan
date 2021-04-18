@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
@@ -28,12 +30,9 @@ class EditEvent extends StatefulWidget {
 
 class _EditEventState extends State<EditEvent> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  //EventRequest eventrequestobj = new EventRequest();
-  //_EditProfileViewState({Key key, @required this.eventrequest}) ;
-  //final IKirthanRestApi apiSvc = new RestAPIServices();
   String _selectedState;
   String state;
-
+  String _hour, _minute, _time;
   var _states = [
     "Kant",
     "Andhra Pradesh",
@@ -163,7 +162,7 @@ class _EditEventState extends State<EditEvent> {
               child: new MaterialButton(
                 color: themeData.primaryColor,
                 textColor: themeData.secondaryHeaderColor,
-                child: new Text('Save'),
+                child: new Text('Save',style: TextStyle(color: KirthanStyles.colorPallete30),),
                 onPressed: () {
                   // _handleSubmitted();
                   //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
@@ -243,30 +242,51 @@ class _EditEventState extends State<EditEvent> {
                   ),
                 ),
                 new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Date",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    controller: _eventDateController,
-                    onSaved: (String value) {
-                      widget.eventrequest.eventDate = value;
+                  child: DateTimeField(
+
+                    format: DateFormat("yyyy-MM-dd"),
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.parse(widget.eventrequest.eventDate),
+                          initialDate: currentValue ?? widget.eventrequest.eventDate,
+                          lastDate: DateTime(2100));
+                      return date;
                     },
+                    onSaved: (input) {
+                      widget.eventrequest.eventDate =
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                              .format(input)
+                              .toString();
+                    },
+                    controller: _eventDateController,
+                    autocorrect: false,
                   ),
                 ),
                 new Container(
-                  child: new TextFormField(
+                 child: DateTimeField(
+                    format: DateFormat("HH:mm"),
+                    onShowPicker: (context, currentValue) async {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                      );
+
+                      final date = DateTime.now();
+                      return DateTimeField.convert(time);
+                    },
+                   autocorrect: false,
+                   controller: _eventTimeController,
+                    onSaved: (input) {
+                      widget.eventrequest.eventTime =
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                              .format(input)
+                              .toString();
+                    },
+
+                  ),
+                ),
+                  /*child: new TextFormField(
                     decoration: const InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
@@ -286,8 +306,8 @@ class _EditEventState extends State<EditEvent> {
                     onSaved: (String value) {
                       widget.eventrequest.eventTime = value;
                     },
-                  ),
-                ),
+                  ),*//*
+                ),*/
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(

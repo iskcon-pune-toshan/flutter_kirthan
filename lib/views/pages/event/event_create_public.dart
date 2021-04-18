@@ -1,43 +1,50 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_kirthan/models/eventteam.dart';
+import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/services/event_team_service_impl.dart';
+import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
-import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
+import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/models/event.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
-
-class EventWrite extends StatefulWidget {
-  // EventWrite({Key key}) : super(key: key);
+final TeamPageViewModel teamPageVM=
+    TeamPageViewModel(apiSvc: TeamAPIService());
+class EventWritePublic extends StatefulWidget {
+  TeamRequest selectedTeam;
   final String screenName = SCR_EVENT;
   EventRequest eventrequest;
   UserRequest userRequest;
   UserLogin userLogin;
   UserDetail userDetail;
   @override
-  _EventWriteState createState() => _EventWriteState();
+  _EventWriteState createState() => _EventWriteState(selectedTeam: selectedTeam);
 
-  EventWrite({@required this.eventrequest, @required this.userLogin});
+  EventWritePublic({this.selectedTeam,@required this.eventrequest, @required this.userLogin}) : super();
 }
 
-class _EventWriteState extends State<EventWrite> {
+class _EventWriteState extends State<EventWritePublic> {
   bool mapToggle = false;
   FocusNode myFocusNode = new FocusNode();
   bool locationToggle = false;
   bool resetToggle = false;
-
+  TeamRequest selectedTeam;
+  TeamRequest selectedTeamfor;
+  //final IKirthanRestApi apiSvc = new RestAPIServices();
+  _EventWriteState({this.selectedTeam});
   List<Marker> myMarker = [];
   List<Marker> get markers => myMarker;
 
@@ -49,7 +56,7 @@ class _EventWriteState extends State<EventWrite> {
 
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
-
+TeamRequest _selectedTeam;
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   List<String> _states = [
     "Kant",
@@ -106,7 +113,62 @@ class _EventWriteState extends State<EventWrite> {
   String _selectedState;
   String _selectedCountry;
   bool selected;
+  Future<List<TeamRequest>> teams;
+  void initState() {
+    teams = teamPageVM.getTeamRequests("Approved");
+    super.initState();
+  }
+  FutureBuilder getTeamsWidget() {
+    return FutureBuilder<List<TeamRequest>>(
+        future: teams,
+        builder:
+            (BuildContext context, AsyncSnapshot<List<TeamRequest>> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return Center(child: const CircularProgressIndicator());
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return Container(
 
+                  child: Center(
+                    child: DropdownButtonFormField<TeamRequest>(
+                      value: _selectedTeam,
+                      icon: const Icon(Icons.supervisor_account),
+                      hint: Text('Select Team',style:TextStyle(
+                        color: Colors.grey,
+                      ),),
+                      items: snapshot.data
+                          .map((team) => DropdownMenuItem<TeamRequest>(
+                        value: team,
+                        child: Text(team.teamTitle),
+                      ))
+                          .toList(),
+                      onChanged: (input) {
+                        setState(() {
+                          _selectedTeam = input;
+                          //_selectedTeam=selectedTeamfor;
+                          selectedTeam = _selectedTeam;
+                          print(_selectedTeam.id);
+                        });
+                      },
+                    ),
+                  ),
+                );
+
+              } else {
+                return Container(
+                  width: 20.0,
+                  height: 10.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+          }
+        });
+  }
   handleTap(LatLng tappedPoint1) {
     print(tappedPoint1);
     //print(tappedPoint2);
@@ -215,7 +277,7 @@ class _EventWriteState extends State<EventWrite> {
             color: KirthanStyles.colorPallete60, //change your color here
           ),
           backgroundColor: KirthanStyles.colorPallete30,
-        title: Text('Create Event',
+        title: Text('Create Public Event',
     style: TextStyle(color: KirthanStyles.colorPallete60)
         )
         ),
@@ -405,16 +467,6 @@ class _EventWriteState extends State<EventWrite> {
                           Text("Event Time",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey),),
 
                       DateTimeField(
-
-                        /*decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                          ),
-                        ),*/
-
                         format: DateFormat("HH:mm"),
                         onShowPicker: (context, currentValue) async {
                           final time = await showTimePicker(
@@ -1035,7 +1087,8 @@ class _EventWriteState extends State<EventWrite> {
                           ),
                         ],
                       ),
-
+                    //getTeamsWidget(),
+                    //getTeamsWidget(),
                     new Container(margin: const EdgeInsets.only(top: 40)),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -1057,45 +1110,75 @@ class _EventWriteState extends State<EventWrite> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseUser user =
-                                    await auth.currentUser();
+                                await auth.currentUser();
                                 final String email = user.email;
                                 eventrequest.createdBy = email;
                                 print("created by " + eventrequest.createdBy);
                                 print(email);
 
                                 _formKey.currentState.save();
-                                eventrequest.isProcessed = false;
+                                eventrequest.isProcessed = true;
+                                eventrequest.isPublicEvent = true;
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
                                 // print(eventrequest.createdBy);
                                 String dt =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                    .format(DateTime.now());
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
-                                eventrequest.approvalStatus = "Waiting";
+                                eventrequest.approvalStatus = "Processing";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
-                                    eventrequest.toJson();
+                                eventrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
-                                EventRequest newteamrequest = await eventPageVM
+                                EventRequest neweventrequest = await eventPageVM
                                     .submitNewEventRequest(teammap);
 
-                                print(newteamrequest.id);
-                                String eid = newteamrequest.id.toString();
+                                print(neweventrequest.id);
+                                String eid = neweventrequest.id.toString();
 
                                 SnackBar mysnackbar = SnackBar(
                                   content: Text(
                                       "Event registered $successful with $eid"),
                                   duration: new Duration(seconds: 4),
                                   backgroundColor: Colors.green,
+
                                 );
 
-                                // Scaffold.of(context).showSnackBar(mysnackbar);
-                                _scaffoldKey.currentState
-                                    .showSnackBar(mysnackbar);
-                                // Scaffold.of(context).showSnackBar(mysnackbar);
+                                List<EventTeam> listofEventUsers = new List<
+                                    EventTeam>();
+
+                                  EventTeam eventteam = new EventTeam();
+                                  //eventteam.eventId = team.eventId;
+                                  eventteam.teamId = selectedTeam.id;
+                                  eventteam.eventId = neweventrequest.id;
+                                  eventteam.createdBy = email;
+
+
+                                  String dta = DateFormat(
+                                      "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                      .format(DateTime.now());
+                                  eventteam.createdTime = dt;
+                                  //eventteam.updatedBy = "SYSTEM";
+                                  //eventteam.updatedTime = dt;
+                                  listofEventUsers.add(eventteam);
+                                  print("event-team created");
+                                  /*SnackBar mysnackbar = SnackBar(
+                                    content: Text(
+                                        "Event-Team registered $successful "),
+                                    duration: new Duration(seconds: 4),
+                                    backgroundColor: Colors.green,
+                                  );*/
+                                  // Scaffold.of(context).showSnackBar(mysnackbar);
+                                  _scaffoldKey.currentState.showSnackBar(
+                                      mysnackbar);
+                                  // Scaffold.of(context).showSnackBar(mysnackbar);
+
+                                  // Scaffold.of(context).showSnackBar(mysnackbar);
+
+                                //eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
                               }
                               //String s = jsonEncode(userrequest.mapToJson());
                               //service.registerUser(s);

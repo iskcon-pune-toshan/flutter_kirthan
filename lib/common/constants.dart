@@ -46,6 +46,7 @@ const String SCR_FORGOT_PASSWORD = "Forgot password";
 const String SCR_LOGIN_SCREEN = "Login screen";
 const String SCR_TEAM = "Team";
 const String SCR_EVENT = "Event";
+const String SCR_MYEVENT = "My Events";
 const String SCR_TEAM_USER = "Team-user";
 const String SCR_EVENT_USER = "Event-User";
 const String SCR_NOTIFICATION_HUB = "Notification Hub";

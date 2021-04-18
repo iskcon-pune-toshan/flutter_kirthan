@@ -9,17 +9,18 @@ class EventTeam {
   String teamName;
   String eventName;
 
+
 //Typically called form service layer to create a new user
   EventTeam(
       {this.id,
-      this.teamId,
-      this.eventId,
-      this.createdBy,
-      this.updatedBy,
-      this.createdTime,
-      this.updatedTime,
-      this.eventName,
-      this.teamName});
+        this.teamId,
+        this.eventId,
+        this.createdBy,
+        this.updatedBy,
+        this.createdTime,
+        this.updatedTime,
+        this.eventName,
+        this.teamName});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventTeam.fromJson(Map<String, dynamic> data) {

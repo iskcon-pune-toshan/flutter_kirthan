@@ -119,6 +119,7 @@ class NotificationManager extends BaseAPIService
     });
     var respData = convert.jsonDecode(resp.body);
     print(resp.statusCode);
+    print(callback);
     if (callback != null) callback();
   }
 
