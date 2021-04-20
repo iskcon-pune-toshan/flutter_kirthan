@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/models/eventuser.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
-import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
-import 'package:flutter_kirthan/common/constants.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_kirthan/views/pages/event/event_location.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/view_models/event_user_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'Interested_events.dart';
+import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
+import 'package:flutter_kirthan/views/pages/event/event_location.dart';
+//import 'package:flutter_kirthan/views/pages/eventuser/eventUserRegister.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
 import 'int_item.dart';
 
 class Choice {
@@ -33,6 +36,7 @@ class EventRequestsListItem extends StatelessWidget {
     //Choice(id: 4, description: "Location"),
   ];
   String get index => null;
+  bool flag = false;
   // var filteredMap;
   // List<EventRequest> filtereMap = eventrequest
   //     .where((x) => x.eventDuration.contains(notifier.duration))
@@ -57,32 +61,27 @@ class EventRequestsListItem extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              FlatButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: EdgeInsets.all(0),
-                child: Row(
-                  children: [
-                    Text(
-                      "Location",
-                      style: TextStyle(
-                        color: KirthanStyles.colorPallete60,
-                      ),
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            FlatButton(
+              // shape: RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.circular(15.0),
+              // ),
+              highlightColor: Colors.grey,
+              padding: EdgeInsets.all(0),
+              //color: Colors.black,
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(0),
+                    child: Icon(
+                      Icons.location_on_sharp,
+                      color: KirthanStyles.colorPallete30,
+                      size: 20,
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(0),
-                      child: Icon(
-                        Icons.location_on,
-                        color: KirthanStyles.colorPallete60,
-                        size: 20,
-                      ),
-                      /*Icon(icon: Icon(Icons.location_on),
+                    /*Icon(icon: Icon(Icons.location_on),
 
-                         */ /* onPressed:  () => {
+                         */
+                    /* onPressed:  () => {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -93,26 +92,33 @@ class EventRequestsListItem extends StatelessWidget {
                               //do something
                             )
                           },*/ /*),*/
+                  ),
+                  Text(
+                    "Location",
+                    style: TextStyle(
+                      color: KirthanStyles.colorPallete30,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
 //color: KirthanStyles.subTitleColor,
 
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            Location(eventrequest: eventrequest)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          Location(eventrequest: eventrequest)),
 //MapView(eventrequest: eventrequest)),
 
 //do something
-                  );
-                },
-                //splashColor: Colors.red,
-                color: KirthanStyles.colorPallete30,
+                );
+              },
+              //splashColor: Colors.red,
 //shape: Border.all(width: 2.0, color: Colors.black)
-              ),
+            ),
 /*              Container(
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -326,9 +332,8 @@ class EventRequestsListItem extends StatelessWidget {
     },
     ),
     )*/
-    ]),
-
-    ]);
+          ]),
+        ]);
     var subTitle = Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -350,7 +355,6 @@ class EventRequestsListItem extends StatelessWidget {
             ),
           ),
         ),
-
       ],
     );
 
@@ -420,7 +424,7 @@ class EventRequestsListItem extends StatelessWidget {
                           padding: EdgeInsets.only(bottom: 15),
                           margin: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Text(
-                            eventrequest?.eventTime.substring(11, 16),
+                            eventrequest?.eventTime,
                             style: TextStyle(
                               fontSize: notifier.custFontSize,
                               //color: KirthanStyles.subTitleColor,
@@ -455,6 +459,8 @@ class EventRequestsListItem extends StatelessWidget {
                         ),
                       ],
                     ),
+                    EventTeamUserRegister(
+                        eventrequest: eventrequest, flag: flag)
                   ]),
             ),
           ]),

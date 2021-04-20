@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_kirthan/models/event.dart';
 
-
 abstract class IEventRestApi {
 //event
   Future<List<EventRequest>> getEventRequests(String userType);
@@ -10,7 +9,8 @@ abstract class IEventRestApi {
 
   Future<List<EventRequest>> getEventDates(String userType);
 
-  Future<EventRequest> submitNewEventRequest(Map<String, dynamic> eventrequestmap);
+  Future<EventRequest> submitNewEventRequest(
+      Map<String, dynamic> eventrequestmap);
 
   Future<List<int>> getEventCount();
 
@@ -22,6 +22,7 @@ abstract class IEventRestApi {
 
   Future<bool> submitUpdateEventRequest(String eventrequestmap);
 
-  Future<List<EventRequest>> getDummyEventRequests();
+  Future<bool> submitRegisterEventRequest(String eventrequestmap);
 
+  Future<List<EventRequest>> getDummyEventRequests();
 }

@@ -122,6 +122,7 @@ class _EventWriteState extends State<EventWrite> {
     'Guntur',
     'Hyderabad'
   ];
+
   List<String> _category = [
     'Bhajan',
     'Kirthan',
@@ -134,80 +135,12 @@ class _EventWriteState extends State<EventWrite> {
   String _selectedCity;
   String _selectedState;
   String _selectedCountry;
-  bool selected;
   String _selectedCategory;
-
+  bool selected;
   Future<List<TeamRequest>> teams;
   void initState() {
-    //events = eventPageVM.getEventRequests("AA");
-    teams = teamPageVM.getTeamRequests("Approved");
     super.initState();
-    //_selectedTeam =  null;
   }
-
-  // FutureBuilder getTeamsWidget() {
-  //   return FutureBuilder<List<TeamRequest>>(
-  //       future: teams,
-  //       builder:
-  //           (BuildContext context, AsyncSnapshot<List<TeamRequest>> snapshot) {
-  //         switch (snapshot.connectionState) {
-  //           case ConnectionState.none:
-  //           case ConnectionState.active:
-  //           case ConnectionState.waiting:
-  //             return Center(child: const CircularProgressIndicator());
-  //           case ConnectionState.done:
-  //             if (snapshot.hasData) {
-  //               return Container(
-  //                 //width: 20.0,
-  //                 //height: 10.0,
-  //                 child: Center(
-  //                   child: DropdownButtonFormField<TeamRequest>(
-  //                     value: _selectedTeam,
-  //                     icon: const Icon(Icons.supervisor_account),
-  //                     hint: Text(
-  //                       'Event Type',
-  //                       style: TextStyle(
-  //                         color: Colors.grey,
-  //                       ),
-  //                     ),
-  //                     items: snapshot.data
-  //                         .map((team) => DropdownMenuItem<TeamRequest>(
-  //                               value: team,
-  //                               child: Text(team.teamDescription),
-  //                             ))
-  //                         .toList(),
-  //                     onChanged: (input) {
-  //                       setState(() {
-  //                         _selectedTeam = input;
-  //                         print(_selectedTeam.teamDescription);
-  //                         //_selectedTeam=selectedTeamfor;
-  //                         selectedTeam = _selectedTeam;
-  //                         eventrequest.eventType =
-  //                             _selectedTeam.teamDescription;
-  //                         print(eventrequest.eventType);
-  //                       });
-  //                     },
-  //                     onSaved: (input) {
-  //                       print(input);
-  //                       eventrequest.eventType =
-  //                           input.teamDescription.toString();
-  //                       print(input.teamDescription);
-  //                     },
-  //                   ),
-  //                 ),
-  //               );
-  //             } else {
-  //               return Container(
-  //                 width: 20.0,
-  //                 height: 10.0,
-  //                 child: Center(
-  //                   child: CircularProgressIndicator(),
-  //                 ),
-  //               );
-  //             }
-  //         }
-  //       });
-  // }
 
   handleTap(LatLng tappedPoint1) {
     print(tappedPoint1);
@@ -509,10 +442,9 @@ class _EventWriteState extends State<EventWrite> {
                               return date;
                             },
                             onSaved: (input) {
-                              eventrequest.eventDate =
-                                  DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                      .format(input)
-                                      .toString();
+                              eventrequest.eventDate = DateFormat("yyyy-MM-dd")
+                                  .format(input)
+                                  .toString();
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
@@ -637,6 +569,26 @@ class _EventWriteState extends State<EventWrite> {
                       ),
                       elevation: 5,
                     ),*/
+                    DropdownButtonFormField<String>(
+                      value: _selectedCategory,
+                      icon: const Icon(Icons.category),
+                      hint: Text('Select Event Type',
+                          style: TextStyle(color: Colors.grey)),
+                      items: _category
+                          .map((category) => DropdownMenuItem<String>(
+                                value: category,
+                                child: Text(category),
+                              ))
+                          .toList(),
+                      onChanged: (input) {
+                        setState(() {
+                          _selectedCategory = input;
+                        });
+                      },
+                      onSaved: (input) {
+                        eventrequest.eventType = input;
+                      },
+                    ),
                     /*Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
@@ -1144,26 +1096,6 @@ class _EventWriteState extends State<EventWrite> {
                       ],
                     ),
                     //getTeamsWidget(),
-                    DropdownButtonFormField<String>(
-                      value: _selectedCategory,
-                      icon: const Icon(Icons.category),
-                      hint: Text('Select Event Type',
-                          style: TextStyle(color: Colors.grey)),
-                      items: _category
-                          .map((category) => DropdownMenuItem<String>(
-                                value: category,
-                                child: Text(category),
-                              ))
-                          .toList(),
-                      onChanged: (input) {
-                        setState(() {
-                          _selectedCategory = input;
-                        });
-                      },
-                      onSaved: (input) {
-                        eventrequest.eventType = input;
-                      },
-                    ),
                     new Container(margin: const EdgeInsets.only(top: 40)),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -1202,7 +1134,7 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
-                                eventrequest.approvalStatus = "Processing";
+                                //eventrequest.approvalStatus = "Processing";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
                                     eventrequest.toJson();

@@ -314,30 +314,78 @@ class NotificationViewState extends State<NotificationView> {
                               ),
                             ],
                           )
+                        : data.message.contains("Registered")
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Registered",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              )
+                            : data.message
+                                    .contains("Request to update an event")
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Updated",
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Accepted",
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
+                    subtitle: data.message.contains("Registered")
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data.message,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          )
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Accepted",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                ),
+                                data.message +
+                                    " by " +
+                                    data.createdBy.toString(),
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                             ],
                           ),
-                    subtitle: Column(
-                      children: [
-                        Text(
-                          data.message + " by " + data.createdBy.toString(),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
@@ -508,7 +556,8 @@ class NotificationViewState extends State<NotificationView> {
                             new Map<String, dynamic>();
                         processrequestmap["id"] = notification.id;
                         print(notification.id);
-                        notification.message.contains("Your")
+                        notification.message.contains("Your") ||
+                                notification.message.contains("Registered")
                             ? notificationPageVM.deleteNotification(
                                 processrequestmap, false)
                             : notificationPageVM.deleteNotification(

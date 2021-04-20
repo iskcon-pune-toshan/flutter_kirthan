@@ -81,10 +81,10 @@ class _EditEventState extends State<EditEvent> {
       new TextEditingController();
   String eventType;
   final TextEditingController _eventDateController =
-  new TextEditingController();
+      new TextEditingController();
   String eventDate;
   final TextEditingController _eventTimeController =
-  new TextEditingController();
+      new TextEditingController();
   String eventTime;
   final TextEditingController _eventDescriptionController =
       new TextEditingController();
@@ -120,8 +120,8 @@ class _EditEventState extends State<EditEvent> {
   void initState() {
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
-    _eventDateController.text = widget.eventrequest.eventDate.substring(0,10);
-    _eventTimeController.text = widget.eventrequest.eventTime.substring(11,16);
+    _eventDateController.text = widget.eventrequest.eventDate.substring(0, 10);
+    _eventTimeController.text = widget.eventrequest.eventTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
     _lineoneController.text = widget.eventrequest.addLineOne;
     _eventDurationController.text = widget.eventrequest.eventDuration;
@@ -145,7 +145,6 @@ class _EditEventState extends State<EditEvent> {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     widget.eventrequest.updatedBy = email;
-
     print(email);
     return email;
   }
@@ -162,7 +161,10 @@ class _EditEventState extends State<EditEvent> {
               child: new MaterialButton(
                 color: themeData.primaryColor,
                 textColor: themeData.secondaryHeaderColor,
-                child: new Text('Save',style: TextStyle(color: KirthanStyles.colorPallete30),),
+                child: new Text(
+                  'Save',
+                  style: TextStyle(color: KirthanStyles.colorPallete30),
+                ),
                 onPressed: () {
                   // _handleSubmitted();
                   //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
@@ -243,50 +245,55 @@ class _EditEventState extends State<EditEvent> {
                 ),
                 new Container(
                   child: DateTimeField(
-
                     format: DateFormat("yyyy-MM-dd"),
                     onShowPicker: (context, currentValue) async {
                       final date = await showDatePicker(
                           context: context,
-                          firstDate: DateTime.parse(widget.eventrequest.eventDate),
-                          initialDate: currentValue ?? widget.eventrequest.eventDate,
+                          firstDate:
+                              DateTime.parse(widget.eventrequest.eventDate),
+                          initialDate:
+                              currentValue ?? widget.eventrequest.eventDate,
                           lastDate: DateTime(2100));
                       return date;
                     },
-                    onSaved: (input) {
-                      widget.eventrequest.eventDate =
-                          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                              .format(input)
-                              .toString();
-                    },
                     controller: _eventDateController,
+
+                    onSaved: (input) {
+                      if (input != null) {
+                        widget.eventrequest.eventDate =
+                            DateFormat("yyyy-MM-dd").format(input).toString();
+                      } else
+                        _eventTimeController.text =
+                            widget.eventrequest.eventDate;
+                    },
+                    //controller: _eventDateController,
                     autocorrect: false,
                   ),
                 ),
                 new Container(
-                 child: DateTimeField(
+                  child: DateTimeField(
                     format: DateFormat("HH:mm"),
                     onShowPicker: (context, currentValue) async {
                       final time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()),
                       );
 
                       final date = DateTime.now();
                       return DateTimeField.convert(time);
                     },
-                   autocorrect: false,
-                   controller: _eventTimeController,
+                    autocorrect: false,
+                    controller: _eventTimeController,
                     onSaved: (input) {
-                      widget.eventrequest.eventTime =
-                          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                      widget.eventrequest.eventTime = input.toString();
+                      /*DateFormat("HH:mm")
                               .format(input)
-                              .toString();
+                              .toString();*/
                     },
-
                   ),
                 ),
-                  /*child: new TextFormField(
+                /*child: new TextFormField(
                     decoration: const InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
@@ -306,7 +313,7 @@ class _EditEventState extends State<EditEvent> {
                     onSaved: (String value) {
                       widget.eventrequest.eventTime = value;
                     },
-                  ),*//*
+                  ),*/ /*
                 ),*/
                 new Container(
                   child: new TextFormField(

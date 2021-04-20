@@ -72,4 +72,10 @@ class EventPageViewModel extends Model {
     Future<bool> updateFlag = apiSvc?.submitUpdateEventRequest(eventrequestmap);
     return updateFlag;
   }
+
+  Future<bool> submitRegisterEventRequest(String eventrequestmap) {
+    Future<bool> updateFlag =
+        apiSvc?.submitRegisterEventRequest(eventrequestmap);
+    return updateFlag;
+  }
 }

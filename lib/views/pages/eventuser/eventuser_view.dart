@@ -7,8 +7,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final EventUserPageViewModel eventUserPageVM =
-EventUserPageViewModel(apiSvc: EventUserAPIService());
-
+    EventUserPageViewModel(apiSvc: EventUserAPIService());
 
 class EventUserView extends StatefulWidget {
   final String title = "Event User Mapping View";
@@ -106,7 +105,7 @@ class _EventUserViewState extends State<EventUserView> {
 */
   @override
   void initState() {
-    eventusers = eventUserPageVM.getEventTeamUserMappings("SA");
+    eventusers = eventUserPageVM.getEventTeamUserMappings();
     print("initstate: eventusers");
     eventusers.then((neweventusers) {
       neweventusers.forEach((eventuser) => usercehckmap[
@@ -166,7 +165,8 @@ class _EventUserViewState extends State<EventUserView> {
               });
             },
           ),
-          Text(user.userName.toString() + " [from] " + user.teamName.toString()),
+          Text(
+              user.userName.toString() + " [from] " + user.teamName.toString()),
         ],
       ));
     }
@@ -275,7 +275,8 @@ class _EventUserViewState extends State<EventUserView> {
                   child: Text('Delete'),
                   onPressed: () {
                     print(selectedEventUsers);
-                    eventUserPageVM.submitDeleteEventTeamUserMapping(selectedEventUsers);
+                    eventUserPageVM
+                        .submitDeleteEventTeamUserMapping(selectedEventUsers);
                   },
                 ),
               ),

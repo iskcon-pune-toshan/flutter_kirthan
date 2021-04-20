@@ -58,6 +58,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       throw Exception('Failed to get data');
     }
   }
+
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   //getEvent
@@ -89,8 +90,8 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     } else if (eventType == "This Month") {
       requestBody = '{"dateInterval": "This Month"}';
     } else if (eventType == "All" ||
-               eventType == "AA" ||
-               eventType == "Approved") {
+        eventType == "AA" ||
+        eventType == "Approved") {
       requestBody = '{"isPublicEvent" : true , "approvalStatus" : "Approved"}';
     } else if (eventType == "Rejected") {
       requestBody = '{"approvalStatus" : "Rejected"}';
@@ -277,6 +278,25 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/event/updateevent',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: eventrequestmap);
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+
+  Future<bool> submitRegisterEventRequest(String eventrequestmap) async {
+    print(eventrequestmap);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/event/registerevent',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
