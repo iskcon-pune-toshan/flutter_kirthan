@@ -1168,7 +1168,7 @@ TeamRequest _selectedTeam;
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
-                                eventrequest.approvalStatus = "Processing";
+                                //eventrequest.approvalStatus = "Processing";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
                                 eventrequest.toJson();

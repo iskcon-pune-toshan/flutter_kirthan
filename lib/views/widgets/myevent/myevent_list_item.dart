@@ -39,10 +39,39 @@ class MyEventRequestsListItem extends StatelessWidget {
   //     .where((x) => x.eventDuration.contains(notifier.duration))
   //     .toList();
   Color getcolor(){
-    if(eventrequest?.approvalStatus=="Approved")
+    if(eventrequest?.status==2)
       return Colors.green;
-    else
+    else if (eventrequest?.status==1)
+      return Colors.blue;
+    else if (eventrequest?.status==0)
       return Colors.red;
+    else Colors.red;
+  }
+  Text getstatus(){
+    if(eventrequest?.status==1)
+      return Text('Processing',style: TextStyle(
+        color: getcolor(),
+        fontSize: 16,
+      ),
+        textAlign: TextAlign.end,);
+    else if(eventrequest?.status==2)
+      return Text('Approved',style: TextStyle(
+        color: getcolor(),
+        fontSize: 16,
+      ),
+        textAlign: TextAlign.end,);
+    else if(eventrequest?.status==0)
+      return Text('Not Initiated',style: TextStyle(
+        color: getcolor(),
+        fontSize: 16,
+      ),
+        textAlign: TextAlign.end,);
+    else
+      return Text('Cancelled',style: TextStyle(
+        color: getcolor(),
+        fontSize: 16,
+      ),
+        textAlign: TextAlign.end,);
   }
   @override
   Widget build(BuildContext context) {
@@ -373,16 +402,17 @@ class MyEventRequestsListItem extends StatelessWidget {
           //margin: const EdgeInsets.only(left: 4.0),
 
           child: Consumer<ThemeNotifier>(
-            builder: (context, notifier, child) => Text(
+            builder: (context, notifier, child) => getstatus(),
+            /*Text(
 
-              eventrequest?.approvalStatus,
+             // eventrequest?.approvalStatus,
 
               style: TextStyle(
                 color: getcolor(),
                 fontSize: notifier.custFontSize,
               ),
               textAlign: TextAlign.end,
-            ),
+            ),*/
           ),
         ),
 

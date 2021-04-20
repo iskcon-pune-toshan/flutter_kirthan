@@ -59,7 +59,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
   http.Client client1 = http.Client();
   Future getevent() async {
     String requestBody = '';
-    requestBody = '{"approvalStatus" : "Approved"}';
+    requestBody = '{"status" : 2}';
     print(requestBody);
     String token = AutheticationAPIService().sessionJWTToken;
     print("search service");

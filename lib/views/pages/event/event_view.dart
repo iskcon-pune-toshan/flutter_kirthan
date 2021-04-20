@@ -58,7 +58,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
   http.Client client1 = http.Client();
   Future getevent() async {
     String requestBody = '';
-    requestBody = '{"isPublicEvent" : true , "approvalStatus" : "Approved"}';
+    requestBody = '{"isPublicEvent" : true , "status" : 2}';
     print(requestBody);
     String token = AutheticationAPIService().sessionJWTToken;
     print("search service");

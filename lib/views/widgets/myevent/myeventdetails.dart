@@ -728,8 +728,8 @@ List<String> eventss;
                                                                                 new Map<String, dynamic>();
                                                                             processrequestmap["id"] =
                                                                                 widget.eventrequest?.id;
-                                                                            widget.eventrequest?.isProcessed=false;
-                                                                            widget.eventrequest?.approvalStatus="Cancelled";
+                                                                            //widget.eventrequest?.isProcessed=false;
+                                                                            //widget.eventrequest?.approvalStatus="Cancelled";
                                                                             widget.eventrequest?.status = 3;
                                                                             String eventrequestStr =
                                                                             jsonEncode(widget.eventrequest.toStrJson());

@@ -91,13 +91,13 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     } else if (eventType == "All" ||
                eventType == "AA" ||
                eventType == "Approved") {
-      requestBody = '{"isPublicEvent" : true , "approvalStatus" : "Approved"}';
+      requestBody = '{"isPublicEvent" : true }';
     } else if (eventType == "Rejected") {
-      requestBody = '{"approvalStatus" : "Rejected"}';
+      requestBody = '{"status" : 3}';
     } else if (eventType == "Waiting") {
-      requestBody = '{"approvalStatus" : "Processing"}';
+      requestBody = '{"status" : 1}';
     } else if (eventType == "MyEvent") {
-      requestBody = '{"createdBy" : ["$email"],"isProcessed" : true}';
+      requestBody = '{"createdBy" : ["$email"]}';
     } else {
       requestBody = '{"eventDuration" : "$eventType"}';
     }
@@ -131,7 +131,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
     String requestBody = '';
 
-    requestBody = '{"approvalStatus" : "Approved"}';
+    requestBody = '{"status" : 2}';
 
     //print(requestBody);
 
