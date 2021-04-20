@@ -167,6 +167,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                     _selectedTempleArea) +
                                                 1;
                                         print(_selectedtempleId);
+                                        _selectedLocalAdmin = null;
                                       });
                                     },
                                     onSaved: (input) {
