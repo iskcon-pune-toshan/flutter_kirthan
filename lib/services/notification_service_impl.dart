@@ -61,13 +61,6 @@ class NotificationManager extends BaseAPIService
     print("I am in Service: getNotificationsBySpec");
 
     String requestBody = '';
-    //requestBody = '{"dateInterval" : "$ntfType"}';
-    if (ntfType == "TODAY") {
-      requestBody = '{"dateInterval" : "TODAY"}';
-    } else {
-      requestBody = '{"dateInterval" : "NOT TODAY"}';
-    }
-    print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/notifications/getntf',
@@ -75,7 +68,7 @@ class NotificationManager extends BaseAPIService
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
-        body: requestBody);
+        body: ntfType);
     if (response.statusCode == 200) {
       //print(response.body);
       List<dynamic> data = json.decode(response.body);

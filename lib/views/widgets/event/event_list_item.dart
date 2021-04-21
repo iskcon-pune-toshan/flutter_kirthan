@@ -62,6 +62,8 @@ class EventRequestsListItem extends StatelessWidget {
             ],
           ),
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            EventTeamUserRegister(eventrequest: eventrequest, flag: flag),
+            SizedBox(width: 5),
             FlatButton(
               // shape: RoundedRectangleBorder(
               //   borderRadius: BorderRadius.circular(15.0),
@@ -459,8 +461,6 @@ class EventRequestsListItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                    EventTeamUserRegister(
-                        eventrequest: eventrequest, flag: flag)
                   ]),
             ),
           ]),

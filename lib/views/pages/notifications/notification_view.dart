@@ -204,7 +204,7 @@ class NotificationViewState extends State<NotificationView> {
     );
   }
 
-  Widget _buildNotification(NotificationModel data) {
+  Widget _buildNotification(NotificationModel data, bool flag) {
     IconData icon;
     Widget actions = Container(
         padding: EdgeInsets.all(0),
@@ -232,7 +232,9 @@ class NotificationViewState extends State<NotificationView> {
     if (icon == Icons.pause)
       return CustomTile(data, () {
         setState(() {
-          notificationPageVM.getNotifications();
+          flag
+              ? notificationPageVM.getNotificationsBySpec("Today")
+              : notificationPageVM.getNotifications();
         });
       });
     // return Column(
@@ -466,7 +468,10 @@ class NotificationViewState extends State<NotificationView> {
                     onTap: () {
                       showNotification(context, data, () {
                         setState(() {
-                          notificationPageVM.getNotifications();
+                          flag
+                              ? notificationPageVM
+                                  .getNotificationsBySpec("Today")
+                              : notificationPageVM.getNotifications();
                         });
                       });
                     }),
@@ -475,11 +480,13 @@ class NotificationViewState extends State<NotificationView> {
       );
   }
 
+  List<NotificationModel> ntfList = new List<NotificationModel>();
   @override
   void initState() {
     super.initState();
     loadPref();
-    notificationPageVM.newNotificationCount;
+    print(notificationPageVM.newNotificationCount);
+    //notificationPageVM.newNotificationCount;
     //  print(context);
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
@@ -490,6 +497,7 @@ class NotificationViewState extends State<NotificationView> {
     await Future.delayed(Duration(seconds: 2));
 
     setState(() {
+      // notificationPageVM.getNotificationsBySpec("Today");
       notificationPageVM.getNotifications();
     });
 
@@ -505,22 +513,58 @@ class NotificationViewState extends State<NotificationView> {
       drawer: MyDrawer(),
       body: RefreshIndicator(
         key: refreshKey,
-        child: FutureBuilder(
-            future: notificationPageVM.getNotifications(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                    itemBuilder: (context, itemCount) =>
-                        _buildNotification(snapshot.data[itemCount]),
-                    itemCount: snapshot.data.length);
-              } else if (snapshot.hasError) {
-                print(snapshot);
-                print(snapshot.error.toString() + " Error ");
-                return Center(child: Text('Error loading notifications'));
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            }),
+        child:
+            // FutureBuilder(
+            //     future: notificationPageVM.getNotificationsBySpec("Today"),
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasData) {
+            //         ntfList = snapshot.data;
+            //         print(ntfList);
+            //         return ntfList.isNotEmpty
+            //             ? Column(
+            //                 crossAxisAlignment: CrossAxisAlignment.start,
+            //                 children: [
+            //                   Text(
+            //                     "Today",
+            //                     style: TextStyle(
+            //                       fontWeight: FontWeight.bold,
+            //                     ),
+            //                   ),
+            //                   Divider(),
+            //                   Expanded(
+            //                     child: ListView.builder(
+            //                         itemBuilder: (context, itemCount) =>
+            //                             _buildNotification(
+            //                                 snapshot.data[itemCount], true),
+            //                         itemCount: snapshot.data.length),
+            //                   ),
+            //                 ],
+            //               )
+            //             : Container();
+            //       } else if (snapshot.hasError) {
+            //         print(snapshot);
+            //         print(snapshot.error.toString() + " Error ");
+            //         return Center(child: Text('Error loading notifications'));
+            //       } else {
+            //         return Center(child: CircularProgressIndicator());
+            //       }
+            //     }),
+            FutureBuilder(
+                future: notificationPageVM.getNotifications(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemBuilder: (context, itemCount) =>
+                            _buildNotification(snapshot.data[itemCount], false),
+                        itemCount: snapshot.data.length);
+                  } else if (snapshot.hasError) {
+                    print(snapshot);
+                    print(snapshot.error.toString() + " Error ");
+                    return Center(child: Text('Error loading notifications'));
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
         onRefresh: refreshList,
       ),
     );
