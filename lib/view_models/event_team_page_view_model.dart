@@ -7,7 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 class EventTeamPageViewModel extends Model {
   Future<List<EventTeam>> _teamUsers;
   final IEventTeamRestApi apiSvc;
-  Map<String,bool> accessTypes;
+  Map<String, bool> accessTypes;
 
   EventTeamPageViewModel({@required this.apiSvc});
 
@@ -17,13 +17,15 @@ class EventTeamPageViewModel extends Model {
     _teamUsers = value;
     notifyListeners();
   }
+
   Future<bool> setEvenTeamMappings(int eventteamType) async {
     teamUsers = apiSvc?.getEventTeamMappings(eventteamType);
     return teamUsers != null;
   }
 
   Future<List<EventTeam>> getEventTeamMappings(int teamMapping) {
-    Future<List<EventTeam>> teamusers = apiSvc?.getEventTeamMappings(teamMapping);
+    Future<List<EventTeam>> teamusers =
+    apiSvc?.getEventTeamMappings(teamMapping);
     return teamusers;
   }
 

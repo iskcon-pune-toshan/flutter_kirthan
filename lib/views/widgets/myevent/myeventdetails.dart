@@ -147,7 +147,7 @@ List<String> eventss;
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
     _eventDateController.text = widget.eventrequest.eventDate.substring(0, 10);
-    _eventTimeController.text = widget.eventrequest.eventTime.substring(11, 16);
+    _eventTimeController.text = widget.eventrequest.eventTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
     _lineoneController.text = widget.eventrequest.addLineOne;
     _eventDurationController.text = widget.eventrequest.eventDuration;
@@ -545,7 +545,31 @@ List<String> eventss;
                     },
                   ),
                 ),*/
-                DropdownButtonFormField<String>(
+                new Container(
+                  child: new TextFormField(
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "State",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
+                    autocorrect: false,
+                    readOnly: true,
+                    controller: _stateController,
+                    onSaved: (String value) {
+                      widget.eventrequest.state = value;
+                    },
+                  ),
+                ),
+               /* DropdownButtonFormField<String>(
                   value: widget.eventrequest.state,
                   icon: const Icon(Icons.location_city),
                   hint: Text('Select State'),
@@ -565,7 +589,7 @@ List<String> eventss;
                   onSaved: (input) {
                     widget.eventrequest.state = input;
                   },
-                ),
+                ),*/
 
                 RaisedButton(
                     color: KirthanStyles.colorPallete10,

@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 final EventUserPageViewModel eventUserPageVM =
 EventUserPageViewModel(apiSvc: EventUserAPIService());
 
-
 class EventUserView extends StatefulWidget {
   final String title = "Event User Mapping View";
   final String screenName = SCR_EVENT_USER;
@@ -106,17 +105,17 @@ class _EventUserViewState extends State<EventUserView> {
 */
   @override
   void initState() {
-    eventusers = eventUserPageVM.getEventTeamUserMappings("SA");
+    eventusers = eventUserPageVM.getEventTeamUserMappings();
     print("initstate: eventusers");
     eventusers.then((neweventusers) {
       neweventusers.forEach((eventuser) => usercehckmap[
-              eventuser.eventId.toString() +
-                  "E" +
-                  eventuser.teamId.toString() +
-                  "TU" +
-                  eventuser.userId.toString()] = false
-          //usercehckmap.putIfAbsent(, () => )
-          );
+      eventuser.eventId.toString() +
+          "E" +
+          eventuser.teamId.toString() +
+          "TU" +
+          eventuser.userId.toString()] = false
+        //usercehckmap.putIfAbsent(, () => )
+      );
       /*listofteamusers.addAll(teamusers);
       print(teamusers.length);
       print("Vardhan: ");
@@ -138,7 +137,7 @@ class _EventUserViewState extends State<EventUserView> {
   List<Widget> populateChildren(String eventname) {
     List<Widget> children = new List<Widget>();
     List<EventUser> listofusers =
-        listofeventusers.where((user) => user.eventName == eventname).toList();
+    listofeventusers.where((user) => user.eventName == eventname).toList();
     for (var user in listofusers) {
       //print(user.teamId.toString()+"TU"+user.userId.toString());
       children.add(Row(
@@ -146,10 +145,10 @@ class _EventUserViewState extends State<EventUserView> {
         children: <Widget>[
           Checkbox(
             value: usercehckmap[(user.eventId.toString() +
-                    "E" +
-                    user.teamId.toString() +
-                    "TU" +
-                    user.userId.toString())
+                "E" +
+                user.teamId.toString() +
+                "TU" +
+                user.userId.toString())
                 .toString()],
             onChanged: (input) {
               setState(() {
@@ -166,7 +165,8 @@ class _EventUserViewState extends State<EventUserView> {
               });
             },
           ),
-          Text(user.userName.toString() + " [from] " + user.teamName.toString()),
+          Text(
+              user.userName.toString() + " [from] " + user.teamName.toString()),
         ],
       ));
     }
@@ -195,7 +195,7 @@ class _EventUserViewState extends State<EventUserView> {
                     builder: (BuildContext context,
                         AsyncSnapshot<List<EventUser>> snapshot) {
                       switch (snapshot.connectionState) {
-                        // ignore: missing_return
+                      // ignore: missing_return
                         case ConnectionState.none:
                         case ConnectionState.active:
                         case ConnectionState.waiting:
@@ -220,7 +220,7 @@ class _EventUserViewState extends State<EventUserView> {
                                         "Event Name: ${setofEvents[index]}"),
                                     //subtitle: Text("Hello Manjunath"),
                                     children:
-                                        populateChildren(setofEvents[index]),
+                                    populateChildren(setofEvents[index]),
                                   );
                                 });
                           } else {
@@ -275,7 +275,8 @@ class _EventUserViewState extends State<EventUserView> {
                   child: Text('Delete'),
                   onPressed: () {
                     print(selectedEventUsers);
-                    eventUserPageVM.submitDeleteEventTeamUserMapping(selectedEventUsers);
+                    eventUserPageVM
+                        .submitDeleteEventTeamUserMapping(selectedEventUsers);
                   },
                 ),
               ),

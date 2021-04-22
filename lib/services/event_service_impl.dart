@@ -58,6 +58,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       throw Exception('Failed to get data');
     }
   }
+
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   //getEvent
@@ -89,15 +90,15 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     } else if (eventType == "This Month") {
       requestBody = '{"dateInterval": "This Month"}';
     } else if (eventType == "All" ||
-               eventType == "AA" ||
-               eventType == "Approved") {
-      requestBody = '{"isPublicEvent" : true }';
+        eventType == "AA" ||
+        eventType == "Approved") {
+      requestBody = '{"isPublicEvent" : true , "approvalStatus" : "Approved"}';
     } else if (eventType == "Rejected") {
-      requestBody = '{"status" : 3}';
+      requestBody = '{"approvalStatus" : "Rejected"}';
     } else if (eventType == "Waiting") {
-      requestBody = '{"status" : 1}';
+      requestBody = '{"approvalStatus" : "Processing"}';
     } else if (eventType == "MyEvent") {
-      requestBody = '{"createdBy" : ["$email"]}';
+      requestBody = '{"createdBy" : ["$email"],"isProcessed" : true}';
     } else {
       requestBody = '{"eventDuration" : "$eventType"}';
     }
@@ -131,7 +132,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
     String requestBody = '';
 
-    requestBody = '{"status" : 2}';
+    requestBody = '{"approvalStatus" : "Approved"}';
 
     //print(requestBody);
 
@@ -151,7 +152,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
           .toList();
       List<String> events =
-          eventrequests.map((event) => event.toString()).toList();
+      eventrequests.map((event) => event.toString()).toList();
       print(events);
 //print(eventrequests);
       print("before return");
@@ -186,7 +187,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
           .toList();
       List<String> events =
-          eventrequests.map((event) => event.toString()).toList();
+      eventrequests.map((event) => event.toString()).toList();
       print(events);
 //print(eventrequests);
       print("before return");
@@ -277,6 +278,25 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/event/updateevent',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: eventrequestmap);
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+
+  Future<bool> submitRegisterEventRequest(String eventrequestmap) async {
+    print(eventrequestmap);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/event/registerevent',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"

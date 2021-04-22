@@ -6,8 +6,7 @@ import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/event_user_service_interface.dart';
 
-class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
-
+class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
   static final EventUserAPIService _internal = EventUserAPIService.internal();
 
   factory EventUserAPIService() => _internal;
@@ -20,10 +19,14 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
     String requestBody = json.encode(listofeventusermap);
     print(requestBody);
 
-
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/eventteamuser/addeventteamuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+    var response = await client1.put(
+        '$baseUrl/api/eventteamuser/addeventteamuser',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
 
     if (response.statusCode == 200) {
       List<dynamic> eventusermappingData = json.decode(response.body);
@@ -45,16 +48,16 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
     }
   }
 
-  Future<List<EventUser>> getEventTeamUserMappings(String eventMapping) async {
+  Future<List<EventUser>> getEventTeamUserMappings() async {
     //String requestBody = '{"createdBy":"SYSTEM"}';
-
-    String requestBody = "";
-    print(requestBody);
-
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/eventteamuser/geteventteamuserswithdescription',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
-
+    var response = await client1.get(
+      '$baseUrl/api/eventteamuser/geteventteamusers',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+    );
 
     if (response.statusCode == 200) {
       print(response.body);
@@ -84,7 +87,10 @@ class EventUserAPIService extends BaseAPIService  implements IEventUserRestApi {
 
     var response = await client1.put(
         '$baseUrl/api/eventteamuser/deleteeventteamuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"},
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
         body: requestBody);
 
     if (response.statusCode == 200) {

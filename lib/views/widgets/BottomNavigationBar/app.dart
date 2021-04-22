@@ -37,7 +37,7 @@ class AppState extends State<App> {
       icon: Icons.account_circle,
       page: UserView(),
     ),*/
-  TabItem(
+    TabItem(
       tabName: "Teams",
       icon: Icons.people,
       page: TeamView(),

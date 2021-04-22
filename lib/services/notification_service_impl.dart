@@ -24,12 +24,13 @@ class NotificationManager extends BaseAPIService
     if (Platform.operatingSystem == "Android")
       fms
           .createNotificationChannel('Kirtan@ISKON', 'Kirtan Notifications',
-              'Default Channel for Kirtan notification')
+          'Default Channel for Kirtan notification')
           .then((value) => print("Channel Created"));
     try {
       fms.getFBToken().then((deviceToken) {
         print(deviceToken);
         storeToken(deviceToken);
+        print("using firebase in ntf!");
       });
     } catch (Exception) {
       print("Error uploading token");
@@ -50,7 +51,7 @@ class NotificationManager extends BaseAPIService
     // List<NotificationModel> expectedData =
     //print("Hello");
     List<NotificationModel> expectedData =
-        data.map((element) => NotificationModel.fromJson(element)).toList();
+    data.map((element) => NotificationModel.fromJson(element)).toList();
     //print(expectedData.toString());
     return expectedData;
   }
@@ -60,13 +61,6 @@ class NotificationManager extends BaseAPIService
     print("I am in Service: getNotificationsBySpec");
 
     String requestBody = '';
-    //requestBody = '{"dateInterval" : "$ntfType"}';
-    if (ntfType == "TODAY") {
-      requestBody = '{"dateInterval" : "TODAY"}';
-    } else {
-      requestBody = '{"dateInterval" : "NOT TODAY"}';
-    }
-    print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/notifications/getntf',
@@ -74,13 +68,13 @@ class NotificationManager extends BaseAPIService
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
-        body: requestBody);
+        body: ntfType);
     if (response.statusCode == 200) {
       //print(response.body);
       List<dynamic> data = json.decode(response.body);
       print(data);
       List<NotificationModel> expectedData =
-          data.map((element) => NotificationModel.fromJson(element)).toList();
+      data.map((element) => NotificationModel.fromJson(element)).toList();
       //print(expectedData.toString());
       return expectedData;
     } else {
@@ -101,6 +95,10 @@ class NotificationManager extends BaseAPIService
           'Authorization': 'Bearer $token'
         },
         body: bodyData);
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else
+      print(response.statusCode);
   }
 
   void respondToNotification(var callback, String id, bool response) async {
@@ -116,6 +114,29 @@ class NotificationManager extends BaseAPIService
     print(resp.statusCode);
     print(callback);
     if (callback != null) callback();
+  }
+
+  Future<bool> deleteNotificationApproval(
+      Map<String, dynamic> processrequestmap) async {
+    //print(processrequestmap);
+    String requestBody = json.encode(processrequestmap);
+    //print(requestBody);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put(
+        '$baseUrl/api/notifications/deletenotificationapproval',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return true;
+    } else {
+      throw Exception('Failed to get data');
+    }
   }
 
   Future<bool> deleteNotification(

@@ -57,7 +57,7 @@ class EventsPanel extends StatelessWidget {
                             },
                           ),*/
 
-                         /* RaisedButton(
+                          /* RaisedButton(
                             color: KirthanStyles.colorPallete30,
                             child: const Text(
                               "Event-User Add",
@@ -119,12 +119,12 @@ class EventsPanel extends StatelessWidget {
                               child: Center(
                                 child: Consumer<ThemeNotifier>(
                                     builder: (context, notifier, child) => Text(
-                                          'Map',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: notifier.custFontSize),
-                                        )),
+                                      'Map',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: notifier.custFontSize),
+                                    )),
                               ),
 
                               // child: const Text("Map"),

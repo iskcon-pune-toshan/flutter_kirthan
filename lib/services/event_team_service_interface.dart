@@ -10,5 +10,4 @@ abstract class IEventTeamRestApi {
 
   Future<List<EventTeam>> submitDeleteEventTeamMapping(
       Map<String, dynamic> processrequestmap);
-
 }

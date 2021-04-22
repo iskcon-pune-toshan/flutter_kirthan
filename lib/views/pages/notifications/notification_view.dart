@@ -13,14 +13,21 @@ import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+//Discard notification bug fixed
+//Tile text color bug fixed
 
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
-    NotificationViewModel(apiSvc: NotificationManager());
+NotificationViewModel(apiSvc: NotificationManager());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
+  final String screenName = SCR_NTF;
   @override
   State<StatefulWidget> createState() {
     return new NotificationViewState();
@@ -29,9 +36,24 @@ class NotificationView extends StatefulWidget {
 
 class NotificationViewState extends State<NotificationView> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
-  final Firestore _db = Firestore.instance;
-  final FirebaseMessaging _fcm = FirebaseMessaging();
+  //final Firestore _db = Firestore.instance;
+  // final FirebaseMessaging _fcm = FirebaseMessaging();
+  SharedPreferences prefs;
+  List<String> access;
+  Map<String, bool> accessTypes = new Map<String, bool>();
 
+  void loadPref() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      access = prefs.getStringList(widget.screenName);
+      access.forEach((f) {
+        List<String> access = f.split(":");
+        accessTypes[access.elementAt(0)] =
+        access.elementAt(1).toLowerCase() == "true" ? true : false;
+      });
+      notificationPageVM.accessTypes = accessTypes;
+    });
+  }
   // //Get current date & compare for Today's notification (NOT USED)
   // bool compareNotificationDate(NotificationModel data) {
   //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -72,19 +94,24 @@ class NotificationViewState extends State<NotificationView> {
                             children: <Widget>[
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      data.message,
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      softWrap: true,
-                                      overflow: TextOverflow.clip,
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                            data.message,
+                                            //maxLines: 2,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                color: notifier.darkTheme
+                                                    ? Colors.white
+                                                    : Colors.black),
+                                            softWrap: true,
+                                            overflow: TextOverflow.clip,
+                                          ),
                                     ),
                                   ),
                                   Container(
@@ -102,16 +129,22 @@ class NotificationViewState extends State<NotificationView> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      'By ' + data.createdBy.toString(),
-                                      overflow: TextOverflow.clip,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                      ),
+                                    padding: EdgeInsets.only(left: 10, top: 3),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          Text(
+                                            'By ' + data.createdBy.toString(),
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
+                                              //fontWeight: FontWeight.w300,
+                                              color: notifier.darkTheme
+                                                  ? Colors.white
+                                                  : Colors.grey[500],
+                                            ),
+                                          ),
                                     ),
                                   ),
                                   Container(
@@ -171,7 +204,7 @@ class NotificationViewState extends State<NotificationView> {
     );
   }
 
-  Widget _buildNotification(NotificationModel data) {
+  Widget _buildNotification(NotificationModel data, bool flag) {
     IconData icon;
     Widget actions = Container(
         padding: EdgeInsets.all(0),
@@ -199,7 +232,9 @@ class NotificationViewState extends State<NotificationView> {
     if (icon == Icons.pause)
       return CustomTile(data, () {
         setState(() {
-          notificationPageVM.getNotifications();
+          flag
+              ? notificationPageVM.getNotificationsBySpec("Today")
+              : notificationPageVM.getNotifications();
         });
       });
     // return Column(
@@ -253,7 +288,7 @@ class NotificationViewState extends State<NotificationView> {
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
+          //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -268,37 +303,85 @@ class NotificationViewState extends State<NotificationView> {
                     contentPadding: EdgeInsets.all(5),
                     title: data.message.contains("Rejected")
                         ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Rejected",
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Accepted",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          data.message + " by " + data.createdBy.toString(),
+                          "Rejected",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : data.message.contains("Registered")
+                        ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Registered",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : data.message
+                        .contains("Request to update an event")
+                        ? Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Updated",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Accepted",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                    subtitle: data.message.contains("Registered")
+                        ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.message,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.message +
+                              " by " +
+                              data.createdBy.toString(),
                         ),
                         SizedBox(
                           height: 10,
@@ -322,7 +405,7 @@ class NotificationViewState extends State<NotificationView> {
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
+          //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -346,46 +429,49 @@ class NotificationViewState extends State<NotificationView> {
                     trailing: icon == Icons.pause
                         ? actions
                         : Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                data.createdAt.toString().substring(11, 16),
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                data.createdAt.toString().substring(0, 10),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              icon == Icons.close
-                                  ? Text(
-                                      "Rejected",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                    )
-                                  : Text(
-                                      "Accepted",
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                            ],
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          data.createdAt.toString().substring(11, 16),
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
                           ),
+                        ),
+                        Text(
+                          data.createdAt.toString().substring(0, 10),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        icon == Icons.close
+                            ? Text(
+                          "Rejected",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        )
+                            : Text(
+                          "Accepted",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    ),
                     onTap: () {
                       showNotification(context, data, () {
                         setState(() {
-                          notificationPageVM.getNotifications();
+                          flag
+                              ? notificationPageVM
+                              .getNotificationsBySpec("Today")
+                              : notificationPageVM.getNotifications();
                         });
                       });
                     }),
@@ -394,9 +480,13 @@ class NotificationViewState extends State<NotificationView> {
       );
   }
 
+  List<NotificationModel> ntfList = new List<NotificationModel>();
   @override
   void initState() {
     super.initState();
+    loadPref();
+    print(notificationPageVM.newNotificationCount);
+    //notificationPageVM.newNotificationCount;
     //  print(context);
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
@@ -407,6 +497,7 @@ class NotificationViewState extends State<NotificationView> {
     await Future.delayed(Duration(seconds: 2));
 
     setState(() {
+      // notificationPageVM.getNotificationsBySpec("Today");
       notificationPageVM.getNotifications();
     });
 
@@ -422,13 +513,49 @@ class NotificationViewState extends State<NotificationView> {
       drawer: MyDrawer(),
       body: RefreshIndicator(
         key: refreshKey,
-        child: FutureBuilder(
+        child:
+        // FutureBuilder(
+        //     future: notificationPageVM.getNotificationsBySpec("Today"),
+        //     builder: (context, snapshot) {
+        //       if (snapshot.hasData) {
+        //         ntfList = snapshot.data;
+        //         print(ntfList);
+        //         return ntfList.isNotEmpty
+        //             ? Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(
+        //                     "Today",
+        //                     style: TextStyle(
+        //                       fontWeight: FontWeight.bold,
+        //                     ),
+        //                   ),
+        //                   Divider(),
+        //                   Expanded(
+        //                     child: ListView.builder(
+        //                         itemBuilder: (context, itemCount) =>
+        //                             _buildNotification(
+        //                                 snapshot.data[itemCount], true),
+        //                         itemCount: snapshot.data.length),
+        //                   ),
+        //                 ],
+        //               )
+        //             : Container();
+        //       } else if (snapshot.hasError) {
+        //         print(snapshot);
+        //         print(snapshot.error.toString() + " Error ");
+        //         return Center(child: Text('Error loading notifications'));
+        //       } else {
+        //         return Center(child: CircularProgressIndicator());
+        //       }
+        //     }),
+        FutureBuilder(
             future: notificationPageVM.getNotifications(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
                     itemBuilder: (context, itemCount) =>
-                        _buildNotification(snapshot.data[itemCount]),
+                        _buildNotification(snapshot.data[itemCount], false),
                     itemCount: snapshot.data.length);
               } else if (snapshot.hasError) {
                 print(snapshot);
@@ -450,35 +577,39 @@ class NotificationViewState extends State<NotificationView> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              content: Text(notification.message),
-              title: Center(
-                child: Text(
-                  "Notification Alert!",
-                ),
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("View"),
-                  onPressed: () {
+          content: Text(notification.message),
+          title: Center(
+            child: Text(
+              "Notification Alert!",
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("View"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AdminView()));
+              },
+            ),
+            FlatButton(
+                child: Text("Discard"),
+                onPressed: () {
+                  setState(() {
+                    Map<String, dynamic> processrequestmap =
+                    new Map<String, dynamic>();
+                    processrequestmap["id"] = notification.id;
+                    print(notification.id);
+                    notification.message.contains("Your") ||
+                        notification.message.contains("Registered")
+                        ? notificationPageVM.deleteNotification(
+                        processrequestmap, false)
+                        : notificationPageVM.deleteNotification(
+                        processrequestmap, true);
                     Navigator.pop(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AdminView()));
-                  },
-                ),
-                FlatButton(
-                    child: Text("Discard"),
-                    onPressed: () {
-                      setState(() {
-                        Map<String, dynamic> processrequestmap =
-                            new Map<String, dynamic>();
-                        processrequestmap["id"] = notification.id;
-                        print(notification.id);
-                        notificationPageVM
-                            .deleteNotification(processrequestmap);
-                        Navigator.pop(context);
-                      });
-                    }),
-              ],
-            ));
+                  });
+                }),
+          ],
+        ));
   }
 }

@@ -9,26 +9,18 @@ import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/team_name.dart';
-import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
-import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
-import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
-import 'package:flutter_kirthan/views/pages/eventteam/team_selection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
+
 class EventWrite extends StatefulWidget {
   // EventWrite({Key key}) : super(key: key);
   //TeamUserCreate({this.selectedUsers}) : super();
@@ -39,9 +31,14 @@ class EventWrite extends StatefulWidget {
   UserLogin userLogin;
   UserDetail userDetail;
   @override
-  _EventWriteState createState() => _EventWriteState(selectedTeam: selectedTeam);
+  _EventWriteState createState() =>
+      _EventWriteState(selectedTeam: selectedTeam);
 
-  EventWrite({this.selectedTeam,@required this.eventrequest, @required this.userLogin}) : super();
+  EventWrite(
+      {this.selectedTeam,
+        @required this.eventrequest,
+        @required this.userLogin})
+      : super();
 }
 
 class _EventWriteState extends State<EventWrite> {
@@ -64,7 +61,7 @@ class _EventWriteState extends State<EventWrite> {
 
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
-TeamRequest _selectedTeam;
+  TeamRequest _selectedTeam;
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   List<String> _states = [
     "Kant",
@@ -117,77 +114,24 @@ TeamRequest _selectedTeam;
     'Guntur',
     'Hyderabad'
   ];
+
+  List<String> _category = [
+    'Bhajan',
+    'Kirthan',
+    'Bhajan & Kirthan',
+    'Dance',
+    'Music',
+    'Lecture'
+  ];
+
   String _selectedCity;
   String _selectedState;
   String _selectedCountry;
+  String _selectedCategory;
   bool selected;
   Future<List<TeamRequest>> teams;
   void initState() {
-
-    //events = eventPageVM.getEventRequests("AA");
-    teams = teamPageVM.getTeamRequests("Approved");
     super.initState();
-    //_selectedTeam =  null;
-  }
-  FutureBuilder getTeamsWidget() {
-    return FutureBuilder<List<TeamRequest>>(
-        future: teams,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<TeamRequest>> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return Center(child: const CircularProgressIndicator());
-            case ConnectionState.done:
-              if (snapshot.hasData) {
-                return Container(
-                  //width: 20.0,
-                  //height: 10.0,
-                  child: Center(
-                    child: DropdownButtonFormField<TeamRequest>(
-                      value: _selectedTeam,
-                      icon: const Icon(Icons.supervisor_account),
-                      hint: Text('Event Type',style:TextStyle(
-                        color: Colors.grey,
-                      ),),
-                      items: snapshot.data
-                          .map((team) => DropdownMenuItem<TeamRequest>(
-                        value: team,
-                        child: Text(team.teamDescription),
-                      ))
-                          .toList(),
-                      onChanged: (input) {
-                        setState(() {
-                          _selectedTeam = input;
-                          print(_selectedTeam.teamDescription);
-                          //_selectedTeam=selectedTeamfor;
-                          selectedTeam = _selectedTeam;
-                          eventrequest.eventType = _selectedTeam.teamDescription;
-                          print(eventrequest.eventType);
-                        });
-                      },
-                      onSaved: (input) {
-                        print(input);
-                        eventrequest.eventType = input.teamDescription.toString();
-                        print(input.teamDescription);
-                      },
-                    ),
-
-                  ),
-                );
-
-              } else {
-                return Container(
-                  width: 20.0,
-                  height: 10.0,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-          }
-        });
   }
 
   handleTap(LatLng tappedPoint1) {
@@ -254,7 +198,6 @@ TeamRequest _selectedTeam;
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Radio(
-
           activeColor: Colors.black,
           value: type[btnValue],
           groupValue: select,
@@ -263,28 +206,30 @@ TeamRequest _selectedTeam;
               print(value);
               eventrequest.eventMobility = value;
               select = value;
-
             });
           },
         ),
-        Text(title,style: TextStyle(
-           //color:  KirthanStyles.titleColor ,
-            fontWeight:
-             FontWeight.normal),)
+        Text(
+          title,
+          style: TextStyle(
+            //color:  KirthanStyles.titleColor ,
+              fontWeight: FontWeight.normal),
+        )
       ],
     );
   }
+
   String validateMobile(String value) {
     String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = new RegExp(patttern);
     if (value.length == 0) {
       return 'Please enter mobile number';
-    }
-    else if (!regExp.hasMatch(value)) {
+    } else if (!regExp.hasMatch(value)) {
       return 'Please enter valid mobile number';
     }
     return null;
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -292,20 +237,17 @@ TeamRequest _selectedTeam;
       key: _scaffoldKey,
       //resizeToAvoidBottomInset: false,
 
-        appBar: AppBar(
+      appBar: AppBar(
           elevation: 0.0,
           iconTheme: IconThemeData(
             color: KirthanStyles.colorPallete60, //change your color here
           ),
           backgroundColor: KirthanStyles.colorPallete30,
-        title: Text('Create Event',
-    style: TextStyle(color: KirthanStyles.colorPallete60)
-        )
-        ),
+          title: Text('Create Private Event',
+              style: TextStyle(color: KirthanStyles.colorPallete60))),
       body: Builder(builder: (context) {
         return SingleChildScrollView(
           child: Container(
-
             margin: EdgeInsets.all(10),
             padding: EdgeInsets.all(5),
             //color: Colors.black,
@@ -318,16 +260,15 @@ TeamRequest _selectedTeam;
                 child: Column(
                   //crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-
                     new Container(
-
-                      alignment: Alignment.centerLeft,
-                       // margin: const EdgeInsets.only(top: 30),
-                      child: new Text("About Event",
-                        style: new TextStyle(
-                          fontSize: 17.0,
-                            color: KirthanStyles.colorPallete30
-                      ),)),
+                        alignment: Alignment.centerLeft,
+                        // margin: const EdgeInsets.only(top: 30),
+                        child: new Text(
+                          "About Event",
+                          style: new TextStyle(
+                              fontSize: 17.0,
+                              color: KirthanStyles.colorPallete30),
+                        )),
 
                     /* Card(
                     child: Container(
@@ -354,73 +295,72 @@ TeamRequest _selectedTeam;
                     elevation: 5,
                   ),*/
 
-                     Container(
-                        //padding: new EdgeInsets.all(10),
-                        child: TextFormField(
-
-                          focusNode: myFocusNode,
-                          //attribute: "eventTitle",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              //icon: const Icon(Icons.title, color: Colors.grey),
-                              labelText: "Title",
-                              hintText: "Type title of Event",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                  color: myFocusNode.hasFocus ? Colors.black : Colors.grey
-                              )),
-                          onSaved: (input) {
-                            eventrequest.eventTitle = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
+                    Container(
+                      //padding: new EdgeInsets.all(10),
+                      child: TextFormField(
+                        focusNode: myFocusNode,
+                        //attribute: "eventTitle",
+                        decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.green),
+                            ),
+                            //icon: const Icon(Icons.title, color: Colors.grey),
+                            labelText: "Title",
+                            hintText: "Type title of Event",
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            labelStyle: TextStyle(
+                                color: myFocusNode.hasFocus
+                                    ? Colors.black
+                                    : Colors.grey)),
+                        onSaved: (input) {
+                          eventrequest.eventTitle = input;
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter some text";
+                          }
+                          return null;
+                        },
                       ),
+                    ),
 
-                     Container(
-                        //padding: new EdgeInsets.all(10),
-                        child: TextFormField(
-
-                          //attribute: "Description",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              //icon: const Icon(Icons.description,
-                               //   color: Colors.grey),
-                              labelText: "Description",
-                              hintText: "Type Description of event",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.eventDescription = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
+                    Container(
+                      //padding: new EdgeInsets.all(10),
+                      child: TextFormField(
+                        //attribute: "Description",
+                        decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.green),
+                            ),
+                            //icon: const Icon(Icons.description,
+                            //   color: Colors.grey),
+                            labelText: "Description",
+                            hintText: "Type Description of event",
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.grey,
+                            )),
+                        onSaved: (input) {
+                          eventrequest.eventDescription = input;
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter some text";
+                          }
+                          return null;
+                        },
                       ),
+                    ),
 
                     /*Card(
                     child: Container(
@@ -473,108 +413,107 @@ TeamRequest _selectedTeam;
                           ),
                     ]),
                     ),*/
-                     Container(
-                        padding: new EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text("Event Date",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey),),
-
-                            DateTimeField(
-
-                              format: DateFormat("yyyy-MM-dd"),
-                              onShowPicker: (context, currentValue) async {
-                                final date = await showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime.now(),
-                                    initialDate: currentValue ?? DateTime.now(),
-                                    lastDate: DateTime(2100));
-                                return date;
-                              },
-                              onSaved: (input) {
-                                eventrequest.eventDate =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(input)
-                                        .toString();
-                              },
-                              validator: (value) {
-                                if (value.toString().isEmpty) {
-                                  return "Please enter some text";
-                                }
-                                return null;
-                              },
-                            ),
-
-                          ],
-                        ),
-                      ),
                     Container(
                       padding: new EdgeInsets.all(10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Text("Event Time",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey),),
-
-                      DateTimeField(
-                        format: DateFormat("HH:mm"),
-                        onShowPicker: (context, currentValue) async {
-                          final time = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-                          );
-                          return DateTimeField.convert(time);
-                        },
-                        onSaved: (input) {
-                          eventrequest.eventTime =
-                              DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                          Text(
+                            "Event Date",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          DateTimeField(
+                            format: DateFormat("yyyy-MM-dd"),
+                            onShowPicker: (context, currentValue) async {
+                              final date = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime.now(),
+                                  initialDate: currentValue ?? DateTime.now(),
+                                  lastDate: DateTime(2100));
+                              return date;
+                            },
+                            onSaved: (input) {
+                              eventrequest.eventDate = DateFormat("yyyy-MM-dd")
                                   .format(input)
                                   .toString();
+                            },
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: new EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text(
+                            "Event Time",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          DateTimeField(
+                            format: DateFormat("HH:mm"),
+                            onShowPicker: (context, currentValue) async {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.fromDateTime(
+                                    currentValue ?? DateTime.now()),
+                              );
+                              return DateTimeField.convert(time);
+                            },
+                            onSaved: (input) {
+                              eventrequest.eventTime =
+                                  DateFormat("HH:mm").format(input).toString();
+                            },
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      //padding: new EdgeInsets.all(10),
+                      child: TextFormField(
+                        //attribute: "Duration",
+                        decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.green),
+                            ),
+                            //icon: const Icon(Icons.timelapse,
+                            //  color: Colors.grey),
+                            labelText: "Duration",
+                            hintText: "Duration of event in hrs",
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.grey,
+                            )),
+                        onSaved: (input) {
+                          eventrequest.eventDuration = input;
                         },
                         validator: (value) {
-                          if (value.toString().isEmpty) {
+                          if (value.isEmpty) {
                             return "Please enter some text";
                           }
                           return null;
                         },
                       ),
-
-
-                        ],
-                      ),
                     ),
-                    Container(
-                        //padding: new EdgeInsets.all(10),
-                        child: TextFormField(
-
-                          //attribute: "Duration",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              //icon: const Icon(Icons.timelapse,
-                                //  color: Colors.grey),
-                              labelText: "Duration",
-                              hintText: "Duration of event in hrs",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.eventDuration = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
 
                     /*    Card(
                         child: Container(
@@ -622,7 +561,26 @@ TeamRequest _selectedTeam;
                       ),
                       elevation: 5,
                     ),*/
-                    getTeamsWidget(),
+                    DropdownButtonFormField<String>(
+                      value: _selectedCategory,
+                      icon: const Icon(Icons.category),
+                      hint: Text('Select Event Type',
+                          style: TextStyle(color: Colors.grey)),
+                      items: _category
+                          .map((category) => DropdownMenuItem<String>(
+                        value: category,
+                        child: Text(category),
+                      ))
+                          .toList(),
+                      onChanged: (input) {
+                        setState(() {
+                          _selectedCategory = input;
+                        });
+                      },
+                      onSaved: (input) {
+                        eventrequest.eventType = input;
+                      },
+                    ),
                     /*Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
@@ -659,11 +617,11 @@ TeamRequest _selectedTeam;
                         ),
                       ),*/
 
-                     Container(
-                        //padding: new EdgeInsets.all(10),
-                        child: TextFormField(
+                    Container(
+                      //padding: new EdgeInsets.all(10),
+                      child: TextFormField(
 
-                          //attribute: "PhoneNumber",
+                        //attribute: "PhoneNumber",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -671,8 +629,8 @@ TeamRequest _selectedTeam;
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                             // icon: const Icon(Icons.phone_iphone,
-                               //   color: Colors.grey),
+                              // icon: const Icon(Icons.phone_iphone,
+                              //   color: Colors.grey),
                               labelText: "Phone Number",
                               hintText: "Type Phone Number",
                               hintStyle: TextStyle(
@@ -685,27 +643,27 @@ TeamRequest _selectedTeam;
                             eventrequest.phoneNumber = int.parse(input);
                           },
                           validator: validateMobile
-                            /*  (value) {
+                        /*  (value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },*/
-                        ),
                       ),
+                    ),
                     new Container(
-
                         alignment: Alignment.centerLeft,
-                         margin: const EdgeInsets.only(top: 20),
-                        child: new Text("About Event Venue",
+                        margin: const EdgeInsets.only(top: 20),
+                        child: new Text(
+                          "About Event Venue",
                           style: new TextStyle(
                               fontSize: 17.0,
-                              color: KirthanStyles.colorPallete30
-                          ),)),
+                              color: KirthanStyles.colorPallete30),
+                        )),
 
-                   Column(
-                        children: <Widget>[
-                          /*Row(
+                    Column(
+                      children: <Widget>[
+                        /*Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     addRadioButton(0, 'Stationary'),
@@ -927,208 +885,208 @@ TeamRequest _selectedTeam;
                           ),
             ]),*/
 
-                          TextFormField(
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
-                                icon:
-                                    const Icon(Icons.home, color: Colors.grey),
-                                labelText: "Address",
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                labelStyle: TextStyle(
-                                  color: Colors.grey,
-                                )),
-                            onSaved: (input) {
-                              eventrequest.addLineOne = input;
-                              eventrequest.eventLocation = input;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
-                                labelText: "Line 2",
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                labelStyle: TextStyle(
-                                  color: Colors.grey,
-                                )),
-                            onSaved: (input) {
-                              eventrequest.addLineTwo = input;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-
-                            //attribute: "line3",
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
-                                labelText: "Line 3",
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                labelStyle: TextStyle(
-                                  color: Colors.grey,
-                                )),
-                            onSaved: (input) {
-                              eventrequest.addLineThree = input;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
-                                labelText: "Locality",
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                labelStyle: TextStyle(
-                                  color: Colors.grey,
-                                )),
-                            onSaved: (input) {
-                              eventrequest.locality = input;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
-                                labelText: "PinCode",
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                labelStyle: TextStyle(
-                                  color: Colors.grey,
-                                )),
-                            onSaved: (input) {
-                              eventrequest.pincode = int.parse(input);
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              icon: const Icon(Icons.home, color: Colors.grey),
+                              labelText: "Address",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            eventrequest.addLineOne = input;
+                            eventrequest.eventLocation = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              labelText: "Line 2",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            eventrequest.addLineTwo = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          //attribute: "line3",
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              labelText: "Line 3",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            eventrequest.addLineThree = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              labelText: "Locality",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            eventrequest.locality = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              labelText: "PinCode",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            eventrequest.pincode = int.parse(input);
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
 
                     Column(
-                        children: <Widget>[
-                          DropdownButtonFormField<String>(
-
-                            value: _selectedCity,
-                            icon: const Icon(Icons.location_city),
-                            hint: Text('Select City',style: TextStyle(color: Colors.grey)),
-                            items: _cities
-                                .map((city) => DropdownMenuItem<String>(
-                                      value: city,
-                                      child: Text(city),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedCity = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              eventrequest.city = input;
-                            },
+                      children: <Widget>[
+                        DropdownButtonFormField<String>(
+                          value: _selectedCity,
+                          icon: const Icon(Icons.location_city),
+                          hint: Text('Select City',
+                              style: TextStyle(color: Colors.grey)),
+                          items: _cities
+                              .map((city) => DropdownMenuItem<String>(
+                            value: city,
+                            child: Text(city),
+                          ))
+                              .toList(),
+                          onChanged: (input) {
+                            setState(() {
+                              _selectedCity = input;
+                            });
+                          },
+                          onSaved: (input) {
+                            eventrequest.city = input;
+                          },
+                        ),
+                        DropdownButtonFormField<String>(
+                          value: _selectedState,
+                          icon: const Icon(Icons.location_city),
+                          hint: Text(
+                            'Select State',
+                            style: TextStyle(color: Colors.grey),
                           ),
-                          DropdownButtonFormField<String>(
-
-                            value: _selectedState,
-                            icon: const Icon(Icons.location_city),
-                            hint: Text('Select State',style: TextStyle(color: Colors.grey),),
-                            items: _states
-                                .map((state) => DropdownMenuItem(
-                                      value: state,
-                                      child: Text(state),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedState = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              eventrequest.state = input;
-                            },
-                          ),
-                          DropdownButtonFormField<String>(
-
-                            value: _selectedCountry,
-                            icon: const Icon(Icons.location_city),
-                            hint: Text('Select Country',style: TextStyle(color: Colors.grey)),
-                            items: ['IND', 'Kyrgyzstan']
-                                .map((country) => DropdownMenuItem(
-                                      value: country,
-                                      child: Text(country),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedCountry = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              eventrequest.country = input;
-                            },
-                          ),
-                        ],
-                      ),
+                          items: _states
+                              .map((state) => DropdownMenuItem(
+                            value: state,
+                            child: Text(state),
+                          ))
+                              .toList(),
+                          onChanged: (input) {
+                            setState(() {
+                              _selectedState = input;
+                            });
+                          },
+                          onSaved: (input) {
+                            eventrequest.state = input;
+                          },
+                        ),
+                        DropdownButtonFormField<String>(
+                          value: _selectedCountry,
+                          icon: const Icon(Icons.location_city),
+                          hint: Text('Select Country',
+                              style: TextStyle(color: Colors.grey)),
+                          items: ['IND', 'Kyrgyzstan']
+                              .map((country) => DropdownMenuItem(
+                            value: country,
+                            child: Text(country),
+                          ))
+                              .toList(),
+                          onChanged: (input) {
+                            setState(() {
+                              _selectedCountry = input;
+                            });
+                          },
+                          onSaved: (input) {
+                            eventrequest.country = input;
+                          },
+                        ),
+                      ],
+                    ),
                     //getTeamsWidget(),
                     new Container(margin: const EdgeInsets.only(top: 40)),
                     Row(
@@ -1185,7 +1143,6 @@ TeamRequest _selectedTeam;
                                       "Event registered $successful with $eid"),
                                   duration: new Duration(seconds: 4),
                                   backgroundColor: Colors.green,
-
                                 );
 /*
                                 List<EventTeam> listofEventUsers = new List<
@@ -1206,18 +1163,18 @@ TeamRequest _selectedTeam;
                                   //eventteam.updatedTime = dt;
                                   listofEventUsers.add(eventteam);
                                   print("event-team created");*/
-                                  /*SnackBar mysnackbar = SnackBar(
+                                /*SnackBar mysnackbar = SnackBar(
                                     content: Text(
                                         "Event-Team registered $successful "),
                                     duration: new Duration(seconds: 4),
                                     backgroundColor: Colors.green,
                                   );*/
-                                  // Scaffold.of(context).showSnackBar(mysnackbar);
-                                  _scaffoldKey.currentState.showSnackBar(
-                                      mysnackbar);
-                                  // Scaffold.of(context).showSnackBar(mysnackbar);
+                                // Scaffold.of(context).showSnackBar(mysnackbar);
+                                _scaffoldKey.currentState
+                                    .showSnackBar(mysnackbar);
+                                // Scaffold.of(context).showSnackBar(mysnackbar);
 
-                                  // Scaffold.of(context).showSnackBar(mysnackbar);
+                                // Scaffold.of(context).showSnackBar(mysnackbar);
 
                                 //eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
                               }
@@ -1250,7 +1207,6 @@ TeamRequest _selectedTeam;
     final String email = user.email;
     eventrequest.createdBy = email;
     print("created by " + eventrequest.createdBy);
-
 
     print(email);
     return email;

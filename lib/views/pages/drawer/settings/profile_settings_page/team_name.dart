@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/teamuser.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
@@ -6,7 +8,6 @@ import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-
 
 final TeamPageViewModel teamPageVM =
 TeamPageViewModel(apiSvc: TeamAPIService());
@@ -32,7 +33,10 @@ class _teamNameState extends State<teamName> {
       appBar: AppBar(
         elevation: 0.0,
         iconTheme: IconThemeData(color: KirthanStyles.colorPallete60),
-        title: Text('Add Team',style: TextStyle(color: KirthanStyles.colorPallete60),),
+        title: Text(
+          'Add Team',
+          style: TextStyle(color: KirthanStyles.colorPallete60),
+        ),
         backgroundColor: KirthanStyles.colorPallete30,
       ),
       body: Builder(builder: (context) {
@@ -137,7 +141,6 @@ class _teamNameState extends State<teamName> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-
                         ),
                         MaterialButton(
                             child: Text(
@@ -170,6 +173,7 @@ class _teamNameState extends State<teamName> {
                                 teamrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
+                                List<TeamUser> listofUsers;
                                 TeamRequest newteamrequest = await teamPageVM
                                     .submitNewTeamRequest(teammap);
 

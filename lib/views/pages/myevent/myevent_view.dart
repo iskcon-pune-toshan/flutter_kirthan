@@ -29,7 +29,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 
 class MyEventView extends StatefulWidget {
   final String title = "My Events";
@@ -59,7 +59,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
   http.Client client1 = http.Client();
   Future getevent() async {
     String requestBody = '';
-    requestBody = '{"status" : 2}';
+    requestBody = '{"approvalStatus" : "Approved"}';
     print(requestBody);
     String token = AutheticationAPIService().sessionJWTToken;
     print("search service");
@@ -73,7 +73,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
       List<dynamic> eventrequestsData = json.decode(response.body);
       //print(eventrequestsData);
       List<String> events =
-          eventrequestsData.map((event) => event.toString()).toList();
+      eventrequestsData.map((event) => event.toString()).toList();
       event = events;
       print(event);
       int len = event.length;
@@ -93,7 +93,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
       access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
-            access.elementAt(1).toLowerCase() == "true" ? true : false;
+        access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       eventPageVM.accessTypes = accessTypes;
       //userdetails = prefs.getStringList("LoginDetails");
@@ -161,7 +161,6 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
                         context: context,
                         delegate: Search(event),
                       )
-
                     }),*/
 /*            PopupMenuButton(
                 icon: Icon(
@@ -231,16 +230,16 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
 
 class Search extends SearchDelegate {
   Search(
-    this.listExample, {
-    String hintText = "Search by Event Title",
+      this.listExample, {
+        String hintText = "Search by Event Title",
 
-  }) : super(
-          searchFieldLabel: hintText,
+      }) : super(
+    searchFieldLabel: hintText,
 
-          searchFieldStyle: TextStyle(color: Colors.grey),
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.search,
-        );
+    searchFieldStyle: TextStyle(color: Colors.grey),
+    keyboardType: TextInputType.text,
+    textInputAction: TextInputAction.search,
+  );
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
     final ThemeData theme = Theme.of(context);
@@ -295,23 +294,23 @@ class Search extends SearchDelegate {
     query.isEmpty
         ? suggestionList = recentList //In the true case
         : suggestionList.addAll(listExample.where(
-            // In the false case
-            (element) => element.toUpperCase().contains(query) || element.toLowerCase().contains(query),
-        
-          ));
+      // In the false case
+          (element) => element.toUpperCase().contains(query) || element.toLowerCase().contains(query),
+
+    ));
 
     return
-        //_widget();
-        ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            suggestionList[index],
-          ),
-          leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-        );
-      },
-    );
+      //_widget();
+      ListView.builder(
+        itemCount: suggestionList.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(
+              suggestionList[index],
+            ),
+            leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
+          );
+        },
+      );
   }
 }

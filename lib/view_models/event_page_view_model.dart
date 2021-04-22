@@ -37,7 +37,7 @@ class EventPageViewModel extends Model {
 
   Future<List<EventRequest>> getEventRequests(String userType) {
     Future<List<EventRequest>> eventRequests =
-        apiSvc?.getEventRequests(userType);
+    apiSvc?.getEventRequests(userType);
     return eventRequests;
   }
 
@@ -54,7 +54,7 @@ class EventPageViewModel extends Model {
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap) {
     Future<EventRequest> eventRequest =
-        apiSvc?.submitNewEventRequest(eventrequestmap);
+    apiSvc?.submitNewEventRequest(eventrequestmap);
     return eventRequest;
   }
 
@@ -70,6 +70,12 @@ class EventPageViewModel extends Model {
 
   Future<bool> submitUpdateEventRequest(String eventrequestmap) {
     Future<bool> updateFlag = apiSvc?.submitUpdateEventRequest(eventrequestmap);
+    return updateFlag;
+  }
+
+  Future<bool> submitRegisterEventRequest(String eventrequestmap) {
+    Future<bool> updateFlag =
+    apiSvc?.submitRegisterEventRequest(eventrequestmap);
     return updateFlag;
   }
 }

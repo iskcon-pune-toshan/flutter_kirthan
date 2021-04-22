@@ -121,7 +121,7 @@ class _EditEventState extends State<EditEvent> {
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
     _eventDateController.text = widget.eventrequest.eventDate.substring(0,10);
-    _eventTimeController.text = widget.eventrequest.eventTime.substring(11,16);
+    _eventTimeController.text = widget.eventrequest.eventTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
     _lineoneController.text = widget.eventrequest.addLineOne;
     _eventDurationController.text = widget.eventrequest.eventDuration;
@@ -136,7 +136,7 @@ class _EditEventState extends State<EditEvent> {
     approvalStatus = widget.eventrequest.approvalStatus;
     print("createdTime");
     print(widget.eventrequest.createdTime);
-
+print(widget.eventrequest.isPublicEvent);
     return super.initState();
   }
 
@@ -148,7 +148,12 @@ class _EditEventState extends State<EditEvent> {
     print(email);
     return email;
   }
-
+bool readonly(bool public){
+    if(public==true)
+      return false;
+    else
+      return true;
+}
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
@@ -233,6 +238,7 @@ class _EditEventState extends State<EditEvent> {
                         color: Colors.grey,
                       ),
                     ),
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     autocorrect: false,
                     controller: _eventTypeController,
                     onSaved: (String value) {
@@ -252,40 +258,48 @@ class _EditEventState extends State<EditEvent> {
                           lastDate: DateTime(2100));
                       return date;
                     },
-                    onSaved: (input) {
-                      widget.eventrequest.eventDate =
-                          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                              .format(input)
-                              .toString();
-                    },
                     controller: _eventDateController,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
+                    onSaved: (input) {
+                      if(input!=null) {
+                        widget.eventrequest.eventDate =
+                            DateFormat("yyyy-MM-dd")
+                                .format(input)
+                                .toString();
+                      }
+                      else _eventDateController.text=widget.eventrequest.eventDate;
+                    },
+                   //controller: _eventDateController,
                     autocorrect: false,
                   ),
                 ),
                 new Container(
-                 child: DateTimeField(
+                  child: DateTimeField(
                     format: DateFormat("HH:mm"),
                     onShowPicker: (context, currentValue) async {
                       final time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()),
                       );
 
                       final date = DateTime.now();
                       return DateTimeField.convert(time);
                     },
-                   autocorrect: false,
-                   controller: _eventTimeController,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
+                    autocorrect: false,
+                    controller: _eventTimeController,
                     onSaved: (input) {
-                      widget.eventrequest.eventTime =
-                          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                              .format(input)
-                              .toString();
+                      if (input != null) {
+                        widget.eventrequest.eventTime =
+                            DateFormat("HH:mm").format(input).toString();
+                      } else
+                        _eventTimeController.text =
+                            widget.eventrequest.eventTime;
                     },
-
                   ),
                 ),
-                  /*child: new TextFormField(
+                /*child: new TextFormField(
                     decoration: const InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
@@ -324,6 +338,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _eventDurationController,
                     onSaved: (String value) {
                       widget.eventrequest.eventDuration = value;
@@ -346,6 +361,7 @@ class _EditEventState extends State<EditEvent> {
                         labelStyle: TextStyle(
                           color: Colors.grey,
                         )),
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     autocorrect: false,
                     controller: _eventDescriptionController,
                     onSaved: (String value) {
@@ -370,6 +386,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _lineoneController,
                     onSaved: (String value) {
                       widget.eventrequest.addLineOne = value;
@@ -393,6 +410,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _linetwoController,
                     onSaved: (String value) {
                       widget.eventrequest.addLineTwo = value;
@@ -416,6 +434,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _linethreeController,
                     onSaved: (String value) {
                       widget.eventrequest.addLineThree = value;
@@ -439,6 +458,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _pincodeController,
                     onSaved: (String value) {
                       //  widget.eventrequest.pincode = value;
@@ -474,6 +494,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _cityController,
                     onSaved: (String value) {
                       widget.eventrequest.city = value;
@@ -497,6 +518,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _createdTimeController,
                     onSaved: (String value) {
                       widget.eventrequest.createdTime = value;

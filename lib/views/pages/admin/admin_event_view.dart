@@ -98,7 +98,7 @@ class _EventAdminViewState extends State<EventAdminView> {
                                           .data[itemCount].approvalStatus,
                                       page: EditEvent(
                                           eventrequest:
-                                              snapshot.data[itemCount]),
+                                          snapshot.data[itemCount]),
                                       actions: Actions(
                                           _eventVM.processEventRequest,
                                           snapshot.data[itemCount]))));
