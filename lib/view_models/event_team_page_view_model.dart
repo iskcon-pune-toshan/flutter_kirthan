@@ -25,21 +25,21 @@ class EventTeamPageViewModel extends Model {
 
   Future<List<EventTeam>> getEventTeamMappings(int teamMapping) {
     Future<List<EventTeam>> teamusers =
-        apiSvc?.getEventTeamMappings(teamMapping);
+    apiSvc?.getEventTeamMappings(teamMapping);
     return teamusers;
   }
 
   Future<List<EventTeam>> submitNewEventTeamMapping(
       List<EventTeam> listofteamusermap) {
     Future<List<EventTeam>> teamusers =
-        apiSvc?.submitNewEventTeamMapping(listofteamusermap);
+    apiSvc?.submitNewEventTeamMapping(listofteamusermap);
     return teamusers;
   }
 
   Future<List<EventTeam>> submitDeleteEventTeamMapping(
       Map<String, dynamic> listofteamusermap) {
     Future<List<EventTeam>> teamusers =
-        apiSvc?.submitDeleteEventTeamMapping(listofteamusermap);
+    apiSvc?.submitDeleteEventTeamMapping(listofteamusermap);
     return teamusers;
   }
 }

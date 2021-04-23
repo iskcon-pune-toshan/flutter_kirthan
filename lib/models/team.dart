@@ -12,7 +12,6 @@ class TeamRequest {
   String updatedTime;
   String approvalStatus;
   String approvalComments;
-  String availableTime;
   String availableFrom;
   String availableTo;
   String weekDay;
@@ -28,27 +27,26 @@ class TeamRequest {
 //Typically called form service layer to create a new user
   TeamRequest(
       {this.id,
-      this.teamTitle,
-      this.teamDescription,
-      this.isProcessed,
-      this.createdBy,
-      this.updatedBy,
-      this.createdTime,
-      this.updatedTime,
-      this.approvalStatus,
-      this.approvalComments,
-      this.availableTime,
-      this.availableFrom,
-      this.availableTo,
-      this.weekDay,
-      this.location,
-      this.category,
-      this.experience,
-      this.phoneNumber,
-      this.teamLeadId,
-      this.localAdminArea,
-      this.localAdminName,
-      this.listOfTeamMembers});
+        this.teamTitle,
+        this.teamDescription,
+        this.isProcessed,
+        this.createdBy,
+        this.updatedBy,
+        this.createdTime,
+        this.updatedTime,
+        this.approvalStatus,
+        this.approvalComments,
+        this.availableFrom,
+        this.availableTo,
+        this.weekDay,
+        this.location,
+        this.category,
+        this.experience,
+        this.phoneNumber,
+        this.teamLeadId,
+        this.localAdminArea,
+        this.localAdminName,
+        this.listOfTeamMembers});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory TeamRequest.fromJson(Map<String, dynamic> data) {
@@ -63,7 +61,6 @@ class TeamRequest {
       createdTime: data['createdTime'],
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
-      availableTime: data['availableTime'],
       availableFrom: data['availableFrom'],
       availableTo: data['availableTo'],
       weekDay: data['weekDay'],
@@ -90,7 +87,6 @@ class TeamRequest {
       createdTime: map['createdTime'],
       approvalStatus: map['approvalStatus'],
       approvalComments: map['approvalComments'],
-      availableTime: map['availableTime'],
       availableFrom: map['availableFrom'],
       availableTo: map['availableTo'],
       weekDay: map['weekDay'],
@@ -116,7 +112,6 @@ class TeamRequest {
     data['createdTime'] = this.createdTime;
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
-    data['availableTime'] = this.availableTime;
     data['availableFrom'] = this.availableFrom;
     data['availableTo'] = this.availableTo;
     data['weekDay'] = this.weekDay;
@@ -143,7 +138,8 @@ class TeamRequest {
       "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
       "approvalComments": this.approvalComments,
-      "availableTime": this.availableTime,
+      "availableFrom" : this.availableFrom,
+      "availableTo": this.availableTo,
       "weekDay": this.weekDay,
       "location": this.location,
       "category": this.category,

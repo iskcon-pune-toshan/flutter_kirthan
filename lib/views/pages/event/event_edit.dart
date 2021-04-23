@@ -81,10 +81,10 @@ class _EditEventState extends State<EditEvent> {
       new TextEditingController();
   String eventType;
   final TextEditingController _eventDateController =
-      new TextEditingController();
+  new TextEditingController();
   String eventDate;
   final TextEditingController _eventTimeController =
-      new TextEditingController();
+  new TextEditingController();
   String eventTime;
   final TextEditingController _eventDescriptionController =
       new TextEditingController();
@@ -120,7 +120,7 @@ class _EditEventState extends State<EditEvent> {
   void initState() {
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
-    _eventDateController.text = widget.eventrequest.eventDate.substring(0, 10);
+    _eventDateController.text = widget.eventrequest.eventDate.substring(0,10);
     _eventTimeController.text = widget.eventrequest.eventTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
     _lineoneController.text = widget.eventrequest.addLineOne;
@@ -136,7 +136,7 @@ class _EditEventState extends State<EditEvent> {
     approvalStatus = widget.eventrequest.approvalStatus;
     print("createdTime");
     print(widget.eventrequest.createdTime);
-
+print(widget.eventrequest.isPublicEvent);
     return super.initState();
   }
 
@@ -148,7 +148,12 @@ class _EditEventState extends State<EditEvent> {
     print(email);
     return email;
   }
-
+bool readonly(bool public){
+    if(public==true)
+      return false;
+    else
+      return true;
+}
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
@@ -161,10 +166,7 @@ class _EditEventState extends State<EditEvent> {
               child: new MaterialButton(
                 color: themeData.primaryColor,
                 textColor: themeData.secondaryHeaderColor,
-                child: new Text(
-                  'Save',
-                  style: TextStyle(color: KirthanStyles.colorPallete30),
-                ),
+                child: new Text('Save',style: TextStyle(color: KirthanStyles.colorPallete30),),
                 onPressed: () {
                   // _handleSubmitted();
                   //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
@@ -236,6 +238,7 @@ class _EditEventState extends State<EditEvent> {
                         color: Colors.grey,
                       ),
                     ),
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     autocorrect: false,
                     controller: _eventTypeController,
                     onSaved: (String value) {
@@ -245,28 +248,28 @@ class _EditEventState extends State<EditEvent> {
                 ),
                 new Container(
                   child: DateTimeField(
+
                     format: DateFormat("yyyy-MM-dd"),
                     onShowPicker: (context, currentValue) async {
                       final date = await showDatePicker(
                           context: context,
-                          firstDate:
-                              DateTime.parse(widget.eventrequest.eventDate),
-                          initialDate:
-                              currentValue ?? widget.eventrequest.eventDate,
+                          firstDate: DateTime.parse(widget.eventrequest.eventDate),
+                          initialDate: currentValue ?? widget.eventrequest.eventDate,
                           lastDate: DateTime(2100));
                       return date;
                     },
                     controller: _eventDateController,
-
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     onSaved: (input) {
-                      if (input != null) {
+                      if(input!=null) {
                         widget.eventrequest.eventDate =
-                            DateFormat("yyyy-MM-dd").format(input).toString();
-                      } else
-                        _eventTimeController.text =
-                            widget.eventrequest.eventDate;
+                            DateFormat("yyyy-MM-dd")
+                                .format(input)
+                                .toString();
+                      }
+                      else _eventDateController.text=widget.eventrequest.eventDate;
                     },
-                    //controller: _eventDateController,
+                   //controller: _eventDateController,
                     autocorrect: false,
                   ),
                 ),
@@ -283,13 +286,16 @@ class _EditEventState extends State<EditEvent> {
                       final date = DateTime.now();
                       return DateTimeField.convert(time);
                     },
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     autocorrect: false,
                     controller: _eventTimeController,
                     onSaved: (input) {
-                      widget.eventrequest.eventTime = input.toString();
-                      /*DateFormat("HH:mm")
-                              .format(input)
-                              .toString();*/
+                      if (input != null) {
+                        widget.eventrequest.eventTime =
+                            DateFormat("HH:mm").format(input).toString();
+                      } else
+                        _eventTimeController.text =
+                            widget.eventrequest.eventTime;
                     },
                   ),
                 ),
@@ -313,7 +319,7 @@ class _EditEventState extends State<EditEvent> {
                     onSaved: (String value) {
                       widget.eventrequest.eventTime = value;
                     },
-                  ),*/ /*
+                  ),*//*
                 ),*/
                 new Container(
                   child: new TextFormField(
@@ -332,6 +338,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _eventDurationController,
                     onSaved: (String value) {
                       widget.eventrequest.eventDuration = value;
@@ -354,6 +361,7 @@ class _EditEventState extends State<EditEvent> {
                         labelStyle: TextStyle(
                           color: Colors.grey,
                         )),
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     autocorrect: false,
                     controller: _eventDescriptionController,
                     onSaved: (String value) {
@@ -378,6 +386,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _lineoneController,
                     onSaved: (String value) {
                       widget.eventrequest.addLineOne = value;
@@ -401,6 +410,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _linetwoController,
                     onSaved: (String value) {
                       widget.eventrequest.addLineTwo = value;
@@ -424,6 +434,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _linethreeController,
                     onSaved: (String value) {
                       widget.eventrequest.addLineThree = value;
@@ -447,6 +458,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _pincodeController,
                     onSaved: (String value) {
                       //  widget.eventrequest.pincode = value;
@@ -482,6 +494,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _cityController,
                     onSaved: (String value) {
                       widget.eventrequest.city = value;
@@ -505,6 +518,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _createdTimeController,
                     onSaved: (String value) {
                       widget.eventrequest.createdTime = value;

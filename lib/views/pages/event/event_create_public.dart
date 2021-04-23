@@ -21,9 +21,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 
 class EventWritePublic extends StatefulWidget {
   TeamRequest selectedTeam;
@@ -38,8 +38,8 @@ class EventWritePublic extends StatefulWidget {
 
   EventWritePublic(
       {this.selectedTeam,
-      @required this.eventrequest,
-      @required this.userLogin})
+        @required this.eventrequest,
+        @required this.userLogin})
       : super();
 }
 
@@ -151,9 +151,9 @@ class _EventWriteState extends State<EventWritePublic> {
                       ),
                       items: snapshot.data
                           .map((team) => DropdownMenuItem<TeamRequest>(
-                                value: team,
-                                child: Text(team.teamTitle),
-                              ))
+                        value: team,
+                        child: Text(team.teamTitle),
+                      ))
                           .toList(),
                       onChanged: (input) {
                         setState(() {
@@ -266,13 +266,13 @@ class _EventWriteState extends State<EventWritePublic> {
                               padding: const EdgeInsets.all(12.0),
                               child: Column(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   new Container(
                                     child: new Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      MainAxisAlignment.center,
                                       children: <Widget>[
                                         Consumer<ThemeNotifier>(
                                           builder: (context, notifier, child) =>
@@ -287,12 +287,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                               //attribute: "Address",
                                               decoration: InputDecoration(
                                                   enabledBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.grey),
                                                   ),
                                                   focusedBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.green),
                                                   ),
@@ -322,12 +322,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                               //attribute: "line2",
                                               decoration: InputDecoration(
                                                   enabledBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.grey),
                                                   ),
                                                   focusedBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.green),
                                                   ),
@@ -353,12 +353,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                               //attribute: "line3",
                                               decoration: InputDecoration(
                                                   enabledBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.grey),
                                                   ),
                                                   focusedBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.green),
                                                   ),
@@ -385,12 +385,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                               //attribute: "locality",
                                               decoration: InputDecoration(
                                                   enabledBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.grey),
                                                   ),
                                                   focusedBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.green),
                                                   ),
@@ -416,12 +416,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                               //attribute: "PinCode",
                                               decoration: InputDecoration(
                                                   enabledBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.grey),
                                                   ),
                                                   focusedBorder:
-                                                      UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.green),
                                                   ),
@@ -453,20 +453,20 @@ class _EventWriteState extends State<EventWritePublic> {
                                   ),
                                   Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
                                         RaisedButton(
                                           onPressed: () {},
                                           child: Consumer<ThemeNotifier>(
                                             builder:
                                                 (context, notifier, child) =>
-                                                    Text(
-                                              "Send",
-                                              style: TextStyle(
-                                                  fontSize:
+                                                Text(
+                                                  "Send",
+                                                  style: TextStyle(
+                                                      fontSize:
                                                       notifier.custFontSize,
-                                                  color: Colors.white),
-                                            ),
+                                                      color: Colors.white),
+                                                ),
                                           ),
                                           color: const Color(0xFF1BC0C5),
                                         ),
@@ -487,7 +487,7 @@ class _EventWriteState extends State<EventWritePublic> {
         Text(
           title,
           style: TextStyle(
-              //color:  KirthanStyles.titleColor ,
+            //color:  KirthanStyles.titleColor ,
               fontWeight: FontWeight.normal),
         )
       ],
@@ -863,7 +863,7 @@ class _EventWriteState extends State<EventWritePublic> {
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
 
-                          //attribute: "PhoneNumber",
+                        //attribute: "PhoneNumber",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -885,13 +885,13 @@ class _EventWriteState extends State<EventWritePublic> {
                             eventrequest.phoneNumber = int.parse(input);
                           },
                           validator: validateMobile
-                          /*  (value) {
+                        /*  (value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },*/
-                          ),
+                      ),
                     ),
                     new Container(
                         alignment: Alignment.centerLeft,
@@ -1276,9 +1276,9 @@ class _EventWriteState extends State<EventWritePublic> {
                               style: TextStyle(color: Colors.grey)),
                           items: _cities
                               .map((city) => DropdownMenuItem<String>(
-                                    value: city,
-                                    child: Text(city),
-                                  ))
+                            value: city,
+                            child: Text(city),
+                          ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1298,9 +1298,9 @@ class _EventWriteState extends State<EventWritePublic> {
                           ),
                           items: _states
                               .map((state) => DropdownMenuItem(
-                                    value: state,
-                                    child: Text(state),
-                                  ))
+                            value: state,
+                            child: Text(state),
+                          ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1318,9 +1318,9 @@ class _EventWriteState extends State<EventWritePublic> {
                               style: TextStyle(color: Colors.grey)),
                           items: ['IND', 'Kyrgyzstan']
                               .map((country) => DropdownMenuItem(
-                                    value: country,
-                                    child: Text(country),
-                                  ))
+                            value: country,
+                            child: Text(country),
+                          ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1356,7 +1356,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseUser user =
-                                    await auth.currentUser();
+                                await auth.currentUser();
                                 final String email = user.email;
                                 eventrequest.createdBy = email;
                                 print("created by " + eventrequest.createdBy);
@@ -1368,15 +1368,15 @@ class _EventWriteState extends State<EventWritePublic> {
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
                                 // print(eventrequest.createdBy);
                                 String dt =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                    .format(DateTime.now());
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
                                 //eventrequest.approvalStatus = "Processing";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
-                                    eventrequest.toJson();
+                                eventrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
                                 EventRequest neweventrequest = await eventPageVM
@@ -1393,7 +1393,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 );
 
                                 List<EventTeam> listofEventUsers =
-                                    new List<EventTeam>();
+                                new List<EventTeam>();
 
                                 EventTeam eventteam = new EventTeam();
                                 //eventteam.eventId = team.eventId;
@@ -1402,8 +1402,8 @@ class _EventWriteState extends State<EventWritePublic> {
                                 eventteam.createdBy = email;
 
                                 String dta =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                    .format(DateTime.now());
                                 eventteam.createdTime = dt;
                                 //eventteam.updatedBy = "SYSTEM";
                                 //eventteam.updatedTime = dt;

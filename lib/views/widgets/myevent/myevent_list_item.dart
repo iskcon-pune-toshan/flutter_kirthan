@@ -485,7 +485,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.only(bottom: 15),
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              const EdgeInsets.symmetric(horizontal: 15.0),
                               child: Text(
                                 eventrequest?.eventDate.substring(0, 10),
 //0,10 date
@@ -512,7 +512,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.only(bottom: 15),
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
                                 eventrequest?.eventTime,
                                 style: TextStyle(
@@ -536,7 +536,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.only(bottom: 15),
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
                                 //notifier.duration
                                 eventrequest?.eventDuration == notifier.duration

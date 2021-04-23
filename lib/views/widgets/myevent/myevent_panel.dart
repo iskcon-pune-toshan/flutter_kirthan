@@ -179,7 +179,7 @@ class MyEventsPanel extends StatelessWidget {
                               itemBuilder: (_, int index) {
                                 eventteamrequest = eventRequests[index];
                                 return MyEventRequestsListItem(
-                                 // eventteam: eventteamrequest,
+                                  // eventteam: eventteamrequest,
                                 );
                               },
                             ),
@@ -203,5 +203,4 @@ class MyEventsPanel extends StatelessWidget {
       },
     );
   }
-  }
-
+}

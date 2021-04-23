@@ -28,7 +28,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 
 class EventView extends StatefulWidget {
   final String title = "Events";
@@ -72,7 +72,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
       List<dynamic> eventrequestsData = json.decode(response.body);
       //print(eventrequestsData);
       List<String> events =
-          eventrequestsData.map((event) => event.toString()).toList();
+      eventrequestsData.map((event) => event.toString()).toList();
       event = events;
       print(event);
       int len = event.length;
@@ -92,7 +92,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
       access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
-            access.elementAt(1).toLowerCase() == "true" ? true : false;
+        access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       eventPageVM.accessTypes = accessTypes;
       //userdetails = prefs.getStringList("LoginDetails");
@@ -168,76 +168,76 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
     return Consumer<ThemeNotifier>(
       builder: (content, notifier, child) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Events",
-            //style: TextStyle(fontSize: notifier.custFontSize),
-          ),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                  Icons.search,
-                ),
-                onPressed: () => {
-                  print(event),
-                      showSearch(
-                        context: context,
-                        delegate: Search(event),
-                      )
-
-                    }),
-            PopupMenuButton(
-                icon: Icon(
-                  Icons.tune,
-                ),
-                onSelected: (input) {
-                  _selectedValue = input;
-                  print(input);
-                  if (input == 'Today')
-                    eventPageVM.setEventRequests("TODAY");
-                  else if (input == 'Tomorrow')
-                    eventPageVM.setEventRequests("TOMORROW");
-                  else if (input == 'This Week')
-                    eventPageVM.setEventRequests("This Week");
-                  else if (input == 'This Month')
-                    eventPageVM.setEventRequests("This Month");
-                  else if(input == 'Clear Filter')
-                    eventPageVM.setEventRequests("All");
-                  else if (notifier.duration != null) {
-                    eventPageVM.setEventRequests(notifier.duration);
-                  }
-                },
-                itemBuilder: (BuildContext context) {
-                  return eventTime.map((f) {
-                    return CheckedPopupMenuItem<String>(
-                      child: Text(
-                        f,
-                        style: TextStyle(
-                          fontSize: notifier.custFontSize,
-                        ),
-                      ),
-                      value: f,
-                      checked: _selectedValue == f ? true : false,
-                      enabled: true,
-                      //checked: true,
-                    );
-                  }).toList();
-                }),
-          ],
-          iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
-        ),
-        drawer: MyDrawer(),
-        body: RefreshIndicator(
-          key: refreshKey,
-          child: ScopedModel<EventPageViewModel>(
-            model: eventPageVM,
-            child: EventsPanel(
-              eventType: "Pune",
+          appBar: AppBar(
+            title: Text(
+              "Events",
+              //style: TextStyle(fontSize: notifier.custFontSize),
             ),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.search,
+                  ),
+                  onPressed: () => {
+                    print(event),
+                    showSearch(
+                      context: context,
+                      delegate: Search(event),
+                    )
+
+                  }),
+              PopupMenuButton(
+                  icon: Icon(
+                    Icons.tune,
+                  ),
+                  onSelected: (input) {
+                    _selectedValue = input;
+                    print(input);
+                    if (input == 'Today')
+                      eventPageVM.setEventRequests("TODAY");
+                    else if (input == 'Tomorrow')
+                      eventPageVM.setEventRequests("TOMORROW");
+                    else if (input == 'This Week')
+                      eventPageVM.setEventRequests("This Week");
+                    else if (input == 'This Month')
+                      eventPageVM.setEventRequests("This Month");
+                    else if(input == 'Clear Filter')
+                      eventPageVM.setEventRequests("All");
+                    else if (notifier.duration != null) {
+                      eventPageVM.setEventRequests(notifier.duration);
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return eventTime.map((f) {
+                      return CheckedPopupMenuItem<String>(
+                        child: Text(
+                          f,
+                          style: TextStyle(
+                            fontSize: notifier.custFontSize,
+                          ),
+                        ),
+                        value: f,
+                        checked: _selectedValue == f ? true : false,
+                        enabled: true,
+                        //checked: true,
+                      );
+                    }).toList();
+                  }),
+            ],
+            iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
           ),
-          onRefresh: refreshList,
-        ),
-        floatingActionButton:buildSpeedDial() /*FloatingActionButton(
+          drawer: MyDrawer(),
+          body: RefreshIndicator(
+            key: refreshKey,
+            child: ScopedModel<EventPageViewModel>(
+              model: eventPageVM,
+              child: EventsPanel(
+                eventType: "Pune",
+              ),
+            ),
+            onRefresh: refreshList,
+          ),
+          floatingActionButton:buildSpeedDial() /*FloatingActionButton(
           heroTag: "event",
           child: Icon(Icons.add),
           backgroundColor: KirthanStyles.colorPallete10,
@@ -254,16 +254,16 @@ class _EventViewState extends State<EventView> with BaseAPIService {
 
 class Search extends SearchDelegate {
   Search(
-    this.listExample, {
-    String hintText = "Search by Event Title",
+      this.listExample, {
+        String hintText = "Search by Event Title",
 
-  }) : super(
-          searchFieldLabel: hintText,
+      }) : super(
+    searchFieldLabel: hintText,
 
-          searchFieldStyle: TextStyle(color: Colors.grey),
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.search,
-        );
+    searchFieldStyle: TextStyle(color: Colors.grey),
+    keyboardType: TextInputType.text,
+    textInputAction: TextInputAction.search,
+  );
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
     final ThemeData theme = Theme.of(context);
@@ -318,23 +318,23 @@ class Search extends SearchDelegate {
     query.isEmpty
         ? suggestionList = recentList //In the true case
         : suggestionList.addAll(listExample.where(
-            // In the false case
-            (element) => element.toUpperCase().contains(query) || element.toLowerCase().contains(query),
-        
-          ));
+      // In the false case
+          (element) => element.toUpperCase().contains(query) || element.toLowerCase().contains(query),
+
+    ));
 
     return
-        //_widget();
-        ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            suggestionList[index],
-          ),
-          leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-        );
-      },
-    );
+      //_widget();
+      ListView.builder(
+        itemCount: suggestionList.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(
+              suggestionList[index],
+            ),
+            leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
+          );
+        },
+      );
   }
 }

@@ -24,7 +24,7 @@ class NotificationManager extends BaseAPIService
     if (Platform.operatingSystem == "Android")
       fms
           .createNotificationChannel('Kirtan@ISKON', 'Kirtan Notifications',
-              'Default Channel for Kirtan notification')
+          'Default Channel for Kirtan notification')
           .then((value) => print("Channel Created"));
     try {
       fms.getFBToken().then((deviceToken) {
@@ -51,7 +51,7 @@ class NotificationManager extends BaseAPIService
     // List<NotificationModel> expectedData =
     //print("Hello");
     List<NotificationModel> expectedData =
-        data.map((element) => NotificationModel.fromJson(element)).toList();
+    data.map((element) => NotificationModel.fromJson(element)).toList();
     //print(expectedData.toString());
     return expectedData;
   }
@@ -74,7 +74,7 @@ class NotificationManager extends BaseAPIService
       List<dynamic> data = json.decode(response.body);
       print(data);
       List<NotificationModel> expectedData =
-          data.map((element) => NotificationModel.fromJson(element)).toList();
+      data.map((element) => NotificationModel.fromJson(element)).toList();
       //print(expectedData.toString());
       return expectedData;
     } else {

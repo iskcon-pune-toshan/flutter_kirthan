@@ -33,7 +33,7 @@ class NotificationViewModel extends Model {
   //geting today's ntfs
   Future<List<NotificationModel>> getNotificationsBySpec(String ntfType) async {
     List<NotificationModel> expectedData =
-        await apiSvc?.getNotificationsBySpec(ntfType);
+    await apiSvc?.getNotificationsBySpec(ntfType);
     return expectedData;
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/event/event_create_invite.dart';
+// import 'package:flutter_kirthan/views/pages/event/event_create_invite.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_create.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';

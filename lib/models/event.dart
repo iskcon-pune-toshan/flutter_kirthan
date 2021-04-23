@@ -1,4 +1,3 @@
-
 class EventRequest {
   final int id;
   String eventTitle;
@@ -59,10 +58,10 @@ class EventRequest {
         this.destinationLongitude,
         this.destinationLatitude,
         this.eventMobility,
-      this.eventTime,
-      this.isPublicEvent,
-      this.status,
-      this.cancelReason});
+        this.eventTime,
+        this.isPublicEvent,
+        this.status,
+        this.cancelReason});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventRequest.fromJson(Map<String, dynamic> data) {

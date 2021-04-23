@@ -56,6 +56,7 @@ dependencies:
   syncfusion_flutter_calendar:
   datetime_picker_formfield:
   flutter_speed_dial:
+  flutter_datetime_picker:
 
 
 

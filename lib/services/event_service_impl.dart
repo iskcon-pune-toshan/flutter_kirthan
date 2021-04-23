@@ -152,7 +152,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
           .toList();
       List<String> events =
-          eventrequests.map((event) => event.toString()).toList();
+      eventrequests.map((event) => event.toString()).toList();
       print(events);
 //print(eventrequests);
       print("before return");
@@ -187,7 +187,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
           .toList();
       List<String> events =
-          eventrequests.map((event) => event.toString()).toList();
+      eventrequests.map((event) => event.toString()).toList();
       print(events);
 //print(eventrequests);
       print("before return");
