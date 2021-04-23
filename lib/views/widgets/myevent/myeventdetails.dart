@@ -23,10 +23,12 @@ import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 /*final EventTeamPageViewModel eventTeamPageVM =
     EventTeamPageViewModel(apiSvc: EventTeamAPIService());*/
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
+
 class EventDetails extends StatefulWidget {
   EventRequest eventrequest;
   //EventTeam eventTeam;
@@ -41,7 +43,7 @@ class EventDetails extends StatefulWidget {
   _EventDetailsState createState() => new _EventDetailsState();
 }
 
-class _EventDetailsState extends State<EventDetails> with BaseAPIService{
+class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   //EventRequest eventrequestobj = new EventRequest();
   //_EditProfileViewState({Key key, @required this.eventrequest}) ;
@@ -91,59 +93,56 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService{
   ];
   // controllers for form text controllers
   final TextEditingController _eventTitleController =
-  new TextEditingController();
+      new TextEditingController();
   String eventTitle;
   final TextEditingController _eventTypeController =
-  new TextEditingController();
+      new TextEditingController();
   String eventType;
   final TextEditingController _eventDateController =
-  new TextEditingController();
+      new TextEditingController();
   String eventDate;
   final TextEditingController _eventTimeController =
-  new TextEditingController();
+      new TextEditingController();
   String eventTime;
   final TextEditingController _eventDescriptionController =
-  new TextEditingController();
+      new TextEditingController();
   String eventDescription;
   final TextEditingController _lineoneController = new TextEditingController();
   String lineOne;
   final TextEditingController _eventDurationController =
-  new TextEditingController();
+      new TextEditingController();
   String eventDuration;
   final TextEditingController _linetwoController = new TextEditingController();
   String lineTwo;
   final TextEditingController _linethreeController =
-  new TextEditingController();
+      new TextEditingController();
   String lineThree;
   final TextEditingController _cityController = new TextEditingController();
   String city;
   final TextEditingController _pincodeController = new TextEditingController();
   String pinCode;
   final TextEditingController _createdTimeController =
-  new TextEditingController();
+      new TextEditingController();
   String createdTime;
   final TextEditingController _stateController = new TextEditingController();
   final TextEditingController _updatedByController =
-  new TextEditingController();
+      new TextEditingController();
   String updatedBy;
   final TextEditingController _updatedTimeController =
-  new TextEditingController();
+      new TextEditingController();
   String updatedTime;
   String approvalStatus;
-final TextEditingController _teamName = new TextEditingController();
+  final TextEditingController _teamName = new TextEditingController();
 
-List<String> eventss;
+  List<String> eventss;
   String radioItem = '';
   //String createdTime;
 
   int t;
   Map<String, bool> usercehckmap = new Map<String, bool>();
 
-
-
   @override
   void initState() {
-
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
     _eventDateController.text = widget.eventrequest.eventDate.substring(0, 10);
@@ -163,13 +162,10 @@ List<String> eventss;
     print("createdTime");
     print(widget.eventrequest.createdTime);
     //_teamName.text = widget.selectedteam.teamTitle;
- t=widget.eventrequest.id;
+    t = widget.eventrequest.id;
     //eventTeamPageVM.setEvenTeamMappings(widget.eventrequest.id);
     //eventteam=eventTeamPageVM.getEventTeamMappings(widget.eventrequest.id);
     //print(eventteam);
-
-
-
 
 //print(eventss);
 
@@ -177,7 +173,6 @@ List<String> eventss;
 
     //print(teamname);
     return super.initState();
-
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -189,13 +184,15 @@ List<String> eventss;
     print(email);
     return email;
   }
-  int _groupValue=-1;
-  List type = ["Health issues/injury", "Emergency","Important Event", "Other"];
+
+  int _groupValue = -1;
+  List type = ["Health issues/injury", "Emergency", "Important Event", "Other"];
   Widget _myRadioButton(String title, int value, Function onchanged) {
     return RadioListTile(
       value: value,
       groupValue: _groupValue,
-      onChanged: onchanged,/*(value) {
+      onChanged: onchanged,
+      /*(value) {
         setState(() {
           print(value);
           widget.eventrequest.cancelReason = title;
@@ -204,37 +201,33 @@ List<String> eventss;
 
         });
       },*/
-      title:  Consumer<ThemeNotifier>(
-          builder:
-              (context, notifier,
-              child) => Text(title,style:
-          TextStyle(fontSize: notifier
-              .custFontSize)),),
-
-
-
+      title: Consumer<ThemeNotifier>(
+        builder: (context, notifier, child) =>
+            Text(title, style: TextStyle(fontSize: notifier.custFontSize)),
+      ),
       selected: false,
-
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-            title: const Text('Event Details'), actions: <Widget>[
+        appBar:
+            new AppBar(title: const Text('Event Details'), actions: <Widget>[
           new Container(
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
-              child: new IconButton(icon: Icon(Icons.edit),
+              child: new IconButton(
+                icon: Icon(Icons.edit),
                 onPressed: () {
-
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            EditEvent(eventrequest: widget.eventrequest,)),
+                        builder: (context) => EditEvent(
+                              eventrequest: widget.eventrequest,
+                            )),
                   );
-                },)
-          )
+                },
+              ))
         ]),
         body: new Form(
             key: _formKey,
@@ -545,41 +538,15 @@ List<String> eventss;
                     },
                   ),
                 ),*/
-                new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "State",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    readOnly: true,
-                    controller: _stateController,
-                    onSaved: (String value) {
-                      widget.eventrequest.state = value;
-                    },
-                  ),
-                ),
-               /* DropdownButtonFormField<String>(
+                DropdownButtonFormField<String>(
                   value: widget.eventrequest.state,
                   icon: const Icon(Icons.location_city),
                   hint: Text('Select State'),
-
                   items: _states
-                      .map((state) =>
-                      DropdownMenuItem(
-                        value: state,
-                        child: Text(state),
-                      ))
+                      .map((state) => DropdownMenuItem(
+                            value: state,
+                            child: Text(state),
+                          ))
                       .toList(),
                   onChanged: (input) {
                     setState(() {
@@ -589,13 +556,11 @@ List<String> eventss;
                   onSaved: (input) {
                     widget.eventrequest.state = input;
                   },
-                ),*/
-
+                ),
                 RaisedButton(
                     color: KirthanStyles.colorPallete10,
                     child: Text('Cancel Invite'),
                     onPressed: () {
-
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -608,10 +573,10 @@ List<String> eventss;
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceEvenly,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Align(
                                         alignment: Alignment.center,
@@ -619,134 +584,127 @@ List<String> eventss;
                                           builder: (context, notifier, child) =>
                                               Text(
                                                   "Do you really want to cancel?",
-                                                  style:
-                                                  TextStyle(fontSize: notifier
-                                                      .custFontSize)),
+                                                  style: TextStyle(
+                                                      fontSize: notifier
+                                                          .custFontSize)),
                                         ),
                                       ),
                                       Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .spaceEvenly,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
                                           children: <Widget>[
                                             RaisedButton(
                                               onPressed: () {
-
                                                 showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return StatefulBuilder (
-                                                      builder: (context, setState) {
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return StatefulBuilder(
+                                                          builder: (context,
+                                                              setState) {
                                                         return Dialog(
                                                           shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius
-                                                                  .circular(
-                                                                  20.0)),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.0)),
                                                           //this right here
                                                           child: Container(
                                                             height: 500,
                                                             child: Padding(
-                                                              padding: const EdgeInsets
-                                                                  .all(12.0),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .all(
+                                                                      12.0),
                                                               child: Column(
-                                                                mainAxisAlignment: MainAxisAlignment
-                                                                    .spaceEvenly,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
                                                                 crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
+                                                                    CrossAxisAlignment
+                                                                        .center,
                                                                 children: [
                                                                   new Container(
-                                                                    child: new Column(
-                                                                      mainAxisAlignment: MainAxisAlignment
-                                                                          .center,
+                                                                    child:
+                                                                        new Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
                                                                       children: <
                                                                           Widget>[
                                                                         Consumer<
                                                                             ThemeNotifier>(
-                                                                          builder:
-                                                                              (
-                                                                              context,
-                                                                              notifier,
-                                                                              child) =>
-                                                                              Text(
-                                                                                  'Why do you want to cancel?',
-                                                                                  style:
-                                                                                  TextStyle(
-                                                                                      fontSize: notifier
-                                                                                          .custFontSize)),),
+                                                                          builder: (context, notifier, child) => Text(
+                                                                              'Why do you want to cancel?',
+                                                                              style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                        ),
                                                                         Column(
                                                                           children: <
                                                                               Widget>[
-                                                                            _myRadioButton( 'Health issues/injury',
-                                                                               1,(value) {
+                                                                            _myRadioButton(
+                                                                              'Health issues/injury',
+                                                                              1,
+                                                                              (value) {
                                                                                 setState(() {
                                                                                   print(value);
                                                                                   widget.eventrequest.cancelReason = 'Health issues/injury';
                                                                                   print('Health issues/injury');
                                                                                   //_groupValue = value;
-
                                                                                 });
                                                                               },
-
-
                                                                             ),
                                                                             _myRadioButton(
-                                                                               'Emergency',
-                                                                               2,(value) {
-                                                                              setState(() {
-                                                                                print(value);
-                                                                                widget.eventrequest.cancelReason = 'Emergency';
-                                                                                print('Emergency');
-                                                                                //_groupValue = value;
-
-                                                                              });
-                                                                            },
-
+                                                                              'Emergency',
+                                                                              2,
+                                                                              (value) {
+                                                                                setState(() {
+                                                                                  print(value);
+                                                                                  widget.eventrequest.cancelReason = 'Emergency';
+                                                                                  print('Emergency');
+                                                                                  //_groupValue = value;
+                                                                                });
+                                                                              },
                                                                             ),
                                                                             _myRadioButton(
-                                                                               'Important Event',
-                                                                               3,(value) {
-                                                                              setState(() {
-                                                                                print(value);
-                                                                                widget.eventrequest.cancelReason = 'Important Event';
-                                                                                print('Important Event');
-                                                                                //_groupValue = value;
-
-                                                                              });
-                                                                            },
-
-
+                                                                              'Important Event',
+                                                                              3,
+                                                                              (value) {
+                                                                                setState(() {
+                                                                                  print(value);
+                                                                                  widget.eventrequest.cancelReason = 'Important Event';
+                                                                                  print('Important Event');
+                                                                                  //_groupValue = value;
+                                                                                });
+                                                                              },
                                                                             ),
                                                                             _myRadioButton(
-                                                                               'Other',
-                                                                               4,(value) {
-                                                                              setState(() {
-                                                                                print(value);
-                                                                                widget.eventrequest.cancelReason = 'Other ';
-                                                                                print('Other');
-                                                                                //_groupValue = value;
-
-                                                                              });
-                                                                            },
-
-
+                                                                              'Other',
+                                                                              4,
+                                                                              (value) {
+                                                                                setState(() {
+                                                                                  print(value);
+                                                                                  widget.eventrequest.cancelReason = 'Other ';
+                                                                                  print('Other');
+                                                                                  //_groupValue = value;
+                                                                                });
+                                                                              },
                                                                             ),
-
 
                                                                             //Text('$radioItem', style: TextStyle(fontSize: 23),)
-
                                                                           ],
                                                                         ),
                                                                       ],
-                                                                    )
-                                                                    ,
+                                                                    ),
                                                                   ),
                                                                   Row(
-                                                                      mainAxisAlignment: MainAxisAlignment
-                                                                          .spaceEvenly,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceEvenly,
                                                                       children: <
                                                                           Widget>[
                                                                         RaisedButton(
-                                                                          onPressed: () {
+                                                                          onPressed:
+                                                                              () {
                                                                             Map<String, dynamic>
                                                                                 processrequestmap =
                                                                                 new Map<String, dynamic>();
@@ -754,10 +712,12 @@ List<String> eventss;
                                                                                 widget.eventrequest?.id;
                                                                             //widget.eventrequest?.isProcessed=false;
                                                                             //widget.eventrequest?.approvalStatus="Cancelled";
-                                                                            widget.eventrequest?.status = 3;
-                                                                            String eventrequestStr =
-                                                                            jsonEncode(widget.eventrequest.toStrJson());
-                                                                            eventPageVM.submitUpdateEventRequest(eventrequestStr);
+                                                                            widget.eventrequest?.status =
+                                                                                3;
+                                                                            Map<String, dynamic>
+                                                                                eventmap =
+                                                                                widget.eventrequest.toJson();
+                                                                            eventPageVM.deleteEventRequest(eventmap);
                                                                             //eventPageVM.deleteEventRequest(processrequestmap);
                                                                             SnackBar
                                                                                 mysnackbar =
@@ -771,28 +731,17 @@ List<String> eventss;
                                                                               MaterialPageRoute(builder: (context) => App()),
                                                                             );
                                                                           },
-                                                                          child: Consumer<
-                                                                              ThemeNotifier>(
-                                                                            builder:
-                                                                                (
-                                                                                context,
-                                                                                notifier,
-                                                                                child) =>
+                                                                          child:
+                                                                              Consumer<ThemeNotifier>(
+                                                                            builder: (context, notifier, child) =>
                                                                                 Text(
-                                                                                  "Send",
-                                                                                  style: TextStyle(
-                                                                                      fontSize:
-                                                                                      notifier
-                                                                                          .custFontSize,
-                                                                                      color: Colors
-                                                                                          .white),
-                                                                                ),
+                                                                              "Send",
+                                                                              style: TextStyle(fontSize: notifier.custFontSize, color: Colors.white),
+                                                                            ),
                                                                           ),
-                                                                          color: const Color(
-                                                                              0xFF1BC0C5),
+                                                                          color:
+                                                                              const Color(0xFF1BC0C5),
                                                                         ),
-
-
                                                                       ]),
                                                                 ],
                                                               ),
@@ -800,44 +749,38 @@ List<String> eventss;
                                                           ),
                                                         );
                                                       });
-                                                  });
-
+                                                    });
                                               },
                                               child: Consumer<ThemeNotifier>(
-                                                builder:
-                                                    (context, notifier,
-                                                    child) =>
+                                                builder: (context, notifier,
+                                                        child) =>
                                                     Text(
-                                                      "Yes",
-                                                      style: TextStyle(
-                                                          fontSize:
+                                                  "Yes",
+                                                  style: TextStyle(
+                                                      fontSize:
                                                           notifier.custFontSize,
-                                                          color: Colors.white),
-                                                    ),
+                                                      color: Colors.white),
+                                                ),
                                               ),
                                               color: const Color(0xFF1BC0C5),
                                             ),
-
-
                                             RaisedButton(
                                               onPressed: () {
                                                 Navigator.pop(context);
                                               },
                                               child: Consumer<ThemeNotifier>(
-                                                builder:
-                                                    (context, notifier,
-                                                    child) =>
+                                                builder: (context, notifier,
+                                                        child) =>
                                                     Text(
-                                                      "No",
-                                                      style: TextStyle(
-                                                          fontSize:
+                                                  "No",
+                                                  style: TextStyle(
+                                                      fontSize:
                                                           notifier.custFontSize,
-                                                          color: Colors.white),
-                                                    ),
+                                                      color: Colors.white),
+                                                ),
                                               ),
                                               color: const Color(0xFF1BC0C5),
                                             ),
-
                                           ]),
                                     ],
                                   ),
@@ -849,6 +792,4 @@ List<String> eventss;
               ],
             )));
   }
-
-
 }

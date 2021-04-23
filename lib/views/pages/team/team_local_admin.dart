@@ -26,15 +26,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 final TeamUserPageViewModel teamUserPageVM =
-TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TemplePageViewModel templePageVM =
-TemplePageViewModel(apiSvc: TempleAPIService());
+    TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
-UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 
 class TeamLocalAdmin extends StatefulWidget {
   TeamRequest teamrequest;
@@ -95,7 +95,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
       teamUser.userName = _selectedTeamMember;
       teamUser.createdBy = "SYSTEM";
       String dt =
-      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
       teamUser.createdTime = dt;
       teamUser.updatedBy = "SYSTEM";
       teamUser.updatedTime = dt;
@@ -153,18 +153,18 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                         style: TextStyle(color: Colors.grey)),
                                     items: templeArea
                                         .map((templeArea) =>
-                                        DropdownMenuItem<String>(
-                                          value: templeArea,
-                                          child: Text(templeArea),
-                                        ))
+                                            DropdownMenuItem<String>(
+                                              value: templeArea,
+                                              child: Text(templeArea),
+                                            ))
                                         .toList(),
                                     onChanged: (input) {
                                       setState(() {
                                         _selectedTempleArea = input;
                                         _selectedtempleId =
                                             templeList.indexWhere((element) =>
-                                            element.area ==
-                                                _selectedTempleArea) +
+                                                    element.area ==
+                                                    _selectedTempleArea) +
                                                 1;
                                         print(_selectedtempleId);
                                         _selectedLocalAdmin = null;
@@ -186,7 +186,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                 if (snapshot.data != null) {
                                   userTempleList = snapshot.data
                                       .where((element) =>
-                                  element.templeId == _selectedtempleId)
+                                          element.templeId == _selectedtempleId)
                                       .toList();
                                   List<String> templeArea = userTempleList
                                       .map((user) => user.userName)
@@ -200,10 +200,10 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                         style: TextStyle(color: Colors.grey)),
                                     items: templeArea
                                         .map((templeArea) =>
-                                        DropdownMenuItem<String>(
-                                          value: templeArea,
-                                          child: Text(templeArea),
-                                        ))
+                                            DropdownMenuItem<String>(
+                                              value: templeArea,
+                                              child: Text(templeArea),
+                                            ))
                                         .toList(),
                                     onChanged: (input) {
                                       setState(() {
@@ -222,7 +222,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                 } else if (snapshot.hasError) {
                                   return Text("Error");
                                 } else {
-                                  return Text("Something else");
+                                  return Text("Retrieved null values");
                                 }
                               }),
                         ],
@@ -261,20 +261,20 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                             _formKey.currentState.save();
                                             int i = 0;
                                             for (var member
-                                            in widget.selectedMembers) {
+                                                in widget.selectedMembers) {
                                               addUser(userList, member, i);
                                               i++;
                                             }
                                             for (var user in selectedUsers) {
                                               TeamUser teamUser =
-                                              new TeamUser();
+                                                  new TeamUser();
                                               teamUser.userId = user.id;
                                               teamUser.teamId =
                                                   widget.teamrequest.id;
                                               teamUser.userName = user.userName;
                                               teamUser.createdBy = "SYSTEM";
                                               String dt = DateFormat(
-                                                  "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                                      "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                                   .format(DateTime.now());
                                               teamUser.createdTime = dt;
                                               teamUser.updatedBy = "SYSTEM";
@@ -283,23 +283,23 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                             }
                                             print(listofTeamUsers);
                                             widget.teamrequest
-                                                .listOfTeamMembers =
+                                                    .listOfTeamMembers =
                                                 listofTeamUsers;
                                             Map<String, dynamic> teammap =
-                                            widget.teamrequest.toJson();
+                                                widget.teamrequest.toJson();
                                             TeamRequest newteamrequest =
-                                            await teamPageVM
-                                                .submitNewTeamRequest(
-                                                teammap);
+                                                await teamPageVM
+                                                    .submitNewTeamRequest(
+                                                        teammap);
 
                                             print(newteamrequest.id);
                                             String tid =
-                                            newteamrequest.id.toString();
+                                                newteamrequest.id.toString();
                                             SnackBar mysnackbar = SnackBar(
                                               content: Text(
                                                   "Team registered $successful with $tid"),
                                               duration:
-                                              new Duration(seconds: 4),
+                                                  new Duration(seconds: 4),
                                               backgroundColor: Colors.green,
                                             );
                                             Scaffold.of(context)

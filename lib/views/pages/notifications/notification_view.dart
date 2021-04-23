@@ -23,7 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
-NotificationViewModel(apiSvc: NotificationManager());
+    NotificationViewModel(apiSvc: NotificationManager());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
@@ -49,7 +49,7 @@ class NotificationViewState extends State<NotificationView> {
       access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
-        access.elementAt(1).toLowerCase() == "true" ? true : false;
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       notificationPageVM.accessTypes = accessTypes;
     });
@@ -94,24 +94,24 @@ class NotificationViewState extends State<NotificationView> {
                             children: <Widget>[
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     padding: EdgeInsets.only(left: 10),
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                            data.message,
-                                            //maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: notifier.darkTheme
-                                                    ? Colors.white
-                                                    : Colors.black),
-                                            softWrap: true,
-                                            overflow: TextOverflow.clip,
-                                          ),
+                                        data.message,
+                                        //maxLines: 2,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: notifier.darkTheme
+                                                ? Colors.white
+                                                : Colors.black),
+                                        softWrap: true,
+                                        overflow: TextOverflow.clip,
+                                      ),
                                     ),
                                   ),
                                   Container(
@@ -129,22 +129,22 @@ class NotificationViewState extends State<NotificationView> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     padding: EdgeInsets.only(left: 10, top: 3),
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                            'By ' + data.createdBy.toString(),
-                                            overflow: TextOverflow.clip,
-                                            style: TextStyle(
-                                              //fontWeight: FontWeight.w300,
-                                              color: notifier.darkTheme
-                                                  ? Colors.white
-                                                  : Colors.grey[500],
-                                            ),
-                                          ),
+                                        'By ' + data.createdBy.toString(),
+                                        overflow: TextOverflow.clip,
+                                        style: TextStyle(
+                                          //fontWeight: FontWeight.w300,
+                                          color: notifier.darkTheme
+                                              ? Colors.white
+                                              : Colors.grey[500],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Container(
@@ -216,7 +216,7 @@ class NotificationViewState extends State<NotificationView> {
               FlatButton(child: Icon(Icons.check)),
               FlatButton(child: Icon(Icons.close)),
             ]));
-    //TODO for update action == null (Check Server code)
+
     if (data.action == null) {
       icon = null;
     } else {
@@ -288,7 +288,7 @@ class NotificationViewState extends State<NotificationView> {
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -303,91 +303,119 @@ class NotificationViewState extends State<NotificationView> {
                     contentPadding: EdgeInsets.all(5),
                     title: data.message.contains("Rejected")
                         ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Rejected",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Rejected",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          )
                         : data.message.contains("Registered")
-                        ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Registered",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : data.message
-                        .contains("Request to update an event")
-                        ? Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Updated",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Accepted",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Registered",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              )
+                            : data.message
+                                    .contains("Request to update an event")
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Updated",
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  )
+                                : data.message.contains("cancelled")
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Cancelled",
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Accepted",
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      ),
                     subtitle: data.message.contains("Registered")
                         ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message +
-                              " by " +
-                              data.createdBy.toString(),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data.message,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          )
+                        : data.message.contains("cancelled")
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.message,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.message +
+                                        " by " +
+                                        data.createdBy.toString(),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
@@ -405,7 +433,7 @@ class NotificationViewState extends State<NotificationView> {
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -429,48 +457,48 @@ class NotificationViewState extends State<NotificationView> {
                     trailing: icon == Icons.pause
                         ? actions
                         : Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          data.createdAt.toString().substring(11, 16),
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                data.createdAt.toString().substring(11, 16),
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                data.createdAt.toString().substring(0, 10),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              icon == Icons.close
+                                  ? Text(
+                                      "Rejected",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Accepted",
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          data.createdAt.toString().substring(0, 10),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        icon == Icons.close
-                            ? Text(
-                          "Rejected",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        )
-                            : Text(
-                          "Accepted",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
                     onTap: () {
                       showNotification(context, data, () {
                         setState(() {
                           flag
                               ? notificationPageVM
-                              .getNotificationsBySpec("Today")
+                                  .getNotificationsBySpec("Today")
                               : notificationPageVM.getNotifications();
                         });
                       });
@@ -514,57 +542,57 @@ class NotificationViewState extends State<NotificationView> {
       body: RefreshIndicator(
         key: refreshKey,
         child:
-        // FutureBuilder(
-        //     future: notificationPageVM.getNotificationsBySpec("Today"),
-        //     builder: (context, snapshot) {
-        //       if (snapshot.hasData) {
-        //         ntfList = snapshot.data;
-        //         print(ntfList);
-        //         return ntfList.isNotEmpty
-        //             ? Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Text(
-        //                     "Today",
-        //                     style: TextStyle(
-        //                       fontWeight: FontWeight.bold,
-        //                     ),
-        //                   ),
-        //                   Divider(),
-        //                   Expanded(
-        //                     child: ListView.builder(
-        //                         itemBuilder: (context, itemCount) =>
-        //                             _buildNotification(
-        //                                 snapshot.data[itemCount], true),
-        //                         itemCount: snapshot.data.length),
-        //                   ),
-        //                 ],
-        //               )
-        //             : Container();
-        //       } else if (snapshot.hasError) {
-        //         print(snapshot);
-        //         print(snapshot.error.toString() + " Error ");
-        //         return Center(child: Text('Error loading notifications'));
-        //       } else {
-        //         return Center(child: CircularProgressIndicator());
-        //       }
-        //     }),
-        FutureBuilder(
-            future: notificationPageVM.getNotifications(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                    itemBuilder: (context, itemCount) =>
-                        _buildNotification(snapshot.data[itemCount], false),
-                    itemCount: snapshot.data.length);
-              } else if (snapshot.hasError) {
-                print(snapshot);
-                print(snapshot.error.toString() + " Error ");
-                return Center(child: Text('Error loading notifications'));
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            }),
+            // FutureBuilder(
+            //     future: notificationPageVM.getNotificationsBySpec("Today"),
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasData) {
+            //         ntfList = snapshot.data;
+            //         print(ntfList);
+            //         return ntfList.isNotEmpty
+            //             ? Column(
+            //                 crossAxisAlignment: CrossAxisAlignment.start,
+            //                 children: [
+            //                   Text(
+            //                     "Today",
+            //                     style: TextStyle(
+            //                       fontWeight: FontWeight.bold,
+            //                     ),
+            //                   ),
+            //                   Divider(),
+            //                   Expanded(
+            //                     child: ListView.builder(
+            //                         itemBuilder: (context, itemCount) =>
+            //                             _buildNotification(
+            //                                 snapshot.data[itemCount], true),
+            //                         itemCount: snapshot.data.length),
+            //                   ),
+            //                 ],
+            //               )
+            //             : Container();
+            //       } else if (snapshot.hasError) {
+            //         print(snapshot);
+            //         print(snapshot.error.toString() + " Error ");
+            //         return Center(child: Text('Error loading notifications'));
+            //       } else {
+            //         return Center(child: CircularProgressIndicator());
+            //       }
+            //     }),
+            FutureBuilder(
+                future: notificationPageVM.getNotifications(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemBuilder: (context, itemCount) =>
+                            _buildNotification(snapshot.data[itemCount], false),
+                        itemCount: snapshot.data.length);
+                  } else if (snapshot.hasError) {
+                    print(snapshot);
+                    print(snapshot.error.toString() + " Error ");
+                    return Center(child: Text('Error loading notifications'));
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
         onRefresh: refreshList,
       ),
     );
@@ -577,39 +605,40 @@ class NotificationViewState extends State<NotificationView> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: Text(notification.message),
-          title: Center(
-            child: Text(
-              "Notification Alert!",
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("View"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AdminView()));
-              },
-            ),
-            FlatButton(
-                child: Text("Discard"),
-                onPressed: () {
-                  setState(() {
-                    Map<String, dynamic> processrequestmap =
-                    new Map<String, dynamic>();
-                    processrequestmap["id"] = notification.id;
-                    print(notification.id);
-                    notification.message.contains("Your") ||
-                        notification.message.contains("Registered")
-                        ? notificationPageVM.deleteNotification(
-                        processrequestmap, false)
-                        : notificationPageVM.deleteNotification(
-                        processrequestmap, true);
+              content: Text(notification.message),
+              title: Center(
+                child: Text(
+                  "Notification Alert!",
+                ),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("View"),
+                  onPressed: () {
                     Navigator.pop(context);
-                  });
-                }),
-          ],
-        ));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AdminView()));
+                  },
+                ),
+                FlatButton(
+                    child: Text("Discard"),
+                    onPressed: () {
+                      setState(() {
+                        Map<String, dynamic> processrequestmap =
+                            new Map<String, dynamic>();
+                        processrequestmap["id"] = notification.id;
+                        print(notification.id);
+                        notification.message.contains("Your") ||
+                                notification.message.contains("Registered") ||
+                                notification.message.contains("cancelled")
+                            ? notificationPageVM.deleteNotification(
+                                processrequestmap, false)
+                            : notificationPageVM.deleteNotification(
+                                processrequestmap, true);
+                        Navigator.pop(context);
+                      });
+                    }),
+              ],
+            ));
   }
 }

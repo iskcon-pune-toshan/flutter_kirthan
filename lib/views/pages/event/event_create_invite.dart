@@ -9,17 +9,25 @@ import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/team_name.dart';
+import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
+//import 'package:flutter_kirthan/views/pages/eventteam/team_selection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 final EventPageViewModel eventPageVM =
-EventPageViewModel(apiSvc: EventAPIService());
+    EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class EventWrite extends StatefulWidget {
   // EventWrite({Key key}) : super(key: key);
@@ -36,8 +44,8 @@ class EventWrite extends StatefulWidget {
 
   EventWrite(
       {this.selectedTeam,
-        @required this.eventrequest,
-        @required this.userLogin})
+      @required this.eventrequest,
+      @required this.userLogin})
       : super();
 }
 
@@ -104,6 +112,7 @@ class _EventWriteState extends State<EventWrite> {
   ];
 
   List<String> _cities = [
+    'Pune',
     'Kant',
     'Adilabad',
     'Delhi',
@@ -212,7 +221,7 @@ class _EventWriteState extends State<EventWrite> {
         Text(
           title,
           style: TextStyle(
-            //color:  KirthanStyles.titleColor ,
+              //color:  KirthanStyles.titleColor ,
               fontWeight: FontWeight.normal),
         )
       ],
@@ -243,7 +252,7 @@ class _EventWriteState extends State<EventWrite> {
             color: KirthanStyles.colorPallete60, //change your color here
           ),
           backgroundColor: KirthanStyles.colorPallete30,
-          title: Text('Create Private Event',
+          title: Text('Create Event',
               style: TextStyle(color: KirthanStyles.colorPallete60))),
       body: Builder(builder: (context) {
         return SingleChildScrollView(
@@ -568,9 +577,9 @@ class _EventWriteState extends State<EventWrite> {
                           style: TextStyle(color: Colors.grey)),
                       items: _category
                           .map((category) => DropdownMenuItem<String>(
-                        value: category,
-                        child: Text(category),
-                      ))
+                                value: category,
+                                child: Text(category),
+                              ))
                           .toList(),
                       onChanged: (input) {
                         setState(() {
@@ -621,7 +630,7 @@ class _EventWriteState extends State<EventWrite> {
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
 
-                        //attribute: "PhoneNumber",
+                          //attribute: "PhoneNumber",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -643,13 +652,13 @@ class _EventWriteState extends State<EventWrite> {
                             eventrequest.phoneNumber = int.parse(input);
                           },
                           validator: validateMobile
-                        /*  (value) {
+                          /*  (value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },*/
-                      ),
+                          ),
                     ),
                     new Container(
                         alignment: Alignment.centerLeft,
@@ -1030,9 +1039,9 @@ class _EventWriteState extends State<EventWrite> {
                               style: TextStyle(color: Colors.grey)),
                           items: _cities
                               .map((city) => DropdownMenuItem<String>(
-                            value: city,
-                            child: Text(city),
-                          ))
+                                    value: city,
+                                    child: Text(city),
+                                  ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1052,9 +1061,9 @@ class _EventWriteState extends State<EventWrite> {
                           ),
                           items: _states
                               .map((state) => DropdownMenuItem(
-                            value: state,
-                            child: Text(state),
-                          ))
+                                    value: state,
+                                    child: Text(state),
+                                  ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1072,9 +1081,9 @@ class _EventWriteState extends State<EventWrite> {
                               style: TextStyle(color: Colors.grey)),
                           items: ['IND', 'Kyrgyzstan']
                               .map((country) => DropdownMenuItem(
-                            value: country,
-                            child: Text(country),
-                          ))
+                                    value: country,
+                                    child: Text(country),
+                                  ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1109,7 +1118,7 @@ class _EventWriteState extends State<EventWrite> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseUser user =
-                                await auth.currentUser();
+                                    await auth.currentUser();
                                 final String email = user.email;
                                 eventrequest.createdBy = email;
                                 print("created by " + eventrequest.createdBy);
@@ -1121,15 +1130,15 @@ class _EventWriteState extends State<EventWrite> {
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
                                 // print(eventrequest.createdBy);
                                 String dt =
-                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                    .format(DateTime.now());
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        .format(DateTime.now());
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
                                 //eventrequest.approvalStatus = "Processing";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
-                                eventrequest.toJson();
+                                    eventrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
                                 EventRequest neweventrequest = await eventPageVM
