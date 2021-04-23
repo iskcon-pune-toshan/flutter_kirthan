@@ -14,7 +14,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_pag
 import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
-import 'package:flutter_kirthan/views/pages/eventteam/team_selection.dart';
+//import 'package:flutter_kirthan/views/pages/eventteam/team_selection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +112,7 @@ class _EventWriteState extends State<EventWrite> {
   ];
 
   List<String> _cities = [
+    'Pune',
     'Kant',
     'Adilabad',
     'Delhi',

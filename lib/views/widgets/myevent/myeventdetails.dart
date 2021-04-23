@@ -714,10 +714,10 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                             //widget.eventrequest?.approvalStatus="Cancelled";
                                                                             widget.eventrequest?.status =
                                                                                 3;
-                                                                            String
-                                                                                eventrequestStr =
-                                                                                jsonEncode(widget.eventrequest.toStrJson());
-                                                                            eventPageVM.submitUpdateEventRequest(eventrequestStr);
+                                                                            Map<String, dynamic>
+                                                                                eventmap =
+                                                                                widget.eventrequest.toJson();
+                                                                            eventPageVM.deleteEventRequest(eventmap);
                                                                             //eventPageVM.deleteEventRequest(processrequestmap);
                                                                             SnackBar
                                                                                 mysnackbar =

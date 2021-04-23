@@ -219,8 +219,11 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                       widget.teamrequest.localAdminName = input;
                                     },
                                   );
+                                } else if (snapshot.hasError) {
+                                  return Text("Error");
+                                } else {
+                                  return Text("Retrieved null values");
                                 }
-                                return Container();
                               }),
                         ],
                       ),

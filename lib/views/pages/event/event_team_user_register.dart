@@ -42,6 +42,7 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
   List<EventUser> eventUserList = new List<EventUser>();
   List<TeamUser> listofTeamUsers = new List<TeamUser>();
   String email;
+  bool _flag;
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
@@ -70,20 +71,25 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                 .where((element) => element.eventId == widget.eventrequest.id)
                 .toList();
             print(eventUserList);
-            // eventUserList = eventUserList
-            //     .where((element) => element.userName == email)
-            //     .toList();
-            return widget.flag
+
+            return eventUserList.isNotEmpty // || widget.flag
                 ? FlatButton(
                     //color: const Color(0xFF1BC0C5),
                     padding: EdgeInsets.symmetric(horizontal: 0),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Colors.grey[700],
+                          width: 1,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                     child: Row(
                       children: [
                         Text(
-                          "Registered",
-                          style: TextStyle(color: Colors.white),
+                          "RSVP",
+                          //style: TextStyle(color: Colors.white),
                         ),
-                        Icon(Icons.close),
+                        Icon(Icons.check),
                       ],
                     ),
                     onPressed: () async {
@@ -112,14 +118,18 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                         print(userList);
 
                         return FlatButton(
-                            color: KirthanStyles.colorPallete30,
+                            //color: KirthanStyles.colorPallete30,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              side: BorderSide(
+                                  color: Colors.grey[700],
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                             padding: EdgeInsets.symmetric(horizontal: 0),
                             child: Text(
-                              "Register",
-                              style: TextStyle(color: Colors.white),
+                              "RSVP",
+                              //style: TextStyle(color: Colors.white),
                             ),
                             onPressed: () async {
                               if (!widget.flag) {
@@ -149,26 +159,24 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                                   eventUserList.add(eventUser);
                                 }
                                 //TODO
-                                setState(() {
-                                  eventUserPageVM.submitNewEventTeamUserMapping(
-                                      eventUserList);
+                                eventUserPageVM.submitNewEventTeamUserMapping(
+                                    eventUserList);
 
-                                  //notificationPageVM.addNotification(eventUsermap);
+                                //notificationPageVM.addNotification(eventUsermap);
 
-                                  // await widget.notificationPageVM.updateNotifications(
-                                  //     await widget.notificationPageVM.getNotifications(),
-                                  //     widget.eventrequest.id.toString(),
-                                  //     true);
-                                  String title = widget.eventrequest.eventTitle;
-                                  SnackBar mysnackbar = SnackBar(
-                                    content: Text("Registred for $title"),
-                                    duration: new Duration(seconds: 4),
-                                    backgroundColor: Colors.white,
-                                  );
-                                  Scaffold.of(context).showSnackBar(mysnackbar);
-
-                                  widget.flag = true;
-                                });
+                                // await widget.notificationPageVM.updateNotifications(
+                                //     await widget.notificationPageVM.getNotifications(),
+                                //     widget.eventrequest.id.toString(),
+                                //     true);
+                                String title = widget.eventrequest.eventTitle;
+                                SnackBar mysnackbar = SnackBar(
+                                  content: Text("Registred for $title"),
+                                  duration: new Duration(seconds: 4),
+                                  backgroundColor: Colors.white,
+                                );
+                                Scaffold.of(context).showSnackBar(mysnackbar);
+                                eventUserPageVM.getEventTeamUserMappings();
+                                widget.flag = true;
                               }
                               if (widget.flag) {
                                 String eventrequestStr =

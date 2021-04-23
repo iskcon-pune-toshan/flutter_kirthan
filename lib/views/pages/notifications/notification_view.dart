@@ -216,7 +216,7 @@ class NotificationViewState extends State<NotificationView> {
               FlatButton(child: Icon(Icons.check)),
               FlatButton(child: Icon(Icons.close)),
             ]));
-    //TODO for update action == null (Check Server code)
+
     if (data.action == null) {
       icon = null;
     } else {
@@ -348,21 +348,37 @@ class NotificationViewState extends State<NotificationView> {
                                       ),
                                     ],
                                   )
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Accepted",
-                                        style: TextStyle(
-                                          color: Colors.green,
-                                        ),
+                                : data.message.contains("cancelled")
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Cancelled",
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Accepted",
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  ),
                     subtitle: data.message.contains("Registered")
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,19 +391,31 @@ class NotificationViewState extends State<NotificationView> {
                               ),
                             ],
                           )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                data.message +
-                                    " by " +
-                                    data.createdBy.toString(),
+                        : data.message.contains("cancelled")
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.message,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.message +
+                                        " by " +
+                                        data.createdBy.toString(),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
@@ -601,7 +629,8 @@ class NotificationViewState extends State<NotificationView> {
                         processrequestmap["id"] = notification.id;
                         print(notification.id);
                         notification.message.contains("Your") ||
-                                notification.message.contains("Registered")
+                                notification.message.contains("Registered") ||
+                                notification.message.contains("cancelled")
                             ? notificationPageVM.deleteNotification(
                                 processrequestmap, false)
                             : notificationPageVM.deleteNotification(

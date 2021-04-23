@@ -92,7 +92,9 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     } else if (eventType == "All" ||
         eventType == "AA" ||
         eventType == "Approved") {
-      requestBody = '{"isPublicEvent" : true , "approvalStatus" : "Approved"}';
+      print("Public request body");
+      //requestBody = '{"isPublicEvent" : true , "approvalStatus" : "Approved"}';
+      requestBody = '{"isPublicEvent" : true}';
     } else if (eventType == "Rejected") {
       requestBody = '{"approvalStatus" : "Rejected"}';
     } else if (eventType == "Waiting") {
@@ -152,7 +154,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
           .toList();
       List<String> events =
-      eventrequests.map((event) => event.toString()).toList();
+          eventrequests.map((event) => event.toString()).toList();
       print(events);
 //print(eventrequests);
       print("before return");
@@ -187,7 +189,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
           .toList();
       List<String> events =
-      eventrequests.map((event) => event.toString()).toList();
+          eventrequests.map((event) => event.toString()).toList();
       print(events);
 //print(eventrequests);
       print("before return");
@@ -293,8 +295,8 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
   }
 
   Future<bool> submitRegisterEventRequest(String eventrequestmap) async {
-    print(eventrequestmap);
-
+    //print(eventrequestmap);
+    print("Inside register event service");
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/event/registerevent',
         headers: {
@@ -305,7 +307,8 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
     print(response.statusCode);
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
+      print("register event called successfully");
     } else {
       throw Exception('Failed to get data');
     }
