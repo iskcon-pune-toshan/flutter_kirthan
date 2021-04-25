@@ -71,138 +71,127 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                 .where((element) => element.eventId == widget.eventrequest.id)
                 .toList();
             print(eventUserList);
-            // eventUserList = eventUserList
-            //     .where((element) => element.userName == email)
-            //     .toList();
-            return eventUserList.isNotEmpty ||
-                widget.flag
-                    ? FlatButton(
-                        //color: const Color(0xFF1BC0C5),
-                        padding: EdgeInsets.symmetric(horizontal: 0),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Colors.grey[700],
-                              width: 1,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(10.0),
+
+            return eventUserList.isNotEmpty // || widget.flag
+                ? FlatButton(
+                    //color: const Color(0xFF1BC0C5),
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Colors.grey[700],
+                          width: 1,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "RSVP",
+                          //style: TextStyle(color: Colors.white),
                         ),
-                        child: Row(
-                          children: [
-                            Text(
+                        Icon(Icons.check),
+                      ],
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        widget.flag = false;
+                        List<EventUser> eventUserTempList =
+                            new List<EventUser>();
+                        eventUserTempList = eventUserList
+                            .where((element) =>
+                                element.eventId == widget.eventrequest.id)
+                            .toList();
+                        eventUserPageVM.submitDeleteEventTeamUserMapping(
+                            eventUserTempList);
+                      });
+                    }
+                    //String s = jsonEncode(userrequest.mapToJson());
+                    //service.registerUser(s);
+                    //print(s);
+                    )
+                : FutureBuilder<List<UserRequest>>(
+                    future: Users,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<UserRequest>> snapshot) {
+                      if (snapshot.data != null) {
+                        userList = snapshot.data;
+                        print(userList);
+
+                        return FlatButton(
+                            //color: KirthanStyles.colorPallete30,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Colors.grey[700],
+                                  width: 1,
+                                  style: BorderStyle.solid),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 0),
+                            child: Text(
                               "RSVP",
                               //style: TextStyle(color: Colors.white),
                             ),
-                            Icon(Icons.check),
-                          ],
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            widget.flag = false;
-                            List<EventUser> eventUserTempList =
-                                new List<EventUser>();
-                            eventUserTempList = eventUserList
-                                .where((element) =>
-                                    element.eventId == widget.eventrequest.id)
-                                .toList();
-                            eventUserPageVM.submitDeleteEventTeamUserMapping(
-                                eventUserTempList);
-                          });
-                        }
-                        //String s = jsonEncode(userrequest.mapToJson());
-                        //service.registerUser(s);
-                        //print(s);
-                        )
-                    : FutureBuilder<List<UserRequest>>(
-                        future: Users,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<UserRequest>> snapshot) {
-                          if (snapshot.data != null) {
-                            userList = snapshot.data;
-                            print(userList);
-
-                            return FlatButton(
-                                //color: KirthanStyles.colorPallete30,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: Colors.grey[700],
-                                      width: 1,
-                                      style: BorderStyle.solid),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 0),
-                                child: Text(
-                                  "RSVP",
-                                  //style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: () async {
-                                  if (!widget.flag) {
-                                    final FirebaseAuth auth =
-                                        FirebaseAuth.instance;
-                                    final FirebaseUser user =
-                                        await auth.currentUser();
-                                    final String email = user.email;
-                                    userTempList = userList
-                                        .where(
-                                            (element) => element.email == email)
-                                        .toList();
-                                    for (var user in userTempList) {
-                                      EventUser eventUser = new EventUser();
-                                      eventUser.createdBy = user.email;
-                                      eventUser.userId = user.id;
-                                      eventUser.teamId = 11;
-                                      eventUser.userName = user.email;
-                                      eventUser.eventId =
-                                          widget.eventrequest?.id;
-                                      String dt = DateFormat(
-                                              "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                            onPressed: () async {
+                              if (!widget.flag) {
+                                final FirebaseAuth auth = FirebaseAuth.instance;
+                                final FirebaseUser user =
+                                    await auth.currentUser();
+                                final String email = user.email;
+                                userTempList = userList
+                                    .where((element) => element.email == email)
+                                    .toList();
+                                for (var user in userTempList) {
+                                  EventUser eventUser = new EventUser();
+                                  eventUser.createdBy = user.email;
+                                  eventUser.userId = user.id;
+                                  eventUser.teamId = 11;
+                                  eventUser.userName = user.email;
+                                  eventUser.eventId = widget.eventrequest?.id;
+                                  String dt =
+                                      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                           .format(DateTime.now());
-                                      eventUser.createdTime = dt;
-                                      eventUser.updatedBy = null;
-                                      eventUser.updatedTime = null;
-                                      widget.eventrequest?.updatedTime;
-                                      eventUser.teamName = "New";
+                                  eventUser.createdTime = dt;
+                                  eventUser.updatedBy = null;
+                                  eventUser.updatedTime = null;
+                                  widget.eventrequest?.updatedTime;
+                                  eventUser.teamName = "New";
 
-                                      eventUserList.add(eventUser);
-                                    }
-                                    //TODO
-                                    setState(() {
-                                      eventUserPageVM
-                                          .submitNewEventTeamUserMapping(
-                                              eventUserList);
-
-                                      //notificationPageVM.addNotification(eventUsermap);
-
-                                      // await widget.notificationPageVM.updateNotifications(
-                                      //     await widget.notificationPageVM.getNotifications(),
-                                      //     widget.eventrequest.id.toString(),
-                                      //     true);
-                                      String title =
-                                          widget.eventrequest.eventTitle;
-                                      SnackBar mysnackbar = SnackBar(
-                                        content: Text("Registred for $title"),
-                                        duration: new Duration(seconds: 4),
-                                        backgroundColor: Colors.white,
-                                      );
-                                      Scaffold.of(context)
-                                          .showSnackBar(mysnackbar);
-
-                                      widget.flag = true;
-                                    });
-                                  }
-                                  if (widget.flag) {
-                                    String eventrequestStr = jsonEncode(
-                                        widget.eventrequest.toStrJson());
-                                    eventPageVM.submitRegisterEventRequest(
-                                        eventrequestStr);
-                                  }
+                                  eventUserList.add(eventUser);
                                 }
-                                //String s = jsonEncode(userrequest.mapToJson());
-                                //service.registerUser(s);
-                                //print(s);
+                                //TODO
+                                eventUserPageVM.submitNewEventTeamUserMapping(
+                                    eventUserList);
+
+                                //notificationPageVM.addNotification(eventUsermap);
+
+                                // await widget.notificationPageVM.updateNotifications(
+                                //     await widget.notificationPageVM.getNotifications(),
+                                //     widget.eventrequest.id.toString(),
+                                //     true);
+                                String title = widget.eventrequest.eventTitle;
+                                SnackBar mysnackbar = SnackBar(
+                                  content: Text("Registred for $title"),
+                                  duration: new Duration(seconds: 4),
+                                  backgroundColor: Colors.white,
                                 );
-                          }
-                          return Container();
-                        });
+                                Scaffold.of(context).showSnackBar(mysnackbar);
+                                eventUserPageVM.getEventTeamUserMappings();
+                                widget.flag = true;
+                              }
+                              if (widget.flag) {
+                                String eventrequestStr =
+                                    jsonEncode(widget.eventrequest.toStrJson());
+                                eventPageVM.submitRegisterEventRequest(
+                                    eventrequestStr);
+                              }
+                            }
+                            //String s = jsonEncode(userrequest.mapToJson());
+                            //service.registerUser(s);
+                            //print(s);
+                            );
+                      }
+                      return Container();
+                    });
           }
           return Container();
         });

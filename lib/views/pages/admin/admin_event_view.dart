@@ -85,6 +85,7 @@ class _EventAdminViewState extends State<EventAdminView> {
                     FlatButton(
                         padding: EdgeInsets.all(0),
                         clipBehavior: Clip.none,
+                        //shows the list of events in adminPanel
                         child: EventRequestsListItem(
                           eventrequest: snapshot.data[itemCount],
                           eventPageVM: _eventVM,
@@ -94,11 +95,10 @@ class _EventAdminViewState extends State<EventAdminView> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => EditView(
-                                      status: snapshot
-                                          .data[itemCount].approvalStatus,
+                                      status: snapshot.data[itemCount].status,
                                       page: EditEvent(
                                           eventrequest:
-                                          snapshot.data[itemCount]),
+                                              snapshot.data[itemCount]),
                                       actions: Actions(
                                           _eventVM.processEventRequest,
                                           snapshot.data[itemCount]))));

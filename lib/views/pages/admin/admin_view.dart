@@ -62,7 +62,8 @@ class _AdminViewState extends State<AdminView> {
     _body = EventAdminView();
     _displayStat = new Stats();
   }
-int _selectedIndex=0;
+
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return ScopedModel<Stats>(
@@ -100,8 +101,7 @@ int _selectedIndex=0;
                                       onPressed: () {
                                         if (_currentIndex == 0)
                                           setState(() {
-                                            _body = EventAdminView(
-                                                status: "Approved");
+                                            _body = EventAdminView(status: "2");
                                           });
                                         else if (_currentIndex == 1) {
                                           setState(() {
@@ -134,8 +134,7 @@ int _selectedIndex=0;
                                   onPressed: () {
                                     if (_currentIndex == 0)
                                       setState(() {
-                                        _body =
-                                            EventAdminView(status: "Rejected");
+                                        _body = EventAdminView(status: "4");
                                       });
                                     else if (_currentIndex == 1) {
                                       setState(() {
@@ -169,7 +168,7 @@ int _selectedIndex=0;
                                     if (_currentIndex == 0)
                                       setState(() {
                                         _body = EventAdminView(
-                                          status: "Waiting",
+                                          status: "1",
                                         );
                                       });
                                     else if (_currentIndex == 1) {
@@ -195,7 +194,7 @@ int _selectedIndex=0;
                     onTap: (int index) {
                       if (index == 0) {
                         setState(() {
-                          _body = EventAdminView(status: "Approved");
+                          _body = EventAdminView(status: "2");
                           _currentIndex = index;
                         });
                       }
@@ -215,19 +214,13 @@ int _selectedIndex=0;
                       }
                     },
                     items: <BottomNavigationBarItem>[
-
                       BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.event
-                        ),
+                        icon: Icon(Icons.event),
                         title: Text(
                           'Events',
-
-
                         ),
                       ),
                       BottomNavigationBarItem(
-
                           icon: Icon(Icons.group), title: Text('Teams')),
                       BottomNavigationBarItem(
                           icon: Icon(Icons.person), title: Text('User')),

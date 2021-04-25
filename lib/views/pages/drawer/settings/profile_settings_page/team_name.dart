@@ -10,7 +10,7 @@ import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class teamName extends StatefulWidget {
   teamName({Key key}) : super(key: key);
@@ -152,11 +152,11 @@ class _teamNameState extends State<teamName> {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseAuth auth = FirebaseAuth.instance;
                                 final FirebaseUser user =
-                                await auth.currentUser();
+                                    await auth.currentUser();
                                 final String email = user.email;
                                 String dt =
-                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                    .format(DateTime.now());
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        .format(DateTime.now());
                                 _formKey.currentState.save();
 
                                 final String teamTitle = teamrequest.teamTitle;
@@ -168,9 +168,9 @@ class _teamNameState extends State<teamName> {
                                 teamrequest.updatedTime = null;
                                 teamrequest.approvalStatus = null;
                                 teamrequest.approvalComments =
-                                "Approved$teamTitle";
+                                    "Approved$teamTitle";
                                 Map<String, dynamic> teammap =
-                                teamrequest.toJson();
+                                    teamrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
                                 List<TeamUser> listofUsers;
