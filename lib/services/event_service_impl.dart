@@ -7,6 +7,7 @@ import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_interface.dart';
 import 'package:http/http.dart' as _http;
 
+//added status to getevents
 class EventAPIService extends BaseAPIService implements IEventRestApi {
   static final EventAPIService _internal = EventAPIService.internal();
   EventRequest eventRequest;
@@ -16,9 +17,9 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
   @override
   Future<List<int>> getEventCount() async {
-    List<EventRequest> approved = await getEventRequests("All");
-    List<EventRequest> rejected = await getEventRequests("Rejected");
-    List<EventRequest> waiting = await getEventRequests("Waiting");
+    List<EventRequest> approved = await getEventRequests("2");
+    List<EventRequest> rejected = await getEventRequests("4");
+    List<EventRequest> waiting = await getEventRequests("1");
     List<int> resultData = [];
     resultData.add(approved.length);
     resultData.add(rejected.length);
@@ -101,6 +102,10 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       requestBody = '{"approvalStatus" : "Processing"}';
     } else if (eventType == "MyEvent") {
       requestBody = '{"createdBy" : ["$email"],"isProcessed" : true}';
+    } else if (eventType == "1" || eventType == "2" || eventType == "4") {
+      int status = int.parse(eventType);
+      print(status);
+      requestBody = '{"status" : $status}';
     } else {
       requestBody = '{"eventDuration" : "$eventType"}';
     }

@@ -102,7 +102,7 @@ class NotificationViewState extends State<NotificationView> {
                                       builder: (context, notifier, child) =>
                                           Text(
                                         data.message,
-                                        //maxLines: 2,
+                                        maxLines: 2,
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -136,7 +136,10 @@ class NotificationViewState extends State<NotificationView> {
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                        'By ' + data.createdBy.toString(),
+                                        //'By ' + data.createdBy.toString(),
+                                        data.updatedBy == null
+                                            ? "By " + data.createdBy.toString()
+                                            : "By " + data.updatedBy.toString(),
                                         overflow: TextOverflow.clip,
                                         style: TextStyle(
                                           //fontWeight: FontWeight.w300,
@@ -410,6 +413,10 @@ class NotificationViewState extends State<NotificationView> {
                                     data.message +
                                         " by " +
                                         data.createdBy.toString(),
+                                    //         data.updatedBy ==
+                                    //     null
+                                    // ? data.createdBy.toString()
+                                    // : data.updatedBy.toString(),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -451,7 +458,10 @@ class NotificationViewState extends State<NotificationView> {
                       overflow: TextOverflow.clip,
                     ),
                     subtitle: Text(
-                      "By " + data.createdBy.toString(),
+                      //"By " +//data.createdBy.toString(),
+                      data.updatedBy == null
+                          ? "By " + data.createdBy.toString()
+                          : "By " + data.updatedBy.toString(),
                     ),
                     //isThreeLine: true,
                     trailing: icon == Icons.pause

@@ -5,6 +5,7 @@ class NotificationModel {
   String _action;
   DateTime _createdAt;
   String _createdBy;
+  String _updatedBy;
   int _id;
 
   NotificationModel(
@@ -14,7 +15,8 @@ class NotificationModel {
       String message,
       String type,
       String action,
-      int id}) {
+      int id,
+      String updatedBy}) {
     this._targetType = type;
     this._action = action;
     this._createdBy = createdBy;
@@ -22,6 +24,7 @@ class NotificationModel {
     this._uuid = uuid;
     this._message = message;
     this._id = id;
+    this._updatedBy = updatedBy;
   }
 
   Map<String, dynamic> toJson() {
@@ -33,6 +36,7 @@ class NotificationModel {
     data["action"] = this._action;
     data["message"] = this._message;
     data["id"] = this._id;
+    data["updatedBy"] = this._updatedBy;
     return data;
   }
 
@@ -47,6 +51,7 @@ class NotificationModel {
       type: data["targetType"],
       action: data["action"],
       id: data["id"],
+      updatedBy: data["updatedBy"],
     );
   }
 
@@ -63,4 +68,6 @@ class NotificationModel {
   String get message => _message;
 
   int get id => _id;
+
+  String get updatedBy => _updatedBy;
 }
