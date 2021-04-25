@@ -102,7 +102,7 @@ class NotificationViewState extends State<NotificationView> {
                                       builder: (context, notifier, child) =>
                                           Text(
                                         data.message,
-                                        maxLines: 2,
+                                        //maxLines: 2,
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -413,10 +413,6 @@ class NotificationViewState extends State<NotificationView> {
                                     data.message +
                                         " by " +
                                         data.createdBy.toString(),
-                                    //         data.updatedBy ==
-                                    //     null
-                                    // ? data.createdBy.toString()
-                                    // : data.updatedBy.toString(),
                                   ),
                                   SizedBox(
                                     height: 10,
