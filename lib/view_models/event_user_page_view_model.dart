@@ -25,16 +25,16 @@ class EventUserPageViewModel extends Model {
   }
 
   Future<List<EventUser>> submitNewEventTeamUserMapping(
-      List<EventUser> listofeventsermap) {
+      List<EventUser> listofeventsermap, var callback) {
     Future<List<EventUser>> eventusers =
-    apiSvc?.submitNewEventTeamUserMapping(listofeventsermap);
+        apiSvc?.submitNewEventTeamUserMapping(listofeventsermap, callback);
     return eventusers;
   }
 
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(
       List<EventUser> listofeventsermap) {
     Future<List<EventUser>> eventusers =
-    apiSvc?.submitDeleteEventTeamUserMapping(listofeventsermap);
+        apiSvc?.submitDeleteEventTeamUserMapping(listofeventsermap);
     return eventusers;
   }
 }

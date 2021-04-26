@@ -6,7 +6,7 @@ abstract class IEventUserRestApi {
   Future<List<EventUser>> getEventTeamUserMappings();
 
   Future<List<EventUser>> submitNewEventTeamUserMapping(
-      List<EventUser> listofeventsermap);
+      List<EventUser> listofeventsermap, var callback);
 
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(
       List<EventUser> listofeventsermap);

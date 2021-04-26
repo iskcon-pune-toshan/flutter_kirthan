@@ -36,7 +36,6 @@ class EventRequestsListItem extends StatelessWidget {
     //Choice(id: 4, description: "Location"),
   ];
   String get index => null;
-  bool flag = false;
   // var filteredMap;
   // List<EventRequest> filtereMap = eventrequest
   //     .where((x) => x.eventDuration.contains(notifier.duration))
@@ -62,7 +61,7 @@ class EventRequestsListItem extends StatelessWidget {
             ],
           ),
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            EventTeamUserRegister(eventrequest: eventrequest, flag: flag),
+            EventTeamUserRegister(eventrequest: eventrequest),
             SizedBox(width: 5),
             FlatButton(
               // shape: RoundedRectangleBorder(
