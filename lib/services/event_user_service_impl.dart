@@ -14,7 +14,7 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
   EventUserAPIService.internal();
 
   Future<List<EventUser>> submitNewEventTeamUserMapping(
-      List<EventUser> listofeventusermap) async {
+      List<EventUser> listofeventusermap, var callback) async {
     print(listofeventusermap);
     String requestBody = json.encode(listofeventusermap);
     print(requestBody);
@@ -34,6 +34,7 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
           .map(
               (eventusermappingData) => EventUser.fromMap(eventusermappingData))
           .toList();
+      if (callback != null) callback();
 //      TeamUser.fromMap(teamusermappingData);
       print(eventusers);
       return eventusers;

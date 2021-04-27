@@ -26,9 +26,7 @@ final EventUserPageViewModel eventUserPageVM =
 
 class EventTeamUserRegister extends StatefulWidget {
   EventRequest eventrequest;
-  bool flag;
-  EventTeamUserRegister(
-      {Key key, @required this.eventrequest, @required this.flag})
+  EventTeamUserRegister({Key key, @required this.eventrequest})
       : super(key: key);
   @override
   _EventTeamUserRegisterState createState() => _EventTeamUserRegisterState();
@@ -36,17 +34,14 @@ class EventTeamUserRegister extends StatefulWidget {
 
 class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
   Future<List<UserRequest>> Users;
-  Future<List<EventUser>> EventUsers;
   List<UserRequest> userList = new List<UserRequest>();
   List<UserRequest> userTempList = new List<UserRequest>();
   List<EventUser> eventUserList = new List<EventUser>();
   List<TeamUser> listofTeamUsers = new List<TeamUser>();
   String email;
-  bool _flag;
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
-    EventUsers = eventUserPageVM.getEventTeamUserMappings();
     email = getCurrentUser().toString();
     super.initState();
   }
@@ -63,7 +58,7 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<EventUser>>(
-        future: EventUsers,
+        future: eventUserPageVM.getEventTeamUserMappings(),
         builder:
             (BuildContext context, AsyncSnapshot<List<EventUser>> snapshot) {
           if (snapshot.data != null) {
@@ -71,8 +66,7 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                 .where((element) => element.eventId == widget.eventrequest.id)
                 .toList();
             print(eventUserList);
-
-            return eventUserList.isNotEmpty // || widget.flag
+            return eventUserList.isNotEmpty
                 ? FlatButton(
                     //color: const Color(0xFF1BC0C5),
                     padding: EdgeInsets.symmetric(horizontal: 0),
@@ -94,7 +88,6 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                     ),
                     onPressed: () async {
                       setState(() {
-                        widget.flag = false;
                         List<EventUser> eventUserTempList =
                             new List<EventUser>();
                         eventUserTempList = eventUserList
@@ -104,11 +97,7 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                         eventUserPageVM.submitDeleteEventTeamUserMapping(
                             eventUserTempList);
                       });
-                    }
-                    //String s = jsonEncode(userrequest.mapToJson());
-                    //service.registerUser(s);
-                    //print(s);
-                    )
+                    })
                 : FutureBuilder<List<UserRequest>>(
                     future: Users,
                     builder: (BuildContext context,
@@ -118,7 +107,6 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                         print(userList);
 
                         return FlatButton(
-                            //color: KirthanStyles.colorPallete30,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                   color: Colors.grey[700],
@@ -132,63 +120,50 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                               //style: TextStyle(color: Colors.white),
                             ),
                             onPressed: () async {
-                              if (!widget.flag) {
-                                final FirebaseAuth auth = FirebaseAuth.instance;
-                                final FirebaseUser user =
-                                    await auth.currentUser();
-                                final String email = user.email;
-                                userTempList = userList
-                                    .where((element) => element.email == email)
-                                    .toList();
-                                for (var user in userTempList) {
-                                  EventUser eventUser = new EventUser();
-                                  eventUser.createdBy = user.email;
-                                  eventUser.userId = user.id;
-                                  eventUser.teamId = 11;
-                                  eventUser.userName = user.email;
-                                  eventUser.eventId = widget.eventrequest?.id;
-                                  String dt =
-                                      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                          .format(DateTime.now());
-                                  eventUser.createdTime = dt;
-                                  eventUser.updatedBy = null;
-                                  eventUser.updatedTime = null;
-                                  widget.eventrequest?.updatedTime;
-                                  eventUser.teamName = "New";
+                              final FirebaseAuth auth = FirebaseAuth.instance;
+                              final FirebaseUser user =
+                                  await auth.currentUser();
+                              final String email = user.email;
+                              userTempList = userList
+                                  .where((element) => element.email == email)
+                                  .toList();
+                              for (var user in userTempList) {
+                                EventUser eventUser = new EventUser();
+                                eventUser.createdBy = user.email;
+                                eventUser.userId = user.id;
+                                eventUser.teamId = 11;
+                                eventUser.userName = user.email;
+                                eventUser.eventId = widget.eventrequest?.id;
+                                String dt =
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        .format(DateTime.now());
+                                eventUser.createdTime = dt;
+                                eventUser.updatedBy = null;
+                                eventUser.updatedTime = null;
+                                widget.eventrequest?.updatedTime;
+                                eventUser.teamName = "New";
 
-                                  eventUserList.add(eventUser);
-                                }
-                                //TODO
-                                eventUserPageVM.submitNewEventTeamUserMapping(
-                                    eventUserList);
-
-                                //notificationPageVM.addNotification(eventUsermap);
-
-                                // await widget.notificationPageVM.updateNotifications(
-                                //     await widget.notificationPageVM.getNotifications(),
-                                //     widget.eventrequest.id.toString(),
-                                //     true);
-                                String title = widget.eventrequest.eventTitle;
-                                SnackBar mysnackbar = SnackBar(
-                                  content: Text("Registred for $title"),
-                                  duration: new Duration(seconds: 4),
-                                  backgroundColor: Colors.white,
-                                );
-                                Scaffold.of(context).showSnackBar(mysnackbar);
-                                eventUserPageVM.getEventTeamUserMappings();
-                                widget.flag = true;
+                                eventUserList.add(eventUser);
                               }
-                              if (widget.flag) {
-                                String eventrequestStr =
-                                    jsonEncode(widget.eventrequest.toStrJson());
-                                eventPageVM.submitRegisterEventRequest(
-                                    eventrequestStr);
-                              }
-                            }
-                            //String s = jsonEncode(userrequest.mapToJson());
-                            //service.registerUser(s);
-                            //print(s);
-                            );
+
+                              eventUserPageVM.submitNewEventTeamUserMapping(
+                                  eventUserList, () {
+                                setState(() {
+                                  String eventrequestStr = jsonEncode(
+                                      widget.eventrequest.toStrJson());
+                                  eventPageVM.submitRegisterEventRequest(
+                                      eventrequestStr);
+                                });
+                              });
+
+                              String title = widget.eventrequest.eventTitle;
+                              SnackBar mysnackbar = SnackBar(
+                                content: Text("Registred for $title"),
+                                duration: new Duration(seconds: 4),
+                                backgroundColor: Colors.white,
+                              );
+                              Scaffold.of(context).showSnackBar(mysnackbar);
+                            });
                       }
                       return Container();
                     });
