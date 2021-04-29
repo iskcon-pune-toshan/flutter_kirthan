@@ -121,7 +121,8 @@ class _EventWriteState extends State<EventWrite> {
     'Chittoor',
     'Kakinada',
     'Guntur',
-    'Hyderabad'
+    'Hyderabad',
+    'Mumbai',
   ];
 
   List<String> _category = [
