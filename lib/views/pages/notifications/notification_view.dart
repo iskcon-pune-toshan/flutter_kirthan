@@ -16,6 +16,7 @@ import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -540,7 +541,9 @@ class NotificationViewState extends State<NotificationView> {
             ]),
       );
   }
-
+  SlidableController _slidableController;
+  Animation<double> _rotationAnimation;
+  Color _fabColor = Colors.redAccent;
   List<NotificationModel> ntfList = new List<NotificationModel>();
   @override
   void initState() {
@@ -557,7 +560,17 @@ class NotificationViewState extends State<NotificationView> {
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
   }
+  void slideAnimationChanged(Animation<double> slideAnimation) {
+    setState(() {
+      _rotationAnimation = slideAnimation;
+    });
+  }
 
+  void slideIsOpenChanged(bool isOpen) {
+    setState(() {
+      _fabColor = isOpen ? Colors.orange : Colors.redAccent;
+    });
+  }
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -599,75 +612,72 @@ Widget buildlist(BuildContext context, Axis direction){
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-            scrollDirection: direction,
+              scrollDirection: direction,
               itemBuilder: (context, itemCount){
                 final Axis slidableDirection =
                 direction == Axis.horizontal ? Axis.vertical : Axis.horizontal;
-                  _buildNotification(snapshot.data[itemCount], false);
+                _buildNotification(snapshot.data[itemCount], false);
                 var item = snapshot.data[itemCount];
-                   return
-                     Slidable(
-                       child:_buildNotification(snapshot.data[itemCount], false),
-                       controller: _slidableController,
-                       actionPane: SlidableDrawerActionPane(),
-                       actions: <Widget>[
-                       ],
-                       secondaryActions: <Widget>[
-                       Visibility(
-                       visible: isVisible,
-                         child:
-                         IconSlideAction(
-                           caption: 'View',
-                           color: Colors.grey.shade200,
-                           icon: Icons.more_horiz,
-                           onTap: () {
-                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                               Navigator.pop(context);
-                               Navigator.push(context,
-                                   MaterialPageRoute(builder: (context) => AdminView()));
-                             });
-                             /*Navigator.pop(context);
+                return
+                  Slidable(
+                    child:_buildNotification(snapshot.data[itemCount], false),
+                    controller: _slidableController,
+                    actionPane: SlidableDrawerActionPane(),
+                    actions: <Widget>[
+                    ],
+                    secondaryActions: <Widget>[
+                      IconSlideAction(
+                        caption: 'View',
+                        color: Colors.grey.shade200,
+                        icon: Icons.more_horiz,
+                        onTap: () {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Navigator.pop(context);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => AdminView()));
+                          });
+                          /*Navigator.pop(context);
                            Navigator.push(context,
                                MaterialPageRoute(builder: (context) => AdminView()));*/
-                           },
-                           closeOnTap: false,
-                         ),
-                       ),
-                         IconSlideAction(
-                           caption: 'Delete',
-                           color: Colors.red,
-                           icon: Icons.delete,
-                           onTap: () =>{   setState(() {
-                Map<String, dynamic> processrequestmap =
-                new Map<String, dynamic>();
+                        },
+                        closeOnTap: false,
+                      ),
+                      IconSlideAction(
+                        caption: 'Delete',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () =>{   setState(() {
+                          Map<String, dynamic> processrequestmap =
+                          new Map<String, dynamic>();
 
-                processrequestmap["id"] = snapshot.data[itemCount].id;
-                print(snapshot.data[itemCount].id);
+                          processrequestmap["id"] = snapshot.data[itemCount].id;
+                          print(snapshot.data[itemCount].id);
 
-                snapshot.data[itemCount].message.contains("Your") ||
-                    snapshot.data[itemCount].message.contains("Registered") ||
-                    snapshot.data[itemCount].message.contains("cancelled") ||
-                    snapshot.data[itemCount].message
-                    .contains("has been created")
-                ? notificationPageVM.deleteNotification(
-                processrequestmap, false)
-                    : notificationPageVM.deleteNotification(
-                processrequestmap, true);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.of(context);
+                          snapshot.data[itemCount].message.contains("Your") ||
+                              snapshot.data[itemCount].message.contains("Registered") ||
+                              snapshot.data[itemCount].message.contains("cancelled") ||
+                              snapshot.data[itemCount].message
+                                  .contains("has been created")
+                              ? notificationPageVM.deleteNotification(
+                              processrequestmap, false)
+                              : notificationPageVM.deleteNotification(
+                              processrequestmap, true);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Navigator.of(context);
 
-                });
+                          });
 
-                }),
-                           _showSnackBar(context, 'Delete')},
-                         ),
-                       ],
-                     );
-                 },
+                        }),
+                          //_showSnackBar(context, 'Delete'),
+                        },
+                      ),
+                    ],
+                  );
+              },
               itemCount: snapshot.data.length);
         } else if (snapshot.hasError) {
           print(snapshot);
-          print(snapshot.error.toString() + " Errorinnotification");
+          print(snapshot.error.toString() + " Error ");
           return Center(child: Text('Error loading notifications'));
         } else {
           return Center(child: CircularProgressIndicator());
@@ -709,27 +719,9 @@ Widget buildlist(BuildContext context, Axis direction){
         //         return Center(child: CircularProgressIndicator());
         //       }
         //     }),
-        FutureBuilder(
-            future: notificationPageVM.getNotifications(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                    itemBuilder: (context, itemCount) =>
-                        _buildNotification(snapshot.data[itemCount], false),
-                    itemCount: snapshot.data.length);
-              } else if (snapshot.hasError) {
-                print(snapshot);
-                print(snapshot.error.toString() + " Error ");
-                return Center(child: Text('Error loading notifications'));
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            }),
-        onRefresh: refreshList,
-      ),
-    );
-  }
 
+  }
+bool isVisible;
   void showNotification(
       BuildContext context, NotificationModel notification, var callback) {
     bool setAction = false;
@@ -758,7 +750,7 @@ Widget buildlist(BuildContext context, Axis direction){
             FlatButton(
                 child: Text("Discard"),
                 onPressed: () {
-                  setState(() {
+                  /*setState(() {
                     Map<String, dynamic> processrequestmap =
                     new Map<String, dynamic>();
                     processrequestmap["id"] = notification.id;
@@ -773,9 +765,9 @@ Widget buildlist(BuildContext context, Axis direction){
                         : notificationPageVM.deleteNotification(
                         processrequestmap, true);
                     Navigator.pop(context);
-                  });
+                  });*/
                 }),
           ],
         ));
   }
-}
+
