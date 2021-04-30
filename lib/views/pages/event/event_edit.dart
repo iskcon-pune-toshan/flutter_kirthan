@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 
 class EditEvent extends StatefulWidget {
   EventRequest eventrequest;
@@ -75,10 +75,10 @@ class _EditEventState extends State<EditEvent> {
   ];
   // controllers for form text controllers
   final TextEditingController _eventTitleController =
-      new TextEditingController();
+  new TextEditingController();
   String eventTitle;
   final TextEditingController _eventTypeController =
-      new TextEditingController();
+  new TextEditingController();
   String eventType;
   final TextEditingController _eventDateController =
   new TextEditingController();
@@ -87,31 +87,31 @@ class _EditEventState extends State<EditEvent> {
   new TextEditingController();
   String eventTime;
   final TextEditingController _eventDescriptionController =
-      new TextEditingController();
+  new TextEditingController();
   String eventDescription;
   final TextEditingController _lineoneController = new TextEditingController();
   String lineOne;
   final TextEditingController _eventDurationController =
-      new TextEditingController();
+  new TextEditingController();
   String eventDuration;
   final TextEditingController _linetwoController = new TextEditingController();
   String lineTwo;
   final TextEditingController _linethreeController =
-      new TextEditingController();
+  new TextEditingController();
   String lineThree;
   final TextEditingController _cityController = new TextEditingController();
   String city;
   final TextEditingController _pincodeController = new TextEditingController();
   String pinCode;
   final TextEditingController _createdTimeController =
-      new TextEditingController();
+  new TextEditingController();
   String createdTime;
   final TextEditingController _stateController = new TextEditingController();
   final TextEditingController _updatedByController =
-      new TextEditingController();
+  new TextEditingController();
   String updatedBy;
   final TextEditingController _updatedTimeController =
-      new TextEditingController();
+  new TextEditingController();
   String updatedTime;
   String approvalStatus;
   //String createdTime;
@@ -123,10 +123,9 @@ class _EditEventState extends State<EditEvent> {
     _eventDateController.text = widget.eventrequest.eventDate.substring(0,10);
     _eventTimeController.text = widget.eventrequest.eventTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
-    _lineoneController.text = widget.eventrequest.addLineOne;
+    _lineoneController.text = widget.eventrequest.addLineOneS;
     _eventDurationController.text = widget.eventrequest.eventDuration;
-    _linetwoController.text = widget.eventrequest.addLineTwo;
-    _linethreeController.text = widget.eventrequest.addLineThree;
+    _linetwoController.text = widget.eventrequest.addLineTwoS;
     _pincodeController.text = widget.eventrequest.pincode.toString();
     _stateController.text = widget.eventrequest.state;
     _cityController.text = widget.eventrequest.city;
@@ -136,7 +135,7 @@ class _EditEventState extends State<EditEvent> {
     approvalStatus = widget.eventrequest.approvalStatus;
     print("createdTime");
     print(widget.eventrequest.createdTime);
-print(widget.eventrequest.isPublicEvent);
+    print(widget.eventrequest.isPublicEvent);
     return super.initState();
   }
 
@@ -148,12 +147,12 @@ print(widget.eventrequest.isPublicEvent);
     print(email);
     return email;
   }
-bool readonly(bool public){
+  bool readonly(bool public){
     if(public==true)
       return false;
     else
       return true;
-}
+  }
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
@@ -185,7 +184,7 @@ bool readonly(bool public){
                   //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
                   //String eventmap = widget.eventrequest.toStrJsonJson();
                   String eventrequestStr =
-                      jsonEncode(widget.eventrequest.toStrJson());
+                  jsonEncode(widget.eventrequest.toStrJson());
                   eventPageVM.submitUpdateEventRequest(eventrequestStr);
                 },
               ))
@@ -269,7 +268,7 @@ bool readonly(bool public){
                       }
                       else _eventDateController.text=widget.eventrequest.eventDate;
                     },
-                   //controller: _eventDateController,
+                    //controller: _eventDateController,
                     autocorrect: false,
                   ),
                 ),
@@ -299,28 +298,6 @@ bool readonly(bool public){
                     },
                   ),
                 ),
-                /*child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Time",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    controller: _eventTimeController,
-                    onSaved: (String value) {
-                      widget.eventrequest.eventTime = value;
-                    },
-                  ),*//*
-                ),*/
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(
@@ -389,7 +366,7 @@ bool readonly(bool public){
                     readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _lineoneController,
                     onSaved: (String value) {
-                      widget.eventrequest.addLineOne = value;
+                      widget.eventrequest.addLineOneS = value;
                     },
                   ),
                 ),
@@ -413,31 +390,7 @@ bool readonly(bool public){
                     readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _linetwoController,
                     onSaved: (String value) {
-                      widget.eventrequest.addLineTwo = value;
-                    },
-                  ),
-                ),
-                new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Line 3",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    readOnly: readonly(widget.eventrequest.isPublicEvent),
-                    controller: _linethreeController,
-                    onSaved: (String value) {
-                      widget.eventrequest.addLineThree = value;
+                      widget.eventrequest.addLineTwoS = value;
                     },
                   ),
                 ),
@@ -466,17 +419,6 @@ bool readonly(bool public){
                   ),
                 ),
 
-                /*new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Locality"),
-                    autocorrect: false,
-                    controller: _linethreeController,
-                    onSaved: (String value) {
-                      lineThree = value;
-                    },
-                  ),
-                ),
-*/
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(
@@ -531,9 +473,9 @@ bool readonly(bool public){
                   hint: Text('Select State'),
                   items: _states
                       .map((state) => DropdownMenuItem(
-                            value: state,
-                            child: Text(state),
-                          ))
+                    value: state,
+                    child: Text(state),
+                  ))
                       .toList(),
                   onChanged: (input) {
                     setState(() {

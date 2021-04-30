@@ -16,6 +16,7 @@ import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,7 +58,6 @@ class NotificationViewState extends State<NotificationView> {
       notificationPageVM.accessTypes = accessTypes;
     });
   }
-
   // //Get current date & compare for Today's notification (NOT USED)
   // bool compareNotificationDate(NotificationModel data) {
   //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -77,7 +77,7 @@ class NotificationViewState extends State<NotificationView> {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
     List<UserRequest> temp =
-        userRequest.where((element) => element.email == user.email).toList();
+    userRequest.where((element) => element.email == user.email).toList();
     for (var users in temp) {
       if (users.roleId == 1 || users.roleId == 2) {
         setState(() {
@@ -395,36 +395,22 @@ class NotificationViewState extends State<NotificationView> {
                                           ),
                                         ],
                                       )
-                                    : data.message.contains("Approved")
-                                        ? Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Accepted",
-                                                style: TextStyle(
-                                                  color: Colors.green,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
-                                          )
-                                        : Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                " ",
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Accepted",
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                            ),
                                           ),
-                    subtitle: data.message.contains("Registered") ||
-                            data.message.contains(" has been created")
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      ),
+                    subtitle: data.message.contains("Registered")
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -468,7 +454,7 @@ class NotificationViewState extends State<NotificationView> {
                         setState(() {
                           notificationPageVM.getNotifications();
                         });
-                      }, isVisible);
+                      });
                     }),
               ),
             ]),
@@ -549,26 +535,42 @@ class NotificationViewState extends State<NotificationView> {
                                   .getNotificationsBySpec("Today")
                               : notificationPageVM.getNotifications();
                         });
-                      }, isVisible);
+                      });
                     }),
               ),
             ]),
       );
   }
-
+  SlidableController _slidableController;
+  Animation<double> _rotationAnimation;
+  Color _fabColor = Colors.redAccent;
   List<NotificationModel> ntfList = new List<NotificationModel>();
   @override
   void initState() {
-    getRoleId();
     super.initState();
     loadPref();
+    getRoleId();
+    _slidableController = SlidableController(
+      onSlideAnimationChanged: slideAnimationChanged,
+      onSlideIsOpenChanged: slideIsOpenChanged,
+    );
     print(notificationPageVM.newNotificationCount);
     //notificationPageVM.newNotificationCount;
     //  print(context);
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
   }
+  void slideAnimationChanged(Animation<double> slideAnimation) {
+    setState(() {
+      _rotationAnimation = slideAnimation;
+    });
+  }
 
+  void slideIsOpenChanged(bool isOpen) {
+    setState(() {
+      _fabColor = isOpen ? Colors.orange : Colors.redAccent;
+    });
+  }
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -591,108 +593,184 @@ class NotificationViewState extends State<NotificationView> {
       body: RefreshIndicator(
         key: refreshKey,
         child:
-            // FutureBuilder(
-            //     future: notificationPageVM.getNotificationsBySpec("Today"),
-            //     builder: (context, snapshot) {
-            //       if (snapshot.hasData) {
-            //         ntfList = snapshot.data;
-            //         print(ntfList);
-            //         return ntfList.isNotEmpty
-            //             ? Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Text(
-            //                     "Today",
-            //                     style: TextStyle(
-            //                       fontWeight: FontWeight.bold,
-            //                     ),
-            //                   ),
-            //                   Divider(),
-            //                   Expanded(
-            //                     child: ListView.builder(
-            //                         itemBuilder: (context, itemCount) =>
-            //                             _buildNotification(
-            //                                 snapshot.data[itemCount], true),
-            //                         itemCount: snapshot.data.length),
-            //                   ),
-            //                 ],
-            //               )
-            //             : Container();
-            //       } else if (snapshot.hasError) {
-            //         print(snapshot);
-            //         print(snapshot.error.toString() + " Error ");
-            //         return Center(child: Text('Error loading notifications'));
-            //       } else {
-            //         return Center(child: CircularProgressIndicator());
-            //       }
-            //     }),
-            FutureBuilder(
-                future: notificationPageVM.getNotifications(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemBuilder: (context, itemCount) =>
-                            _buildNotification(snapshot.data[itemCount], false),
-                        itemCount: snapshot.data.length);
-                  } else if (snapshot.hasError) {
-                    print(snapshot);
-                    print(snapshot.error.toString() + " Error ");
-                    return Center(child: Text('Error loading notifications'));
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                }),
+        Center(
+          child: OrientationBuilder(
+            builder: (context, orientation) => buildlist(
+                context,
+                orientation == Orientation.portrait
+                    ? Axis.vertical
+                    : Axis.horizontal),
+          ),
+        ),
         onRefresh: refreshList,
       ),
     );
   }
+Widget buildlist(BuildContext context, Axis direction){
+  return FutureBuilder(
+      future: notificationPageVM.getNotifications(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.builder(
+              scrollDirection: direction,
+              itemBuilder: (context, itemCount){
+                final Axis slidableDirection =
+                direction == Axis.horizontal ? Axis.vertical : Axis.horizontal;
+                _buildNotification(snapshot.data[itemCount], false);
+                var item = snapshot.data[itemCount];
+                return
+                  Slidable(
+                    child:_buildNotification(snapshot.data[itemCount], false),
+                    controller: _slidableController,
+                    actionPane: SlidableDrawerActionPane(),
+                    actions: <Widget>[
+                    ],
+                    secondaryActions: <Widget>[
+                      Visibility(visible:isVisible,
+                      child:
+                      IconSlideAction(
+                        caption: 'View',
+                        color: Colors.grey.shade200,
+                        icon: Icons.more_horiz,
+                        onTap: () {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Navigator.pop(context);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => AdminView()));
+                          });
+                          /*Navigator.pop(context);
+                           Navigator.push(context,
+                               MaterialPageRoute(builder: (context) => AdminView()));*/
+                        },
+                        closeOnTap: false,
+                      ),
+                      ),
+                      IconSlideAction(
+                        caption: 'Delete',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () =>{   setState(() {
+                          Map<String, dynamic> processrequestmap =
+                          new Map<String, dynamic>();
 
-  void showNotification(BuildContext context, NotificationModel notification,
-      var callback, bool isVisible) {
+                          processrequestmap["id"] = snapshot.data[itemCount].id;
+                          print(snapshot.data[itemCount].id);
+
+                          snapshot.data[itemCount].message.contains("Your") ||
+                              snapshot.data[itemCount].message.contains("Registered") ||
+                              snapshot.data[itemCount].message.contains("cancelled") ||
+                              snapshot.data[itemCount].message
+                                  .contains("has been created")
+                              ? notificationPageVM.deleteNotification(
+                              processrequestmap, false)
+                              : notificationPageVM.deleteNotification(
+                              processrequestmap, true);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Navigator.of(context);
+
+                          });
+
+                        }),
+                          //_showSnackBar(context, 'Delete'),
+                        },
+                      ),
+                    ],
+                  );
+              },
+              itemCount: snapshot.data.length);
+        } else if (snapshot.hasError) {
+          print(snapshot);
+          print(snapshot.error.toString() + " Error ");
+          return Center(child: Text('Error loading notifications'));
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      });
+}
+        // FutureBuilder(
+        //     future: notificationPageVM.getNotificationsBySpec("Today"),
+        //     builder: (context, snapshot) {
+        //       if (snapshot.hasData) {
+        //         ntfList = snapshot.data;
+        //         print(ntfList);
+        //         return ntfList.isNotEmpty
+        //             ? Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(
+        //                     "Today",
+        //                     style: TextStyle(
+        //                       fontWeight: FontWeight.bold,
+        //                     ),
+        //                   ),
+        //                   Divider(),
+        //                   Expanded(
+        //                     child: ListView.builder(
+        //                         itemBuilder: (context, itemCount) =>
+        //                             _buildNotification(
+        //                                 snapshot.data[itemCount], true),
+        //                         itemCount: snapshot.data.length),
+        //                   ),
+        //                 ],
+        //               )
+        //             : Container();
+        //       } else if (snapshot.hasError) {
+        //         print(snapshot);
+        //         print(snapshot.error.toString() + " Error ");
+        //         return Center(child: Text('Error loading notifications'));
+        //       } else {
+        //         return Center(child: CircularProgressIndicator());
+        //       }
+        //     }),
+
+  }
+bool isVisible;
+  void showNotification(
+      BuildContext context, NotificationModel notification, var callback) {
     bool setAction = false;
     if (notification.action == "waiting") setAction = true;
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              content: Text(notification.message),
-              title: Center(
-                child: Text(
-                  "Notification Alert!",
-                ),
+          content: Text(notification.message),
+          title: Center(
+            child: Text(
+              "Notification Alert!",
+            ),
+          ),
+          actions: <Widget>[
+            Visibility(
+              visible: isVisible,
+              child: FlatButton(
+                child: Text("View"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AdminView()));
+                },
               ),
-              actions: <Widget>[
-                Visibility(
-                  visible: isVisible,
-                  child: FlatButton(
-                    child: Text("View"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AdminView()));
-                    },
-                  ),
-                ),
-                FlatButton(
-                    child: Text("Discard"),
-                    onPressed: () {
-                      setState(() {
-                        Map<String, dynamic> processrequestmap =
-                            new Map<String, dynamic>();
-                        processrequestmap["id"] = notification.id;
-                        print(notification.id);
-                        notification.message.contains("Your") ||
-                                notification.message.contains("Registered") ||
-                                notification.message.contains("cancelled") ||
-                                notification.message
-                                    .contains("has been created")
-                            ? notificationPageVM.deleteNotification(
-                                processrequestmap, false)
-                            : notificationPageVM.deleteNotification(
-                                processrequestmap, true);
-                        Navigator.pop(context);
-                      });
-                    }),
-              ],
-            ));
+            ),
+            FlatButton(
+                child: Text("Discard"),
+                onPressed: () {
+                  /*setState(() {
+                    Map<String, dynamic> processrequestmap =
+                    new Map<String, dynamic>();
+                    processrequestmap["id"] = notification.id;
+                    print(notification.id);
+                    notification.message.contains("Your") ||
+                        notification.message.contains("Registered") ||
+                        notification.message.contains("cancelled") ||
+                        notification.message
+                            .contains("has been created")
+                        ? notificationPageVM.deleteNotification(
+                        processrequestmap, false)
+                        : notificationPageVM.deleteNotification(
+                        processrequestmap, true);
+                    Navigator.pop(context);
+                  });*/
+                }),
+          ],
+        ));
   }
-}
+

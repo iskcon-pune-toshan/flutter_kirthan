@@ -25,9 +25,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 
 class EventWrite extends StatefulWidget {
   // EventWrite({Key key}) : super(key: key);
@@ -44,8 +44,8 @@ class EventWrite extends StatefulWidget {
 
   EventWrite(
       {this.selectedTeam,
-      @required this.eventrequest,
-      @required this.userLogin})
+        @required this.eventrequest,
+        @required this.userLogin})
       : super();
 }
 
@@ -222,7 +222,7 @@ class _EventWriteState extends State<EventWrite> {
         Text(
           title,
           style: TextStyle(
-              //color:  KirthanStyles.titleColor ,
+            //color:  KirthanStyles.titleColor ,
               fontWeight: FontWeight.normal),
         )
       ],
@@ -578,9 +578,9 @@ class _EventWriteState extends State<EventWrite> {
                           style: TextStyle(color: Colors.grey)),
                       items: _category
                           .map((category) => DropdownMenuItem<String>(
-                                value: category,
-                                child: Text(category),
-                              ))
+                        value: category,
+                        child: Text(category),
+                      ))
                           .toList(),
                       onChanged: (input) {
                         setState(() {
@@ -631,7 +631,7 @@ class _EventWriteState extends State<EventWrite> {
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
 
-                          //attribute: "PhoneNumber",
+                        //attribute: "PhoneNumber",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -653,13 +653,13 @@ class _EventWriteState extends State<EventWrite> {
                             eventrequest.phoneNumber = int.parse(input);
                           },
                           validator: validateMobile
-                          /*  (value) {
+                        /*  (value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
                             }
                             return null;
                           },*/
-                          ),
+                      ),
                     ),
                     new Container(
                         alignment: Alignment.centerLeft,
@@ -913,7 +913,7 @@ class _EventWriteState extends State<EventWrite> {
                                 color: Colors.grey,
                               )),
                           onSaved: (input) {
-                            eventrequest.addLineOne = input;
+                            eventrequest.addLineOneS = input;
                             eventrequest.eventLocation = input;
                           },
                           validator: (value) {
@@ -940,34 +940,7 @@ class _EventWriteState extends State<EventWrite> {
                                 color: Colors.grey,
                               )),
                           onSaved: (input) {
-                            eventrequest.addLineTwo = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          //attribute: "line3",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              labelText: "Line 3",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.addLineThree = input;
+                            eventrequest.addLineTwoS = input;
                           },
                           validator: (value) {
                             if (value.isEmpty) {
@@ -993,7 +966,7 @@ class _EventWriteState extends State<EventWrite> {
                                 color: Colors.grey,
                               )),
                           onSaved: (input) {
-                            eventrequest.locality = input;
+                            eventrequest.localityS = input;
                           },
                           validator: (value) {
                             if (value.isEmpty) {
@@ -1040,9 +1013,9 @@ class _EventWriteState extends State<EventWrite> {
                               style: TextStyle(color: Colors.grey)),
                           items: _cities
                               .map((city) => DropdownMenuItem<String>(
-                                    value: city,
-                                    child: Text(city),
-                                  ))
+                            value: city,
+                            child: Text(city),
+                          ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1062,9 +1035,9 @@ class _EventWriteState extends State<EventWrite> {
                           ),
                           items: _states
                               .map((state) => DropdownMenuItem(
-                                    value: state,
-                                    child: Text(state),
-                                  ))
+                            value: state,
+                            child: Text(state),
+                          ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1082,9 +1055,9 @@ class _EventWriteState extends State<EventWrite> {
                               style: TextStyle(color: Colors.grey)),
                           items: ['IND', 'Kyrgyzstan']
                               .map((country) => DropdownMenuItem(
-                                    value: country,
-                                    child: Text(country),
-                                  ))
+                            value: country,
+                            child: Text(country),
+                          ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1119,7 +1092,7 @@ class _EventWriteState extends State<EventWrite> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseUser user =
-                                    await auth.currentUser();
+                                await auth.currentUser();
                                 final String email = user.email;
                                 eventrequest.createdBy = email;
                                 print("created by " + eventrequest.createdBy);
@@ -1131,15 +1104,15 @@ class _EventWriteState extends State<EventWrite> {
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
                                 // print(eventrequest.createdBy);
                                 String dt =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                    .format(DateTime.now());
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
                                 //eventrequest.approvalStatus = "Processing";
                                 eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
-                                    eventrequest.toJson();
+                                eventrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
                                 EventRequest neweventrequest = await eventPageVM

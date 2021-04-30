@@ -7,6 +7,8 @@ import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_event_view.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_team_view.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_user_view.dart';
+import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class Stats extends Model {
@@ -64,6 +66,13 @@ class _AdminViewState extends State<AdminView> {
   }
 
   int _selectedIndex = 0;
+  _goBack(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      //Navigator.pop(context);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => NotificationView()));
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return ScopedModel<Stats>(
@@ -71,6 +80,13 @@ class _AdminViewState extends State<AdminView> {
         child: ScopedModelDescendant<Stats>(
             builder: (context, child, model) => Scaffold(
                   appBar: AppBar(
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      iconSize: 20.0,
+                      onPressed: () {
+                        _goBack(context);
+                      },
+                    ),
                     title: Text('Admin panel'),
                     bottom: PreferredSize(
                       preferredSize: Size.fromHeight(50),

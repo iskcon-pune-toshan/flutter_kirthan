@@ -293,8 +293,8 @@ List<Marker> myMarker=[];
   }
   Future<void> _onMapCreated(GoogleMapController controller) async {
     var title = widget.eventrequest?.eventTitle;
-    final query = widget.eventrequest?.addLineOne +
-        widget.eventrequest?.addLineTwo + widget.eventrequest?.locality +
+    final query = widget.eventrequest?.addLineOneS +
+        widget.eventrequest?.addLineTwoS + widget.eventrequest?.localityS +
         widget.eventrequest?.city + widget.eventrequest.state;
     print('object');
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
