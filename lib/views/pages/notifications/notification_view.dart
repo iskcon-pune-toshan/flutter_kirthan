@@ -626,6 +626,8 @@ Widget buildlist(BuildContext context, Axis direction){
                     actions: <Widget>[
                     ],
                     secondaryActions: <Widget>[
+                      Visibility(visible:isVisible,
+                      child:
                       IconSlideAction(
                         caption: 'View',
                         color: Colors.grey.shade200,
@@ -641,6 +643,7 @@ Widget buildlist(BuildContext context, Axis direction){
                                MaterialPageRoute(builder: (context) => AdminView()));*/
                         },
                         closeOnTap: false,
+                      ),
                       ),
                       IconSlideAction(
                         caption: 'Delete',
