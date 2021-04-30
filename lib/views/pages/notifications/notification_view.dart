@@ -367,22 +367,36 @@ class NotificationViewState extends State<NotificationView> {
                                           ),
                                         ],
                                       )
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Accepted",
-                                            style: TextStyle(
-                                              color: Colors.green,
-                                            ),
+                                    : data.message.contains("Approved")
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Accepted",
+                                                style: TextStyle(
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ],
+                                          )
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                " ",
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                        ],
-                                      ),
-                    subtitle: data.message.contains("Registered")
+                    subtitle: data.message.contains("Registered") ||
+                            data.message.contains(" has been created")
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -636,7 +650,9 @@ class NotificationViewState extends State<NotificationView> {
                         print(notification.id);
                         notification.message.contains("Your") ||
                                 notification.message.contains("Registered") ||
-                                notification.message.contains("cancelled")
+                                notification.message.contains("cancelled") ||
+                                notification.message
+                                    .contains("has been created")
                             ? notificationPageVM.deleteNotification(
                                 processrequestmap, false)
                             : notificationPageVM.deleteNotification(
