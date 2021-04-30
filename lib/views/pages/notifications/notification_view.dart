@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/notification.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
@@ -41,7 +43,8 @@ class NotificationViewState extends State<NotificationView> {
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
-
+  bool isVisible;
+  List<UserRequest> userRequest = new List<UserRequest>();
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -54,6 +57,7 @@ class NotificationViewState extends State<NotificationView> {
       notificationPageVM.accessTypes = accessTypes;
     });
   }
+
   // //Get current date & compare for Today's notification (NOT USED)
   // bool compareNotificationDate(NotificationModel data) {
   //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -62,6 +66,30 @@ class NotificationViewState extends State<NotificationView> {
   //   else
   //     return false;
   // }
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  Future<String> getEmail() async {
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    return email;
+  }
+
+  getRoleId() async {
+    final FirebaseUser user = await auth.currentUser();
+    userRequest = await userPageVM.getUserRequests("Approved");
+    List<UserRequest> temp =
+        userRequest.where((element) => element.email == user.email).toList();
+    for (var users in temp) {
+      if (users.roleId == 1 || users.roleId == 2) {
+        setState(() {
+          isVisible = true;
+        });
+      } else {
+        setState(() {
+          isVisible = false;
+        });
+      }
+    }
+  }
 
   //Yet to be approved events
   Widget CustomTile(NotificationModel data, var callback) {
@@ -440,7 +468,7 @@ class NotificationViewState extends State<NotificationView> {
                         setState(() {
                           notificationPageVM.getNotifications();
                         });
-                      });
+                      }, isVisible);
                     }),
               ),
             ]),
@@ -521,7 +549,7 @@ class NotificationViewState extends State<NotificationView> {
                                   .getNotificationsBySpec("Today")
                               : notificationPageVM.getNotifications();
                         });
-                      });
+                      }, isVisible);
                     }),
               ),
             ]),
@@ -531,6 +559,7 @@ class NotificationViewState extends State<NotificationView> {
   List<NotificationModel> ntfList = new List<NotificationModel>();
   @override
   void initState() {
+    getRoleId();
     super.initState();
     loadPref();
     print(notificationPageVM.newNotificationCount);
@@ -618,8 +647,8 @@ class NotificationViewState extends State<NotificationView> {
     );
   }
 
-  void showNotification(
-      BuildContext context, NotificationModel notification, var callback) {
+  void showNotification(BuildContext context, NotificationModel notification,
+      var callback, bool isVisible) {
     bool setAction = false;
     if (notification.action == "waiting") setAction = true;
     showDialog(
@@ -632,13 +661,16 @@ class NotificationViewState extends State<NotificationView> {
                 ),
               ),
               actions: <Widget>[
-                FlatButton(
-                  child: Text("View"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AdminView()));
-                  },
+                Visibility(
+                  visible: isVisible,
+                  child: FlatButton(
+                    child: Text("View"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => AdminView()));
+                    },
+                  ),
                 ),
                 FlatButton(
                     child: Text("Discard"),
