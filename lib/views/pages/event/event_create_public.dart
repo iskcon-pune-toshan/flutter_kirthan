@@ -1113,7 +1113,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                     .format(DateTime.now());
                                 eventrequest.createdTime = dt;
-                                eventrequest.updatedBy = null;
+                                eventrequest.updatedBy = email;
                                 eventrequest.updatedTime = null;
                                 //eventrequest.approvalStatus = "Processing";
                                 eventrequest.approvalComments = "AAA";
