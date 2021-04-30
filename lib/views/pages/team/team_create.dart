@@ -51,14 +51,23 @@ class TeamWrite extends StatefulWidget {
 class _TeamWriteState extends State<TeamWrite> {
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
-  // List<TeamUser> listofTeamUsers = new List<TeamUser>();
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
     super.initState();
   }
 
-  // List<UserRequest> selectedUsers = new List<UserRequest>();
+  List<UserRequest> getTeamLeads(
+      List<TeamRequest> teamList, List<UserRequest> tempList) {
+    List<String> uMail = new List<String>();
+    for (var user in teamList) {
+      if (user.teamLeadId != null) uMail.add(user.teamLeadId);
+    }
+    for (var mail in uMail) {
+      tempList.removeWhere((element) => element.email == mail);
+    }
+    return tempList;
+  }
 
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
@@ -377,38 +386,54 @@ class _TeamWriteState extends State<TeamWrite> {
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Column(
                         children: <Widget>[
-                          FutureBuilder<List<UserRequest>>(
-                              future: Users,
+                          FutureBuilder<List<TeamRequest>>(
+                              future: teamPageVM.getTeamRequests("Approved"),
                               builder: (BuildContext context,
-                                  AsyncSnapshot<List<UserRequest>> snapshot) {
+                                  AsyncSnapshot<List<TeamRequest>> snapshot) {
                                 if (snapshot.data != null) {
-                                  userList = snapshot.data;
-                                  List<String> teamLeadId = userList
-                                      .map((user) => user.email)
-                                      .toSet()
-                                      .toList();
+                                  List<TeamRequest> teamList = snapshot.data;
+                                  return FutureBuilder<List<UserRequest>>(
+                                      future: Users,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<UserRequest>>
+                                          snapshot) {
+                                        if (snapshot.data != null) {
+                                          List<UserRequest> tempUserList =
+                                              snapshot.data;
+                                          userList = getTeamLeads(
+                                              teamList, tempUserList);
+                                          List<String> teamLeadId = userList
+                                              .map((user) => user.email)
+                                              .toSet()
+                                              .toList();
 
-                                  return DropdownButtonFormField<String>(
-                                    value: _selectedTeamLeadId,
-                                    icon: const Icon(Icons.account_circle),
-                                    hint: Text('Select Team Lead Id',
-                                        style: TextStyle(color: Colors.grey)),
-                                    items: teamLeadId
-                                        .map((teamLeadId) =>
-                                        DropdownMenuItem<String>(
-                                          value: teamLeadId,
-                                          child: Text(teamLeadId),
-                                        ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedTeamLeadId = input;
+                                          return DropdownButtonFormField<
+                                              String>(
+                                            value: _selectedTeamLeadId,
+                                            icon: const Icon(
+                                                Icons.account_circle),
+                                            hint: Text('Select Team Lead Id',
+                                                style: TextStyle(
+                                                    color: Colors.grey)),
+                                            items: teamLeadId
+                                                .map((teamLeadId) =>
+                                                DropdownMenuItem<String>(
+                                                  value: teamLeadId,
+                                                  child: Text(teamLeadId),
+                                                ))
+                                                .toList(),
+                                            onChanged: (input) {
+                                              setState(() {
+                                                _selectedTeamLeadId = input;
+                                              });
+                                            },
+                                            onSaved: (input) {
+                                              teamrequest.teamLeadId = input;
+                                            },
+                                          );
+                                        }
+                                        return Container();
                                       });
-                                    },
-                                    onSaved: (input) {
-                                      teamrequest.teamLeadId = input;
-                                    },
-                                  );
                                 }
                                 return Container();
                               }),

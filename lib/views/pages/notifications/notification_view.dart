@@ -4,10 +4,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/notification.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
@@ -19,14 +19,13 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 //Discard notification bug fixed
 //Tile text color bug fixed
 
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
-NotificationViewModel(apiSvc: NotificationManager());
+    NotificationViewModel(apiSvc: NotificationManager());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
@@ -43,12 +42,9 @@ class NotificationViewState extends State<NotificationView> {
   // final FirebaseMessaging _fcm = FirebaseMessaging();
   SharedPreferences prefs;
   List<String> access;
+  Map<String, bool> accessTypes = new Map<String, bool>();
   bool isVisible;
   List<UserRequest> userRequest = new List<UserRequest>();
-  Map<String, bool> accessTypes = new Map<String, bool>();
-  SlidableController _slidableController;
-  Animation<double> _rotationAnimation;
-  Color _fabColor = Colors.redAccent;
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -56,18 +52,26 @@ class NotificationViewState extends State<NotificationView> {
       access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
-        access.elementAt(1).toLowerCase() == "true" ? true : false;
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       notificationPageVM.accessTypes = accessTypes;
     });
   }
-
+  // //Get current date & compare for Today's notification (NOT USED)
+  // bool compareNotificationDate(NotificationModel data) {
+  //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
+  //   if (data.createdAt.toString().substring(0, 10) == now)
+  //     return true;
+  //   else
+  //     return false;
+  // }
   final FirebaseAuth auth = FirebaseAuth.instance;
   Future<String> getEmail() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     return email;
   }
+
   getRoleId() async {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
@@ -85,29 +89,6 @@ class NotificationViewState extends State<NotificationView> {
       }
     }
   }
-
-  void slideAnimationChanged(Animation<double> slideAnimation) {
-    setState(() {
-      _rotationAnimation = slideAnimation;
-    });
-  }
-
-  void slideIsOpenChanged(bool isOpen) {
-    setState(() {
-      _fabColor = isOpen ? Colors.orange : Colors.redAccent;
-    });
-  }
-  void _showSnackBar(BuildContext context, String text) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
-  }
-  // //Get current date & compare for Today's notification (NOT USED)
-  // bool compareNotificationDate(NotificationModel data) {
-  //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
-  //   if (data.createdAt.toString().substring(0, 10) == now)
-  //     return true;
-  //   else
-  //     return false;
-  // }
 
   //Yet to be approved events
   Widget CustomTile(NotificationModel data, var callback) {
@@ -140,24 +121,24 @@ class NotificationViewState extends State<NotificationView> {
                             children: <Widget>[
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     padding: EdgeInsets.only(left: 10),
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                            data.message,
-                                            //maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: notifier.darkTheme
-                                                    ? Colors.white
-                                                    : Colors.black),
-                                            softWrap: true,
-                                            overflow: TextOverflow.clip,
-                                          ),
+                                        data.message,
+                                        //maxLines: 2,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: notifier.darkTheme
+                                                ? Colors.white
+                                                : Colors.black),
+                                        softWrap: true,
+                                        overflow: TextOverflow.clip,
+                                      ),
                                     ),
                                   ),
                                   Container(
@@ -175,25 +156,25 @@ class NotificationViewState extends State<NotificationView> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     padding: EdgeInsets.only(left: 10, top: 3),
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                            //'By ' + data.createdBy.toString(),
-                                            data.updatedBy == null
-                                                ? "By " + data.createdBy.toString()
-                                                : "By " + data.updatedBy.toString(),
-                                            overflow: TextOverflow.clip,
-                                            style: TextStyle(
-                                              //fontWeight: FontWeight.w300,
-                                              color: notifier.darkTheme
-                                                  ? Colors.white
-                                                  : Colors.grey[500],
-                                            ),
-                                          ),
+                                        //'By ' + data.createdBy.toString(),
+                                        data.updatedBy == null
+                                            ? "By " + data.createdBy.toString()
+                                            : "By " + data.updatedBy.toString(),
+                                        overflow: TextOverflow.clip,
+                                        style: TextStyle(
+                                          //fontWeight: FontWeight.w300,
+                                          color: notifier.darkTheme
+                                              ? Colors.white
+                                              : Colors.grey[500],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Container(
@@ -337,7 +318,7 @@ class NotificationViewState extends State<NotificationView> {
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -352,133 +333,119 @@ class NotificationViewState extends State<NotificationView> {
                     contentPadding: EdgeInsets.all(5),
                     title: data.message.contains("Rejected")
                         ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Rejected",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Rejected",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          )
                         : data.message.contains("Registered")
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Registered",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              )
+                            : data.message
+                                    .contains("Request to update an event")
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Updated",
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  )
+                                : data.message.contains("cancelled")
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Cancelled",
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Accepted",
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      ),
+                    subtitle: data.message.contains("Registered")
                         ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Registered",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : data.message
-                        .contains("Request to update an event")
-                        ? Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Updated",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data.message,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          )
                         : data.message.contains("cancelled")
-                        ? Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Cancelled",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : data.message.contains("Approved")
-                        ? Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Accepted",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          " ",
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                    subtitle: data.message.contains("Registered") ||
-                        data.message.contains(" has been created")
-                        ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : data.message.contains("cancelled")
-                        ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message +
-                              " by " +
-                              data.createdBy.toString(),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.message,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.message +
+                                        " by " +
+                                        data.createdBy.toString(),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
@@ -496,7 +463,7 @@ class NotificationViewState extends State<NotificationView> {
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -523,48 +490,48 @@ class NotificationViewState extends State<NotificationView> {
                     trailing: icon == Icons.pause
                         ? actions
                         : Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          data.createdAt.toString().substring(11, 16),
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                data.createdAt.toString().substring(11, 16),
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                data.createdAt.toString().substring(0, 10),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              icon == Icons.close
+                                  ? Text(
+                                      "Rejected",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Accepted",
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          data.createdAt.toString().substring(0, 10),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        icon == Icons.close
-                            ? Text(
-                          "Rejected",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        )
-                            : Text(
-                          "Accepted",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
                     onTap: () {
                       showNotification(context, data, () {
                         setState(() {
                           flag
                               ? notificationPageVM
-                              .getNotificationsBySpec("Today")
+                                  .getNotificationsBySpec("Today")
                               : notificationPageVM.getNotifications();
                         });
                       });
@@ -707,6 +674,61 @@ Widget buildlist(BuildContext context, Axis direction){
         }
       });
 }
+        // FutureBuilder(
+        //     future: notificationPageVM.getNotificationsBySpec("Today"),
+        //     builder: (context, snapshot) {
+        //       if (snapshot.hasData) {
+        //         ntfList = snapshot.data;
+        //         print(ntfList);
+        //         return ntfList.isNotEmpty
+        //             ? Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(
+        //                     "Today",
+        //                     style: TextStyle(
+        //                       fontWeight: FontWeight.bold,
+        //                     ),
+        //                   ),
+        //                   Divider(),
+        //                   Expanded(
+        //                     child: ListView.builder(
+        //                         itemBuilder: (context, itemCount) =>
+        //                             _buildNotification(
+        //                                 snapshot.data[itemCount], true),
+        //                         itemCount: snapshot.data.length),
+        //                   ),
+        //                 ],
+        //               )
+        //             : Container();
+        //       } else if (snapshot.hasError) {
+        //         print(snapshot);
+        //         print(snapshot.error.toString() + " Error ");
+        //         return Center(child: Text('Error loading notifications'));
+        //       } else {
+        //         return Center(child: CircularProgressIndicator());
+        //       }
+        //     }),
+        FutureBuilder(
+            future: notificationPageVM.getNotifications(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    itemBuilder: (context, itemCount) =>
+                        _buildNotification(snapshot.data[itemCount], false),
+                    itemCount: snapshot.data.length);
+              } else if (snapshot.hasError) {
+                print(snapshot);
+                print(snapshot.error.toString() + " Error ");
+                return Center(child: Text('Error loading notifications'));
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            }),
+        onRefresh: refreshList,
+      ),
+    );
+  }
 
   void showNotification(
       BuildContext context, NotificationModel notification, var callback) {
@@ -722,13 +744,16 @@ Widget buildlist(BuildContext context, Axis direction){
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-              child: Text("View"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AdminView()));
-              },
+            Visibility(
+              visible: isVisible,
+              child: FlatButton(
+                child: Text("View"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AdminView()));
+                },
+              ),
             ),
             FlatButton(
                 child: Text("Discard"),

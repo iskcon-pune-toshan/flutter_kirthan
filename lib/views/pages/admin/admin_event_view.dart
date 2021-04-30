@@ -95,10 +95,11 @@ class _EventAdminViewState extends State<EventAdminView> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => EditView(
-                                      status: snapshot.data[itemCount].status,
+                                      status: snapshot.data[itemCount].status
+                                          .toString(),
                                       page: EditEvent(
                                           eventrequest:
-                                              snapshot.data[itemCount]),
+                                          snapshot.data[itemCount]),
                                       actions: Actions(
                                           _eventVM.processEventRequest,
                                           snapshot.data[itemCount]))));
