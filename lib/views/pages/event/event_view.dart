@@ -165,7 +165,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
       visible: true,
       curve: Curves.bounceInOut,
       children: [
-        role_id == 2 || role_id == 1|| role_id == 3
+        role_id == 2 || role_id == 1
             ? SpeedDialChild(
                 child: Icon(Icons.event, color: Colors.white),
                 backgroundColor: KirthanStyles.colorPallete10,
