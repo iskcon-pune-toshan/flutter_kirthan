@@ -104,13 +104,13 @@ class AppState extends State<App> {
       icon: Icons.calendar_today,
       page: MyEventView(),
     ),
-    // if(role_id == 1 || role_id ==2)
+     if(role_id == 1 || role_id ==2)
       TabItem(
         tabName: "Initiate team",
         icon: Icons.group_add,
         page: InitiateTeam(),
       ),
-    // if(role_id == 1)
+     if(role_id == 1)
     TabItem(
       tabName: "Users",
       icon:  Icons.group ,
