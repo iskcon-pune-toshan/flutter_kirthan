@@ -117,19 +117,24 @@ class _MyDrawerState extends State<MyDrawer> {
     return Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Drawer(
               child: ListView(
+                //shrinkWrap: true,
                 children: <Widget>[
                   Card(
                     child: ListTile(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      title: Column(
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           CircleAvatar(
-                            radius: 15,
+                            radius: 25,
                             backgroundColor: Color(0xf0000000),
                             child: ClipOval(
                               child: new SizedBox(
-                                  width: 100.0,
-                                  height: 100.0,
+                                  // width: 100.0,
+                                  // height: 100.0,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.8,
+                                  width: MediaQuery.of(context).size.width * 1,
                                   child: (photoUrl != null)
                                       ? Image.network(
                                           photoUrl,
@@ -139,56 +144,53 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                           ),
                           SizedBox(
-                            width: 10,
+                            height: 10,
                           ),
-                          Expanded(
-                            child: FutureBuilder(
-                                future: getEmail(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.data != null) {
-                                    final String currUserEmail =
-                                        snapshot.data.toString();
-                                    return FutureBuilder<List<UserRequest>>(
-                                        future: Users,
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<List<UserRequest>>
-                                                snapshot) {
-                                          if (snapshot.data != null) {
-                                            userList = snapshot.data
-                                                .where((element) =>
-                                                    element.email ==
-                                                    currUserEmail)
-                                                .toList();
+                          FutureBuilder(
+                              future: getEmail(),
+                              builder: (context, snapshot) {
+                                if (snapshot.data != null) {
+                                  final String currUserEmail =
+                                      snapshot.data.toString();
+                                  return FutureBuilder<List<UserRequest>>(
+                                      future: Users,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<UserRequest>>
+                                              snapshot) {
+                                        if (snapshot.data != null) {
+                                          userList = snapshot.data
+                                              .where((element) =>
+                                                  element.email ==
+                                                  currUserEmail)
+                                              .toList();
 
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                UserRole(userList)
-                                                    ? Text(
-                                                        currUserRole,
-                                                        style: TextStyle(
-                                                            fontSize: notifier
-                                                                .custFontSize),
-                                                      )
-                                                    : Text("No role"),
-                                                Text(
-                                                  currUserName,
-                                                  style:
-                                                      TextStyle(fontSize: 14),
-                                                ),
-                                              ],
-                                            );
-                                          }
-                                          return Container();
-                                        });
-                                  }
-                                  return Text(
-                                    "No user",
-                                    style: TextStyle(color: Colors.blue),
-                                  );
-                                }),
-                          ),
+                                          return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              UserRole(userList)
+                                                  ? Text(
+                                                      currUserRole,
+                                                      style: TextStyle(
+                                                          fontSize: notifier
+                                                              .custFontSize),
+                                                    )
+                                                  : Text("No role"),
+                                              Text(
+                                                currUserName,
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                        return Container();
+                                      });
+                                }
+                                return Text(
+                                  "No user",
+                                  style: TextStyle(color: Colors.blue),
+                                );
+                              }),
                         ],
                       ),
                       trailing: null,

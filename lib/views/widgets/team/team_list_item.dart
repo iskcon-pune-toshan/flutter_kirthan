@@ -117,6 +117,8 @@ class TeamRequestsListItem extends StatelessWidget {
                                       Map<String, dynamic> teamrequestmap =
                                           new Map<String, dynamic>();
                                       teamrequestmap["id"] = teamrequest?.id;
+                                      teamrequestmap["teamLeadId"] =
+                                          teamrequest?.teamLeadId;
                                       teamPageVM
                                           .deleteTeamRequest(teamrequestmap);
                                       SnackBar mysnackbar = SnackBar(
