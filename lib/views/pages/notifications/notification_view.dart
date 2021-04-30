@@ -395,21 +395,33 @@ class NotificationViewState extends State<NotificationView> {
                                           ),
                                         ],
                                       )
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Accepted",
-                                            style: TextStyle(
-                                              color: Colors.green,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                        ],
-                                      ),
+                                    :data.message.contains("Approved") ?
+                    Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Accepted",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ): Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.message,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                     subtitle: data.message.contains("Registered")
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,27 +446,40 @@ class NotificationViewState extends State<NotificationView> {
                                   ),
                                 ],
                               )
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    data.message +
-                                        " by " +
-                                        data.createdBy.toString(),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              ),
+                            : data.message.contains("Approved") ||
+                        data.message.contains("Rejected")
+                        ? Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.message +
+                              " by " +
+                              data.createdBy.toString(),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(" "),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
-                      showNotification(context, data, () {
+                      /*showNotification(context, data, () {
                         setState(() {
                           notificationPageVM.getNotifications();
                         });
-                      });
+                      });*/
                     }),
               ),
             ]),
@@ -528,14 +553,14 @@ class NotificationViewState extends State<NotificationView> {
                             ],
                           ),
                     onTap: () {
-                      showNotification(context, data, () {
+                      /*showNotification(context, data, () {
                         setState(() {
                           flag
                               ? notificationPageVM
                                   .getNotificationsBySpec("Today")
                               : notificationPageVM.getNotifications();
                         });
-                      });
+                      });*/
                     }),
               ),
             ]),
@@ -614,7 +639,7 @@ Widget buildlist(BuildContext context, Axis direction){
           return ListView.builder(
               scrollDirection: direction,
               itemBuilder: (context, itemCount){
-                final Axis slidableDirection =
+                //final Axis slidableDirection =
                 direction == Axis.horizontal ? Axis.vertical : Axis.horizontal;
                 _buildNotification(snapshot.data[itemCount], false);
                 var item = snapshot.data[itemCount];

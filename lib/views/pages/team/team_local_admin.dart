@@ -18,6 +18,7 @@ import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
@@ -305,6 +306,14 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                             Scaffold.of(context)
                                                 .showSnackBar(mysnackbar);
                                           }
+                                          setState(() {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TeamView()),
+                                            );
+                                          });
                                         });
                                   }
                                   return Container();
