@@ -123,10 +123,9 @@ class _EditEventState extends State<EditEvent> {
     _eventDateController.text = widget.eventrequest.eventDate.substring(0,10);
     _eventTimeController.text = widget.eventrequest.eventTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
-    _lineoneController.text = widget.eventrequest.addLineOne;
+    _lineoneController.text = widget.eventrequest.addLineOneS;
     _eventDurationController.text = widget.eventrequest.eventDuration;
-    _linetwoController.text = widget.eventrequest.addLineTwo;
-    _linethreeController.text = widget.eventrequest.addLineThree;
+    _linetwoController.text = widget.eventrequest.addLineTwoS;
     _pincodeController.text = widget.eventrequest.pincode.toString();
     _stateController.text = widget.eventrequest.state;
     _cityController.text = widget.eventrequest.city;
@@ -299,28 +298,6 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-                /*child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Time",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    controller: _eventTimeController,
-                    onSaved: (String value) {
-                      widget.eventrequest.eventTime = value;
-                    },
-                  ),*//*
-                ),*/
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(
@@ -389,7 +366,7 @@ class _EditEventState extends State<EditEvent> {
                     readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _lineoneController,
                     onSaved: (String value) {
-                      widget.eventrequest.addLineOne = value;
+                      widget.eventrequest.addLineOneS = value;
                     },
                   ),
                 ),
@@ -413,31 +390,7 @@ class _EditEventState extends State<EditEvent> {
                     readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _linetwoController,
                     onSaved: (String value) {
-                      widget.eventrequest.addLineTwo = value;
-                    },
-                  ),
-                ),
-                new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Line 3",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    readOnly: readonly(widget.eventrequest.isPublicEvent),
-                    controller: _linethreeController,
-                    onSaved: (String value) {
-                      widget.eventrequest.addLineThree = value;
+                      widget.eventrequest.addLineTwoS = value;
                     },
                   ),
                 ),
@@ -466,17 +419,6 @@ class _EditEventState extends State<EditEvent> {
                   ),
                 ),
 
-                /*new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(labelText: "Locality"),
-                    autocorrect: false,
-                    controller: _linethreeController,
-                    onSaved: (String value) {
-                      lineThree = value;
-                    },
-                  ),
-                ),
-*/
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(

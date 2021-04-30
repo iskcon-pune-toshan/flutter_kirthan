@@ -7,10 +7,12 @@ class EventRequest {
   String eventLocation;
   String eventType;
   int phoneNumber;
-  String addLineOne;
-  String addLineTwo;
-  String addLineThree;
-  String locality;
+  String addLineOneS;
+  String addLineTwoS;
+  String localityS;
+  String addLineOneD;
+  String addLineTwoD;
+  String localityD;
   String city;
   int pincode;
   String state;
@@ -38,10 +40,12 @@ class EventRequest {
         this.eventLocation,
         this.eventType,
         this.phoneNumber,
-        this.addLineOne,
-        this.addLineTwo,
-        this.addLineThree,
-        this.locality,
+        this.addLineOneS,
+        this.addLineTwoS,
+        this.localityS,
+        this.addLineOneD,
+        this.addLineTwoD,
+        this.localityD,
         this.city,
         this.pincode,
         this.state,
@@ -74,10 +78,12 @@ class EventRequest {
       eventLocation: data['eventLocation'],
       eventType: data['eventType'],
       phoneNumber: data['phoneNumber'],
-      addLineOne: data['addLineOne'],
-      addLineTwo: data['addLineTwo'],
-      addLineThree: data['addLineThree'],
-      locality: data['locality'],
+      addLineOneS: data['addLineOneS'],
+      addLineTwoS: data['addLineTwoS'],
+      localityS: data['localityS'],
+      addLineOneD: data['addLineOneD'],
+      addLineTwoD: data['addLineTwoD'],
+      localityD: data['localityD'],
       city: data['city'],
       pincode: data['pincode'],
       state: data['state'],
@@ -111,10 +117,12 @@ class EventRequest {
       eventLocation: map['eventLocation'],
       eventType: map['eventType'],
       phoneNumber: map['phoneNumber'],
-      addLineOne: map['addLineOne'],
-      addLineTwo: map['addLineTwo'],
-      addLineThree: map['addLineThree'],
-      locality: map['locality'],
+      addLineOneS: map['addLineOneS'],
+      addLineTwoS: map['addLineTwoS'],
+      localityS: map['localityS'],
+      addLineOneD: map['addLineOneD'],
+      addLineTwoD: map['addLineTwoD'],
+      localityD: map['localityD'],
       city: map['city'],
       pincode: map['pincode'],
       state: map['state'],
@@ -149,10 +157,12 @@ class EventRequest {
     data['eventLocation'] = this.eventLocation;
     data['eventType'] = this.eventType;
     data['phoneNumber'] = this.phoneNumber;
-    data['addLineOne'] = this.addLineOne;
-    data['addLineTwo'] = this.addLineTwo;
-    data['addLineThree'] = this.addLineThree;
-    data['locality'] = this.locality;
+    data['addLineOneS'] = this.addLineOneS;
+    data['addLineTwoS'] = this.addLineTwoS;
+    data['localityS'] = this.localityS;
+    data['addLineOneD'] = this.addLineOneD;
+    data['addLineTwoD'] = this.addLineTwoD;
+    data['localityD'] = this.localityD;
     data['city'] = this.city;
     data['pincode'] = this.pincode;
     data['state'] = this.state;
@@ -187,10 +197,12 @@ class EventRequest {
       "eventLocation":this.eventLocation,
       "eventType":this.eventType,
       "phoneNumber":this.phoneNumber,
-      "addLineOne":this.addLineOne,
-      "addLineTwo":this.addLineTwo,
-      "addLineThree":this.addLineThree,
-      "locality":this.locality,
+      "addLineOneS":this.addLineOneS,
+      "addLineTwoS":this.addLineTwoS,
+      "localityS":this.localityS,
+      "addLineOneD":this.addLineOneD,
+      "addLineTwoD":this.addLineTwoD,
+      "localityD":this.localityD,
       "city":this.city,
       "pincode":this.pincode,
       "state":this.state,

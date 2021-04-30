@@ -15,6 +15,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class Maps extends StatefulWidget {
+
+
   @override
   State<StatefulWidget> createState() {
     return _MapState();
@@ -23,7 +25,7 @@ class Maps extends StatefulWidget {
 
 class _MapState extends State<Maps> {
   GoogleMapController _controller;
-  final Set<Marker> _markers = {};
+  final List<Marker> _markers = [];
   final Set<Circle> _circle = {};
   double _radius = 100.0;
   double _zoom = 18.0;
@@ -53,7 +55,8 @@ class _MapState extends State<Maps> {
         zoom: _zoom,
       ),
       circles: _circle,
-      markers: _markers,
+      markers: Set.from(
+          _markers),
       onCameraMove: _onCameraMove,
       onCameraIdle: () {
         if (_isRadiusFixed != true)

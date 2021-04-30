@@ -912,7 +912,7 @@ class _EventWriteState extends State<EventWrite> {
                                 color: Colors.grey,
                               )),
                           onSaved: (input) {
-                            eventrequest.addLineOne = input;
+                            eventrequest.addLineOneS = input;
                             eventrequest.eventLocation = input;
                           },
                           validator: (value) {
@@ -939,34 +939,7 @@ class _EventWriteState extends State<EventWrite> {
                                 color: Colors.grey,
                               )),
                           onSaved: (input) {
-                            eventrequest.addLineTwo = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          //attribute: "line3",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              labelText: "Line 3",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.addLineThree = input;
+                            eventrequest.addLineTwoS = input;
                           },
                           validator: (value) {
                             if (value.isEmpty) {
@@ -992,7 +965,7 @@ class _EventWriteState extends State<EventWrite> {
                                 color: Colors.grey,
                               )),
                           onSaved: (input) {
-                            eventrequest.locality = input;
+                            eventrequest.localityS = input;
                           },
                           validator: (value) {
                             if (value.isEmpty) {

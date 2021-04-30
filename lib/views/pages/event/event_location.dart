@@ -123,17 +123,26 @@ class LocationMark extends State<Location> {
   //final Map<String, Marker> _markerss = {};
   Future<void> _onMapCreated(GoogleMapController controller) async {
     var title = widget.eventrequest?.eventTitle;
-
-    final query = widget.eventrequest?.addLineOne +
-        widget.eventrequest?.addLineTwo +
-        widget.eventrequest?.locality +
-        widget.eventrequest?.city +
-        widget.eventrequest.state;
-    var addresses = await Geocoder.local.findAddressesFromQuery(query);
-    var first = addresses.first;
-    print(query);
-    double lat = first.coordinates.latitude;
-    double long = first.coordinates.longitude;
+    double lat;
+    double long;
+if(widget.eventrequest?.sourceLatitude==null) {
+  final query = widget.eventrequest?.addLineOneS +
+      widget.eventrequest?.addLineTwoS +
+      widget.eventrequest?.localityS +
+      widget.eventrequest?.city +
+      widget.eventrequest.state;
+  var addresses = await Geocoder.local.findAddressesFromQuery(query);
+  var first = addresses.first;
+  print(query);
+   lat = first.coordinates.latitude;
+  long = first.coordinates.longitude;
+}
+else
+  {
+    lat=widget.eventrequest.sourceLatitude;
+    long=widget.eventrequest.sourceLongitude;
+    print("else part exceuted");
+  }
     _destination = LatLng(lat, long);
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: LatLng(lat, long),

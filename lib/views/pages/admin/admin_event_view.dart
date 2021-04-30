@@ -36,7 +36,7 @@ class _EventAdminViewState extends State<EventAdminView> {
     return Scaffold(
       body: page,
       persistentFooterButtons: <Widget>[
-        if (status.toLowerCase() == "NEW") actions
+        if (status.toUpperCase() == "NEW") actions
       ],
     );
   }

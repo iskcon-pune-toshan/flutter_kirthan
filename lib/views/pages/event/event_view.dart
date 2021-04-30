@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create_public.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +33,9 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
-
+final UserPageViewModel userPageVM =
+UserPageViewModel(apiSvc: UserAPIService());
+int role_id;
 class EventView extends StatefulWidget {
   final String title = "Events";
   final String screenName = SCR_EVENT;
@@ -115,6 +121,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
   void initState() {
     super.initState();
     _index = 0;
+    getRoleId();
     loadData();
     loadPref();
     NotificationManager ntfManger = NotificationManager();
@@ -130,6 +137,26 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     });
     return null;
   }
+  int roleid;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  List<UserRequest> userRequest;
+  List<UserRequest> userRequestList = List<UserRequest>();
+  getRoleId() async {
+    final FirebaseUser user = await auth.currentUser();
+    userRequest = await userPageVM.getUserRequests("Approved");
+    for (var users in userRequest) {
+      print("Role Id is");
+      if (users.email == user.email) {
+        setState(() {
+          role_id = users.roleId;
+          roleid=role_id;
+        });
+      }
+    }
+    //print(email);
+    print(role_id.toString());
+  }
+
   SpeedDial buildSpeedDial() {
     return SpeedDial(
       animatedIcon: AnimatedIcons.add_event,
@@ -138,7 +165,38 @@ class _EventViewState extends State<EventView> with BaseAPIService {
       visible: true,
       curve: Curves.bounceInOut,
       children: [
-        SpeedDialChild(
+        role_id == 2 || role_id == 1|| role_id == 3
+            ? SpeedDialChild(
+                child: Icon(Icons.event, color: Colors.white),
+                backgroundColor: KirthanStyles.colorPallete10,
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EventWritePublic())),
+                label: 'Public Event',
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: KirthanStyles.colorPallete60),
+                labelBackgroundColor: KirthanStyles.colorPallete30,
+              )
+            : SpeedDialChild(
+                child: Icon(Icons.event, color: Colors.white),
+                backgroundColor: Colors.grey,
+                onTap: () {
+                  SnackBar mysnackbar = SnackBar(
+                    content: Text("Only LocalAdmins can create Public Event"),
+                    duration: new Duration(seconds: 4),
+                    backgroundColor: Colors.green,
+                  );
+                  Scaffold.of(context).showSnackBar(mysnackbar);
+                },
+                label: 'Public Event',
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: KirthanStyles.colorPallete60),
+                labelBackgroundColor: KirthanStyles.colorPallete30,
+              ),
+        /*SpeedDialChild(
           child: Icon(Icons.event, color: Colors.white),
           backgroundColor: KirthanStyles.colorPallete10,
           onTap: () => Navigator.push(
@@ -147,20 +205,21 @@ class _EventViewState extends State<EventView> with BaseAPIService {
           labelStyle:
           TextStyle(fontWeight: FontWeight.w500, color: KirthanStyles.colorPallete60),
           labelBackgroundColor: KirthanStyles.colorPallete30,
-        ),
+        ),*/
         SpeedDialChild(
           child: Icon(Icons.event_note, color: Colors.white),
           backgroundColor: KirthanStyles.colorPallete10,
           onTap: () => Navigator.push(
               context, MaterialPageRoute(builder: (context) => EventWrite())),
           label: 'Invite Team',
-          labelStyle:
-          TextStyle(fontWeight: FontWeight.w500, color: KirthanStyles.colorPallete60),
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.w500, color: KirthanStyles.colorPallete60),
           labelBackgroundColor: KirthanStyles.colorPallete30,
         ),
       ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
     //accessTypes.containsKey(ACCESS_TYPE_CREATE)

@@ -1,19 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
+import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
-import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
-import 'package:flutter_kirthan/views/pages/user/user_view.dart';
-import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/CommonBottomNavigationBar.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/tabItem.dart';
+
+
 //import 'bottomNavigation.dart';
 //import 'screens.dart';
+FirebaseAuth auth = FirebaseAuth.instance;
+final UserPageViewModel userPageVM =
+UserPageViewModel(apiSvc: UserAPIService());
+int role_id;
 
 class App extends StatefulWidget {
   @override
@@ -21,12 +24,24 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
-  // this is static property so other widget throughout the app
-  // can access it simply by AppState.currentTab
   static int currentTab = 0;
 
+  List<UserRequest> userRequest;
+  List<UserRequest> userRequestList = List<UserRequest>();
+
+  @override
+  void initState() {
+    print("CHECK");
+    getRoleId();
+    super.initState();
+  }
+
+  // this is static property so other widget throughout the app
+  // can access it simply by AppState.currentTab
+
   // list tabs here
-  final List<TabItem> tabs = [
+
+  List<TabItem> tabs = [
     TabItem(
       tabName: "Home",
       icon: Icons.home,
@@ -37,6 +52,7 @@ class AppState extends State<App> {
       icon: Icons.account_circle,
       page: UserView(),
     ),*/
+    if(role_id==1||role_id==2)
     TabItem(
       tabName: "Teams",
       icon: Icons.people,
@@ -53,6 +69,12 @@ class AppState extends State<App> {
       page: MyEventView(),
     ),
 
+    // TabItem(
+    //   tabName: "Events",
+    //   icon: Icons.calendar_today,
+    //   page: MyEventView(),
+    // ),
+
     /*TabItem(
       tabName: "Screens",
       icon: Icons.fullscreen,
@@ -68,8 +90,6 @@ class AppState extends State<App> {
       icon: Icons.fullscreen_exit,
       page: RoleScreenView(),
     ),*/
-
-
   ];
 
   AppState() {
@@ -130,5 +150,22 @@ class AppState extends State<App> {
         ),
       ),
     );
+  }
+
+  getRoleId() async {
+    final FirebaseUser user = await auth.currentUser();
+    userRequest = await userPageVM.getUserRequests("Approved");
+    for (var users in userRequest) {
+      print("HELLOHELLOHELLOHELLOHELLO");
+      print(users.email);
+      print(user.email);
+      if (users.email == user.email) {
+        setState(() {
+          role_id = users.roleId;
+        });
+      }
+    }
+    print("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
+    print(role_id.toString());
   }
 }
