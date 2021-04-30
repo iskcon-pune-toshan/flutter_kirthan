@@ -214,6 +214,21 @@ class _MyDrawerState extends State<MyDrawer> {
                   Card(
                     child: ListTile(
                       title: Text(
+                        "Create a Team",
+                        style: TextStyle(fontSize: notifier.custFontSize),
+                      ),
+                      trailing: Icon(Icons.phone_in_talk),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RequestCode()));
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: Text(
                         "Participated Teams",
                         style: TextStyle(fontSize: notifier.custFontSize),
                       ),
