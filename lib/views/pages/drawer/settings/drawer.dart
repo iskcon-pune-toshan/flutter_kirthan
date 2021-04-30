@@ -6,9 +6,11 @@ import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/aboutus.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/entitlements_settings.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/profile_picture.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/team/request_code.dart';
 import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
 import 'package:flutter_kirthan/views/widgets/team/participated_team.dart';
 import 'package:rating_dialog/rating_dialog.dart';
@@ -17,6 +19,7 @@ import 'package:share/share.dart';
 import 'faq.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
 
@@ -29,6 +32,8 @@ class _MyDrawerState extends State<MyDrawer> {
   String photoUrl;
   String name;
   Future<List<UserRequest>> Users;
+  String currUserName;
+  String currUserRole;
   List<UserRequest> userList = new List<UserRequest>();
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
@@ -42,14 +47,37 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   void initState() {
-    Users = userPageVM.getUserRequests("All");
+    Users = userPageVM.getUserRequests("Approved");
     super.initState();
   }
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
   Future<String> getEmail() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    var user = await auth.currentUser();
-    var email = user.email;
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
     return email;
+  }
+
+  bool UserRole(List<UserRequest> userList) {
+    for (var user in userList) {
+      currUserName = user.userName;
+      print("In User Role function, role id is");
+      print(user.roleId);
+      if (user.roleId == 1) {
+        currUserRole = "Super Admin";
+      } else if (user.roleId == 2) {
+        currUserRole = "Local Admin";
+      } else if (user.roleId == 3) {
+        currUserRole = "User";
+      } else if (user.roleId == 4) {
+        currUserRole = "Team lead";
+      }
+      print("User role $currUserRole");
+    }
+    if (currUserRole != null)
+      return true;
+    else
+      return false;
   }
 
   Widget ProfilePages() {
@@ -58,7 +86,9 @@ class _MyDrawerState extends State<MyDrawer> {
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             String _email = snapshot.data + '.jpg';
-            print("\n\n\n\n\n\n\n\n\n\n\n" + _email + "\n\n\n\n\n\n\n\n");
+            print("\n\n\n\n\n\n\n\n\n\n\n Email : " +
+                _email +
+                "\n\n\n\n\n\n\n\n");
             final ref = FirebaseStorage.instance.ref().child(_email);
             return FutureBuilder(
                 future: ref.getDownloadURL(),
@@ -72,9 +102,14 @@ class _MyDrawerState extends State<MyDrawer> {
                   );
                 });
           }
-          return Image.asset(
-            "assets/images/default_profile_picture.png",
-            fit: BoxFit.fill,
+          return Row(
+            children: [
+              Image.asset(
+                "assets/images/default_profile_picture.png",
+                fit: BoxFit.fill,
+              ),
+              Text("No user"),
+            ],
           );
         });
   }
@@ -83,61 +118,113 @@ class _MyDrawerState extends State<MyDrawer> {
     return Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Drawer(
           child: ListView(
+            //shrinkWrap: true,
             children: <Widget>[
               Card(
                 child: ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  title: Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       CircleAvatar(
-                        radius: 15,
+                        radius: 25,
                         backgroundColor: Color(0xf0000000),
                         child: ClipOval(
                           child: new SizedBox(
-                            width: 100.0,
-                            height: 100.0,
-                            child: (photoUrl != null)
-                                ? Image.network(
-                              photoUrl,
-                              fit: BoxFit.contain,
-                            )
-                                : ProfilePages(),
-                          ),
+                            // width: 100.0,
+                            // height: 100.0,
+                              height:
+                              MediaQuery.of(context).size.height * 0.8,
+                              width: MediaQuery.of(context).size.width * 1,
+                              child: (photoUrl != null)
+                                  ? Image.network(
+                                photoUrl,
+                                fit: BoxFit.contain,
+                              )
+                                  : ProfilePages()),
                         ),
                       ),
-                      Expanded(
-                        child: FutureBuilder(
-                            future: getEmail(),
-                            builder: (context, snapshot) {
-                              if (snapshot.data != null) {
-                                String CurrentUserName="string";
-                                String uemail = snapshot.data;
-                                return FutureBuilder<List<UserRequest>>(
-                                    future: Users,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.data != null) {
-                                        userList = snapshot.data;
-                                        for (var uname in userList) {
-                                          if (uname.email == uemail) {
-                                            CurrentUserName = uname.userName;
-                                            return Text(CurrentUserName,
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }return Container();
-                                    });
-                              }return Container();
+                      SizedBox(
+                        height: 10,
+                      ),
+                      FutureBuilder(
+                          future: getEmail(),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              final String currUserEmail =
+                              snapshot.data.toString();
+                              return FutureBuilder<List<UserRequest>>(
+                                  future: Users,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<UserRequest>>
+                                      snapshot) {
+                                    if (snapshot.data != null) {
+                                      userList = snapshot.data
+                                          .where((element) =>
+                                      element.email ==
+                                          currUserEmail)
+                                          .toList();
+
+                                      return Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        children: [
+                                          UserRole(userList)
+                                              ? Text(
+                                            currUserRole,
+                                            style: TextStyle(
+                                                fontSize: notifier
+                                                    .custFontSize),
+                                          )
+                                              : Text("No role"),
+                                          Text(
+                                            currUserName,
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                    return Container();
+                                  });
                             }
-                        ),
-                      ),
+                            return Text(
+                              "No user",
+                              style: TextStyle(color: Colors.blue),
+                            );
+                          }),
                     ],
                   ),
-
                   trailing: null,
-                  onTap: () {},
+                  onTap: () {
+                    if (currUserRole.contains("Team Lead")) {
+                      //TODO: Change route to team details page
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => profilePicture()));
+                    } else {
+                      //TODO: Change route to user details page
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => profilePicture()));
+                    }
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: Text(
+                    "Create a Team",
+                    style: TextStyle(fontSize: notifier.custFontSize),
+                  ),
+                  trailing: Icon(Icons.phone_in_talk),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RequestCode()));
+                  },
                 ),
               ),
               Card(
@@ -157,7 +244,10 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               Card(
                 child: ListTile(
-                  title: Text("Interested Events"),
+                  title: Text(
+                    "Interested Events",
+                    style: TextStyle(fontSize: 16),
+                  ),
                   trailing: Icon(Icons.event),
                   onTap: () {
                     Navigator.push(
@@ -199,7 +289,10 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               Card(
                 child: ListTile(
-                  title: Text("Share app"),
+                  title: Text(
+                    "Share app",
+                    style: TextStyle(fontSize: 16),
+                  ),
                   trailing: Icon(Icons.share),
                   onTap: () {
                     Share.share(
