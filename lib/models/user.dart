@@ -68,7 +68,7 @@ class UserLogin {
   }
 }
 
-class UserRequest extends Model{
+class UserRequest extends Model {
   final int id;
 
   String uid;
@@ -99,35 +99,38 @@ class UserRequest extends Model{
   String approvalStatus;
   String approvalComments;
   String avatarUrl;
+  int invitedBy;
 
 //Typically called form service layer to create a new user
-  UserRequest( {this.id,
-    this.uid,
-    this.userName,
-    this.password,
-    this.roleId,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.phoneNumber,
-    this.addLineOne,
-    this.addLineTwo,
-    this.addLineThree,
-    this.locality,
-    this.city,
-    this.pinCode,
-    this.state,
-    this.country,
-    this.govtIdType,
-    this.govtId,
-    this.isProcessed,
-    this.createdBy,
-    this.createdTime,
-    this.updatedBy,
-    this.updatedTime,
-    this.approvalStatus,
-    this.approvalComments,
-    this.avatarUrl});
+  UserRequest(
+      {this.id,
+      this.uid,
+      this.userName,
+      this.password,
+      this.roleId,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.phoneNumber,
+      this.addLineOne,
+      this.addLineTwo,
+      this.addLineThree,
+      this.locality,
+      this.city,
+      this.pinCode,
+      this.state,
+      this.country,
+      this.govtIdType,
+      this.govtId,
+      this.isProcessed,
+      this.createdBy,
+      this.createdTime,
+      this.updatedBy,
+      this.updatedTime,
+      this.approvalStatus,
+      this.approvalComments,
+      this.avatarUrl,
+      this.invitedBy});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory UserRequest.fromJson(Map<String, dynamic> data) {
@@ -159,41 +162,42 @@ class UserRequest extends Model{
       approvalStatus: data['approvalStatus'],
       approvalComments: data['approvalComments'],
       avatarUrl: data['avatarUrl'],
+      invitedBy: data['invitedBy'],
     );
   }
 
   factory UserRequest.fromMap(Map<String, dynamic> map) {
     return UserRequest(
-        id: map['id'],
-        uid: map['uid'],
-        userName: map['userName'],
-        password: map['password'],
-        roleId: map['roleId'],
-        firstName: map['firstName'],
-        lastName: map['lastName'],
-        email: map['email'],
-        phoneNumber: map['phoneNumber'],
-        addLineOne: map['addLineOne'],
-        addLineTwo: map['addLineTwo'],
-        addLineThree: map['addLineThree'],
-        locality: map['locality'],
-        city: map['city'],
-        pinCode: map['pinCode'],
-        state: map['state'],
-        country: map['country'],
-        govtIdType: map['govtIdType'],
-        govtId: map['govtId'],
-        isProcessed: map['isProcessed'],
-        createdBy: map['createdBy'],
-        createdTime: map['createdTime'],
-        updatedBy: map['updatedBy'],
-        updatedTime: map['updatedTime'],
-        approvalStatus: map['approvalStatus'],
-        approvalComments: map['approvalComments'],
-        avatarUrl: map['avatarUrl']
+      id: map['id'],
+      uid: map['uid'],
+      userName: map['userName'],
+      password: map['password'],
+      roleId: map['roleId'],
+      firstName: map['firstName'],
+      lastName: map['lastName'],
+      email: map['email'],
+      phoneNumber: map['phoneNumber'],
+      addLineOne: map['addLineOne'],
+      addLineTwo: map['addLineTwo'],
+      addLineThree: map['addLineThree'],
+      locality: map['locality'],
+      city: map['city'],
+      pinCode: map['pinCode'],
+      state: map['state'],
+      country: map['country'],
+      govtIdType: map['govtIdType'],
+      govtId: map['govtId'],
+      isProcessed: map['isProcessed'],
+      createdBy: map['createdBy'],
+      createdTime: map['createdTime'],
+      updatedBy: map['updatedBy'],
+      updatedTime: map['updatedTime'],
+      approvalStatus: map['approvalStatus'],
+      approvalComments: map['approvalComments'],
+      avatarUrl: map['avatarUrl'],
+      invitedBy: map['invitedBy'],
     );
   }
-
 
 //Typically called from service or data_source layer just before persisting data.
   //Here is the appropriate place to check data validity before persistence.
@@ -226,6 +230,7 @@ class UserRequest extends Model{
     data['approvalStatus'] = this.approvalStatus;
     data['approvalComments'] = this.approvalComments;
     data['avatarUrl'] = this.avatarUrl;
+    data['invitedBy'] = this.invitedBy;
     return data;
   }
 
@@ -257,7 +262,8 @@ class UserRequest extends Model{
       "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
       "approvalComments": this.approvalComments,
-      "avatarUrl":this.avatarUrl
+      "avatarUrl": this.avatarUrl,
+      "invitedBy": this.invitedBy,
     };
   }
 }

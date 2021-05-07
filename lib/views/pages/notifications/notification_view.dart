@@ -58,6 +58,7 @@ class NotificationViewState extends State<NotificationView> {
       notificationPageVM.accessTypes = accessTypes;
     });
   }
+
   // //Get current date & compare for Today's notification (NOT USED)
   // bool compareNotificationDate(NotificationModel data) {
   //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -77,7 +78,7 @@ class NotificationViewState extends State<NotificationView> {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
     List<UserRequest> temp =
-    userRequest.where((element) => element.email == user.email).toList();
+        userRequest.where((element) => element.email == user.email).toList();
     for (var users in temp) {
       if (users.roleId == 1 || users.roleId == 2) {
         setState(() {
@@ -395,33 +396,34 @@ class NotificationViewState extends State<NotificationView> {
                                           ),
                                         ],
                                       )
-                                    :data.message.contains("Approved") ?
-                    Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Accepted",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ): Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
+                                    : data.message.contains("Approved")
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Accepted",
+                                                style: TextStyle(
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ],
+                                          )
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                data.message,
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ],
+                                          ),
                     subtitle: data.message.contains("Registered")
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,31 +449,31 @@ class NotificationViewState extends State<NotificationView> {
                                 ],
                               )
                             : data.message.contains("Approved") ||
-                        data.message.contains("Rejected")
-                        ? Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message +
-                              " by " +
-                              data.createdBy.toString(),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(" "),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
+                                    data.message.contains("Rejected")
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        data.message +
+                                            " by " +
+                                            data.createdBy.toString(),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(" "),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
@@ -566,6 +568,7 @@ class NotificationViewState extends State<NotificationView> {
             ]),
       );
   }
+
   SlidableController _slidableController;
   Animation<double> _rotationAnimation;
   Color _fabColor = Colors.redAccent;
@@ -585,6 +588,7 @@ class NotificationViewState extends State<NotificationView> {
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
   }
+
   void slideAnimationChanged(Animation<double> slideAnimation) {
     setState(() {
       _rotationAnimation = slideAnimation;
@@ -596,6 +600,7 @@ class NotificationViewState extends State<NotificationView> {
       _fabColor = isOpen ? Colors.orange : Colors.redAccent;
     });
   }
+
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -617,8 +622,7 @@ class NotificationViewState extends State<NotificationView> {
       drawer: MyDrawer(),
       body: RefreshIndicator(
         key: refreshKey,
-        child:
-        Center(
+        child: Center(
           child: OrientationBuilder(
             builder: (context, orientation) => buildlist(
                 context,
@@ -631,154 +635,164 @@ class NotificationViewState extends State<NotificationView> {
       ),
     );
   }
-Widget buildlist(BuildContext context, Axis direction){
-  return FutureBuilder(
-      future: notificationPageVM.getNotifications(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-              scrollDirection: direction,
-              itemBuilder: (context, itemCount){
-                //final Axis slidableDirection =
-                direction == Axis.horizontal ? Axis.vertical : Axis.horizontal;
-                _buildNotification(snapshot.data[itemCount], false);
-                var item = snapshot.data[itemCount];
-                return
-                  Slidable(
-                    child:_buildNotification(snapshot.data[itemCount], false),
+
+  Widget buildlist(BuildContext context, Axis direction) {
+    return FutureBuilder(
+        future: notificationPageVM.getNotifications(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                scrollDirection: direction,
+                itemBuilder: (context, itemCount) {
+                  //final Axis slidableDirection =
+                  direction == Axis.horizontal
+                      ? Axis.vertical
+                      : Axis.horizontal;
+                  _buildNotification(snapshot.data[itemCount], false);
+                  var item = snapshot.data[itemCount];
+                  return Slidable(
+                    child: _buildNotification(snapshot.data[itemCount], false),
                     controller: _slidableController,
                     actionPane: SlidableDrawerActionPane(),
-                    actions: <Widget>[
-                    ],
+                    actions: <Widget>[],
                     secondaryActions: <Widget>[
-                      Visibility(visible:isVisible,
-                      child:
-                      IconSlideAction(
-                        caption: 'View',
-                        color: Colors.grey.shade200,
-                        icon: Icons.more_horiz,
-                        onTap: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Navigator.pop(context);
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => AdminView()));
-                          });
-                          /*Navigator.pop(context);
+                      Visibility(
+                        visible: isVisible,
+                        child: IconSlideAction(
+                          caption: 'View',
+                          color: Colors.grey.shade200,
+                          icon: Icons.more_horiz,
+                          onTap: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AdminView()));
+                            });
+                            /*Navigator.pop(context);
                            Navigator.push(context,
                                MaterialPageRoute(builder: (context) => AdminView()));*/
-                        },
-                        closeOnTap: false,
-                      ),
+                          },
+                          closeOnTap: false,
+                        ),
                       ),
                       IconSlideAction(
                         caption: 'Delete',
                         color: Colors.red,
                         icon: Icons.delete,
-                        onTap: () =>{   setState(() {
-                          Map<String, dynamic> processrequestmap =
-                          new Map<String, dynamic>();
+                        onTap: () => {
+                          setState(() {
+                            Map<String, dynamic> processrequestmap =
+                                new Map<String, dynamic>();
 
-                          processrequestmap["id"] = snapshot.data[itemCount].id;
-                          print(snapshot.data[itemCount].id);
+                            processrequestmap["id"] =
+                                snapshot.data[itemCount].id;
+                            print(snapshot.data[itemCount].id);
 
-                          snapshot.data[itemCount].message.contains("Your") ||
-                              snapshot.data[itemCount].message.contains("Registered") ||
-                              snapshot.data[itemCount].message.contains("cancelled") ||
-                              snapshot.data[itemCount].message
-                                  .contains("has been created")
-                              ? notificationPageVM.deleteNotification(
-                              processrequestmap, false)
-                              : notificationPageVM.deleteNotification(
-                              processrequestmap, true);
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Navigator.of(context);
-
-                          });
-
-                        }),
+                            snapshot.data[itemCount].message.contains("Your") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("Registered") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("cancelled") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("has been created") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("have been promoted") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("have been made")
+                                ? notificationPageVM.deleteNotification(
+                                    processrequestmap, false)
+                                : notificationPageVM.deleteNotification(
+                                    processrequestmap, true);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.of(context);
+                            });
+                          }),
                           //_showSnackBar(context, 'Delete'),
                         },
                       ),
                     ],
                   );
-              },
-              itemCount: snapshot.data.length);
-        } else if (snapshot.hasError) {
-          print(snapshot);
-          print(snapshot.error.toString() + " Error ");
-          return Center(child: Text('Error loading notifications'));
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      });
-}
-        // FutureBuilder(
-        //     future: notificationPageVM.getNotificationsBySpec("Today"),
-        //     builder: (context, snapshot) {
-        //       if (snapshot.hasData) {
-        //         ntfList = snapshot.data;
-        //         print(ntfList);
-        //         return ntfList.isNotEmpty
-        //             ? Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Text(
-        //                     "Today",
-        //                     style: TextStyle(
-        //                       fontWeight: FontWeight.bold,
-        //                     ),
-        //                   ),
-        //                   Divider(),
-        //                   Expanded(
-        //                     child: ListView.builder(
-        //                         itemBuilder: (context, itemCount) =>
-        //                             _buildNotification(
-        //                                 snapshot.data[itemCount], true),
-        //                         itemCount: snapshot.data.length),
-        //                   ),
-        //                 ],
-        //               )
-        //             : Container();
-        //       } else if (snapshot.hasError) {
-        //         print(snapshot);
-        //         print(snapshot.error.toString() + " Error ");
-        //         return Center(child: Text('Error loading notifications'));
-        //       } else {
-        //         return Center(child: CircularProgressIndicator());
-        //       }
-        //     }),
-
-  }
-bool isVisible;
-  void showNotification(
-      BuildContext context, NotificationModel notification, var callback) {
-    bool setAction = false;
-    if (notification.action == "waiting") setAction = true;
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text(notification.message),
-          title: Center(
-            child: Text(
-              "Notification Alert!",
-            ),
-          ),
-          actions: <Widget>[
-            Visibility(
-              visible: isVisible,
-              child: FlatButton(
-                child: Text("View"),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AdminView()));
                 },
+                itemCount: snapshot.data.length);
+          } else if (snapshot.hasError) {
+            print(snapshot);
+            print(snapshot.error.toString() + " Error ");
+            return Center(child: Text('Error loading notifications'));
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
+  }
+  // FutureBuilder(
+  //     future: notificationPageVM.getNotificationsBySpec("Today"),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         ntfList = snapshot.data;
+  //         print(ntfList);
+  //         return ntfList.isNotEmpty
+  //             ? Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     "Today",
+  //                     style: TextStyle(
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                   Divider(),
+  //                   Expanded(
+  //                     child: ListView.builder(
+  //                         itemBuilder: (context, itemCount) =>
+  //                             _buildNotification(
+  //                                 snapshot.data[itemCount], true),
+  //                         itemCount: snapshot.data.length),
+  //                   ),
+  //                 ],
+  //               )
+  //             : Container();
+  //       } else if (snapshot.hasError) {
+  //         print(snapshot);
+  //         print(snapshot.error.toString() + " Error ");
+  //         return Center(child: Text('Error loading notifications'));
+  //       } else {
+  //         return Center(child: CircularProgressIndicator());
+  //       }
+  //     }),
+
+}
+
+bool isVisible;
+void showNotification(
+    BuildContext context, NotificationModel notification, var callback) {
+  bool setAction = false;
+  if (notification.action == "waiting") setAction = true;
+  showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            content: Text(notification.message),
+            title: Center(
+              child: Text(
+                "Notification Alert!",
               ),
             ),
-            FlatButton(
-                child: Text("Discard"),
-                onPressed: () {
-                  /*setState(() {
+            actions: <Widget>[
+              Visibility(
+                visible: isVisible,
+                child: FlatButton(
+                  child: Text("View"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AdminView()));
+                  },
+                ),
+              ),
+              FlatButton(
+                  child: Text("Discard"),
+                  onPressed: () {
+                    /*setState(() {
                     Map<String, dynamic> processrequestmap =
                     new Map<String, dynamic>();
                     processrequestmap["id"] = notification.id;
@@ -794,8 +808,7 @@ bool isVisible;
                         processrequestmap, true);
                     Navigator.pop(context);
                   });*/
-                }),
-          ],
-        ));
-  }
-
+                  }),
+            ],
+          ));
+}
