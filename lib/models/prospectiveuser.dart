@@ -2,7 +2,7 @@
 class ProspectiveUserRequest {
   final int id;
   String userEmail;
-  String localAdminEmail;
+  String invitedBy;
   String inviteType;
   String inviteCode;
   bool isProcessed;
@@ -11,7 +11,7 @@ class ProspectiveUserRequest {
   ProspectiveUserRequest({
     this.id,
     this.userEmail,
-    this.localAdminEmail,
+    this.invitedBy,
     this.inviteCode,
     this.inviteType,
     this.isProcessed,
@@ -22,7 +22,7 @@ class ProspectiveUserRequest {
     return ProspectiveUserRequest(
       id: data['id'],
       userEmail: data['userEmail'],
-      localAdminEmail: data['localAdminEmail'],
+      invitedBy: data['invitedBy'],
       inviteCode: data['inviteCode'],
       inviteType: data['inviteType'],
       isProcessed: data['isProcessed'],
@@ -33,7 +33,7 @@ class ProspectiveUserRequest {
     return ProspectiveUserRequest(
       id: map['id'],
       userEmail: map['userEmail'],
-      localAdminEmail: map['localAdminEmail'],
+      invitedBy: map['invitedBy'],
       inviteType: map['inviteType'],
       inviteCode: map['inviteCode'],
       isProcessed: map['isProcessed'],
@@ -44,7 +44,7 @@ class ProspectiveUserRequest {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['userEmail'] = this.userEmail;
-    data['localAdminEmail'] = this.localAdminEmail;
+    data['invitedBy'] = this.invitedBy;
     data['inviteType'] = this.inviteType;
     data['inviteCode'] = this.inviteCode;
     data['isProcessed'] = this.isProcessed;
@@ -55,7 +55,7 @@ class ProspectiveUserRequest {
     return {
       "id": this.id,
       "userEmail": this.userEmail,
-      "localAdminEmail": this.localAdminEmail,
+      "invitedBy": this.invitedBy,
       "inviteType": this.inviteType,
       "inviteCode": this.inviteCode,
       "isProcessed": this.isProcessed,

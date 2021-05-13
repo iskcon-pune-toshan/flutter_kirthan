@@ -71,10 +71,10 @@ class ProspectiveUserAPIService extends BaseAPIService
       var array = eventType.split(":");
       String umail = array[1];
       requestBody = '{"userEmail" : "$umail"}';
-    } else if (eventType.contains("localAdminEmail")) {
+    } else if (eventType.contains("invitedBy")) {
       var array = eventType.split(":");
       String lamail = array[1];
-      requestBody = '{"userEmail" : "$lamail"}';
+      requestBody = '{"invitedBy" : "$lamail"}';
     } else if (eventType.contains("local admin") ||
         eventType.contains("team")) {
       requestBody = '{"inviteType" : "$eventType"}';
