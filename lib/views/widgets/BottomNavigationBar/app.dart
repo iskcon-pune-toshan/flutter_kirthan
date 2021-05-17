@@ -33,8 +33,6 @@ class AppState extends State<App> {
   // this is static property so other widget throughout the app
   // can access it simply by AppState.currentTab
   static int currentTab = 0;
-  Future<List<UserRequest>> userRequest;
-  List<UserRequest> userRequestList = List<UserRequest>();
 
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
@@ -44,34 +42,28 @@ class AppState extends State<App> {
     print("Current User Call");
     return email;
   }
-
-
+  List<UserRequest> userRequest;
+  List<UserRequest> userRequestList = List<UserRequest>();
   getRoleId() async {
-    FutureBuilder<List<UserRequest>>(
-        future: userRequest,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<UserRequest>> snapshot) {
-          if (snapshot.data != null) {
-            setState(() {
-              userRequestList = snapshot.data;
-              for (var user in userRequestList) {
-                setState(() {
-                  role_id = user.roleId;
-                  print("From User");
-                  print(user.roleId);
-                });
-              }
-            });
-          }else{
-            return Text("Error in getRoleId");
-          }
+    final FirebaseUser user = await auth.currentUser();
+    userRequest = await userPageVM.getUserRequests("Approved");
+    for (var users in userRequest) {
+      print("Role Id is");
+      if (users.email == user.email) {
+        setState(() {
+          role_id = users.roleId;
+
         });
+      }
+    }
+    //print(email);
+    print(role_id.toString());
   }
 
   @override
   void initState() {
     String email = getCurrentUser().toString();
-    userRequest = userPageVM.getUserRequests(email.toString());
+    //userRequest = userPageVM.getUserRequests(email.toString());
     getRoleId();
     super.initState();
     print("+++++++++++++ Role Id");
@@ -89,11 +81,7 @@ class AppState extends State<App> {
       icon: Icons.account_circle,
       page: UserView(),
     ),*/
-    TabItem(
-      tabName: "Teams",
-      icon: Icons.people,
-      page: TeamView(),
-    ),
+
     TabItem(
       tabName: "Notifications",
       icon: Icons.notifications,
@@ -104,18 +92,16 @@ class AppState extends State<App> {
       icon: Icons.calendar_today,
       page: MyEventView(),
     ),
-     if(role_id == 1 || role_id ==2)
-      TabItem(
+    TabItem(
         tabName: "Initiate team",
         icon: Icons.group_add,
         page: InitiateTeam(),
-      ),
-     if(role_id == 1)
-    TabItem(
-      tabName: "Users",
-      icon:  Icons.group ,
-      page: InviteLocalAdmin() ,
     ),
+      TabItem(
+        tabName: "Users",
+        icon:  Icons.group ,
+        page: InviteLocalAdmin() ,
+      ),
 
     /*TabItem(
       tabName: "Screens",
@@ -147,6 +133,8 @@ class AppState extends State<App> {
   // sets current tab index
   // and update state
   void _selectTab(int index) {
+    print(role_id);
+    print("inside role id");
     if (index == currentTab) {
       // pop to first route
       // if the user taps on the active tab
