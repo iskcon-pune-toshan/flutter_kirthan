@@ -73,6 +73,7 @@ class UserRequest extends Model {
 
   String uid;
   int roleId;
+  int prevRoleId;
   String userName;
   String password;
 
@@ -107,6 +108,7 @@ class UserRequest extends Model {
       this.uid,
       this.userName,
       this.password,
+      this.prevRoleId,
       this.roleId,
       this.firstName,
       this.lastName,
@@ -139,6 +141,7 @@ class UserRequest extends Model {
       uid: data['uid'],
       userName: data['userName'],
       password: data['password'],
+      prevRoleId: data['prevRoleId'],
       roleId: data['roleId'],
       firstName: data['firstName'],
       lastName: data['lastName'],
@@ -172,6 +175,7 @@ class UserRequest extends Model {
       uid: map['uid'],
       userName: map['userName'],
       password: map['password'],
+      prevRoleId: map['prevRoleId'],
       roleId: map['roleId'],
       firstName: map['firstName'],
       lastName: map['lastName'],
@@ -207,6 +211,7 @@ class UserRequest extends Model {
     data['uid'] = this.uid;
     data['userName'] = this.userName;
     data['password'] = this.password;
+    data['prevRoleId'] = this.prevRoleId;
     data['roleId'] = this.roleId;
     data['firstName'] = this.firstName;
     data['lastName'] = this.lastName;
@@ -239,6 +244,7 @@ class UserRequest extends Model {
       "id": this.id,
       "uid": this.uid,
       "userName": this.userName,
+      "prevRoleId": this.prevRoleId,
       "roleId": this.roleId,
       "password": this.password,
       "firstName": this.firstName,

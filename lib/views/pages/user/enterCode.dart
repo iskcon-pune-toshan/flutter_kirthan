@@ -3,16 +3,20 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/prospectiveuser.dart';
+import 'package:flutter_kirthan/services/prospective_user_service_impl.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/user/inviteUser.dart' as inU;
 import 'package:flutter_kirthan/views/pages/user/inviteUser.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
+import 'package:flutter_kirthan/view_models/prospective_user_page_view_model.dart';
 
 TextEditingController _textController = TextEditingController();
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
+final ProspectiveUserPageViewModel prospectiveUserPageVM =
+    ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
 
 class EnterCode extends StatefulWidget {
   @override

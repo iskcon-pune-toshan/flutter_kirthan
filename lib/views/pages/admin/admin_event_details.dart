@@ -498,8 +498,6 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    if (widget.data != null)
-                                      _buildNtf(widget.data),
                                   ]),
                                 ),
                               ),
