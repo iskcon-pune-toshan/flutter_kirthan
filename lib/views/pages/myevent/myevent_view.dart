@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/views/widgets/myevent/myevent_panel.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,7 +30,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 
 final EventPageViewModel eventPageVM =
-EventPageViewModel(apiSvc: EventAPIService());
+    EventPageViewModel(apiSvc: EventAPIService());
 
 class MyEventView extends StatefulWidget {
   final String title = "My Events";
@@ -41,7 +42,14 @@ class MyEventView extends StatefulWidget {
 }
 
 class _MyEventViewState extends State<MyEventView> with BaseAPIService {
-  List<String> eventTime = ["Today", "Tomorrow", "This Week", "This Month","Clear Filter"];
+  bool _v = false;
+  List<String> eventTime = [
+    "Today",
+    "Tomorrow",
+    "This Week",
+    "This Month",
+    "Clear Filter"
+  ];
   String date;
   String datetomm;
   String _selectedValue;
@@ -73,7 +81,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
       List<dynamic> eventrequestsData = json.decode(response.body);
       //print(eventrequestsData);
       List<String> events =
-      eventrequestsData.map((event) => event.toString()).toList();
+          eventrequestsData.map((event) => event.toString()).toList();
       event = events;
       print(event);
       int len = event.length;
@@ -93,7 +101,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
       access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
-        access.elementAt(1).toLowerCase() == "true" ? true : false;
+            access.elementAt(1).toLowerCase() == "true" ? true : false;
       });
       eventPageVM.accessTypes = accessTypes;
       //userdetails = prefs.getStringList("LoginDetails");
@@ -106,6 +114,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
       //print(userdetails.length);
     });
   }
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
@@ -113,6 +122,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
     print(email);
     return email;
   }
+
   final now = DateTime.now();
   Future loadData() async {
     await eventPageVM.setEventRequests("MyEvent");
@@ -144,9 +154,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
     return Consumer<ThemeNotifier>(
       builder: (content, notifier, child) => Scaffold(
-
         appBar: AppBar(
-
           title: Text(
             "My Events",
             //style: TextStyle(fontSize: notifier.custFontSize),
@@ -203,15 +211,42 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
           iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
         ),
         drawer: MyDrawer(),
-        body: RefreshIndicator(
-          key: refreshKey,
-          child: ScopedModel<EventPageViewModel>(
-            model: eventPageVM,
-            child: MyEventsPanel(
-              eventType: "Pune",
+        body: Column(
+          children: <Widget>[
+            SwitchListTile(
+                title: Consumer<ThemeNotifier>(
+                  builder: (context, notifier, child) => Text(
+                    "Calender View",
+                    style: TextStyle(
+                        fontSize: notifier.custFontSize,
+                        color: KirthanStyles.colorPallete30),
+                  ),
+                ),
+                activeColor: Colors.cyanAccent,
+                value: _v,
+                onChanged: (value) {
+                  setState(() {
+                    _v = value;
+                  });
+                }),
+            Divider(
+              thickness: 2,
             ),
-          ),
-          onRefresh: refreshList,
+            RefreshIndicator(
+              key: refreshKey,
+              child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: _v == false
+                      ? ScopedModel<EventPageViewModel>(
+                          model: eventPageVM,
+                          child: MyEventsPanel(
+                            eventType: "Pune",
+                          ),
+                        )
+                      : CalendarPage(eventrequest: null)),
+              onRefresh: refreshList,
+            ),
+          ],
         ),
         /*floatingActionButton: FloatingActionButton(
           heroTag: "myevent",
@@ -230,16 +265,14 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
 
 class Search extends SearchDelegate {
   Search(
-      this.listExample, {
-        String hintText = "Search by Event Title",
-
-      }) : super(
-    searchFieldLabel: hintText,
-
-    searchFieldStyle: TextStyle(color: Colors.grey),
-    keyboardType: TextInputType.text,
-    textInputAction: TextInputAction.search,
-  );
+    this.listExample, {
+    String hintText = "Search by Event Title",
+  }) : super(
+          searchFieldLabel: hintText,
+          searchFieldStyle: TextStyle(color: Colors.grey),
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
     final ThemeData theme = Theme.of(context);
@@ -294,23 +327,24 @@ class Search extends SearchDelegate {
     query.isEmpty
         ? suggestionList = recentList //In the true case
         : suggestionList.addAll(listExample.where(
-      // In the false case
-          (element) => element.toUpperCase().contains(query) || element.toLowerCase().contains(query),
-
-    ));
+            // In the false case
+            (element) =>
+                element.toUpperCase().contains(query) ||
+                element.toLowerCase().contains(query),
+          ));
 
     return
-      //_widget();
-      ListView.builder(
-        itemCount: suggestionList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(
-              suggestionList[index],
-            ),
-            leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-          );
-        },
-      );
+        //_widget();
+        ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(
+            suggestionList[index],
+          ),
+          leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
+        );
+      },
+    );
   }
 }

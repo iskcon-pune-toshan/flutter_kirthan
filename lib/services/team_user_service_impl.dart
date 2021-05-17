@@ -6,8 +6,8 @@ import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/team_user_service_interface.dart';
 import 'package:flutter_kirthan/models/user.dart';
 
+//getTeamUsers based on Id
 class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
-
   static final TeamUserAPIService _internal = TeamUserAPIService.internal();
 
   factory TeamUserAPIService() => _internal;
@@ -22,7 +22,11 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/teamuser/addteamuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
 
     if (response.statusCode == 200) {
       List<dynamic> teamusermappingData = json.decode(response.body);
@@ -53,10 +57,15 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
     //print(requestBody);
 
     String requestBody = "";
-
+    int teamid = int.parse(teamMapping);
+    requestBody = '{"team_id": $teamid}';
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/teamuser/getteamuserswithdescription',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+    var response = await client1.put('$baseUrl/api/teamuser/getteamusers',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -82,7 +91,11 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/teamuser/deleteteamuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: requestBody);
 
     if (response.statusCode == 200) {
       List<dynamic> teamusermappingData = json.decode(response.body);

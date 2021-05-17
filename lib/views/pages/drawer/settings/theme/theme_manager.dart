@@ -12,6 +12,7 @@ ThemeData light = ThemeData(
   scaffoldBackgroundColor: Color(0xfff9f9f9),
   cardColor: KirthanStyles.colorPallete60,
   appBarTheme: AppBarTheme(
+    color: KirthanStyles.colorPallete60,
     iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
   ),
   buttonTheme: ButtonThemeData(

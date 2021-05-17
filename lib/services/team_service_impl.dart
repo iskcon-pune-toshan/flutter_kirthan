@@ -8,6 +8,7 @@ import 'package:flutter_kirthan/models/team.dart';
 import 'package:http/http.dart' as _http;
 import 'package:flutter_kirthan/services/team_service_interface.dart';
 
+//getTeams based on Id
 class TeamAPIService extends BaseAPIService implements ITeamRestApi {
   static final TeamAPIService _internal = TeamAPIService.internal();
 
@@ -137,6 +138,17 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
       requestBody = '{"approvalStatus":"rejected"}';
     } else if (teamTitle == "Waiting") {
       requestBody = '{"approvalStatus":"Waiting"}';
+    } else if (teamTitle.contains("localAdmin")) {
+      var array = teamTitle.split(":");
+      String localAdminName = array[1];
+      requestBody = '{"localAdminName":"$localAdminName"}';
+    } else if (teamTitle.contains("teamLead")) {
+      var array = teamTitle.split(":");
+      String teamLeadId = array[1];
+      requestBody = '{"teamLeadId":"$teamLeadId"}';
+    } else {
+      int teamId = int.parse(teamTitle);
+      requestBody = '{"id": $teamId }';
     }
     print(requestBody);
 

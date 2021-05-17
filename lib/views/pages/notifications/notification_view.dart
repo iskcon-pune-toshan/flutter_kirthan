@@ -7,26 +7,37 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/notification.dart';
+import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
+import 'package:flutter_kirthan/services/team_service_impl.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
+import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/admin/admin_event_details.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/perferences_create.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/team/team_create.dart';
+import 'package:flutter_kirthan/views/pages/team/team_profile_page.dart';
+import 'package:flutter_kirthan/views/pages/user/user_profile_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//Discard notification bug fixed
-//Tile text color bug fixed
-
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
     NotificationViewModel(apiSvc: NotificationManager());
+final UserPageViewModel userPageVM =
+    UserPageViewModel(apiSvc: UserAPIService());
+final TeamPageViewModel teamPageVM =
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
@@ -46,6 +57,9 @@ class NotificationViewState extends State<NotificationView> {
   Map<String, bool> accessTypes = new Map<String, bool>();
   bool isVisible;
   List<UserRequest> userRequest = new List<UserRequest>();
+  UserRequest userRequestTeam = new UserRequest();
+  UserRequest localAdminTeam = new UserRequest();
+
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -58,6 +72,7 @@ class NotificationViewState extends State<NotificationView> {
       notificationPageVM.accessTypes = accessTypes;
     });
   }
+
   // //Get current date & compare for Today's notification (NOT USED)
   // bool compareNotificationDate(NotificationModel data) {
   //   String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -77,7 +92,7 @@ class NotificationViewState extends State<NotificationView> {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
     List<UserRequest> temp =
-    userRequest.where((element) => element.email == user.email).toList();
+        userRequest.where((element) => element.email == user.email).toList();
     for (var users in temp) {
       if (users.roleId == 1 || users.roleId == 2) {
         setState(() {
@@ -101,11 +116,34 @@ class NotificationViewState extends State<NotificationView> {
                   color: Colors.grey[400], width: 1, style: BorderStyle.solid),
               borderRadius: BorderRadius.circular(10)),
           padding: EdgeInsets.only(top: 10, left: 20, bottom: 0, right: 20),
-          onPressed: () {
+          onPressed: () async {
             //Screen doesn't pop. User, team lead should be able to view admin panel until ntf is not accepted or declined
             // Navigator.pop(context);
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => AdminView()));
+            List<UserRequest> user =
+                await userPageVM.getUserRequests(data.createdBy);
+            String userName = " ";
+            for (var u in user) {
+              userName = u.userName;
+            }
+            String eventId = data.targetId.toString();
+            List<EventRequest> eventList =
+                await eventPageVM.getEventRequests("event_id:$eventId");
+            EventRequest eventRequest = new EventRequest();
+            for (var event in eventList) {
+              eventRequest = event;
+            }
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AdminEventDetails(
+                            UserName: userName,
+                            eventRequest: eventRequest,
+                            data: data,
+                          )));
+            });
           },
           child: Column(children: [
             Container(
@@ -395,33 +433,34 @@ class NotificationViewState extends State<NotificationView> {
                                           ),
                                         ],
                                       )
-                                    :data.message.contains("Approved") ?
-                    Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Accepted",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ): Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
+                                    : data.message.contains("Approved")
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Accepted",
+                                                style: TextStyle(
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ],
+                                          )
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                data.message,
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ],
+                                          ),
                     subtitle: data.message.contains("Registered")
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,31 +486,82 @@ class NotificationViewState extends State<NotificationView> {
                                 ],
                               )
                             : data.message.contains("Approved") ||
-                        data.message.contains("Rejected")
-                        ? Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.message +
-                              " by " +
-                              data.createdBy.toString(),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )
-                        : Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(" "),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
+                                    data.message.contains("Rejected")
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        data.message +
+                                            " by " +
+                                            data.createdBy.toString(),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  )
+                                : data.message.contains(
+                                        "You have been invited to create a team by")
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            data.message +
+                                                " by " +
+                                                data.createdBy.toString(),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          FlatButton(
+                                            textColor:
+                                                KirthanStyles.colorPallete60,
+                                            color: KirthanStyles.colorPallete30,
+                                            child: Text("Create team"),
+                                            onPressed: () async {
+                                              List<UserRequest>
+                                                  userRequestList =
+                                                  await userPageVM
+                                                      .getUserRequests(
+                                                          data.createdBy);
+                                              for (var user
+                                                  in userRequestList) {
+                                                userRequestTeam = user;
+                                              }
+                                              List<UserRequest> localAdminList =
+                                                  await userPageVM
+                                                      .getUserRequests(
+                                                          data.updatedBy);
+                                              for (var user in localAdminList) {
+                                                localAdminTeam = user;
+                                              }
+                                              // Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          TeamWrite(
+                                                            userRequest:
+                                                                userRequestTeam,
+                                                            localAdmin:
+                                                                localAdminTeam,
+                                                          )));
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(" "),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
@@ -566,6 +656,7 @@ class NotificationViewState extends State<NotificationView> {
             ]),
       );
   }
+
   SlidableController _slidableController;
   Animation<double> _rotationAnimation;
   Color _fabColor = Colors.redAccent;
@@ -585,6 +676,7 @@ class NotificationViewState extends State<NotificationView> {
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
     //_nvm.notificationCount = 0;
   }
+
   void slideAnimationChanged(Animation<double> slideAnimation) {
     setState(() {
       _rotationAnimation = slideAnimation;
@@ -596,6 +688,7 @@ class NotificationViewState extends State<NotificationView> {
       _fabColor = isOpen ? Colors.orange : Colors.redAccent;
     });
   }
+
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -617,8 +710,7 @@ class NotificationViewState extends State<NotificationView> {
       drawer: MyDrawer(),
       body: RefreshIndicator(
         key: refreshKey,
-        child:
-        Center(
+        child: Center(
           child: OrientationBuilder(
             builder: (context, orientation) => buildlist(
                 context,
@@ -631,154 +723,238 @@ class NotificationViewState extends State<NotificationView> {
       ),
     );
   }
-Widget buildlist(BuildContext context, Axis direction){
-  return FutureBuilder(
-      future: notificationPageVM.getNotifications(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-              scrollDirection: direction,
-              itemBuilder: (context, itemCount){
-                //final Axis slidableDirection =
-                direction == Axis.horizontal ? Axis.vertical : Axis.horizontal;
-                _buildNotification(snapshot.data[itemCount], false);
-                var item = snapshot.data[itemCount];
-                return
-                  Slidable(
-                    child:_buildNotification(snapshot.data[itemCount], false),
+
+  Widget buildlist(BuildContext context, Axis direction) {
+    return FutureBuilder(
+        future: notificationPageVM.getNotifications(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                scrollDirection: direction,
+                itemBuilder: (context, itemCount) {
+                  //final Axis slidableDirection =
+                  direction == Axis.horizontal
+                      ? Axis.vertical
+                      : Axis.horizontal;
+                  _buildNotification(snapshot.data[itemCount], false);
+                  var item = snapshot.data[itemCount];
+                  return Slidable(
+                    child: _buildNotification(snapshot.data[itemCount], false),
                     controller: _slidableController,
                     actionPane: SlidableDrawerActionPane(),
-                    actions: <Widget>[
-                    ],
+                    actions: <Widget>[],
                     secondaryActions: <Widget>[
-                      Visibility(visible:isVisible,
-                      child:
-                      IconSlideAction(
-                        caption: 'View',
-                        color: Colors.grey.shade200,
-                        icon: Icons.more_horiz,
-                        onTap: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Navigator.pop(context);
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => AdminView()));
-                          });
-                          /*Navigator.pop(context);
-                           Navigator.push(context,
-                               MaterialPageRoute(builder: (context) => AdminView()));*/
-                        },
-                        closeOnTap: false,
-                      ),
+                      Visibility(
+                        visible: isVisible,
+                        child: IconSlideAction(
+                          caption: 'View',
+                          color: Colors.grey.shade200,
+                          icon: Icons.more_horiz,
+                          onTap: () async {
+                            UserRequest userReq = new UserRequest();
+                            UserRequest localAdmin = new UserRequest();
+                            TeamRequest team = new TeamRequest();
+                            EventRequest eventRequest = new EventRequest();
+                            if (snapshot.data[itemCount].targetType == "team") {
+                              List<TeamRequest> teamList =
+                                  await teamPageVM.getTeamRequests(snapshot
+                                      .data[itemCount].targetId
+                                      .toString());
+                              for (var t in teamList) {
+                                team = t;
+                              }
+                            }
+                            if (snapshot.data[itemCount].targetType == "user" &&
+                                snapshot.data[itemCount].message
+                                    .contains("Invited user")) {
+                              List<TeamRequest> teamList = await teamPageVM
+                                  .getTeamRequests("teamLeadId:" +
+                                      snapshot.data[itemCount].createdBy);
+                              for (var t in teamList) {
+                                team = t;
+                              }
+                            }
+                            List<UserRequest> userRequestList =
+                                await userPageVM.getUserRequests(
+                                    snapshot.data[itemCount].createdBy);
+                            for (var user in userRequestList) {
+                              userReq = user;
+                            }
+                            List<UserRequest> user =
+                                await userPageVM.getUserRequests(
+                                    snapshot.data[itemCount].createdBy);
+                            String userName = " ";
+                            for (var u in user) {
+                              userName = u.userName;
+                            }
+                            String eventId =
+                                snapshot.data[itemCount].targetId.toString();
+                            List<EventRequest> eventList = await eventPageVM
+                                .getEventRequests("event_id:$eventId");
+                            for (var event in eventList) {
+                              eventRequest = event;
+                            }
+                            List<UserRequest> localAdminList =
+                                await userPageVM.getUserRequests(
+                                    snapshot.data[itemCount].updatedBy);
+                            for (var user in localAdminList) {
+                              localAdmin = user;
+                            }
+                            if (snapshot.data[itemCount].message
+                                .contains("Request to create an event")) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AdminEventDetails(
+                                              UserName: userName,
+                                              eventRequest: eventRequest,
+                                              data: null,
+                                            )));
+                              });
+                            } else if (snapshot.data[itemCount].message
+                                    .contains("Request to create a team") ||
+                                snapshot.data[itemCount].message
+                                    .contains("Invited user")) {
+                              print(snapshot.data[itemCount].targetId);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                //Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TeamProfilePage(
+                                              teamTitle: team.teamTitle,
+                                            )));
+                              });
+                            } else {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AdminView()));
+                              });
+                            }
+                          },
+                          closeOnTap: false,
+                        ),
                       ),
                       IconSlideAction(
                         caption: 'Delete',
                         color: Colors.red,
                         icon: Icons.delete,
-                        onTap: () =>{   setState(() {
-                          Map<String, dynamic> processrequestmap =
-                          new Map<String, dynamic>();
+                        onTap: () => {
+                          setState(() {
+                            Map<String, dynamic> processrequestmap =
+                                new Map<String, dynamic>();
 
-                          processrequestmap["id"] = snapshot.data[itemCount].id;
-                          print(snapshot.data[itemCount].id);
+                            processrequestmap["id"] =
+                                snapshot.data[itemCount].id;
+                            print(snapshot.data[itemCount].id);
 
-                          snapshot.data[itemCount].message.contains("Your") ||
-                              snapshot.data[itemCount].message.contains("Registered") ||
-                              snapshot.data[itemCount].message.contains("cancelled") ||
-                              snapshot.data[itemCount].message
-                                  .contains("has been created")
-                              ? notificationPageVM.deleteNotification(
-                              processrequestmap, false)
-                              : notificationPageVM.deleteNotification(
-                              processrequestmap, true);
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Navigator.of(context);
-
-                          });
-
-                        }),
+                            snapshot.data[itemCount].message.contains("Your") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("Registered") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("cancelled") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("has been created") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("have been promoted") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("have been made")
+                                ? notificationPageVM.deleteNotification(
+                                    processrequestmap, false)
+                                : notificationPageVM.deleteNotification(
+                                    processrequestmap, true);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.of(context);
+                            });
+                          }),
                           //_showSnackBar(context, 'Delete'),
                         },
                       ),
                     ],
                   );
-              },
-              itemCount: snapshot.data.length);
-        } else if (snapshot.hasError) {
-          print(snapshot);
-          print(snapshot.error.toString() + " Error ");
-          return Center(child: Text('Error loading notifications'));
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      });
-}
-        // FutureBuilder(
-        //     future: notificationPageVM.getNotificationsBySpec("Today"),
-        //     builder: (context, snapshot) {
-        //       if (snapshot.hasData) {
-        //         ntfList = snapshot.data;
-        //         print(ntfList);
-        //         return ntfList.isNotEmpty
-        //             ? Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Text(
-        //                     "Today",
-        //                     style: TextStyle(
-        //                       fontWeight: FontWeight.bold,
-        //                     ),
-        //                   ),
-        //                   Divider(),
-        //                   Expanded(
-        //                     child: ListView.builder(
-        //                         itemBuilder: (context, itemCount) =>
-        //                             _buildNotification(
-        //                                 snapshot.data[itemCount], true),
-        //                         itemCount: snapshot.data.length),
-        //                   ),
-        //                 ],
-        //               )
-        //             : Container();
-        //       } else if (snapshot.hasError) {
-        //         print(snapshot);
-        //         print(snapshot.error.toString() + " Error ");
-        //         return Center(child: Text('Error loading notifications'));
-        //       } else {
-        //         return Center(child: CircularProgressIndicator());
-        //       }
-        //     }),
-
-  }
-bool isVisible;
-  void showNotification(
-      BuildContext context, NotificationModel notification, var callback) {
-    bool setAction = false;
-    if (notification.action == "waiting") setAction = true;
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text(notification.message),
-          title: Center(
-            child: Text(
-              "Notification Alert!",
-            ),
-          ),
-          actions: <Widget>[
-            Visibility(
-              visible: isVisible,
-              child: FlatButton(
-                child: Text("View"),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AdminView()));
                 },
+                itemCount: snapshot.data.length);
+          } else if (snapshot.hasError) {
+            print(snapshot);
+            print(snapshot.error.toString() + " Error ");
+            return Center(child: Text('Error loading notifications'));
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
+  }
+  // FutureBuilder(
+  //     future: notificationPageVM.getNotificationsBySpec("Today"),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         ntfList = snapshot.data;
+  //         print(ntfList);
+  //         return ntfList.isNotEmpty
+  //             ? Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     "Today",
+  //                     style: TextStyle(
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                   Divider(),
+  //                   Expanded(
+  //                     child: ListView.builder(
+  //                         itemBuilder: (context, itemCount) =>
+  //                             _buildNotification(
+  //                                 snapshot.data[itemCount], true),
+  //                         itemCount: snapshot.data.length),
+  //                   ),
+  //                 ],
+  //               )
+  //             : Container();
+  //       } else if (snapshot.hasError) {
+  //         print(snapshot);
+  //         print(snapshot.error.toString() + " Error ");
+  //         return Center(child: Text('Error loading notifications'));
+  //       } else {
+  //         return Center(child: CircularProgressIndicator());
+  //       }
+  //     }),
+
+}
+
+bool isVisible;
+void showNotification(
+    BuildContext context, NotificationModel notification, var callback) {
+  bool setAction = false;
+  if (notification.action == "waiting") setAction = true;
+  showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            content: Text(notification.message),
+            title: Center(
+              child: Text(
+                "Notification Alert!",
               ),
             ),
-            FlatButton(
-                child: Text("Discard"),
-                onPressed: () {
-                  /*setState(() {
+            actions: <Widget>[
+              Visibility(
+                visible: isVisible,
+                child: FlatButton(
+                  child: Text("View"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AdminView()));
+                  },
+                ),
+              ),
+              FlatButton(
+                  child: Text("Discard"),
+                  onPressed: () {
+                    /*setState(() {
                     Map<String, dynamic> processrequestmap =
                     new Map<String, dynamic>();
                     processrequestmap["id"] = notification.id;
@@ -794,8 +970,38 @@ bool isVisible;
                         processrequestmap, true);
                     Navigator.pop(context);
                   });*/
-                }),
-          ],
-        ));
-  }
+                  }),
+            ],
+          ));
+}
 
+// void createTeam(
+//     BuildContext context, NotificationModel notification) {
+//   bool setAction = false;
+//   UserRequest userRequest = new UserRequest();
+//
+//   if (notification.action == "waiting") setAction = true;
+//   showDialog(
+//     context: context,
+//     builder: (context) => Visibility(
+//       visible: isVisible,
+//       child: FlatButton(
+//         child: Text("Create team"),
+//         onPressed: () async {
+//           List<UserRequest> userRequestList =
+//               await userPageVM.getUserRequests(notification.createdBy);
+//           for (var user in userRequestList) {
+//             userRequest = user;
+//           }
+//           Navigator.pop(context);
+//           Navigator.push(
+//               context,
+//               MaterialPageRoute(
+//                   builder: (context) => TeamWrite(
+//                         userRequest: userRequest,
+//                       )));
+//         },
+//       ),
+//     ),
+//   );
+// }

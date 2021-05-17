@@ -1,33 +1,28 @@
-import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/services/authenticate_service.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
-import 'package:flutter_kirthan/services/event_team_service_impl.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
-import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_kirthan/services/base_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /*final EventTeamPageViewModel eventTeamPageVM =
     EventTeamPageViewModel(apiSvc: EventTeamAPIService());*/
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
+final UserPageViewModel userPageVM =
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class EventDetails extends StatefulWidget {
   EventRequest eventrequest;
@@ -141,6 +136,12 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   int t;
   Map<String, bool> usercehckmap = new Map<String, bool>();
 
+  String UserName;
+  String Email;
+  int Phone;
+  String photoUrl;
+  Future<List<UserRequest>> Users;
+  List<UserRequest> userList = new List<UserRequest>();
   @override
   void initState() {
     _eventTitleController.text = widget.eventrequest.eventTitle;
@@ -171,6 +172,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
 //print(eventteam);
 
     //print(teamname);
+    Users = userPageVM.getUserRequests('Approved');
     return super.initState();
   }
 
@@ -186,26 +188,62 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
 
   int _groupValue = -1;
   List type = ["Health issues/injury", "Emergency", "Important Event", "Other"];
-  Widget _myRadioButton(String title, int value, Function onchanged) {
-    return RadioListTile(
-      value: value,
-      groupValue: _groupValue,
-      onChanged: onchanged,
-      /*(value) {
-        setState(() {
-          print(value);
-          widget.eventrequest.cancelReason = title;
-          print(title);
-          //_groupValue = value;
-
+  // Widget _myRadioButton(String title, int value, Function onchanged) {
+  //   return RadioListTile(
+  //     value: value,
+  //     groupValue: [1, 2, 3, 4],
+  //     onChanged: onchanged,
+  //     //selected: true,
+  //
+  //     /*(value) {
+  //       setState(() {
+  //         print(value);
+  //         widget.eventrequest.cancelReason = title;
+  //         print(title);
+  //         //_groupValue = value;
+  //
+  //       });
+  //     },*/
+  //     title: Consumer<ThemeNotifier>(
+  //       builder: (context, notifier, child) =>
+  //           Text(title, style: TextStyle(fontSize: notifier.custFontSize)),
+  //     ),
+  //   );
+  // }
+  @override
+  Widget ProfilePages() {
+    return FutureBuilder<List<UserRequest>>(
+        future: Users,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            userList = snapshot.data;
+            for (var uname in userList)
+              if (uname.userName == UserName) {
+                String _email = uname.email;
+                String _photoName = _email + '.jpg';
+                print("*********************" +
+                    _photoName +
+                    "*************************");
+                final ref = FirebaseStorage.instance.ref().child(_photoName);
+                return FutureBuilder(
+                    future: ref.getDownloadURL(),
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null) {
+                        return new Image.network(snapshot.data,
+                            fit: BoxFit.fill);
+                      }
+                      return Image.asset(
+                        "assets/images/default_profile_picture.png",
+                        fit: BoxFit.fill,
+                      );
+                    });
+              }
+          }
+          return Image.asset(
+            "assets/images/default_profile_picture.png",
+            fit: BoxFit.fill,
+          );
         });
-      },*/
-      title: Consumer<ThemeNotifier>(
-        builder: (context, notifier, child) =>
-            Text(title, style: TextStyle(fontSize: notifier.custFontSize)),
-      ),
-      selected: false,
-    );
   }
 
   @override
@@ -532,238 +570,301 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                     widget.eventrequest.state = input;
                   },
                 ),
-                RaisedButton(
-                    color: KirthanStyles.colorPallete10,
-                    child: Text('Cancel Invite'),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      20.0)), //this right here
-                              child: Container(
-                                height: 200,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Consumer<ThemeNotifier>(
-                                          builder: (context, notifier, child) =>
-                                              Text(
-                                                  "Do you really want to cancel?",
-                                                  style: TextStyle(
-                                                      fontSize: notifier
-                                                          .custFontSize)),
-                                        ),
-                                      ),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            RaisedButton(
-                                              onPressed: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return StatefulBuilder(
-                                                          builder: (context,
-                                                              setState) {
-                                                        return Dialog(
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20.0)),
-                                                          //this right here
-                                                          child: Container(
-                                                            height: 500,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .all(
-                                                                      12.0),
-                                                              child: Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  new Container(
-                                                                    child:
-                                                                        new Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: <
-                                                                          Widget>[
-                                                                        Consumer<
-                                                                            ThemeNotifier>(
-                                                                          builder: (context, notifier, child) => Text(
-                                                                              'Why do you want to cancel?',
-                                                                              style: TextStyle(fontSize: notifier.custFontSize)),
-                                                                        ),
-                                                                        Column(
+                SizedBox(
+                  width: 30,
+                  height: 20,
+                ),
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Color(0xf0000000),
+                        child: ClipOval(
+                          child: new SizedBox(
+                            width: 100.0,
+                            height: 100.0,
+                            child: (photoUrl != null)
+                                ? Image.network(
+                                    photoUrl,
+                                    fit: BoxFit.contain,
+                                  )
+                                : ProfilePages(),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(30, 20, 30, 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Team Profile',
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              "Some text",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    if (widget.eventrequest.serviceType == 'Premium')
+                      RaisedButton(
+                          color: KirthanStyles.colorPallete30,
+                          child: Text('Make Payment'),
+                          onPressed: () {}),
+                    RaisedButton(
+                        color: KirthanStyles.colorPallete10,
+                        child: Text('Cancel Invite'),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          20.0)), //this right here
+                                  child: Container(
+                                    height: 200,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Consumer<ThemeNotifier>(
+                                              builder: (context, notifier,
+                                                      child) =>
+                                                  Text(
+                                                      "Do you really want to cancel?",
+                                                      style: TextStyle(
+                                                          fontSize: notifier
+                                                              .custFontSize)),
+                                            ),
+                                          ),
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: <Widget>[
+                                                RaisedButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return StatefulBuilder(
+                                                              builder: (context,
+                                                                  setState) {
+                                                            return Dialog(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20.0)),
+                                                              //this right here
+                                                              child: Container(
+                                                                height: 500,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          12.0),
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceEvenly,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      new Container(
+                                                                        child:
+                                                                            new Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
                                                                           children: <
                                                                               Widget>[
-                                                                            _myRadioButton(
-                                                                              'Health issues/injury',
-                                                                              1,
-                                                                              (value) {
-                                                                                setState(() {
-                                                                                  print(value);
-                                                                                  widget.eventrequest.cancelReason = 'Health issues/injury';
-                                                                                  print('Health issues/injury');
-                                                                                  //_groupValue = value;
-                                                                                });
-                                                                              },
+                                                                            Consumer<ThemeNotifier>(
+                                                                              builder: (context, notifier, child) => Text('Why do you want to cancel?', style: TextStyle(fontSize: notifier.custFontSize)),
                                                                             ),
-                                                                            _myRadioButton(
-                                                                              'Emergency',
-                                                                              2,
-                                                                              (value) {
-                                                                                setState(() {
-                                                                                  print(value);
-                                                                                  widget.eventrequest.cancelReason = 'Emergency';
-                                                                                  print('Emergency');
-                                                                                  //_groupValue = value;
-                                                                                });
-                                                                              },
-                                                                            ),
-                                                                            _myRadioButton(
-                                                                              'Important Event',
-                                                                              3,
-                                                                              (value) {
-                                                                                setState(() {
-                                                                                  print(value);
-                                                                                  widget.eventrequest.cancelReason = 'Important Event';
-                                                                                  print('Important Event');
-                                                                                  //_groupValue = value;
-                                                                                });
-                                                                              },
-                                                                            ),
-                                                                            _myRadioButton(
-                                                                              'Other',
-                                                                              4,
-                                                                              (value) {
-                                                                                setState(() {
-                                                                                  print(value);
-                                                                                  widget.eventrequest.cancelReason = 'Other ';
-                                                                                  print('Other');
-                                                                                  //_groupValue = value;
-                                                                                });
-                                                                              },
-                                                                            ),
+                                                                            Column(
+                                                                              children: <Widget>[
+                                                                                RadioListTile(
+                                                                                  value: 1,
+                                                                                  groupValue: _groupValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      print(value);
+                                                                                      widget.eventrequest.cancelReason = 'Health issues/injury';
+                                                                                      print('Health issues/injury');
 
-                                                                            //Text('$radioItem', style: TextStyle(fontSize: 23),)
+                                                                                      _groupValue = value;
+                                                                                    });
+                                                                                  },
+                                                                                  title: Consumer<ThemeNotifier>(
+                                                                                    builder: (context, notifier, child) => Text('Health issues/injury', style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                  ),
+                                                                                ),
+
+                                                                                RadioListTile(
+                                                                                  value: 2,
+                                                                                  groupValue: _groupValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      print(value);
+                                                                                      widget.eventrequest.cancelReason = 'Emergency';
+                                                                                      print('Emergency');
+
+                                                                                      _groupValue = value;
+                                                                                    });
+                                                                                  },
+                                                                                  title: Consumer<ThemeNotifier>(
+                                                                                    builder: (context, notifier, child) => Text('Emergency', style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                  ),
+                                                                                ),
+                                                                                RadioListTile(
+                                                                                  value: 3,
+                                                                                  groupValue: _groupValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      print(value);
+                                                                                      widget.eventrequest.cancelReason = 'Important event';
+                                                                                      print('Important Event');
+
+                                                                                      _groupValue = value;
+                                                                                    });
+                                                                                  },
+                                                                                  title: Consumer<ThemeNotifier>(
+                                                                                    builder: (context, notifier, child) => Text('Important event', style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                  ),
+                                                                                ),
+                                                                                RadioListTile(
+                                                                                  value: 4,
+                                                                                  groupValue: _groupValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      print(value);
+                                                                                      widget.eventrequest.cancelReason = 'Others';
+                                                                                      print('Others');
+
+                                                                                      _groupValue = value;
+                                                                                    });
+                                                                                  },
+                                                                                  title: Consumer<ThemeNotifier>(
+                                                                                    builder: (context, notifier, child) => Text('Others', style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                  ),
+                                                                                ),
+
+                                                                                //Text('$radioItem', style: TextStyle(fontSize: 23),)
+                                                                              ],
+                                                                            ),
                                                                           ],
                                                                         ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
+                                                                      ),
+                                                                      Row(
+                                                                          mainAxisAlignment: MainAxisAlignment
                                                                               .spaceEvenly,
-                                                                      children: <
-                                                                          Widget>[
-                                                                        RaisedButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            Map<String, dynamic>
-                                                                                processrequestmap =
-                                                                                new Map<String, dynamic>();
-                                                                            processrequestmap["id"] =
-                                                                                widget.eventrequest?.id;
-                                                                            //widget.eventrequest?.isProcessed=false;
-                                                                            //widget.eventrequest?.approvalStatus="Cancelled";
-                                                                            widget.eventrequest?.status =
-                                                                                3;
-                                                                            Map<String, dynamic>
-                                                                                eventmap =
-                                                                                widget.eventrequest.toJson();
-                                                                            eventPageVM.deleteEventRequest(eventmap);
-                                                                            //eventPageVM.deleteEventRequest(processrequestmap);
-                                                                            SnackBar
-                                                                                mysnackbar =
-                                                                                SnackBar(
-                                                                              content: Text("Event $delete "),
-                                                                              duration: new Duration(seconds: 4),
-                                                                              backgroundColor: Colors.red,
-                                                                            );
-                                                                            Navigator.push(
-                                                                              context,
-                                                                              MaterialPageRoute(builder: (context) => App()),
-                                                                            );
-                                                                          },
-                                                                          child:
-                                                                              Consumer<ThemeNotifier>(
-                                                                            builder: (context, notifier, child) =>
-                                                                                Text(
-                                                                              "Send",
-                                                                              style: TextStyle(fontSize: notifier.custFontSize, color: Colors.white),
+                                                                          children: <
+                                                                              Widget>[
+                                                                            RaisedButton(
+                                                                              onPressed: () {
+                                                                                Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
+                                                                                processrequestmap["id"] = widget.eventrequest?.id;
+                                                                                //widget.eventrequest?.isProcessed=false;
+                                                                                //widget.eventrequest?.approvalStatus="Cancelled";
+                                                                                widget.eventrequest?.status = 3;
+                                                                                Map<String, dynamic> eventmap = widget.eventrequest.toJson();
+                                                                                eventPageVM.deleteEventRequest(eventmap);
+                                                                                //eventPageVM.deleteEventRequest(processrequestmap);
+                                                                                SnackBar mysnackbar = SnackBar(
+                                                                                  content: Text("Event $delete "),
+                                                                                  duration: new Duration(seconds: 4),
+                                                                                  backgroundColor: Colors.red,
+                                                                                );
+                                                                                Navigator.push(
+                                                                                  context,
+                                                                                  MaterialPageRoute(builder: (context) => App()),
+                                                                                );
+                                                                              },
+                                                                              child: Consumer<ThemeNotifier>(
+                                                                                builder: (context, notifier, child) => Text(
+                                                                                  "Send",
+                                                                                  style: TextStyle(fontSize: notifier.custFontSize, color: Colors.white),
+                                                                                ),
+                                                                              ),
+                                                                              color: const Color(0xFF1BC0C5),
                                                                             ),
-                                                                          ),
-                                                                          color:
-                                                                              const Color(0xFF1BC0C5),
-                                                                        ),
-                                                                      ]),
-                                                                ],
+                                                                          ]),
+                                                                    ],
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ),
-                                                        );
-                                                      });
-                                                    });
-                                              },
-                                              child: Consumer<ThemeNotifier>(
-                                                builder: (context, notifier,
-                                                        child) =>
-                                                    Text(
-                                                  "Yes",
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          notifier.custFontSize,
-                                                      color: Colors.white),
+                                                            );
+                                                          });
+                                                        });
+                                                  },
+                                                  child:
+                                                      Consumer<ThemeNotifier>(
+                                                    builder: (context, notifier,
+                                                            child) =>
+                                                        Text(
+                                                      "Yes",
+                                                      style: TextStyle(
+                                                          fontSize: notifier
+                                                              .custFontSize,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  color:
+                                                      const Color(0xFF1BC0C5),
                                                 ),
-                                              ),
-                                              color: const Color(0xFF1BC0C5),
-                                            ),
-                                            RaisedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Consumer<ThemeNotifier>(
-                                                builder: (context, notifier,
-                                                        child) =>
-                                                    Text(
-                                                  "No",
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          notifier.custFontSize,
-                                                      color: Colors.white),
+                                                RaisedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child:
+                                                      Consumer<ThemeNotifier>(
+                                                    builder: (context, notifier,
+                                                            child) =>
+                                                        Text(
+                                                      "No",
+                                                      style: TextStyle(
+                                                          fontSize: notifier
+                                                              .custFontSize,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  color:
+                                                      const Color(0xFF1BC0C5),
                                                 ),
-                                              ),
-                                              color: const Color(0xFF1BC0C5),
-                                            ),
-                                          ]),
-                                    ],
+                                              ]),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            );
-                          });
-                    }),
+                                );
+                              });
+                        }),
+                  ],
+                ),
               ],
             )));
   }

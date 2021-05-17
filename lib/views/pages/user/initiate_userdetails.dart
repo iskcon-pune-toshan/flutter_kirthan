@@ -10,7 +10,7 @@ import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class InitiateUserDetails extends StatefulWidget {
   String UserName;
@@ -21,6 +21,7 @@ class InitiateUserDetails extends StatefulWidget {
 }
 
 class _InitiateUserDetailsState extends State<InitiateUserDetails> {
+  FirebaseUser user;
   UserRequest userRequest;
   String UserName;
   _InitiateUserDetailsState(this.UserName);
@@ -29,6 +30,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   String photoUrl;
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
+  int superId;
 
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
@@ -41,15 +43,8 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   @override
   void initState() {
     Users = userPageVM.getUserRequests('Approved');
+    getSuperAdminId();
     super.initState();
-  }
-
-  Future<String> getEmail() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-
-    var user = await auth.currentUser();
-    var email = user.email;
-    return email;
   }
 
   Widget ProfilePages() {
@@ -104,6 +99,20 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
             builder: (context, snapshot) {
               if (snapshot.data != null) {
                 userList = snapshot.data;
+
+                print("lllll");
+                print(user.email);
+                String _email = user.email;
+                print(_email);
+                for (var _users in userList) {
+                  print("GGGG");
+                  print(_users.email);
+                  if (_users.email == _email) {
+                    superId = _users.id;
+                  } else {
+                    print("BYEBYE");
+                  }
+                }
                 for (var uname in userList) {
                   if (uname.userName == UserName) {
                     Email = uname.email;
@@ -117,7 +126,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                               color: Colors.white,
                               width: MediaQuery.of(context).size.width,
                               height:
-                              (MediaQuery.of(context).size.height / 4) + 40,
+                                  (MediaQuery.of(context).size.height / 4) + 40,
                               child: Image.asset(
                                 "assets/images/profile_back.jfif",
                                 fit: BoxFit.fill,
@@ -137,21 +146,21 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                             children: <Widget>[
                               Container(
                                   decoration: BoxDecoration(
-                                    //color: Colors.grey[700],
+                                      //color: Colors.grey[700],
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Padding(
                                           padding:
-                                          const EdgeInsets.only(top: 50),
+                                              const EdgeInsets.only(top: 50),
                                           child: Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
                                               FittedBox(
                                                 fit: BoxFit.contain,
@@ -163,7 +172,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                         style: TextStyle(
                                                             fontSize: 20,
                                                             fontFamily:
-                                                            'OpenSans'),
+                                                                'OpenSans'),
                                                       ),
                                                       VerticalDivider(
                                                         color: Colors.white,
@@ -171,15 +180,17 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                         width: 30,
                                                       ),
                                                       Text(
-                                                        uname.roleId ==1
+                                                        uname.roleId == 1
                                                             ? "Super Admin"
-                                                            : uname.roleId==2?"Local Admin":"User",
+                                                            : uname.roleId == 2
+                                                                ? "Local Admin"
+                                                                : "User",
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             fontWeight:
-                                                            FontWeight.w800,
+                                                                FontWeight.w800,
                                                             fontFamily:
-                                                            'OpenSans'),
+                                                                'OpenSans'),
                                                       ),
                                                     ],
                                                   ),
@@ -219,7 +230,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                       CircleAvatar(
                                         radius: 43,
                                         backgroundColor:
-                                        KirthanStyles.colorPallete30,
+                                            KirthanStyles.colorPallete30,
                                         child: CircleAvatar(
                                           radius: 40,
                                           //backgroundColor: Colors.white,
@@ -229,9 +240,9 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                               height: 100.0,
                                               child: (photoUrl != null)
                                                   ? Image.network(
-                                                photoUrl,
-                                                fit: BoxFit.contain,
-                                              )
+                                                      photoUrl,
+                                                      fit: BoxFit.contain,
+                                                    )
                                                   : ProfilePages(),
                                             ),
                                           ),
@@ -272,98 +283,105 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                               ),
                               uname.roleId != 2
                                   ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(20)),
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        Colors.white,
-                                        Colors.grey[300]
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight),
-                                ),
-                                child: FlatButton(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 50, vertical: 10),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(20)),
-                                    child: Text(
-                                      'Make Local Admin',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontFamily: 'OpenSans'),
-                                    ),
-                                    onPressed: () {
-                                      userRequest = uname;
-                                      setState(() {
-                                        userRequest.roleId = 2;
-                                      });
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        gradient: LinearGradient(
+                                            colors: [
+                                              Colors.white,
+                                              Colors.grey[300]
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight),
+                                      ),
+                                      child: FlatButton(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 50, vertical: 10),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          child: Text(
+                                            'Make Local Admin',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontFamily: 'OpenSans'),
+                                          ),
+                                          onPressed: () {
+                                            userRequest = uname;
+                                            print("Printing user request");
+                                            print(userRequest);
+                                            setState(() {
+                                              print("ooooo");
+                                              userRequest.roleId = 2;
+                                              print("JJJJJJ");
+                                              print(superId);
+                                              userRequest.invitedBy = superId;
+                                            });
 
-                                      String userrequestStr = jsonEncode(
-                                          userRequest.toStrJson());
-                                      userPageVM.submitUpdateUserRequest(
-                                          userrequestStr);
-                                      SnackBar mysnackbar = SnackBar(
-                                        content: Text(
-                                            UserName + " is now Admin"),
-                                        duration:
-                                        new Duration(seconds: 4),
-                                        backgroundColor: Colors.white,
-                                      );
-                                      Scaffold.of(context)
-                                          .showSnackBar(mysnackbar);
-                                    }),
-                              )
+                                            String userrequestStr = jsonEncode(
+                                                userRequest.toStrJson());
+                                            userPageVM.submitUpdateUserRequest(
+                                                userrequestStr);
+                                            SnackBar mysnackbar = SnackBar(
+                                              content: Text(
+                                                  UserName + " is now Admin"),
+                                              duration:
+                                                  new Duration(seconds: 4),
+                                              backgroundColor: Colors.white,
+                                            );
+                                            Scaffold.of(context)
+                                                .showSnackBar(mysnackbar);
+                                          }),
+                                    )
                                   : Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(20)),
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        Colors.white,
-                                        Colors.grey[300]
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight),
-                                ),
-                                child: FlatButton(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 50, vertical: 10),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(20)),
-                                    color: Colors.white,
-                                    child: Text(
-                                      'Make User',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontFamily: 'OpenSans'),
-                                    ),
-                                    onPressed: () {
-                                      userRequest = uname;
-                                      setState(() {
-                                        userRequest.roleId = 3;
-                                      });
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        gradient: LinearGradient(
+                                            colors: [
+                                              Colors.white,
+                                              Colors.grey[300]
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight),
+                                      ),
+                                      child: FlatButton(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 50, vertical: 10),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          color: Colors.white,
+                                          child: Text(
+                                            'Make User',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontFamily: 'OpenSans'),
+                                          ),
+                                          onPressed: () {
+                                            userRequest = uname;
+                                            setState(() {
+                                              userRequest.roleId = 3;
+                                              userRequest.invitedBy = superId;
+                                            });
 
-                                      String userrequestStr = jsonEncode(
-                                          userRequest.toStrJson());
-                                      userPageVM.submitUpdateUserRequest(
-                                          userrequestStr);
-                                      SnackBar mysnackbar = SnackBar(
-                                        content: Text(
-                                            UserName + " is now User"),
-                                        duration:
-                                        new Duration(seconds: 2),
-                                        backgroundColor: Colors.white,
-                                      );
-                                      Scaffold.of(context)
-                                          .showSnackBar(mysnackbar);
-                                    }),
-                              )
+                                            String userrequestStr = jsonEncode(
+                                                userRequest.toStrJson());
+                                            userPageVM.submitUpdateUserRequest(
+                                                userrequestStr);
+                                            SnackBar mysnackbar = SnackBar(
+                                              content: Text(
+                                                  UserName + " is now User"),
+                                              duration:
+                                                  new Duration(seconds: 2),
+                                              backgroundColor: Colors.white,
+                                            );
+                                            Scaffold.of(context)
+                                                .showSnackBar(mysnackbar);
+                                          }),
+                                    )
                             ],
                           ),
                         )
@@ -376,5 +394,13 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
             }),
       ),
     );
+  }
+
+  void getSuperAdminId() async {
+    //print("helllloo");
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    user = await auth.currentUser();
+    //print("helo");
+    print(user.email);
   }
 }

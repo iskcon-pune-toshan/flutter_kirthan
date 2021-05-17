@@ -94,7 +94,12 @@ class _TeamViewState extends State<TeamView>
         //backgroundColor: Colors.green,
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => TeamWrite()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TeamWrite(
+                        userRequest: null,
+                        localAdmin: null,
+                      )));
         },
       ),
     );
