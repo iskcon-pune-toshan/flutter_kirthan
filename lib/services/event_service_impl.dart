@@ -7,7 +7,7 @@ import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_interface.dart';
 import 'package:http/http.dart' as _http;
 
-//added status to getevents
+//get events based on eventId
 class EventAPIService extends BaseAPIService implements IEventRestApi {
   static final EventAPIService _internal = EventAPIService.internal();
   EventRequest eventRequest;
@@ -106,6 +106,10 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       int status = int.parse(eventType);
       print(status);
       requestBody = '{"status" : $status}';
+    } else if (eventType.contains("event_id:")) {
+      var array = eventType.split(":");
+      int eventId = int.parse(array[1]);
+      requestBody = '{"id" : $eventId}';
     } else {
       requestBody = '{"eventDuration" : "$eventType"}';
     }

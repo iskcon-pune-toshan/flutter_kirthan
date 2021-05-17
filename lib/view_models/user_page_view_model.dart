@@ -4,12 +4,11 @@ import 'package:flutter_kirthan/services/user_service_interface.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_kirthan/models/user.dart';
 
-
 class UserPageViewModel extends Model {
   final IUserRestApi apiSvc;
 
   UserPageViewModel({@required this.apiSvc});
-  Map<String,bool> accessTypes;
+  Map<String, bool> accessTypes;
 
   Future<List<UserRequest>> _userrequests;
   Future<List<UserRequest>> get userrequests => _userrequests;
@@ -20,12 +19,13 @@ class UserPageViewModel extends Model {
   }
 
   Future<List<int>> getUserCount() async {
-    List<int> result = await  apiSvc?.getUserCount();
+    List<int> result = await apiSvc?.getUserCount();
     return result;
   }
 
-  Future<List<UserRequest>> getUserForApproval(String status){
-    Future<List<UserRequest>> usersreqs = apiSvc?.getNewUserRequests(status,"Pune");
+  Future<List<UserRequest>> getUserForApproval(String status) {
+    Future<List<UserRequest>> usersreqs =
+        apiSvc?.getNewUserRequests(status, "Pune");
     print(usersreqs);
     return usersreqs;
   }
@@ -40,9 +40,10 @@ class UserPageViewModel extends Model {
     return usersreqs;
   }
 
-
-  Future<UserRequest> submitNewUserRequest(Map<String, dynamic> userrequestmap) {
-    Future<UserRequest> userrequest = apiSvc?.submitNewUserRequest(userrequestmap);
+  Future<UserRequest> submitNewUserRequest(
+      Map<String, dynamic> userrequestmap) {
+    Future<UserRequest> userrequest =
+        apiSvc?.submitNewUserRequest(userrequestmap);
     return userrequest;
   }
 
@@ -61,5 +62,8 @@ class UserPageViewModel extends Model {
     return updateFlag;
   }
 
-
+  Future<bool> submitInitiateTeam(String userrequestmap) {
+    Future<bool> updateFlag = apiSvc?.submitInitiateTeam(userrequestmap);
+    return updateFlag;
+  }
 }

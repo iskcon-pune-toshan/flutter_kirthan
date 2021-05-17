@@ -1,6 +1,8 @@
+//added targetId
 class NotificationModel {
   String _uuid;
   String _targetType;
+  int _targetId;
   String _message;
   String _action;
   DateTime _createdAt;
@@ -14,10 +16,12 @@ class NotificationModel {
       String uuid,
       String message,
       String type,
+      int targetId,
       String action,
       int id,
       String updatedBy}) {
     this._targetType = type;
+    this._targetId = targetId;
     this._action = action;
     this._createdBy = createdBy;
     this._createdAt = createdAt;
@@ -30,6 +34,7 @@ class NotificationModel {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = new Map<String, dynamic>();
     data["type"] = this._targetType;
+    data["targetId"] = this._targetId;
     data["createdBy"] = this._createdBy;
     data["createdTime"] = this._createdAt;
     data["uuid"] = this._uuid;
@@ -52,6 +57,7 @@ class NotificationModel {
       action: data["action"],
       id: data["id"],
       updatedBy: data["updatedBy"],
+      targetId: data["targetId"],
     );
   }
 
@@ -69,5 +75,6 @@ class NotificationModel {
 
   int get id => _id;
 
+  int get targetId => _targetId;
   String get updatedBy => _updatedBy;
 }

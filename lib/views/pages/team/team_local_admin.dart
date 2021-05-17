@@ -1,23 +1,28 @@
+import 'dart:convert';
 import 'dart:core';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_kirthan/models/prospectiveuser.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/models/usertemple.dart';
+import 'package:flutter_kirthan/services/prospective_user_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
 import 'package:flutter_kirthan/services/temple_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/services/user_temple_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/prospective_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/team/non_user_team_invite.dart';
 import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +30,7 @@ import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
@@ -36,12 +42,18 @@ final TemplePageViewModel templePageVM =
     TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
     UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+final ProspectiveUserPageViewModel prospectiveUserPageViewModel =
+    ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
 
 class TeamLocalAdmin extends StatefulWidget {
   TeamRequest teamrequest;
   List<String> selectedMembers;
+  UserRequest user;
   TeamLocalAdmin(
-      {Key key, @required this.teamrequest, @required this.selectedMembers})
+      {Key key,
+      @required this.teamrequest,
+      @required this.selectedMembers,
+      @required this.user})
       : super(key: key);
 
   final String screenName = SCR_TEAM;
@@ -64,6 +76,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
     Users = userPageVM.getUserRequests("Approved");
     Temples = templePageVM.getTemples("All");
     UserTemples = userTemplePageVM.getUserTempleMapping("All");
+    //getLocalAdminTemple();
     super.initState();
   }
 
@@ -104,6 +117,32 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
     }
   }
 
+  // void getLocalAdminTemple() async {
+  //   int templeId;
+  //   FutureBuilder<List<UserTemple>>(
+  //       future: UserTemples,
+  //       builder:
+  //           (BuildContext context, AsyncSnapshot<List<UserTemple>> snapshot) {
+  //         if (snapshot.data != null) {
+  //           List<UserTemple> uTemple = snapshot.data
+  //               .where((element) => element.userId == widget.user.id)
+  //               .toList();
+  //           if (widget.user != null) {
+  //             _selectedLocalAdmin = widget.user.userName;
+  //             for (var temp in snapshot.data) {
+  //               templeId = temp.templeId;
+  //               print("Temple id is $templeId");
+  //             }
+  //           }
+  //         }
+  //         return Container();
+  //       });
+  //   List<Temple> temple = await templePageVM.getTemples(templeId.toString());
+  //   for (var temp in temple) {
+  //     _selectedTempleArea = temp.area;
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,48 +174,87 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                       child: Column(
                         children: <Widget>[
                           SizedBox(height: 35),
-
-                          FutureBuilder<List<Temple>>(
-                              future: Temples,
+                          FutureBuilder<List<UserTemple>>(
+                              future: UserTemples,
                               builder: (BuildContext context,
-                                  AsyncSnapshot<List<Temple>> snapshot) {
+                                  AsyncSnapshot<List<UserTemple>> snapshot) {
                                 if (snapshot.data != null) {
-                                  templeList = snapshot.data;
-                                  List<String> templeArea = templeList
-                                      .map((user) => user.area)
-                                      .toSet()
-                                      .toList();
-
-                                  return DropdownButtonFormField<String>(
-                                    value: _selectedTempleArea,
-                                    icon: const Icon(Icons.account_circle),
-                                    hint: Text('Select Temple Area',
-                                        style: TextStyle(color: Colors.grey)),
-                                    items: templeArea
-                                        .map((templeArea) =>
-                                            DropdownMenuItem<String>(
-                                              value: templeArea,
-                                              child: Text(templeArea),
-                                            ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedTempleArea = input;
-                                        _selectedtempleId =
-                                            templeList.indexWhere((element) =>
-                                                    element.area ==
-                                                    _selectedTempleArea) +
-                                                1;
-                                        print(_selectedtempleId);
-                                        _selectedLocalAdmin = null;
+                                  userTempleList = snapshot.data.toList();
+                                  if (widget.user != null) {
+                                    List<UserTemple> templeArea = userTempleList
+                                        .where((user) =>
+                                            user.userId == widget.user.id)
+                                        .toList();
+                                    for (var temple in templeArea) {
+                                      _selectedtempleId = temple.templeId;
+                                      print("work man $_selectedtempleId");
+                                    }
+                                  }
+                                  return FutureBuilder<List<Temple>>(
+                                      future: Temples,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<Temple>>
+                                              snapshot) {
+                                        if (snapshot.data != null) {
+                                          if (widget.user == null) {
+                                            templeList = snapshot.data;
+                                          } else {
+                                            templeList = snapshot.data
+                                                .where((element) =>
+                                                    element.id ==
+                                                    _selectedtempleId)
+                                                .toList();
+                                            for (var temple in templeList) {
+                                              _selectedTempleArea = temple.area;
+                                              print(
+                                                  "this is temple area : $_selectedTempleArea");
+                                            }
+                                          }
+                                          List<String> templeArea = snapshot
+                                              .data
+                                              .map((user) => user.area)
+                                              .toSet()
+                                              .toList();
+                                          return DropdownButtonFormField<
+                                              String>(
+                                            value: _selectedTempleArea,
+                                            icon: const Icon(
+                                                Icons.account_circle),
+                                            hint: Text('Select Temple Area',
+                                                style: TextStyle(
+                                                    color: Colors.grey)),
+                                            items: templeArea
+                                                .map((templeArea) =>
+                                                    DropdownMenuItem<String>(
+                                                      value: templeArea,
+                                                      child: Text(templeArea),
+                                                    ))
+                                                .toList(),
+                                            onChanged: (input) {
+                                              setState(() {
+                                                _selectedTempleArea = input;
+                                                _selectedtempleId = templeList
+                                                        .indexWhere((element) =>
+                                                            element.area ==
+                                                            _selectedTempleArea) +
+                                                    1;
+                                                print(_selectedtempleId);
+                                                _selectedLocalAdmin = null;
+                                              });
+                                            },
+                                            onSaved: (input) {
+                                              widget.teamrequest
+                                                  .localAdminArea = input;
+                                            },
+                                          );
+                                        }
+                                        return Container();
                                       });
-                                    },
-                                    onSaved: (input) {
-                                      widget.teamrequest.localAdminArea = input;
-                                    },
-                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("Error");
+                                } else {
+                                  return Text("Retrieved null values");
                                 }
-                                return Container();
                               }),
                           SizedBox(height: 35),
                           //UserTemple
@@ -195,7 +273,9 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                       .toList();
 
                                   return DropdownButtonFormField<String>(
-                                    value: _selectedLocalAdmin,
+                                    value: widget.user == null
+                                        ? _selectedLocalAdmin
+                                        : widget.user.userName,
                                     icon: const Icon(Icons.account_circle),
                                     hint: Text('Select Local Admin',
                                         style: TextStyle(color: Colors.grey)),
@@ -232,13 +312,6 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // memberCount.length == 0
-                        //     ? new ListView.builder(
-                        //         itemCount: dynamicList.length,
-                        //         itemBuilder: (_, index) => dynamicList[index],
-                        //       )
-                        //     : Text("Failed"),
-
                         new Container(margin: const EdgeInsets.only(top: 40)),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -286,6 +359,42 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                             widget.teamrequest
                                                     .listOfTeamMembers =
                                                 listofTeamUsers;
+                                            List<ProspectiveUserRequest> puReq =
+                                                await prospectiveUserPageVM
+                                                    .getProspectiveUserRequests(
+                                                        "uEmail:" +
+                                                            widget.teamrequest
+                                                                .teamLeadId);
+                                            if (puReq.isNotEmpty) {
+                                              ProspectiveUserRequest purequest =
+                                                  new ProspectiveUserRequest();
+                                              widget.teamrequest
+                                                  .approvalStatus = "Approved";
+                                              widget.teamrequest
+                                                      .approvalComments =
+                                                  "Approved";
+                                              widget.teamrequest.isProcessed =
+                                                  true;
+                                              for (var user in puReq) {
+                                                user.isProcessed = true;
+                                                purequest = user;
+                                              }
+                                              String prospectiveStr =
+                                                  jsonEncode(
+                                                      purequest.toStrJson());
+                                              prospectiveUserPageVM
+                                                  .submitUpdateProspectiveUserRequest(
+                                                      prospectiveStr);
+                                            }
+                                            if (widget.user != null) {
+                                              widget.teamrequest
+                                                  .approvalStatus = "Approved";
+                                              widget.teamrequest
+                                                      .approvalComments =
+                                                  "Approved";
+                                              widget.teamrequest.isProcessed =
+                                                  true;
+                                            }
                                             Map<String, dynamic> teammap =
                                                 widget.teamrequest.toJson();
                                             TeamRequest newteamrequest =
@@ -311,7 +420,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      TeamView()),
+                                                      EventView()),
                                             );
                                           });
                                         });

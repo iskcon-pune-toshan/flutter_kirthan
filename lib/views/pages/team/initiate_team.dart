@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
-import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/team/initiate_team_userdetails.dart';
+import 'package:flutter_kirthan/views/pages/team/non_user_team_invite.dart';
+import 'package:flutter_kirthan/views/pages/team/team_profile_page.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
 
@@ -46,7 +46,6 @@ class _InitiateTeamState extends State<InitiateTeam> {
 
   @override
   void initState() {
-
     Users = userPageVM.getUserRequests("Approved");
     Team = teamPageVM.getTeamRequests("Approved");
     print('CHECK');
@@ -60,49 +59,56 @@ class _InitiateTeamState extends State<InitiateTeam> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var user = await auth.currentUser();
     var email = user.email;
-    print('*******************' + email);
     return email;
   }
 
   Widget initializedTeams(String userName) {
-            return FutureBuilder<List<TeamRequest>>(
-                future:Team ,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    teamList = snapshot.data;
-                    print('////////////');
-                    print(teamList);
-                    print(userName);
-                   List<TeamRequest> initiatedTeams = teamList.where((user) => user.localAdminName == userName).toList();
-                    print('***************************************************');
-                    print(initiatedTeams);
-                    List<String> teamTitles = initiatedTeams.map((title) => (title.teamTitle)).toSet().toList();
-                    print('***************************************************');
-                    print(teamTitles);
-                    print('***************************************************');
-                    // if(initiatedTeam!= null)
-                    return ListView.builder(
-                      shrinkWrap: true,
-                        itemCount: teamTitles.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            elevation: 10,
-                            child: Container(
-                              height: 70,
-                              child: ListTile(
-                                leading: Icon(Icons.group),
-                                title: Text(teamTitles[index],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.grey
-                                ),),
-                              ),
-                            ),
-                          );
-                        });
-
-
-                  // :Center(child:Text('No initiated Teams',style:TextStyle(fontSize: 20,color: Colors.grey)));
-                  }
-                  return Center(child: Container(child: Text('No Teams Available')),);
+    return FutureBuilder<List<TeamRequest>>(
+        future: Team,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            teamList = snapshot.data;
+            List<TeamRequest> initiatedTeams = teamList
+                .where((user) => user.localAdminName == userName)
+                .toList();
+            List<String> teamTitles = initiatedTeams
+                .map((title) => (title.teamTitle))
+                .toSet()
+                .toList();
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: teamTitles.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 10,
+                    child: Container(
+                      height: 70,
+                      child: ListTile(
+                        leading: Icon(Icons.group),
+                        trailing: Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TeamProfilePage(
+                                      teamTitle: teamTitles[index])));
+                        },
+                        title: Text(
+                          teamTitles[index],
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  );
                 });
+          }
+          return Center(
+            child: Container(child: Text('No Teams Available')),
+          );
+        });
   }
 
   final userSelected = TextEditingController();
@@ -137,11 +143,10 @@ class _InitiateTeamState extends State<InitiateTeam> {
                           .toList();
                       List<String> listOfUsers =
                           userList.map((e) => e.userName).toSet().toList();
-                      for(var user in localadmin1){
-                        if(user.email == currentEmail)
-                          {
-                            currentUserName= user.userName;
-                          }
+                      for (var user in localadmin1) {
+                        if (user.email == currentEmail) {
+                          currentUserName = user.userName;
+                        }
                       }
                       print(listOfUsers);
                       return Column(
@@ -157,35 +162,34 @@ class _InitiateTeamState extends State<InitiateTeam> {
                                       MediaQuery.of(context).size.width * 0.9,
                                   margin: EdgeInsets.fromLTRB(10, 20, 0, 10),
                                   decoration: BoxDecoration(
-                                    border:Border.all(style: BorderStyle.solid,color: Colors.grey),
+                                    border: Border.all(
+                                        style: BorderStyle.solid,
+                                        color: Colors.grey),
                                   ),
                                   child: FlatButton(
                                     child: Row(
-                                    children: <Widget>[
-                                      Align(alignment:Alignment.centerRight,child: Icon(Icons.search,color: Colors.grey,)),
-                                      SizedBox(width: 5,),
-                                      Text('Search User',style: TextStyle(fontSize: 16,color: Colors.grey),),
-
-
-                                    ],
-                                  ),
-                                    onPressed: (){
+                                      children: <Widget>[
+                                        Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Icon(
+                                              Icons.search,
+                                              color: Colors.grey,
+                                            )),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          'Search User',
+                                          style: TextStyle(
+                                              fontSize: 16, color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                    onPressed: () {
                                       showSearch(
-                                                context: context,
-                                                delegate: userSearch());
+                                          context: context,
+                                          delegate: userSearch());
                                     },
-
-                                    //
-                                    // decoration: InputDecoration(
-                                    //   hintText: 'Search User',
-                                    //   hintStyle: TextStyle(fontSize: 20),
-                                    //   suffixIcon: Icon(Icons.search),
-                                    // ),
-                                    // onTap: () {
-                                    //   showSearch(
-                                    //       context: context,
-                                    //       delegate: userSearch());
-                                    // },
                                   )),
                             ],
                           ),
@@ -199,71 +203,75 @@ class _InitiateTeamState extends State<InitiateTeam> {
                               margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
                               child: Text(
                                 'Initiated Teams:',
-                                style: TextStyle(fontSize: 18,color: Colors.grey),
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.grey),
                               ),
                             ),
                           ),
-
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Container(
-
                               child: RefreshIndicator(
-                                key: refreshKey,
-                                child: SingleChildScrollView(
-                                  child: Container( height: MediaQuery.of(context).size.height * 0.55,
-                                      child: initializedTeams(currentUserName))
-                                  // FutureBuilder<List<TeamRequest>>(
-                                  //   future: Teams,
-                                  //   builder:(context,snapshot){
-                                  //     if(snapshot.data != null){
-                                  //       teamList = snapshot.data;
-                                  //       print('******************************************8');
-                                  //       List<UserRequest> listoflocalAdmins = localAdminList
-                                  //           .where((user) => user.roleId == 2)
-                                  //           .toList();
-                                  //       for(var uname in listoflocalAdmins){
-                                  //         if(uname.email == currentEmail){
-                                  //           currentUserName = uname.userName;
-                                  //           List<TeamRequest> initiatedTeams = teamList
-                                  //               .where((user) =>
-                                  //           user.localAdminName == currentUserName)
-                                  //               .toList();
-                                  //
-                                  //           List<String> initiatedTeam = initiatedTeams
-                                  //               .map((e) => e.teamTitle)
-                                  //               .toSet()
-                                  //               .toList();
-                                  //           initiatedTeam != null
-                                  //               ?SizedBox(
-                                  //             height:MediaQuery.of(context).size.height * 0.4,
-                                  //             width: MediaQuery.of(context).size.width * 0.8,
-                                  //             child: SingleChildScrollView(
-                                  //               child: ListView.builder(
-                                  //                 itemCount: initiatedTeam.length,
-                                  //                 itemBuilder: (context, index){
-                                  //                   return ListTile(
-                                  //                     title: Text(initiatedTeam[index]),
-                                  //                   );
-                                  //                 }
-                                  //             ),
-                                  //
-                                  //           )
-                                  //     )
-                                  //     :Center(child:Text('No teams Initialized',style: TextStyle(fontSize: 20,color: Colors.grey),));
-                                  //         }
-                                  //       }
-                                  //     }return CircularProgressIndicator();
-                                  //   }
-                                  // )
+                            key: refreshKey,
+                            child: SingleChildScrollView(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.55,
+                                    child: initializedTeams(currentUserName))
+                                // FutureBuilder<List<TeamRequest>>(
+                                //   future: Teams,
+                                //   builder:(context,snapshot){
+                                //     if(snapshot.data != null){
+                                //       teamList = snapshot.data;
+                                //       print('******************************************8');
+                                //       List<UserRequest> listoflocalAdmins = localAdminList
+                                //           .where((user) => user.roleId == 2)
+                                //           .toList();
+                                //       for(var uname in listoflocalAdmins){
+                                //         if(uname.email == currentEmail){
+                                //           currentUserName = uname.userName;
+                                //           List<TeamRequest> initiatedTeams = teamList
+                                //               .where((user) =>
+                                //           user.localAdminName == currentUserName)
+                                //               .toList();
+                                //
+                                //           List<String> initiatedTeam = initiatedTeams
+                                //               .map((e) => e.teamTitle)
+                                //               .toSet()
+                                //               .toList();
+                                //           initiatedTeam != null
+                                //               ?SizedBox(
+                                //             height:MediaQuery.of(context).size.height * 0.4,
+                                //             width: MediaQuery.of(context).size.width * 0.8,
+                                //             child: SingleChildScrollView(
+                                //               child: ListView.builder(
+                                //                 itemCount: initiatedTeam.length,
+                                //                 itemBuilder: (context, index){
+                                //                   return ListTile(
+                                //                     title: Text(initiatedTeam[index]),
+                                //                   );
+                                //                 }
+                                //             ),
+                                //
+                                //           )
+                                //     )
+                                //     :Center(child:Text('No teams Initialized',style: TextStyle(fontSize: 20,color: Colors.grey),));
+                                //         }
+                                //       }
+                                //     }return CircularProgressIndicator();
+                                //   }
+                                // )
                                 ),
-                                onRefresh: refreshList,
-                              ))
+                            onRefresh: refreshList,
+                          ))
                         ],
                       );
                     }
                     return CircularProgressIndicator();
                   });
-            }return Container();
+            }
+            return Container();
           }),
     );
   }
@@ -287,6 +295,14 @@ class userSearch extends SearchDelegate<String> {
 
   @override
   List<Widget> buildActions(BuildContext context) {
+    String menuItem = " Invite User via Email";
+    void choiceAction(String choice) {
+      if (choice == Constant.invite) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => NonUserTeamInvite()));
+      }
+    }
+
     return [
       IconButton(
         icon: Icon(Icons.clear),
@@ -294,8 +310,15 @@ class userSearch extends SearchDelegate<String> {
           query = "";
         },
       ),
+      PopupMenuButton<String>(
+        onSelected: choiceAction,
+        itemBuilder: (BuildContext context) {
+          return Constant.choice.map((String choice) {
+            return PopupMenuItem<String>(value: choice, child: Text(choice));
+          }).toList();
+        },
+      )
     ];
-    throw UnimplementedError();
   }
 
   @override
@@ -337,17 +360,6 @@ class userSearch extends SearchDelegate<String> {
               ListView.builder(
             itemCount: suggestionList.length,
             itemBuilder: (context, index) {
-              // return FlatButton(
-              //   child:Text(suggestionList[index]),
-              //   onPressed: (){
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) =>
-              //                 UserDetails(
-              //                     )));
-              //   },
-              // );
               return ListTile(
                   title: Text(
                     suggestionList[index],
@@ -357,8 +369,8 @@ class userSearch extends SearchDelegate<String> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                TeamInitiateUserDetails(UserName: suggestionList[index])));
+                            builder: (context) => TeamInitiateUserDetails(
+                                UserName: suggestionList[index])));
                   });
             },
           );
@@ -367,4 +379,9 @@ class userSearch extends SearchDelegate<String> {
       },
     );
   }
+}
+
+class Constant {
+  static const String invite = "Invite User Via Email";
+  static const List<String> choice = [invite];
 }

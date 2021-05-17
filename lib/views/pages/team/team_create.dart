@@ -4,6 +4,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_kirthan/models/notification.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
@@ -29,18 +30,20 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 final TeamUserPageViewModel teamUserPageVM =
-TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TemplePageViewModel templePageVM =
-TemplePageViewModel(apiSvc: TempleAPIService());
+    TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
-UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 
 class TeamWrite extends StatefulWidget {
-  TeamWrite({Key key}) : super(key: key);
+  UserRequest userRequest;
+  UserRequest localAdmin;
+  TeamWrite({Key key, this.userRequest, this.localAdmin}) : super(key: key);
 
   final String screenName = SCR_TEAM;
 
@@ -50,6 +53,7 @@ class TeamWrite extends StatefulWidget {
 
 class _TeamWriteState extends State<TeamWrite> {
   Future<List<UserRequest>> Users;
+
   List<UserRequest> userList = new List<UserRequest>();
   @override
   void initState() {
@@ -68,6 +72,22 @@ class _TeamWriteState extends State<TeamWrite> {
     }
     return tempList;
   }
+
+  // void getLocalAdmin() {
+  //   FutureBuilder<List<UserRequest>>(
+  //       future: Users,
+  //       builder:
+  //           (BuildContext context, AsyncSnapshot<List<UserRequest>> snapshot) {
+  //         if (snapshot.data != null) {
+  //           List<UserRequest> user = snapshot.data
+  //               .where((element) => element.id == widget.userRequest.invitedBy);
+  //           for (var la in user) {
+  //             localAdmin = la;
+  //           }
+  //         }
+  //         return Container();
+  //       });
+  // }
 
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
@@ -122,44 +142,6 @@ class _TeamWriteState extends State<TeamWrite> {
     return null;
   }
 
-  //check if user in User is registered
-  // bool containUserName(List<UserRequest> userList, String _selectedTeamMember) {
-  //   if (userList
-  //       .where((element) => element.userName == _selectedTeamMember)
-  //       .toList()
-  //       .isNotEmpty) {
-  //     print("true");
-  //     return true;
-  //   } else {
-  //     print("false");
-  //     return false;
-  //   }
-  // }
-
-  //Add user if not registered
-  // void addUser(String _selectedTeamMember) {
-  //   TeamUser teamUser = new TeamUser();
-  //   teamUser.userId = 0;
-  //   teamUser.teamId = teamrequest.id;
-  //   teamUser.userName = _selectedTeamMember;
-  //   teamUser.createdBy = "SYSTEM";
-  //   String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-  //   teamUser.createdTime = dt;
-  //   teamUser.updatedBy = "SYSTEM";
-  //   teamUser.updatedTime = dt;
-  //   listofTeamUsers.add(teamUser);
-  //   print("add unregistered user executed");
-  // }
-
-  // void addRegisteredUser(
-  //     List<UserRequest> userList, String _selectedTeamMember) {
-  //   selectedUsers = selectedUsers +
-  //       userList
-  //           .where((element) => element.userName == _selectedTeamMember)
-  //           .toList();
-  //   print("add Registered user executed");
-  // }
-
   Widget addMember() {
     //Divider();
     String _selectedTeamMembernew;
@@ -170,7 +152,7 @@ class _TeamWriteState extends State<TeamWrite> {
           if (snapshot.data != null) {
             userList = snapshot.data;
             List<String> _teamMember =
-            userList.map((user) => user.userName).toSet().toList();
+                userList.map((user) => user.userName).toSet().toList();
             print(userList);
             DropdownButtonFormField<String>(
               value: _selectedTeamMembernew,
@@ -179,9 +161,9 @@ class _TeamWriteState extends State<TeamWrite> {
                   style: TextStyle(color: Colors.grey)),
               items: _teamMember
                   .map((teamMember) => DropdownMenuItem<String>(
-                value: teamMember,
-                child: Text(teamMember),
-              ))
+                        value: teamMember,
+                        child: Text(teamMember),
+                      ))
                   .toList(),
               onChanged: (input) {
                 setState(() {
@@ -344,7 +326,7 @@ class _TeamWriteState extends State<TeamWrite> {
                         //color: Colors.white,
                         padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          //attribute: "Description",
+                            //attribute: "Description",
 
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -369,13 +351,13 @@ class _TeamWriteState extends State<TeamWrite> {
                               teamrequest.phoneNumber = int.parse(input);
                             },
                             validator: validateMobile
-                          //     (value) {
-                          //   if (value.isEmpty) {
-                          //     return "Please enter some text";
-                          //   }
-                          //   return null;
-                          // },
-                        ),
+                            //     (value) {
+                            //   if (value.isEmpty) {
+                            //     return "Please enter some text";
+                            //   }
+                            //   return null;
+                            // },
+                            ),
                       ),
                       elevation: 5,
                     ),
@@ -396,20 +378,27 @@ class _TeamWriteState extends State<TeamWrite> {
                                       future: Users,
                                       builder: (BuildContext context,
                                           AsyncSnapshot<List<UserRequest>>
-                                          snapshot) {
+                                              snapshot) {
                                         if (snapshot.data != null) {
                                           List<UserRequest> tempUserList =
-                                              snapshot.data;
+                                              new List<UserRequest>();
+                                          if (widget.userRequest == null) {
+                                            tempUserList = snapshot.data;
+                                          } else {
+                                            tempUserList
+                                                .add(widget.userRequest);
+                                          }
                                           userList = getTeamLeads(
                                               teamList, tempUserList);
                                           List<String> teamLeadId = userList
                                               .map((user) => user.email)
                                               .toSet()
                                               .toList();
-
                                           return DropdownButtonFormField<
                                               String>(
-                                            value: _selectedTeamLeadId,
+                                            value: widget.userRequest == null
+                                                ? _selectedTeamLeadId
+                                                : widget.userRequest.email,
                                             icon: const Icon(
                                                 Icons.account_circle),
                                             hint: Text('Select Team Lead Id',
@@ -417,10 +406,10 @@ class _TeamWriteState extends State<TeamWrite> {
                                                     color: Colors.grey)),
                                             items: teamLeadId
                                                 .map((teamLeadId) =>
-                                                DropdownMenuItem<String>(
-                                                  value: teamLeadId,
-                                                  child: Text(teamLeadId),
-                                                ))
+                                                    DropdownMenuItem<String>(
+                                                      value: teamLeadId,
+                                                      child: Text(teamLeadId),
+                                                    ))
                                                 .toList(),
                                             onChanged: (input) {
                                               setState(() {
@@ -431,6 +420,8 @@ class _TeamWriteState extends State<TeamWrite> {
                                               teamrequest.teamLeadId = input;
                                             },
                                           );
+                                        } else if (snapshot.hasError) {
+                                          Text("You already have a team");
                                         }
                                         return Container();
                                       });
@@ -445,9 +436,9 @@ class _TeamWriteState extends State<TeamWrite> {
                                 style: TextStyle(color: Colors.grey)),
                             items: _category
                                 .map((category) => DropdownMenuItem<String>(
-                              value: category,
-                              child: Text(category),
-                            ))
+                                      value: category,
+                                      child: Text(category),
+                                    ))
                                 .toList(),
                             onChanged: (input) {
                               setState(() {
@@ -468,9 +459,9 @@ class _TeamWriteState extends State<TeamWrite> {
                             ),
                             items: _weekday
                                 .map((weekday) => DropdownMenuItem(
-                              value: weekday,
-                              child: Text(weekday),
-                            ))
+                                      value: weekday,
+                                      child: Text(weekday),
+                                    ))
                                 .toList(),
                             onChanged: (input) {
                               setState(() {
@@ -489,9 +480,9 @@ class _TeamWriteState extends State<TeamWrite> {
                                 style: TextStyle(color: Colors.grey)),
                             items: _location
                                 .map((location) => DropdownMenuItem(
-                              value: location,
-                              child: Text(location),
-                            ))
+                                      value: location,
+                                      child: Text(location),
+                                    ))
                                 .toList(),
                             onChanged: (input) {
                               setState(() {
@@ -820,26 +811,12 @@ class _TeamWriteState extends State<TeamWrite> {
                                     final FirebaseAuth auth =
                                         FirebaseAuth.instance;
                                     final FirebaseUser user =
-                                    await auth.currentUser();
+                                        await auth.currentUser();
                                     final String email = user.email;
-                                    // for (var user in selectedUsers) {
-                                    //   TeamUser teamUser = new TeamUser();
-                                    //   teamUser.userId = user.id;
-                                    //   teamUser.teamId = teamrequest.id;
-                                    //   teamUser.userName = user.userName;
-                                    //   teamUser.createdBy = "SYSTEM";
-                                    //   String dt = DateFormat(
-                                    //           "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                    //       .format(DateTime.now());
-                                    //   teamUser.createdTime = dt;
-                                    //   teamUser.updatedBy = "SYSTEM";
-                                    //   teamUser.updatedTime = dt;
-                                    //   listofTeamUsers.add(teamUser);
-                                    // }
-                                    // print(listofTeamUsers);
+
                                     String dt =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
+                                        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                            .format(DateTime.now());
                                     _formKey.currentState.save();
                                     final String teamTitle =
                                         teamrequest.teamTitle;
@@ -851,19 +828,28 @@ class _TeamWriteState extends State<TeamWrite> {
                                     teamrequest.updatedTime = null;
                                     teamrequest.approvalStatus = "approved";
                                     teamrequest.approvalComments =
-                                    "Approved$teamTitle";
+                                        "Approved$teamTitle";
                                     // teamrequest.listOfTeamMembers =
                                     //     listofTeamUsers;
                                     setState(() {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                TeamLocalAdmin(
-                                                  teamrequest: teamrequest,
-                                                  selectedMembers:
-                                                  selectedMembers,
-                                                )),
+                                            builder: (context) => widget
+                                                        .userRequest ==
+                                                    null
+                                                ? TeamLocalAdmin(
+                                                    teamrequest: teamrequest,
+                                                    selectedMembers:
+                                                        selectedMembers,
+                                                    user: null,
+                                                  )
+                                                : TeamLocalAdmin(
+                                                    teamrequest: teamrequest,
+                                                    selectedMembers:
+                                                        selectedMembers,
+                                                    user: widget.localAdmin,
+                                                  )),
                                       );
                                     });
                                   }

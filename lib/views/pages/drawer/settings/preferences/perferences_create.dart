@@ -63,13 +63,6 @@ class _PreferenceWriteState extends State<PreferenceWrite> {
     return email;
   }
 
-  String curremail;
-  @override
-  void initState() {
-    curremail = getCurrentUser().toString();
-    return super.initState();
-  }
-
   Widget _buildPreferences() {
     return Scaffold(
       appBar: AppBar(

@@ -8,6 +8,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/user_service_interface.dart';
 import 'package:http/http.dart' as _http;
 
+//added submit initiate team function
 class UserAPIService extends BaseAPIService implements IUserRestApi {
   static final UserAPIService _internal = UserAPIService.internal();
 
@@ -207,6 +208,26 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/updateuser',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: userrequestmap);
+
+    print(response.statusCode);
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+
+  Future<bool> submitInitiateTeam(String userrequestmap) async {
+    print(userrequestmap);
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/user/initiateteam',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"

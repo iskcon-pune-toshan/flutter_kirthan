@@ -50,23 +50,12 @@ class ProspectiveUserAPIService extends BaseAPIService
   Future<List<ProspectiveUserRequest>> getProspectiveUserRequests(
       String eventType) async {
     print("I am in Service: getEventRequests");
-    final FirebaseUser user = await auth.currentUser();
-    final String email = user.email;
-    print(email);
+    // final FirebaseUser user = await auth.currentUser();
+    // final String email = user.email;
+    // print(email);
 
     String requestBody = '';
 
-    // All Events [Select * from event_request]
-    // One Single events [Select * from event_request where id=?]
-    // Events on datewise [Today/Tomorrow/This week/This month]
-    // Events at City wise [City='Pune']
-    // Events at Statewise [State='MH']
-    // Events isprocessed = 0 or 1
-    // Events on event Type = Free or Premium
-    // Events public or private
-
-    // Events on duration
-    //requestBody = '{"city":["Pune","Mumbai"]}';
     if (eventType.contains("uEmail")) {
       var array = eventType.split(":");
       String umail = array[1];
@@ -84,13 +73,14 @@ class ProspectiveUserAPIService extends BaseAPIService
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    print("entered getEvents");
-    var response = await client1.put('$baseUrl/api/event/getprospectiveuser',
+    var response = await client1.put(
+        '$baseUrl/api/prospectiveuser/getprospectiveuser',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
         body: requestBody);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       //print(response.body);
       List<dynamic> eventrequestsData = json.decode(response.body);
@@ -114,7 +104,8 @@ class ProspectiveUserAPIService extends BaseAPIService
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/event/addprospectiveuser',
+    var response = await client1.put(
+        '$baseUrl/api/prospectiveuser/addprospectiveuser',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
@@ -145,7 +136,8 @@ class ProspectiveUserAPIService extends BaseAPIService
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/event/deleteprospectiveuser',
+    var response = await client1.put(
+        '$baseUrl/api/prospectiveuser/deleteprospectiveuser',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
@@ -171,7 +163,8 @@ class ProspectiveUserAPIService extends BaseAPIService
     print(eventrequestmap);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/event/updateprospectiveuser',
+    var response = await client1.put(
+        '$baseUrl/api/prospectiveuser/updateprospectiveuser',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"

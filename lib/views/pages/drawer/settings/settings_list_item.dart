@@ -169,10 +169,36 @@ class _MyAppState extends State<MySettingsApp> {
                   ),
                 ),
                 onChanged: (value) {
-                  setState(() {
-                    getNotification();
-                    _v = value;
-                  });
+                  return showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Notifications'),
+                          content: Text(
+                              'Do you want to get notifications on phone?'),
+                          actions: [
+                            FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  getNotification();
+                                  _v = true;
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Text('Yes'),
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  _v = false;
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Text('No'),
+                            ),
+                          ],
+                        );
+                      });
                 },
                 value: _v,
                 secondary: Icon(
@@ -187,43 +213,40 @@ class _MyAppState extends State<MySettingsApp> {
     );
   }
 
-  _showMaterialDialog() {
-    /*showDialog(
-        context: context,
-        builder: (_) => new AlertDialog(
-          title: new Text("Notifications"),
-          content: new Text("Do you want to get notifications on phone?"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Yes'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ));
-
-
-     */
-    bool _v = false;
-    /*return SwitchListTile(
-    onChanged: (value) {
-      setState(() {
-        getNotification();
-        _v = value;
-      });
-
-
-    },
-    value: _v,
-
-  );
-*/
-  }
+//   _showMaterialDialog() {
+//     showDialog(
+//         context: context,
+//         builder: (_) => new AlertDialog(
+//           title: new Text("Notifications"),
+//           content: new Text("Do you want to get notifications on phone?"),
+//           actions: <Widget>[
+//             FlatButton(
+//               child: Text('Yes'),
+//               onPressed: () {
+//                 return true;
+//               },
+//             ),
+//             FlatButton(
+//               child: Text('No'),
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//           ],
+//         ));
+//   //   bool _v = false;
+//   //   return SwitchListTile(
+//   //   onChanged: (value) {
+//   //     setState(() {
+//   //       getNotification();
+//   //       _v = value;
+//   //     });
+//   //
+//   //
+//   //   },
+//   //   value: _v,
+//   //
+//   // );
+//
+//   }
 }

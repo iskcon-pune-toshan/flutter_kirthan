@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 class members_profile extends StatefulWidget {
   @override
@@ -9,6 +8,7 @@ class members_profile extends StatefulWidget {
 }
 
 class _members_profileState extends State<members_profile> {
+  int counter = 3;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,175 +20,82 @@ class _members_profileState extends State<members_profile> {
           padding: const EdgeInsets.all(16.0),
           child: Form(
               child: Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => Column(
+            builder: (context, notifier, child) => Column(
+              children: [
+                Text("Members",
+                    style: TextStyle(
+                        fontSize: notifier.custFontSize,
+                        fontWeight: FontWeight.bold)),
+                addmember(counter),
+                Divider(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("Members",
-                        style: TextStyle(
-                            fontSize: notifier.custFontSize,
-                            fontWeight: FontWeight.bold)),
-                    Divider(),
-                    Card(
-                      child: Container(
-                        //color: Colors.black26,
-                        padding: const EdgeInsets.all(10),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              icon: Icon(Icons.people_outline, color: Colors.grey),
-                              labelText: "Member 1",
-                              hintText: "Please enter the name of the member",
-                              labelStyle: TextStyle(
-                                  fontSize: notifier.custFontSize,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey),
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                        ),
-                      ),
+                    RaisedButton.icon(
+                      label: Text('Add'),
+                      icon: const Icon(Icons.add_circle),
+                      color: Colors.green,
+                      onPressed: () {
+                        //addmember();
+                        setState(() {
+                          counter++;
+                        });
+                      },
                     ),
-                    Divider(),
-                    Card(
-                      child: Container(
-                        //color: Colors.black26,
-                        padding: const EdgeInsets.all(10),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              icon: Icon(Icons.people_outline, color: Colors.grey),
-                              labelText: "Member 2",
-                              hintText: "Please enter the name of the member",
-                              labelStyle: TextStyle(
-                                fontSize: notifier.custFontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                              ),
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                        ),
-                      ),
-                    ),
-                    Divider(),
-                    Card(
-                      child: Container(
-                        //color: Colors.black26,
-                        padding: const EdgeInsets.all(10),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              icon: Icon(Icons.people_outline, color: Colors.grey),
-                              labelText: "Member 3",
-                              hintText: "Please enter the name of the member",
-                              labelStyle: TextStyle(
-                                fontSize: notifier.custFontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                              ),
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                        ),
-                      ),
-                    ),
-                    Divider(),
-                    Card(
-                      child: Container(
-                        //color: Colors.black26,
-                        padding: const EdgeInsets.all(10),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              icon: Icon(Icons.people_outline, color: Colors.grey),
-                              labelText: "Member 4",
-                              hintText: "Please enter the name of the member",
-                              labelStyle: TextStyle(
-                                fontSize: notifier.custFontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                              ),
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                        ),
-                      ),
-                    ),
-                    Divider(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        RaisedButton.icon(
-                          label: Text('Add'),
-                          icon: const Icon(Icons.add_circle),
-                          color: Colors.green,
-                          onPressed: () {
-                            addmember();
-                          },
-                        ),
-                        RaisedButton(
-                          child: Text('Get Approved'),
-                          //color: Colors.redAccent,
-                          //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
-                          onPressed: () {},
-                        ),
-                      ],
+                    RaisedButton(
+                      child: Text('Get Approved'),
+                      //color: Colors.redAccent,
+                      //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
+                      onPressed: () {},
                     ),
                   ],
                 ),
-              )),
+              ],
+            ),
+          )),
         ),
       ),
     );
   }
 
   //print("Entered");
-  List<Widget> addmember() {
-    //Divider();
-    Card(
+  Widget addmember(int counter) {
+    var i = 1;
+    return Card(
       child: Consumer<ThemeNotifier>(
-        builder: (context, notifier, child) => Container(
-          //color: Colors.black26,
-          padding: const EdgeInsets.all(10),
-          child: TextFormField(
-            decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
+        builder: (context, notifier, child) => Column(
+          children: [
+            for (int i = 1; i <= counter; i++)
+              Container(
+                //color: Colors.black26,
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          icon: Icon(Icons.people_outline, color: Colors.grey),
+                          labelText: "Member " + i.toString(),
+                          hintText: "Please enter the name of the member",
+                          labelStyle: TextStyle(
+                            fontSize: notifier.custFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          )),
+                    ),
+                    Divider()
+                  ],
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green),
-                ),
-                icon: Icon(Icons.people_outline, color: Colors.grey),
-                labelText: "Member 3",
-                hintText: "Please enter the name of the member",
-                labelStyle: TextStyle(
-                  fontSize: notifier.custFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
-                ),
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                )),
-          ),
+              ),
+          ],
         ),
       ),
     );

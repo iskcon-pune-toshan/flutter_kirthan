@@ -7,26 +7,37 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/notification.dart';
+import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
+import 'package:flutter_kirthan/services/team_service_impl.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
+import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/admin/admin_event_details.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/perferences_create.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/team/team_create.dart';
+import 'package:flutter_kirthan/views/pages/team/team_profile_page.dart';
+import 'package:flutter_kirthan/views/pages/user/user_profile_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//Discard notification bug fixed
-//Tile text color bug fixed
-
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
     NotificationViewModel(apiSvc: NotificationManager());
+final UserPageViewModel userPageVM =
+    UserPageViewModel(apiSvc: UserAPIService());
+final TeamPageViewModel teamPageVM =
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
@@ -46,6 +57,9 @@ class NotificationViewState extends State<NotificationView> {
   Map<String, bool> accessTypes = new Map<String, bool>();
   bool isVisible;
   List<UserRequest> userRequest = new List<UserRequest>();
+  UserRequest userRequestTeam = new UserRequest();
+  UserRequest localAdminTeam = new UserRequest();
+
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -102,11 +116,34 @@ class NotificationViewState extends State<NotificationView> {
                   color: Colors.grey[400], width: 1, style: BorderStyle.solid),
               borderRadius: BorderRadius.circular(10)),
           padding: EdgeInsets.only(top: 10, left: 20, bottom: 0, right: 20),
-          onPressed: () {
+          onPressed: () async {
             //Screen doesn't pop. User, team lead should be able to view admin panel until ntf is not accepted or declined
             // Navigator.pop(context);
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => AdminView()));
+            List<UserRequest> user =
+                await userPageVM.getUserRequests(data.createdBy);
+            String userName = " ";
+            for (var u in user) {
+              userName = u.userName;
+            }
+            String eventId = data.targetId.toString();
+            List<EventRequest> eventList =
+                await eventPageVM.getEventRequests("event_id:$eventId");
+            EventRequest eventRequest = new EventRequest();
+            for (var event in eventList) {
+              eventRequest = event;
+            }
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AdminEventDetails(
+                            UserName: userName,
+                            eventRequest: eventRequest,
+                            data: data,
+                          )));
+            });
           },
           child: Column(children: [
             Container(
@@ -464,16 +501,67 @@ class NotificationViewState extends State<NotificationView> {
                                       ),
                                     ],
                                   )
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(" "),
-                                      SizedBox(
-                                        height: 10,
+                                : data.message.contains(
+                                        "You have been invited to create a team by")
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            data.message +
+                                                " by " +
+                                                data.createdBy.toString(),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          FlatButton(
+                                            textColor:
+                                                KirthanStyles.colorPallete60,
+                                            color: KirthanStyles.colorPallete30,
+                                            child: Text("Create team"),
+                                            onPressed: () async {
+                                              List<UserRequest>
+                                                  userRequestList =
+                                                  await userPageVM
+                                                      .getUserRequests(
+                                                          data.createdBy);
+                                              for (var user
+                                                  in userRequestList) {
+                                                userRequestTeam = user;
+                                              }
+                                              List<UserRequest> localAdminList =
+                                                  await userPageVM
+                                                      .getUserRequests(
+                                                          data.updatedBy);
+                                              for (var user in localAdminList) {
+                                                localAdminTeam = user;
+                                              }
+                                              // Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          TeamWrite(
+                                                            userRequest:
+                                                                userRequestTeam,
+                                                            localAdmin:
+                                                                localAdminTeam,
+                                                          )));
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(" "),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
@@ -662,17 +750,91 @@ class NotificationViewState extends State<NotificationView> {
                           caption: 'View',
                           color: Colors.grey.shade200,
                           icon: Icons.more_horiz,
-                          onTap: () {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AdminView()));
-                            });
-                            /*Navigator.pop(context);
-                           Navigator.push(context,
-                               MaterialPageRoute(builder: (context) => AdminView()));*/
+                          onTap: () async {
+                            UserRequest userReq = new UserRequest();
+                            UserRequest localAdmin = new UserRequest();
+                            TeamRequest team = new TeamRequest();
+                            EventRequest eventRequest = new EventRequest();
+                            if (snapshot.data[itemCount].targetType == "team") {
+                              List<TeamRequest> teamList =
+                                  await teamPageVM.getTeamRequests(snapshot
+                                      .data[itemCount].targetId
+                                      .toString());
+                              for (var t in teamList) {
+                                team = t;
+                              }
+                            }
+                            if (snapshot.data[itemCount].targetType == "user" &&
+                                snapshot.data[itemCount].message
+                                    .contains("Invited user")) {
+                              List<TeamRequest> teamList = await teamPageVM
+                                  .getTeamRequests("teamLeadId:" +
+                                      snapshot.data[itemCount].createdBy);
+                              for (var t in teamList) {
+                                team = t;
+                              }
+                            }
+                            List<UserRequest> userRequestList =
+                                await userPageVM.getUserRequests(
+                                    snapshot.data[itemCount].createdBy);
+                            for (var user in userRequestList) {
+                              userReq = user;
+                            }
+                            List<UserRequest> user =
+                                await userPageVM.getUserRequests(
+                                    snapshot.data[itemCount].createdBy);
+                            String userName = " ";
+                            for (var u in user) {
+                              userName = u.userName;
+                            }
+                            String eventId =
+                                snapshot.data[itemCount].targetId.toString();
+                            List<EventRequest> eventList = await eventPageVM
+                                .getEventRequests("event_id:$eventId");
+                            for (var event in eventList) {
+                              eventRequest = event;
+                            }
+                            List<UserRequest> localAdminList =
+                                await userPageVM.getUserRequests(
+                                    snapshot.data[itemCount].updatedBy);
+                            for (var user in localAdminList) {
+                              localAdmin = user;
+                            }
+                            if (snapshot.data[itemCount].message
+                                .contains("Request to create an event")) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AdminEventDetails(
+                                              UserName: userName,
+                                              eventRequest: eventRequest,
+                                              data: null,
+                                            )));
+                              });
+                            } else if (snapshot.data[itemCount].message
+                                    .contains("Request to create a team") ||
+                                snapshot.data[itemCount].message
+                                    .contains("Invited user")) {
+                              print(snapshot.data[itemCount].targetId);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                //Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TeamProfilePage(
+                                              teamTitle: team.teamTitle,
+                                            )));
+                              });
+                            } else {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AdminView()));
+                              });
+                            }
                           },
                           closeOnTap: false,
                         ),
@@ -812,3 +974,34 @@ void showNotification(
             ],
           ));
 }
+
+// void createTeam(
+//     BuildContext context, NotificationModel notification) {
+//   bool setAction = false;
+//   UserRequest userRequest = new UserRequest();
+//
+//   if (notification.action == "waiting") setAction = true;
+//   showDialog(
+//     context: context,
+//     builder: (context) => Visibility(
+//       visible: isVisible,
+//       child: FlatButton(
+//         child: Text("Create team"),
+//         onPressed: () async {
+//           List<UserRequest> userRequestList =
+//               await userPageVM.getUserRequests(notification.createdBy);
+//           for (var user in userRequestList) {
+//             userRequest = user;
+//           }
+//           Navigator.pop(context);
+//           Navigator.push(
+//               context,
+//               MaterialPageRoute(
+//                   builder: (context) => TeamWrite(
+//                         userRequest: userRequest,
+//                       )));
+//         },
+//       ),
+//     ),
+//   );
+// }

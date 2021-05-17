@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +20,8 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
+  File _image;
+  String _uploadedFileURL;
 
   final TextEditingController _passwordcontroller = new TextEditingController();
   String password;
@@ -23,6 +29,7 @@ class _SignUpState extends State<SignUp> {
   String email;
   final TextEditingController _displaynamecontroller =
       new TextEditingController();
+  final TextEditingController _addresscontroller = new TextEditingController();
   String displayName;
   final TextEditingController _confirmpassword = new TextEditingController();
 
@@ -30,6 +37,27 @@ class _SignUpState extends State<SignUp> {
   UserLogin _selecteduser;
 
   UserRequest user = new UserRequest();
+
+  Future chooseFile() async {
+    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      setState(() {
+        _image = image;
+      });
+    });
+  }
+
+  Future uploadFile() async {
+    StorageReference storageReference =
+        await FirebaseStorage.instance.ref().child('${_emailcontroller.text}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        _uploadedFileURL = fileURL;
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -82,7 +110,7 @@ class _SignUpState extends State<SignUp> {
       user.addLineTwo = "abc";
       user.addLineThree = "pqr";
       user.locality = "Pune";
-      user.city = "Pune";
+      user.city = _addresscontroller.text;
       user.pinCode = 400001;
       user.state = "Maharashtra";
       user.country = "India";
@@ -118,158 +146,193 @@ class _SignUpState extends State<SignUp> {
               onPressed: () => Navigator.of(context).pop()),
         ),
         body: Center(
-          child: Container(
-            alignment: Alignment.center,
-            width: 300,
-            height: 1500,
-            //color: Color.alphaBlend(BlendMode.color, BlendMode.colorDodge),
-            child: Form(
-              key: _formKey,
-              child: Center(
-                child: Column(
-                  verticalDirection: VerticalDirection.down,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: TextFormField(
-                        decoration: buildInputDecoration(
-                            Icons.person, "Full Name", "Full Name"),
+          child: SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 20),
 
-                        controller: _displaynamecontroller,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            // ignore: missing_return
-                            return "Please enter some text";
-                          }
-                          return null;
+              //color: Color.alphaBlend(BlendMode.color, BlendMode.colorDodge),
+              child: Form(
+                key: _formKey,
+                child: Center(
+                  child: Column(
+                    verticalDirection: VerticalDirection.down,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          chooseFile();
                         },
-                        //onSaved: (input) => displayName = input,
+                        child: CircleAvatar(
+                          backgroundColor: KirthanStyles.colorPallete30,
+                          radius: MediaQuery.of(context).size.width / 5 + 3,
+                          child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: MediaQuery.of(context).size.width / 5,
+                              backgroundImage: _image != null
+                                  ? FileImage(
+                                      _image,
+                                    )
+                                  : AssetImage(
+                                      "assets/images/add_profile.png")),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: TextFormField(
-                        decoration:
-                            buildInputDecoration(Icons.email, "Email", "Email"),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15, top: 15),
+                        child: TextFormField(
+                          decoration: buildInputDecoration(
+                              Icons.person, "Full Name", "Full Name"),
 
-                        controller: _emailcontroller,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Please enter some text";
-                          }
-                          return null;
-                        },
-                        //onSaved: (input) => email = input,
+                          controller: _displaynamecontroller,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              // ignore: missing_return
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                          //onSaved: (input) => displayName = input,
+                        ),
                       ),
-                    ),
-                    Padding(
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: TextFormField(
+                          decoration: buildInputDecoration(
+                              Icons.email, "Email", "Email"),
+
+                          controller: _emailcontroller,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                          //onSaved: (input) => email = input,
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: TextFormField(
+                            decoration: buildInputDecoration(
+                                Icons.location_on, "Address", "Address"),
+                            controller: _addresscontroller,
+                            validator: (value) {
+                              // ignore: missing_return
+                              if (value.isEmpty) return 'Please enter a value';
+
+                              return null;
+                            },
+                          )),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: TextFormField(
+                            decoration: buildInputDecoration(Icons.lock,
+                                "Must contain 8-30 characters", "Password"),
+                            controller: _passwordcontroller,
+                            validator: (value) {
+                              // ignore: missing_return
+                              if (value.isEmpty) return 'Please enter a value';
+
+                              if (value.length < 8)
+                                return 'Must contain 8-30 characters';
+                              return null;
+                            },
+                            obscureText: true,
+                          )),
+                      Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: TextFormField(
                           decoration: buildInputDecoration(Icons.lock,
-                              "Must contain 8-30 characters", "Password"),
-                          controller: _passwordcontroller,
-                          validator: (value) {
-                            // ignore: missing_return
-                            if (value.isEmpty) return 'Please enter a value';
-
-                            if (value.length < 8)
-                              return 'Must contain 8-30 characters';
+                              "Re-Type Password", "Re-Type Password"),
+                          controller: _confirmpassword,
+                          validator: (val) {
+                            if (val.isEmpty) return 'Empty';
+                            if (val != _passwordcontroller.text)
+                              return "Not Match";
                             return null;
                           },
+                          onSaved: (input) => password = input,
                           obscureText: true,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: TextFormField(
-                        decoration: buildInputDecoration(
-                            Icons.lock, "Confirm Password", "Confirm Password"),
-                        controller: _confirmpassword,
-                        validator: (val) {
-                          if (val.isEmpty) return 'Empty';
-                          if (val != _passwordcontroller.text)
-                            return "Not Match";
-                          return null;
-                        },
-                        onSaved: (input) => password = input,
-                        obscureText: true,
+                        ),
                       ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Divider(
-                          thickness: 100.0,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: 140,
-                          height: 50,
-                          child: RaisedButton(
-                            color: Colors.white,
-                            child: Text('Cancel'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                side: BorderSide(color: Colors.blue, width: 2)),
+                      Row(
+                        children: <Widget>[
+                          Divider(
+                            thickness: 100.0,
                           ),
-                        ),
-                        /*SizedBox(
-                          width: 140,
-                          height: 50,
-                          child: (
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  KirthanStyles.colorPallete30),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                    side: BorderSide(
-                                        color: Colors.blue, width: 2)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // SizedBox(
+                          //   width: 140,
+                          //   height: 50,
+                          //   child: RaisedButton(
+                          //     color: Colors.white,
+                          //     child: Text('Cancel'),
+                          //     onPressed: () {
+                          //       Navigator.pop(context);
+                          //     },
+                          //     shape: RoundedRectangleBorder(
+                          //         borderRadius: BorderRadius.circular(50.0),
+                          //         side: BorderSide(color: Colors.blue, width: 2)),
+                          //   ),
+                          // ),
+                          /*SizedBox(
+                            width: 140,
+                            height: 50,
+                            child: (
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                    KirthanStyles.colorPallete30),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      side: BorderSide(
+                                          color: Colors.blue, width: 2)),
+                                ),
+                              ),
+                              child: Text('Submit'),
+                              onPressed: () async {
+                                signIn
+                                    .signUpWithEmail(_emailcontroller.text,
+                                        _passwordcontroller.text)
+                                    .then((FirebaseUser user) => populateData())
+                                    .catchError((e) => print(e))
+                                    .whenComplete(() => addUser());
+                              },
+                            ),
+                          )*/
+                          SizedBox(
+                            width: 140,
+                            height: 50,
+                            child: RaisedButton(
+                              color: KirthanStyles.colorPallete30,
+                              child: Text(
+                                'Register',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () async {
+                                uploadFile();
+                                signIn
+                                    .signUpWithEmail(_emailcontroller.text,
+                                        _passwordcontroller.text)
+                                    .then((FirebaseUser user) => populateData())
+                                    .catchError((e) => print(e))
+                                    .whenComplete(() => addUser());
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0),
                               ),
                             ),
-                            child: Text('Submit'),
-                            onPressed: () async {
-                              signIn
-                                  .signUpWithEmail(_emailcontroller.text,
-                                      _passwordcontroller.text)
-                                  .then((FirebaseUser user) => populateData())
-                                  .catchError((e) => print(e))
-                                  .whenComplete(() => addUser());
-                            },
                           ),
-                        )*/
-                        SizedBox(
-                          width: 140,
-                          height: 50,
-                          child: RaisedButton(
-                            color: KirthanStyles.colorPallete30,
-                            child: Text('Submit'),
-                            onPressed: () async {
-                              signIn
-                                  .signUpWithEmail(_emailcontroller.text,
-                                  _passwordcontroller.text)
-                                  .then((FirebaseUser user) => populateData())
-                                  .catchError((e) => print(e))
-                                  .whenComplete(() => addUser());
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                side: BorderSide(color: Colors.blue, width: 2)),
-
-
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -284,11 +347,16 @@ class _SignUpState extends State<SignUp> {
     return InputDecoration(
       labelText: labeltext,
       hintText: hinttext,
-      prefixIcon: Icon(icons,color: KirthanStyles.colorPallete30,),
+      prefixIcon: Icon(
+        icons,
+        color: KirthanStyles.colorPallete30,
+      ),
+      labelStyle: TextStyle(color: Colors.grey),
+      hintStyle: TextStyle(color: Colors.grey),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
         borderSide: BorderSide(
-          color: Colors.green,
+          color: Colors.grey,
           width: 1.5,
         ),
       ),
