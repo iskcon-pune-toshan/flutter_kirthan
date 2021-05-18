@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_kirthan/locator.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
@@ -26,9 +24,6 @@ class UserController {
     _currentUser.avatarUrl = await _storageRepo.uploadFile(image);
   }
 
-  // Future<void> deleteProfilePicture() async {
-  //   _currentUser.avatarUrl = await _storageRepo.deleteFile();
-  // }
 
   Future<String> getDownloadUrl() async {
     return await _storageRepo.getUserProfileImage(currentUser.id.toString());
@@ -47,17 +42,6 @@ class UserController {
     _authRepo.updateDisplayName(displayName);
   }
 
-
-
-  // void updateEmail(String email) {
-  //   _currentUser.email = email;
-  //   UserRequest().email = email;
-  // }
-  //
-  // void updateAddress(String address) {
-  //   _currentUser.addLineOne = address;
-  //   _authRepo.updateDisplayName(address);
-  // }
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _authRepo.validatePassword(password);

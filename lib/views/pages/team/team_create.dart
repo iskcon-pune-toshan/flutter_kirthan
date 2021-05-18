@@ -73,21 +73,6 @@ class _TeamWriteState extends State<TeamWrite> {
     return tempList;
   }
 
-  // void getLocalAdmin() {
-  //   FutureBuilder<List<UserRequest>>(
-  //       future: Users,
-  //       builder:
-  //           (BuildContext context, AsyncSnapshot<List<UserRequest>> snapshot) {
-  //         if (snapshot.data != null) {
-  //           List<UserRequest> user = snapshot.data
-  //               .where((element) => element.id == widget.userRequest.invitedBy);
-  //           for (var la in user) {
-  //             localAdmin = la;
-  //           }
-  //         }
-  //         return Container();
-  //       });
-  // }
 
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
@@ -170,9 +155,6 @@ class _TeamWriteState extends State<TeamWrite> {
                   _selectedTeamMembernew = input;
                 });
               },
-              // onSaved: (input) {
-              //   teamrequest.teamMember = input ;
-              // },
             );
           }
           return Container();
@@ -218,10 +200,7 @@ class _TeamWriteState extends State<TeamWrite> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                              /*icon: const Icon(
-                                Icons.title,
-                                color: Colors.grey,
-                              ),*/
+
                               labelText: "Title",
                               hintText: "Add a title",
                               hintStyle: TextStyle(
@@ -257,10 +236,7 @@ class _TeamWriteState extends State<TeamWrite> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                              /*icon: const Icon(
-                                Icons.description,
-                                color: Colors.grey,
-                              ),*/
+
                               labelText: "Description",
                               hintText: "Add a description",
                               hintStyle: TextStyle(
@@ -296,10 +272,7 @@ class _TeamWriteState extends State<TeamWrite> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                              /*icon: const Icon(
-                                Icons.description,
-                                color: Colors.grey,
-                              ),*/
+
                               labelText: "Experience",
                               hintText: "Add Experience",
                               hintStyle: TextStyle(
@@ -335,10 +308,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.green),
                                 ),
-                                /*icon: const Icon(
-                                Icons.description,
-                                color: Colors.grey,
-                              ),*/
+
                                 labelText: "Phone Number",
                                 hintText: "Add Phone Number",
                                 hintStyle: TextStyle(
@@ -351,12 +321,7 @@ class _TeamWriteState extends State<TeamWrite> {
                               teamrequest.phoneNumber = int.parse(input);
                             },
                             validator: validateMobile
-                            //     (value) {
-                            //   if (value.isEmpty) {
-                            //     return "Please enter some text";
-                            //   }
-                            //   return null;
-                            // },
+
                             ),
                       ),
                       elevation: 5,
@@ -597,10 +562,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                               borderSide: BorderSide(
                                                   color: Colors.green),
                                             ),
-                                            /*icon: const Icon(
-                                Icons.description,
-                                color: Colors.grey,
-                              ),*/
+
                                             labelText: "Add Team Member1",
                                             hintText: "Add Team Member",
                                             hintStyle: TextStyle(
@@ -614,18 +576,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                             _selectedTeamMember1 = input;
                                           });
                                         },
-                                        // onEditingComplete: () {
-                                        //   setState(() {
-                                        //     containUserName(userList,
-                                        //             _selectedTeamMember1)
-                                        //         ? selectedUsers = userList
-                                        //             .where((element) =>
-                                        //                 element.userName ==
-                                        //                 _selectedTeamMember1)
-                                        //             .toList()
-                                        //         : addUser(_selectedTeamMember1);
-                                        //   });
-                                        // },
+
                                         validator: (value) {
                                           if (value.isEmpty) {
                                             return "Please enter some text";
@@ -664,10 +615,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                               borderSide: BorderSide(
                                                   color: Colors.green),
                                             ),
-                                            /*icon: const Icon(
-                                Icons.description,
-                                color: Colors.grey,
-                              ),*/
+
                                             labelText: "Add Team Member2",
                                             hintText: "Add Team Member",
                                             hintStyle: TextStyle(
@@ -687,15 +635,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                           }
                                           return null;
                                         },
-                                        // onEditingComplete: () {
-                                        //   setState(() {
-                                        //     containUserName(userList,
-                                        //             _selectedTeamMember2)
-                                        //         ? addRegisteredUser(userList,
-                                        //             _selectedTeamMember2)
-                                        //         : addUser(_selectedTeamMember2);
-                                        //   });
-                                        // },
+
                                       ),
                                     ),
                                     elevation: 5,
@@ -729,10 +669,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                               borderSide: BorderSide(
                                                   color: Colors.green),
                                             ),
-                                            /*icon: const Icon(
-                                Icons.description,
-                                color: Colors.grey,
-                              ),*/
+
                                             labelText: "Add Team Member3",
                                             hintText: "Add Team Member",
                                             hintStyle: TextStyle(
@@ -853,18 +790,9 @@ class _TeamWriteState extends State<TeamWrite> {
                                       );
                                     });
                                   }
-                                  //String s = jsonEncode(userrequest.mapToJson());
-                                  //service.registerUser(s);
-                                  //print(s);
+
                                 }),
-                            /*MaterialButton(
-                        child: Text("Reset",style: TextStyle(color:
-Colors.white),),
-                        color: Colors.pink,
-                        onPressed: () {
-                          _fbKey.currentState.reset();
-                        },
-                      ),*/
+
                           ],
                         )
                       ],

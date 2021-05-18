@@ -1,11 +1,3 @@
-/*class UserModel {
-  String uid = UserRequest().id.toString();
-  String displayName = UserRequest().userName;
-  String avatarUrl;
-
-  UserModel(this.uid, {this.displayName, this.avatarUrl});
-}*/
-
 import 'package:scoped_model/scoped_model.dart';
 
 class UserLogin {
@@ -35,37 +27,37 @@ class UserLogin {
     return data;
   }
 
-  static List<UserLogin> getUsers() {
-    List<UserLogin> users = List<UserLogin>();
-    users.add(UserLogin(
-        username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
-    users.add(UserLogin(
-        username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
-    users.add(UserLogin(
-        username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
-    users.add(UserLogin(
-        username: "writetoanuka@gmail.com", password: "", usertype: "User"));
-    users.add(UserLogin(
-        username: "janicem995@gmail.com",
-        password: "",
-        usertype: "Local Admin"));
-    users.add(UserLogin(
-        username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
-    users.add(UserLogin(
-        username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
-    users.add(UserLogin(
-        username: "parthprandas.rns@gmail.com",
-        password: "",
-        usertype: "User"));
-    users.add(UserLogin(
-        username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
-
-    users.add(UserLogin(
-        username: "nisha.khandelwal1225@gmail.com",
-        password: "",
-        usertype: "Admin"));
-    return users;
-  }
+  // static List<UserLogin> getUsers() {
+  //   List<UserLogin> users = List<UserLogin>();
+  //   users.add(UserLogin(
+  //       username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
+  //   users.add(UserLogin(
+  //       username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
+  //   users.add(UserLogin(
+  //       username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
+  //   users.add(UserLogin(
+  //       username: "writetoanuka@gmail.com", password: "", usertype: "User"));
+  //   users.add(UserLogin(
+  //       username: "janicem995@gmail.com",
+  //       password: "",
+  //       usertype: "Local Admin"));
+  //   users.add(UserLogin(
+  //       username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
+  //   users.add(UserLogin(
+  //       username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
+  //   users.add(UserLogin(
+  //       username: "parthprandas.rns@gmail.com",
+  //       password: "",
+  //       usertype: "User"));
+  //   users.add(UserLogin(
+  //       username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
+  //
+  //   users.add(UserLogin(
+  //       username: "nisha.khandelwal1225@gmail.com",
+  //       password: "",
+  //       usertype: "Admin"));
+  //   return users;
+  // }
 }
 
 class UserRequest extends Model {

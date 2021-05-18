@@ -6,7 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/user_service_interface.dart';
-import 'package:http/http.dart' as _http;
+
 
 //added submit initiate team function
 class UserAPIService extends BaseAPIService implements IUserRestApi {
@@ -89,17 +89,13 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     }
   }
 
-  //updateuser
+  //addUser
   Future<UserRequest> submitNewUserRequest(
       Map<String, dynamic> userrequestmap) async {
     print(userrequestmap);
     String requestBody = json.encode(userrequestmap);
     print(requestBody);
 
-    String token = AutheticationAPIService().sessionJWTToken;
-/*    var response = await client1.put('$baseUrl/api/user/updateuser',
-        headers: {"Content-Type": "application/json","Authorization": "Bearer $token"}, body: requestBody);
-  */
     var response = await client1.put('$baseUrl/api/user/adduser',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
@@ -107,9 +103,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      //UserRequest respuserrequest = json.decode(response.body);
-      //print(respuserrequest);
-      //return respuserrequest;
       Map<String, dynamic> userrequestsData = json.decode(response.body);
       UserRequest userrequests = UserRequest.fromMap(userrequestsData);
       print(userrequests);
@@ -203,8 +196,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
 
   Future<bool> submitUpdateUserRequest(String userrequestmap) async {
     print(userrequestmap);
-    //String requestBody = json.encode(userrequestmap);
-    //print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/updateuser',

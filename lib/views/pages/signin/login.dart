@@ -66,7 +66,7 @@ class _LoginAppState extends State<LoginApp> {
   @override
   void initState() {
     super.initState();
-    users = UserLogin.getUsers();
+    //users = UserLogin.getUsers();
     entitlements = UserAccess.getUserEntitlements();
     loadPref();
 
