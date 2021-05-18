@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/contact_details_profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/description_profile_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/location_profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/members_name_profile.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/password_profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/profile_picture.dart';
@@ -228,7 +229,13 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => location_profile(),
+                      ));
+                },
                 selected: true,
               ),
             ),

@@ -62,6 +62,12 @@ class UserPageViewModel extends Model {
     return updateFlag;
   }
 
+  Future<bool> submitUpdateUserRequestDetails(String userrequestmap) {
+    Future<bool> updateFlag =
+        apiSvc?.submitUpdateUserRequestDetails(userrequestmap);
+    return updateFlag;
+  }
+
   Future<bool> submitInitiateTeam(String userrequestmap) {
     Future<bool> updateFlag = apiSvc?.submitInitiateTeam(userrequestmap);
     return updateFlag;

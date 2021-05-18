@@ -100,17 +100,31 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
                                                   UserName: selectUser)));
                                 });
                               },
-                            ),
-                            FlatButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => InviteUser(),
-                                    ));
-                              },
-                              color: KirthanStyles.colorPallete30,
-                              child: Text("Invite user"),
+                              icon: PopupMenuButton(
+                                  onSelected: (input) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => InviteUser(),
+                                        ));
+                                  },
+                                  child: const Icon(
+                                    Icons.more_vert_sharp,
+                                    color: Colors.grey,
+                                  ),
+                                  itemBuilder: (BuildContext context) {
+                                    List<String> newList = ["Invite User"];
+                                    return newList.map((f) {
+                                      return CheckedPopupMenuItem<String>(
+                                        child: Text(
+                                          f,
+                                        ),
+                                        value: f,
+                                        //enabled: true,
+                                        //checked: true,
+                                      );
+                                    }).toList();
+                                  }),
                             ),
                             ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
