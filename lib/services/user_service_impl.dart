@@ -215,6 +215,29 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
     }
   }
 
+  Future<bool> submitUpdateUserRequestDetails(String userrequestmap) async {
+    print(userrequestmap);
+    //String requestBody = json.encode(userrequestmap);
+    //print(requestBody);
+
+    String token = AutheticationAPIService().sessionJWTToken;
+    var response = await client1.put('$baseUrl/api/user/updateuserdetails',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: userrequestmap);
+
+    print(response.statusCode);
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      throw Exception('Failed to get data');
+    }
+  }
+
   Future<bool> submitInitiateTeam(String userrequestmap) async {
     print(userrequestmap);
     String token = AutheticationAPIService().sessionJWTToken;
