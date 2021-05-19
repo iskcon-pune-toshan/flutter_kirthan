@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
-import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/team/team_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';

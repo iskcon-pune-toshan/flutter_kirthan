@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/user/user_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/color_picker.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class Choice {
@@ -45,12 +42,7 @@ class UserRequestsListItem extends StatelessWidget {
     var subTitle = Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        /*Icon(
-          Icons.movie,
-          color: KirthanStyles.subTitleColor,
-          size: KirthanStyles.subTitleFontSize,
-        ),
-        */
+
         Container(
           margin: const EdgeInsets.only(left: 4.0),
           child: Consumer<ThemeNotifier>(

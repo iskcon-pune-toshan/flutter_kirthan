@@ -24,7 +24,6 @@ class EditTeam extends StatefulWidget {
 class _EditTeamState extends State<EditTeam> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
-  //final IKirthanRestApi apiSvc = new RestAPIServices();
 
   List<String> _category = [
     'Bhajan',

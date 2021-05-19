@@ -1,14 +1,7 @@
 import 'dart:core';
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_kirthan/models/notification.dart';
-import 'package:flutter_kirthan/models/teamuser.dart';
-import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/models/usertemple.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
 import 'package:flutter_kirthan/services/temple_service_impl.dart';
@@ -20,14 +13,12 @@ import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/team/team_local_admin.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
@@ -683,13 +674,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                             _selectedTeamMember3 = input;
                                           });
                                         },
-                                        // onEditingComplete: () {
-                                        //   containUserName(userList,
-                                        //           _selectedTeamMember3)
-                                        //       ? addRegisteredUser(userList,
-                                        //           _selectedTeamMember3)
-                                        //       : addUser(_selectedTeamMember3);
-                                        // },
+
                                         validator: (value) {
                                           if (value.isEmpty) {
                                             return "Please enter some text";
@@ -766,8 +751,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                     teamrequest.approvalStatus = "approved";
                                     teamrequest.approvalComments =
                                         "Approved$teamTitle";
-                                    // teamrequest.listOfTeamMembers =
-                                    //     listofTeamUsers;
+
                                     setState(() {
                                       Navigator.push(
                                         context,

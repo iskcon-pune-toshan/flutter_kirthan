@@ -257,11 +257,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                     onChanged: (input) {
                                       setState(() {
                                         _selectedLocalAdmin = input;
-                                        // _selectedtempleId =
-                                        //     templeList.indexWhere((element) =>
-                                        //         element.area ==
-                                        //         _selectedTempleArea);
-                                        print(_selectedtempleId);
+                                        // print(_selectedtempleId);
                                       });
                                     },
                                     onSaved: (input) {
