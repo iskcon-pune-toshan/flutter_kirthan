@@ -134,6 +134,8 @@ class NotificationViewState extends State<NotificationView> {
             for (var event in eventList) {
               eventRequest = event;
             }
+            print("Printing dara");
+            print(data);
             WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.push(
                   context,
@@ -802,6 +804,8 @@ class NotificationViewState extends State<NotificationView> {
                             }
                             if (snapshot.data[itemCount].message
                                 .contains("Request to create an event")) {
+                              print("Printing dara");
+                              print(snapshot.data[itemCount]);
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 Navigator.push(
                                     context,
@@ -809,7 +813,7 @@ class NotificationViewState extends State<NotificationView> {
                                         builder: (context) => AdminEventDetails(
                                               UserName: userName,
                                               eventRequest: eventRequest,
-                                              data: null,
+                                              data: snapshot.data[itemCount],
                                             )));
                               });
                             } else if (snapshot.data[itemCount].message

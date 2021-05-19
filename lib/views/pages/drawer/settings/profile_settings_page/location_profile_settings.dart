@@ -14,13 +14,12 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
 
-class contact_details_profile extends StatefulWidget {
+class location_profile extends StatefulWidget {
   @override
-  _contact_details_profileState createState() =>
-      _contact_details_profileState();
+  _location_profileState createState() => _location_profileState();
 }
 
-class _contact_details_profileState extends State<contact_details_profile> {
+class _location_profileState extends State<location_profile> {
   Future<String> getEmail() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
@@ -32,7 +31,7 @@ class _contact_details_profileState extends State<contact_details_profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contact Details"),
+        title: Text("Location"),
       ),
       body: FutureBuilder(
           future: getEmail(),
@@ -57,57 +56,7 @@ class _contact_details_profileState extends State<contact_details_profile> {
                               children: [
                                 Divider(),
                                 TextFormField(
-                                  initialValue: user.phoneNumber.toString(),
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.green),
-                                    ),
-                                    icon: Icon(
-                                      Icons.phone_in_talk,
-                                      color: Colors.grey,
-                                    ),
-                                    labelText: "Phone Number",
-                                    labelStyle: TextStyle(
-                                      fontSize: notifier.custFontSize,
-                                      color: Colors.grey,
-                                    ),
-                                    hintText: "",
-                                  ),
-                                  onSaved: (input) {
-                                    user.phoneNumber = int.parse(input);
-                                  },
-                                ),
-                                Divider(),
-                                // TextFormField(
-                                //   keyboardType: TextInputType.emailAddress,
-                                //   decoration: InputDecoration(
-                                //     enabledBorder: UnderlineInputBorder(
-                                //       borderSide: BorderSide(color: Colors.grey),
-                                //     ),
-                                //     focusedBorder: UnderlineInputBorder(
-                                //       borderSide: BorderSide(color: Colors.green),
-                                //     ),
-                                //     icon: Icon(
-                                //       Icons.email,
-                                //       color: Colors.grey,
-                                //     ),
-                                //     labelText: "Email Id",
-                                //     labelStyle: TextStyle(
-                                //       fontSize: notifier.custFontSize,
-                                //       color: Colors.grey,
-                                //     ),
-                                //     hintText: "",
-                                //   ),
-                                // ),
-                                // Divider(),
-                                TextFormField(
-                                  initialValue: user.city,
+                                  initialValue: user.state,
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide:
@@ -118,7 +67,7 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                           BorderSide(color: Colors.green),
                                     ),
                                     icon: Icon(Icons.home, color: Colors.grey),
-                                    labelText: "Address",
+                                    labelText: "State",
                                     labelStyle: TextStyle(
                                       fontSize: notifier.custFontSize,
                                       color: Colors.grey,
@@ -126,7 +75,31 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                     hintText: "",
                                   ),
                                   onSaved: (input) {
-                                    user.city = input;
+                                    user.state = input;
+                                  },
+                                ),
+                                Divider(),
+                                TextFormField(
+                                  initialValue: user.country,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    ),
+                                    icon: Icon(Icons.home, color: Colors.grey),
+                                    labelText: "Country",
+                                    labelStyle: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "",
+                                  ),
+                                  onSaved: (input) {
+                                    user.country = input;
                                   },
                                 ),
                                 Divider(),

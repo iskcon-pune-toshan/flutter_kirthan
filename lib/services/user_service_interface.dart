@@ -22,5 +22,7 @@ abstract class IUserRestApi {
 
   Future<bool> submitUpdateUserRequest(String userrequestmap);
 
+  Future<bool> submitUpdateUserRequestDetails(String userrequestmap);
+
   Future<bool> submitInitiateTeam(String userrequestmap);
 }
