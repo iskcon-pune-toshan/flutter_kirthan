@@ -204,16 +204,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                     color: KirthanStyles.colorPallete60),
                 labelBackgroundColor: KirthanStyles.colorPallete30,
               ),
-        /*SpeedDialChild(
-          child: Icon(Icons.event, color: Colors.white),
-          backgroundColor: KirthanStyles.colorPallete10,
-          onTap: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => EventWritePublic())),
-          label: 'Public Event',
-          labelStyle:
-          TextStyle(fontWeight: FontWeight.w500, color: KirthanStyles.colorPallete60),
-          labelBackgroundColor: KirthanStyles.colorPallete30,
-        ),*/
         SpeedDialChild(
           child: Icon(Icons.event_note, color: Colors.white),
           backgroundColor: KirthanStyles.colorPallete10,

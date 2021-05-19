@@ -139,11 +139,7 @@ class _SignUpState extends State<SignUp> {
         appBar: AppBar(
           title: Text("Sign Up"),
           backgroundColor: KirthanStyles.colorPallete30,
-          leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-              ),
-              onPressed: () => Navigator.of(context).pop()),
+
         ),
         body: Center(
           child: SingleChildScrollView(
