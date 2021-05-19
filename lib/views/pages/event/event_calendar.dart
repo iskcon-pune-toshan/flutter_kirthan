@@ -12,7 +12,6 @@ class CalendarPage extends StatefulWidget {
   EventRequest eventrequest;
 
   CalendarPage({Key key, @required this.eventrequest}) : super(key: key);
-
   @override
   CalendarClass createState() => CalendarClass();
 }
