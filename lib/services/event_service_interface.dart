@@ -5,10 +5,6 @@ abstract class IEventRestApi {
 //event
   Future<List<EventRequest>> getEventRequests(String userType);
 
-  Future<List<EventRequest>> getEventTitle(String userType);
-
-  Future<List<EventRequest>> getEventDates(String userType);
-
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap);
 

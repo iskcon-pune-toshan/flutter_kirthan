@@ -79,7 +79,12 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     // Events isprocessed = 0 or 1
     // Events on event Type = Free or Premium
     // Events public or private
-
+    // Events as per status(
+    //  0=not initiated
+    //  1=Processing(team has not accepted the invite)
+    //  2=Approved(team accepted the invite)
+    //  3=Cancelled(Event is cancelled)
+    //  )
     // Events on duration
     //requestBody = '{"city":["Pune","Mumbai"]}';
     if (eventType == "TODAY") {
@@ -138,93 +143,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     }
   }
 
-  Future<List<EventRequest>> getEventTitle(String eventType) async {
-    //print("I am in Service: getEventRequests");
-
-    String requestBody = '';
-
-    requestBody = '{"approvalStatus" : "Approved"}';
-
-    //print(requestBody);
-
-    String token = AutheticationAPIService().sessionJWTToken;
-    print("search service");
-    var response = await client1.put('$baseUrl/api/event/geteventtitle',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      List<dynamic> eventrequestsData = json.decode(response.body);
-      //print(eventrequestsData);
-      List<EventRequest> eventrequests = eventrequestsData
-          .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
-          .toList();
-      List<String> events =
-          eventrequests.map((event) => event.toString()).toList();
-      print(events);
-//print(eventrequests);
-      print("before return");
-      return eventrequests;
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-
-  Future<List<EventRequest>> getEventByDate(String request) async {
-    //print("I am in Service: getEventRequests");
-
-    String requestBody = '';
-    request = DateTime.now().toString();
-    requestBody = '{"eventDate" : "2020-04-20T05:50:02.000+0000"}';
-
-    //print(requestBody);
-
-    String token = AutheticationAPIService().sessionJWTToken;
-
-    var response = await client1.put('$baseUrl/api/event/geteventbydate',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      List<dynamic> eventrequestsData = json.decode(response.body);
-      print(eventrequestsData);
-      List<EventRequest> eventrequests = eventrequestsData
-          .map((eventrequestsData) => EventRequest.fromJson(eventrequestsData))
-          .toList();
-      List<String> events =
-          eventrequests.map((event) => event.toString()).toList();
-      print(events);
-//print(eventrequests);
-      print("before return");
-      return eventrequests;
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-
-/*  Future<EventRequest> submitNewEventRequest(EventRequest pEventrequest) async {
-    String requestBody = ''; Future<List<EventRequest>> getEventRequestsFromJson() async {
-    var userDetailsJson = await rootBundle.loadString(eventdetailsJsonPath);
-    List<dynamic> eventdetailsData = json.decode(eventDetailsJson) as List;
-    List<UserRequest> eventdetails = eventdetailsData.map((eventdetailsData) => EventRequest.fromMap(eventdetailsData)).toList();
-
-    return eventdetails;
-  }
-
-    var response = await _client.put('$_baseUrl/submitneweventrequest', headers: {"Content-Type": "application/json"}, body: requestBody);
-    if (response.statusCode == 200) {
-      EventRequest eventrequestsData = json.decode(response.body);
-      print(eventrequestsData);
-    }
-  }
-*/
-
   //addevent
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap) async {
@@ -241,9 +159,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
         body: requestBody);
 
     if (response.statusCode == 200) {
-      //EventRequest respeventrequest = json.decode(response.body);
-      //print(respeventrequest);
-      //return respeventrequest;
 
       Map<String, dynamic> eventrequestsData = json.decode(response.body);
       EventRequest eventrequests = EventRequest.fromMap(eventrequestsData);
@@ -323,9 +238,4 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     }
   }
 
-  @override
-  Future<List<EventRequest>> getEventDates(String userType) {
-    // TODO: implement getEventDates
-    throw UnimplementedError();
-  }
 }

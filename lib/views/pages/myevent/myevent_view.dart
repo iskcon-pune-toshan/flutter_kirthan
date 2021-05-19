@@ -160,53 +160,6 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
             //style: TextStyle(fontSize: notifier.custFontSize),
           ),
           actions: <Widget>[
-            /*IconButton(
-                icon: Icon(
-                  Icons.search,
-                ),
-                onPressed: () => {
-                      showSearch(
-                        context: context,
-                        delegate: Search(event),
-                      )
-                    }),*/
-/*            PopupMenuButton(
-                icon: Icon(
-                  Icons.tune,
-                ),
-                onSelected: (input) {
-                  _selectedValue = input;
-                  print(input);
-                  if (input == 'Today')
-                    eventPageVM.setEventRequests("TODAY");
-                  else if (input == 'Tomorrow')
-                    eventPageVM.setEventRequests("TOMORROW");
-                  else if (input == 'This Week')
-                    eventPageVM.setEventRequests("This Week");
-                  else if (input == 'This Month')
-                    eventPageVM.setEventRequests("This Month");
-                  else if(input == 'Clear Filter')
-                    eventPageVM.setEventRequests("All");
-                  else if (notifier.duration != null) {
-                    eventPageVM.setEventRequests(notifier.duration);
-                  }
-                },
-                itemBuilder: (BuildContext context) {
-                  return eventTime.map((f) {
-                    return CheckedPopupMenuItem<String>(
-                      child: Text(
-                        f,
-                        style: TextStyle(
-                          fontSize: notifier.custFontSize,
-                        ),
-                      ),
-                      value: f,
-                      checked: _selectedValue == f ? true : false,
-                      enabled: true,
-                      //checked: true,
-                    );
-                  }).toList();
-                }),*/
           ],
           iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
         ),
@@ -229,13 +182,13 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
                     _v = value;
                   });
                 }),
-            Divider(
+            /*Divider(
               thickness: 2,
-            ),
+            ),*/
             RefreshIndicator(
               key: refreshKey,
               child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.6,
+                  height: MediaQuery.of(context).size.height * 0.7,
                   child: _v == false
                       ? ScopedModel<EventPageViewModel>(
                           model: eventPageVM,
@@ -248,103 +201,9 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
             ),
           ],
         ),
-        /*floatingActionButton: FloatingActionButton(
-          heroTag: "myevent",
-          child: Icon(Icons.add),
-          backgroundColor: KirthanStyles.colorPallete10,
-          //tooltip: accessTypes["Create"].toString(),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => EventWrite()));
-          },
-        ),*/
+
       ),
     );
   }
 }
 
-class Search extends SearchDelegate {
-  Search(
-    this.listExample, {
-    String hintText = "Search by Event Title",
-  }) : super(
-          searchFieldLabel: hintText,
-          searchFieldStyle: TextStyle(color: Colors.grey),
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.search,
-        );
-  ThemeData appBarTheme(BuildContext context) {
-    assert(context != null);
-    final ThemeData theme = Theme.of(context);
-    assert(theme != null);
-    return theme.copyWith(
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.light,
-      primaryTextTheme: theme.textTheme,
-    );
-  }
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-      IconButton(
-        icon: Icon(Icons.close),
-        onPressed: () {
-          query = "";
-        },
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-  }
-
-  String selectedResult = "";
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(selectedResult,
-            style: TextStyle(color: KirthanStyles.colorPallete10)),
-      ),
-    );
-  }
-
-  final List<String> listExample;
-  List<String> recentList = [];
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> suggestionList = [];
-    query.isEmpty
-        ? suggestionList = recentList //In the true case
-        : suggestionList.addAll(listExample.where(
-            // In the false case
-            (element) =>
-                element.toUpperCase().contains(query) ||
-                element.toLowerCase().contains(query),
-          ));
-
-    return
-        //_widget();
-        ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            suggestionList[index],
-          ),
-          leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-        );
-      },
-    );
-  }
-}
