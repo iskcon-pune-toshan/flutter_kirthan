@@ -7,7 +7,7 @@ import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/user/inviteUser.dart';
-import 'file:///D:/AndroidStudioProjects/flutter_kirthan/lib/views/pages/user/initiate_userdetails.dart';
+import 'initiate_userdetails.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 
 final TeamPageViewModel teamPageVM =

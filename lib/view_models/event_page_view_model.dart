@@ -41,16 +41,6 @@ class EventPageViewModel extends Model {
     return eventRequests;
   }
 
-  Future<bool> setEventTitles(String eventtype) async {
-    eventrequests = apiSvc?.getEventTitle(eventtype);
-    return eventrequests != null;
-  }
-
-  Future<List<EventRequest>> getEventTitle(String userType) async {
-    Future<List<EventRequest>> eventRequests = apiSvc?.getEventTitle(userType);
-    return eventRequests;
-  }
-
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap) {
     Future<EventRequest> eventRequest =
