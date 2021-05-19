@@ -114,16 +114,16 @@ class _TeamWriteState extends State<TeamWrite> {
     'Pune',
     'Mumbai'
   ];
-  List<String> _weekday = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-    'Anyday'
-  ];
+  // List<String> _weekday = [
+  //   'Monday',
+  //   'Tuesday',
+  //   'Wednesday',
+  //   'Thursday',
+  //   'Friday',
+  //   'Saturday',
+  //   'Sunday',
+  //   'Anyday'
+  // ];
   String _selectedCategory;
   String _selectedWeekday;
   String _selectedLocation;
@@ -202,7 +202,7 @@ class _TeamWriteState extends State<TeamWrite> {
                 autovalidate: true,
                 // readonly: true,
                 child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.center,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     new Container(margin: const EdgeInsets.only(top: 50)),
                     Card(
@@ -281,6 +281,32 @@ class _TeamWriteState extends State<TeamWrite> {
                         ),
                       ),
                       elevation: 5,
+                    ),
+                    SizedBox(height: 35),
+                    Card(
+                      child: Container(
+                        padding: new EdgeInsets.all(10),
+                        child: DropdownButtonFormField<String>(
+                          value: _selectedCategory,
+                          icon: const Icon(Icons.category),
+                          hint: Text('Select Category',
+                              style: TextStyle(color: Colors.grey)),
+                          items: _category
+                              .map((category) => DropdownMenuItem<String>(
+                                    value: category,
+                                    child: Text(category),
+                                  ))
+                              .toList(),
+                          onChanged: (input) {
+                            setState(() {
+                              _selectedCategory = input;
+                            });
+                          },
+                          onSaved: (input) {
+                            teamrequest.category = input;
+                          },
+                        ),
+                      ),
                     ),
                     Card(
                       child: Container(
@@ -428,152 +454,136 @@ class _TeamWriteState extends State<TeamWrite> {
                                 }
                                 return Container();
                               }),
+                          // SizedBox(height: 35),
+                          // DropdownButtonFormField<String>(
+                          //   value: _selectedWeekday,
+                          //   icon: const Icon(Icons.calendar_today_rounded),
+                          //   hint: Text(
+                          //     'Select weekday ',
+                          //     style: TextStyle(color: Colors.grey),
+                          //   ),
+                          //   items: _weekday
+                          //       .map((weekday) => DropdownMenuItem(
+                          //             value: weekday,
+                          //             child: Text(weekday),
+                          //           ))
+                          //       .toList(),
+                          //   onChanged: (input) {
+                          //     setState(() {
+                          //       _selectedWeekday = input;
+                          //     });
+                          //   },
+                          //   onSaved: (input) {
+                          //     teamrequest.weekDay = input;
+                          //   },
+                          // ),
                           SizedBox(height: 35),
-                          DropdownButtonFormField<String>(
-                            value: _selectedCategory,
-                            icon: const Icon(Icons.category),
-                            hint: Text('Select Category',
-                                style: TextStyle(color: Colors.grey)),
-                            items: _category
-                                .map((category) => DropdownMenuItem<String>(
-                                      value: category,
-                                      child: Text(category),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedCategory = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              teamrequest.category = input;
-                            },
-                          ),
-                          SizedBox(height: 35),
-                          DropdownButtonFormField<String>(
-                            value: _selectedWeekday,
-                            icon: const Icon(Icons.calendar_today_rounded),
-                            hint: Text(
-                              'Select weekday ',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            items: _weekday
-                                .map((weekday) => DropdownMenuItem(
-                                      value: weekday,
-                                      child: Text(weekday),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedWeekday = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              teamrequest.weekDay = input;
-                            },
-                          ),
-                          SizedBox(height: 35),
-                          DropdownButtonFormField<String>(
-                            value: _selectedLocation,
-                            icon: const Icon(Icons.location_city),
-                            hint: Text('Select Location',
-                                style: TextStyle(color: Colors.grey)),
-                            items: _location
-                                .map((location) => DropdownMenuItem(
-                                      value: location,
-                                      child: Text(location),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedLocation = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              teamrequest.location = input;
-                            },
-                          ),
-                          SizedBox(
-                            height: 35,
-                          ),
-                          Container(
-                            padding: new EdgeInsets.all(10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Text(
-                                  "Available From",
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                DateTimeField(
-                                  format: DateFormat("HH:mm"),
-                                  onShowPicker: (context, currentValue) async {
-                                    final time = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.fromDateTime(
-                                          currentValue ?? DateTime.now()),
-                                    );
-                                    return DateTimeField.convert(time);
-                                  },
-                                  onSaved: (input) {
-                                    teamrequest.availableFrom =
-                                        DateFormat("HH:mm")
-                                            .format(input)
-                                            .toString();
-                                  },
-                                  validator: (value) {
-                                    if (value.toString().isEmpty) {
-                                      return "Please enter some text";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Container(
-                            padding: new EdgeInsets.all(10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Text(
-                                  "Available To",
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                DateTimeField(
-                                  format: DateFormat("HH:mm"),
-                                  onShowPicker: (context, currentValue) async {
-                                    final time = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.fromDateTime(
-                                          currentValue ?? DateTime.now()),
-                                    );
-                                    return DateTimeField.convert(time);
-                                  },
-                                  onSaved: (input) {
-                                    teamrequest.availableTo =
-                                        DateFormat("HH:mm")
-                                            .format(input)
-                                            .toString();
-                                  },
-                                  validator: (value) {
-                                    if (value.toString().isEmpty) {
-                                      return "Please enter some text";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ],
+                          Card(
+                            child: Container(
+                              //padding: new EdgeInsets.all(10),
+                              child: DropdownButtonFormField<String>(
+                                value: _selectedLocation,
+                                icon: const Icon(Icons.location_city),
+                                hint: Text('Select Location',
+                                    style: TextStyle(color: Colors.grey)),
+                                items: _location
+                                    .map((location) => DropdownMenuItem(
+                                          value: location,
+                                          child: Text(location),
+                                        ))
+                                    .toList(),
+                                onChanged: (input) {
+                                  setState(() {
+                                    _selectedLocation = input;
+                                  });
+                                },
+                                onSaved: (input) {
+                                  teamrequest.location = input;
+                                },
+                              ),
                             ),
                           ),
                           SizedBox(
                             height: 35,
                           ),
+                          // Container(
+                          //   padding: new EdgeInsets.all(10),
+                          //   child: Column(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //     children: <Widget>[
+                          //       Text(
+                          //         "Available From",
+                          //         textAlign: TextAlign.left,
+                          //         style: TextStyle(color: Colors.grey),
+                          //       ),
+                          //       DateTimeField(
+                          //         format: DateFormat("HH:mm"),
+                          //         onShowPicker: (context, currentValue) async {
+                          //           final time = await showTimePicker(
+                          //             context: context,
+                          //             initialTime: TimeOfDay.fromDateTime(
+                          //                 currentValue ?? DateTime.now()),
+                          //           );
+                          //           return DateTimeField.convert(time);
+                          //         },
+                          //         onSaved: (input) {
+                          //           teamrequest.availableFrom =
+                          //               DateFormat("HH:mm")
+                          //                   .format(input)
+                          //                   .toString();
+                          //         },
+                          //         validator: (value) {
+                          //           if (value.toString().isEmpty) {
+                          //             return "Please enter some text";
+                          //           }
+                          //           return null;
+                          //         },
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 30,
+                          // ),
+                          // Container(
+                          //   padding: new EdgeInsets.all(10),
+                          //   child: Column(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //     children: <Widget>[
+                          //       Text(
+                          //         "Available To",
+                          //         textAlign: TextAlign.left,
+                          //         style: TextStyle(color: Colors.grey),
+                          //       ),
+                          //       DateTimeField(
+                          //         format: DateFormat("HH:mm"),
+                          //         onShowPicker: (context, currentValue) async {
+                          //           final time = await showTimePicker(
+                          //             context: context,
+                          //             initialTime: TimeOfDay.fromDateTime(
+                          //                 currentValue ?? DateTime.now()),
+                          //           );
+                          //           return DateTimeField.convert(time);
+                          //         },
+                          //         onSaved: (input) {
+                          //           teamrequest.availableTo =
+                          //               DateFormat("HH:mm")
+                          //                   .format(input)
+                          //                   .toString();
+                          //         },
+                          //         validator: (value) {
+                          //           if (value.toString().isEmpty) {
+                          //             return "Please enter some text";
+                          //           }
+                          //           return null;
+                          //         },
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 35,
+                          // ),
                           FutureBuilder<List<UserRequest>>(
                               future: Users,
                               builder: (BuildContext context,
@@ -581,60 +591,107 @@ class _TeamWriteState extends State<TeamWrite> {
                                 if (snapshot.data != null) {
                                   print(userList);
                                   userList = snapshot.data;
-                                  return Card(
-                                    child: Container(
-                                      //color: Colors.white,
-                                      padding: new EdgeInsets.all(10),
-                                      child: TextFormField(
-                                        //attribute: "Description",
+                                  return Column(
+                                    children: [
+                                      Card(
+                                        child: Container(
+                                          //color: Colors.white,
+                                          padding: new EdgeInsets.all(10),
+                                          child: TextFormField(
+                                            //attribute: "Description",
 
-                                        decoration: InputDecoration(
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.green),
-                                            ),
-                                            /*icon: const Icon(
+                                            decoration: InputDecoration(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey),
+                                                ),
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.green),
+                                                ),
+                                                /*icon: const Icon(
                                 Icons.description,
                                 color: Colors.grey,
                               ),*/
-                                            labelText: "Add Team Member1",
-                                            hintText: "Add Team Member",
-                                            hintStyle: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                            labelStyle: TextStyle(
-                                              color: Colors.grey,
-                                            )),
-                                        onChanged: (input) {
-                                          setState(() {
-                                            _selectedTeamMember1 = input;
-                                          });
-                                        },
-                                        // onEditingComplete: () {
-                                        //   setState(() {
-                                        //     containUserName(userList,
-                                        //             _selectedTeamMember1)
-                                        //         ? selectedUsers = userList
-                                        //             .where((element) =>
-                                        //                 element.userName ==
-                                        //                 _selectedTeamMember1)
-                                        //             .toList()
-                                        //         : addUser(_selectedTeamMember1);
-                                        //   });
-                                        // },
-                                        validator: (value) {
-                                          if (value.isEmpty) {
-                                            return "Please enter some text";
-                                          }
-                                          return null;
-                                        },
+                                                labelText: "Add Team Member1",
+                                                hintText: "Add Team Member",
+                                                hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                                labelStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                )),
+                                            onChanged: (input) {
+                                              setState(() {
+                                                _selectedTeamMember1 = input;
+                                              });
+                                            },
+                                            // onEditingComplete: () {
+                                            //   setState(() {
+                                            //     containUserName(userList,
+                                            //             _selectedTeamMember1)
+                                            //         ? selectedUsers = userList
+                                            //             .where((element) =>
+                                            //                 element.userName ==
+                                            //                 _selectedTeamMember1)
+                                            //             .toList()
+                                            //         : addUser(_selectedTeamMember1);
+                                            //   });
+                                            // },
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Please enter some text";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        elevation: 5,
                                       ),
-                                    ),
-                                    elevation: 5,
+                                      Card(
+                                        child: Container(
+                                          //color: Colors.white,
+                                          padding: new EdgeInsets.all(10),
+                                          child: TextFormField(
+                                            //attribute: "Description",
+
+                                            decoration: InputDecoration(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey),
+                                                ),
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.green),
+                                                ),
+                                                /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                                                labelText: "Description",
+                                                hintText: "Description",
+                                                hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                                labelStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                )),
+                                            onSaved: (input) {},
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Please enter some text";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        elevation: 5,
+                                      ),
+                                    ],
                                   );
                                 }
                                 return Container();
@@ -648,57 +705,104 @@ class _TeamWriteState extends State<TeamWrite> {
                                   AsyncSnapshot<List<UserRequest>> snapshot) {
                                 if (snapshot.data != null) {
                                   userList = snapshot.data;
-                                  return Card(
-                                    child: Container(
-                                      //color: Colors.white,
-                                      padding: new EdgeInsets.all(10),
-                                      child: TextFormField(
-                                        //attribute: "Description",
+                                  return Column(
+                                    children: [
+                                      Card(
+                                        child: Container(
+                                          //color: Colors.white,
+                                          padding: new EdgeInsets.all(10),
+                                          child: TextFormField(
+                                            //attribute: "Description",
 
-                                        decoration: InputDecoration(
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.green),
-                                            ),
-                                            /*icon: const Icon(
+                                            decoration: InputDecoration(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey),
+                                                ),
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.green),
+                                                ),
+                                                /*icon: const Icon(
                                 Icons.description,
                                 color: Colors.grey,
                               ),*/
-                                            labelText: "Add Team Member2",
-                                            hintText: "Add Team Member",
-                                            hintStyle: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                            labelStyle: TextStyle(
-                                              color: Colors.grey,
-                                            )),
-                                        onChanged: (input) {
-                                          setState(() {
-                                            _selectedTeamMember2 = input;
-                                          });
-                                        },
-                                        validator: (value) {
-                                          if (value.isEmpty) {
-                                            return "Please enter some text";
-                                          }
-                                          return null;
-                                        },
-                                        // onEditingComplete: () {
-                                        //   setState(() {
-                                        //     containUserName(userList,
-                                        //             _selectedTeamMember2)
-                                        //         ? addRegisteredUser(userList,
-                                        //             _selectedTeamMember2)
-                                        //         : addUser(_selectedTeamMember2);
-                                        //   });
-                                        // },
+                                                labelText: "Add Team Member2",
+                                                hintText: "Add Team Member",
+                                                hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                                labelStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                )),
+                                            onChanged: (input) {
+                                              setState(() {
+                                                _selectedTeamMember2 = input;
+                                              });
+                                            },
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Please enter some text";
+                                              }
+                                              return null;
+                                            },
+                                            // onEditingComplete: () {
+                                            //   setState(() {
+                                            //     containUserName(userList,
+                                            //             _selectedTeamMember2)
+                                            //         ? addRegisteredUser(userList,
+                                            //             _selectedTeamMember2)
+                                            //         : addUser(_selectedTeamMember2);
+                                            //   });
+                                            // },
+                                          ),
+                                        ),
+                                        elevation: 5,
                                       ),
-                                    ),
-                                    elevation: 5,
+                                      Card(
+                                        child: Container(
+                                          //color: Colors.white,
+                                          padding: new EdgeInsets.all(10),
+                                          child: TextFormField(
+                                            //attribute: "Description",
+
+                                            decoration: InputDecoration(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey),
+                                                ),
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.green),
+                                                ),
+                                                /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                                                labelText: "Description",
+                                                hintText: "Description",
+                                                hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                                labelStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                )),
+                                            onSaved: (input) {},
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Please enter some text";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        elevation: 5,
+                                      ),
+                                    ],
                                   );
                                 }
                                 return Container();
@@ -713,55 +817,102 @@ class _TeamWriteState extends State<TeamWrite> {
                                 if (snapshot.data != null) {
                                   userList = snapshot.data;
                                   print(userList);
-                                  return Card(
-                                    child: Container(
-                                      //color: Colors.white,
-                                      padding: new EdgeInsets.all(10),
-                                      child: TextFormField(
-                                        //attribute: "Description",
+                                  return Column(
+                                    children: [
+                                      Card(
+                                        child: Container(
+                                          //color: Colors.white,
+                                          padding: new EdgeInsets.all(10),
+                                          child: TextFormField(
+                                            //attribute: "Description",
 
-                                        decoration: InputDecoration(
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.green),
-                                            ),
-                                            /*icon: const Icon(
+                                            decoration: InputDecoration(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey),
+                                                ),
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.green),
+                                                ),
+                                                /*icon: const Icon(
                                 Icons.description,
                                 color: Colors.grey,
                               ),*/
-                                            labelText: "Add Team Member3",
-                                            hintText: "Add Team Member",
-                                            hintStyle: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                            labelStyle: TextStyle(
-                                              color: Colors.grey,
-                                            )),
-                                        onChanged: (input) {
-                                          setState(() {
-                                            _selectedTeamMember3 = input;
-                                          });
-                                        },
-                                        // onEditingComplete: () {
-                                        //   containUserName(userList,
-                                        //           _selectedTeamMember3)
-                                        //       ? addRegisteredUser(userList,
-                                        //           _selectedTeamMember3)
-                                        //       : addUser(_selectedTeamMember3);
-                                        // },
-                                        validator: (value) {
-                                          if (value.isEmpty) {
-                                            return "Please enter some text";
-                                          }
-                                          return null;
-                                        },
+                                                labelText: "Add Team Member3",
+                                                hintText: "Add Team Member",
+                                                hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                                labelStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                )),
+                                            onChanged: (input) {
+                                              setState(() {
+                                                _selectedTeamMember3 = input;
+                                              });
+                                            },
+                                            // onEditingComplete: () {
+                                            //   containUserName(userList,
+                                            //           _selectedTeamMember3)
+                                            //       ? addRegisteredUser(userList,
+                                            //           _selectedTeamMember3)
+                                            //       : addUser(_selectedTeamMember3);
+                                            // },
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Please enter some text";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        elevation: 5,
                                       ),
-                                    ),
-                                    elevation: 5,
+                                      Card(
+                                        child: Container(
+                                          //color: Colors.white,
+                                          padding: new EdgeInsets.all(10),
+                                          child: TextFormField(
+                                            //attribute: "Description",
+
+                                            decoration: InputDecoration(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey),
+                                                ),
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.green),
+                                                ),
+                                                /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                                                labelText: "Description",
+                                                hintText: "Description",
+                                                hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                                labelStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                )),
+                                            onSaved: (input) {},
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Please enter some text";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        elevation: 5,
+                                      ),
+                                    ],
                                   );
                                 }
                                 return Container();
@@ -772,16 +923,16 @@ class _TeamWriteState extends State<TeamWrite> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        RaisedButton.icon(
-                          label: Text('Add'),
-                          icon: const Icon(Icons.add_circle),
-                          color: Colors.green,
-                          onPressed: () async {
-                            setState(() {
-                              addMember();
-                            });
-                          },
-                        ),
+                        // RaisedButton.icon(
+                        //   label: Text('Add'),
+                        //   icon: const Icon(Icons.add_circle),
+                        //   color: Colors.green,
+                        //   onPressed: () async {
+                        //     setState(() {
+                        //       addMember();
+                        //     });
+                        //   },
+                        // ),
                         new Container(margin: const EdgeInsets.only(top: 40)),
                         Row(
                           mainAxisSize: MainAxisSize.max,

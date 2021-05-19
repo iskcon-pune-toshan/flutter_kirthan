@@ -38,6 +38,8 @@ final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
+final EventPageViewModel eventPageVM =
+    EventPageViewModel(apiSvc: EventAPIService());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";

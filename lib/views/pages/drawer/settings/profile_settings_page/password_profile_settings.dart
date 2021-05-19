@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,6 @@ class _password_profileState extends State<password_profile> {
     return email;
   }
 
-  SignInService signIn = new SignInService();
   String password;
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   @override
@@ -79,7 +79,7 @@ class _password_profileState extends State<password_profile> {
                                   password = input;
                                 },
                                 onSaved: (input) {
-                                  user.password = input;
+                                  //user.password = input;
                                 },
                                 validator: (value) {
                                   // ignore: missing_return
@@ -126,27 +126,29 @@ class _password_profileState extends State<password_profile> {
                                     child: Text('Save'),
                                     color: Colors.green,
                                     onPressed: () async {
-                                      if (_formKey.currentState.validate()) {
-                                        signIn.updatePassword(password);
-                                        FirebaseUser s =
-                                            await auth.currentUser();
-                                        String pass = s.uid;
-                                        user.password = pass;
-                                        _formKey.currentState.save();
-                                        String userrequestStr =
-                                            jsonEncode(user.toStrJson());
-                                        userPageVM
-                                            .submitUpdateUserRequestDetails(
-                                                userrequestStr);
-                                        SnackBar mysnackbar = SnackBar(
-                                          content: Text(
-                                              "User details updated $successful"),
-                                          duration: new Duration(seconds: 4),
-                                          backgroundColor: Colors.green,
-                                        );
-                                        Scaffold.of(context)
-                                            .showSnackBar(mysnackbar);
-                                      }
+                                      // if (_formKey.currentState.validate()) {
+                                      //   SignInService signIn =
+                                      //       new SignInService();
+                                      //   FirebaseUser s =
+                                      //       await auth.currentUser();
+                                      //   s
+                                      //       .updatePassword(password)
+                                      //       .whenComplete(() => print("Works"));
+                                      //   _formKey.currentState.save();
+                                      //   String userrequestStr =
+                                      //       jsonEncode(user.toStrJson());
+                                      //   userPageVM
+                                      //       .submitUpdateUserRequestDetails(
+                                      //           userrequestStr);
+                                      //   SnackBar mysnackbar = SnackBar(
+                                      //     content: Text(
+                                      //         "User details updated $successful"),
+                                      //     duration: new Duration(seconds: 4),
+                                      //     backgroundColor: Colors.green,
+                                      //   );
+                                      //   Scaffold.of(context)
+                                      //       .showSnackBar(mysnackbar);
+                                      // }
                                     },
                                   ),
                                   RaisedButton(

@@ -281,7 +281,7 @@ class AppState extends State<App> {
   static int currentTab = 0;
   Future<List<UserRequest>> userRequest;
   List<UserRequest> userRequestList = List<UserRequest>();
-
+  int role_id;
   Future<String> getEmail() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var user = await auth.currentUser();
@@ -291,6 +291,7 @@ class AppState extends State<App> {
 
   @override
   void initState() {
+    getRoleId();
     super.initState();
     print("+++++++++++++ Role Id");
     print("//////////");
@@ -322,17 +323,17 @@ class AppState extends State<App> {
       icon: Icons.calendar_today,
       page: MyEventView(),
     ),
-    TabItem(
-      tabName: "Initiate team",
-      icon: Icons.group_add,
-      page: InitiateTeam(),
-    ),
-    //  if (role_id == 1)
-    TabItem(
-      tabName: "Users",
-      icon: Icons.group,
-      page: InviteLocalAdmin(),
-    ),
+    // TabItem(
+    //   tabName: "Initiate team",
+    //   icon: Icons.group_add,
+    //   page: InitiateTeam(),
+    // ),
+    // //  if (role_id == 1)
+    // TabItem(
+    //   tabName: "Users",
+    //   icon: Icons.group,
+    //   page: InviteLocalAdmin(),
+    // ),
 
     /*TabItem(
       tabName: "Screens",
@@ -351,24 +352,60 @@ class AppState extends State<App> {
     ),*/
   ];
 
+  final List<TabItem> tabs_alternative = [
+    TabItem(
+      tabName: "Home",
+      icon: Icons.home,
+      page: EventView(),
+    ),
+    TabItem(
+      tabName: "Notifications",
+      icon: Icons.notifications,
+      page: NotificationView(),
+    ),
+    TabItem(
+      tabName: "Initiate team",
+      icon: Icons.group_add,
+      page: InitiateTeam(),
+    ),
+  ];
+
   AppState() {
     // indexing is necessary for proper functionality
     // of determining which tab is active
     tabs.asMap().forEach((index, details) {
       details.setIndex(index);
     });
+    tabs_alternative.asMap().forEach((index, details) {
+      details.setIndex(index);
+    });
   }
   // sets current tab index
   // and update state
   void _selectTab(int index) {
-    if (index == currentTab) {
-      // pop to first route
-      // if the user taps on the active tab
-      tabs[index].key.currentState.popUntil((route) => route.isFirst);
+    if (role_id == 2) {
+      if (index == currentTab) {
+        // pop to first route
+        // if the user taps on the active tab
+        tabs_alternative[index]
+            .key
+            .currentState
+            .popUntil((route) => route.isFirst);
+      } else {
+        // update the state
+        // in order to repaint
+        setState(() => currentTab = index);
+      }
     } else {
-      // update the state
-      // in order to repaint
-      setState(() => currentTab = index);
+      if (index == currentTab) {
+        // pop to first route
+        // if the user taps on the active tab
+        tabs[index].key.currentState.popUntil((route) => route.isFirst);
+      } else {
+        // update the state
+        // in order to repaint
+        setState(() => currentTab = index);
+      }
     }
   }
 
@@ -377,19 +414,35 @@ class AppState extends State<App> {
     // WillPopScope handle android back btn
     return WillPopScope(
       onWillPop: () async {
-        final isFirstRouteInCurrentTab =
-            !await tabs[currentTab].key.currentState.maybePop();
-        if (isFirstRouteInCurrentTab) {
-          // if not on the 'main' tab
-          if (currentTab != 0) {
-            // select 'main' tab
-            _selectTab(0);
-            // back button handled by app
-            return false;
+        if (role_id == 2) {
+          final isFirstRouteInCurrentTab =
+              !await tabs_alternative[currentTab].key.currentState.maybePop();
+          if (isFirstRouteInCurrentTab) {
+            // if not on the 'main' tab
+            if (currentTab != 0) {
+              // select 'main' tab
+              _selectTab(0);
+              // back button handled by app
+              return false;
+            }
           }
+          // let system handle back button if we're on the first route
+          return isFirstRouteInCurrentTab;
+        } else {
+          final isFirstRouteInCurrentTab =
+              !await tabs[currentTab].key.currentState.maybePop();
+          if (isFirstRouteInCurrentTab) {
+            // if not on the 'main' tab
+            if (currentTab != 0) {
+              // select 'main' tab
+              _selectTab(0);
+              // back button handled by app
+              return false;
+            }
+          }
+          // let system handle back button if we're on the first route
+          return isFirstRouteInCurrentTab;
         }
-        // let system handle back button if we're on the first route
-        return isFirstRouteInCurrentTab;
       },
       // this is the base scaffold
       // don't put appbar in here otherwise you might end up
@@ -399,14 +452,34 @@ class AppState extends State<App> {
         // indexed stack shows only one child
         body: IndexedStack(
           index: currentTab,
-          children: tabs.map((e) => e.page).toList(),
+          children: role_id == 2
+              ? tabs_alternative.map((e) => e.page).toList()
+              : tabs.map((e) => e.page).toList(),
         ),
         // Bottom navigation
         bottomNavigationBar: BottomNavigation(
           onSelectTab: _selectTab,
-          tabs: tabs,
+          tabs: role_id == 2 ? tabs_alternative : tabs,
         ),
       ),
     );
+  }
+
+  getRoleId() async {
+    final FirebaseUser user = await auth.currentUser();
+    userRequestList = await userPageVM.getUserRequests("Approved");
+    for (var users in userRequestList) {
+      print("HELLOHELLOHELLOHELLOHELLO");
+      print(users.email);
+      print(user.email);
+      if (users.email == user.email) {
+        setState(() {
+          role_id = users.roleId;
+        });
+      }
+    }
+    print("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
+    //print(email);
+    print(role_id.toString());
   }
 }

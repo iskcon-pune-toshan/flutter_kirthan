@@ -72,7 +72,7 @@ class _UserAdminView extends State<UserAdminView> {
 
   Widget View({String status}) {
     return FutureBuilder(
-        future: _userVM.getUserForApproval(status),
+        future: _userVM.getUserRequests(status),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
