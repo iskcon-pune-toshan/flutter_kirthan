@@ -160,11 +160,11 @@ class _MapState extends State<Maps> {
                 body: Stack(
                   children: <Widget>[
                     _googleMapsWidget(state),
-                    FixedLocationGps(showFixedGpsIcon: _showFixedGpsIcon),
+                    //FixedLocationGps(showFixedGpsIcon: _showFixedGpsIcon),
                     MapOption(mapType: _currentMapType),
                     LocationUser(),
                     SearchPlace(onPressed: _animateCamera),
-                    RangeRadius(isRadiusFixed: _isRadiusFixed),
+                    //RangeRadius(isRadiusFixed: _isRadiusFixed),
                   ],
                 ),
               );
@@ -175,6 +175,20 @@ class _MapState extends State<Maps> {
 
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
+    setState(() {
+     // _markers.clear();
+
+      _markers.add(
+        Marker(
+          markerId: MarkerId("title"),
+          position: LatLng(19.12467575006192, 74.72964141259739),
+          infoWindow: InfoWindow(
+            title: "title",
+          ),
+          //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+        ),
+      );
+    });
   }
 
   void _onCameraMove(CameraPosition position) {
