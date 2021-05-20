@@ -23,30 +23,33 @@ class TeamRequest {
   String localAdminArea;
   String localAdminName;
   List<TeamUser> listOfTeamMembers;
-
+  int requestAcceptance;
+  int duration;
 //Typically called form service layer to create a new user
   TeamRequest(
       {this.id,
-        this.teamTitle,
-        this.teamDescription,
-        this.isProcessed,
-        this.createdBy,
-        this.updatedBy,
-        this.createdTime,
-        this.updatedTime,
-        this.approvalStatus,
-        this.approvalComments,
-        this.availableFrom,
-        this.availableTo,
-        this.weekDay,
-        this.location,
-        this.category,
-        this.experience,
-        this.phoneNumber,
-        this.teamLeadId,
-        this.localAdminArea,
-        this.localAdminName,
-        this.listOfTeamMembers});
+      this.teamTitle,
+      this.teamDescription,
+      this.isProcessed,
+      this.createdBy,
+      this.updatedBy,
+      this.createdTime,
+      this.updatedTime,
+      this.approvalStatus,
+      this.approvalComments,
+      this.availableFrom,
+      this.availableTo,
+      this.weekDay,
+      this.location,
+      this.category,
+      this.experience,
+      this.phoneNumber,
+      this.teamLeadId,
+      this.localAdminArea,
+      this.localAdminName,
+      this.listOfTeamMembers,
+      this.requestAcceptance,
+      this.duration});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory TeamRequest.fromJson(Map<String, dynamic> data) {
@@ -72,6 +75,8 @@ class TeamRequest {
       localAdminArea: data['localAdminArea'],
       localAdminName: data['localAdminName'],
       listOfTeamMembers: data['listOfTeamMembers'],
+      requestAcceptance: data['requestAcceptance'],
+      duration: data['duration'],
     );
   }
 
@@ -97,6 +102,8 @@ class TeamRequest {
       teamLeadId: map['teamLeadId'],
       localAdminArea: map['localAdminArea'],
       localAdminName: map['localAdminName'],
+      requestAcceptance: map['requestAcceptance'],
+      duration: map['duration'],
     );
   }
 
@@ -123,6 +130,8 @@ class TeamRequest {
     data['localAdminArea'] = this.localAdminArea;
     data['localAdminName'] = this.localAdminName;
     data['listOfTeamMembers'] = this.listOfTeamMembers;
+    data['requestAcceptance'] = this.requestAcceptance;
+    data['duration'] = this.duration;
     return data;
   }
 
@@ -138,7 +147,7 @@ class TeamRequest {
       "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
       "approvalComments": this.approvalComments,
-      "availableFrom" : this.availableFrom,
+      "availableFrom": this.availableFrom,
       "availableTo": this.availableTo,
       "weekDay": this.weekDay,
       "location": this.location,
@@ -149,6 +158,8 @@ class TeamRequest {
       "localAdminArea": this.localAdminArea,
       "localAdminName": this.localAdminName,
       "listOfTeamMembers": this.listOfTeamMembers,
+      "requestAcceptance": this.requestAcceptance,
+      "duration": this.duration,
     };
   }
 }

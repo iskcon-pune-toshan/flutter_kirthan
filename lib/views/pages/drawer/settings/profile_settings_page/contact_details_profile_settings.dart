@@ -84,28 +84,6 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   },
                                 ),
                                 Divider(),
-                                // TextFormField(
-                                //   keyboardType: TextInputType.emailAddress,
-                                //   decoration: InputDecoration(
-                                //     enabledBorder: UnderlineInputBorder(
-                                //       borderSide: BorderSide(color: Colors.grey),
-                                //     ),
-                                //     focusedBorder: UnderlineInputBorder(
-                                //       borderSide: BorderSide(color: Colors.green),
-                                //     ),
-                                //     icon: Icon(
-                                //       Icons.email,
-                                //       color: Colors.grey,
-                                //     ),
-                                //     labelText: "Email Id",
-                                //     labelStyle: TextStyle(
-                                //       fontSize: notifier.custFontSize,
-                                //       color: Colors.grey,
-                                //     ),
-                                //     hintText: "",
-                                //   ),
-                                // ),
-                                // Divider(),
                                 TextFormField(
                                   initialValue: user.city,
                                   decoration: InputDecoration(
@@ -127,6 +105,177 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   ),
                                   onSaved: (input) {
                                     user.city = input;
+                                  },
+                                ),
+                                Divider(),
+                                TextFormField(
+                                  initialValue: user.addLineOne,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    ),
+                                    //icon: Icon(Icons.home, color: Colors.grey),
+                                    labelText: "address",
+                                    labelStyle: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "",
+                                  ),
+                                  onSaved: (input) {
+                                    user.addLineOne = input;
+                                  },
+                                ),
+                                Divider(),
+                                TextFormField(
+                                  initialValue: user.addLineTwo,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    ),
+                                    //icon: Icon(Icons.home, color: Colors.grey),
+                                    labelText: "address",
+                                    labelStyle: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "",
+                                  ),
+                                  onSaved: (input) {
+                                    user.addLineTwo = input;
+                                  },
+                                ),
+                                Divider(),
+                                TextFormField(
+                                  initialValue: user.addLineThree,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    ),
+                                    //icon: Icon(Icons.home, color: Colors.grey),
+                                    labelText: "address",
+                                    labelStyle: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "",
+                                  ),
+                                  onSaved: (input) {
+                                    user.addLineThree = input;
+                                  },
+                                ),
+                                Divider(),
+                                TextFormField(
+                                  initialValue: user.state,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    ),
+                                    icon: Icon(Icons.home, color: Colors.grey),
+                                    labelText: "State",
+                                    labelStyle: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "",
+                                  ),
+                                  onSaved: (input) {
+                                    user.state = input;
+                                  },
+                                ),
+                                Divider(),
+                                TextFormField(
+                                  initialValue: user.country,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    ),
+                                    icon:
+                                        Icon(Icons.public, color: Colors.grey),
+                                    labelText: "Country",
+                                    labelStyle: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "",
+                                  ),
+                                  onSaved: (input) {
+                                    user.country = input;
+                                  },
+                                ),
+                                Divider(),
+                                TextFormField(
+                                  initialValue: user.govtIdType,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    ),
+                                    icon: Icon(Icons.insert_drive_file_outlined,
+                                        color: Colors.grey),
+                                    labelText: "Govt. Id type",
+                                    labelStyle: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "",
+                                  ),
+                                  onSaved: (input) {
+                                    user.govtIdType = input;
+                                  },
+                                ),
+                                Divider(),
+                                TextFormField(
+                                  initialValue: user.govtId,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    ),
+                                    icon: Icon(Icons.insert_drive_file_outlined,
+                                        color: Colors.grey),
+                                    labelText: "Govt. Id",
+                                    labelStyle: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "",
+                                  ),
+                                  onSaved: (input) {
+                                    user.govtId = input;
                                   },
                                 ),
                                 Divider(),

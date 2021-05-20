@@ -120,7 +120,47 @@ class _description_profileState extends State<description_profile> {
                                     },
                                   ),
                                 ),
+                                Card(
+                                  child: Container(
+                                    padding: new EdgeInsets.all(10),
+                                    child: TextFormField(
+                                      initialValue: teamrequest.experience,
+                                      decoration: InputDecoration(
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.grey),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.green),
+                                          ),
+                                          /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                                          labelText: "Experience",
+                                          hintText: "Add experience",
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          labelStyle: TextStyle(
+                                            color: Colors.grey,
+                                          )),
+                                      onSaved: (input) {
+                                        teamrequest.experience = input;
+                                      },
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return "Please enter some text";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                  elevation: 5,
+                                ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Divider(
                                       thickness: 100.0,
@@ -132,7 +172,7 @@ class _description_profileState extends State<description_profile> {
                                         width: 150,
                                         height: 50,
                                         child: RaisedButton(
-                                          color: Colors.lightGreen,
+                                          color: KirthanStyles.colorPallete30,
                                           child: Text('Submit'),
                                           onPressed: () async {
                                             if (_formKey.currentState
@@ -163,9 +203,7 @@ class _description_profileState extends State<description_profile> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(50.0),
-                                              side: BorderSide(
-                                                  color: Colors.blue,
-                                                  width: 2)),
+                                              side: BorderSide(width: 2)),
                                         ),
                                       ),
                                     ),
@@ -184,9 +222,7 @@ class _description_profileState extends State<description_profile> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(50.0),
-                                              side: BorderSide(
-                                                  color: Colors.blue,
-                                                  width: 2)),
+                                              side: BorderSide(width: 2)),
                                         ),
                                       ),
                                     ),

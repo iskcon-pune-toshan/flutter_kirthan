@@ -7,6 +7,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter_kirthan/view_models/prospective_user_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:random_string/random_string.dart';
 
 final ProspectiveUserPageViewModel prospectiveUserPageVM =
     ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
@@ -18,7 +19,7 @@ class NonUserTeamInvite extends StatefulWidget {
 
 class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
   String userEmail;
-  String inviteCode = 'xyz123';
+  String inviteCode = randomAlphaNumeric(6);
   String invitedBy;
   Future<String> getEmail() async {
     final FirebaseUser user = await auth.currentUser();
