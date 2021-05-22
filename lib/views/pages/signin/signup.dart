@@ -139,200 +139,206 @@ class _SignUpState extends State<SignUp> {
         appBar: AppBar(
           title: Text("Sign Up"),
           backgroundColor: KirthanStyles.colorPallete30,
-
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 20),
+        body: Builder(
+          builder: (context) => (
+           Center(
+            child: SingleChildScrollView(
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 20),
 
-              //color: Color.alphaBlend(BlendMode.color, BlendMode.colorDodge),
-              child: Form(
-                key: _formKey,
-                child: Center(
-                  child: Column(
-                    verticalDirection: VerticalDirection.down,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    //mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          chooseFile();
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: KirthanStyles.colorPallete30,
-                          radius: MediaQuery.of(context).size.width / 5 + 3,
+                //color: Color.alphaBlend(BlendMode.color, BlendMode.colorDodge),
+                child: Form(
+                  key: _formKey,
+                  child: Center(
+                    child: Column(
+                      verticalDirection: VerticalDirection.down,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            chooseFile();
+                          },
                           child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: MediaQuery.of(context).size.width / 5,
-                              backgroundImage: _image != null
-                                  ? FileImage(
-                                      _image,
-                                    )
-                                  : AssetImage(
-                                      "assets/images/add_profile.png")),
+                            backgroundColor: KirthanStyles.colorPallete30,
+                            radius: MediaQuery.of(context).size.width / 5 + 3,
+                            child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: MediaQuery.of(context).size.width / 5,
+                                backgroundImage: _image != null
+                                    ? FileImage(
+                                        _image,
+                                      )
+                                    : AssetImage(
+                                        "assets/images/add_profile.png")),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 15, top: 15),
-                        child: TextFormField(
-                          decoration: buildInputDecoration(
-                              Icons.person, "Full Name", "Full Name"),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15, top: 15),
+                          child: TextFormField(
+                            decoration: buildInputDecoration(
+                                Icons.person, "Full Name", "Full Name"),
 
-                          controller: _displaynamecontroller,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              // ignore: missing_return
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                          //onSaved: (input) => displayName = input,
+                            controller: _displaynamecontroller,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                // ignore: missing_return
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                            //onSaved: (input) => displayName = input,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 15),
-                        child: TextFormField(
-                          decoration: buildInputDecoration(
-                              Icons.email, "Email", "Email"),
-
-                          controller: _emailcontroller,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                          //onSaved: (input) => email = input,
-                        ),
-                      ),
-                      Padding(
+                        Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: TextFormField(
                             decoration: buildInputDecoration(
-                                Icons.location_on, "Address", "Address"),
-                            controller: _addresscontroller,
-                            validator: (value) {
-                              // ignore: missing_return
-                              if (value.isEmpty) return 'Please enter a value';
+                                Icons.email, "Email", "Email"),
 
+                            controller: _emailcontroller,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Please enter some text";
+                              }
                               return null;
                             },
-                          )),
-                      Padding(
+                            //onSaved: (input) => email = input,
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(bottom: 15),
+                            child: TextFormField(
+                              decoration: buildInputDecoration(
+                                  Icons.location_on, "Address", "Address"),
+                              controller: _addresscontroller,
+                              validator: (value) {
+                                // ignore: missing_return
+                                if (value.isEmpty) return 'Please enter a value';
+
+                                return null;
+                              },
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.only(bottom: 15),
+                            child: TextFormField(
+                              decoration: buildInputDecoration(Icons.lock,
+                                  "Must contain 8-30 characters", "Password"),
+                              controller: _passwordcontroller,
+                              validator: (value) {
+                                // ignore: missing_return
+                                if (value.isEmpty) return 'Please enter a value';
+
+                                if (value.length < 8)
+                                  return 'Must contain 8-30 characters';
+                                return null;
+                              },
+                              obscureText: true,
+                            )),
+                        Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: TextFormField(
                             decoration: buildInputDecoration(Icons.lock,
-                                "Must contain 8-30 characters", "Password"),
-                            controller: _passwordcontroller,
-                            validator: (value) {
-                              // ignore: missing_return
-                              if (value.isEmpty) return 'Please enter a value';
-
-                              if (value.length < 8)
-                                return 'Must contain 8-30 characters';
+                                "Re-Type Password", "Re-Type Password"),
+                            controller: _confirmpassword,
+                            validator: (val) {
+                              if (val.isEmpty) return 'Empty';
+                              if (val != _passwordcontroller.text)
+                                return "Not Match";
                               return null;
                             },
+                            onSaved: (input) => password = input,
                             obscureText: true,
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 15),
-                        child: TextFormField(
-                          decoration: buildInputDecoration(Icons.lock,
-                              "Re-Type Password", "Re-Type Password"),
-                          controller: _confirmpassword,
-                          validator: (val) {
-                            if (val.isEmpty) return 'Empty';
-                            if (val != _passwordcontroller.text)
-                              return "Not Match";
-                            return null;
-                          },
-                          onSaved: (input) => password = input,
-                          obscureText: true,
-                        ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Divider(
-                            thickness: 100.0,
                           ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // SizedBox(
-                          //   width: 140,
-                          //   height: 50,
-                          //   child: RaisedButton(
-                          //     color: Colors.white,
-                          //     child: Text('Cancel'),
-                          //     onPressed: () {
-                          //       Navigator.pop(context);
-                          //     },
-                          //     shape: RoundedRectangleBorder(
-                          //         borderRadius: BorderRadius.circular(50.0),
-                          //         side: BorderSide(color: Colors.blue, width: 2)),
-                          //   ),
-                          // ),
-                          /*SizedBox(
-                            width: 140,
-                            height: 50,
-                            child: (
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                    KirthanStyles.colorPallete30),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      side: BorderSide(
-                                          color: Colors.blue, width: 2)),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Divider(
+                              thickness: 100.0,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // SizedBox(
+                            //   width: 140,
+                            //   height: 50,
+                            //   child: RaisedButton(
+                            //     color: Colors.white,
+                            //     child: Text('Cancel'),
+                            //     onPressed: () {
+                            //       Navigator.pop(context);
+                            //     },
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(50.0),
+                            //         side: BorderSide(color: Colors.blue, width: 2)),
+                            //   ),
+                            // ),
+                            /*SizedBox(
+                              width: 140,
+                              height: 50,
+                              child: (
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                      KirthanStyles.colorPallete30),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50.0),
+                                        side: BorderSide(
+                                            color: Colors.blue, width: 2)),
+                                  ),
+                                ),
+                                child: Text('Submit'),
+                                onPressed: () async {
+                                  signIn
+                                      .signUpWithEmail(_emailcontroller.text,
+                                          _passwordcontroller.text)
+                                      .then((FirebaseUser user) => populateData())
+                                      .catchError((e) => print(e))
+                                      .whenComplete(() => addUser());
+                                },
+                              ),
+                            )*/
+                            SizedBox(
+                              width: 140,
+                              height: 50,
+                              child: RaisedButton(
+                                color: KirthanStyles.colorPallete30,
+                                child: Text(
+                                  'Register',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                onPressed: () async {
+                                  uploadFile();
+                                  signIn
+                                      .signUpWithEmail(_emailcontroller.text,
+                                          _passwordcontroller.text)
+                                      .then((FirebaseUser user) => populateData())
+                                      .catchError((e) => print(e))
+                                      .whenComplete(() => addUser());
+                                },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
                                 ),
                               ),
-                              child: Text('Submit'),
-                              onPressed: () async {
-                                signIn
-                                    .signUpWithEmail(_emailcontroller.text,
-                                        _passwordcontroller.text)
-                                    .then((FirebaseUser user) => populateData())
-                                    .catchError((e) => print(e))
-                                    .whenComplete(() => addUser());
-                              },
                             ),
-                          )*/
-                          SizedBox(
-                            width: 140,
-                            height: 50,
-                            child: RaisedButton(
-                              color: KirthanStyles.colorPallete30,
-                              child: Text(
-                                'Register',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () async {
-                                uploadFile();
-                                signIn
-                                    .signUpWithEmail(_emailcontroller.text,
-                                        _passwordcontroller.text)
-                                    .then((FirebaseUser user) => populateData())
-                                    .catchError((e) => print(e))
-                                    .whenComplete(() => addUser());
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
+          )),
         ),
       ),
     );
