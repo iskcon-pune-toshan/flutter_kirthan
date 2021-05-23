@@ -207,7 +207,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
           if (snapshot.data != null) {
             userList = snapshot.data;
             for (var uname in userList)
-              if (uname.userName == UserName) {
+              if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
                 print("*********************" +
