@@ -1,3 +1,5 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:flutter_kirthan/models/team.dart';
@@ -11,7 +13,6 @@ import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/team_name.dart';
-import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:flutter_kirthan/views/pages/event/service_type.dart';
@@ -159,8 +160,8 @@ class _EventWriteState extends State<EventWrite> {
         ),
       );
 
-      eventrequest.sourceLongitude = tappedPoint1.longitude;
-      eventrequest.sourceLatitude = tappedPoint1.latitude;
+      eventrequest.longitudeS = tappedPoint1.longitude;
+      eventrequest.latitudeS = tappedPoint1.latitude;
       /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
       infoWindow: InfoWindow(
         title: 'End Point') ,
@@ -184,8 +185,8 @@ class _EventWriteState extends State<EventWrite> {
         ),
       );
 
-      eventrequest.destinationLongitude = tappedPoint1.longitude;
-      eventrequest.destinationLatitude = tappedPoint1.latitude;
+      eventrequest.longitudeD = tappedPoint1.longitude;
+      eventrequest.latitudeD = tappedPoint1.latitude;
       /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
       infoWindow: InfoWindow(
         title: 'End Point') ,
@@ -280,31 +281,6 @@ class _EventWriteState extends State<EventWrite> {
                               fontSize: 17.0,
                               color: KirthanStyles.colorPallete30),
                         )),
-
-                    /* Card(
-                    child: Container(
-                      padding: new EdgeInsets.all(10),
-                      child: TextFormField(
-                        maxLength: 30,
-                        //attribute: "Username",
-                        decoration: InputDecoration(
-                            icon: const Icon(Icons.tag_faces),
-                            hintText: "",
-                            labelText:"eventID"
-                        ),
-                        onSaved: (input){
-                          eventrequest.id = input;
-                        },=
-                        validator: (value) {
-                          if(value.isEmpty) {
-                            return "Please enter some text";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    elevation: 5,
-                  ),*/
 
                     Container(
                       //padding: new EdgeInsets.all(10),
@@ -451,7 +427,7 @@ class _EventWriteState extends State<EventWrite> {
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
-                                return "Please enter some text";
+                                return "Please select a date";
                               }
                               return null;
                             },
@@ -465,7 +441,7 @@ class _EventWriteState extends State<EventWrite> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Text(
-                            "Event Time",
+                            "Event Start Time",
                             textAlign: TextAlign.start,
                             style: TextStyle(color: Colors.grey),
                           ),
@@ -480,12 +456,12 @@ class _EventWriteState extends State<EventWrite> {
                               return DateTimeField.convert(time);
                             },
                             onSaved: (input) {
-                              eventrequest.eventTime =
+                              eventrequest.eventStartTime =
                                   DateFormat("HH:mm").format(input).toString();
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
-                                return "Please enter some text";
+                                return "Please select time";
                               }
                               return null;
                             },
@@ -494,6 +470,40 @@ class _EventWriteState extends State<EventWrite> {
                       ),
                     ),
                     Container(
+                      padding: new EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text(
+                            "Event End Time",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          DateTimeField(
+                            format: DateFormat("HH:mm"),
+                            onShowPicker: (context, currentValue) async {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.fromDateTime(
+                                    currentValue ?? DateTime.now()),
+                              );
+                              return DateTimeField.convert(time);
+                            },
+                            onSaved: (input) {
+                              eventrequest.eventEndTime =
+                                  DateFormat("HH:mm").format(input).toString();
+                            },
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return "Please select time";
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                /*    Container(
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
                         //attribute: "Duration",
@@ -524,7 +534,7 @@ class _EventWriteState extends State<EventWrite> {
                           return null;
                         },
                       ),
-                    ),
+                    ),*/
 
                     /*    Card(
                         child: Container(
@@ -590,6 +600,12 @@ class _EventWriteState extends State<EventWrite> {
                       },
                       onSaved: (input) {
                         eventrequest.eventType = input;
+                      },
+                      validator: (value) {
+                        if (value==null) {
+                          return "Please select event type";
+                        }
+                        return null;
                       },
                     ),
                     /*Container(
@@ -674,227 +690,7 @@ class _EventWriteState extends State<EventWrite> {
 
                     Column(
                       children: <Widget>[
-                        /*Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    addRadioButton(0, 'Stationary'),
-                                    addRadioButton(1, 'Moving'),
-                              ]),*/
-                        /*  Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children:<Widget>[
-                              RaisedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BlocProvider(
-                                    create: (BuildContext context) =>
-                                        MapsBloc(),
 
-                                    child: Scaffold(
-                                        appBar: AppBar(
-
-                                          actions: <Widget>[
-
-                                            IconButton(
-                                              icon: Icon(Icons.refresh),
-                                              onPressed: () => {
-                                                setState(() {
-                                                  markers.clear();
-                                                }), //setState
-                                              }, //onpressed
-                                            ),
-                                            IconButton(
-                                              icon: Icon(Icons.done),
-                                              onPressed: () {
-                                                handleTap(tappedPoint1);
-                                                eventrequest.sourceLongitude =
-                                                    tappedPoint1.longitude;
-                                                eventrequest.sourceLatitude =
-                                                    tappedPoint1.latitude;
-                                                print(eventrequest
-                                                    .sourceLongitude);
-                                                print(eventrequest
-                                                    .sourceLatitude);
-                                                handleTap(tappedPoint2);
-                                                //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
-                                                //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
-
-                                                // widget.eventrequest.eventLocation=tappedPoint1.toString();
-                                              },
-                                              //onpressed
-                                            ),
-                                          ],
-                                        ),
-                                        body: Column(
-                                          children: <Widget>[
-                                            Stack(
-                                              children: <Widget>[
-                                                Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height -
-                                                            80.0,
-                                                    width: double.infinity,
-                                                    child: !mapToggle
-                                                        ? GoogleMap(
-                                                            myLocationButtonEnabled:
-                                                                true,
-                                                            myLocationEnabled:
-                                                                true,
-                                                            compassEnabled:
-                                                                true,
-                                                            onMapCreated:
-                                                                onMapCreated,
-                                                            onTap: handleTap,
-                                                            markers: Set.from(
-                                                                myMarker),
-                                                            initialCameraPosition:
-                                                                CameraPosition(
-                                                                    target:
-                                                                        LatLng(
-                                                                            0.0,
-                                                                            0.0),
-                                                                    zoom: 16),
-                                                          )
-                                                        : Center(
-                                                            child: Text(
-                                                            'Loading.. Please wait..',
-                                                            style: TextStyle(
-                                                                fontSize: 20.0),
-                                                          ))),
-                                              ],
-                                            )
-                                          ],
-                                        )),
-                                  ),
-                                ),
-                              );
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-
-                            label: Text(
-                              'Add Source',
-                              style: TextStyle(color: Colors.black,fontSize:12.5),
-                            ),
-                            icon: Icon(
-                              Icons.location_on,
-                              color: Colors.black,
-                            ),
-                            textColor: Colors.black,
-                            splashColor: Colors.red,
-                            color: Colors.white,
-                          ),
-                          RaisedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BlocProvider(
-                                    create: (BuildContext context) =>
-                                        MapsBloc(),
-                                    child: Scaffold(
-                                        appBar: AppBar(
-                                          title: Text('Location'),
-                                          actions: <Widget>[
-                                            IconButton(
-                                              icon: Icon(Icons.refresh),
-                                              onPressed: () => {
-                                                setState(() {
-                                                  markers.clear();
-                                                }), //setState
-                                              }, //onpressed
-                                            ),
-                                            IconButton(
-                                              icon: Icon(Icons.done),
-                                              onPressed: () {
-                                                handleTap2(tappedPoint2);
-                                                eventrequest
-                                                        .destinationLongitude =
-                                                    tappedPoint1.longitude;
-                                                eventrequest
-                                                        .destinationLatitude =
-                                                    tappedPoint1.latitude;
-                                                print(eventrequest
-                                                    .destinationLongitude);
-                                                print(eventrequest
-                                                    .destinationLatitude);
-
-                                                //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
-                                                //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
-
-                                                // widget.eventrequest.eventLocation=tappedPoint1.toString();
-                                              },
-                                              //onpressed
-                                            ),
-                                          ],
-                                        ),
-                                        body: Column(
-                                          children: <Widget>[
-                                            Stack(
-                                              children: <Widget>[
-                                                Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height -
-                                                            80.0,
-                                                    width: double.infinity,
-                                                    child: !mapToggle
-                                                        ? GoogleMap(
-                                                            myLocationButtonEnabled:
-                                                                true,
-                                                            myLocationEnabled:
-                                                                true,
-                                                            compassEnabled:
-                                                                true,
-                                                            onMapCreated:
-                                                                onMapCreated,
-                                                            onTap: handleTap,
-                                                            markers: Set.from(
-                                                                myMarker),
-                                                            initialCameraPosition:
-                                                                CameraPosition(
-                                                                    target:
-                                                                        LatLng(
-                                                                            0.0,
-                                                                            0.0),
-                                                                    zoom: 16),
-                                                          )
-                                                        : Center(
-                                                            child: Text(
-                                                            'Loading.. Please wait..',
-                                                            style: TextStyle(
-                                                                fontSize: 20.0),
-                                                          ))),
-                                              ],
-                                            )
-                                          ],
-                                        )),
-                                  ),
-                                ),
-                              );
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            label: Text(
-                              'Add Destination',
-                              style: TextStyle(color: Colors.black,fontSize: 12.5),
-                            ),
-                            icon: Icon(
-                              Icons.location_on,
-                              color: Colors.black,
-                            ),
-                            textColor: Colors.black,
-                            splashColor: Colors.red,
-                            color: Colors.white,
-                          ),
-            ]),*/
 
                         TextFormField(
                           decoration: InputDecoration(
@@ -915,7 +711,7 @@ class _EventWriteState extends State<EventWrite> {
                               )),
                           onSaved: (input) {
                             eventrequest.addLineOneS = input;
-                            eventrequest.eventLocation = input;
+                            //eventrequest.eventLocation = input;
                           },
                           validator: (value) {
                             if (value.isEmpty) {
@@ -977,6 +773,7 @@ class _EventWriteState extends State<EventWrite> {
                           },
                         ),
                         TextFormField(
+                          keyboardType:TextInputType.number,
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -1026,6 +823,12 @@ class _EventWriteState extends State<EventWrite> {
                           onSaved: (input) {
                             eventrequest.city = input;
                           },
+                            validator: (value) {
+                              if (value==null) {
+                                return "Please select a city";
+                              }
+                              return null;
+                            }
                         ),
                         DropdownButtonFormField<String>(
                           value: _selectedState,
@@ -1048,6 +851,12 @@ class _EventWriteState extends State<EventWrite> {
                           onSaved: (input) {
                             eventrequest.state = input;
                           },
+                            validator: (value) {
+                              if (value==null) {
+                                return "Please select a state";
+                              }
+                              return null;
+                            }
                         ),
                         DropdownButtonFormField<String>(
                           value: _selectedCountry,
@@ -1068,6 +877,12 @@ class _EventWriteState extends State<EventWrite> {
                           onSaved: (input) {
                             eventrequest.country = input;
                           },
+                            validator: (value) {
+                              if (value==null) {
+                                return "Please select a country";
+                              }
+                              return null;
+                            }
                         ),
                       ],
                     ),
@@ -1099,7 +914,7 @@ class _EventWriteState extends State<EventWrite> {
                                 print("created by " + eventrequest.createdBy);
                                 print(email);
                                 _formKey.currentState.save();
-                                eventrequest.isProcessed = true;
+                               // eventrequest.isProcessed = true;
                                 eventrequest.isPublicEvent = false;
 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
 // print(eventrequest.createdBy);
@@ -1110,7 +925,7 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
 //eventrequest.approvalStatus = "Processing";
-                                eventrequest.approvalComments = "AAA";
+                               //eventrequest.approvalComments = "AAA";
 
 //TeamRequest newteamrequest = await apiSvc
 //  ?.submitNewTeamRequest(teammap);
@@ -2351,3 +2166,224 @@ class _EventWriteState extends State<EventWrite> {
 //     return email;
 //   }
 // }
+/*Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    addRadioButton(0, 'Stationary'),
+                                    addRadioButton(1, 'Moving'),
+                              ]),*/
+/*  Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children:<Widget>[
+                              RaisedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (BuildContext context) =>
+                                        MapsBloc(),
+
+                                    child: Scaffold(
+                                        appBar: AppBar(
+
+                                          actions: <Widget>[
+
+                                            IconButton(
+                                              icon: Icon(Icons.refresh),
+                                              onPressed: () => {
+                                                setState(() {
+                                                  markers.clear();
+                                                }), //setState
+                                              }, //onpressed
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.done),
+                                              onPressed: () {
+                                                handleTap(tappedPoint1);
+                                                eventrequest.sourceLongitude =
+                                                    tappedPoint1.longitude;
+                                                eventrequest.sourceLatitude =
+                                                    tappedPoint1.latitude;
+                                                print(eventrequest
+                                                    .sourceLongitude);
+                                                print(eventrequest
+                                                    .sourceLatitude);
+                                                handleTap(tappedPoint2);
+                                                //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
+
+                                                // widget.eventrequest.eventLocation=tappedPoint1.toString();
+                                              },
+                                              //onpressed
+                                            ),
+                                          ],
+                                        ),
+                                        body: Column(
+                                          children: <Widget>[
+                                            Stack(
+                                              children: <Widget>[
+                                                Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height -
+                                                            80.0,
+                                                    width: double.infinity,
+                                                    child: !mapToggle
+                                                        ? GoogleMap(
+                                                            myLocationButtonEnabled:
+                                                                true,
+                                                            myLocationEnabled:
+                                                                true,
+                                                            compassEnabled:
+                                                                true,
+                                                            onMapCreated:
+                                                                onMapCreated,
+                                                            onTap: handleTap,
+                                                            markers: Set.from(
+                                                                myMarker),
+                                                            initialCameraPosition:
+                                                                CameraPosition(
+                                                                    target:
+                                                                        LatLng(
+                                                                            0.0,
+                                                                            0.0),
+                                                                    zoom: 16),
+                                                          )
+                                                        : Center(
+                                                            child: Text(
+                                                            'Loading.. Please wait..',
+                                                            style: TextStyle(
+                                                                fontSize: 20.0),
+                                                          ))),
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  ),
+                                ),
+                              );
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+
+                            label: Text(
+                              'Add Source',
+                              style: TextStyle(color: Colors.black,fontSize:12.5),
+                            ),
+                            icon: Icon(
+                              Icons.location_on,
+                              color: Colors.black,
+                            ),
+                            textColor: Colors.black,
+                            splashColor: Colors.red,
+                            color: Colors.white,
+                          ),
+                          RaisedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (BuildContext context) =>
+                                        MapsBloc(),
+                                    child: Scaffold(
+                                        appBar: AppBar(
+                                          title: Text('Location'),
+                                          actions: <Widget>[
+                                            IconButton(
+                                              icon: Icon(Icons.refresh),
+                                              onPressed: () => {
+                                                setState(() {
+                                                  markers.clear();
+                                                }), //setState
+                                              }, //onpressed
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.done),
+                                              onPressed: () {
+                                                handleTap2(tappedPoint2);
+                                                eventrequest
+                                                        .destinationLongitude =
+                                                    tappedPoint1.longitude;
+                                                eventrequest
+                                                        .destinationLatitude =
+                                                    tappedPoint1.latitude;
+                                                print(eventrequest
+                                                    .destinationLongitude);
+                                                print(eventrequest
+                                                    .destinationLatitude);
+
+                                                //widget.eventrequest.destinationLongitude=tappedPoint1.longitude;
+                                                //widget.eventrequest.destinationLatitude=tappedPoint1.latitude;
+
+                                                // widget.eventrequest.eventLocation=tappedPoint1.toString();
+                                              },
+                                              //onpressed
+                                            ),
+                                          ],
+                                        ),
+                                        body: Column(
+                                          children: <Widget>[
+                                            Stack(
+                                              children: <Widget>[
+                                                Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height -
+                                                            80.0,
+                                                    width: double.infinity,
+                                                    child: !mapToggle
+                                                        ? GoogleMap(
+                                                            myLocationButtonEnabled:
+                                                                true,
+                                                            myLocationEnabled:
+                                                                true,
+                                                            compassEnabled:
+                                                                true,
+                                                            onMapCreated:
+                                                                onMapCreated,
+                                                            onTap: handleTap,
+                                                            markers: Set.from(
+                                                                myMarker),
+                                                            initialCameraPosition:
+                                                                CameraPosition(
+                                                                    target:
+                                                                        LatLng(
+                                                                            0.0,
+                                                                            0.0),
+                                                                    zoom: 16),
+                                                          )
+                                                        : Center(
+                                                            child: Text(
+                                                            'Loading.. Please wait..',
+                                                            style: TextStyle(
+                                                                fontSize: 20.0),
+                                                          ))),
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  ),
+                                ),
+                              );
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            label: Text(
+                              'Add Destination',
+                              style: TextStyle(color: Colors.black,fontSize: 12.5),
+                            ),
+                            icon: Icon(
+                              Icons.location_on,
+                              color: Colors.black,
+                            ),
+                            textColor: Colors.black,
+                            splashColor: Colors.red,
+                            color: Colors.white,
+                          ),
+            ]),*/

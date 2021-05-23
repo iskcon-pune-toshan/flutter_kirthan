@@ -175,7 +175,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
                         color: KirthanStyles.colorPallete30),
                   ),
                 ),
-                activeColor: Colors.cyanAccent,
+                activeColor: KirthanStyles.colorPallete30,
                 value: _v,
                 onChanged: (value) {
                   setState(() {

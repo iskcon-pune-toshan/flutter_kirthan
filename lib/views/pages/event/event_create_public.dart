@@ -128,9 +128,9 @@ class _EventWriteState extends State<EventWritePublic> {
         ),
       );
       CircularProgressIndicator();
-      eventrequest.sourceLongitude = tappedPoint1.longitude;
-      eventrequest.sourceLatitude = tappedPoint1.latitude;
-      print(eventrequest.sourceLatitude);
+      eventrequest.longitudeS = tappedPoint1.longitude;
+      eventrequest.latitudeS = tappedPoint1.latitude;
+      //print(eventrequest.sourceLatitude);
     });
   }
 
@@ -145,9 +145,9 @@ class _EventWriteState extends State<EventWritePublic> {
           position: tappedPoint1,
         ),
       );
-      eventrequest.destinationLongitude = tappedPoint1.longitude;
-      eventrequest.destinationLatitude = tappedPoint1.latitude;
-      print(eventrequest.destinationLatitude);
+      eventrequest.longitudeD = tappedPoint1.longitude;
+      eventrequest.latitudeD = tappedPoint1.latitude;
+      //print(eventrequest.destinationLatitude);
     });
   }
 
@@ -414,7 +414,7 @@ class _EventWriteState extends State<EventWritePublic> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Text(
-                            "Event Time",
+                            "Event Start Time",
                             textAlign: TextAlign.start,
                             style: TextStyle(color: Colors.grey),
                           ),
@@ -429,9 +429,9 @@ class _EventWriteState extends State<EventWritePublic> {
                               return DateTimeField.convert(time);
                             },
                             onSaved: (input) {
-                              eventrequest.eventTime =
+                              eventrequest.eventStartTime =
                                   DateFormat("HH:mm").format(input).toString();
-                              print(eventrequest.eventTime);
+                              print(eventrequest.eventStartTime);
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
@@ -444,37 +444,41 @@ class _EventWriteState extends State<EventWritePublic> {
                       ),
                     ),
                     Container(
-                      //padding: new EdgeInsets.all(10),
-                      child: TextFormField(
-                        //attribute: "Duration",
-                        decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.green),
-                            ),
-                            //icon: const Icon(Icons.timelapse,
-                            //  color: Colors.grey),
-                            labelText: "Duration",
-                            hintText: "Duration of event in hrs",
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            labelStyle: TextStyle(
-                              color: Colors.grey,
-                            )),
-                        onSaved: (input) {
-                          eventrequest.eventDuration = input;
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Please enter some text";
-                          }
-                          return null;
-                        },
+                      padding: new EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text(
+                            "Event End Time",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          DateTimeField(
+                            format: DateFormat("HH:mm"),
+                            onShowPicker: (context, currentValue) async {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.fromDateTime(
+                                    currentValue ?? DateTime.now()),
+                              );
+                              return DateTimeField.convert(time);
+                            },
+                            onSaved: (input) {
+                              eventrequest.eventEndTime =
+                                  DateFormat("HH:mm").format(input).toString();
+                              print(eventrequest.eventEndTime);
+                            },
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
                       ),
                     ),
+
                     Container(
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
@@ -699,7 +703,7 @@ class _EventWriteState extends State<EventWritePublic> {
                               )),
                           onSaved: (input) {
                             eventrequest.addLineOneS = input;
-                            eventrequest.eventLocation = input;
+                            //eventrequest.eventLocation = input;
                           },
                           validator: (value) {
                             if (value.isEmpty) {
@@ -1105,7 +1109,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 print(email);
 
                                 _formKey.currentState.save();
-                                eventrequest.isProcessed = true;
+                                //eventrequest.isProcessed = true;
                                 eventrequest.isPublicEvent = true;
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
                                 // print(eventrequest.createdBy);
@@ -1116,7 +1120,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 eventrequest.updatedBy = email;
                                 eventrequest.updatedTime = null;
                                 //eventrequest.approvalStatus = "Processing";
-                                eventrequest.approvalComments = "AAA";
+                                //eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
                                 eventrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc

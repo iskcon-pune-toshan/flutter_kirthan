@@ -4,8 +4,8 @@ class EventRequest {
   String eventTitle;
   String eventDescription;
   String eventDate;
-  String eventDuration;
-  String eventLocation;
+  String eventStartTime;
+  String eventEndTime;
   String eventType;
   int phoneNumber;
   String addLineOneS;
@@ -18,21 +18,17 @@ class EventRequest {
   int pincode;
   String state;
   String country;
-  bool isProcessed;
   String createdBy;
   String createdTime;
   String updatedBy;
   String updatedTime;
-  String approvalStatus;
-  String approvalComments;
-  double sourceLongitude;
-  double sourceLatitude;
-  double destinationLongitude;
-  double destinationLatitude;
+  double longitudeS;
+  double latitudeS;
+  double longitudeD;
+  double latitudeD;
   String eventMobility;
-  String eventTime;
   bool isPublicEvent;
-  int status;
+  int teamInviteStatus;
   String cancelReason;
   String serviceType;
 
@@ -42,8 +38,8 @@ class EventRequest {
       this.eventTitle,
       this.eventDescription,
       this.eventDate,
-      this.eventDuration,
-      this.eventLocation,
+      this.eventStartTime,
+      this.eventEndTime,
       this.eventType,
       this.phoneNumber,
       this.addLineOneS,
@@ -56,21 +52,21 @@ class EventRequest {
       this.pincode,
       this.state,
       this.country,
-      this.isProcessed,
+
       this.createdBy,
       this.updatedBy,
       this.createdTime,
       this.updatedTime,
-      this.approvalStatus,
-      this.approvalComments,
-      this.sourceLongitude,
-      this.sourceLatitude,
-      this.destinationLongitude,
-      this.destinationLatitude,
+      /*this.approvalStatus,
+      this.approvalComments,*/
+      this.latitudeS,
+      this.longitudeS,
+      this.latitudeD,
+      this.longitudeD,
       this.eventMobility,
-      this.eventTime,
+      //this.eventTime,
       this.isPublicEvent,
-      this.status,
+      this.teamInviteStatus,
       this.cancelReason,
       this.serviceType});
 
@@ -81,8 +77,8 @@ class EventRequest {
       eventTitle: data['eventTitle'],
       eventDescription: data['eventDescription'],
       eventDate: data['eventDate'],
-      eventDuration: data['eventDuration'],
-      eventLocation: data['eventLocation'],
+      eventStartTime: data['eventStartTime'],
+      eventEndTime: data['eventEndTime'],
       eventType: data['eventType'],
       phoneNumber: data['phoneNumber'],
       addLineOneS: data['addLineOneS'],
@@ -95,21 +91,21 @@ class EventRequest {
       pincode: data['pincode'],
       state: data['state'],
       country: data['country'],
-      isProcessed: data['isProcessed'],
+      //isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
       updatedBy: data['updatedBy'],
       updatedTime: data['updatedTime'],
       createdTime: data['createdTime'],
-      approvalStatus: data['approvalStatus'],
-      approvalComments: data['approvalComments'],
-      sourceLongitude: data['sourceLongitude'],
-      sourceLatitude: data['sourceLatitude'],
-      destinationLongitude: data['destinationLongitude'],
-      destinationLatitude: data['destinationLatitude'],
+      /*approvalStatus: data['approvalStatus'],
+      approvalComments: data['approvalComments'],*/
+      longitudeS: data['longitudeS'],
+      latitudeS: data['latitudeS'],
+      longitudeD: data['longitudeD'],
+      latitudeD: data['latitudeD'],
       eventMobility: data['eventMobility'],
-      eventTime: data['eventTime'],
+      //eventTime: data['eventTime'],
       isPublicEvent: data['isPublicEvent'],
-      status: data['status'],
+      teamInviteStatus: data['teamInviteStatus'],
       cancelReason: data['cancelReason'],
       serviceType: data['serviceType'],
     );
@@ -121,8 +117,8 @@ class EventRequest {
       eventTitle: map['eventTitle'],
       eventDescription: map['eventDescription'],
       eventDate: map['eventDate'],
-      eventDuration: map['eventDuration'],
-      eventLocation: map['eventLocation'],
+      eventStartTime: map['eventStartTime'],
+      eventEndTime: map['eventEndTime'],
       eventType: map['eventType'],
       phoneNumber: map['phoneNumber'],
       addLineOneS: map['addLineOneS'],
@@ -135,21 +131,21 @@ class EventRequest {
       pincode: map['pincode'],
       state: map['state'],
       country: map['country'],
-      isProcessed: map['isProcessed'],
+      //isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
       updatedBy: map['updatedBy'],
       updatedTime: map['updatedTime'],
       createdTime: map['createdTime'],
-      approvalStatus: map['approvalStatus'],
-      approvalComments: map['approvalComments'],
-      sourceLongitude: map['sourceLongitude'],
-      sourceLatitude: map['sourceLatitude'],
-      destinationLongitude: map['destinationLongitude'],
-      destinationLatitude: map['destinationLatitude'],
+     /* approvalStatus: map['approvalStatus'],
+      approvalComments: map['approvalComments'],*/
+      longitudeS: map['longitudeS'],
+      latitudeS: map['latitudeS'],
+      longitudeD: map['longitudeD'],
+      latitudeD: map['latitudeD'],
       eventMobility: map['eventMobility'],
-      eventTime: map['eventTime'],
+      //eventTime: map['eventTime'],
       isPublicEvent: map['isPublicEvent'],
-      status: map['status'],
+      teamInviteStatus: map['teamInviteStatus'],
       cancelReason: map['cancelReason'],
       serviceType: map['serviceType'],
     );
@@ -161,8 +157,8 @@ class EventRequest {
     data['eventTitle'] = this.eventTitle;
     data['eventDescription'] = this.eventDescription;
     data['eventDate'] = this.eventDate;
-    data['eventDuration'] = this.eventDuration;
-    data['eventLocation'] = this.eventLocation;
+    data['eventStartTime'] = this.eventStartTime;
+    data['eventEndTime'] = this.eventEndTime;
     data['eventType'] = this.eventType;
     data['phoneNumber'] = this.phoneNumber;
     data['addLineOneS'] = this.addLineOneS;
@@ -175,21 +171,21 @@ class EventRequest {
     data['pincode'] = this.pincode;
     data['state'] = this.state;
     data['country'] = this.country;
-    data['isProcessed'] = this.isProcessed;
+    //data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
     data['updatedTime'] = this.updatedTime;
     data['createdTime'] = this.createdTime;
-    data['approvalStatus'] = this.approvalStatus;
-    data['approvalComments'] = this.approvalComments;
-    data['sourceLongitude'] = this.sourceLongitude;
-    data['sourceLatitude'] = this.sourceLatitude;
-    data['destinationLongitude'] = this.destinationLongitude;
-    data['destinationLatitude'] = this.destinationLatitude;
+    /*data['approvalStatus'] = this.approvalStatus;
+    data['approvalComments'] = this.approvalComments;*/
+    data['longitudeS'] = this.longitudeS;
+    data['latitudeS'] = this.latitudeS;
+    data['longitudeD'] = this.longitudeD;
+    data['latitudeD'] = this.latitudeD;
     data['eventMobility'] = this.eventMobility;
-    data['eventTime'] = this.eventTime;
+    //data['eventTime'] = this.eventTime;
     data['isPublicEvent'] = this.isPublicEvent;
-    data['status'] = this.status;
+    data['teamInviteStatus'] = this.teamInviteStatus;
     data['cancelReason'] = this.cancelReason;
     data['serviceType'] = this.serviceType;
     return data;
@@ -201,8 +197,8 @@ class EventRequest {
       "eventTitle": this.eventTitle,
       "eventDescription": this.eventDescription,
       "eventDate": this.eventDate,
-      "eventDuration": this.eventDuration,
-      "eventLocation": this.eventLocation,
+      "eventStartTime": this.eventStartTime,
+      "eventEndTime": this.eventEndTime,
       "eventType": this.eventType,
       "phoneNumber": this.phoneNumber,
       "addLineOneS": this.addLineOneS,
@@ -215,21 +211,21 @@ class EventRequest {
       "pincode": this.pincode,
       "state": this.state,
       "country": this.country,
-      "isProcessed": this.isProcessed,
+      //"isProcessed": this.isProcessed,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
       "updatedTime": this.updatedTime,
       "createdTime": this.createdTime,
-      "approvalStatus": this.approvalStatus,
-      "approvalComments": this.approvalComments,
-      "sourceLongitude": this.sourceLongitude,
-      "sourceLatitude": this.sourceLatitude,
-      "destinationLongitude": this.destinationLongitude,
-      "destinationLatitude": this.destinationLatitude,
+      /*"approvalStatus": this.approvalStatus,
+      "approvalComments": this.approvalComments,*/
+      "longitudeS": this.longitudeS,
+      "latitudeS": this.latitudeS,
+      "longitudeD": this.longitudeD,
+      "latitudeD": this.latitudeD,
       "eventMobility": this.eventMobility,
-      "eventTime": this.eventTime,
+      //"eventTime": this.eventTime,
       "isPublicEvent": this.isPublicEvent,
-      "status": this.status,
+      "teamInviteStatus": this.teamInviteStatus,
       "cancelReason": this.cancelReason,
       "serviceType": this.serviceType,
     };

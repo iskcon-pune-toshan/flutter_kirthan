@@ -4,6 +4,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
+import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 
 class ServiceType extends StatefulWidget {
   EventRequest eventRequest;
@@ -19,6 +20,15 @@ class _ServiceTypeState extends State<ServiceType> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          elevation: 0.0,
+          iconTheme: IconThemeData(
+            color: KirthanStyles.colorPallete60, //change your color here
+          ),
+          backgroundColor: KirthanStyles.colorPallete30,
+          title: Text('Service Type',
+              style: TextStyle(color: KirthanStyles.colorPallete60))
+    ),
       key: _scaffoldKey,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -160,10 +170,11 @@ class _ServiceTypeState extends State<ServiceType> {
                                   );*/
 // Scaffold.of(context).showSnackBar(mysnackbar);
               _scaffoldKey.currentState.showSnackBar(mysnackbar);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyEventView()));
+              /*Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => App()));*/
 // Scaffold.of(context).showSnackBar(mysnackbar);
-
+Navigator.pop(context);
+Navigator.pop(context);
 // Scaffold.of(context).showSnackBar(mysnackbar);
 
 //eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
