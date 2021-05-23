@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/temple_service_impl.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/event/addlocation.dart';
+
 import 'package:flutter_kirthan/views/pages/event/home_page_map/MapsBloc.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -235,18 +235,7 @@ class _TempleWriteState extends State<TempleWrite> {
                           child: Column(
                             children: <Widget>[
                               RaisedButton.icon(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => BlocProvider(
-                                        create: (BuildContext context) =>
-                                            MapsBloc(),
-                                        child: AddLocation(),
-                                      ),
-                                    ),
-                                  );
-                                },
+                                onPressed: () {},
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),

@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/models/eventuser.dart';
-import 'package:flutter_kirthan/models/user.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/event_user_page_view_model.dart';
-import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'package:flutter_kirthan/views/pages/event/event_edit.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
-//import 'package:flutter_kirthan/views/pages/eventuser/eventUserRegister.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
-import 'int_item.dart';
+
 
 class Choice {
   const Choice({this.id, this.description});
@@ -35,11 +29,17 @@ class EventRequestsListItem extends StatelessWidget {
     Choice(id: 3, description: "Delete"),
     //Choice(id: 4, description: "Location"),
   ];
+  String duration() {
+    var format = DateFormat("HH:mm");
+    var one = format.parse(eventrequest.eventStartTime);
+    var two = format.parse(eventrequest.eventEndTime);
+    if(two.difference(one).toString().substring(0,2).contains(":"))
+    return two.difference(one).toString().substring(0,1);
+    else
+      return two.difference(one).toString().substring(0,2);
+  }
   String get index => null;
-  // var filteredMap;
-  // List<EventRequest> filtereMap = eventrequest
-  //     .where((x) => x.eventDuration.contains(notifier.duration))
-  //     .toList();
+
   @override
   Widget build(BuildContext context) {
     var title = Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,20 +79,6 @@ class EventRequestsListItem extends StatelessWidget {
                       color: KirthanStyles.colorPallete30,
                       size: 20,
                     ),
-                    /*Icon(icon: Icon(Icons.location_on),
-
-                         */
-                    /* onPressed:  () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Location (eventrequest: eventrequest)),
-                              //MapView(eventrequest: eventrequest)),
-
-                              //do something
-                            )
-                          },*/ /*),*/
                   ),
                   Text(
                     "Location",
@@ -104,17 +90,12 @@ class EventRequestsListItem extends StatelessWidget {
                   ),
                 ],
               ),
-//color: KirthanStyles.subTitleColor,
-
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           Location(eventrequest: eventrequest)),
-//MapView(eventrequest: eventrequest)),
-
-//do something
                 );
               },
               //splashColor: Colors.red,
@@ -379,7 +360,8 @@ class EventRequestsListItem extends StatelessWidget {
             );
           } else if (daysRemaining < 0) {
             return Text(
-              daysRemaining.abs().toString() + ' days ago',
+              'Event ended',
+              //daysRemaining.abs().toString() + ' days ago',
               style: TextStyle(
                   // color: KirthanStyles.subTitleColor,
                   fontSize: notifier.custFontSize,
@@ -461,7 +443,7 @@ class EventRequestsListItem extends StatelessWidget {
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
-                                eventrequest?.eventTime,
+                                eventrequest?.eventStartTime,
                                 style: TextStyle(
                                   fontSize: notifier.custFontSize,
                                   //color: KirthanStyles.subTitleColor,
@@ -486,9 +468,9 @@ class EventRequestsListItem extends StatelessWidget {
                                   const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
                                 //notifier.duration
-                                eventrequest?.eventDuration == notifier.duration
-                                    ? eventrequest?.eventDuration + "Hrs"
-                                    : eventrequest?.eventDuration + "Hrs",
+                                duration() == notifier.duration
+                                    ? duration() + " Hrs"
+                                    : duration() + " Hrs",
                                 style: TextStyle(
                                   fontSize: notifier.custFontSize,
                                   // color: KirthanStyles.subTitleColor,

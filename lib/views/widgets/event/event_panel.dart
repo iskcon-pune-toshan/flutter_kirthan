@@ -5,6 +5,7 @@ import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
@@ -129,7 +130,8 @@ class EventsPanel extends StatelessWidget {
 
                               // child: const Text("Map"),
                               onPressed: () {
-                                Navigator.push(
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>MapPage(eventrequest: eventRequest)));
+                                /*Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => BlocProvider(
@@ -138,7 +140,7 @@ class EventsPanel extends StatelessWidget {
                                       child: Maps(),
                                     ),
                                   ),
-                                );
+                                );*/
                               },
                               //child: Image.asset("assets/images/map.jpg")
                             ),
@@ -159,6 +161,7 @@ class EventsPanel extends StatelessWidget {
                                   ? 0
                                   : eventRequests.length,
                               itemBuilder: (_, int index) {
+
                                 var eventrequest = eventRequests[index];
                                 return EventRequestsListItem(
                                   eventrequest: eventrequest,
