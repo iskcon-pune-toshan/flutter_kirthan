@@ -83,7 +83,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
-      currUserName = user.userName;
+      currUserName = user.fullName;
       print("In User Role function, role id is");
       print(user.roleId);
       if (user.roleId == 1) {
@@ -235,7 +235,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                               .toList();
 
                                           for (var username in userList) {
-                                            currUserName = username.userName;
+                                            currUserName = username.fullName;
                                             return FutureBuilder<
                                                     List<TeamRequest>>(
                                                 future: Teams,

@@ -26,7 +26,7 @@ class _ManageProfileInformationWidgetState
 
   @override
   void initState() {
-    _displayNameController.text = widget.currentUser.userName;
+    _displayNameController.text = widget.currentUser.fullName;
     super.initState();
   }
 
@@ -97,7 +97,7 @@ class _ManageProfileInformationWidgetState
               onPressed: () async {
                 var userController = locator.get<UserController>();
 
-                if (widget.currentUser.userName !=
+                if (widget.currentUser.fullName !=
                     _displayNameController.text) {
                   var displayName = _displayNameController.text;
                   userController.updateDisplayName(displayName);

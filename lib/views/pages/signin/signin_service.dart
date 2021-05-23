@@ -58,7 +58,7 @@ class SignInService {
     var authResult = await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     return UserRequest(
-        uid: authResult.user.uid, userName: authResult.user.displayName);
+        uid: authResult.user.uid, fullName: authResult.user.displayName);
   }
 
   Future<FirebaseUser> signInWithEmail(String email, String password) async {
@@ -146,7 +146,7 @@ class SignInService {
   Future<UserRequest> getUser() async {
     var firebaseUser = await firebaseAuth.currentUser();
     return UserRequest(
-        uid: firebaseUser?.uid, userName: firebaseUser?.displayName);
+        uid: firebaseUser?.uid, fullName: firebaseUser?.displayName);
   }
 
   Future<bool> validatePassword(String password) async {

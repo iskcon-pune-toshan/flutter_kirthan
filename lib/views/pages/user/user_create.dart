@@ -100,7 +100,7 @@ class _UserWriteState extends State<UserWrite> {
                   hintText: "",
                   labelText: "Username"),
               onChanged: (input) {
-                userrequest.userName = input;
+                userrequest.fullName = input;
               },
               validator: (value) {
                 if (value.isEmpty) {
@@ -173,40 +173,40 @@ class _UserWriteState extends State<UserWrite> {
         autovalidate: true,
         child: Column(
           children: <Widget>[
-            TextFormField(
-              //attribute: "FirstName",
-              decoration: InputDecoration(
-                icon: const Icon(Icons.people_outline),
-                labelText: "FirstName",
-                hintText: "",
-              ),
-              onChanged: (input) {
-                userrequest.firstName = input;
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Please enter some text";
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              //attribute: "FirstName",
-              decoration: InputDecoration(
-                icon: const Icon(Icons.people_outline),
-                labelText: "LastName",
-                hintText: "",
-              ),
-              onChanged: (input) {
-                userrequest.lastName = input;
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Please enter some text";
-                }
-                return null;
-              },
-            ),
+            // TextFormField(
+            //   //attribute: "FirstName",
+            //   decoration: InputDecoration(
+            //     icon: const Icon(Icons.people_outline),
+            //     labelText: "FirstName",
+            //     hintText: "",
+            //   ),
+            //   onChanged: (input) {
+            //     userrequest.firstName = input;
+            //   },
+            //   validator: (value) {
+            //     if (value.isEmpty) {
+            //       return "Please enter some text";
+            //     }
+            //     return null;
+            //   },
+            // ),
+            // TextFormField(
+            //   //attribute: "FirstName",
+            //   decoration: InputDecoration(
+            //     icon: const Icon(Icons.people_outline),
+            //     labelText: "LastName",
+            //     hintText: "",
+            //   ),
+            //   onChanged: (input) {
+            //     userrequest.lastName = input;
+            //   },
+            //   validator: (value) {
+            //     if (value.isEmpty) {
+            //       return "Please enter some text";
+            //     }
+            //     return null;
+            //   },
+            // ),
             TextFormField(
               //attribute: "Email",
               decoration: InputDecoration(
@@ -500,7 +500,7 @@ class _UserWriteState extends State<UserWrite> {
                             userrequest.state = "Maharashtra";
                             userrequest.country = "IND";
                             //userrequest.userType = "Admin";
-                            userrequest.isProcessed = false;
+                            //userrequest.isProcessed = false;
                             userrequest.createdBy = "SYSTEM";
                             String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                 .format(DateTime.now());
@@ -508,7 +508,7 @@ class _UserWriteState extends State<UserWrite> {
                             userrequest.updatedBy = "SYSTEM";
                             //userrequest.updateTime = dt;
                             userrequest.approvalStatus = "approved";
-                            userrequest.approvalComments = "AAA";
+                            // userrequest.approvalComments = "AAA";
 
                             Map<String, dynamic> usermap = userrequest.toJson();
                             print(usermap);

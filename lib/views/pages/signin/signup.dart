@@ -5,11 +5,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final UserPageViewModel userPageVM =
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class SignUp extends StatefulWidget {
   SignUp({Key key}) : super(key: key);
@@ -47,8 +52,9 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future uploadFile() async {
-    StorageReference storageReference =
-        await FirebaseStorage.instance.ref().child('${_emailcontroller.text}');
+    StorageReference storageReference = await FirebaseStorage.instance
+        .ref()
+        .child('${_emailcontroller.text}' + '.jpg');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
     print('File Uploaded');
@@ -100,12 +106,12 @@ class _SignUpState extends State<SignUp> {
       String dt =
           DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
-      user.firstName = _displaynamecontroller.text;
-      user.lastName = _displaynamecontroller.text;
+      // user.firstName = _displaynamecontroller.text;
+      // user.lastName = _displaynamecontroller.text;
       user.email = _emailcontroller.text;
       user.password = pass;
       user.phoneNumber = 123456789;
-      user.userName = _displaynamecontroller.text;
+      user.fullName = _displaynamecontroller.text;
       user.addLineOne = "xyz";
       user.addLineTwo = "abc";
       user.addLineThree = "pqr";
@@ -116,14 +122,16 @@ class _SignUpState extends State<SignUp> {
       user.country = "India";
       user.govtIdType = "Aadhaar";
       user.govtId = "Aadhaar";
-      user.isProcessed = true;
-      user.approvalComments = "Waiting";
+      //user.isProcessed = true;
+      // user.approvalComments = "Waiting";
       user.approvalStatus = "Waiting";
       user.roleId = 3;
+      user.prevRoleId = 3;
       user.createdBy = _emailcontroller.text;
       user.updatedBy = "";
       user.createdTime = dt;
       user.updatedTime = null;
+      user.profileUrl = _uploadedFileURL;
 
       Map<String, dynamic> usermap = user.toJson();
       UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap);
@@ -139,7 +147,6 @@ class _SignUpState extends State<SignUp> {
         appBar: AppBar(
           title: Text("Sign Up"),
           backgroundColor: KirthanStyles.colorPallete30,
-
         ),
         body: Center(
           child: SingleChildScrollView(

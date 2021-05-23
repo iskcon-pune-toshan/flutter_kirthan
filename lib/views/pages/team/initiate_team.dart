@@ -142,10 +142,10 @@ class _InitiateTeamState extends State<InitiateTeam> {
                           .where((element) => element.roleId == 2)
                           .toList();
                       List<String> listOfUsers =
-                          userList.map((e) => e.userName).toSet().toList();
+                          userList.map((e) => e.fullName).toSet().toList();
                       for (var user in localadmin1) {
                         if (user.email == currentEmail) {
-                          currentUserName = user.userName;
+                          currentUserName = user.fullName;
                         }
                       }
                       print(listOfUsers);
@@ -347,7 +347,7 @@ class userSearch extends SearchDelegate<String> {
         if (snapshot.data != null) {
           userList = snapshot.data;
           List<String> UserList =
-              userList.map((user) => user.userName).toSet().toList();
+              userList.map((user) => user.fullName).toSet().toList();
           print(UserList);
           List<String> suggestionList = [];
           query.isEmpty

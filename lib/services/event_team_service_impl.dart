@@ -68,7 +68,9 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
           "Authorization": "Bearer $token"
         },
         body: requestBody);
-
+    // print("In get Event teams");
+    // print(requestBody);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       //print(response.body);
       List<dynamic> teamtsermappingData = json.decode(response.body);
@@ -76,8 +78,8 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
       List<EventTeam> teamusermappings = teamtsermappingData
           .map((teamtsermappingData) => EventTeam.fromMap(teamtsermappingData))
           .toList();
-      //print(teamusermappings);
-      //print(userdetails);
+      // print(teamtsermappingData);
+      // print(teamusermappings);
 
       return teamusermappings;
     } else {

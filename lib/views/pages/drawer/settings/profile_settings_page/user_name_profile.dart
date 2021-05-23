@@ -90,7 +90,7 @@ class _userName_profileState extends State<userName_profile> {
                                             ),
                                           ),
                                           validator: (input) {
-                                            return user.userName != input
+                                            return user.fullName != input
                                                 ? 'Enter valid username'
                                                 : null;
                                           },
@@ -135,7 +135,7 @@ class _userName_profileState extends State<userName_profile> {
                                             username = input;
                                           },
                                           onSaved: (input) {
-                                            user.userName = input;
+                                            user.fullName = input;
                                           },
                                         ),
                                       ),

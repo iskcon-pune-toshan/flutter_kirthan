@@ -5,16 +5,11 @@ class TeamRequest {
   final int id;
   String teamTitle;
   String teamDescription;
-  bool isProcessed;
   String createdBy;
   String createdTime;
   String updatedBy;
   String updatedTime;
   String approvalStatus;
-  String approvalComments;
-  String availableFrom;
-  String availableTo;
-  String weekDay;
   String location;
   String category;
   String experience;
@@ -30,16 +25,11 @@ class TeamRequest {
       {this.id,
       this.teamTitle,
       this.teamDescription,
-      this.isProcessed,
       this.createdBy,
       this.updatedBy,
       this.createdTime,
       this.updatedTime,
       this.approvalStatus,
-      this.approvalComments,
-      this.availableFrom,
-      this.availableTo,
-      this.weekDay,
       this.location,
       this.category,
       this.experience,
@@ -57,16 +47,11 @@ class TeamRequest {
       id: data['id'],
       teamTitle: data['teamTitle'],
       teamDescription: data['teamDescription'],
-      isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
       updatedBy: data['updatedBy'],
       updatedTime: data['updatedTime'],
       createdTime: data['createdTime'],
       approvalStatus: data['approvalStatus'],
-      approvalComments: data['approvalComments'],
-      availableFrom: data['availableFrom'],
-      availableTo: data['availableTo'],
-      weekDay: data['weekDay'],
       location: data['location'],
       category: data['category'],
       experience: data['experience'],
@@ -85,16 +70,11 @@ class TeamRequest {
       id: map['id'],
       teamTitle: map['teamTitle'],
       teamDescription: map['teamDescription'],
-      isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
       updatedBy: map['updatedBy'],
       updatedTime: map['updatedTime'],
       createdTime: map['createdTime'],
       approvalStatus: map['approvalStatus'],
-      approvalComments: map['approvalComments'],
-      availableFrom: map['availableFrom'],
-      availableTo: map['availableTo'],
-      weekDay: map['weekDay'],
       location: map['location'],
       category: map['category'],
       experience: map['experience'],
@@ -112,16 +92,11 @@ class TeamRequest {
     data['id'] = this.id;
     data['teamTitle'] = this.teamTitle;
     data['teamDescription'] = this.teamDescription;
-    data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
     data['updatedTime'] = this.updatedTime;
     data['createdTime'] = this.createdTime;
     data['approvalStatus'] = this.approvalStatus;
-    data['approvalComments'] = this.approvalComments;
-    data['availableFrom'] = this.availableFrom;
-    data['availableTo'] = this.availableTo;
-    data['weekDay'] = this.weekDay;
     data['location'] = this.location;
     data['category'] = this.category;
     data['experience'] = this.experience;
@@ -140,16 +115,11 @@ class TeamRequest {
       "id": this.id,
       "teamDescription": this.teamDescription,
       "teamTitle": this.teamTitle,
-      "isProcessed": this.isProcessed,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
       "updatedTime": this.updatedTime,
       "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
-      "approvalComments": this.approvalComments,
-      "availableFrom": this.availableFrom,
-      "availableTo": this.availableTo,
-      "weekDay": this.weekDay,
       "location": this.location,
       "category": this.category,
       "experience": this.experience,

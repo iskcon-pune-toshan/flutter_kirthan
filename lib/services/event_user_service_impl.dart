@@ -20,8 +20,7 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put(
-        '$baseUrl/api/eventteamuser/addeventteamuser',
+    var response = await client1.put('$baseUrl/api/eventuser/addeventuser',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
@@ -53,7 +52,7 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
     //String requestBody = '{"createdBy":"SYSTEM"}';
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.get(
-      '$baseUrl/api/eventteamuser/geteventteamusers',
+      '$baseUrl/api/eventuser/geteventusers',
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
@@ -86,8 +85,7 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
 
     String token = AutheticationAPIService().sessionJWTToken;
 
-    var response = await client1.put(
-        '$baseUrl/api/eventteamuser/deleteeventteamuser',
+    var response = await client1.put('$baseUrl/api/eventuser/deleteeventuser',
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"

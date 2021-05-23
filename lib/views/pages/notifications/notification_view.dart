@@ -57,7 +57,7 @@ class NotificationViewState extends State<NotificationView> {
   SharedPreferences prefs;
   List<String> access;
   Map<String, bool> accessTypes = new Map<String, bool>();
-  bool isVisible;
+  bool isVisible = false;
   List<UserRequest> userRequest = new List<UserRequest>();
   UserRequest userRequestTeam = new UserRequest();
   UserRequest localAdminTeam = new UserRequest();
@@ -123,31 +123,37 @@ class NotificationViewState extends State<NotificationView> {
             // Navigator.pop(context);
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => AdminView()));
-            List<UserRequest> user =
-                await userPageVM.getUserRequests(data.createdBy);
-            String userName = " ";
-            for (var u in user) {
-              userName = u.userName;
+            if (data.targetType.contains("event")) {
+              List<UserRequest> user =
+                  await userPageVM.getUserRequests(data.createdBy);
+              String userName = " ";
+              for (var u in user) {
+                userName = u.fullName;
+              }
+
+              String eventId = data.targetId.toString();
+              List<EventRequest> eventList =
+                  await eventPageVM.getEventRequests("event_id:$eventId");
+              EventRequest eventRequest = new EventRequest();
+              for (var event in eventList) {
+                eventRequest = event;
+              }
+              print("Printing dara");
+              print(data);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AdminEventDetails(
+                              UserName: userName,
+                              eventRequest: eventRequest,
+                              data: data,
+                            )));
+              });
+            } else {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AdminView()));
             }
-            String eventId = data.targetId.toString();
-            List<EventRequest> eventList =
-                await eventPageVM.getEventRequests("event_id:$eventId");
-            EventRequest eventRequest = new EventRequest();
-            for (var event in eventList) {
-              eventRequest = event;
-            }
-            print("Printing dara");
-            print(data);
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AdminEventDetails(
-                            UserName: userName,
-                            eventRequest: eventRequest,
-                            data: data,
-                          )));
-            });
           },
           child: Column(children: [
             Container(
@@ -166,21 +172,24 @@ class NotificationViewState extends State<NotificationView> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Consumer<ThemeNotifier>(
-                                      builder: (context, notifier, child) =>
-                                          Text(
-                                        data.message,
-                                        //maxLines: 2,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: notifier.darkTheme
-                                                ? Colors.white
-                                                : Colors.black),
-                                        softWrap: true,
-                                        overflow: TextOverflow.clip,
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Consumer<ThemeNotifier>(
+                                        builder: (context, notifier, child) =>
+                                            Text(
+                                          data.message,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: notifier.darkTheme
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                          // softWrap: true,
+                                          // overflow: TextOverflow.clip,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -789,7 +798,7 @@ class NotificationViewState extends State<NotificationView> {
                                     snapshot.data[itemCount].createdBy);
                             String userName = " ";
                             for (var u in user) {
-                              userName = u.userName;
+                              userName = u.fullName;
                             }
                             String eventId =
                                 snapshot.data[itemCount].targetId.toString();
@@ -805,7 +814,9 @@ class NotificationViewState extends State<NotificationView> {
                               localAdmin = user;
                             }
                             if (snapshot.data[itemCount].message
-                                .contains("Request to create an event")) {
+                                    .contains("Request to create an event") &&
+                                snapshot.data[itemCount].targetType
+                                    .contains("event")) {
                               print("Printing dara");
                               print(snapshot.data[itemCount]);
                               WidgetsBinding.instance.addPostFrameCallback((_) {

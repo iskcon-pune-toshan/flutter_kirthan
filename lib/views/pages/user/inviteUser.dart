@@ -13,7 +13,6 @@ final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
 final ProspectiveUserPageViewModel prospectiveUserPageVM =
     ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
-final TextEditingController _emailController = new TextEditingController();
 
 class InviteUser extends StatefulWidget {
   @override
@@ -28,6 +27,7 @@ class _InviteUserState extends State<InviteUser> {
   List<UserRequest> userList = List<UserRequest>();
   List<ProspectiveUserRequest> prospectiveList = List<ProspectiveUserRequest>();
   ProspectiveUserRequest prospectiveUserRequest = ProspectiveUserRequest();
+  final TextEditingController _emailController = new TextEditingController();
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   String email;
@@ -127,9 +127,10 @@ class _InviteUserState extends State<InviteUser> {
                 prospectiveUserPageVM
                     .submitNewProspectiveUserRequest(prospectivemap);
                 emailLaunch('mailto:$uemail?'
-                    'subject=Invitiation%20to%20become%20Local%20Admin'
-                    'body=Hello\n\nI%20would%20like%20to%20invite%20you%20to%20be%20a%20local%20admin'
-                    '%20using%20the%20code%20given%20below%20\n\n$inviteCode\n\n\n\nThank%20You');
+                    'subject=Invitiation%20to%20become%20a%20local admin&'
+                    'body=Hello\n\nI%20would%20like%20to%20inivte%20you%20to%20download%20our%20app%20using%20the%20link\n\n'
+                    'https://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing\n\n'
+                    'And%20become%20a%20local admin%20using%20the%20code\n"$inviteCode"\n\nThank%20You');
                 // SnackBar mysnackbar = SnackBar(
                 //   content: Text("Invited Successfully"),
                 //   duration: new Duration(seconds: 4),

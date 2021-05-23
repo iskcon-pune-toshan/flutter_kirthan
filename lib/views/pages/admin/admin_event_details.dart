@@ -82,7 +82,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
           if (snapshot.data != null) {
             userList = snapshot.data;
             for (var uname in userList)
-              if (uname.userName == widget.UserName) {
+              if (uname.fullName == widget.UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
                 final ref = FirebaseStorage.instance.ref().child(_photoName);
@@ -246,7 +246,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
                             (element) => element.email == widget.data.createdBy)
                         .toList();
                     for (var uname in userList) {
-                      if (uname.userName == widget.UserName) {
+                      if (uname.fullName == widget.UserName) {
                         return Stack(
                           fit: StackFit.expand,
                           children: <Widget>[

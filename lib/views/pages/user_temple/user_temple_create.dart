@@ -17,11 +17,10 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final UserTemplePageViewModel userTemplePageVM =
-UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
-
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class UserTempleCreate extends StatefulWidget {
   UserTempleCreate({this.selectedUsers}) : super();
@@ -29,7 +28,6 @@ class UserTempleCreate extends StatefulWidget {
 
   final String screenName = SCR_USER_TEMPLE;
   final String title = "User Temple Mapping";
-
 
   @override
   _UserTempleCreateState createState() =>
@@ -80,11 +78,10 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
                       icon: const Icon(Icons.supervisor_account),
                       hint: Text('Select User'),
                       items: snapshot.data
-                          .map((user) =>
-                          DropdownMenuItem<UserRequest>(
-                            value: user,
-                            child: Text(user.userName),
-                          ))
+                          .map((user) => DropdownMenuItem<UserRequest>(
+                                value: user,
+                                child: Text(user.fullName),
+                              ))
                           .toList(),
                       onChanged: (input) {
                         setState(() {
@@ -106,6 +103,7 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
           }
         });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -141,17 +139,15 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
                   onPressed: () {
                     List<UserTemple> listofUserTemples = new List<UserTemple>();
                     for (var user in selectedUsers) {
-
                       UserTemple userTemple = new UserTemple();
                       userTemple.templeId = user.templeId;
                       userTemple.userId = _selectedUser.id;
                       userTemple.roleId = user.roleId;
-                      userTemple.userName = _selectedUser.userName;
+                      userTemple.userName = _selectedUser.fullName;
                       userTemple.templeName = user.templeName;
 
-
                       listofUserTemples.add(userTemple);
-                      SnackBar mysnackbar = SnackBar (
+                      SnackBar mysnackbar = SnackBar(
                         content: Text("User-Temple registered $successful "),
                         duration: new Duration(seconds: 4),
                         backgroundColor: Colors.green,
@@ -160,7 +156,8 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
                       _scaffoldKey.currentState.showSnackBar(mysnackbar);
                     }
                     print(listofUserTemples);
-                    userTemplePageVM.submitNewUserTempleMapping(listofUserTemples);
+                    userTemplePageVM
+                        .submitNewUserTempleMapping(listofUserTemples);
                   },
                 ),
               ),

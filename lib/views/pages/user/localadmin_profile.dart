@@ -64,7 +64,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
 
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
-      currUserName = user.userName;
+      currUserName = user.fullName;
       print(">>>>>>>>>>>>");
       print(currUserName);
     }
@@ -139,7 +139,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                                 return Row(
                                                   children: [
                                                     Text(
-                                                      uname.userName,
+                                                      uname.fullName,
                                                       style: TextStyle(
                                                           fontSize: 16),
                                                     ),

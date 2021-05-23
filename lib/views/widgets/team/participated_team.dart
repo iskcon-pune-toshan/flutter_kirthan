@@ -24,7 +24,6 @@ class _Participated_TeamState extends State<Participated_Team> {
   Future<List<TeamUser>> teamusers;
   Future<List<UserRequest>> Users;
 
-
   List<TeamUser> listofteamusers = new List<TeamUser>();
   List<UserRequest> userList = new List<UserRequest>();
   @override
@@ -162,7 +161,7 @@ class _Participated_TeamState extends State<Participated_Team> {
                                 userList = snapshot.data;
                                 for (var uname in userList) {
                                   if (uname.email == uemail) {
-                                    CurrentUserName = uname.userName;
+                                    CurrentUserName = uname.fullName;
                                     print(CurrentUserName);
                                   }
                                 }

@@ -89,17 +89,17 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
   void addUser(
       List<UserRequest> userList, String _selectedTeamMember, int index) {
     if (userList
-        .where((element) => element.userName == _selectedTeamMember)
+        .where((element) => element.fullName == _selectedTeamMember)
         .toList()
         .isNotEmpty) {
       if (index == 0) {
         selectedUsers = userList
-            .where((element) => element.userName == _selectedTeamMember)
+            .where((element) => element.fullName == _selectedTeamMember)
             .toList();
       } else {
         selectedUsers = selectedUsers +
             userList
-                .where((element) => element.userName == _selectedTeamMember)
+                .where((element) => element.fullName == _selectedTeamMember)
                 .toList();
       }
     } else {
@@ -275,7 +275,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                   return DropdownButtonFormField<String>(
                                     value: widget.user == null
                                         ? _selectedLocalAdmin
-                                        : widget.user.userName,
+                                        : widget.user.fullName,
                                     icon: const Icon(Icons.account_circle),
                                     hint: Text('Select Local Admin',
                                         style: TextStyle(color: Colors.grey)),
@@ -330,99 +330,120 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                         ),
                                         color: KirthanStyles.colorPallete30,
                                         onPressed: () async {
-                                          if (_formKey.currentState
-                                              .validate()) {
-                                            _formKey.currentState.save();
-                                            int i = 0;
-                                            for (var member
-                                                in widget.selectedMembers) {
-                                              addUser(userList, member, i);
-                                              i++;
-                                            }
-                                            for (var user in selectedUsers) {
-                                              TeamUser teamUser =
-                                                  new TeamUser();
-                                              teamUser.userId = user.id;
-                                              teamUser.teamId =
-                                                  widget.teamrequest.id;
-                                              teamUser.userName = user.userName;
-                                              teamUser.createdBy = "SYSTEM";
-                                              String dt = DateFormat(
-                                                      "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                                  .format(DateTime.now());
-                                              teamUser.createdTime = dt;
-                                              teamUser.updatedBy = "SYSTEM";
-                                              teamUser.updatedTime = dt;
-                                              listofTeamUsers.add(teamUser);
-                                            }
-                                            print(listofTeamUsers);
-                                            widget.teamrequest
-                                                    .listOfTeamMembers =
-                                                listofTeamUsers;
-                                            List<ProspectiveUserRequest> puReq =
-                                                await prospectiveUserPageVM
-                                                    .getProspectiveUserRequests(
-                                                        "uEmail:" +
-                                                            widget.teamrequest
-                                                                .teamLeadId);
-                                            if (puReq.isNotEmpty) {
-                                              ProspectiveUserRequest purequest =
-                                                  new ProspectiveUserRequest();
-                                              widget.teamrequest
-                                                  .approvalStatus = "Approved";
-                                              widget.teamrequest
-                                                      .approvalComments =
-                                                  "Approved";
-                                              widget.teamrequest.isProcessed =
-                                                  true;
-                                              for (var user in puReq) {
-                                                user.isProcessed = true;
-                                                purequest = user;
-                                              }
-                                              String prospectiveStr =
-                                                  jsonEncode(
-                                                      purequest.toStrJson());
-                                              prospectiveUserPageVM
-                                                  .submitUpdateProspectiveUserRequest(
-                                                      prospectiveStr);
-                                            }
-                                            if (widget.user != null) {
-                                              widget.teamrequest
-                                                  .approvalStatus = "Approved";
-                                              widget.teamrequest
-                                                      .approvalComments =
-                                                  "Approved";
-                                              widget.teamrequest.isProcessed =
-                                                  true;
-                                            }
-                                            Map<String, dynamic> teammap =
-                                                widget.teamrequest.toJson();
-                                            TeamRequest newteamrequest =
-                                                await teamPageVM
-                                                    .submitNewTeamRequest(
-                                                        teammap);
-
-                                            print(newteamrequest.id);
-                                            String tid =
-                                                newteamrequest.id.toString();
-                                            SnackBar mysnackbar = SnackBar(
-                                              content: Text(
-                                                  "Team registered $successful with $tid"),
-                                              duration:
-                                                  new Duration(seconds: 4),
-                                              backgroundColor: Colors.green,
-                                            );
+                                          List<TeamRequest> tempTeamList =
+                                              await teamPageVM.getTeamRequests(
+                                                  "teamLead:" +
+                                                      widget.teamrequest
+                                                          .teamLeadId);
+                                          if (tempTeamList.isNotEmpty) {
                                             Scaffold.of(context)
-                                                .showSnackBar(mysnackbar);
+                                                .showSnackBar(SnackBar(
+                                              content:
+                                                  Text('Team already exits'),
+                                              backgroundColor: Colors.red,
+                                            ));
+                                          } else if (widget
+                                                  .teamrequest.teamLeadId ==
+                                              null) {
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Team lead cannot be null'),
+                                              backgroundColor: Colors.red,
+                                            ));
+                                          } else {
+                                            if (_formKey.currentState
+                                                .validate()) {
+                                              _formKey.currentState.save();
+                                              int i = 0;
+                                              for (var member
+                                                  in widget.selectedMembers) {
+                                                addUser(userList, member, i);
+                                                i++;
+                                              }
+                                              for (var user in selectedUsers) {
+                                                TeamUser teamUser =
+                                                    new TeamUser();
+                                                teamUser.userId = user.id;
+                                                teamUser.teamId =
+                                                    widget.teamrequest.id;
+                                                teamUser.userName =
+                                                    user.fullName;
+                                                teamUser.createdBy = "SYSTEM";
+                                                String dt = DateFormat(
+                                                        "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                                    .format(DateTime.now());
+                                                teamUser.createdTime = dt;
+                                                teamUser.updatedBy = "SYSTEM";
+                                                teamUser.updatedTime = dt;
+                                                listofTeamUsers.add(teamUser);
+                                              }
+                                              print(listofTeamUsers);
+                                              widget.teamrequest
+                                                      .listOfTeamMembers =
+                                                  listofTeamUsers;
+                                              List<ProspectiveUserRequest>
+                                                  puReq =
+                                                  await prospectiveUserPageVM
+                                                      .getProspectiveUserRequests(
+                                                          "uEmail:" +
+                                                              widget.teamrequest
+                                                                  .teamLeadId);
+                                              if (puReq.isNotEmpty) {
+                                                for (var user in puReq) {
+                                                  if (user.inviteType
+                                                      .contains("team")) {
+                                                    ProspectiveUserRequest
+                                                        purequest =
+                                                        new ProspectiveUserRequest();
+                                                    user.isProcessed = true;
+                                                    purequest = user;
+                                                    String prospectiveStr =
+                                                        jsonEncode(purequest
+                                                            .toStrJson());
+                                                    prospectiveUserPageVM
+                                                        .submitUpdateProspectiveUserRequest(
+                                                            prospectiveStr);
+                                                  }
+                                                }
+                                              }
+                                              if (widget.user != null) {
+                                                widget.teamrequest
+                                                        .approvalStatus =
+                                                    "Approved";
+                                              } else {
+                                                widget.teamrequest
+                                                    .approvalStatus = "Waiting";
+                                              }
+                                              Map<String, dynamic> teammap =
+                                                  widget.teamrequest.toJson();
+                                              TeamRequest newteamrequest =
+                                                  await teamPageVM
+                                                      .submitNewTeamRequest(
+                                                          teammap);
+
+                                              print(newteamrequest.id);
+                                              String tid =
+                                                  newteamrequest.id.toString();
+                                              SnackBar mysnackbar = SnackBar(
+                                                content: Text(
+                                                    "Team registered $successful with $tid"),
+                                                duration:
+                                                    new Duration(seconds: 4),
+                                                backgroundColor: Colors.green,
+                                              );
+                                              Scaffold.of(context)
+                                                  .showSnackBar(mysnackbar);
+                                            }
+                                            setState(() {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EventView()),
+                                              );
+                                            });
                                           }
-                                          setState(() {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EventView()),
-                                            );
-                                          });
                                         });
                                   }
                                   return Container();

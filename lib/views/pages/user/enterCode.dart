@@ -74,7 +74,8 @@ class _EnterCodeState extends State<EnterCode> {
           print(prospectiveList.length);
           if (prospectiveList != null) {
             for (var puser in prospectiveList) {
-              if (puser.userEmail == email) {
+              if (puser.userEmail == email &&
+                  puser.inviteType.contains("local_admin")) {
                 if (puser.isProcessed == true) {
                   // return Navigator.of(context)
                   //     .push(MaterialPageRoute(

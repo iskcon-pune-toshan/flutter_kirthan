@@ -118,12 +118,12 @@ class _LoginAppState extends State<LoginApp> {
       String dt =
           DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
-      user.firstName = userName;
-      user.lastName = userName;
+      // user.firstName = userName;
+      // user.lastName = userName;
       user.email = email;
       user.password = pass;
       user.phoneNumber = 12345678;
-      user.userName = userName;
+      user.fullName = userName;
       user.addLineOne = "xyz";
       user.addLineTwo = "abc";
       user.addLineThree = "pqr";
@@ -134,8 +134,8 @@ class _LoginAppState extends State<LoginApp> {
       user.country = "India";
       user.govtIdType = "Aadhaar";
       user.govtId = "Aadhaar";
-      user.isProcessed = true;
-      user.approvalComments = "Waiting";
+      //user.isProcessed = true;
+      // user.approvalComments = "Waiting";
       user.approvalStatus = "Waiting";
       user.roleId = 3;
       user.createdBy = email;

@@ -75,7 +75,7 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
                   userList = snapshot.data;
                   print(userList);
                   List<String> listOfUsers =
-                      userList.map((e) => e.userName).toSet().toList();
+                      userList.map((e) => e.fullName).toSet().toList();
                   print(listOfUsers);
                   return Expanded(
                     child: SingleChildScrollView(

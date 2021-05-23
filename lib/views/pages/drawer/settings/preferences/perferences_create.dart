@@ -285,7 +285,7 @@ class _PreferenceState extends State<Preference> {
                                                                 null
                                                             ? _selectedLocalAdmin
                                                             : widget
-                                                                .user.userName,
+                                                                .user.fullName,
                                                         icon: const Icon(Icons
                                                             .account_circle),
                                                         hint: Text(

@@ -45,7 +45,7 @@ class _TeamAdminView extends State<TeamAdminView> {
     );
   }
 
-  Widget Actions(var callback, TeamRequest data) {
+  Widget Actions(TeamRequest data) {
     Map<String, dynamic> resultData = {
       "id": data.id,
       "usertype": "admin",
@@ -57,15 +57,13 @@ class _TeamAdminView extends State<TeamAdminView> {
             child: Text('Approve'),
             onPressed: () {
               resultData["approvalstatus"] = "approved";
-              resultData["approvalcomments"] = "approved";
-              callback(resultData);
+              //callback(resultData);
             }),
         FlatButton(
           child: Text('Reject'),
           onPressed: () {
             resultData["approvalstatus"] = "rejected";
-            resultData["approvalcomments"] = "rejected";
-            callback(resultData);
+            //callback(resultData);
           },
         ),
       ],
@@ -102,16 +100,14 @@ class _TeamAdminView extends State<TeamAdminView> {
                                         snapshot.data[itemCount].approvalStatus,
                                     page: EditTeam(
                                         teamrequest: snapshot.data[itemCount]),
-                                    actions: Actions(_teamVM.processTeamRequest,
-                                        snapshot.data[itemCount]),
+                                    actions: Actions(snapshot.data[itemCount]),
                                   ),
                                 ),
                               );
                             },
                           ),
                           if (status == "NEW")
-                            Actions(_teamVM.processTeamRequest,
-                                snapshot.data[itemCount]),
+                            Actions(snapshot.data[itemCount]),
                         ],
                       ),
                     ));

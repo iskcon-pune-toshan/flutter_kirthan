@@ -84,7 +84,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
             userList = snapshot.data;
             for (var user in userList) {
               if (user.email == email) {
-                username = user.userName;
+                username = user.fullName;
 
                 return Text(
                   username,

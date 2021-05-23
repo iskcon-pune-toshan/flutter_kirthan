@@ -43,11 +43,9 @@ class UserController {
   }
 
   void updateDisplayName(String displayName) {
-    _currentUser.userName = displayName;
+    _currentUser.fullName = displayName;
     _authRepo.updateDisplayName(displayName);
   }
-
-
 
   // void updateEmail(String email) {
   //   _currentUser.email = email;
@@ -67,5 +65,3 @@ class UserController {
     _authRepo.updatePassword(password);
   }
 }
-
-

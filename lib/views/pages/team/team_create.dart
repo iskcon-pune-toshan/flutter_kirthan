@@ -152,7 +152,7 @@ class _TeamWriteState extends State<TeamWrite> {
           if (snapshot.data != null) {
             userList = snapshot.data;
             List<String> _teamMember =
-                userList.map((user) => user.userName).toSet().toList();
+                userList.map((user) => user.fullName).toSet().toList();
             print(userList);
             DropdownButtonFormField<String>(
               value: _selectedTeamMembernew,
@@ -854,13 +854,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                                 _selectedTeamMember3 = input;
                                               });
                                             },
-                                            // onEditingComplete: () {
-                                            //   containUserName(userList,
-                                            //           _selectedTeamMember3)
-                                            //       ? addRegisteredUser(userList,
-                                            //           _selectedTeamMember3)
-                                            //       : addUser(_selectedTeamMember3);
-                                            // },
+
                                             validator: (value) {
                                               if (value.isEmpty) {
                                                 return "Please enter some text";
@@ -923,16 +917,6 @@ class _TeamWriteState extends State<TeamWrite> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // RaisedButton.icon(
-                        //   label: Text('Add'),
-                        //   icon: const Icon(Icons.add_circle),
-                        //   color: Colors.green,
-                        //   onPressed: () async {
-                        //     setState(() {
-                        //       addMember();
-                        //     });
-                        //   },
-                        // ),
                         new Container(margin: const EdgeInsets.only(top: 40)),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -971,17 +955,12 @@ class _TeamWriteState extends State<TeamWrite> {
                                     _formKey.currentState.save();
                                     final String teamTitle =
                                         teamrequest.teamTitle;
-                                    teamrequest.isProcessed = false;
+                                    //teamrequest.isProcessed = false;
                                     teamrequest.createdBy = email;
                                     print(teamrequest.createdBy);
                                     teamrequest.createdTime = dt;
                                     teamrequest.updatedBy = null;
                                     teamrequest.updatedTime = null;
-                                    teamrequest.approvalStatus = "approved";
-                                    teamrequest.approvalComments =
-                                        "Approved$teamTitle";
-                                    // teamrequest.listOfTeamMembers =
-                                    //     listofTeamUsers;
                                     setState(() {
                                       Navigator.push(
                                         context,

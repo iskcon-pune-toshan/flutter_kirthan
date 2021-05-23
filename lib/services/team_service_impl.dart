@@ -150,6 +150,7 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
       int teamId = int.parse(teamTitle);
       requestBody = '{"id": $teamId }';
     }
+    print("In Get team");
     print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
