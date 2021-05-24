@@ -216,9 +216,12 @@ class NotificationViewState extends State<NotificationView> {
                                       builder: (context, notifier, child) =>
                                           Text(
                                         //'By ' + data.createdBy.toString(),
-                                        data.updatedBy == null
-                                            ? "By " + data.createdBy.toString()
-                                            : "By " + data.updatedBy.toString(),
+                                        // data.updatedBy == null
+                                        //     ? "By " + data.createdBy.toString()
+                                        //     :
+                                        data.message.contains("Your")
+                                            ? "By " + data.updatedBy.toString()
+                                            : "By " + data.createdBy.toString(),
                                         overflow: TextOverflow.clip,
                                         style: TextStyle(
                                           //fontWeight: FontWeight.w300,
@@ -507,7 +510,7 @@ class NotificationViewState extends State<NotificationView> {
                                       Text(
                                         data.message +
                                             " by " +
-                                            data.createdBy.toString(),
+                                            data.updatedBy.toString(),
                                       ),
                                       SizedBox(
                                         height: 10,
@@ -611,9 +614,7 @@ class NotificationViewState extends State<NotificationView> {
                     ),
                     subtitle: Text(
                       //"By " +//data.createdBy.toString(),
-                      data.updatedBy == null
-                          ? "By " + data.createdBy.toString()
-                          : "By " + data.updatedBy.toString(),
+                      "By " + data.createdBy.toString(),
                     ),
                     //isThreeLine: true,
                     trailing: icon == Icons.pause
