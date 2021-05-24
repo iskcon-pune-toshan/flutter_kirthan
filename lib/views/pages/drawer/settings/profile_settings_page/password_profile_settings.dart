@@ -11,7 +11,7 @@ import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class password_profile extends StatefulWidget {
   @override
@@ -24,8 +24,10 @@ class _password_profileState extends State<password_profile> {
     final String email = user.email;
     return email;
   }
+  TextEditingController _password = TextEditingController();
+  TextEditingController _passwordConfirm = TextEditingController();
 
-  String password;
+  String currentPassword;
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class _password_profileState extends State<password_profile> {
                       UserRequest user = new UserRequest();
                       for (var u in userList) {
                         user = u;
+                        currentPassword= user.password;
                       }
                       print("user password" + user.password);
                       return SingleChildScrollView(
@@ -57,14 +60,15 @@ class _password_profileState extends State<password_profile> {
                             children: [
                               Divider(),
                               TextFormField(
+                                controller: _password,
                                 decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.grey),
+                                      BorderSide(color: Colors.grey),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.green),
+                                      BorderSide(color: Colors.green),
                                     ),
                                     labelText: "New Password",
                                     hintText: "Enter new password",
@@ -75,9 +79,10 @@ class _password_profileState extends State<password_profile> {
                                       color: Colors.grey,
                                     )),
                                 obscureText: true,
-                                onChanged: (input) {
-                                  password = input;
-                                },
+                                // onChanged: (input) {
+                                //
+                                //   password = input;
+                                // },
                                 onSaved: (input) {
                                   //user.password = input;
                                 },
@@ -88,20 +93,25 @@ class _password_profileState extends State<password_profile> {
 
                                   if (value.length < 8)
                                     return 'Must contain 8-30 characters';
+
+                                  if(currentPassword == value)
+                                    return 'New password cannot be same as current password';
                                   return null;
                                 },
                               ),
                               Divider(),
                               TextFormField(
+                                controller: _passwordConfirm,
                                 decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.grey),
+                                      BorderSide(color: Colors.grey),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.green),
+                                      BorderSide(color: Colors.green),
                                     ),
+
                                     labelText: "Confirm Password",
                                     hintText: "Confirm the password",
                                     hintStyle: TextStyle(
@@ -112,15 +122,18 @@ class _password_profileState extends State<password_profile> {
                                     )),
                                 obscureText: true,
                                 validator: (input) {
-                                  return password != input
-                                      ? 'Passwords do not match'
-                                      : null;
+                                  return _password.text != input
+                                      ?"Passwords do no match"
+                                      :null;
+                                  // return password != input
+                                  //     ? 'Passwords do not match'
+                                  //     : null;
                                 },
                               ),
                               Divider(),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                MainAxisAlignment.spaceEvenly,
                                 children: [
                                   RaisedButton(
                                     child: Text('Save'),
@@ -132,7 +145,7 @@ class _password_profileState extends State<password_profile> {
                                             .currentUser();
 
                                         //Pass in the password to updatePassword.
-                                        s.updatePassword(password).then((_) {
+                                        s.updatePassword(_password.text).then((_) {
                                           print(
                                               "Successfully changed password");
                                         }).catchError((error) {
@@ -142,10 +155,10 @@ class _password_profileState extends State<password_profile> {
                                         });
                                         _formKey.currentState.save();
                                         String userrequestStr =
-                                            jsonEncode(user.toStrJson());
+                                        jsonEncode(user.toStrJson());
                                         userPageVM
                                             .submitUpdateUserRequestDetails(
-                                                userrequestStr);
+                                            userrequestStr);
                                         SnackBar mysnackbar = SnackBar(
                                           content: Text(
                                               "User details updated $successful"),
@@ -161,7 +174,10 @@ class _password_profileState extends State<password_profile> {
                                     child: Text('Reset'),
                                     color: Colors.redAccent,
                                     //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _passwordConfirm.clear();
+                                      _password.clear();
+                                    },
                                   ),
                                 ],
                               ),
