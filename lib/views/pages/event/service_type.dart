@@ -142,9 +142,12 @@ class _ServiceTypeState extends State<ServiceType> {
                   backgroundColor: Colors.green,
                 );
                 _scaffoldKey.currentState.showSnackBar(mysnackbar);
-
-                Navigator.pop(context);
-                Navigator.pop(context);
+                new Future.delayed(const Duration(seconds: 3), () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                });
+                /*Navigator.pop(context);
+                Navigator.pop(context);*/
               }
             },
             child: Text("Submit"),
