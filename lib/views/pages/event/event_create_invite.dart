@@ -1,5 +1,3 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:flutter_kirthan/models/team.dart';
@@ -426,10 +424,10 @@ class _EventWriteState extends State<EventWrite> {
                                   .toString();
                             },
                             validator: (value) {
-                              if (value.toString().isEmpty) {
+                              if (value.toString().isEmpty || value == null) {
                                 return "Please select a date";
-                              }
-                              return null;
+                              } else
+                                return null;
                             },
                           ),
                         ],
@@ -460,10 +458,10 @@ class _EventWriteState extends State<EventWrite> {
                                   DateFormat("HH:mm").format(input).toString();
                             },
                             validator: (value) {
-                              if (value.toString().isEmpty) {
+                              if (value.toString().isEmpty || value == null) {
                                 return "Please select time";
-                              }
-                              return null;
+                              } else
+                                return null;
                             },
                           ),
                         ],
@@ -494,16 +492,16 @@ class _EventWriteState extends State<EventWrite> {
                                   DateFormat("HH:mm").format(input).toString();
                             },
                             validator: (value) {
-                              if (value.toString().isEmpty) {
+                              if (value.toString().isEmpty || value == null) {
                                 return "Please select time";
-                              }
-                              return null;
+                              } else
+                                return null;
                             },
                           ),
                         ],
                       ),
                     ),
-                /*    Container(
+                    /*    Container(
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
                         //attribute: "Duration",
@@ -602,7 +600,7 @@ class _EventWriteState extends State<EventWrite> {
                         eventrequest.eventType = input;
                       },
                       validator: (value) {
-                        if (value==null) {
+                        if (value == null) {
                           return "Please select event type";
                         }
                         return null;
@@ -690,8 +688,6 @@ class _EventWriteState extends State<EventWrite> {
 
                     Column(
                       children: <Widget>[
-
-
                         TextFormField(
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -773,7 +769,7 @@ class _EventWriteState extends State<EventWrite> {
                           },
                         ),
                         TextFormField(
-                          keyboardType:TextInputType.number,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -805,85 +801,82 @@ class _EventWriteState extends State<EventWrite> {
                     Column(
                       children: <Widget>[
                         DropdownButtonFormField<String>(
-                          value: _selectedCity,
-                          icon: const Icon(Icons.location_city),
-                          hint: Text('Select City',
-                              style: TextStyle(color: Colors.grey)),
-                          items: _cities
-                              .map((city) => DropdownMenuItem<String>(
-                                    value: city,
-                                    child: Text(city),
-                                  ))
-                              .toList(),
-                          onChanged: (input) {
-                            setState(() {
-                              _selectedCity = input;
-                            });
-                          },
-                          onSaved: (input) {
-                            eventrequest.city = input;
-                          },
+                            value: _selectedCity,
+                            icon: const Icon(Icons.location_city),
+                            hint: Text('Select City',
+                                style: TextStyle(color: Colors.grey)),
+                            items: _cities
+                                .map((city) => DropdownMenuItem<String>(
+                                      value: city,
+                                      child: Text(city),
+                                    ))
+                                .toList(),
+                            onChanged: (input) {
+                              setState(() {
+                                _selectedCity = input;
+                              });
+                            },
+                            onSaved: (input) {
+                              eventrequest.city = input;
+                            },
                             validator: (value) {
-                              if (value==null) {
+                              if (value == null) {
                                 return "Please select a city";
                               }
                               return null;
-                            }
-                        ),
+                            }),
                         DropdownButtonFormField<String>(
-                          value: _selectedState,
-                          icon: const Icon(Icons.location_city),
-                          hint: Text(
-                            'Select State',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          items: _states
-                              .map((state) => DropdownMenuItem(
-                                    value: state,
-                                    child: Text(state),
-                                  ))
-                              .toList(),
-                          onChanged: (input) {
-                            setState(() {
-                              _selectedState = input;
-                            });
-                          },
-                          onSaved: (input) {
-                            eventrequest.state = input;
-                          },
+                            value: _selectedState,
+                            icon: const Icon(Icons.location_city),
+                            hint: Text(
+                              'Select State',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            items: _states
+                                .map((state) => DropdownMenuItem(
+                                      value: state,
+                                      child: Text(state),
+                                    ))
+                                .toList(),
+                            onChanged: (input) {
+                              setState(() {
+                                _selectedState = input;
+                              });
+                            },
+                            onSaved: (input) {
+                              eventrequest.state = input;
+                            },
                             validator: (value) {
-                              if (value==null) {
+                              if (value == null) {
                                 return "Please select a state";
                               }
                               return null;
-                            }
-                        ),
+                            }),
                         DropdownButtonFormField<String>(
-                          value: _selectedCountry,
-                          icon: const Icon(Icons.location_city),
-                          hint: Text('Select Country',
-                              style: TextStyle(color: Colors.grey)),
-                          items: ['IND', 'Kyrgyzstan']
-                              .map((country) => DropdownMenuItem(
-                                    value: country,
-                                    child: Text(country),
-                                  ))
-                              .toList(),
-                          onChanged: (input) {
-                            setState(() {
-                              _selectedCountry = input;
-                            });
-                          },
-                          onSaved: (input) {
-                            eventrequest.country = input;
-                          },
+                            value: _selectedCountry,
+                            icon: const Icon(Icons.location_city),
+                            hint: Text('Select Country',
+                                style: TextStyle(color: Colors.grey)),
+                            items: ['IND', 'Kyrgyzstan']
+                                .map((country) => DropdownMenuItem(
+                                      value: country,
+                                      child: Text(country),
+                                    ))
+                                .toList(),
+                            onChanged: (input) {
+                              setState(() {
+                                _selectedCountry = input;
+                              });
+                            },
+                            onSaved: (input) {
+                              eventrequest.country = input;
+                            },
                             validator: (value) {
-                              if (value==null) {
+                              if (value == null) {
                                 return "Please select a country";
                               }
                               return null;
-                            }
-                        ),
+                            }),
                       ],
                     ),
                     //getTeamsWidget(),
@@ -914,7 +907,7 @@ class _EventWriteState extends State<EventWrite> {
                                 print("created by " + eventrequest.createdBy);
                                 print(email);
                                 _formKey.currentState.save();
-                               // eventrequest.isProcessed = true;
+                                // eventrequest.isProcessed = true;
                                 eventrequest.isPublicEvent = false;
 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
 // print(eventrequest.createdBy);
@@ -925,7 +918,7 @@ class _EventWriteState extends State<EventWrite> {
                                 eventrequest.updatedBy = null;
                                 eventrequest.updatedTime = null;
 //eventrequest.approvalStatus = "Processing";
-                               //eventrequest.approvalComments = "AAA";
+                                //eventrequest.approvalComments = "AAA";
 
 //TeamRequest newteamrequest = await apiSvc
 //  ?.submitNewTeamRequest(teammap);

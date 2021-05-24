@@ -38,11 +38,12 @@ class MyEventRequestsListItem extends StatelessWidget {
     var format = DateFormat("HH:mm");
     var one = format.parse(eventrequest.eventStartTime);
     var two = format.parse(eventrequest.eventEndTime);
-    if(two.difference(one).toString().substring(0,2).contains(":"))
-      return two.difference(one).toString().substring(0,1);
+    if (two.difference(one).toString().substring(0, 2).contains(":"))
+      return two.difference(one).toString().substring(0, 1);
     else
-      return two.difference(one).toString().substring(0,2);
+      return two.difference(one).toString().substring(0, 2);
   }
+
   String get index => null;
   // var filteredMap;
   // List<EventRequest> filtereMap = eventrequest
@@ -139,7 +140,6 @@ class MyEventRequestsListItem extends StatelessWidget {
                       color: KirthanStyles.colorPallete60,
                       size: 20,
                     ),
-
                   ),
                 ],
               ),
@@ -162,9 +162,7 @@ class MyEventRequestsListItem extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.keyboard_arrow_right),
-              onPressed: () {
-
-              },
+              onPressed: () {},
             ),
 /*              Container(
                 child: Align(
@@ -425,10 +423,6 @@ class MyEventRequestsListItem extends StatelessWidget {
 
     return new GestureDetector(
         onTap: () {
-          if(eventrequest?.teamInviteStatus==3){
-
-          }
-          else
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -473,7 +467,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.only(bottom: 15),
                               margin:
-                              const EdgeInsets.symmetric(horizontal: 15.0),
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
                               child: Text(
                                 eventrequest?.eventDate.substring(0, 10),
 //0,10 date
@@ -500,7 +494,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.only(bottom: 15),
                               margin:
-                              const EdgeInsets.symmetric(horizontal: 20.0),
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
                                 eventrequest?.eventStartTime,
                                 style: TextStyle(
@@ -524,7 +518,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.only(bottom: 15),
                               margin:
-                              const EdgeInsets.symmetric(horizontal: 20.0),
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
                                 //notifier.duration
                                 duration() == notifier.duration

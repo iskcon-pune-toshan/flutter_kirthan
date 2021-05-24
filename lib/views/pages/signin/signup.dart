@@ -14,13 +14,16 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flushbar/flushbar_helper.dart';
+
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
+
 class SignUp extends StatefulWidget {
   SignUp({Key key}) : super(key: key);
   @override
   _SignUpState createState() => _SignUpState();
 }
+
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   File _image;
@@ -30,7 +33,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailcontroller = new TextEditingController();
   String email;
   final TextEditingController _displaynamecontroller =
-  new TextEditingController();
+      new TextEditingController();
   final TextEditingController _addresscontroller = new TextEditingController();
   String displayName;
   final TextEditingController _confirmpassword = new TextEditingController();
@@ -44,9 +47,11 @@ class _SignUpState extends State<SignUp> {
       });
     });
   }
+
   Future uploadFile() async {
-    StorageReference storageReference =
-    await FirebaseStorage.instance.ref().child('${_emailcontroller.text}'+'.jpg');
+    StorageReference storageReference = await FirebaseStorage.instance
+        .ref()
+        .child('${_emailcontroller.text}' + '.jpg');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
     print('File Uploaded');
@@ -56,12 +61,14 @@ class _SignUpState extends State<SignUp> {
       });
     });
   }
+
   @override
   void initState() {
     super.initState();
     entitlements = UserAccess.getUserEntitlements();
     loadPref();
   }
+
   SignInService signIn = new SignInService();
   UserAccess _userAccess;
   List<UserAccess> entitlements;
@@ -70,6 +77,7 @@ class _SignUpState extends State<SignUp> {
     prefs = await SharedPreferences.getInstance();
     //prefs.setString("My Name", "Manjunath Bijinepalli");
   }
+
   void populateData() {
     _userAccess = entitlements
         .singleWhere((access) => access.userType == _selecteduser.usertype);
@@ -80,6 +88,7 @@ class _SignUpState extends State<SignUp> {
     prefs.setString("userType", _selecteduser.usertype);
     prefs.setString("dataEnt", _userAccess.dataEntitlement);
   }
+
   addUser() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser s = await auth.currentUser();
@@ -89,7 +98,7 @@ class _SignUpState extends State<SignUp> {
     print(pass);
     if (_formKey.currentState.validate()) {
       String dt =
-      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
       // user.firstName = _displaynamecontroller.text;
       // user.lastName = _displaynamecontroller.text;
       user.email = _emailcontroller.text;
@@ -120,6 +129,7 @@ class _SignUpState extends State<SignUp> {
       UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -154,7 +164,9 @@ class _SignUpState extends State<SignUp> {
                     //mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       GestureDetector(
                         onTap: () {
                           chooseFile();
@@ -164,13 +176,13 @@ class _SignUpState extends State<SignUp> {
                           radius: MediaQuery.of(context).size.width / 5 + 3,
                           child: CircleAvatar(
                               backgroundColor: Colors.white,
-                              radius: MediaQuery.of(context).size.width / 5,
+                              radius: MediaQuery.of(context).size.width / 5.5,
                               backgroundImage: _image != null
                                   ? FileImage(
-                                _image,
-                              )
+                                      _image,
+                                    )
                                   : AssetImage(
-                                  "assets/images/add_profile.png")),
+                                      "assets/images/add_profile.png")),
                         ),
                       ),
                       Padding(
@@ -309,11 +321,10 @@ class _SignUpState extends State<SignUp> {
                                 uploadFile();
                                 signIn
                                     .signUpWithEmail(_emailcontroller.text,
-                                    _passwordcontroller.text)
+                                        _passwordcontroller.text)
                                     .then((FirebaseUser user) => populateData())
                                     .catchError((e) => print(e))
-                                    .whenComplete(()
-                                {
+                                    .whenComplete(() {
                                   addUser();
                                   showFlushBar(context);
                                 });
@@ -325,7 +336,9 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20,)
+                      SizedBox(
+                        height: 20,
+                      )
                     ],
                   ),
                 ),
@@ -336,6 +349,7 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
+
   InputDecoration buildInputDecoration(
       IconData icons, String hinttext, String labeltext) {
     return InputDecoration(
@@ -371,16 +385,15 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-void showFlushBar(BuildContext context){
+
+void showFlushBar(BuildContext context) {
   Flushbar(
-    messageText: Text('User Registered Successfully',
-      style: TextStyle(color: Colors.white),),
+    messageText: Text(
+      'User Registered Successfully',
+      style: TextStyle(color: Colors.white),
+    ),
     backgroundColor: Colors.green,
     duration: Duration(seconds: 4),
-  )..show(context).whenComplete(() =>  Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder:
-              (context) =>
-              LoginApp())));
+  )..show(context).whenComplete(() => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => LoginApp())));
 }
