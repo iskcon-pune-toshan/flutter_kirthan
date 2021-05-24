@@ -61,7 +61,8 @@ class SignInService {
         uid: authResult.user.uid, fullName: authResult.user.displayName);
   }
 
-  Future<FirebaseUser> signInWithEmail(String email, String password) async {
+  Future<FirebaseUser> signInWithEmail(
+      String email, String password, BuildContext context) async {
     AuthResult authResult = await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 

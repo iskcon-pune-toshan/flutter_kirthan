@@ -92,6 +92,23 @@ class _PreferenceState extends State<Preference> {
   String _selectedTempleArea;
   String _selectedLocalAdmin;
   int _selectedtempleId;
+  String getRequestAcceptance(int requestAcceptance) {
+    switch (requestAcceptance) {
+      case 7:
+        return "One week before";
+        break;
+      case 15:
+        return '15 days before';
+        break;
+      case 30:
+        return 'One month before';
+        break;
+      default:
+        return 'Any time';
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +129,7 @@ class _PreferenceState extends State<Preference> {
                         for (var u in teamList) {
                           teamrequest = u;
                         }
+
                         return Consumer<ThemeNotifier>(
                           builder: (context, notifier, child) => Form(
                             key: _formKey,
@@ -281,6 +299,8 @@ class _PreferenceState extends State<Preference> {
                                                       child:
                                                           DropdownButtonFormField<
                                                               String>(
+                                                        disabledHint: Text(
+                                                            "No Local Admin Available"),
                                                         value: widget.user ==
                                                                 null
                                                             ? _selectedLocalAdmin
@@ -377,7 +397,10 @@ class _PreferenceState extends State<Preference> {
                                 Container(
                                   padding: new EdgeInsets.all(10),
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedRequestAcceptance,
+                                    value: teamrequest.requestAcceptance == null
+                                        ? _selectedRequestAcceptance
+                                        : getRequestAcceptance(
+                                            teamrequest.requestAcceptance),
                                     icon: const Icon(Icons.add),
                                     hint: Text(
                                       'Select request acceptance ',
@@ -423,29 +446,38 @@ class _PreferenceState extends State<Preference> {
                                           color: KirthanStyles.colorPallete30,
                                           child: Text('Submit'),
                                           onPressed: () async {
-                                            if (_formKey.currentState
-                                                .validate()) {
-                                              _formKey.currentState.save();
-                                              String dt = DateFormat(
-                                                      "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                                  .format(DateTime.now());
-                                              teamrequest.updatedTime = dt;
-                                              teamrequest.updatedBy = email;
-                                              String teamrequestStr =
-                                                  jsonEncode(
-                                                      teamrequest.toStrJson());
-                                              teamPageVM
-                                                  .submitUpdateTeamRequest(
-                                                      teamrequestStr);
-                                              SnackBar mysnackbar = SnackBar(
-                                                content: Text(
-                                                    "Team details updated $successful"),
-                                                duration:
-                                                    new Duration(seconds: 4),
-                                                backgroundColor: Colors.green,
-                                              );
+                                            if (_selectedLocalAdmin == null) {
                                               Scaffold.of(context)
-                                                  .showSnackBar(mysnackbar);
+                                                  .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'Local Admin cannot be null'),
+                                                backgroundColor: Colors.red,
+                                              ));
+                                            } else {
+                                              if (_formKey.currentState
+                                                  .validate()) {
+                                                _formKey.currentState.save();
+                                                String dt = DateFormat(
+                                                        "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                                    .format(DateTime.now());
+                                                teamrequest.updatedTime = dt;
+                                                teamrequest.updatedBy = email;
+                                                String teamrequestStr =
+                                                    jsonEncode(teamrequest
+                                                        .toStrJson());
+                                                teamPageVM
+                                                    .submitUpdateTeamRequest(
+                                                        teamrequestStr);
+                                                SnackBar mysnackbar = SnackBar(
+                                                  content: Text(
+                                                      "Team details updated $successful"),
+                                                  duration:
+                                                      new Duration(seconds: 4),
+                                                  backgroundColor: Colors.green,
+                                                );
+                                                Scaffold.of(context)
+                                                    .showSnackBar(mysnackbar);
+                                              }
                                             }
                                           },
                                           // shape: RoundedRectangleBorder(

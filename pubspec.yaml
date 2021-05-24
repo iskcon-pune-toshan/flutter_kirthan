@@ -62,6 +62,7 @@ dependencies:
   email_validator:
   url_launcher:
   random_string: ^2.1.0
+  flushbar:
 
 
 

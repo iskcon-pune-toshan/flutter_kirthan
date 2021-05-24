@@ -25,6 +25,9 @@ final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
 
 class members_profile extends StatefulWidget {
+  // bool showDelete;
+  // members_profile({this.showDelete});
+
   @override
   _members_profileState createState() => _members_profileState();
 }
@@ -135,6 +138,32 @@ class _members_profileState extends State<members_profile> {
   void initState() {
     selectedRadio = 0;
     selectedRadioTile = 0;
+    // if (widget.showDelete == true) {
+    //   widget.showDelete = false;
+    //   Flushbar(
+    //     duration: Duration(seconds: 3),
+    //     //aroundPadding: EdgeInsets.all(10),
+    //     borderRadius: 8,
+    //     backgroundGradient: LinearGradient(
+    //       colors: [Colors.red.shade800, Colors.redAccent.shade700],
+    //       stops: [0.6, 1],
+    //     ),
+    //     boxShadows: [
+    //       BoxShadow(
+    //         color: Colors.black45,
+    //         offset: Offset(3, 3),
+    //         blurRadius: 3,
+    //       ),
+    //     ],
+    //     // All of the previous Flushbars could be dismissed by swiping down
+    //     // now we want to swipe to the sides
+    //     //dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+    //     // The default curve is Curves.easeOut
+    //     //forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+    //     title: 'Member Deleted Successfully',
+    //     message: 'Deleted',
+    //   )..show(context);
+    // }
     super.initState();
   }
 
@@ -162,7 +191,7 @@ class _members_profileState extends State<members_profile> {
 
     setState(() {
       loadData();
-      //counter = 0;
+      counter = 0;
     });
 
     return null;
@@ -309,6 +338,8 @@ class _members_profileState extends State<members_profile> {
                                                                                                 print(finalTeamUserList[i].userName);
 
                                                                                                 _groupValue = value;
+                                                                                                print("groupvalue");
+                                                                                                print(_groupValue);
                                                                                               });
                                                                                             },
                                                                                             title: Consumer<ThemeNotifier>(
@@ -324,19 +355,25 @@ class _members_profileState extends State<members_profile> {
                                                                                       onPressed: () {
                                                                                         List<TeamUser> teamUserToBeDeleted = new List<TeamUser>();
                                                                                         teamUserToBeDeleted.add(finalTeamUserList[_groupValue]);
+                                                                                        print("final");
+                                                                                        print(finalTeamUserList);
                                                                                         teamUserPageVM.submitDeleteTeamUserMapping(teamUserToBeDeleted);
 
                                                                                         // teamrequestmap["id"] =
                                                                                         //     permissionsrequest?.id;
                                                                                         // permissionsPageVM
                                                                                         //     .deletePermissions(teamrequestmap);
+                                                                                        //Navigator.of(context).pushReplacementNamed('/screen4');
                                                                                         SnackBar mysnackbar = SnackBar(
                                                                                           content: Text("Member $delete "),
                                                                                           duration: new Duration(seconds: 4),
                                                                                           backgroundColor: Colors.red,
                                                                                         );
-                                                                                        _scaffoldKey.currentState.showSnackBar(mysnackbar);
-                                                                                        Navigator.pop(context);
+
+                                                                                        Navigator.of(context).pushNamedAndRemoveUntil('/screen1', ModalRoute.withName('/screen4'));
+                                                                                        Navigator.of(context).push(MaterialPageRoute(
+                                                                                            builder: (context) => //App()
+                                                                                                members_profile()));
                                                                                       },
                                                                                       child: Consumer<ThemeNotifier>(
                                                                                         builder: (context, notifier, child) => Text(

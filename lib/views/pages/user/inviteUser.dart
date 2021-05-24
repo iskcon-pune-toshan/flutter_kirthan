@@ -23,6 +23,7 @@ class _InviteUserState extends State<InviteUser> {
   Future<List<UserRequest>> Users;
   String inviteCode = randomAlphaNumeric(6);
   bool present = false;
+  bool _validate = false;
   Future<List<ProspectiveUserRequest>> ProspectiveUsers;
   List<UserRequest> userList = List<UserRequest>();
   List<ProspectiveUserRequest> prospectiveList = List<ProspectiveUserRequest>();
@@ -69,7 +70,10 @@ class _InviteUserState extends State<InviteUser> {
               child: TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(), hintText: 'Enter E-mail'),
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter E-mail',
+                  errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                ),
               ),
             ),
             SizedBox(
@@ -78,6 +82,11 @@ class _InviteUserState extends State<InviteUser> {
             RaisedButton.icon(
               icon: Icon(Icons.keyboard),
               onPressed: () async {
+                setState(() {
+                  _emailController.text.isEmpty
+                      ? _validate = true
+                      : _validate = false;
+                });
                 print("clicked");
                 print("CHECK0");
                 userList = await Users;
@@ -116,27 +125,34 @@ class _InviteUserState extends State<InviteUser> {
                     );
                   }
                 }
-                String uemail = _emailController.text;
-                prospectiveUserRequest.invitedBy = user_id;
-                prospectiveUserRequest.userEmail = _emailController.text;
-                prospectiveUserRequest.inviteCode = inviteCode;
-                prospectiveUserRequest.inviteType = "local_admin";
-                prospectiveUserRequest.isProcessed = false;
-                Map<String, dynamic> prospectivemap =
-                    prospectiveUserRequest.toJson();
-                prospectiveUserPageVM
-                    .submitNewProspectiveUserRequest(prospectivemap);
-                emailLaunch('mailto:$uemail?'
-                    'subject=Invitiation%20to%20become%20a%20local admin&'
-                    'body=Hello\n\nI%20would%20like%20to%20inivte%20you%20to%20download%20our%20app%20using%20the%20link\n\n'
-                    'https://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing\n\n'
-                    'And%20become%20a%20local admin%20using%20the%20code\n"$inviteCode"\n\nThank%20You');
-                // SnackBar mysnackbar = SnackBar(
-                //   content: Text("Invited Successfully"),
-                //   duration: new Duration(seconds: 4),
-                //   backgroundColor: Colors.green,
-                // );
-                // Scaffold.of(context).showSnackBar(mysnackbar);
+                if (!_emailController.text.contains("@")) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('Enter a valid email'),
+                    backgroundColor: Colors.red,
+                  ));
+                } else {
+                  String uemail = _emailController.text;
+                  prospectiveUserRequest.invitedBy = user_id;
+                  prospectiveUserRequest.userEmail = _emailController.text;
+                  prospectiveUserRequest.inviteCode = inviteCode;
+                  prospectiveUserRequest.inviteType = "local_admin";
+                  prospectiveUserRequest.isProcessed = false;
+                  Map<String, dynamic> prospectivemap =
+                      prospectiveUserRequest.toJson();
+                  prospectiveUserPageVM
+                      .submitNewProspectiveUserRequest(prospectivemap);
+                  emailLaunch('mailto:$uemail?'
+                      'subject=Invitiation%20to%20become%20a%20local admin&'
+                      'body=Hello\n\nI%20would%20like%20to%20inivte%20you%20to%20download%20our%20app%20using%20the%20link\n\n'
+                      'https://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing\n\n'
+                      'And%20become%20a%20local admin%20using%20the%20code\n"$inviteCode"\n\nThank%20You');
+                  // SnackBar mysnackbar = SnackBar(
+                  //   content: Text("Invited Successfully"),
+                  //   duration: new Duration(seconds: 4),
+                  //   backgroundColor: Colors.green,
+                  // );
+                  // Scaffold.of(context).showSnackBar(mysnackbar);
+                }
               },
               label: Text("Send a code"),
             )

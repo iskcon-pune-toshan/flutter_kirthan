@@ -399,55 +399,84 @@ class _TeamWriteState extends State<TeamWrite> {
                               builder: (BuildContext context,
                                   AsyncSnapshot<List<TeamRequest>> snapshot) {
                                 if (snapshot.data != null) {
-                                  List<TeamRequest> teamList = snapshot.data;
-                                  return FutureBuilder<List<UserRequest>>(
-                                      future: Users,
+                                  List<TeamRequest> teamListAppr =
+                                      snapshot.data;
+                                  return FutureBuilder<List<TeamRequest>>(
+                                      future:
+                                          teamPageVM.getTeamRequests("Waiting"),
                                       builder: (BuildContext context,
-                                          AsyncSnapshot<List<UserRequest>>
+                                          AsyncSnapshot<List<TeamRequest>>
                                               snapshot) {
                                         if (snapshot.data != null) {
-                                          List<UserRequest> tempUserList =
-                                              new List<UserRequest>();
-                                          if (widget.userRequest == null) {
-                                            tempUserList = snapshot.data;
-                                          } else {
-                                            tempUserList
-                                                .add(widget.userRequest);
-                                          }
-                                          userList = getTeamLeads(
-                                              teamList, tempUserList);
-                                          List<String> teamLeadId = userList
-                                              .map((user) => user.email)
-                                              .toSet()
-                                              .toList();
-                                          return DropdownButtonFormField<
-                                              String>(
-                                            value: widget.userRequest == null
-                                                ? _selectedTeamLeadId
-                                                : widget.userRequest.email,
-                                            icon: const Icon(
-                                                Icons.account_circle),
-                                            hint: Text('Select Team Lead Id',
-                                                style: TextStyle(
-                                                    color: Colors.grey)),
-                                            items: teamLeadId
-                                                .map((teamLeadId) =>
-                                                    DropdownMenuItem<String>(
-                                                      value: teamLeadId,
-                                                      child: Text(teamLeadId),
-                                                    ))
-                                                .toList(),
-                                            onChanged: (input) {
-                                              setState(() {
-                                                _selectedTeamLeadId = input;
+                                          List<TeamRequest> teamList =
+                                              teamListAppr + snapshot.data;
+                                          return FutureBuilder<
+                                                  List<UserRequest>>(
+                                              future: Users,
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<
+                                                          List<UserRequest>>
+                                                      snapshot) {
+                                                if (snapshot.data != null) {
+                                                  List<UserRequest>
+                                                      tempUserList =
+                                                      new List<UserRequest>();
+                                                  if (widget.userRequest ==
+                                                      null) {
+                                                    tempUserList =
+                                                        snapshot.data;
+                                                  } else {
+                                                    tempUserList.add(
+                                                        widget.userRequest);
+                                                  }
+                                                  userList = getTeamLeads(
+                                                      teamList, tempUserList);
+                                                  List<String> teamLeadId =
+                                                      userList
+                                                          .map((user) =>
+                                                              user.email)
+                                                          .toSet()
+                                                          .toList();
+                                                  return DropdownButtonFormField<
+                                                      String>(
+                                                    value: widget.userRequest ==
+                                                            null
+                                                        ? _selectedTeamLeadId
+                                                        : widget
+                                                            .userRequest.email,
+                                                    icon: const Icon(
+                                                        Icons.account_circle),
+                                                    hint: Text(
+                                                        'Select Team Lead Id',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.grey)),
+                                                    items: teamLeadId
+                                                        .map((teamLeadId) =>
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value: teamLeadId,
+                                                              child: Text(
+                                                                  teamLeadId),
+                                                            ))
+                                                        .toList(),
+                                                    onChanged: (input) {
+                                                      setState(() {
+                                                        _selectedTeamLeadId =
+                                                            input;
+                                                      });
+                                                    },
+                                                    onSaved: (input) {
+                                                      teamrequest.teamLeadId =
+                                                          input;
+                                                    },
+                                                  );
+                                                } else if (snapshot.hasError) {
+                                                  Text(
+                                                      "You already have a team");
+                                                }
+                                                return Container();
                                               });
-                                            },
-                                            onSaved: (input) {
-                                              teamrequest.teamLeadId = input;
-                                            },
-                                          );
-                                        } else if (snapshot.hasError) {
-                                          Text("You already have a team");
                                         }
                                         return Container();
                                       });
@@ -942,46 +971,53 @@ class _TeamWriteState extends State<TeamWrite> {
                                     _selectedTeamMember3
                                   ];
                                   print(selectedMembers);
-                                  if (_formKey.currentState.validate()) {
-                                    final FirebaseAuth auth =
-                                        FirebaseAuth.instance;
-                                    final FirebaseUser user =
-                                        await auth.currentUser();
-                                    final String email = user.email;
+                                  if (_selectedTeamLeadId == null) {
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                      content: Text('Select a team lead'),
+                                      backgroundColor: Colors.red,
+                                    ));
+                                  } else {
+                                    if (_formKey.currentState.validate()) {
+                                      final FirebaseAuth auth =
+                                          FirebaseAuth.instance;
+                                      final FirebaseUser user =
+                                          await auth.currentUser();
+                                      final String email = user.email;
 
-                                    String dt =
-                                        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                            .format(DateTime.now());
-                                    _formKey.currentState.save();
-                                    final String teamTitle =
-                                        teamrequest.teamTitle;
-                                    //teamrequest.isProcessed = false;
-                                    teamrequest.createdBy = email;
-                                    print(teamrequest.createdBy);
-                                    teamrequest.createdTime = dt;
-                                    teamrequest.updatedBy = null;
-                                    teamrequest.updatedTime = null;
-                                    setState(() {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => widget
-                                                        .userRequest ==
-                                                    null
-                                                ? TeamLocalAdmin(
-                                                    teamrequest: teamrequest,
-                                                    selectedMembers:
-                                                        selectedMembers,
-                                                    user: null,
-                                                  )
-                                                : TeamLocalAdmin(
-                                                    teamrequest: teamrequest,
-                                                    selectedMembers:
-                                                        selectedMembers,
-                                                    user: widget.localAdmin,
-                                                  )),
-                                      );
-                                    });
+                                      String dt = DateFormat(
+                                              "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                          .format(DateTime.now());
+                                      _formKey.currentState.save();
+                                      final String teamTitle =
+                                          teamrequest.teamTitle;
+                                      //teamrequest.isProcessed = false;
+                                      teamrequest.createdBy = email;
+                                      print(teamrequest.createdBy);
+                                      teamrequest.createdTime = dt;
+                                      teamrequest.updatedBy = null;
+                                      teamrequest.updatedTime = null;
+                                      setState(() {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => widget
+                                                          .userRequest ==
+                                                      null
+                                                  ? TeamLocalAdmin(
+                                                      teamrequest: teamrequest,
+                                                      selectedMembers:
+                                                          selectedMembers,
+                                                      user: null,
+                                                    )
+                                                  : TeamLocalAdmin(
+                                                      teamrequest: teamrequest,
+                                                      selectedMembers:
+                                                          selectedMembers,
+                                                      user: widget.localAdmin,
+                                                    )),
+                                        );
+                                      });
+                                    }
                                   }
                                   //String s = jsonEncode(userrequest.mapToJson());
                                   //service.registerUser(s);
