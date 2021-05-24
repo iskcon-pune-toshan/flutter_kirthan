@@ -21,14 +21,9 @@ class _ServiceTypeState extends State<ServiceType> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          elevation: 0.0,
-          iconTheme: IconThemeData(
-            color: KirthanStyles.colorPallete60, //change your color here
-          ),
-          backgroundColor: KirthanStyles.colorPallete30,
-          title: Text('Service Type',
-              style: TextStyle(color: KirthanStyles.colorPallete60))
-    ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       key: _scaffoldKey,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -126,58 +121,31 @@ class _ServiceTypeState extends State<ServiceType> {
               //TODO
               if (color1 == true) {
                 widget.eventRequest.serviceType = "Free";
-              }
-              if (color2 == true) {
+              } else if (color2 == true) {
                 widget.eventRequest.serviceType = "Premium";
+              } else if (color1 == false && color2 == false) {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text('Select a service type'),
+                  backgroundColor: Colors.red,
+                ));
               }
+              if (color1 || color2) {
+                Map<String, dynamic> teammap = widget.eventRequest.toJson();
+                EventRequest neweventrequest =
+                    await eventPageVM.submitNewEventRequest(teammap);
 
-              Map<String, dynamic> teammap = widget.eventRequest.toJson();
-              EventRequest neweventrequest =
-                  await eventPageVM.submitNewEventRequest(teammap);
+                print(neweventrequest.id);
+                String eid = neweventrequest.id.toString();
+                SnackBar mysnackbar = SnackBar(
+                  content: Text("Event registered $successful with $eid"),
+                  duration: new Duration(seconds: 4),
+                  backgroundColor: Colors.green,
+                );
+                _scaffoldKey.currentState.showSnackBar(mysnackbar);
 
-              print(neweventrequest.id);
-              String eid = neweventrequest.id.toString();
-
-              SnackBar mysnackbar = SnackBar(
-                content: Text("Event registered $successful with $eid"),
-                duration: new Duration(seconds: 4),
-                backgroundColor: Colors.green,
-              );
-/*
-                                List<EventTeam> listofEventUsers = new List<
-                                    EventTeam>();
-
-                                  EventTeam eventteam = new EventTeam();
-                                  //eventteam.eventId = team.eventId;
-                                  eventteam.teamId = selectedTeam.id;
-                                  eventteam.eventId = neweventrequest.id;
-                                  eventteam.createdBy = email;
-                                  eventteam.teamName = selectedTeam.teamTitle;
-
-                                  String dta = DateFormat(
-                                      "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                      .format(DateTime.now());
-                                  eventteam.createdTime = dt;
-                                  //eventteam.updatedBy = "SYSTEM";
-                                  //eventteam.updatedTime = dt;
-                                  listofEventUsers.add(eventteam);
-                                  print("event-team created");*/
-/*SnackBar mysnackbar = SnackBar(
-                                    content: Text(
-                                        "Event-Team registered $successful "),
-                                    duration: new Duration(seconds: 4),
-                                    backgroundColor: Colors.green,
-                                  );*/
-// Scaffold.of(context).showSnackBar(mysnackbar);
-              _scaffoldKey.currentState.showSnackBar(mysnackbar);
-              /*Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => App()));*/
-// Scaffold.of(context).showSnackBar(mysnackbar);
-Navigator.pop(context);
-Navigator.pop(context);
-// Scaffold.of(context).showSnackBar(mysnackbar);
-
-//eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }
             },
             child: Text("Submit"),
           )

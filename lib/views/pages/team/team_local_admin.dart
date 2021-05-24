@@ -31,6 +31,9 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flushbar/flushbar_route.dart';
+import 'package:flushbar/flushbar_helper.dart';
 
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
@@ -273,6 +276,8 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                       .toList();
 
                                   return DropdownButtonFormField<String>(
+                                    disabledHint:
+                                        Text("No Local Admin Available"),
                                     value: widget.user == null
                                         ? _selectedLocalAdmin
                                         : widget.user.fullName,
@@ -351,6 +356,22 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                   'Team lead cannot be null'),
                                               backgroundColor: Colors.red,
                                             ));
+                                          } else if (_selectedLocalAdmin ==
+                                              null) {
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Local Admin cannot be null'),
+                                              backgroundColor: Colors.red,
+                                            ));
+                                          } else if (_selectedTempleArea ==
+                                              null) {
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Local Admin Area cannot be null'),
+                                              backgroundColor: Colors.red,
+                                            ));
                                           } else {
                                             if (_formKey.currentState
                                                 .validate()) {
@@ -420,29 +441,11 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                               TeamRequest newteamrequest =
                                                   await teamPageVM
                                                       .submitNewTeamRequest(
-                                                          teammap);
-
-                                              print(newteamrequest.id);
-                                              String tid =
-                                                  newteamrequest.id.toString();
-                                              SnackBar mysnackbar = SnackBar(
-                                                content: Text(
-                                                    "Team registered $successful with $tid"),
-                                                duration:
-                                                    new Duration(seconds: 4),
-                                                backgroundColor: Colors.green,
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(mysnackbar);
+                                                          teammap)
+                                                      .whenComplete(() =>
+                                                          showFlushBar(
+                                                              context));
                                             }
-                                            setState(() {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EventView()),
-                                              );
-                                            });
                                           }
                                         });
                                   }
@@ -461,4 +464,16 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
       }),
     );
   }
+}
+
+void showFlushBar(BuildContext context) {
+  Flushbar(
+    messageText: Text(
+      'Team Registered $successful',
+      style: TextStyle(color: Colors.white),
+    ),
+    backgroundColor: Colors.green,
+    duration: Duration(seconds: 3),
+  )..show(context).whenComplete(() => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => EventView())));
 }

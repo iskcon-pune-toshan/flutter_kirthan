@@ -9,7 +9,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
 
-
 class Choice {
   const Choice({this.id, this.description});
 
@@ -33,11 +32,12 @@ class EventRequestsListItem extends StatelessWidget {
     var format = DateFormat("HH:mm");
     var one = format.parse(eventrequest.eventStartTime);
     var two = format.parse(eventrequest.eventEndTime);
-    if(two.difference(one).toString().substring(0,2).contains(":"))
-    return two.difference(one).toString().substring(0,1);
+    if (two.difference(one).toString().substring(0, 2).contains(":"))
+      return two.difference(one).toString().substring(0, 1);
     else
-      return two.difference(one).toString().substring(0,2);
+      return two.difference(one).toString().substring(0, 2);
   }
+
   String get index => null;
 
   @override
@@ -102,162 +102,162 @@ class EventRequestsListItem extends StatelessWidget {
 //shape: Border.all(width: 2.0, color: Colors.black)
             ),
 /*              Container(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  //alignment: Alignment.topRight,
-                  child: PopupMenuButton<Choice>(
-                    tooltip: null,
-                    icon: Icon(
-                      Icons.more_vert,
-                      color: KirthanStyles.colorPallete30,
-                    ),
-                    itemBuilder: (BuildContext context) {
-                      return popupList.map((f) {
-                        return PopupMenuItem<Choice>(
-                          child: Text(f.description),
-                          value: f,
-                        );
-                      }).toList();
-                    },
-                    onSelected: (choice) {
-                      if (choice.id == 2) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  EditEvent(eventrequest: eventrequest)),
-                        );
-                      } else if (choice.id == 1) {
-                        Map<String, dynamic> processrequestmap =
-                            new Map<String, dynamic>();
-                        processrequestmap["id"] = eventrequest?.id;
-                        processrequestmap["approvalStatus"] = "Approved";
-                        processrequestmap["approvalComments"] =
-                            "ApprovalComments";
-                        processrequestmap["eventType"] =
-                            eventrequest?.eventType;
-                        processrequestmap["addLineOne"] =
-                            eventrequest?.addLineOne;
-                        processrequestmap["city"] = eventrequest?.city;
-                        processrequestmap["country"] = eventrequest?.country;
-                        processrequestmap["phoneNumber"] =
-                            eventrequest?.phoneNumber;
-                        processrequestmap["pincode"] = eventrequest?.pincode;
-                        processrequestmap["eventTitle"] =
-                            eventrequest?.eventTitle;
-                        processrequestmap["eventDescription"] =
-                            eventrequest?.eventDescription;
-                        processrequestmap["eventDate"] =
-                            eventrequest?.eventDate;
-                        processrequestmap["eventDuration"] =
-                            eventrequest?.eventDuration;
-                        processrequestmap["eventLocation"] =
-                            eventrequest?.eventLocation;
-                        processrequestmap["locality"] = eventrequest?.locality;
-                        processrequestmap["state"] = eventrequest?.state;
-                        processrequestmap["isProcessed"] =
-                            eventrequest?.isProcessed;
-                        processrequestmap["createdBy"] =
-                            eventrequest?.createdBy;
-                        processrequestmap["createdTime"] =
-                            eventrequest?.createdTime;
-
-                        eventPageVM.processEventRequest(processrequestmap);
-                        SnackBar mysnackbar = SnackBar(
-                          content: Text("Event $process $successful "),
-                          duration: new Duration(seconds: 4),
-                          backgroundColor: Colors.green,
-                        );
-                        Scaffold.of(context).showSnackBar(mysnackbar);
-                      } else if (choice.id == 3) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        20.0)), //this right here
-                                child: Container(
-                                  height: 200,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextField(
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              hintText:
-                                                  'Do you want to delete?'),
-                                        ),
-                                        SizedBox(
-                                          width: 320.0,
-                                          child: RaisedButton(
-                                            onPressed: () {
-                                              Map<String, dynamic>
-                                                  processrequestmap =
-                                                  new Map<String, dynamic>();
-                                              processrequestmap["id"] =
-                                                  eventrequest?.id;
-                                              eventPageVM.deleteEventRequest(
-                                                  processrequestmap);
-                                              SnackBar mysnackbar = SnackBar(
-                                                content: Text("Event $delete "),
-                                                duration:
-                                                    new Duration(seconds: 4),
-                                                backgroundColor: Colors.red,
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(mysnackbar);
-                                            },
-                                            child: Consumer<ThemeNotifier>(
-                                              builder:
-                                                  (context, notifier, child) =>
-                                                      Text(
-                                                "yes",
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        notifier.custFontSize,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            color: const Color(0xFF1BC0C5),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 320.0,
-                                          child: RaisedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Consumer<ThemeNotifier>(
-                                              builder:
-                                                  (context, notifier, child) =>
-                                                      Text(
-                                                "No",
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        notifier.custFontSize,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            color: const Color(0xFF1BC0C5),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            });
-                      }
-                    },
-                  ),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              //alignment: Alignment.topRight,
+              child: PopupMenuButton<Choice>(
+                tooltip: null,
+                icon: Icon(
+                  Icons.more_vert,
+                  color: KirthanStyles.colorPallete30,
                 ),
-              ),*/
+                itemBuilder: (BuildContext context) {
+                  return popupList.map((f) {
+                    return PopupMenuItem<Choice>(
+                      child: Text(f.description),
+                      value: f,
+                    );
+                  }).toList();
+                },
+                onSelected: (choice) {
+                  if (choice.id == 2) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              EditEvent(eventrequest: eventrequest)),
+                    );
+                  } else if (choice.id == 1) {
+                    Map<String, dynamic> processrequestmap =
+                        new Map<String, dynamic>();
+                    processrequestmap["id"] = eventrequest?.id;
+                    processrequestmap["approvalStatus"] = "Approved";
+                    processrequestmap["approvalComments"] =
+                        "ApprovalComments";
+                    processrequestmap["eventType"] =
+                        eventrequest?.eventType;
+                    processrequestmap["addLineOne"] =
+                        eventrequest?.addLineOne;
+                    processrequestmap["city"] = eventrequest?.city;
+                    processrequestmap["country"] = eventrequest?.country;
+                    processrequestmap["phoneNumber"] =
+                        eventrequest?.phoneNumber;
+                    processrequestmap["pincode"] = eventrequest?.pincode;
+                    processrequestmap["eventTitle"] =
+                        eventrequest?.eventTitle;
+                    processrequestmap["eventDescription"] =
+                        eventrequest?.eventDescription;
+                    processrequestmap["eventDate"] =
+                        eventrequest?.eventDate;
+                    processrequestmap["eventDuration"] =
+                        eventrequest?.eventDuration;
+                    processrequestmap["eventLocation"] =
+                        eventrequest?.eventLocation;
+                    processrequestmap["locality"] = eventrequest?.locality;
+                    processrequestmap["state"] = eventrequest?.state;
+                    processrequestmap["isProcessed"] =
+                        eventrequest?.isProcessed;
+                    processrequestmap["createdBy"] =
+                        eventrequest?.createdBy;
+                    processrequestmap["createdTime"] =
+                        eventrequest?.createdTime;
+
+                    eventPageVM.processEventRequest(processrequestmap);
+                    SnackBar mysnackbar = SnackBar(
+                      content: Text("Event $process $successful "),
+                      duration: new Duration(seconds: 4),
+                      backgroundColor: Colors.green,
+                    );
+                    Scaffold.of(context).showSnackBar(mysnackbar);
+                  } else if (choice.id == 3) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20.0)), //this right here
+                            child: Container(
+                              height: 200,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    TextField(
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText:
+                                              'Do you want to delete?'),
+                                    ),
+                                    SizedBox(
+                                      width: 320.0,
+                                      child: RaisedButton(
+                                        onPressed: () {
+                                          Map<String, dynamic>
+                                              processrequestmap =
+                                              new Map<String, dynamic>();
+                                          processrequestmap["id"] =
+                                              eventrequest?.id;
+                                          eventPageVM.deleteEventRequest(
+                                              processrequestmap);
+                                          SnackBar mysnackbar = SnackBar(
+                                            content: Text("Event $delete "),
+                                            duration:
+                                                new Duration(seconds: 4),
+                                            backgroundColor: Colors.red,
+                                          );
+                                          Scaffold.of(context)
+                                              .showSnackBar(mysnackbar);
+                                        },
+                                        child: Consumer<ThemeNotifier>(
+                                          builder:
+                                              (context, notifier, child) =>
+                                                  Text(
+                                            "yes",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    notifier.custFontSize,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                        color: const Color(0xFF1BC0C5),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 320.0,
+                                      child: RaisedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Consumer<ThemeNotifier>(
+                                          builder:
+                                              (context, notifier, child) =>
+                                                  Text(
+                                            "No",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    notifier.custFontSize,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                        color: const Color(0xFF1BC0C5),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                  }
+                },
+              ),
+            ),
+          ),*/
 
 /*    Consumer<int_item>(
     builder: (context, int_item, child) => IconButton(

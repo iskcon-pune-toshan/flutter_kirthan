@@ -108,7 +108,7 @@ class _SignUpState extends State<SignUp> {
       user.govtId = "Aadhaar";
       //user.isProcessed = true;
       // user.approvalComments = "Waiting";
-      user.approvalStatus = "Waiting";
+      user.approvalStatus = "Approved";
       user.roleId = 3;
       user.prevRoleId = 3;
       user.createdBy = _emailcontroller.text;
