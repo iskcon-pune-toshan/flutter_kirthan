@@ -56,26 +56,38 @@ class TeamRequestsListItem extends StatelessWidget {
             },
             onSelected: (choice) {
               if (choice.id == 2) {
-                /*teamPageVM.accessTypes[ACCESS_TYPE_EDIT] == true
-                    ? () {*/
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => EditTeam(teamrequest: teamrequest)),
                 );
-                /* }
-                    : null;*/
               } else if (choice.id == 1) {
-                /*teamPageVM.accessTypes[ACCESS_TYPE_PROCESS] == true
-                    ? () {*/
                 Map<String, dynamic> processrequestmap =
-                new Map<String, dynamic>();
-                processrequestmap["id"] = teamrequest?.id;
-                processrequestmap["approvalStatus"] = "Approved";
-                processrequestmap["approvalComments"] = "ApprovalComments";
-                processrequestmap["teamTitle"] = teamrequest?.teamTitle;
-                processrequestmap["isProcessed"] = teamrequest?.isProcessed;
-                processrequestmap["createdBy"] = teamrequest?.createdBy;
+                    new Map<String, dynamic>();
+                processrequestmap['id'] = teamrequest?.id;
+                processrequestmap['teamTitle'] = teamrequest?.teamTitle;
+                processrequestmap['teamDescription'] =
+                    teamrequest?.teamDescription;
+
+                processrequestmap['createdBy'] = teamrequest?.createdBy;
+                processrequestmap['updatedBy'] = teamrequest?.updatedBy;
+                processrequestmap['updatedTime'] = teamrequest?.updatedTime;
+                processrequestmap['createdTime'] = teamrequest?.createdTime;
+                processrequestmap['approvalStatus'] = "Approved";
+                processrequestmap['location'] = teamrequest?.location;
+                processrequestmap['category'] = teamrequest?.category;
+                processrequestmap['experience'] = teamrequest?.experience;
+                processrequestmap['phoneNumber'] = teamrequest?.phoneNumber;
+                processrequestmap['teamLeadId'] = teamrequest?.teamLeadId;
+                processrequestmap['localAdminArea'] =
+                    teamrequest?.localAdminArea;
+                processrequestmap['localAdminName'] =
+                    teamrequest?.localAdminName;
+                processrequestmap['listOfTeamMembers'] =
+                    teamrequest?.listOfTeamMembers;
+                processrequestmap['requestAcceptance'] =
+                    teamrequest?.requestAcceptance;
+                processrequestmap['duration'] = teamrequest?.duration;
 
                 teamPageVM.processTeamRequest(processrequestmap);
                 SnackBar mysnackbar = SnackBar(
@@ -94,7 +106,7 @@ class TeamRequestsListItem extends StatelessWidget {
                       return Dialog(
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.circular(20.0)), //this right here
+                                BorderRadius.circular(20.0)), //this right here
                         child: Container(
                           height: 200,
                           child: Padding(
@@ -113,7 +125,7 @@ class TeamRequestsListItem extends StatelessWidget {
                                   child: RaisedButton(
                                     onPressed: () {
                                       Map<String, dynamic> teamrequestmap =
-                                      new Map<String, dynamic>();
+                                          new Map<String, dynamic>();
                                       teamrequestmap["id"] = teamrequest?.id;
                                       teamrequestmap["teamLeadId"] =
                                           teamrequest?.teamLeadId;
@@ -130,11 +142,11 @@ class TeamRequestsListItem extends StatelessWidget {
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                            "yes",
-                                            style: TextStyle(
-                                                fontSize: notifier.custFontSize,
-                                                color: Colors.white),
-                                          ),
+                                        "yes",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -148,11 +160,11 @@ class TeamRequestsListItem extends StatelessWidget {
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                            "No",
-                                            style: TextStyle(
-                                                fontSize: notifier.custFontSize,
-                                                color: Colors.white),
-                                          ),
+                                        "No",
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),

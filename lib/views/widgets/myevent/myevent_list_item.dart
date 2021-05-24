@@ -34,24 +34,33 @@ class MyEventRequestsListItem extends StatelessWidget {
     Choice(id: 3, description: "Delete"),
     //Choice(id: 4, description: "Location"),
   ];
+  String duration() {
+    var format = DateFormat("HH:mm");
+    var one = format.parse(eventrequest.eventStartTime);
+    var two = format.parse(eventrequest.eventEndTime);
+    if(two.difference(one).toString().substring(0,2).contains(":"))
+      return two.difference(one).toString().substring(0,1);
+    else
+      return two.difference(one).toString().substring(0,2);
+  }
   String get index => null;
   // var filteredMap;
   // List<EventRequest> filtereMap = eventrequest
   //     .where((x) => x.eventDuration.contains(notifier.duration))
   //     .toList();
   Color getcolor() {
-    if (eventrequest?.status == 2)
+    if (eventrequest?.teamInviteStatus == 2)
       return Colors.green;
-    else if (eventrequest?.status == 1)
+    else if (eventrequest?.teamInviteStatus == 1)
       return Colors.blue;
-    else if (eventrequest?.status == 0)
+    else if (eventrequest?.teamInviteStatus == 0)
       return Colors.red;
     else
       Colors.red;
   }
 
   Text getstatus() {
-    if (eventrequest?.status == 1)
+    if (eventrequest?.teamInviteStatus == 1)
       return Text(
         'Processing',
         style: TextStyle(
@@ -60,7 +69,7 @@ class MyEventRequestsListItem extends StatelessWidget {
         ),
         textAlign: TextAlign.end,
       );
-    else if (eventrequest?.status == 2)
+    else if (eventrequest?.teamInviteStatus == 2)
       return Text(
         'Approved',
         style: TextStyle(
@@ -69,7 +78,7 @@ class MyEventRequestsListItem extends StatelessWidget {
         ),
         textAlign: TextAlign.end,
       );
-    else if (eventrequest?.status == 0)
+    else if (eventrequest?.teamInviteStatus == 0)
       return Text(
         'Not Initiated',
         style: TextStyle(
@@ -130,19 +139,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                       color: KirthanStyles.colorPallete60,
                       size: 20,
                     ),
-                    /*Icon(icon: Icon(Icons.location_on),
 
-                         */ /* onPressed:  () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Location (eventrequest: eventrequest)),
-                              //MapView(eventrequest: eventrequest)),
-
-                              //do something
-                            )
-                          },*/ /*),*/
                   ),
                 ],
               ),
@@ -166,15 +163,7 @@ class MyEventRequestsListItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.keyboard_arrow_right),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          EventDetails(eventrequest: eventrequest)),
-//MapView(eventrequest: eventrequest)),
 
-//do something
-                );
               },
             ),
 /*              Container(
@@ -436,6 +425,10 @@ class MyEventRequestsListItem extends StatelessWidget {
 
     return new GestureDetector(
         onTap: () {
+          if(eventrequest?.teamInviteStatus==3){
+
+          }
+          else
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -454,11 +447,6 @@ class MyEventRequestsListItem extends StatelessWidget {
                 color: notifier.currentColorStatus
                     ? notifier.currentColor
                     : Theme.of(context).cardColor,
-                /*gradient: new LinearGradient(
-                colors: [Colors.white, Colors.white],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                tileMode: TileMode.clamp),*/
               ),
               child: new Column(children: <Widget>[
                 new ListTile(
@@ -514,7 +502,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                               margin:
                               const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
-                                eventrequest?.eventTime,
+                                eventrequest?.eventStartTime,
                                 style: TextStyle(
                                   fontSize: notifier.custFontSize,
                                   //color: KirthanStyles.subTitleColor,
@@ -539,9 +527,9 @@ class MyEventRequestsListItem extends StatelessWidget {
                               const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
                                 //notifier.duration
-                                eventrequest?.eventDuration == notifier.duration
-                                    ? eventrequest?.eventDuration + "Hrs"
-                                    : eventrequest?.eventDuration + "Hrs",
+                                duration() == notifier.duration
+                                    ? duration() + " Hrs"
+                                    : duration() + " Hrs",
                                 style: TextStyle(
                                   fontSize: notifier.custFontSize,
                                   // color: KirthanStyles.subTitleColor,

@@ -204,7 +204,6 @@ class _EventUserCreateState extends State<EventUserCreate> {
                       for (var teamuser in selectedTeamUsers) {
                         EventUser eventUser = new EventUser();
                         eventUser.userId = teamuser.userId;
-                        eventUser.teamId = teamuser.teamId;
                         eventUser.eventId = _selectedEvent.id;
                         eventUser.createdBy = "SYSTEM";
                         String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")

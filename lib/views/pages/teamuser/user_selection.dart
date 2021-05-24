@@ -8,8 +8,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
-
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class UserSelection extends StatefulWidget {
   UserSelection({Key key}) : super(key: key);
@@ -25,7 +24,7 @@ class _UserSelectionState extends State<UserSelection> {
   final _formKey = GlobalKey<FormState>();
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   Future<List<UserRequest>> users;
-  List<UserRequest> selectedUsers ;
+  List<UserRequest> selectedUsers;
   bool sort;
 
   @override
@@ -78,15 +77,15 @@ class _UserSelectionState extends State<UserSelection> {
                         setState(() {
                           sort = !sort;
                           if (ascending) {
-                            snapshot.data.sort((a,b) => a.firstName.compareTo(b.firstName));
+                            snapshot.data.sort(
+                                (a, b) => a.fullName.compareTo(b.fullName));
                           } else {
-                            snapshot.data.sort((a,b) => b.firstName.compareTo(a.firstName));
+                            snapshot.data.sort(
+                                (a, b) => b.fullName.compareTo(a.fullName));
                           }
-
                         });
                         //onSortColum(columnIndex, ascending);
-                      }
-                      ),
+                      }),
                   DataColumn(
                     label: Text("LastName"),
                     numeric: false,
@@ -105,16 +104,16 @@ class _UserSelectionState extends State<UserSelection> {
                           },
                           cells: [
                             DataCell(
-                              Text(user.firstName),
+                              Text(user.fullName),
                               onTap: () {
-                                print('Selected ${user.firstName}');
+                                print('Selected ${user.fullName}');
                               },
                             ),
                             DataCell(
-                              Text(user.lastName),
+                              Text(user.fullName),
                             ),
                             DataCell(
-                              Text(user.userName),
+                              Text(user.fullName),
                             ),
                           ]),
                     )

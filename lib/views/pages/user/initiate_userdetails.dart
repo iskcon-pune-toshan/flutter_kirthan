@@ -54,7 +54,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
           if (snapshot.data != null) {
             userList = snapshot.data;
             for (var uname in userList)
-              if (uname.userName == UserName) {
+              if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
                 // print("*******" + _photoName + "*********");
@@ -114,7 +114,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                   }
                 }
                 for (var uname in userList) {
-                  if (uname.userName == UserName) {
+                  if (uname.fullName == UserName) {
                     Email = uname.email;
                     Phone = uname.phoneNumber;
                     return Stack(

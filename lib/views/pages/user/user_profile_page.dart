@@ -75,7 +75,7 @@ class _UserProfileState extends State<UserProfile> {
           if (snapshot.data != null) {
             userList = snapshot.data;
             for (var uname in userList)
-              if (uname.userName == UserName) {
+              if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
                 // print("*********************" +
@@ -143,7 +143,7 @@ class _UserProfileState extends State<UserProfile> {
             if (snapshot.data != null) {
               userList = snapshot.data;
               for (var uname in userList) {
-                if (uname.userName == UserName) {
+                if (uname.fullName == UserName) {
                   Email = uname.email;
                   Phone = uname.phoneNumber;
                   return Stack(

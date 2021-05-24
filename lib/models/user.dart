@@ -66,12 +66,12 @@ class UserRequest extends Model {
   String uid;
   int roleId;
   int prevRoleId;
-  String userName;
+  String fullName;
   String password;
 
   //String userType;
-  String firstName;
-  String lastName;
+  // String firstName;
+  // String lastName;
   String email;
   int phoneNumber;
   String addLineOne;
@@ -84,26 +84,26 @@ class UserRequest extends Model {
   String country;
   String govtIdType;
   String govtId;
-  bool isProcessed;
+  //bool isProcessed;
   String createdBy;
   String createdTime;
   String updatedBy;
   String updatedTime;
   String approvalStatus;
-  String approvalComments;
   String avatarUrl;
   int invitedBy;
+  String profileUrl;
 
 //Typically called form service layer to create a new user
   UserRequest(
       {this.id,
       this.uid,
-      this.userName,
+      this.fullName,
       this.password,
       this.prevRoleId,
       this.roleId,
-      this.firstName,
-      this.lastName,
+      // this.firstName,
+      // this.lastName,
       this.email,
       this.phoneNumber,
       this.addLineOne,
@@ -116,27 +116,27 @@ class UserRequest extends Model {
       this.country,
       this.govtIdType,
       this.govtId,
-      this.isProcessed,
+      //this.isProcessed,
       this.createdBy,
       this.createdTime,
       this.updatedBy,
       this.updatedTime,
       this.approvalStatus,
-      this.approvalComments,
       this.avatarUrl,
-      this.invitedBy});
+      this.invitedBy,
+      this.profileUrl});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory UserRequest.fromJson(Map<String, dynamic> data) {
     return UserRequest(
       id: data['id'],
       uid: data['uid'],
-      userName: data['userName'],
+      fullName: data['fullName'],
       password: data['password'],
       prevRoleId: data['prevRoleId'],
       roleId: data['roleId'],
-      firstName: data['firstName'],
-      lastName: data['lastName'],
+      // firstName: data['firstName'],
+      // lastName: data['lastName'],
       email: data['email'],
       phoneNumber: data['phoneNumber'],
       addLineOne: data['addLineOne'],
@@ -149,15 +149,16 @@ class UserRequest extends Model {
       country: data['country'],
       govtIdType: data['govtIdType'],
       govtId: data['govtId'],
-      isProcessed: data['isProcessed'],
+      //isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
       createdTime: data['createdTime'],
       updatedBy: data['updatedBy'],
       updatedTime: data['updatedTime'],
       approvalStatus: data['approvalStatus'],
-      approvalComments: data['approvalComments'],
+      // approvalComments: data['approvalComments'],
       avatarUrl: data['avatarUrl'],
       invitedBy: data['invitedBy'],
+      profileUrl: data['profileUrl'],
     );
   }
 
@@ -165,12 +166,12 @@ class UserRequest extends Model {
     return UserRequest(
       id: map['id'],
       uid: map['uid'],
-      userName: map['userName'],
+      fullName: map['fullName'],
       password: map['password'],
       prevRoleId: map['prevRoleId'],
       roleId: map['roleId'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
+      // firstName: map['firstName'],
+      // lastName: map['lastName'],
       email: map['email'],
       phoneNumber: map['phoneNumber'],
       addLineOne: map['addLineOne'],
@@ -183,15 +184,16 @@ class UserRequest extends Model {
       country: map['country'],
       govtIdType: map['govtIdType'],
       govtId: map['govtId'],
-      isProcessed: map['isProcessed'],
+      //isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
       createdTime: map['createdTime'],
       updatedBy: map['updatedBy'],
       updatedTime: map['updatedTime'],
       approvalStatus: map['approvalStatus'],
-      approvalComments: map['approvalComments'],
+      //approvalComments: map['approvalComments'],
       avatarUrl: map['avatarUrl'],
       invitedBy: map['invitedBy'],
+      profileUrl: map['profileUrl'],
     );
   }
 
@@ -201,12 +203,12 @@ class UserRequest extends Model {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['uid'] = this.uid;
-    data['userName'] = this.userName;
+    data['fullName'] = this.fullName;
     data['password'] = this.password;
     data['prevRoleId'] = this.prevRoleId;
     data['roleId'] = this.roleId;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
+    // data['firstName'] = this.firstName;
+    // data['lastName'] = this.lastName;
     data['email'] = this.email;
     data['phoneNumber'] = this.phoneNumber;
     data['addLineOne'] = this.addLineOne;
@@ -219,15 +221,16 @@ class UserRequest extends Model {
     data['country'] = this.country;
     data['govtIdType'] = this.govtIdType;
     data['govtId'] = this.govtId;
-    data['isProcessed'] = this.isProcessed;
+    //data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
     data['createdTime'] = this.createdTime;
     data['updatedBy'] = this.updatedBy;
     data['updatedTime'] = this.updatedTime;
     data['approvalStatus'] = this.approvalStatus;
-    data['approvalComments'] = this.approvalComments;
+    // data['approvalComments'] = this.approvalComments;
     data['avatarUrl'] = this.avatarUrl;
     data['invitedBy'] = this.invitedBy;
+    data['profileUrl'] = this.profileUrl;
     return data;
   }
 
@@ -235,12 +238,12 @@ class UserRequest extends Model {
     return {
       "id": this.id,
       "uid": this.uid,
-      "userName": this.userName,
+      "fullName": this.fullName,
       "prevRoleId": this.prevRoleId,
       "roleId": this.roleId,
       "password": this.password,
-      "firstName": this.firstName,
-      "lastName": this.lastName,
+      // "firstName": this.firstName,
+      // "lastName": this.lastName,
       "email": this.email,
       "phoneNumber": this.phoneNumber,
       "addLineOne": this.addLineOne,
@@ -253,15 +256,16 @@ class UserRequest extends Model {
       "country": this.country,
       "govtIdType": this.govtIdType,
       "govtId": this.govtId,
-      "isProcessed": this.isProcessed,
+      //"isProcessed": this.isProcessed,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
       "updatedTime": this.updatedTime,
       "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
-      "approvalComments": this.approvalComments,
+      // "approvalComments": this.approvalComments,
       "avatarUrl": this.avatarUrl,
       "invitedBy": this.invitedBy,
+      "profileUrl": this.profileUrl,
     };
   }
 }
@@ -586,4 +590,9 @@ class UserEntitlements {
   set screenAccess(List<String> value) {
     _screenAccess = value;
   }
+}
+
+class User {
+  final String uid;
+  User({this.uid});
 }

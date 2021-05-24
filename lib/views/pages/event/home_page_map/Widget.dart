@@ -25,7 +25,7 @@ class Maps extends StatefulWidget {
 
 class _MapState extends State<Maps> {
   GoogleMapController _controller;
-  final List<Marker> _markers = [];
+  final Set<Marker> _markers = {};
   final Set<Circle> _circle = {};
   double _radius = 100.0;
   double _zoom = 18.0;
@@ -55,16 +55,15 @@ class _MapState extends State<Maps> {
         zoom: _zoom,
       ),
       circles: _circle,
-      markers: Set.from(
-          _markers),
+      markers: _markers,
       onCameraMove: _onCameraMove,
-      onCameraIdle: () {
+     /* onCameraIdle: () {
         if (_isRadiusFixed != true)
           _mapsBloc.add(
             GenerateMarkerWithRadius(
                 lastPosition: _lastMapPosition, radius: _radius),
           );
-      },
+      },*/
       mapType: _currentMapType,
     );
   }
@@ -87,7 +86,7 @@ class _MapState extends State<Maps> {
                 LatLng(state.locationModel.lat, state.locationModel.long);
             _animateCamera();
           }
-          if (state is MarkerWithRadius) {
+          /*if (state is MarkerWithRadius) {
             Scaffold.of(context)..hideCurrentSnackBar();
             _showFixedGpsIcon = false;
 
@@ -99,18 +98,18 @@ class _MapState extends State<Maps> {
             }
             _markers.add(state.raidiusModel.marker);
             _circle.add(state.raidiusModel.circle);
-          }
+          }*/
 
-          if (state is RadiusFixedUpdate) {
+          /*if (state is RadiusFixedUpdate) {
             Scaffold.of(context)..hideCurrentSnackBar();
             _isRadiusFixed = state.radiusFixed;
           }
-
+*/
           if (state is MapTypeChanged) {
             Scaffold.of(context)..hideCurrentSnackBar();
             _currentMapType = state.mapType;
           }
-          if (state is RadiusUpdate) {
+         /* if (state is RadiusUpdate) {
             Scaffold.of(context)..hideCurrentSnackBar();
             _radius = state.radius;
             _zoom = state.zoom;
@@ -121,7 +120,7 @@ class _MapState extends State<Maps> {
             Scaffold.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(state.snackBar);
-          }
+          }*/
           if (state is LocationFromPlaceFound) {
             Scaffold.of(context)..hideCurrentSnackBar();
             _lastMapPosition =
@@ -169,7 +168,7 @@ class _MapState extends State<Maps> {
                     MapOption(mapType: _currentMapType),
                     LocationUser(),
                     SearchPlace(onPressed: _animateCamera),
-                    RangeRadius(isRadiusFixed: _isRadiusFixed),
+                    //RangeRadius(isRadiusFixed: _isRadiusFixed),
                   ],
                 ),
               );
@@ -180,6 +179,20 @@ class _MapState extends State<Maps> {
 
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
+    setState(() {
+       _markers.clear();
+
+      _markers.add(
+        Marker(
+          markerId: MarkerId("title"),
+          position: LatLng(19.12467575006192, 74.72964141259739),
+          infoWindow: InfoWindow(
+            title: "title",
+          ),
+          //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+        ),
+      );
+    });
   }
 
   void _onCameraMove(CameraPosition position) {

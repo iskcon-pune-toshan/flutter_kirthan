@@ -11,11 +11,10 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamUserPageViewModel teamUserPageVM =
-TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
-
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class TeamUserCreate extends StatefulWidget {
   TeamUserCreate({this.selectedUsers}) : super();
@@ -23,7 +22,6 @@ class TeamUserCreate extends StatefulWidget {
 
   final String screenName = SCR_TEAM_USER;
   final String title = "Team User Mapping";
-
 
   @override
   _TeamUserCreateState createState() =>
@@ -74,11 +72,10 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
                       icon: const Icon(Icons.supervisor_account),
                       hint: Text('Select Team'),
                       items: snapshot.data
-                          .map((team) =>
-                          DropdownMenuItem<TeamRequest>(
-                            value: team,
-                            child: Text(team.teamTitle),
-                          ))
+                          .map((team) => DropdownMenuItem<TeamRequest>(
+                                value: team,
+                                child: Text(team.teamTitle),
+                              ))
                           .toList(),
                       onChanged: (input) {
                         setState(() {
@@ -100,6 +97,7 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
           }
         });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -120,8 +118,8 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
               itemCount: selectedUsers == null ? 0 : selectedUsers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: Text(selectedUsers[index].firstName),
-                  subtitle: Text(selectedUsers[index].lastName),
+                  title: Text(selectedUsers[index].fullName),
+                  subtitle: Text(selectedUsers[index].fullName),
                 );
               }),
           Row(
@@ -148,7 +146,7 @@ class _TeamUserCreateState extends State<TeamUserCreate> {
                       teamUser.updatedBy = "SYSTEM";
                       teamUser.updatedTime = dt;
                       listofTeamUsers.add(teamUser);
-                      SnackBar mysnackbar = SnackBar (
+                      SnackBar mysnackbar = SnackBar(
                         content: Text("Team-User registered $successful "),
                         duration: new Duration(seconds: 4),
                         backgroundColor: Colors.green,

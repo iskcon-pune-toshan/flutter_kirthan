@@ -47,7 +47,7 @@ class UserRequestsListItem extends StatelessWidget {
           margin: const EdgeInsets.only(left: 4.0),
           child: Consumer<ThemeNotifier>(
             builder: (context, notifier, child) => Text(
-              userrequest?.userName,
+              userrequest?.fullName,
               style: TextStyle(
                 //color: KirthanStyles.subTitleColor,
                 fontSize: notifier.custFontSize,
@@ -77,12 +77,12 @@ class UserRequestsListItem extends StatelessWidget {
                     new Map<String, dynamic>();
                 processrequestmap["id"] = userrequest?.id;
                 processrequestmap["approvalStatus"] = "Approved";
-                processrequestmap["approvalComments"] = "ApprovalComments";
+                // processrequestmap["approvalComments"] = "ApprovalComments";
                 processrequestmap["roleId"] = userrequest?.roleId;
-                processrequestmap["firstName"] = userrequest?.firstName;
-                processrequestmap["lastName"] = userrequest?.lastName;
+                // processrequestmap["firstName"] = userrequest?.firstName;
+                // processrequestmap["lastName"] = userrequest?.lastName;
                 processrequestmap["email"] = userrequest?.email;
-                processrequestmap["userName"] = userrequest?.userName;
+                processrequestmap["userName"] = userrequest?.fullName;
                 processrequestmap["password"] = userrequest?.password;
                 processrequestmap["phoneNumber"] = userrequest?.phoneNumber;
                 processrequestmap["addLineOne"] = userrequest?.addLineOne;
@@ -93,7 +93,7 @@ class UserRequestsListItem extends StatelessWidget {
                 processrequestmap["country"] = userrequest?.country;
                 processrequestmap["govtIdType"] = userrequest?.govtIdType;
                 processrequestmap["govtId"] = userrequest?.govtId;
-                processrequestmap["isProcessed"] = userrequest?.isProcessed;
+                //processrequestmap["isProcessed"] = userrequest?.isProcessed;
                 processrequestmap["createdBy"] = userrequest?.createdBy;
                 processrequestmap["createdTime"] = userrequest?.createdTime;
 

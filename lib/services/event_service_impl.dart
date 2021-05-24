@@ -115,8 +115,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       var array = eventType.split(":");
       int eventId = int.parse(array[1]);
       requestBody = '{"id" : $eventId}';
-    } else {
-      requestBody = '{"eventDuration" : "$eventType"}';
     }
     print(requestBody);
 
@@ -171,7 +169,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
   }
 
   //deleteEvents
-  Future<bool> deleteEventRequest(
+  Future<EventRequest> deleteEventRequest(
       Map<String, dynamic> processrequestmap) async {
     print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
@@ -184,11 +182,14 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           "Authorization": "Bearer $token"
         },
         body: requestBody);
-
+print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.body);
+      Map<String, dynamic> eventrequestsData = json.decode(response.body);
+      EventRequest eventrequests = EventRequest.fromMap(eventrequestsData);
+      print(eventrequests);
 
-      return true;
+      return eventrequests;
     } else {
       throw Exception('Failed to get data');
     }

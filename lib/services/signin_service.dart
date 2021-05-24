@@ -46,8 +46,7 @@ class SignInService {
     var authResult = await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     return UserRequest(
-        uid: authResult.user.uid,
-        userName: authResult.user.displayName);
+        uid: authResult.user.uid, fullName: authResult.user.displayName);
   }
 
   Future<FirebaseUser> signInWithEmail(String email, String password) async {
@@ -71,7 +70,7 @@ class SignInService {
     final AuthCredential auth = EmailAuthProvider.getCredential(
         email: email,
         password:
-        password); // to fetch the user Credential by signInwithemailandpassword method
+            password); // to fetch the user Credential by signInwithemailandpassword method
 
     FirebaseUser user = (await firebaseAuth.signInWithCredential(auth)).user;
 
@@ -82,10 +81,9 @@ class SignInService {
   }
 
   Future<FirebaseUser> googSignIn(BuildContext context) async {
-
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
-    await googleUser.authentication;
+        await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -134,7 +132,7 @@ class SignInService {
   Future<UserRequest> getUser() async {
     var firebaseUser = await firebaseAuth.currentUser();
     return UserRequest(
-        uid: firebaseUser?.uid, userName: firebaseUser?.displayName);
+        uid: firebaseUser?.uid, fullName: firebaseUser?.displayName);
   }
 
   Future<bool> validatePassword(String password) async {
@@ -144,7 +142,7 @@ class SignInService {
         email: firebaseUser.email, password: password);
     try {
       var authResult =
-      await firebaseUser.reauthenticateWithCredential(authCredentials);
+          await firebaseUser.reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
       print(e);

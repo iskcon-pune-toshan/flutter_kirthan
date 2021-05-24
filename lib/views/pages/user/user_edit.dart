@@ -66,10 +66,10 @@ class _UserEditState extends State<UserEdit> {
 
   @override
   void initState() {
-    _userUserNameController.text = widget.userrequest.userName;
+    _userUserNameController.text = widget.userrequest.fullName;
     _userPasswordController.text = widget.userrequest.password;
-    _userFirstNameController.text = widget.userrequest.firstName;
-    _userLastNameController.text = widget.userrequest.lastName;
+    // _userFirstNameController.text = widget.userrequest.firstName;
+    // _userLastNameController.text = widget.userrequest.lastName;
     _userEmailController.text = widget.userrequest.email;
     _userPhoneNumberController.text = widget.userrequest.phoneNumber.toString();
     _userAddressController.text = widget.userrequest.addLineOne;
@@ -112,10 +112,8 @@ class _UserEditState extends State<UserEdit> {
                   // _handleSubmitted();
                   _formKey.currentState.save();
                   Navigator.pop(context);
-                  print(widget.userrequest.userName);
+                  print(widget.userrequest.fullName);
                   print(widget.userrequest.password);
-                  print(widget.userrequest.firstName);
-                  print(widget.userrequest.lastName);
 
                   String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                       .format(DateTime.now());
@@ -153,7 +151,7 @@ class _UserEditState extends State<UserEdit> {
                     autocorrect: false,
                     controller: _userUserNameController,
                     onSaved: (String value) {
-                      widget.userrequest.userName = value;
+                      widget.userrequest.fullName = value;
                     },
                   ),
                 ),
@@ -180,52 +178,52 @@ class _UserEditState extends State<UserEdit> {
                     },
                   ),
                 ),
-                new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "First name",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    controller: _userFirstNameController,
-                    onSaved: (String value) {
-                      widget.userrequest.firstName = value;
-                    },
-                  ),
-                ),
-                new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Last name",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    controller: _userLastNameController,
-                    onSaved: (String value) {
-                      widget.userrequest.lastName = value;
-                    },
-                  ),
-                ),
+                // new Container(
+                //   child: new TextFormField(
+                //     decoration: const InputDecoration(
+                //         enabledBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.grey),
+                //         ),
+                //         focusedBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.green),
+                //         ),
+                //         labelText: "First name",
+                //         hintStyle: TextStyle(
+                //           color: Colors.grey,
+                //         ),
+                //         labelStyle: TextStyle(
+                //           color: Colors.grey,
+                //         )),
+                //     autocorrect: false,
+                //     controller: _userFirstNameController,
+                //     onSaved: (String value) {
+                //       widget.userrequest.firstName = value;
+                //     },
+                //   ),
+                // ),
+                // new Container(
+                //   child: new TextFormField(
+                //     decoration: const InputDecoration(
+                //         enabledBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.grey),
+                //         ),
+                //         focusedBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.green),
+                //         ),
+                //         labelText: "Last name",
+                //         hintStyle: TextStyle(
+                //           color: Colors.grey,
+                //         ),
+                //         labelStyle: TextStyle(
+                //           color: Colors.grey,
+                //         )),
+                //     autocorrect: false,
+                //     controller: _userLastNameController,
+                //     onSaved: (String value) {
+                //       widget.userrequest.lastName = value;
+                //     },
+                //   ),
+                // ),
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(

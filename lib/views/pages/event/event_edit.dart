@@ -83,7 +83,9 @@ class _EditEventState extends State<EditEvent> {
   final TextEditingController _eventDateController =
   new TextEditingController();
   String eventDate;
-  final TextEditingController _eventTimeController =
+  final TextEditingController _eventStartTimeController =
+  new TextEditingController();
+  final TextEditingController _eventEndTimeController =
   new TextEditingController();
   String eventTime;
   final TextEditingController _eventDescriptionController =
@@ -121,10 +123,11 @@ class _EditEventState extends State<EditEvent> {
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
     _eventDateController.text = widget.eventrequest.eventDate.substring(0,10);
-    _eventTimeController.text = widget.eventrequest.eventTime;
+    _eventStartTimeController.text = widget.eventrequest.eventStartTime;
+    _eventEndTimeController.text = widget.eventrequest.eventEndTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
     _lineoneController.text = widget.eventrequest.addLineOneS;
-    _eventDurationController.text = widget.eventrequest.eventDuration;
+    //_eventDurationController.text = widget.eventrequest.eventDuration;
     _linetwoController.text = widget.eventrequest.addLineTwoS;
     _pincodeController.text = widget.eventrequest.pincode.toString();
     _stateController.text = widget.eventrequest.state;
@@ -132,7 +135,7 @@ class _EditEventState extends State<EditEvent> {
     _createdTimeController.text = widget.eventrequest.createdTime;
     _updatedByController.text = getCurrentUser().toString();
     _updatedByController.text = widget.eventrequest.updatedTime;
-    approvalStatus = widget.eventrequest.approvalStatus;
+    //approvalStatus = widget.eventrequest.approvalStatus;
     print("createdTime");
     print(widget.eventrequest.createdTime);
     print(widget.eventrequest.isPublicEvent);
@@ -287,38 +290,40 @@ class _EditEventState extends State<EditEvent> {
                     },
                     readOnly: readonly(widget.eventrequest.isPublicEvent),
                     autocorrect: false,
-                    controller: _eventTimeController,
+                    controller: _eventStartTimeController,
                     onSaved: (input) {
                       if (input != null) {
-                        widget.eventrequest.eventTime =
+                        widget.eventrequest.eventStartTime =
                             DateFormat("HH:mm").format(input).toString();
                       } else
-                        _eventTimeController.text =
-                            widget.eventrequest.eventTime;
+                        _eventStartTimeController.text =
+                            widget.eventrequest.eventStartTime;
                     },
                   ),
                 ),
                 new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Event Duration",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
+                  child: DateTimeField(
+                    format: DateFormat("HH:mm"),
+                    onShowPicker: (context, currentValue) async {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()),
+                      );
+
+                      final date = DateTime.now();
+                      return DateTimeField.convert(time);
+                    },
                     readOnly: readonly(widget.eventrequest.isPublicEvent),
-                    controller: _eventDurationController,
-                    onSaved: (String value) {
-                      widget.eventrequest.eventDuration = value;
+                    autocorrect: false,
+                    controller: _eventEndTimeController,
+                    onSaved: (input) {
+                      if (input != null) {
+                        widget.eventrequest.eventEndTime =
+                            DateFormat("HH:mm").format(input).toString();
+                      } else
+                        _eventEndTimeController.text =
+                            widget.eventrequest.eventEndTime;
                     },
                   ),
                 ),

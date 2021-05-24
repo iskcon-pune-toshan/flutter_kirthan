@@ -25,7 +25,7 @@ class TeamPageViewModel extends Model {
 
   Future<List<TeamRequest>> getTeamForApproval(String status) {
     Future<List<TeamRequest>> teamsreqs =
-    apiSvc?.getTeamRequestByStatus(status);
+        apiSvc?.getTeamRequestByStatus(status);
     return teamsreqs;
   }
 
@@ -42,7 +42,7 @@ class TeamPageViewModel extends Model {
   Future<TeamRequest> submitNewTeamRequest(
       Map<String, dynamic> teamrequestmap) {
     Future<TeamRequest> teamrequest =
-    apiSvc?.submitNewTeamRequest(teamrequestmap);
+        apiSvc?.submitNewTeamRequest(teamrequestmap);
     return teamrequest;
   }
 

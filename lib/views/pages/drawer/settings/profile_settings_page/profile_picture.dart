@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +16,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+final UserPageViewModel userPageVM =
+    UserPageViewModel(apiSvc: UserAPIService());
+
 class profilePicture extends StatefulWidget {
   @override
   _profilePictureState createState() => _profilePictureState();
@@ -19,7 +27,8 @@ class profilePicture extends StatefulWidget {
 class _profilePictureState extends State<profilePicture> {
   File _image;
   String profilePic;
-  String photoUrl;
+  String _photoUrl;
+  String uemail;
   // final FirebaseAuth auth = FirebaseAuth.instance;
   // getCurrentUser() async {
   //   final FirebaseUser user = await auth.currentUser() ;
@@ -43,33 +52,6 @@ class _profilePictureState extends State<profilePicture> {
       });
     }
 
-    // Widget ProfilePages() {
-    //   profilePic=getEmail() ;
-    //   //profilePic = getCurrentUser() as String;
-    //   //  StorageReference ref = FirebaseStorage.instance.ref();
-    //   final ref = FirebaseStorage.instance.ref().child(
-    //       profilePic+'.jpg');
-    //   return FutureBuilder(
-    //       future: ref.getDownloadURL(),
-    //       builder: (context, snapshot) {
-    //         if (snapshot.data != null) {
-    //           print("\n\n\n\n\n\n\n" + snapshot.data + "\n\n\n\n\n\n");
-    //           // return new CachedNetworkImage(
-    //           //   height: 110,
-    //           //   width: 140,
-    //           //   fit: BoxFit.fill,
-    //           //   imageUrl: snapshot.data,
-    //           //   placeholder: (context, url) => CircularProgressIndicator(),
-    //           //   errorWidget: (context, url, error) => Icon(Icons.error),
-    //           // );
-    //
-    //           return new Image.network(snapshot.data,
-    //               height: 100.0, width: 100.0, fit: BoxFit.fill);
-    //
-    //         }
-    //         return CircularProgressIndicator();
-    //       });
-    // }
     Future<String> getEmail() async {
       final FirebaseAuth auth = FirebaseAuth.instance;
       var user = await auth.currentUser();
@@ -125,20 +107,26 @@ class _profilePictureState extends State<profilePicture> {
       getEmail();
       final FirebaseAuth auth = FirebaseAuth.instance;
       var user = await auth.currentUser();
-      String uemail = user.email;
+      uemail = user.email;
       String fileName = basename(_image.path);
       StorageReference firebaseStorageRef =
           FirebaseStorage.instance.ref().child(uemail + '.jpg');
       StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-      FirebaseStorage.instance
-          .ref()
-          .child(fileName)
-          .getDownloadURL()
-          .then((value) => {photoUrl = value});
+      await uploadTask.onComplete;
+      firebaseStorageRef.getDownloadURL().then((value) {
+        setState(() {
+          _photoUrl = value;
+        });
+      });
+      // FirebaseStorage.instance
+      //     .ref()
+      //     .child(uemail + '.jpg')
+      //     .getDownloadURL()
+      //     .then((value) => {photoUrl = value});
       // retrievePic(photoUrl);
       setState(() {
         print("Profile Picture uploaded");
+        print(_photoUrl);
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
       });
@@ -213,7 +201,7 @@ class _profilePictureState extends State<profilePicture> {
                               builder: (context, notifier, child) => Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                 /* Text(
+                                  /* Text(
                                     'Username:    ',
                                     style: TextStyle(
                                         fontSize: notifier.custFontSize),
@@ -245,22 +233,70 @@ class _profilePictureState extends State<profilePicture> {
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
                               color: KirthanStyles.colorPallete30,
-                              onPressed: () {
+                              onPressed: () async {
                                 //Image.asset('assets/images/default_profile_picture.png');
                                 ProfilePages();
                                 deletePic(context);
+                                List<UserRequest> userrequest =
+                                    await userPageVM.getUserRequests('$uemail');
+                                //
+                                if (userrequest.isNotEmpty) {
+                                  print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+                                  print(_photoUrl);
+                                  UserRequest userreq = new UserRequest();
+                                  for (var user in userrequest) {
+                                    user.profileUrl = null;
+                                    userreq = user;
+                                  }
+                                  String userrequestmap =
+                                      jsonEncode(userreq.toStrJson());
+                                  userPageVM
+                                      .submitUpdateUserRequest(userrequestmap);
+                                  // for()
+                                }
                               },
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                RaisedButton(
-                                  child: Text('Save'),
-                                  color: Colors.blueGrey,
-                                  onPressed: () {
-                                    uploadPic(context);
-                                  },
-                                ),
+                                FutureBuilder(
+                                    future: getEmail(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.data != null) {
+                                        String email = snapshot.data;
+                                        {
+                                          {
+                                            return RaisedButton(
+                                              child: Text('Save'),
+                                              color: Colors.blueGrey,
+                                              onPressed: () async {
+                                                uploadPic(context);
+                                                List<UserRequest> userrequest =
+                                                    await userPageVM
+                                                        .getUserRequests(
+                                                            '$email');
+                                                if (userrequest.isNotEmpty) {
+                                                  UserRequest userreq =
+                                                      new UserRequest();
+                                                  for (var user
+                                                      in userrequest) {
+                                                    user.profileUrl = _photoUrl;
+                                                    userreq = user;
+                                                  }
+                                                  String userrequestmap =
+                                                      jsonEncode(
+                                                          userreq.toStrJson());
+                                                  userPageVM
+                                                      .submitUpdateUserRequest(
+                                                          userrequestmap);
+                                                  // for()
+                                                }
+                                              },
+                                            );
+                                          }
+                                        }
+                                      }
+                                    }),
                                 RaisedButton(
                                   child: Text('Cancel'),
                                   color: Colors.blueGrey,

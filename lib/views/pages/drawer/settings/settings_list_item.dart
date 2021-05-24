@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
@@ -9,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/preferences_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/perferences_create.dart';
 
 class MySettingsApp extends StatefulWidget {
@@ -93,47 +93,21 @@ class _MyAppState extends State<MySettingsApp> {
                 ),
                 title: Consumer<ThemeNotifier>(
                   builder: (context, notifier, child) => Text(
-                    "Perferences",
+                    "Preferences",
                     style: TextStyle(
                       fontSize: notifier.custFontSize,
                       color: KirthanStyles.colorPallete30,
                     ),
                   ),
                 ),
-                onTap: () {
+                onTap: () async {
+                  //List<UserRequest> uList
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PreferenceView()));
-                },
-                selected: true,
-              ),
-            ),
-            Divider(),
-            Card(
-              child: ListTile(
-                trailing: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: KirthanStyles.colorPallete30,
-                ),
-                leading: Icon(
-                  Icons.brightness_4,
-                  color: KirthanStyles.colorPallete30,
-                ),
-                title: Consumer<ThemeNotifier>(
-                  builder: (context, notifier, child) => Text(
-                    "Display",
-                    style: TextStyle(
-                      fontSize: notifier.custFontSize,
-                      color: KirthanStyles.colorPallete30,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyPrefSettingsApp()));
+                          builder: (context) => Preference(
+                                user: null,
+                              )));
                 },
                 selected: true,
               ),
@@ -205,6 +179,35 @@ class _MyAppState extends State<MySettingsApp> {
                   Icons.notifications_active,
                   color: KirthanStyles.colorPallete30,
                 ),
+              ),
+            ),
+            Divider(),
+            Card(
+              child: ListTile(
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.brightness_4,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                title: Consumer<ThemeNotifier>(
+                  builder: (context, notifier, child) => Text(
+                    "Display",
+                    style: TextStyle(
+                      fontSize: notifier.custFontSize,
+                      color: KirthanStyles.colorPallete30,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyPrefSettingsApp()));
+                },
+                selected: true,
               ),
             ),
           ],

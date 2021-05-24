@@ -125,7 +125,7 @@ class LocationMark extends State<Location> {
     var title = widget.eventrequest?.eventTitle;
     double lat;
     double long;
-if(widget.eventrequest?.sourceLatitude==null) {
+if(widget.eventrequest?.latitudeS==null) {
   final query = widget.eventrequest?.addLineOneS +
       widget.eventrequest?.addLineTwoS +
       widget.eventrequest?.localityS +
@@ -139,8 +139,8 @@ if(widget.eventrequest?.sourceLatitude==null) {
 }
 else
   {
-    lat=widget.eventrequest.sourceLatitude;
-    long=widget.eventrequest.sourceLongitude;
+    lat=widget.eventrequest.latitudeS;
+    long=widget.eventrequest.longitudeS;
     print("else part exceuted");
   }
     _destination = LatLng(lat, long);

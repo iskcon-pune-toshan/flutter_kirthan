@@ -73,7 +73,8 @@ class _EnterCodeState extends State<EnterCode> {
           print(prospectiveList.length);
           if (prospectiveList != null) {
             for (var puser in prospectiveList) {
-              if (puser.userEmail == email) {
+              if (puser.userEmail == email &&
+                  puser.inviteType.contains("local_admin")) {
                 if (puser.isProcessed == true) {
 
                   return App();
@@ -115,7 +116,7 @@ class _EnterCodeState extends State<EnterCode> {
                               controller: _textController,
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
-                                hintText: "Enter code to become local admin",
+                                  hintText: "Enter code to become local admin",
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(20)),
@@ -152,6 +153,7 @@ class _EnterCodeState extends State<EnterCode> {
                                             _textController.text) {
                                       if (puser.inviteType == 'local_admin') {
                                         userrequest.email = email;
+                                        userrequest.prevRoleId = 3;
                                         userrequest.roleId = 2;
                                         String userrequestStr =
                                             jsonEncode(userrequest.toStrJson());

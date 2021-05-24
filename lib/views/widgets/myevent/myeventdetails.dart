@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,11 +28,13 @@ final UserPageViewModel userPageVM =
 
 class EventDetails extends StatefulWidget {
   EventRequest eventrequest;
+
   //EventTeam eventTeam;
   //TeamRequest selectedteam;
   LoginApp loginApp;
   final String screenName = SCR_EVENT;
   UserRequest userrequest;
+
   EventDetails({Key key, @required this.eventrequest, @required this.loginApp})
       : super(key: key);
 
@@ -40,6 +44,7 @@ class EventDetails extends StatefulWidget {
 
 class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
   //EventRequest eventrequestobj = new EventRequest();
   //_EditProfileViewState({Key key, @required this.eventrequest}) ;
   //final IKirthanRestApi apiSvc = new RestAPIServices();
@@ -86,6 +91,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
     "Lakshadweep",
     "Puducherry"
   ];
+
   // controllers for form text controllers
   final TextEditingController _eventTitleController =
       new TextEditingController();
@@ -96,7 +102,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   final TextEditingController _eventDateController =
       new TextEditingController();
   String eventDate;
-  final TextEditingController _eventTimeController =
+  final TextEditingController _eventEndTimeController =
+      new TextEditingController();
+  final TextEditingController _eventStartTimeController =
       new TextEditingController();
   String eventTime;
   final TextEditingController _eventDescriptionController =
@@ -131,6 +139,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
 
   List<String> eventss;
   String radioItem = '';
+
   //String createdTime;
 
   int t;
@@ -142,15 +151,17 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   String photoUrl;
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
+
   @override
   void initState() {
     _eventTitleController.text = widget.eventrequest.eventTitle;
     _eventTypeController.text = widget.eventrequest.eventType;
     _eventDateController.text = widget.eventrequest.eventDate.substring(0, 10);
-    _eventTimeController.text = widget.eventrequest.eventTime;
+    _eventStartTimeController.text = widget.eventrequest.eventStartTime;
+    _eventEndTimeController.text = widget.eventrequest.eventEndTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;
     _lineoneController.text = widget.eventrequest.addLineOneS;
-    _eventDurationController.text = widget.eventrequest.eventDuration;
+    //  _eventDurationController.text = widget.eventrequest.eventDuration;
     _linetwoController.text = widget.eventrequest.addLineTwoS;
     _pincodeController.text = widget.eventrequest.pincode.toString();
     _stateController.text = widget.eventrequest.state;
@@ -158,7 +169,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
     _createdTimeController.text = widget.eventrequest.createdTime;
     _updatedByController.text = getCurrentUser().toString();
     _updatedByController.text = widget.eventrequest.updatedTime;
-    approvalStatus = widget.eventrequest.approvalStatus;
+    // approvalStatus = widget.eventrequest.approvalStatus;
     print("createdTime");
     print(widget.eventrequest.createdTime);
     //_teamName.text = widget.selectedteam.teamTitle;
@@ -188,28 +199,6 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
 
   int _groupValue = -1;
   List type = ["Health issues/injury", "Emergency", "Important Event", "Other"];
-  // Widget _myRadioButton(String title, int value, Function onchanged) {
-  //   return RadioListTile(
-  //     value: value,
-  //     groupValue: [1, 2, 3, 4],
-  //     onChanged: onchanged,
-  //     //selected: true,
-  //
-  //     /*(value) {
-  //       setState(() {
-  //         print(value);
-  //         widget.eventrequest.cancelReason = title;
-  //         print(title);
-  //         //_groupValue = value;
-  //
-  //       });
-  //     },*/
-  //     title: Consumer<ThemeNotifier>(
-  //       builder: (context, notifier, child) =>
-  //           Text(title, style: TextStyle(fontSize: notifier.custFontSize)),
-  //     ),
-  //   );
-  // }
   @override
   Widget ProfilePages() {
     return FutureBuilder<List<UserRequest>>(
@@ -218,7 +207,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
           if (snapshot.data != null) {
             userList = snapshot.data;
             for (var uname in userList)
-              if (uname.userName == UserName) {
+              if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
                 print("*********************" +
@@ -356,7 +345,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
                         ),
-                        labelText: "Time",
+                        labelText: "Start Time",
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         ),
@@ -365,9 +354,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                         )),
                     autocorrect: false,
                     readOnly: true,
-                    controller: _eventTimeController,
+                    controller: _eventStartTimeController,
                     onSaved: (String value) {
-                      widget.eventrequest.eventTime = value;
+                      widget.eventrequest.eventStartTime = value;
                     },
                   ),
                 ),
@@ -380,7 +369,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
                         ),
-                        labelText: "Event Duration",
+                        labelText: "End Time",
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         ),
@@ -389,9 +378,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                         )),
                     autocorrect: false,
                     readOnly: true,
-                    controller: _eventDurationController,
+                    controller: _eventEndTimeController,
                     onSaved: (String value) {
-                      widget.eventrequest.eventDuration = value;
+                      widget.eventrequest.eventEndTime = value;
                     },
                   ),
                 ),
@@ -790,10 +779,13 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                 processrequestmap["id"] = widget.eventrequest?.id;
                                                                                 //widget.eventrequest?.isProcessed=false;
                                                                                 //widget.eventrequest?.approvalStatus="Cancelled";
-                                                                                widget.eventrequest?.status = 3;
+                                                                                widget.eventrequest?.teamInviteStatus = 3;
                                                                                 Map<String, dynamic> eventmap = widget.eventrequest.toJson();
                                                                                 eventPageVM.deleteEventRequest(eventmap);
-                                                                                //eventPageVM.deleteEventRequest(processrequestmap);
+                                                                                print('event deleted');
+                                                                                String eventrequestStr = jsonEncode(widget.eventrequest.toStrJson());
+                                                                                //eventPageVM.submitUpdateEventRequest(eventrequestStr);
+                                                                                // eventPageVM.deleteEventRequest(processrequestmap);
                                                                                 SnackBar mysnackbar = SnackBar(
                                                                                   content: Text("Event $delete "),
                                                                                   duration: new Duration(seconds: 4),

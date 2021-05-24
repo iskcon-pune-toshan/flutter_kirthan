@@ -131,7 +131,6 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                                 EventUser eventUser = new EventUser();
                                 eventUser.createdBy = user.email;
                                 eventUser.userId = user.id;
-                                eventUser.teamId = 11;
                                 eventUser.userName = user.email;
                                 eventUser.eventId = widget.eventrequest?.id;
                                 String dt =
@@ -141,7 +140,6 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                                 eventUser.updatedBy = null;
                                 eventUser.updatedTime = null;
                                 widget.eventrequest?.updatedTime;
-                                eventUser.teamName = "New";
 
                                 eventUserList.add(eventUser);
                               }

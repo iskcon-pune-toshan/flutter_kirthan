@@ -9,7 +9,7 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:intl/intl.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 
 class EditTeam extends StatefulWidget {
   TeamRequest teamrequest;
@@ -77,24 +77,24 @@ class _EditTeamState extends State<EditTeam> {
   }
 
   final TextEditingController _teamTitleController =
-  new TextEditingController();
+      new TextEditingController();
   String teamTitle;
   final TextEditingController _teamDescriptionController =
-  new TextEditingController();
+      new TextEditingController();
   String teamDescription;
   final TextEditingController _teamupdatedBy = new TextEditingController();
   String teamupdatedBy;
   final TextEditingController _teamExperienceController =
-  new TextEditingController();
+      new TextEditingController();
   String teamExperience;
   final TextEditingController _teamPhoneNumberController =
-  new TextEditingController();
+      new TextEditingController();
   String teamPhoneNumber;
   final TextEditingController _availableTimeFromController =
-  new TextEditingController();
+      new TextEditingController();
   String availableTimeFrom;
   final TextEditingController _availableTimeToController =
-  new TextEditingController();
+      new TextEditingController();
   String availableTimeTo;
 
   @override
@@ -104,8 +104,8 @@ class _EditTeamState extends State<EditTeam> {
     _teamExperienceController.text = widget.teamrequest.experience;
     _teamPhoneNumberController.text = widget.teamrequest.phoneNumber.toString();
     _teamupdatedBy.text = getCurrentUser().toString();
-    _availableTimeFromController.text = widget.teamrequest.availableFrom;
-    _availableTimeToController.text = widget.teamrequest.availableTo;
+    // _availableTimeFromController.text = widget.teamrequest.availableFrom;
+    // _availableTimeToController.text = widget.teamrequest.availableTo;
     return super.initState();
   }
 
@@ -124,7 +124,7 @@ class _EditTeamState extends State<EditTeam> {
     final DateTime today = new DateTime.now();
     return new Scaffold(
         appBar:
-        new AppBar(title: const Text('Edit Profile'), actions: <Widget>[]),
+            new AppBar(title: const Text('Edit Profile'), actions: <Widget>[]),
         body: new Form(
             key: _formKey,
             autovalidate: true,
@@ -225,52 +225,52 @@ class _EditTeamState extends State<EditTeam> {
                     },
                   ),
                 ),
-                new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Available Time (From)",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    controller: _availableTimeFromController,
-                    onSaved: (String value) {
-                      widget.teamrequest.availableFrom = value;
-                    },
-                  ),
-                ),
-                new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Available Time (To)",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    controller: _availableTimeToController,
-                    onSaved: (String value) {
-                      widget.teamrequest.availableTo = value;
-                    },
-                  ),
-                ),
+                // new Container(
+                //   child: new TextFormField(
+                //     decoration: const InputDecoration(
+                //         enabledBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.grey),
+                //         ),
+                //         focusedBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.green),
+                //         ),
+                //         labelText: "Available Time (From)",
+                //         hintStyle: TextStyle(
+                //           color: Colors.grey,
+                //         ),
+                //         labelStyle: TextStyle(
+                //           color: Colors.grey,
+                //         )),
+                //     autocorrect: false,
+                //     controller: _availableTimeFromController,
+                //     onSaved: (String value) {
+                //       widget.teamrequest.availableFrom = value;
+                //     },
+                //   ),
+                // ),
+                // new Container(
+                //   child: new TextFormField(
+                //     decoration: const InputDecoration(
+                //         enabledBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.grey),
+                //         ),
+                //         focusedBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.green),
+                //         ),
+                //         labelText: "Available Time (To)",
+                //         hintStyle: TextStyle(
+                //           color: Colors.grey,
+                //         ),
+                //         labelStyle: TextStyle(
+                //           color: Colors.grey,
+                //         )),
+                //     autocorrect: false,
+                //     controller: _availableTimeToController,
+                //     onSaved: (String value) {
+                //       widget.teamrequest.availableTo = value;
+                //     },
+                //   ),
+                // ),
                 SizedBox(
                   height: 30,
                 ),
@@ -285,9 +285,9 @@ class _EditTeamState extends State<EditTeam> {
                             style: TextStyle(color: Colors.grey)),
                         items: _teamLeadId
                             .map((teamLeadId) => DropdownMenuItem<String>(
-                          value: teamLeadId,
-                          child: Text(teamLeadId),
-                        ))
+                                  value: teamLeadId,
+                                  child: Text(teamLeadId),
+                                ))
                             .toList(),
                         onChanged: (input) {
                           setState(() {
@@ -306,9 +306,9 @@ class _EditTeamState extends State<EditTeam> {
                             style: TextStyle(color: Colors.grey)),
                         items: _category
                             .map((category) => DropdownMenuItem<String>(
-                          value: category,
-                          child: Text(category),
-                        ))
+                                  value: category,
+                                  child: Text(category),
+                                ))
                             .toList(),
                         onChanged: (input) {
                           setState(() {
@@ -319,29 +319,29 @@ class _EditTeamState extends State<EditTeam> {
                           teamrequest.category = input;
                         },
                       ),
-                      SizedBox(height: 35),
-                      DropdownButtonFormField<String>(
-                        value: _selectedWeekday,
-                        icon: const Icon(Icons.calendar_today_rounded),
-                        hint: Text(
-                          'Select weekday ',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        items: _weekday
-                            .map((weekday) => DropdownMenuItem(
-                          value: weekday,
-                          child: Text(weekday),
-                        ))
-                            .toList(),
-                        onChanged: (input) {
-                          setState(() {
-                            _selectedWeekday = input;
-                          });
-                        },
-                        onSaved: (input) {
-                          teamrequest.weekDay = input;
-                        },
-                      ),
+                      // SizedBox(height: 35),
+                      // DropdownButtonFormField<String>(
+                      //   value: _selectedWeekday,
+                      //   icon: const Icon(Icons.calendar_today_rounded),
+                      //   hint: Text(
+                      //     'Select weekday ',
+                      //     style: TextStyle(color: Colors.grey),
+                      //   ),
+                      //   items: _weekday
+                      //       .map((weekday) => DropdownMenuItem(
+                      //     value: weekday,
+                      //     child: Text(weekday),
+                      //   ))
+                      //       .toList(),
+                      //   onChanged: (input) {
+                      //     setState(() {
+                      //       _selectedWeekday = input;
+                      //     });
+                      //   },
+                      //   onSaved: (input) {
+                      //     teamrequest.weekDay = input;
+                      //   },
+                      // ),
                       SizedBox(height: 35),
                       DropdownButtonFormField<String>(
                         value: _selectedLocation,
@@ -350,9 +350,9 @@ class _EditTeamState extends State<EditTeam> {
                             style: TextStyle(color: Colors.grey)),
                         items: _location
                             .map((location) => DropdownMenuItem(
-                          value: location,
-                          child: Text(location),
-                        ))
+                                  value: location,
+                                  child: Text(location),
+                                ))
                             .toList(),
                         onChanged: (input) {
                           setState(() {
@@ -378,7 +378,7 @@ class _EditTeamState extends State<EditTeam> {
                     ),
                     Container(
                         padding:
-                        const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
+                            const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
                         child: new MaterialButton(
                           color: Colors.blue,
                           textColor: themeData.secondaryHeaderColor,
@@ -396,7 +396,7 @@ class _EditTeamState extends State<EditTeam> {
                                 widget.teamrequest.updatedTime = dt;
 
                             String teamrequestStr =
-                            jsonEncode(widget.teamrequest.toStrJson());
+                                jsonEncode(widget.teamrequest.toStrJson());
                             teamPageVM.submitUpdateTeamRequest(teamrequestStr);
                             //apiSvc?.submitUpdateTeamRequest
                             (teamrequestStr);

@@ -1,9 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/team_name.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/user_name_profile.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
@@ -16,10 +22,10 @@ class LocalAdminProfile extends StatefulWidget {
 }
 
 class _LocalAdminProfileState extends State<LocalAdminProfile> {
-
+  //String teamTitle;
   String currUserName;
 
-
+  //_localadmin_profileState(String teamTitle);
   _LocalAdminProfileState createState() => _LocalAdminProfileState();
   @override
   Future<List<UserRequest>> Users;
@@ -58,9 +64,9 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
 
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
-      currUserName = user.userName;
-      // print(">>>>>>>>>>>>");
-      // print(currUserName);
+      currUserName = user.fullName;
+      print(">>>>>>>>>>>>");
+      print(currUserName);
     }
   }
 
@@ -133,7 +139,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                                 return Row(
                                                   children: [
                                                     Text(
-                                                      uname.userName,
+                                                      uname.fullName,
                                                       style: TextStyle(
                                                           fontSize: 16),
                                                     ),

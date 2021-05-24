@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/notification.dart';
 import 'package:flutter_kirthan/models/team.dart';
@@ -82,7 +83,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
           if (snapshot.data != null) {
             userList = snapshot.data;
             for (var uname in userList)
-              if (uname.userName == widget.UserName) {
+              if (uname.fullName == widget.UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
                 final ref = FirebaseStorage.instance.ref().child(_photoName);
@@ -140,7 +141,12 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
 
     return null;
   }
-
+  String duration() {
+    var format = DateFormat("HH:mm");
+    var one = format.parse(widget.eventRequest.eventStartTime);
+    var two = format.parse(widget.eventRequest.eventEndTime);
+    return two.difference(one).toString();
+  }
   Widget _buildNtf(NotificationModel data) {
     IconData icon;
     Widget actions = Container(
@@ -246,7 +252,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
                             (element) => element.email == widget.data.createdBy)
                         .toList();
                     for (var uname in userList) {
-                      if (uname.userName == widget.UserName) {
+                      if (uname.fullName == widget.UserName) {
                         return Stack(
                           fit: StackFit.expand,
                           children: <Widget>[
@@ -405,7 +411,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
                                                     padding: EdgeInsets.all(5),
                                                     child: Text(
                                                       widget.eventRequest
-                                                          .eventTime,
+                                                          .eventStartTime,
                                                       style: TextStyle(
                                                         fontSize: 18,
                                                       ),
@@ -433,8 +439,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
                                           ),
                                           Text(
                                             'Duration: ' +
-                                                widget.eventRequest
-                                                    .eventDuration +
+                                                duration() +
                                                 ' hrs',
                                             style: TextStyle(
                                               fontSize: 18,

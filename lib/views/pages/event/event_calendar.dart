@@ -3,6 +3,7 @@ import 'package:flutter_kirthan/models/event.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 final EventPageViewModel eventPageVM =
@@ -15,7 +16,6 @@ class CalendarPage extends StatefulWidget {
   @override
   CalendarClass createState() => CalendarClass();
 }
-
 List<String> views = <String>[
   'Day',
   'Week',
@@ -38,37 +38,7 @@ class CalendarClass extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              showDatePicker(
-                      context: context,
-                      initialDate: _datePicked,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100))
-                  .then((DateTime date) {
-                if (date != null && date != _calendarDate)
-                  setState(() {
-                    _calendarDate = date;
-                  });
-              });
-            },
-            child: Row(
-              children: [
-                Text('Select a  Date'),
-                SizedBox(
-                  width: 10,
-                ),
-                Icon(
-                  Icons.date_range,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+
       // drawer: MyDrawer(),
       body:
       Container(
@@ -83,6 +53,7 @@ class CalendarClass extends State<CalendarPage> {
                       initialDisplayDate: DateTime.now(),
                       dataSource:_AppointmentDataSource(snapshot.data),
                       monthViewSettings: MonthViewSettings(showAgenda: true),
+                      showDatePickerButton: true,
                     )),
               );
             } else {
@@ -97,16 +68,24 @@ class CalendarClass extends State<CalendarPage> {
       ),
     );
   }
+
   Future<List<Meeting>> getDataFromWeb() async {
 
     final List<Meeting> appointmentData = [];
     eventRequest = await eventPageVM.getEventRequests("MyEvent");
     for(var eventName in eventRequest){
+      var format = DateFormat("HH:mm");
+      var one = format.parse(eventName.eventStartTime);
+      var two = format.parse(eventName.eventEndTime);
+      String duration;
+      if(two.difference(one).toString().substring(0,2).contains(":"))
+        duration= two.difference(one).toString().substring(0,1);
+      else
+        duration= two.difference(one).toString().substring(0,2);
       Meeting meetingData = Meeting(
           eventName: eventName.eventTitle,
           from: DateTime.parse(eventName.eventDate),
-
-          to: DateTime.parse(eventName.eventDate).add(Duration(hours: int.parse(eventName.eventDuration))),
+          to: DateTime.parse(eventName.eventDate).add(Duration(hours: int.parse(duration))),
           background: Colors.blue,);
           //allDay: data['AllDay']);
       appointmentData.add(meetingData);
@@ -171,3 +150,4 @@ class Meeting {
   final String endTimeZone;
   final String description;
 }
+

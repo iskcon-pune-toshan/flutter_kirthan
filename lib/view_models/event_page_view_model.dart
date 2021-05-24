@@ -53,8 +53,8 @@ class EventPageViewModel extends Model {
     return processFlag;
   }
 
-  Future<bool> deleteEventRequest(Map<String, dynamic> processrequestmap) {
-    Future<bool> deleteFlag = apiSvc?.deleteEventRequest(processrequestmap);
+  Future<EventRequest> deleteEventRequest(Map<String, dynamic> processrequestmap) {
+    Future<EventRequest> deleteFlag = apiSvc?.deleteEventRequest(processrequestmap);
     return deleteFlag;
   }
 

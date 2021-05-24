@@ -110,48 +110,6 @@ class _teamNameState extends State<teamName> {
                                       ),
                                       elevation: 5,
                                     ),
-                                    Card(
-                                      child: Container(
-                                        padding: new EdgeInsets.all(10),
-                                        child: TextFormField(
-                                          initialValue:
-                                              teamrequest.teamDescription,
-                                          decoration: InputDecoration(
-                                              enabledBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey),
-                                              ),
-                                              focusedBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.green),
-                                              ),
-                                              /*icon: const Icon(
-                                Icons.description,
-                                color: Colors.grey,
-                              ),*/
-                                              labelText: "Description",
-                                              hintText: "Add a description",
-                                              hintStyle: TextStyle(
-                                                color: Colors.grey,
-                                              ),
-                                              labelStyle: TextStyle(
-                                                color: Colors.grey,
-                                              )),
-                                          onSaved: (input) {
-                                            teamrequest.teamDescription = input;
-                                          },
-                                          validator: (value) {
-                                            if (value.isEmpty) {
-                                              return "Please enter some text";
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ),
-                                      elevation: 5,
-                                    ),
                                     new Container(
                                         margin: const EdgeInsets.only(top: 40)),
                                     Row(
