@@ -134,6 +134,10 @@ class _SignUpState extends State<SignUp> {
             style: TextStyle(color: KirthanStyles.colorPallete60),
           ),
           backgroundColor: KirthanStyles.colorPallete30,
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         body: Center(
           child: SingleChildScrollView(

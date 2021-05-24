@@ -27,37 +27,37 @@ class UserLogin {
     return data;
   }
 
-  // static List<UserLogin> getUsers() {
-  //   List<UserLogin> users = List<UserLogin>();
-  //   users.add(UserLogin(
-  //       username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
-  //   users.add(UserLogin(
-  //       username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
-  //   users.add(UserLogin(
-  //       username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
-  //   users.add(UserLogin(
-  //       username: "writetoanuka@gmail.com", password: "", usertype: "User"));
-  //   users.add(UserLogin(
-  //       username: "janicem995@gmail.com",
-  //       password: "",
-  //       usertype: "Local Admin"));
-  //   users.add(UserLogin(
-  //       username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
-  //   users.add(UserLogin(
-  //       username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
-  //   users.add(UserLogin(
-  //       username: "parthprandas.rns@gmail.com",
-  //       password: "",
-  //       usertype: "User"));
-  //   users.add(UserLogin(
-  //       username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
-  //
-  //   users.add(UserLogin(
-  //       username: "nisha.khandelwal1225@gmail.com",
-  //       password: "",
-  //       usertype: "Admin"));
-  //   return users;
-  // }
+  static List<UserLogin> getUsers() {
+    List<UserLogin> users = List<UserLogin>();
+    users.add(UserLogin(
+        username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
+    users.add(UserLogin(
+        username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
+    users.add(UserLogin(
+        username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
+    users.add(UserLogin(
+        username: "writetoanuka@gmail.com", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "janicem995@gmail.com",
+        password: "",
+        usertype: "Local Admin"));
+    users.add(UserLogin(
+        username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "parthprandas.rns@gmail.com",
+        password: "",
+        usertype: "User"));
+    users.add(UserLogin(
+        username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
+
+    users.add(UserLogin(
+        username: "nisha.khandelwal1225@gmail.com",
+        password: "",
+        usertype: "Admin"));
+    return users;
+  }
 }
 
 class UserRequest extends Model {
@@ -97,34 +97,34 @@ class UserRequest extends Model {
 //Typically called form service layer to create a new user
   UserRequest(
       {this.id,
-      this.uid,
-      this.fullName,
-      this.password,
-      this.prevRoleId,
-      this.roleId,
-      // this.firstName,
-      // this.lastName,
-      this.email,
-      this.phoneNumber,
-      this.addLineOne,
-      this.addLineTwo,
-      this.addLineThree,
-      this.locality,
-      this.city,
-      this.pinCode,
-      this.state,
-      this.country,
-      this.govtIdType,
-      this.govtId,
-      //this.isProcessed,
-      this.createdBy,
-      this.createdTime,
-      this.updatedBy,
-      this.updatedTime,
-      this.approvalStatus,
-      this.avatarUrl,
-      this.invitedBy,
-      this.profileUrl});
+        this.uid,
+        this.fullName,
+        this.password,
+        this.prevRoleId,
+        this.roleId,
+        // this.firstName,
+        // this.lastName,
+        this.email,
+        this.phoneNumber,
+        this.addLineOne,
+        this.addLineTwo,
+        this.addLineThree,
+        this.locality,
+        this.city,
+        this.pinCode,
+        this.state,
+        this.country,
+        this.govtIdType,
+        this.govtId,
+        //this.isProcessed,
+        this.createdBy,
+        this.createdTime,
+        this.updatedBy,
+        this.updatedTime,
+        this.approvalStatus,
+        this.avatarUrl,
+        this.invitedBy,
+        this.profileUrl});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory UserRequest.fromJson(Map<String, dynamic> data) {

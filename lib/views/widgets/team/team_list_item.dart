@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/team/team_edit.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,7 +65,7 @@ class TeamRequestsListItem extends StatelessWidget {
                 );
               } else if (choice.id == 1) {
                 Map<String, dynamic> processrequestmap =
-                    new Map<String, dynamic>();
+                new Map<String, dynamic>();
                 processrequestmap['id'] = teamrequest?.id;
                 processrequestmap['teamTitle'] = teamrequest?.teamTitle;
                 processrequestmap['teamDescription'] =
@@ -106,7 +108,7 @@ class TeamRequestsListItem extends StatelessWidget {
                       return Dialog(
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(20.0)), //this right here
+                            BorderRadius.circular(20.0)), //this right here
                         child: Container(
                           height: 200,
                           child: Padding(
@@ -125,7 +127,7 @@ class TeamRequestsListItem extends StatelessWidget {
                                   child: RaisedButton(
                                     onPressed: () {
                                       Map<String, dynamic> teamrequestmap =
-                                          new Map<String, dynamic>();
+                                      new Map<String, dynamic>();
                                       teamrequestmap["id"] = teamrequest?.id;
                                       teamrequestmap["teamLeadId"] =
                                           teamrequest?.teamLeadId;
@@ -142,11 +144,11 @@ class TeamRequestsListItem extends StatelessWidget {
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                        "yes",
-                                        style: TextStyle(
-                                            fontSize: notifier.custFontSize,
-                                            color: Colors.white),
-                                      ),
+                                            "yes",
+                                            style: TextStyle(
+                                                fontSize: notifier.custFontSize,
+                                                color: Colors.white),
+                                          ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
@@ -160,11 +162,11 @@ class TeamRequestsListItem extends StatelessWidget {
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                        "No",
-                                        style: TextStyle(
-                                            fontSize: notifier.custFontSize,
-                                            color: Colors.white),
-                                      ),
+                                            "No",
+                                            style: TextStyle(
+                                                fontSize: notifier.custFontSize,
+                                                color: Colors.white),
+                                          ),
                                     ),
                                     color: const Color(0xFF1BC0C5),
                                   ),
