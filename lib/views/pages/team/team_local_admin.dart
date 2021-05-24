@@ -1,8 +1,5 @@
 import 'dart:convert';
 import 'dart:core';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_kirthan/models/prospectiveuser.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/temple.dart';
@@ -21,15 +18,11 @@ import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/team/non_user_team_invite.dart';
-import 'package:flutter_kirthan/views/pages/team/team_view.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flushbar/flushbar_route.dart';
@@ -120,31 +113,6 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
     }
   }
 
-  // void getLocalAdminTemple() async {
-  //   int templeId;
-  //   FutureBuilder<List<UserTemple>>(
-  //       future: UserTemples,
-  //       builder:
-  //           (BuildContext context, AsyncSnapshot<List<UserTemple>> snapshot) {
-  //         if (snapshot.data != null) {
-  //           List<UserTemple> uTemple = snapshot.data
-  //               .where((element) => element.userId == widget.user.id)
-  //               .toList();
-  //           if (widget.user != null) {
-  //             _selectedLocalAdmin = widget.user.userName;
-  //             for (var temp in snapshot.data) {
-  //               templeId = temp.templeId;
-  //               print("Temple id is $templeId");
-  //             }
-  //           }
-  //         }
-  //         return Container();
-  //       });
-  //   List<Temple> temple = await templePageVM.getTemples(templeId.toString());
-  //   for (var temp in temple) {
-  //     _selectedTempleArea = temp.area;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -294,11 +262,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                     onChanged: (input) {
                                       setState(() {
                                         _selectedLocalAdmin = input;
-                                        // _selectedtempleId =
-                                        //     templeList.indexWhere((element) =>
-                                        //         element.area ==
-                                        //         _selectedTempleArea);
-                                        print(_selectedtempleId);
+                                        // print(_selectedtempleId);
                                       });
                                     },
                                     onSaved: (input) {

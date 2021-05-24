@@ -78,9 +78,9 @@ class _UserProfileState extends State<UserProfile> {
               if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
-                print("*********************" +
-                    _photoName +
-                    "*************************");
+                // print("*********************" +
+                //     _photoName +
+                //     "*************************");
                 final ref = FirebaseStorage.instance.ref().child(_photoName);
                 return FutureBuilder(
                     future: ref.getDownloadURL(),

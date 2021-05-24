@@ -219,49 +219,6 @@ class _InitiateTeamState extends State<InitiateTeam> {
                                     height: MediaQuery.of(context).size.height *
                                         0.55,
                                     child: initializedTeams(currentUserName))
-                                // FutureBuilder<List<TeamRequest>>(
-                                //   future: Teams,
-                                //   builder:(context,snapshot){
-                                //     if(snapshot.data != null){
-                                //       teamList = snapshot.data;
-                                //       print('******************************************8');
-                                //       List<UserRequest> listoflocalAdmins = localAdminList
-                                //           .where((user) => user.roleId == 2)
-                                //           .toList();
-                                //       for(var uname in listoflocalAdmins){
-                                //         if(uname.email == currentEmail){
-                                //           currentUserName = uname.userName;
-                                //           List<TeamRequest> initiatedTeams = teamList
-                                //               .where((user) =>
-                                //           user.localAdminName == currentUserName)
-                                //               .toList();
-                                //
-                                //           List<String> initiatedTeam = initiatedTeams
-                                //               .map((e) => e.teamTitle)
-                                //               .toSet()
-                                //               .toList();
-                                //           initiatedTeam != null
-                                //               ?SizedBox(
-                                //             height:MediaQuery.of(context).size.height * 0.4,
-                                //             width: MediaQuery.of(context).size.width * 0.8,
-                                //             child: SingleChildScrollView(
-                                //               child: ListView.builder(
-                                //                 itemCount: initiatedTeam.length,
-                                //                 itemBuilder: (context, index){
-                                //                   return ListTile(
-                                //                     title: Text(initiatedTeam[index]),
-                                //                   );
-                                //                 }
-                                //             ),
-                                //
-                                //           )
-                                //     )
-                                //     :Center(child:Text('No teams Initialized',style: TextStyle(fontSize: 20,color: Colors.grey),));
-                                //         }
-                                //       }
-                                //     }return CircularProgressIndicator();
-                                //   }
-                                // )
                                 ),
                             onRefresh: refreshList,
                           ))

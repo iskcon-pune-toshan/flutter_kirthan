@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_kirthan/services/team_service_interface.dart';
 import 'package:scoped_model/scoped_model.dart';

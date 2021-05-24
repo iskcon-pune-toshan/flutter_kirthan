@@ -3,14 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
-import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
-import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
@@ -28,7 +24,6 @@ class EditTeam extends StatefulWidget {
 class _EditTeamState extends State<EditTeam> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
-  //final IKirthanRestApi apiSvc = new RestAPIServices();
 
   List<String> _category = [
     'Bhajan',

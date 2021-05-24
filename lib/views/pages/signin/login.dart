@@ -75,7 +75,7 @@ class _LoginAppState extends State<LoginApp> {
   @override
   void initState() {
     super.initState();
-    users = UserLogin.getUsers();
+    //users = UserLogin.getUsers();
     entitlements = UserAccess.getUserEntitlements();
     loadPref();
 
@@ -444,6 +444,7 @@ class _LoginAppState extends State<LoginApp> {
       appBar: AppBar(
           toolbarHeight: 40.0,
           backgroundColor: Color(0xFF61bcbc),
+          automaticallyImplyLeading: false,
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(100),

@@ -6,6 +6,7 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
+import 'package:flutter_kirthan/views/pages/user/initiate_userdetails.dart';
 import 'package:flutter_kirthan/views/pages/user/inviteUser.dart';
 import 'initiate_userdetails.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
@@ -120,8 +121,7 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
                                           f,
                                         ),
                                         value: f,
-                                        //enabled: true,
-                                        //checked: true,
+
                                       );
                                     }).toList();
                                   }),

@@ -10,7 +10,6 @@ import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/prospective_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/user/inviteUser.dart' as inU;
-import 'package:flutter_kirthan/views/pages/user/inviteUser.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 
 TextEditingController _textController = TextEditingController();
@@ -77,16 +76,10 @@ class _EnterCodeState extends State<EnterCode> {
               if (puser.userEmail == email &&
                   puser.inviteType.contains("local_admin")) {
                 if (puser.isProcessed == true) {
-                  // return Navigator.of(context)
-                  //     .push(MaterialPageRoute(
-                  // builder: (context) => //App()
-                  // App()));
+
                   return App();
                 } else {
-                  // Navigator.of(context)
-                  //     .push(MaterialPageRoute(
-                  // builder: (context) => //App()
-                  // EnterCode()))
+
                   return Scaffold(
                     key: _scaffoldKey,
                     extendBody: false,

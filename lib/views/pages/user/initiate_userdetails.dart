@@ -57,7 +57,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
               if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
-                print("*******" + _photoName + "*********");
+                // print("*******" + _photoName + "*********");
                 final ref = FirebaseStorage.instance.ref().child(_photoName);
                 return FutureBuilder(
                     future: ref.getDownloadURL(),
@@ -100,13 +100,13 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
               if (snapshot.data != null) {
                 userList = snapshot.data;
 
-                print("lllll");
-                print(user.email);
+                // print("lllll");
+                // print(user.email);
                 String _email = user.email;
-                print(_email);
+                // print(_email);
                 for (var _users in userList) {
-                  print("GGGG");
-                  print(_users.email);
+                  // print("GGGG");
+                  // print(_users.email);
                   if (_users.email == _email) {
                     superId = _users.id;
                   } else {
@@ -309,13 +309,13 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                           ),
                                           onPressed: () {
                                             userRequest = uname;
-                                            print("Printing user request");
-                                            print(userRequest);
+                                            // print("Printing user request");
+                                            // print(userRequest);
                                             setState(() {
-                                              print("ooooo");
+                                              // print("ooooo");
                                               userRequest.roleId = 2;
-                                              print("JJJJJJ");
-                                              print(superId);
+                                              // print("JJJJJJ");
+                                              // print(superId);
                                               userRequest.invitedBy = superId;
                                             });
 

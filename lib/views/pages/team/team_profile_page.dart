@@ -47,12 +47,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
   @override
   void initState() {
     Teams = teamPageVM.getTeamRequests('Approved');
-    // TeamUsers = teamUserPageVM.getTeamUserMappings("SYSTEM");
     Users = userPageVM.getUserRequests("Approved");
-    // print('sdfjshgkjdshbfdhbvhdfbvkfdhbvdfhbghdbvdhgbh');
-    // print(TeamUsers);
-    print("llllll");
-    print(teamTitle);
     super.initState();
   }
 
@@ -103,9 +98,6 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             teamusersList = snapshot.data;
-            print("WWWWWWWWWWW");
-            print(teamusersList);
-            print(id);
             List<TeamUser> listofteamusers =
                 teamusersList.where((user) => user.teamId == id).toList();
             List<String> memberList =
@@ -152,13 +144,10 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
               builder: (context, snapshot) {
                 if (snapshot != null) {
                   teamList = snapshot.data;
-                  print("TEAM LISTTT");
-                  print(teamList);
+
                   for (var team in teamList) {
-                    print("PRINTTTTTTT FOR");
+
                     if (team.teamTitle == teamTitle) {
-                      print("IFFFFFF");
-                      print(teamLeadId);
                       type = team.category;
 
                       teamTitle = team.teamTitle;

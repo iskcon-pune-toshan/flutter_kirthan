@@ -67,17 +67,7 @@ class UsersPanel extends StatelessWidget {
                               model.setUserRequests("U");
                             },
                           ),
-                          /*Expanded(
-                            child: RaisedButton(
-                              child: const Text("Create an User Request"),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UserWrite()));
-                              },
-                            ),
-                          ),*/
+
                         ],
                       ),
                       SizedBox(

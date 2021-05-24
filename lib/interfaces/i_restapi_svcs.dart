@@ -71,22 +71,22 @@ abstract class IKirthanRestApi {
   Future<List<UserTemple>> submitNewUserTempleMapping(List<UserTemple> listofusertemplemap);
   Future<List<UserTemple>> submitDeleteUserTempleMapping(List<UserTemple> listofusertemplemap);
 
-  //RolesScreenmapping
-  Future<List<RoleScreen>> getRoleScreenMappings(String rolescreenMapping);
-  Future<List<RoleScreen>> submitNewRoleScreenMapping(List<RoleScreen> listofrolescreenmap);
-  Future<List<RoleScreen>> submitDeleteRoleScreenMapping(List<RoleScreen> listofrolescreenmap);
+  // //RolesScreenmapping
+  // Future<List<RoleScreen>> getRoleScreenMappings(String rolescreenMapping);
+  // Future<List<RoleScreen>> submitNewRoleScreenMapping(List<RoleScreen> listofrolescreenmap);
+  // Future<List<RoleScreen>> submitDeleteRoleScreenMapping(List<RoleScreen> listofrolescreenmap);
 
-  //Permissions
-  Future<List<Permissions>> getPermissionsMappings(String permissionsMapping);
-  Future<List<Permissions>> submitNewPermissionsMapping(List<Permissions> listofpermissionsmap);
-  Future<List<Permissions>> submitDeletePermissionsMapping(List<Permissions> listofpermissionsmap);
-//Future<void> submitUpdateRolesRequest(String rolesrequestmap);
+//   //Permissions
+//   Future<List<Permissions>> getPermissionsMappings(String permissionsMapping);
+//   Future<List<Permissions>> submitNewPermissionsMapping(List<Permissions> listofpermissionsmap);
+//   Future<List<Permissions>> submitDeletePermissionsMapping(List<Permissions> listofpermissionsmap);
+// //Future<void> submitUpdateRolesRequest(String rolesrequestmap);
 
 
-  //Screens
-  Future<List<Screens>> getScreensMappings(String screensMapping);
-  Future<List<Screens>> submitNewScreensMapping(List<Screens> listofscreensmap);
-  Future<List<Screens>> submitDeleteScreensMapping(List<Screens> listofscreensmap);
-//Future<void> submitUpdateRolesRequest(String rolesrequestmap);
+//   //Screens
+//   Future<List<Screens>> getScreensMappings(String screensMapping);
+//   Future<List<Screens>> submitNewScreensMapping(List<Screens> listofscreensmap);
+//   Future<List<Screens>> submitDeleteScreensMapping(List<Screens> listofscreensmap);
+// //Future<void> submitUpdateRolesRequest(String rolesrequestmap);
 
 }

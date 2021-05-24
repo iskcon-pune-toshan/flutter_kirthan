@@ -16,6 +16,7 @@ import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:flutter_kirthan/views/pages/team/request_code.dart';
 import 'package:flutter_kirthan/views/pages/team/team_profile_page.dart';
+import 'package:flutter_kirthan/views/pages/user/inviteLocalAdmin.dart';
 import 'package:flutter_kirthan/views/pages/user/localadmin_profile.dart';
 import 'package:flutter_kirthan/views/pages/user/user_profile_page.dart';
 import 'package:flutter_kirthan/views/pages/user/inviteLocalAdmin.dart';

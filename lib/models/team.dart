@@ -23,23 +23,23 @@ class TeamRequest {
 //Typically called form service layer to create a new user
   TeamRequest(
       {this.id,
-      this.teamTitle,
-      this.teamDescription,
-      this.createdBy,
-      this.updatedBy,
-      this.createdTime,
-      this.updatedTime,
-      this.approvalStatus,
-      this.location,
-      this.category,
-      this.experience,
-      this.phoneNumber,
-      this.teamLeadId,
-      this.localAdminArea,
-      this.localAdminName,
-      this.listOfTeamMembers,
-      this.requestAcceptance,
-      this.duration});
+        this.teamTitle,
+        this.teamDescription,
+        this.createdBy,
+        this.updatedBy,
+        this.createdTime,
+        this.updatedTime,
+        this.approvalStatus,
+        this.location,
+        this.category,
+        this.experience,
+        this.phoneNumber,
+        this.teamLeadId,
+        this.localAdminArea,
+        this.localAdminName,
+        this.listOfTeamMembers,
+        this.requestAcceptance,
+        this.duration});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory TeamRequest.fromJson(Map<String, dynamic> data) {
