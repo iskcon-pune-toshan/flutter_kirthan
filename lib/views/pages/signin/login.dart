@@ -174,7 +174,7 @@ class _LoginAppState extends State<LoginApp> {
   Widget _buildEmailTF() {
     return Form(
       key: _formKey,
-      autovalidate: true,
+      //autovalidate: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -298,6 +298,7 @@ class _LoginAppState extends State<LoginApp> {
               }
             }).whenComplete(
                     () => authenticateService.autheticate().whenComplete(() {
+                          print("MYERROR" + errMessage);
                           if (errMessage == 'ellomate') {
                             Navigator.push(
                                 context,
@@ -522,7 +523,6 @@ final kBoxDecorationStyle = BoxDecoration(
   color: Colors.white,
   border: Border.all(color: Color(0xFF61bcbc)),
   borderRadius: BorderRadius.circular(10.0),
-
   /* boxShadow: [
     BoxShadow(
       color: Color(0xFF61bcbc),
