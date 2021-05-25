@@ -237,10 +237,14 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                   ),
                   onPressed: () => {
                         print(event),
+
+
                         showSearch(
                           context: context,
                           delegate: Search(event),
                         )
+
+
                       }),
               PopupMenuButton(
                   icon: Icon(
@@ -378,7 +382,6 @@ class Search extends SearchDelegate {
                 element.toUpperCase().contains(query) ||
                 element.toLowerCase().contains(query),
           ));
-
     return
         //_widget();
         ListView.builder(
