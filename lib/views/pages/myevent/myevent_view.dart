@@ -65,51 +65,24 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
   bool isLoading = false;
   int length;
   http.Client client1 = http.Client();
-  Future getevent() async {
-    String requestBody = '';
-    requestBody = '{"approvalStatus" : "Approved"}';
-    print(requestBody);
-    String token = AutheticationAPIService().sessionJWTToken;
-    print("search service");
-    var response = await client1.put('$baseUrl/api/event/geteventtitle',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
-    if (response.statusCode == 200) {
-      List<dynamic> eventrequestsData = json.decode(response.body);
-      //print(eventrequestsData);
-      List<String> events =
-          eventrequestsData.map((event) => event.toString()).toList();
-      event = events;
-      print(event);
-      int len = event.length;
-      print(len);
-      length = len;
-      //print(event);
-//print(eventrequests);
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
+
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       access = prefs.getStringList(widget.screenName);
-      access.forEach((f) {
+      /*access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
             access.elementAt(1).toLowerCase() == "true" ? true : false;
-      });
+      });*/
       eventPageVM.accessTypes = accessTypes;
       //userdetails = prefs.getStringList("LoginDetails");
       SignInService().firebaseAuth.currentUser().then((onValue) {
         photoUrl = onValue.photoUrl;
         name = onValue.displayName;
-        print(name);
-        print(photoUrl);
+       // print(name);
+        //print(photoUrl);
       });
       //print(userdetails.length);
     });
@@ -119,7 +92,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
-    print(email);
+    //print(email);
     return email;
   }
 
@@ -135,7 +108,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
     loadData();
     loadPref();
     NotificationManager ntfManger = NotificationManager();
-    getevent();
+   // getevent();
   }
 
   Future<Null> refreshList() async {

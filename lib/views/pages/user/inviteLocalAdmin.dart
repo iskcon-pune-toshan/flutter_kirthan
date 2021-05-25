@@ -44,7 +44,7 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
-    print(Users);
+   // print(Users);
     super.initState();
   }
 
@@ -74,10 +74,10 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
                   AsyncSnapshot<List<UserRequest>> snapshot) {
                 if (snapshot.hasData) {
                   userList = snapshot.data;
-                  print(userList);
+                 // print(userList);
                   List<String> listOfUsers =
                       userList.map((e) => e.fullName).toSet().toList();
-                  print(listOfUsers);
+                 // print(listOfUsers);
                   return Expanded(
                     child: SingleChildScrollView(
                       physics: ScrollPhysics(),

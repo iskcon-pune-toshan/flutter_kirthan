@@ -32,7 +32,7 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
     if (await canLaunch(userEmail)) {
       await launch(userEmail);
     } else {
-      print('Could not launch $userEmail');
+     // print('Could not launch $userEmail');
     }
   }
 
@@ -56,7 +56,7 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
                       onChanged: (value) {
                         setState(() {
                           userEmail = value;
-                          print(userEmail);
+                         // print(userEmail);
                         });
                       },
                       decoration: InputDecoration(
@@ -96,7 +96,7 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
                             .where((element) => element.userEmail == userEmail)
                             .toList()
                             .isEmpty) {
-                          print(userEmail);
+                        //  print(userEmail);
                           ProspectiveUserRequest prospectiveUserRequest =
                               new ProspectiveUserRequest();
                           prospectiveUserRequest.userEmail = userEmail;

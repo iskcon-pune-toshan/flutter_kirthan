@@ -57,8 +57,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
       requestBody = '{"email":"$userType"}';
     }
 
-    print("Instance of request");
-    print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/getuser',
@@ -68,10 +66,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
         },
         body: requestBody);
 
-    print(response.body);
-    print("User sorting");
-    print(requestBody);
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -92,20 +86,18 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   //addUser
   Future<UserRequest> submitNewUserRequest(
       Map<String, dynamic> userrequestmap) async {
-    print(userrequestmap);
+   // print(userrequestmap);
     String requestBody = json.encode(userrequestmap);
-    print(requestBody);
+   // print(requestBody);
 
     var response = await client1.put('$baseUrl/api/user/adduser',
         headers: {"Content-Type": "application/json"}, body: requestBody);
 
-    print(response.body);
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       Map<String, dynamic> userrequestsData = json.decode(response.body);
       UserRequest userrequests = UserRequest.fromMap(userrequestsData);
-      print(userrequests);
+      //print(userrequests);
       return userrequests;
     } else {
       throw Exception('Failed to get data');
@@ -115,9 +107,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   //processuser
   Future<bool> processUserRequest(
       Map<String, dynamic> processrequestmap) async {
-    print(processrequestmap);
+    //print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
-    print(requestBody);
+    //print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/processuser',
@@ -127,11 +119,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
         },
         body: requestBody);
 
-    print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
       return true;
     } else {
       throw Exception('Failed to get data');
@@ -139,9 +129,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   }
 
   Future<bool> deleteUserRequest(Map<String, dynamic> processrequestmap) async {
-    print(processrequestmap);
+   // print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
-    print(requestBody);
+   // print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/deleteuser',
@@ -150,11 +140,11 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
           "Authorization": "Bearer $token"
         },
         body: requestBody);
-    print(response.body);
-    print(response.statusCode);
+   // print(response.body);
+   // print(response.statusCode);
 
     if (response.statusCode == 200) {
-      print(response.body);
+    //  print(response.body);
 
       return true;
     } else {
@@ -195,7 +185,7 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   }
 
   Future<bool> submitUpdateUserRequest(String userrequestmap) async {
-    print(userrequestmap);
+   // print(userrequestmap);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/updateuser',
@@ -205,18 +195,16 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
         },
         body: userrequestmap);
 
-    print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
     } else {
       throw Exception('Failed to get data');
     }
   }
 
   Future<bool> submitUpdateUserRequestDetails(String userrequestmap) async {
-    print(userrequestmap);
+    //print(userrequestmap);
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);
 
@@ -228,18 +216,16 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
         },
         body: userrequestmap);
 
-    print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
     } else {
       throw Exception('Failed to get data');
     }
   }
 
   Future<bool> submitInitiateTeam(String userrequestmap) async {
-    print(userrequestmap);
+   // print(userrequestmap);
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/initiateteam',
         headers: {
@@ -248,11 +234,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
         },
         body: userrequestmap);
 
-    print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
     } else {
       throw Exception('Failed to get data');
     }

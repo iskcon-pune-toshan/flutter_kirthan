@@ -234,9 +234,9 @@ class _FaqState extends State<FaqApp> {
                                           .map((e) => e.fullName)
                                           .toSet()
                                           .toList();
-                                      print(
-                                          '***************************************');
-                                      print(localAdminList);
+                                    //  print(
+                                       //   '***************************************');
+                                      //print(localAdminList);
                                       FutureBuilder(
                                           future: getEmail(),
                                           builder: (context, snapshot) {

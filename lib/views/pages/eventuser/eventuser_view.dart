@@ -274,7 +274,7 @@ class _EventUserViewState extends State<EventUserView> {
                   color: Colors.redAccent,
                   child: Text('Delete'),
                   onPressed: () {
-                    print(selectedEventUsers);
+                   // print(selectedEventUsers);
                     eventUserPageVM
                         .submitDeleteEventTeamUserMapping(selectedEventUsers);
                   },

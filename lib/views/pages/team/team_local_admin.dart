@@ -158,7 +158,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                         .toList();
                                     for (var temple in templeArea) {
                                       _selectedtempleId = temple.templeId;
-                                      print("work man $_selectedtempleId");
+                                     // print("work man $_selectedtempleId");
                                     }
                                   }
                                   return FutureBuilder<List<Temple>>(
@@ -177,8 +177,8 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                 .toList();
                                             for (var temple in templeList) {
                                               _selectedTempleArea = temple.area;
-                                              print(
-                                                  "this is temple area : $_selectedTempleArea");
+                                           //   print(
+                                            //      "this is temple area : $_selectedTempleArea");
                                             }
                                           }
                                           List<String> templeArea = snapshot
@@ -209,7 +209,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                             element.area ==
                                                             _selectedTempleArea) +
                                                     1;
-                                                print(_selectedtempleId);
+                                              //  print(_selectedtempleId);
                                                 _selectedLocalAdmin = null;
                                               });
                                             },
@@ -363,7 +363,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                 teamUser.updatedTime = dt;
                                                 listofTeamUsers.add(teamUser);
                                               }
-                                              print(listofTeamUsers);
+                                             // print(listofTeamUsers);
                                               widget.teamrequest
                                                       .listOfTeamMembers =
                                                   listofTeamUsers;

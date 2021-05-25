@@ -17,10 +17,7 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
 
   Future<List<EventTeam>> submitNewEventTeamMapping(
       List<EventTeam> listofteamusermap) async {
-    print(listofteamusermap);
     String requestBody = json.encode(listofteamusermap);
-    print(requestBody);
-
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/eventteam/addeventteam',
         headers: {
@@ -35,7 +32,6 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
           .map((teamusermappingData) => EventTeam.fromMap(teamusermappingData))
           .toList();
 //      TeamUser.fromMap(teamusermappingData);
-      print(teamrequests);
       return teamrequests;
 
       List<dynamic> userrequestsData = json.decode(response.body);
@@ -68,18 +64,13 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
           "Authorization": "Bearer $token"
         },
         body: requestBody);
-    // print("In get Event teams");
-    // print(requestBody);
-    print(response.statusCode);
     if (response.statusCode == 200) {
-      //print(response.body);
+
       List<dynamic> teamtsermappingData = json.decode(response.body);
-      //print(teamtsermappingData);
+
       List<EventTeam> teamusermappings = teamtsermappingData
           .map((teamtsermappingData) => EventTeam.fromMap(teamtsermappingData))
           .toList();
-      // print(teamtsermappingData);
-      // print(teamusermappings);
 
       return teamusermappings;
     } else {
@@ -89,9 +80,8 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
 
   Future<List<EventTeam>> submitDeleteEventTeamMapping(
       Map<String, dynamic> listofteamusermap) async {
-    print(listofteamusermap);
+
     String requestBody = json.encode(listofteamusermap);
-    print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/eventteam/deleteeventteam',
@@ -107,7 +97,7 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
           .map((teamusermappingData) => EventTeam.fromMap(teamusermappingData))
           .toList();
 //      TeamUser.fromMap(teamusermappingData);
-      print(teamusers);
+
       return teamusers;
 
       List<dynamic> userrequestsData = json.decode(response.body);

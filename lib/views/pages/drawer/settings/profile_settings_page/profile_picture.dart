@@ -48,7 +48,7 @@ class _profilePictureState extends State<profilePicture> {
 
       setState(() {
         _image = image;
-        print('Image Path $_image');
+      //  print('Image Path $_image');
       });
     }
 
@@ -72,7 +72,7 @@ class _profilePictureState extends State<profilePicture> {
             if (snapshot.data != null) {
               // final String email = snapshot.data.toString();
               String _email = snapshot.data + '.jpg';
-              print("\n\n\n\n\n\n\n\n\n\n\n" + _email + "\n\n\n\n\n\n\n\n");
+             // print("\n\n\n\n\n\n\n\n\n\n\n" + _email + "\n\n\n\n\n\n\n\n");
               final ref = FirebaseStorage.instance.ref().child(_email);
               // var url = ref.getDownloadURL();
               // print("\n\n\n\n\n\n\n" + snapshot.data + "\n\n\n\n\n\n");
@@ -125,8 +125,8 @@ class _profilePictureState extends State<profilePicture> {
       //     .then((value) => {photoUrl = value});
       // retrievePic(photoUrl);
       setState(() {
-        print("Profile Picture uploaded");
-        print(_photoUrl);
+       // print("Profile Picture uploaded");
+       // print(_photoUrl);
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
       });
@@ -144,7 +144,7 @@ class _profilePictureState extends State<profilePicture> {
           FirebaseStorage.instance.ref().child(uemail + '.jpg');
       await firebaseStorageRef.delete();
       setState(() {
-        print("Profile Picture deleted");
+      //  print("Profile Picture deleted");
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
       });
@@ -241,8 +241,8 @@ class _profilePictureState extends State<profilePicture> {
                                     await userPageVM.getUserRequests('$uemail');
                                 //
                                 if (userrequest.isNotEmpty) {
-                                  print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
-                                  print(_photoUrl);
+                                //  print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+                                 //print(_photoUrl);
                                   UserRequest userreq = new UserRequest();
                                   for (var user in userrequest) {
                                     user.profileUrl = null;

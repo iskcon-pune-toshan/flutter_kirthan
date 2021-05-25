@@ -35,7 +35,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
       photoUrl = onValue.photoUrl;
-      print(photoUrl);
+     // print(photoUrl);
     });
     //print(userdetails.length);
   }
@@ -110,7 +110,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                   if (_users.email == _email) {
                     superId = _users.id;
                   } else {
-                    print("BYEBYE");
+                  //  print("BYEBYE");
                   }
                 }
                 for (var uname in userList) {
@@ -401,6 +401,6 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     user = await auth.currentUser();
     //print("helo");
-    print(user.email);
+    //print(user.email);
   }
 }

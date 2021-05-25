@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Choice {
   const Choice({this.id, this.description});
@@ -42,219 +43,230 @@ class EventRequestsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => Text(
-                  eventrequest?.eventTitle,
-                  style: TextStyle(
-                    //color: KirthanStyles.titleColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: notifier.custFontSize,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            EventTeamUserRegister(eventrequest: eventrequest),
-            SizedBox(width: 5),
-            FlatButton(
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.circular(15.0),
-              // ),
-              highlightColor: Colors.grey,
-              padding: EdgeInsets.all(0),
-              //color: Colors.black,
+    var title = SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Container(
+              width: notifier.custFontSize >= 20
+                  ? MediaQuery.of(context).size.width * 1.2
+                  : MediaQuery.of(context).size.width,
               child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(0),
-                    child: Icon(
-                      Icons.location_on_sharp,
-                      color: KirthanStyles.colorPallete30,
-                      size: 20,
+                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => Text(
+                          eventrequest?.eventTitle,
+                          style: TextStyle(
+                            //color: KirthanStyles.titleColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: notifier.custFontSize,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    "Location",
-                    style: TextStyle(
-                      color: KirthanStyles.colorPallete30,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          Location(eventrequest: eventrequest)),
-                );
-              },
-              //splashColor: Colors.red,
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.only(right: 33),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              EventTeamUserRegister(
+                                  eventrequest: eventrequest),
+                              SizedBox(width: 5),
+                              FlatButton(
+                                // shape: RoundedRectangleBorder(
+                                //   borderRadius: BorderRadius.circular(15.0),
+                                // ),
+                                highlightColor: Colors.grey,
+                                padding: EdgeInsets.all(0),
+                                //color: Colors.black,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(0),
+                                      child: Icon(
+                                        Icons.location_on_sharp,
+                                        color: KirthanStyles.colorPallete30,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Location",
+                                      style: TextStyle(
+                                        color: KirthanStyles.colorPallete30,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Location(
+                                            eventrequest: eventrequest)),
+                                  );
+                                },
+                                //splashColor: Colors.red,
 //shape: Border.all(width: 2.0, color: Colors.black)
-            ),
+                              ),
 /*              Container(
             child: Align(
               alignment: Alignment.bottomCenter,
               //alignment: Alignment.topRight,
               child: PopupMenuButton<Choice>(
-                tooltip: null,
-                icon: Icon(
-                  Icons.more_vert,
-                  color: KirthanStyles.colorPallete30,
-                ),
-                itemBuilder: (BuildContext context) {
-                  return popupList.map((f) {
-                    return PopupMenuItem<Choice>(
-                      child: Text(f.description),
-                      value: f,
-                    );
-                  }).toList();
-                },
-                onSelected: (choice) {
-                  if (choice.id == 2) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              EditEvent(eventrequest: eventrequest)),
-                    );
-                  } else if (choice.id == 1) {
-                    Map<String, dynamic> processrequestmap =
-                        new Map<String, dynamic>();
-                    processrequestmap["id"] = eventrequest?.id;
-                    processrequestmap["approvalStatus"] = "Approved";
-                    processrequestmap["approvalComments"] =
-                        "ApprovalComments";
-                    processrequestmap["eventType"] =
-                        eventrequest?.eventType;
-                    processrequestmap["addLineOne"] =
-                        eventrequest?.addLineOne;
-                    processrequestmap["city"] = eventrequest?.city;
-                    processrequestmap["country"] = eventrequest?.country;
-                    processrequestmap["phoneNumber"] =
-                        eventrequest?.phoneNumber;
-                    processrequestmap["pincode"] = eventrequest?.pincode;
-                    processrequestmap["eventTitle"] =
-                        eventrequest?.eventTitle;
-                    processrequestmap["eventDescription"] =
-                        eventrequest?.eventDescription;
-                    processrequestmap["eventDate"] =
-                        eventrequest?.eventDate;
-                    processrequestmap["eventDuration"] =
-                        eventrequest?.eventDuration;
-                    processrequestmap["eventLocation"] =
-                        eventrequest?.eventLocation;
-                    processrequestmap["locality"] = eventrequest?.locality;
-                    processrequestmap["state"] = eventrequest?.state;
-                    processrequestmap["isProcessed"] =
-                        eventrequest?.isProcessed;
-                    processrequestmap["createdBy"] =
-                        eventrequest?.createdBy;
-                    processrequestmap["createdTime"] =
-                        eventrequest?.createdTime;
-
-                    eventPageVM.processEventRequest(processrequestmap);
-                    SnackBar mysnackbar = SnackBar(
-                      content: Text("Event $process $successful "),
-                      duration: new Duration(seconds: 4),
-                      backgroundColor: Colors.green,
-                    );
-                    Scaffold.of(context).showSnackBar(mysnackbar);
-                  } else if (choice.id == 3) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20.0)), //this right here
-                            child: Container(
-                              height: 200,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    TextField(
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText:
-                                              'Do you want to delete?'),
-                                    ),
-                                    SizedBox(
-                                      width: 320.0,
-                                      child: RaisedButton(
-                                        onPressed: () {
-                                          Map<String, dynamic>
-                                              processrequestmap =
-                                              new Map<String, dynamic>();
-                                          processrequestmap["id"] =
-                                              eventrequest?.id;
-                                          eventPageVM.deleteEventRequest(
-                                              processrequestmap);
-                                          SnackBar mysnackbar = SnackBar(
-                                            content: Text("Event $delete "),
-                                            duration:
-                                                new Duration(seconds: 4),
-                                            backgroundColor: Colors.red,
-                                          );
-                                          Scaffold.of(context)
-                                              .showSnackBar(mysnackbar);
-                                        },
-                                        child: Consumer<ThemeNotifier>(
-                                          builder:
-                                              (context, notifier, child) =>
-                                                  Text(
-                                            "yes",
-                                            style: TextStyle(
-                                                fontSize:
-                                                    notifier.custFontSize,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                        color: const Color(0xFF1BC0C5),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 320.0,
-                                      child: RaisedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Consumer<ThemeNotifier>(
-                                          builder:
-                                              (context, notifier, child) =>
-                                                  Text(
-                                            "No",
-                                            style: TextStyle(
-                                                fontSize:
-                                                    notifier.custFontSize,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                        color: const Color(0xFF1BC0C5),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                  tooltip: null,
+                  icon: Icon(
+                      Icons.more_vert,
+                      color: KirthanStyles.colorPallete30,
+                  ),
+                  itemBuilder: (BuildContext context) {
+                      return popupList.map((f) {
+                          return PopupMenuItem<Choice>(
+                            child: Text(f.description),
+                            value: f,
                           );
-                        });
-                  }
-                },
+                      }).toList();
+                  },
+                  onSelected: (choice) {
+                      if (choice.id == 2) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    EditEvent(eventrequest: eventrequest)),
+                          );
+                      } else if (choice.id == 1) {
+                          Map<String, dynamic> processrequestmap =
+                              new Map<String, dynamic>();
+                          processrequestmap["id"] = eventrequest?.id;
+                          processrequestmap["approvalStatus"] = "Approved";
+                          processrequestmap["approvalComments"] =
+                              "ApprovalComments";
+                          processrequestmap["eventType"] =
+                              eventrequest?.eventType;
+                          processrequestmap["addLineOne"] =
+                              eventrequest?.addLineOne;
+                          processrequestmap["city"] = eventrequest?.city;
+                          processrequestmap["country"] = eventrequest?.country;
+                          processrequestmap["phoneNumber"] =
+                              eventrequest?.phoneNumber;
+                          processrequestmap["pincode"] = eventrequest?.pincode;
+                          processrequestmap["eventTitle"] =
+                              eventrequest?.eventTitle;
+                          processrequestmap["eventDescription"] =
+                              eventrequest?.eventDescription;
+                          processrequestmap["eventDate"] =
+                              eventrequest?.eventDate;
+                          processrequestmap["eventDuration"] =
+                              eventrequest?.eventDuration;
+                          processrequestmap["eventLocation"] =
+                              eventrequest?.eventLocation;
+                          processrequestmap["locality"] = eventrequest?.locality;
+                          processrequestmap["state"] = eventrequest?.state;
+                          processrequestmap["isProcessed"] =
+                              eventrequest?.isProcessed;
+                          processrequestmap["createdBy"] =
+                              eventrequest?.createdBy;
+                          processrequestmap["createdTime"] =
+                              eventrequest?.createdTime;
+
+                          eventPageVM.processEventRequest(processrequestmap);
+                          SnackBar mysnackbar = SnackBar(
+                            content: Text("Event $process $successful "),
+                            duration: new Duration(seconds: 4),
+                            backgroundColor: Colors.green,
+                          );
+                          Scaffold.of(context).showSnackBar(mysnackbar);
+                      } else if (choice.id == 3) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          20.0)), //this right here
+                                  child: Container(
+                                    height: 200,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextField(
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText:
+                                                    'Do you want to delete?'),
+                                          ),
+                                          SizedBox(
+                                            width: 320.0,
+                                            child: RaisedButton(
+                                              onPressed: () {
+                                                Map<String, dynamic>
+                                                    processrequestmap =
+                                                    new Map<String, dynamic>();
+                                                processrequestmap["id"] =
+                                                    eventrequest?.id;
+                                                eventPageVM.deleteEventRequest(
+                                                    processrequestmap);
+                                                SnackBar mysnackbar = SnackBar(
+                                                  content: Text("Event $delete "),
+                                                  duration:
+                                                      new Duration(seconds: 4),
+                                                  backgroundColor: Colors.red,
+                                                );
+                                                Scaffold.of(context)
+                                                    .showSnackBar(mysnackbar);
+                                              },
+                                              child: Consumer<ThemeNotifier>(
+                                                builder:
+                                                    (context, notifier, child) =>
+                                                        Text(
+                                                  "yes",
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          notifier.custFontSize,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                              color: const Color(0xFF1BC0C5),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 320.0,
+                                            child: RaisedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Consumer<ThemeNotifier>(
+                                                builder:
+                                                    (context, notifier, child) =>
+                                                        Text(
+                                                  "No",
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          notifier.custFontSize,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                              color: const Color(0xFF1BC0C5),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              });
+                      }
+                  },
               ),
             ),
           ),*/
@@ -314,10 +326,12 @@ class EventRequestsListItem extends StatelessWidget {
     },
     ),
     )*/
-          ]),
-        ]);
+                            ]),
+                      ),
+                    ),
+                  ]),
+            )));
     var subTitle = Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         /*Icon(
           Icons.movie,
@@ -326,7 +340,7 @@ class EventRequestsListItem extends StatelessWidget {
         ),
         */
         Container(
-          //margin: const EdgeInsets.only(left: 4.0),
+          margin: const EdgeInsets.only(left: 10.0),
           child: Consumer<ThemeNotifier>(
             builder: (context, notifier, child) => Text(
               eventrequest?.eventDescription,
@@ -342,7 +356,7 @@ class EventRequestsListItem extends StatelessWidget {
     var daysToGo = Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       Container(
         padding: EdgeInsets.only(bottom: 15),
-        margin: const EdgeInsets.symmetric(horizontal: 20.0),
+        margin: const EdgeInsets.symmetric(horizontal: 10.0),
 
         //margin: const EdgeInsets.only(left: 4.0),
         child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
@@ -354,7 +368,7 @@ class EventRequestsListItem extends StatelessWidget {
             return Text(
               daysRemaining.toString() + ' days to go',
               style: TextStyle(
-                  // color: KirthanStyles.subTitleColor,
+                // color: KirthanStyles.subTitleColor,
                   fontSize: notifier.custFontSize,
                   color: Colors.green[700]),
             );
@@ -363,7 +377,7 @@ class EventRequestsListItem extends StatelessWidget {
               'Event ended',
               //daysRemaining.abs().toString() + ' days ago',
               style: TextStyle(
-                  // color: KirthanStyles.subTitleColor,
+                // color: KirthanStyles.subTitleColor,
                   fontSize: notifier.custFontSize,
                   color: Colors.red[700]),
             );
@@ -373,120 +387,152 @@ class EventRequestsListItem extends StatelessWidget {
         }),
       )
     ]);
-    return new Card(
-      child: Consumer<ThemeNotifier>(
+    return Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
-          decoration: new BoxDecoration(
-            borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
-            color: notifier.currentColorStatus
-                ? notifier.currentColor
-                : Theme.of(context).cardColor,
-            /*gradient: new LinearGradient(
-                colors: [Colors.white, Colors.white],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                tileMode: TileMode.clamp),*/
-          ),
-          child: new Column(children: <Widget>[
-            new ListTile(
-// contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-//leading: Icon(Icons.event),
-              title: title,
-              subtitle: subTitle,
-            ),
-            Divider(),
-            Consumer<ThemeNotifier>(
-              builder: (context, notifier, child) => Column(
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Column(
-                          children: [
-                            Text(
-                              "Date",
-                              style: GoogleFonts.openSans(
-                                //color: KirthanStyles.titleColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: notifier.custFontSize,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: new Card(
+            elevation: 8,
+            child: Consumer<ThemeNotifier>(
+              builder: (context, notifier, child) => Container(
+                decoration: new BoxDecoration(
+                  borderRadius:
+                  new BorderRadius.all(new Radius.circular(10.0)),
+                  color: notifier.currentColorStatus
+                      ? notifier.currentColor
+                      : Theme.of(context).cardColor,
+                  /*gradient: new LinearGradient(
+                  colors: [Colors.white, Colors.white],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  tileMode: TileMode.clamp),*/
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: new Column(children: <Widget>[
+                    title,
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          subTitle,
+                        ],
+                      ),
+                    ),
+                    Divider(),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
+                        // color: Colors.green,
+                        width: notifier.custFontSize >= 20
+                            ? MediaQuery.of(context).size.width * 1.4
+                            : MediaQuery.of(context).size.width,
+                        child: Row(children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                //color: Colors.yellow,
+                                child: Text(
+                                  "Date",
+                                  style: GoogleFonts.openSans(
+                                    //color: KirthanStyles.titleColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: notifier.custFontSize,
+                                  ),
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(bottom: 15),
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: Text(
-                                eventrequest?.eventDate.substring(0, 10),
+                              Container(
+                                //color: Colors.yellow,
+                                padding: EdgeInsets.only(bottom: 15),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
+                                child: Text(
+                                  eventrequest?.eventDate.substring(0, 10),
 //0,10 date
 //11,16 time
 
-                                style: TextStyle(
-                                  fontSize: notifier.custFontSize,
-                                  //color: KirthanStyles.subTitleColor,
+                                  style: TextStyle(
+                                    fontSize: notifier.custFontSize,
+                                    //color: KirthanStyles.subTitleColor,
+                                  ),
                                 ),
                               ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  //color: Colors.yellow,
+                                  child: Text(
+                                    "Time",
+                                    style: GoogleFonts.openSans(
+                                      //color: KirthanStyles.titleColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: notifier.custFontSize,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  //color: Colors.yellow,
+                                  padding: EdgeInsets.only(bottom: 15),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 40.0),
+                                  child: Text(
+                                    eventrequest?.eventStartTime,
+                                    style: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      //color: KirthanStyles.subTitleColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "Time",
-                              style: GoogleFonts.openSans(
-                                //color: KirthanStyles.titleColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: notifier.custFontSize,
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(bottom: 15),
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Text(
-                                eventrequest?.eventStartTime,
-                                style: TextStyle(
-                                  fontSize: notifier.custFontSize,
-                                  //color: KirthanStyles.subTitleColor,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                // color: Colors.red,
+                                child: Text(
+                                  "Duration",
+                                  style: GoogleFonts.openSans(
+                                    //color: KirthanStyles.titleColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: notifier.custFontSize,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "Duration ",
-                              style: GoogleFonts.openSans(
-                                //color: KirthanStyles.titleColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: notifier.custFontSize,
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(bottom: 15),
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Text(
-                                //notifier.duration
-                                duration() == notifier.duration
-                                    ? duration() + " Hrs"
-                                    : duration() + " Hrs",
-                                style: TextStyle(
-                                  fontSize: notifier.custFontSize,
-                                  // color: KirthanStyles.subTitleColor,
+                              Container(
+                                //color: Colors.yellow,
+                                padding: EdgeInsets.only(bottom: 15),
+                                child: Text(
+                                  //notifier.duration
+                                  duration() == notifier.duration
+                                      ? duration() + " Hrs"
+                                      : duration() + " Hrs",
+                                  style: TextStyle(
+                                    fontSize: notifier.custFontSize,
+                                    // color: KirthanStyles.subTitleColor,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ]),
-                  daysToGo,
-                ],
+                            ],
+                          ),
+                        ]),
+                      ),
+                    ),
+                    Container(
+                        padding: EdgeInsets.only(right: 23),
+                        width: MediaQuery.of(context).size.width,
+                        child: daysToGo),
+                  ]),
+                ),
               ),
             ),
-          ]),
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

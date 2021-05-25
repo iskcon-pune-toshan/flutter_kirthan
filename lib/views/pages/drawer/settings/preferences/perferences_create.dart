@@ -169,8 +169,8 @@ class _PreferenceState extends State<Preference> {
                                                           in templeArea) {
                                                         _selectedtempleId =
                                                             temple.templeId;
-                                                        print(
-                                                            "work man $_selectedtempleId");
+                                                       /* print(
+                                                            "work man $_selectedtempleId");*/
                                                       }
                                                     }
                                                     return FutureBuilder<
@@ -200,8 +200,8 @@ class _PreferenceState extends State<Preference> {
                                                                   in templeList) {
                                                                 _selectedTempleArea =
                                                                     temple.area;
-                                                                print(
-                                                                    "this is temple area : $_selectedTempleArea");
+                                                              /*  print(
+                                                                    "this is temple area : $_selectedTempleArea");*/
                                                               }
                                                             }
                                                             List<String>
@@ -246,8 +246,8 @@ class _PreferenceState extends State<Preference> {
                                                                                 element.area ==
                                                                                 _selectedTempleArea) +
                                                                             1;
-                                                                    print(
-                                                                        _selectedtempleId);
+                                                                   /* print(
+                                                                        _selectedtempleId);*/
                                                                     _selectedLocalAdmin =
                                                                         null;
                                                                   });
@@ -331,8 +331,8 @@ class _PreferenceState extends State<Preference> {
                                                             //     templeList.indexWhere((element) =>
                                                             //         element.area ==
                                                             //         _selectedTempleArea);
-                                                            print(
-                                                                _selectedtempleId);
+                                                           /* print(
+                                                                _selectedtempleId);*/
                                                           });
                                                         },
                                                         onSaved: (input) {

@@ -155,7 +155,7 @@ class _UserTempleCreateState extends State<UserTempleCreate> {
                       // Scaffold.of(context).showSnackBar(mysnackbar);
                       _scaffoldKey.currentState.showSnackBar(mysnackbar);
                     }
-                    print(listofUserTemples);
+                   // print(listofUserTemples);
                     userTemplePageVM
                         .submitNewUserTempleMapping(listofUserTemples);
                   },

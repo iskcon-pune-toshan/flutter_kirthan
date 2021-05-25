@@ -66,11 +66,11 @@ class NotificationViewState extends State<NotificationView> {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       access = prefs.getStringList(widget.screenName);
-      access.forEach((f) {
+      /*access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
             access.elementAt(1).toLowerCase() == "true" ? true : false;
-      });
+      });*/
       notificationPageVM.accessTypes = accessTypes;
     });
   }
@@ -138,8 +138,8 @@ class NotificationViewState extends State<NotificationView> {
               for (var event in eventList) {
                 eventRequest = event;
               }
-              print("Printing dara");
-              print(data);
+            //  print("Printing dara");
+              //print(data);
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.push(
                     context,
@@ -684,7 +684,7 @@ class NotificationViewState extends State<NotificationView> {
       onSlideAnimationChanged: slideAnimationChanged,
       onSlideIsOpenChanged: slideIsOpenChanged,
     );
-    print(notificationPageVM.newNotificationCount);
+    //print(notificationPageVM.newNotificationCount);
     //notificationPageVM.newNotificationCount;
     //  print(context);
     //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
@@ -818,8 +818,8 @@ class NotificationViewState extends State<NotificationView> {
                                     .contains("Request to create an event") &&
                                 snapshot.data[itemCount].targetType
                                     .contains("event")) {
-                              print("Printing dara");
-                              print(snapshot.data[itemCount]);
+                           //   print("Printing dara");
+                             // print(snapshot.data[itemCount]);
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 Navigator.push(
                                     context,
@@ -834,7 +834,7 @@ class NotificationViewState extends State<NotificationView> {
                                     .contains("Request to create a team") ||
                                 snapshot.data[itemCount].message
                                     .contains("Invited user")) {
-                              print(snapshot.data[itemCount].targetId);
+                             // print(snapshot.data[itemCount].targetId);
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 //Navigator.pop(context);
                                 Navigator.push(
@@ -868,7 +868,7 @@ class NotificationViewState extends State<NotificationView> {
 
                             processrequestmap["id"] =
                                 snapshot.data[itemCount].id;
-                            print(snapshot.data[itemCount].id);
+                          // print(snapshot.data[itemCount].id);
 
                             snapshot.data[itemCount].message.contains("Your") ||
                                     snapshot.data[itemCount].message
@@ -899,8 +899,8 @@ class NotificationViewState extends State<NotificationView> {
                 },
                 itemCount: snapshot.data.length);
           } else if (snapshot.hasError) {
-            print(snapshot);
-            print(snapshot.error.toString() + " Error ");
+           // print(snapshot);
+            //print(snapshot.error.toString() + " Error ");
             return Center(child: Text('Error loading notifications'));
           } else {
             return Center(child: CircularProgressIndicator());

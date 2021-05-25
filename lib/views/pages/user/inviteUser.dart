@@ -36,7 +36,7 @@ class _InviteUserState extends State<InviteUser> {
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     email = user.email;
-    print(email);
+   // print(email);
   }
 
   @override
@@ -51,7 +51,7 @@ class _InviteUserState extends State<InviteUser> {
     if (await canLaunch(userEmail)) {
       await launch(userEmail);
     } else {
-      print('Could not launch $userEmail');
+      //print('Could not launch $userEmail');
     }
   }
 
@@ -87,12 +87,12 @@ class _InviteUserState extends State<InviteUser> {
                       ? _validate = true
                       : _validate = false;
                 });
-                print("clicked");
-                print("CHECK0");
+               /* print("clicked");
+                print("CHECK0");*/
                 userList = await Users;
                 present = false;
                 String userType = "uEmail:" + _emailController.text;
-                print(userType);
+               // print(userType);
                 ProspectiveUsers =
                     prospectiveUserPageVM.getProspectiveUserRequests(userType);
                 prospectiveList = await ProspectiveUsers;
@@ -102,18 +102,18 @@ class _InviteUserState extends State<InviteUser> {
                   }
                 }
                 for (var user in userList) {
-                  print("check3");
-                  print(email);
+                /*  print("check3");
+                  print(email);*/
                   if (email == user.email) {
                     user_id = user.email;
-                    print("CHECK4");
-                    print(user_id);
+                    /*print("CHECK4");
+                    print(user_id);*/
                   }
-                  print("PRESENT");
-                  print(present);
+                  /*print("PRESENT");
+                  print(present);*/
 
                   if (user.email == _emailController.text || present) {
-                    print("HELLO");
+                   // print("HELLO");
                     SnackBar mysnackbar = SnackBar(
                       content: Text("User is in system"),
                       duration: new Duration(seconds: 4),

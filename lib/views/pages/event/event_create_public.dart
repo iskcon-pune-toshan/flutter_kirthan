@@ -116,7 +116,7 @@ class _EventWriteState extends State<EventWritePublic> {
   }
 
   handleTap(LatLng tappedPoint1) {
-    print(tappedPoint1);
+   // print(tappedPoint1);
     setState(() {
       myMarkersource = [];
 
@@ -135,7 +135,7 @@ class _EventWriteState extends State<EventWritePublic> {
   }
 
   handleTap2(LatLng tappedPoint1) {
-    print(tappedPoint1);
+  //  print(tappedPoint1);
     setState(() {
       myMarker = [];
       myMarker.add(
@@ -161,9 +161,9 @@ class _EventWriteState extends State<EventWritePublic> {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     eventrequest.createdBy = email;
-    print("created by " + eventrequest.createdBy);
+   // print("created by " + eventrequest.createdBy);
 
-    print(email);
+  //  print(email);
     return email;
   }
   GoogleMapController _controller;
@@ -237,7 +237,7 @@ class _EventWriteState extends State<EventWritePublic> {
           groupValue: select,
           onChanged: (value) {
             setState(() {
-              print(value);
+            //  print(value);
               eventrequest.eventMobility = value;
               select = value;
               if (value == 'Moving') {
@@ -396,7 +396,7 @@ class _EventWriteState extends State<EventWritePublic> {
                               eventrequest.eventDate = DateFormat("yyyy-MM-dd")
                                   .format(input)
                                   .toString();
-                              print(eventrequest.eventDate);
+                             // print(eventrequest.eventDate);
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
@@ -431,7 +431,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             onSaved: (input) {
                               eventrequest.eventStartTime =
                                   DateFormat("HH:mm").format(input).toString();
-                              print(eventrequest.eventStartTime);
+                             // print(eventrequest.eventStartTime);
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
@@ -466,7 +466,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             onSaved: (input) {
                               eventrequest.eventEndTime =
                                   DateFormat("HH:mm").format(input).toString();
-                              print(eventrequest.eventEndTime);
+                             // print(eventrequest.eventEndTime);
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
@@ -611,7 +611,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                                 _animateCamera();
                                               }
                                               if (state is Failure) {
-                                                print('Failure');
+                                               // print('Failure');
                                                 Scaffold.of(context)
                                                   ..hideCurrentSnackBar()
                                                   ..showSnackBar(
@@ -625,7 +625,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                                   );
                                               }
                                               if (state is Loading) {
-                                                print('loading');
+                                               // print('loading');
                                                 Scaffold.of(context)
                                                   ..hideCurrentSnackBar()
                                                   ..showSnackBar(
@@ -819,7 +819,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                                   _animateCamera();
                                                 }
                                                 if (state is Failure) {
-                                                  print('Failure');
+                                                 // print('Failure');
                                                   Scaffold.of(context)
                                                     ..hideCurrentSnackBar()
                                                     ..showSnackBar(
@@ -833,7 +833,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                                     );
                                                 }
                                                 if (state is Loading) {
-                                                  print('loading');
+                                                 // print('loading');
                                                   Scaffold.of(context)
                                                     ..hideCurrentSnackBar()
                                                     ..showSnackBar(
@@ -1105,8 +1105,8 @@ class _EventWriteState extends State<EventWritePublic> {
                                 await auth.currentUser();
                                 final String email = user.email;
                                 eventrequest.createdBy = email;
-                                print("created by " + eventrequest.createdBy);
-                                print(email);
+                               // print("created by " + eventrequest.createdBy);
+                               // print(email);
 
                                 _formKey.currentState.save();
                                 //eventrequest.isProcessed = true;
@@ -1128,7 +1128,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 EventRequest neweventrequest = await eventPageVM
                                     .submitNewEventRequest(teammap);
 
-                                print(neweventrequest.id);
+                              // print(neweventrequest.id);
                                 String eid = neweventrequest.id.toString();
 
                                 SnackBar mysnackbar = SnackBar(

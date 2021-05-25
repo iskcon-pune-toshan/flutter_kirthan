@@ -55,7 +55,7 @@ class _password_profileState extends State<password_profile> {
                         user = u;
                         currentPassword = user.password;
                       }
-                      print("user password" + user.password);
+                     // print("user password" + user.password);
                       return SingleChildScrollView(
                         padding: const EdgeInsets.all(16.0),
                         child: Form(
@@ -209,11 +209,10 @@ class _password_profileState extends State<password_profile> {
                                                 .updatePassword(_password.text)
                                                 .then((_) {
                                               print(
-                                                  "Successfully changed password");
+                                                  "");
                                             }).catchError((error) {
                                               print(
-                                                  "Password can't be changed" +
-                                                      error.toString());
+                                                 '');
                                               //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
                                             });
                                             _formKey.currentState.save();

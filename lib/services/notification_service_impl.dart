@@ -30,7 +30,6 @@ class NotificationManager extends BaseAPIService
       fms.getFBToken().then((deviceToken) {
         print(deviceToken);
         storeToken(deviceToken);
-        print("using firebase in ntf!");
       });
     } catch (Exception) {
       print("Error uploading token");
@@ -58,7 +57,7 @@ class NotificationManager extends BaseAPIService
 
   //getNotification
   Future<List<NotificationModel>> getNotificationsBySpec(String ntfType) async {
-    print("I am in Service: getNotificationsBySpec");
+
 
     String requestBody = '';
 
@@ -72,7 +71,7 @@ class NotificationManager extends BaseAPIService
     if (response.statusCode == 200) {
       //print(response.body);
       List<dynamic> data = json.decode(response.body);
-      print(data);
+
       List<NotificationModel> expectedData =
       data.map((element) => NotificationModel.fromJson(element)).toList();
       //print(expectedData.toString());
@@ -111,8 +110,6 @@ class NotificationManager extends BaseAPIService
       'Authorization': 'Bearer $token'
     });
     var respData = convert.jsonDecode(resp.body);
-    print(resp.statusCode);
-    print(callback);
     if (callback != null) callback();
   }
 
@@ -132,7 +129,6 @@ class NotificationManager extends BaseAPIService
         body: requestBody);
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
       throw Exception('Failed to get data');
@@ -155,7 +151,6 @@ class NotificationManager extends BaseAPIService
         body: requestBody);
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
       throw Exception('Failed to get data');
