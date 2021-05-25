@@ -425,7 +425,13 @@ class _TeamWriteState extends State<TeamWrite> {
                                                       null) {
                                                     tempUserList =
                                                         snapshot.data;
-                                                  } else {
+                                                  } else if (teamList
+                                                      .where((element) =>
+                                                          element.teamLeadId ==
+                                                          widget.userRequest
+                                                              .email)
+                                                      .toList()
+                                                      .isEmpty) {
                                                     tempUserList.add(
                                                         widget.userRequest);
                                                   }
