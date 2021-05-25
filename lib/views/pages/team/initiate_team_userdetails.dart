@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
@@ -12,6 +13,8 @@ import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
+import 'package:random_string/random_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
@@ -30,10 +33,13 @@ class TeamInitiateUserDetails extends StatefulWidget {
 
 class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
   String UserName;
+  String currUserRole;
   _TeamInitiateUserDetailsState(this.UserName);
   String Email;
   int Phone;
   String photoUrl;
+  String message;
+  String inviteCode = randomAlphaNumeric(6);
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
   UserRequest userrequest = new UserRequest();
@@ -56,7 +62,7 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
   String currentUserName;
   getUserName() async {
     final FirebaseUser user = await auth.currentUser();
-    userList = await userPageVM.getUserRequests("A");
+    userList = await userPageVM.getUserRequests("Approved");
     for (var users in userList) {
       if (users.email == user.email) {
         user_name = users.fullName;
@@ -80,6 +86,28 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
     }
   }
 
+  bool UserRole(List<UserRequest> userList) {
+    for (var user in userList) {
+      // UserName = user.userName;
+      print("In User Role function, role id is");
+      print(user.roleId);
+      if (user.fullName == UserName) {
+        if (user.roleId == 1) {
+          currUserRole = "Admin";
+        } else if (user.roleId == 2) {
+          currUserRole = "Local Admin";
+        } else if (user.roleId == 3) {
+          currUserRole = "User";
+        }
+      }
+      print("User role $currUserRole");
+    }
+    if (currUserRole != null)
+      return true;
+    else
+      return false;
+  }
+
   Widget ProfilePages() {
     return FutureBuilder<List<UserRequest>>(
         future: Users,
@@ -90,9 +118,6 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
               if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
-                // print("*********************" +
-                //     _photoName +
-                //     "*************************");
                 final ref = FirebaseStorage.instance.ref().child(_photoName);
                 return FutureBuilder(
                     future: ref.getDownloadURL(),
@@ -116,6 +141,7 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
   }
 
   TeamRequest teamrequest = new TeamRequest();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,12 +215,15 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text(
-                                          'User',
-                                          style: TextStyle(
-                                              fontSize: 35,
-                                              fontWeight: FontWeight.w800),
-                                        ),
+                                        UserRole(userList)
+                                            ? Text(
+                                                currUserRole,
+                                                style: TextStyle(
+                                                    fontSize: 35,
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                              )
+                                            : Text("No User"),
                                         Divider(),
                                         SizedBox(
                                           height: 10,
@@ -331,17 +360,33 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
                               RaisedButton(
                                   color: KirthanStyles.colorPallete30,
                                   child: Text('Send invite'),
-                                  onPressed: () {
-                                    // print(
-                                    //     'ooooooooooooooooooooooooooooooooooooooooooooooooooooo');
-                                    // print(currentUserId);
-                                    setState(() {
-                                      uname.invitedBy = currentUserId;
-                                      String userrequestStr =
-                                          jsonEncode(uname.toStrJson());
-                                      userPageVM
-                                          .submitInitiateTeam(userrequestStr);
-                                    });
+                                  onPressed: () async {
+                                    List<TeamRequest> checkTeamPresent =
+                                        await teamPageVM.getTeamRequests(
+                                            "teamLeadId:" + Email);
+                                    if (checkTeamPresent.isEmpty) {
+                                      setState(() {
+                                        uname.invitedBy = currentUserId;
+                                        String userrequestStr =
+                                            jsonEncode(uname.toStrJson());
+                                        userPageVM
+                                            .submitInitiateTeam(userrequestStr)
+                                            .whenComplete(() =>
+                                                Scaffold.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      'Invite sent $successful'),
+                                                  backgroundColor: Colors.green,
+                                                )));
+                                      });
+                                    } else {
+                                      Scaffold.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            '${uname.fullName} already has a team'),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    }
                                   })
                             ]),
                           ),
@@ -349,7 +394,6 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
                       ),
                     ],
                   );
-
                 }
               }
             }

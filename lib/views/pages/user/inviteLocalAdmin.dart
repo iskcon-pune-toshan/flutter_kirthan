@@ -86,6 +86,7 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
                         child: Column(
                           children: [
                             DropDownField(
+                              strict: false,
                               textStyle: TextStyle(color: Colors.white70),
                               controller: userSelected,
                               hintText: 'Search User',
@@ -121,7 +122,6 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
                                           f,
                                         ),
                                         value: f,
-
                                       );
                                     }).toList();
                                   }),

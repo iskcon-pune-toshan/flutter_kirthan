@@ -880,7 +880,9 @@ class NotificationViewState extends State<NotificationView> {
                                     snapshot.data[itemCount].message
                                         .contains("have been promoted") ||
                                     snapshot.data[itemCount].message
-                                        .contains("have been made")
+                                        .contains("have been made") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("have been invited")
                                 ? notificationPageVM.deleteNotification(
                                     processrequestmap, false)
                                 : notificationPageVM.deleteNotification(

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -157,6 +158,7 @@ class _SignUpState extends State<SignUp> {
               //color: Color.alphaBlend(BlendMode.color, BlendMode.colorDodge),
               child: Form(
                 key: _formKey,
+                autovalidate: true,
                 child: Center(
                   child: Column(
                     verticalDirection: VerticalDirection.down,
@@ -182,7 +184,7 @@ class _SignUpState extends State<SignUp> {
                                       _image,
                                     )
                                   : AssetImage(
-                                      "assets/images/add_profile.png")),
+                                      "assets/images/default_profile_picture.png")),
                         ),
                       ),
                       Padding(
@@ -208,10 +210,9 @@ class _SignUpState extends State<SignUp> {
                               Icons.email, "Email", "Email"),
                           controller: _emailcontroller,
                           validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
+                            return EmailValidator.validate(value)
+                                ? null
+                                : "Please enter valid email";
                           },
                           //onSaved: (input) => email = input,
                         ),
@@ -318,16 +319,19 @@ class _SignUpState extends State<SignUp> {
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
-                                uploadFile();
-                                signIn
-                                    .signUpWithEmail(_emailcontroller.text,
-                                        _passwordcontroller.text)
-                                    .then((FirebaseUser user) => populateData())
-                                    .catchError((e) => print(e))
-                                    .whenComplete(() {
-                                  addUser();
-                                  showFlushBar(context);
-                                });
+                                if (_formKey.currentState.validate()) {
+                                  uploadFile();
+                                  signIn
+                                      .signUpWithEmail(_emailcontroller.text,
+                                          _passwordcontroller.text)
+                                      .then(
+                                          (FirebaseUser user) => populateData())
+                                      .catchError((e) => print(e))
+                                      .whenComplete(() {
+                                    addUser();
+                                    showFlushBar(context);
+                                  });
+                                }
                               },
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50.0),
