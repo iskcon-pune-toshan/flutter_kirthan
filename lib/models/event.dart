@@ -31,6 +31,7 @@ class EventRequest {
   int teamInviteStatus;
   String cancelReason;
   String serviceType;
+  String zoomId;
 
 //Typically called form service layer to create a new user
   EventRequest(
@@ -68,7 +69,8 @@ class EventRequest {
       this.isPublicEvent,
       this.teamInviteStatus,
       this.cancelReason,
-      this.serviceType});
+      this.serviceType,
+      this.zoomId});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventRequest.fromJson(Map<String, dynamic> data) {
@@ -108,6 +110,7 @@ class EventRequest {
       teamInviteStatus: data['teamInviteStatus'],
       cancelReason: data['cancelReason'],
       serviceType: data['serviceType'],
+      zoomId: data['zoomId'],
     );
   }
 
@@ -148,6 +151,7 @@ class EventRequest {
       teamInviteStatus: map['teamInviteStatus'],
       cancelReason: map['cancelReason'],
       serviceType: map['serviceType'],
+      zoomId: map['zoomId'],
     );
   }
 
@@ -188,6 +192,7 @@ class EventRequest {
     data['teamInviteStatus'] = this.teamInviteStatus;
     data['cancelReason'] = this.cancelReason;
     data['serviceType'] = this.serviceType;
+    data['zoomId'] = this.zoomId;
     return data;
   }
 
@@ -228,6 +233,7 @@ class EventRequest {
       "teamInviteStatus": this.teamInviteStatus,
       "cancelReason": this.cancelReason,
       "serviceType": this.serviceType,
+      "zoomId": this.zoomId,
     };
   }
 }

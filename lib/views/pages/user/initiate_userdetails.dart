@@ -31,11 +31,12 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
   int superId;
+  int prev_role_id;
 
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
       photoUrl = onValue.photoUrl;
-     // print(photoUrl);
+      // print(photoUrl);
     });
     //print(userdetails.length);
   }
@@ -110,13 +111,14 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                   if (_users.email == _email) {
                     superId = _users.id;
                   } else {
-                  //  print("BYEBYE");
+                    //  print("BYEBYE");
                   }
                 }
                 for (var uname in userList) {
                   if (uname.fullName == UserName) {
                     Email = uname.email;
                     Phone = uname.phoneNumber;
+                    prev_role_id = uname.roleId;
                     return Stack(
                       children: [
                         Column(
@@ -309,11 +311,14 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                           ),
                                           onPressed: () {
                                             userRequest = uname;
-                                            // print("Printing user request");
+                                            print("Printing user request");
+                                            print(prev_role_id);
                                             // print(userRequest);
                                             setState(() {
                                               // print("ooooo");
                                               userRequest.roleId = 2;
+                                              userRequest.prevRoleId =
+                                                  prev_role_id;
                                               // print("JJJJJJ");
                                               // print(superId);
                                               userRequest.invitedBy = superId;
@@ -361,10 +366,14 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                 fontFamily: 'OpenSans'),
                                           ),
                                           onPressed: () {
+                                            print("Printing user request");
+                                            print(prev_role_id);
                                             userRequest = uname;
                                             setState(() {
                                               userRequest.roleId = 3;
                                               userRequest.invitedBy = superId;
+                                              userRequest.prevRoleId =
+                                                  prev_role_id;
                                             });
 
                                             String userrequestStr = jsonEncode(

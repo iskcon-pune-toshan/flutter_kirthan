@@ -9,20 +9,22 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
+import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 int user_id;
 String user_name;
-
 class UserProfile extends StatefulWidget {
   String UserName;
   UserProfile({this.UserName});
   @override
-  _UserProfileState createState() => _UserProfileState(UserName);
+  _UserProfileState createState() =>
+      _UserProfileState(UserName);
 }
 
 class _UserProfileState extends State<UserProfile> {
@@ -43,29 +45,27 @@ class _UserProfileState extends State<UserProfile> {
     });
     //print(userdetails.length);
   }
-
-  @override
-  void initState() {
-    Users = userPageVM.getUserRequests('Approved');
-    getUserId();
-    super.initState();
-  }
-
   int currentUserId;
   getUserId() async {
     final FirebaseUser user = await auth.currentUser();
     userList = await userPageVM.getUserRequests("Approved");
     for (var users in userList) {
-     // print("Role Id is");
+      print("Role Id is");
       if (users.email == user.email) {
         setState(() {
           user_id = users.id;
-          currentUserId = user_id;
+          currentUserId=user_id;
         });
       }
     }
     //print(email);
     // print(role_id.toString());
+  }
+  @override
+  void initState() {
+    Users = userPageVM.getUserRequests('Approved');
+    getUserId();
+    super.initState();
   }
 
   Widget ProfilePages() {
@@ -102,29 +102,26 @@ class _UserProfileState extends State<UserProfile> {
           );
         });
   }
-
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
       // UserName = user.userName;
-     /* print("In User Role function, role id is");
-      print(user.roleId);*/
-      if (user.roleId == 1) {
-        currUserRole = "Super Admin";
-      } else if (user.roleId == 2) {
-        currUserRole = "Local Admin";
-      } else if (user.roleId == 3) {
-        currUserRole = "User";
-      } else if (user.roleId == 4) {
-        currUserRole = "Team lead";
-      }
-    //  print("User role $currUserRole");
+      print("In User Role function, role id is");
+      print(user.roleId);
+      if(user.id == currentUserId){
+        if (user.roleId == 1) {
+          currUserRole = "Super Admin";
+        } else if (user.roleId == 2) {
+          currUserRole = "Local Admin";
+        } else if (user.roleId == 3) {
+          currUserRole = "User";
+        }}
+      print("User role $currUserRole");
     }
     if (currUserRole != null)
       return true;
     else
       return false;
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,6 +155,7 @@ class _UserProfileState extends State<UserProfile> {
                           ),
                         ),
                       ),
+
                       FractionallySizedBox(
                         alignment: Alignment.bottomCenter,
                         heightFactor: 0.95,
@@ -182,9 +180,9 @@ class _UserProfileState extends State<UserProfile> {
                                         height: 100.0,
                                         child: (photoUrl != null)
                                             ? Image.network(
-                                                photoUrl,
-                                                fit: BoxFit.contain,
-                                              )
+                                          photoUrl,
+                                          fit: BoxFit.contain,
+                                        )
                                             : ProfilePages(),
                                       ),
                                     ),
@@ -192,33 +190,38 @@ class _UserProfileState extends State<UserProfile> {
                                   SizedBox(
                                     width: 30,
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        UserRole(userList)
-                                            ? Text(
-                                                currUserRole,
-                                                style: TextStyle(
-                                                    fontSize: 35,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              )
-                                            : null,
-                                        Divider(),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          UserName,
-                                          style: TextStyle(fontSize: 18),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                      ],
+                                  Consumer<ThemeNotifier>(
+                                    builder: (context, notifier, child) =>Container(
+                                      margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width:MediaQuery.of(context).size.width*0.5,
+                                            child:UserRole(userList)
+                                                ? Text(
+                                              currUserRole,
+                                              style: TextStyle(
+                                                  fontSize: 19+notifier.custFontSize,
+                                                  fontWeight: FontWeight.w800),
+                                            )
+                                                :null,),
+                                          Divider(),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              UserName,
+                                              style: TextStyle(fontSize: 10+notifier.custFontSize),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   )
                                 ],
@@ -230,15 +233,18 @@ class _UserProfileState extends State<UserProfile> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(20, 0, 5, 5),
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Contact Details:',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                              Consumer<ThemeNotifier>(
+                                builder: (context, notifier, child)=>
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(20, 0, 5, 5),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Contact Details:',
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
                               ),
                               SizedBox(
                                 height: 10,
@@ -254,7 +260,7 @@ class _UserProfileState extends State<UserProfile> {
                                   ),
                                   Text(
                                     ': ' + Phone.toString(),
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(fontSize: 18),
                                   ),
                                 ],
                               ),
@@ -272,14 +278,12 @@ class _UserProfileState extends State<UserProfile> {
                                   ),
                                   Text(
                                     ': ' + Email,
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(fontSize: 18),
                                   ),
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Divider(
-                                    thickness: 3,
-                                  ),
+                                  Divider(thickness: 3,),
                                   SizedBox(height: 5),
                                 ],
                               ),
@@ -295,33 +299,37 @@ class _UserProfileState extends State<UserProfile> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Center(
-                                    child: Container(
-                                      padding: EdgeInsets.fromLTRB(10, 3, 0, 0),
-                                      width: MediaQuery.of(context).size.width *
-                                          0.7,
-                                      height: 30,
-                                      margin:
-                                          EdgeInsets.fromLTRB(10, 10, 20, 0),
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[500],
-                                          border: Border.all(
-                                            style: BorderStyle.solid,
-                                          )),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          uname.locality,
-                                          style: TextStyle(color: Colors.black),
+                                  Consumer<ThemeNotifier>(
+                                    builder: (context, notifier, child)=>
+                                        Center(
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(10, 3, 0, 0),
+                                            width: MediaQuery.of(context).size.width *
+                                                0.7,
+                                            height: 40,
+                                            margin:
+                                            EdgeInsets.fromLTRB(10, 10, 20, 0),
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey[500],
+                                                border: Border.all(
+                                                  style: BorderStyle.solid,
+                                                )),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                uname.locality,
+                                                style: TextStyle(color: Colors.black,fontSize: notifier.custFontSize),
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
                                   ),
                                 ],
                               ),
                               SizedBox(
                                 height: 10,
                               ),
+
                             ]),
                           ),
                         ),
