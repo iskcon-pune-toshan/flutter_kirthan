@@ -135,7 +135,7 @@ class _InviteUserState extends State<InviteUser> {
                   prospectiveUserRequest.invitedBy = user_id;
                   prospectiveUserRequest.userEmail = _emailController.text;
                   prospectiveUserRequest.inviteCode = inviteCode;
-                  prospectiveUserRequest.inviteType = "local_admin";
+                  prospectiveUserRequest.inviteType = 2;
                   prospectiveUserRequest.isProcessed = false;
                   Map<String, dynamic> prospectivemap =
                       prospectiveUserRequest.toJson();

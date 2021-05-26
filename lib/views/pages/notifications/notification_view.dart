@@ -138,7 +138,7 @@ class NotificationViewState extends State<NotificationView> {
               for (var event in eventList) {
                 eventRequest = event;
               }
-            //  print("Printing dara");
+              //  print("Printing dara");
               //print(data);
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.push(
@@ -818,8 +818,8 @@ class NotificationViewState extends State<NotificationView> {
                                     .contains("Request to create an event") &&
                                 snapshot.data[itemCount].targetType
                                     .contains("event")) {
-                           //   print("Printing dara");
-                             // print(snapshot.data[itemCount]);
+                              //   print("Printing dara");
+                              // print(snapshot.data[itemCount]);
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 Navigator.push(
                                     context,
@@ -834,7 +834,7 @@ class NotificationViewState extends State<NotificationView> {
                                     .contains("Request to create a team") ||
                                 snapshot.data[itemCount].message
                                     .contains("Invited user")) {
-                             // print(snapshot.data[itemCount].targetId);
+                              // print(snapshot.data[itemCount].targetId);
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 //Navigator.pop(context);
                                 Navigator.push(
@@ -868,9 +868,11 @@ class NotificationViewState extends State<NotificationView> {
 
                             processrequestmap["id"] =
                                 snapshot.data[itemCount].id;
-                          // print(snapshot.data[itemCount].id);
+                            // print(snapshot.data[itemCount].id);
 
                             snapshot.data[itemCount].message.contains("Your") ||
+                                    snapshot.data[itemCount].message
+                                        .contains("Request") ||
                                     snapshot.data[itemCount].message
                                         .contains("Registered") ||
                                     snapshot.data[itemCount].message
@@ -899,9 +901,11 @@ class NotificationViewState extends State<NotificationView> {
                 },
                 itemCount: snapshot.data.length);
           } else if (snapshot.hasError) {
-           // print(snapshot);
+            // print(snapshot);
             //print(snapshot.error.toString() + " Error ");
-            return Center(child: Text('Error loading notifications'));
+            return Center(
+                child: Text(
+                    'Error loading notifications' + snapshot.error.toString()));
           } else {
             return Center(child: CircularProgressIndicator());
           }

@@ -14,11 +14,12 @@ abstract class IEventRestApi {
 
   Future<bool> processEventRequest(Map<String, dynamic> processrequestmap);
 
-  Future<EventRequest> deleteEventRequest(Map<String, dynamic> processrequestmap);
+  Future<EventRequest> deleteEventRequest(
+      Map<String, dynamic> processrequestmap);
 
   Future<bool> submitUpdateEventRequest(String eventrequestmap);
 
-  Future<bool> submitRegisterEventRequest(String eventrequestmap);
+  //Future<bool> submitRegisterEventRequest(String eventrequestmap);
 
   Future<List<EventRequest>> getDummyEventRequests();
 }

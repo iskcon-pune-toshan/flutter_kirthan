@@ -7,7 +7,6 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/services/user_service_interface.dart';
 
-
 //added submit initiate team function
 class UserAPIService extends BaseAPIService implements IUserRestApi {
   static final UserAPIService _internal = UserAPIService.internal();
@@ -57,7 +56,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
       requestBody = '{"email":"$userType"}';
     }
 
-
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/getuser',
         headers: {
@@ -65,7 +63,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
           "Authorization": "Bearer $token"
         },
         body: requestBody);
-
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -86,13 +83,12 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   //addUser
   Future<UserRequest> submitNewUserRequest(
       Map<String, dynamic> userrequestmap) async {
-   // print(userrequestmap);
+    // print(userrequestmap);
     String requestBody = json.encode(userrequestmap);
-   // print(requestBody);
+    // print(requestBody);
 
     var response = await client1.put('$baseUrl/api/user/adduser',
         headers: {"Content-Type": "application/json"}, body: requestBody);
-
 
     if (response.statusCode == 200) {
       Map<String, dynamic> userrequestsData = json.decode(response.body);
@@ -119,7 +115,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
         },
         body: requestBody);
 
-
     if (response.statusCode == 200) {
       //print(response.body);
       return true;
@@ -129,9 +124,9 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   }
 
   Future<bool> deleteUserRequest(Map<String, dynamic> processrequestmap) async {
-   // print(processrequestmap);
+    // print(processrequestmap);
     String requestBody = json.encode(processrequestmap);
-   // print(requestBody);
+    // print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/deleteuser',
@@ -140,11 +135,11 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
           "Authorization": "Bearer $token"
         },
         body: requestBody);
-   // print(response.body);
-   // print(response.statusCode);
+    // print(response.body);
+    // print(response.statusCode);
 
     if (response.statusCode == 200) {
-    //  print(response.body);
+      //  print(response.body);
 
       return true;
     } else {
@@ -185,7 +180,7 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   }
 
   Future<bool> submitUpdateUserRequest(String userrequestmap) async {
-   // print(userrequestmap);
+    // print(userrequestmap);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/updateuser',
@@ -194,7 +189,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
           "Authorization": "Bearer $token"
         },
         body: userrequestmap);
-
 
     if (response.statusCode == 200) {
       //print(response.body);
@@ -216,7 +210,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
         },
         body: userrequestmap);
 
-
     if (response.statusCode == 200) {
       //print(response.body);
     } else {
@@ -225,7 +218,7 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
   }
 
   Future<bool> submitInitiateTeam(String userrequestmap) async {
-   // print(userrequestmap);
+    // print(userrequestmap);
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/user/initiateteam',
         headers: {
@@ -233,7 +226,6 @@ class UserAPIService extends BaseAPIService implements IUserRestApi {
           "Authorization": "Bearer $token"
         },
         body: userrequestmap);
-
 
     if (response.statusCode == 200) {
       //print(response.body);

@@ -3,7 +3,7 @@ class ProspectiveUserRequest {
   final int id;
   String userEmail;
   String invitedBy;
-  String inviteType;
+  int inviteType;
   String inviteCode;
   bool isProcessed;
 

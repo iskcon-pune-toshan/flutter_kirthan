@@ -264,13 +264,13 @@ class _MyDrawerState extends State<MyDrawer> {
                                   builder: (context) => TeamProfilePage(
                                         teamTitle: team_title,
                                       )));
-                        } else if (currUserRole == 'Local Admin') {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LocalAdminProfile()));
+                          // } else if (currUserRole == 'Local Admin') {
+                          //   Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => LocalAdminProfile()));
                         } else if (currUserRole == 'Admin' ||
-                            currUserRole == "User") {
+                            currUserRole == "User"||currUserRole=="Local Admin") {
                           Navigator.push(
                               context,
                               MaterialPageRoute(

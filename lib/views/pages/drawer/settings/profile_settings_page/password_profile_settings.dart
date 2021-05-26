@@ -65,7 +65,7 @@ class _password_profileState extends State<password_profile> {
                             children: [
                               Divider(),
                               TextFormField(
-                                autovalidate: true,
+                                autovalidate: false,
                                 controller: _oldPassword,
                                 decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
@@ -104,9 +104,15 @@ class _password_profileState extends State<password_profile> {
                                 //   //   });
                                 //   // }
                                 // },
-                                validator: (value) => value.isNotEmpty
+                                validator: (value) {
+                                  if (value.isEmpty ) {
+                                    return "Please select password";
+                                  } else
+                                    return null;
+                                }
+                                /*value.isNotEmpty
                                     ? null
-                                    : "Enter correct password",
+                                    : "Please enter a value"*/,
                               ),
                               Divider(),
                               TextFormField(
@@ -138,10 +144,10 @@ class _password_profileState extends State<password_profile> {
                                 },
                                 validator: (value) {
                                   // ignore: missing_return
-                                  if (value.isEmpty)
-                                    return 'Please enter a value';
+                                  if (value!=_password.text)
+                                    return 'Please enter correct password';
 
-                                  if (value.length < 8)
+                                  if (value.length < 8 && _password.text==null)
                                     return 'Must contain 8-30 characters';
 
                                   if (_password.text == _oldPassword.text)
@@ -240,7 +246,8 @@ class _password_profileState extends State<password_profile> {
                                             errMessage = 'No user Found';
                                           } else if (e.code ==
                                               'ERROR_WRONG_PASSWORD') {
-                                            errMessage = 'INVALID PASSWORD';
+                                            errMessage =
+                                                'Old password is wrong. Try Again!';
                                           }
                                           Scaffold.of(context)
                                               .showSnackBar(SnackBar(

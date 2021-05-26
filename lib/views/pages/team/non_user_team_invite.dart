@@ -72,7 +72,7 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
                       if (EmailValidator.validate(userEmail) == true) {
                         List<ProspectiveUserRequest> puList =
                             await prospectiveUserPageVM
-                                .getProspectiveUserRequests("team");
+                                .getProspectiveUserRequests("team:4");
                         List<UserRequest> uList =
                             await userPageVM.getUserRequests(userEmail);
                         if (puList
@@ -102,7 +102,7 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
                           prospectiveUserRequest.userEmail = userEmail;
                           prospectiveUserRequest.invitedBy = invitedBy;
                           prospectiveUserRequest.inviteCode = inviteCode;
-                          prospectiveUserRequest.inviteType = 'team';
+                          prospectiveUserRequest.inviteType = 4;
                           prospectiveUserRequest.isProcessed = false;
                           Map<String, dynamic> eventrequestmap =
                               prospectiveUserRequest.toJson();

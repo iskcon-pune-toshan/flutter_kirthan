@@ -40,7 +40,8 @@ class _RequestCodeState extends State<RequestCode> {
   String inviteCode;
   @override
   void initState() {
-    ProspectiveUsers = prospectiveUserPageVM.getProspectiveUserRequests('team');
+    ProspectiveUsers =
+        prospectiveUserPageVM.getProspectiveUserRequests('team:4');
     super.initState();
   }
 

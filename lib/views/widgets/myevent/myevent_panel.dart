@@ -66,7 +66,8 @@ class MyEventsPanel extends StatelessWidget {
                             initialScrollOffset: 2,
                             keepScrollOffset: false,
                           ),
-                          child: Container(color: Colors.black12,
+                          child: Container(
+                            color: Colors.black12,
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: eventRequests == null
