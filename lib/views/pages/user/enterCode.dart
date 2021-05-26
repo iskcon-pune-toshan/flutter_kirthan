@@ -69,17 +69,13 @@ class _EnterCodeState extends State<EnterCode> {
           AsyncSnapshot<List<ProspectiveUserRequest>> snapshot) {
         if (snapshot.hasData) {
           prospectiveList = snapshot.data;
-          print("NO DATA");
           print(prospectiveList.length);
           if (prospectiveList != null) {
             for (var puser in prospectiveList) {
-              if (puser.userEmail == email &&
-                  puser.inviteType.contains("local_admin")) {
+              if (puser.userEmail == email && puser.inviteType == 2) {
                 if (puser.isProcessed == true) {
-
                   return App();
                 } else {
-
                   return Scaffold(
                     key: _scaffoldKey,
                     extendBody: false,
@@ -151,7 +147,7 @@ class _EnterCodeState extends State<EnterCode> {
                                     if (puser.userEmail == email &&
                                         puser.inviteCode ==
                                             _textController.text) {
-                                      if (puser.inviteType == 'local_admin') {
+                                      if (puser.inviteType == 2) {
                                         userrequest.email = email;
                                         userrequest.prevRoleId = 3;
                                         userrequest.roleId = 2;
@@ -239,7 +235,7 @@ class _EnterCodeState extends State<EnterCode> {
                   );
                 }
               }
-              return Container();
+              return App();
             }
           }
           return App();

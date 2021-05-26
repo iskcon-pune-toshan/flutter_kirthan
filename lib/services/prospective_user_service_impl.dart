@@ -66,7 +66,9 @@ class ProspectiveUserAPIService extends BaseAPIService
       requestBody = '{"invitedBy" : "$lamail"}';
     } else if (eventType.contains("local admin") ||
         eventType.contains("team")) {
-      requestBody = '{"inviteType" : "$eventType"}';
+      var array = eventType.split(":");
+      int inviteType = int.parse(array[1]);
+      requestBody = '{"inviteType" : "$inviteType"}';
     } else {
       requestBody = '{"inviteCode" : "$eventType"}';
     }

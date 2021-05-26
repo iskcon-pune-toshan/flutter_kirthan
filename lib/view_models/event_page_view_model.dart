@@ -37,14 +37,14 @@ class EventPageViewModel extends Model {
 
   Future<List<EventRequest>> getEventRequests(String userType) {
     Future<List<EventRequest>> eventRequests =
-    apiSvc?.getEventRequests(userType);
+        apiSvc?.getEventRequests(userType);
     return eventRequests;
   }
 
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap) {
     Future<EventRequest> eventRequest =
-    apiSvc?.submitNewEventRequest(eventrequestmap);
+        apiSvc?.submitNewEventRequest(eventrequestmap);
     return eventRequest;
   }
 
@@ -53,8 +53,10 @@ class EventPageViewModel extends Model {
     return processFlag;
   }
 
-  Future<EventRequest> deleteEventRequest(Map<String, dynamic> processrequestmap) {
-    Future<EventRequest> deleteFlag = apiSvc?.deleteEventRequest(processrequestmap);
+  Future<EventRequest> deleteEventRequest(
+      Map<String, dynamic> processrequestmap) {
+    Future<EventRequest> deleteFlag =
+        apiSvc?.deleteEventRequest(processrequestmap);
     return deleteFlag;
   }
 
@@ -63,9 +65,9 @@ class EventPageViewModel extends Model {
     return updateFlag;
   }
 
-  Future<bool> submitRegisterEventRequest(String eventrequestmap) {
-    Future<bool> updateFlag =
-    apiSvc?.submitRegisterEventRequest(eventrequestmap);
-    return updateFlag;
-  }
+  // Future<bool> submitRegisterEventRequest(String eventrequestmap) {
+  //   Future<bool> updateFlag =
+  //   apiSvc?.submitRegisterEventRequest(eventrequestmap);
+  //   return updateFlag;
+  // }
 }

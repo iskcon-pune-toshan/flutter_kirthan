@@ -113,7 +113,6 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,7 +157,6 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                         .toList();
                                     for (var temple in templeArea) {
                                       _selectedtempleId = temple.templeId;
-                                      print("work man $_selectedtempleId");
                                     }
                                   }
                                   return FutureBuilder<List<Temple>>(
@@ -177,8 +175,6 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                 .toList();
                                             for (var temple in templeList) {
                                               _selectedTempleArea = temple.area;
-                                              print(
-                                                  "this is temple area : $_selectedTempleArea");
                                             }
                                           }
                                           List<String> templeArea = snapshot
@@ -242,7 +238,9 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                       .map((user) => user.userName)
                                       .toSet()
                                       .toList();
-
+                                  if (widget.user != null) {
+                                    _selectedLocalAdmin = widget.user.fullName;
+                                  }
                                   return DropdownButtonFormField<String>(
                                     disabledHint:
                                         Text("No Local Admin Available"),
@@ -376,8 +374,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                                   .teamLeadId);
                                               if (puReq.isNotEmpty) {
                                                 for (var user in puReq) {
-                                                  if (user.inviteType
-                                                      .contains("team")) {
+                                                  if (user.inviteType == 4) {
                                                     ProspectiveUserRequest
                                                         purequest =
                                                         new ProspectiveUserRequest();

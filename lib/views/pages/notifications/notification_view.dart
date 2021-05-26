@@ -872,6 +872,8 @@ class NotificationViewState extends State<NotificationView> {
 
                             snapshot.data[itemCount].message.contains("Your") ||
                                     snapshot.data[itemCount].message
+                                        .contains("Request") ||
+                                    snapshot.data[itemCount].message
                                         .contains("Registered") ||
                                     snapshot.data[itemCount].message
                                         .contains("cancelled") ||

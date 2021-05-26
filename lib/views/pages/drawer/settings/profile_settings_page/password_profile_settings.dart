@@ -106,7 +106,7 @@ class _password_profileState extends State<password_profile> {
                                 // },
                                 validator: (value) => value.isNotEmpty
                                     ? null
-                                    : "Enter correct password",
+                                    : "Please enter a value",
                               ),
                               Divider(),
                               TextFormField(
@@ -241,7 +241,8 @@ class _password_profileState extends State<password_profile> {
                                             errMessage = 'No user Found';
                                           } else if (e.code ==
                                               'ERROR_WRONG_PASSWORD') {
-                                            errMessage = 'INVALID PASSWORD';
+                                            errMessage =
+                                                'Old password is wrong. Try Again!';
                                           }
                                           Scaffold.of(context)
                                               .showSnackBar(SnackBar(

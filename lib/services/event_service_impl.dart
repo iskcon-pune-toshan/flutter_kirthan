@@ -157,7 +157,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
         body: requestBody);
 
     if (response.statusCode == 200) {
-
       Map<String, dynamic> eventrequestsData = json.decode(response.body);
       EventRequest eventrequests = EventRequest.fromMap(eventrequestsData);
       print(eventrequests);
@@ -182,7 +181,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
           "Authorization": "Bearer $token"
         },
         body: requestBody);
-print(response.statusCode);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.body);
       Map<String, dynamic> eventrequestsData = json.decode(response.body);
@@ -219,24 +218,24 @@ print(response.statusCode);
     }
   }
 
-  Future<bool> submitRegisterEventRequest(String eventrequestmap) async {
-    //print(eventrequestmap);
-    print("Inside register event service");
-    String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/event/registerevent',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: eventrequestmap);
-
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      //print(response.body);
-      print("register event called successfully");
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
+  // Future<bool> submitRegisterEventRequest(String eventrequestmap) async {
+  //   //print(eventrequestmap);
+  //   print("Inside register event service");
+  //   String token = AutheticationAPIService().sessionJWTToken;
+  //   var response = await client1.put('$baseUrl/api/event/registerevent',
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": "Bearer $token"
+  //       },
+  //       body: eventrequestmap);
+  //
+  //   print(response.statusCode);
+  //   if (response.statusCode == 200) {
+  //     //print(response.body);
+  //     print("register event called successfully");
+  //   } else {
+  //     throw Exception('Failed to get data');
+  //   }
+  // }
 
 }

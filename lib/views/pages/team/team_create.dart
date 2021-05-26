@@ -434,6 +434,8 @@ class _TeamWriteState extends State<TeamWrite> {
                                                       .isEmpty) {
                                                     tempUserList.add(
                                                         widget.userRequest);
+                                                    _selectedTeamLeadId = widget
+                                                        .userRequest.email;
                                                   }
                                                   userList = getTeamLeads(
                                                       teamList, tempUserList);

@@ -147,10 +147,11 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                               eventUserPageVM.submitNewEventTeamUserMapping(
                                   eventUserList, () {
                                 setState(() {
-                                  String eventrequestStr = jsonEncode(
-                                      widget.eventrequest.toStrJson());
-                                  eventPageVM.submitRegisterEventRequest(
-                                      eventrequestStr);
+                                  // String eventrequestStr = jsonEncode(
+                                  //     widget.eventrequest.toStrJson());
+                                  // eventPageVM.submitRegisterEventRequest(
+                                  //     eventrequestStr);
+                                  null;
                                 });
                               });
 
