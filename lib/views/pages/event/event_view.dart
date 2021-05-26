@@ -117,7 +117,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
     for (var users in userRequest) {
-    //  print("Role Id is");
+      //  print("Role Id is");
       if (users.email == user.email) {
         setState(() {
           role_id = users.roleId;
@@ -208,7 +208,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                   ),
                   onSelected: (input) {
                     _selectedValue = input;
-                   // print(input);
+                    // print(input);
                     if (input == 'Today')
                       eventPageVM.setEventRequests("TODAY");
                     else if (input == 'Tomorrow')
@@ -318,7 +318,7 @@ class Search extends SearchDelegate {
     );
   }
 
- // final List<String> listExample;
+  // final List<String> listExample;
   List<String> recentList = [];
 
   @override
@@ -330,22 +330,22 @@ class Search extends SearchDelegate {
         if (snapshot.data != null) {
           eventlist = snapshot.data;
           List<String> EventList =
-          eventlist.map((event) => event.eventTitle).toSet().toList();
+              eventlist.map((event) => event.eventTitle).toSet().toList();
           List<String> suggestionList = [];
           query.isEmpty
               ? suggestionList = EventList
               : suggestionList.addAll(EventList.where((element) =>
-          element.toUpperCase().contains(query) == true ||
-              element.toLowerCase().contains(query) == true));
+                  element.toUpperCase().contains(query) == true ||
+                  element.toLowerCase().contains(query) == true));
           return ListView.builder(
             itemCount: suggestionList.length,
             itemBuilder: (context, index) {
               return ListTile(
-                  title: Text(
-                    suggestionList[index],
-                  ),
-                  //leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-                 );
+                title: Text(
+                  suggestionList[index],
+                ),
+                //leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
+              );
             },
           );
         }

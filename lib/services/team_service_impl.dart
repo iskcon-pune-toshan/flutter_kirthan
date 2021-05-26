@@ -26,7 +26,6 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
 
   //updateTeam
   Future<bool> submitUpdateTeamRequest(String teamrequestmap) async {
-
     //String requestBody = json.encode(userrequestmap);
     //print(requestBody);
 
@@ -49,7 +48,6 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
 
   Future<TeamRequest> submitNewTeamRequest(
       Map<String, dynamic> eventrequestmap) async {
-
     String requestBody = json.encode(eventrequestmap);
 
     String token = AutheticationAPIService().sessionJWTToken;
@@ -61,7 +59,6 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
         body: requestBody);
 
     if (response.statusCode == 200) {
-
       Map<String, dynamic> teamrequestsData = json.decode(response.body);
       TeamRequest teamrequests = TeamRequest.fromMap(teamrequestsData);
       return teamrequests;
@@ -72,7 +69,6 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
 
   //deleteTeam
   Future<bool> deleteTeamRequest(Map<String, dynamic> processrequestmap) async {
-
     String requestBody = json.encode(processrequestmap);
 
     String token = AutheticationAPIService().sessionJWTToken;
@@ -83,9 +79,7 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
         },
         body: requestBody);
 
-
     if (response.statusCode == 200) {
-
       return true;
     } else {
       throw Exception('Failed to get data');
@@ -143,9 +137,7 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
   //processteam
   Future<bool> processTeamRequest(
       Map<String, dynamic> processrequestmap) async {
-
     String requestBody = json.encode(processrequestmap);
-
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/team/processteam',
@@ -155,11 +147,7 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
         },
         body: requestBody);
 
-
-
     if (response.statusCode == 200) {
-      print(response.body);
-
       return true;
     } else {
       throw Exception('Failed to get data');

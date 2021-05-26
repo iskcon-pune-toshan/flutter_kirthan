@@ -30,15 +30,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 final TeamUserPageViewModel teamUserPageVM =
-TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TemplePageViewModel templePageVM =
-TemplePageViewModel(apiSvc: TempleAPIService());
+    TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
-UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 
 class TeamWrite extends StatefulWidget {
   UserRequest userRequest;
@@ -142,15 +142,16 @@ class _TeamWriteState extends State<TeamWrite> {
     }
     return null;
   }
+
   List<String> selectedMembers = new List<String>();
   Widget addmember(int counter) {
-    List<TextEditingController> _member= new List<TextEditingController>(this.counter);
+    List<TextEditingController> _member =
+        new List<TextEditingController>(this.counter);
     return Card(
       child: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Column(
           children: [
             for (int i = 0; i < this.counter; i++)
-
               Container(
                 //color: Colors.black26,
                 padding: const EdgeInsets.all(10),
@@ -167,8 +168,7 @@ class _TeamWriteState extends State<TeamWrite> {
                             borderSide: BorderSide(color: Colors.green),
                           ),
                           icon: Icon(Icons.people_outline, color: Colors.grey),
-                          labelText: "Member " +
-                              (i + 1).toString(),
+                          labelText: "Member " + (i + 1).toString(),
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
                             fontSize: notifier.custFontSize,
@@ -309,9 +309,9 @@ class _TeamWriteState extends State<TeamWrite> {
                               style: TextStyle(color: Colors.grey)),
                           items: _category
                               .map((category) => DropdownMenuItem<String>(
-                            value: category,
-                            child: Text(category),
-                          ))
+                                    value: category,
+                                    child: Text(category),
+                                  ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -368,7 +368,7 @@ class _TeamWriteState extends State<TeamWrite> {
                         //color: Colors.white,
                         padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          //attribute: "Description",
+                            //attribute: "Description",
 
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -393,13 +393,13 @@ class _TeamWriteState extends State<TeamWrite> {
                               teamrequest.phoneNumber = int.parse(input);
                             },
                             validator: validateMobile
-                          //     (value) {
-                          //   if (value.isEmpty) {
-                          //     return "Please enter some text";
-                          //   }
-                          //   return null;
-                          // },
-                        ),
+                            //     (value) {
+                            //   if (value.isEmpty) {
+                            //     return "Please enter some text";
+                            //   }
+                            //   return null;
+                            // },
+                            ),
                       ),
                       elevation: 5,
                     ),
@@ -419,33 +419,33 @@ class _TeamWriteState extends State<TeamWrite> {
                                       snapshot.data;
                                   return FutureBuilder<List<TeamRequest>>(
                                       future:
-                                      teamPageVM.getTeamRequests("Waiting"),
+                                          teamPageVM.getTeamRequests("Waiting"),
                                       builder: (BuildContext context,
                                           AsyncSnapshot<List<TeamRequest>>
-                                          snapshot) {
+                                              snapshot) {
                                         if (snapshot.data != null) {
                                           List<TeamRequest> teamList =
                                               teamListAppr + snapshot.data;
                                           return FutureBuilder<
-                                              List<UserRequest>>(
+                                                  List<UserRequest>>(
                                               future: Users,
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<
-                                                      List<UserRequest>>
-                                                  snapshot) {
+                                                          List<UserRequest>>
+                                                      snapshot) {
                                                 if (snapshot.data != null) {
                                                   List<UserRequest>
-                                                  tempUserList =
-                                                  new List<UserRequest>();
+                                                      tempUserList =
+                                                      new List<UserRequest>();
                                                   if (widget.userRequest ==
                                                       null) {
                                                     tempUserList =
                                                         snapshot.data;
                                                   } else if (teamList
                                                       .where((element) =>
-                                                  element.teamLeadId ==
-                                                      widget.userRequest
-                                                          .email)
+                                                          element.teamLeadId ==
+                                                          widget.userRequest
+                                                              .email)
                                                       .toList()
                                                       .isEmpty) {
                                                     tempUserList.add(
@@ -456,33 +456,33 @@ class _TeamWriteState extends State<TeamWrite> {
                                                   userList = getTeamLeads(
                                                       teamList, tempUserList);
                                                   List<String> teamLeadId =
-                                                  userList
-                                                      .map((user) =>
-                                                  user.email)
-                                                      .toSet()
-                                                      .toList();
+                                                      userList
+                                                          .map((user) =>
+                                                              user.email)
+                                                          .toSet()
+                                                          .toList();
                                                   return DropdownButtonFormField<
                                                       String>(
                                                     value: widget.userRequest ==
-                                                        null
+                                                            null
                                                         ? _selectedTeamLeadId
                                                         : widget
-                                                        .userRequest.email,
+                                                            .userRequest.email,
                                                     icon: const Icon(
                                                         Icons.account_circle),
                                                     hint: Text(
                                                         'Select Team Lead Id',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.grey)),
+                                                                Colors.grey)),
                                                     items: teamLeadId
                                                         .map((teamLeadId) =>
-                                                        DropdownMenuItem<
-                                                            String>(
-                                                          value: teamLeadId,
-                                                          child: Text(
-                                                              teamLeadId),
-                                                        ))
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value: teamLeadId,
+                                                              child: Text(
+                                                                  teamLeadId),
+                                                            ))
                                                         .toList(),
                                                     onChanged: (input) {
                                                       setState(() {
@@ -541,9 +541,9 @@ class _TeamWriteState extends State<TeamWrite> {
                                     style: TextStyle(color: Colors.grey)),
                                 items: _location
                                     .map((location) => DropdownMenuItem(
-                                  value: location,
-                                  child: Text(location),
-                                ))
+                                          value: location,
+                                          child: Text(location),
+                                        ))
                                     .toList(),
                                 onChanged: (input) {
                                   setState(() {
@@ -974,8 +974,7 @@ class _TeamWriteState extends State<TeamWrite> {
                         new Container(margin: const EdgeInsets.only(top: 40)),
                         RaisedButton.icon(
                           label: Text('Add team members'),
-                          icon: const Icon(
-                              Icons.add_circle),
+                          icon: const Icon(Icons.add_circle),
                           color: Colors.green,
                           onPressed: () {
 //addmember();
@@ -988,7 +987,6 @@ class _TeamWriteState extends State<TeamWrite> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-
                             MaterialButton(
                               color: Colors.white,
                               child: Text("Cancel"),
@@ -1016,17 +1014,17 @@ class _TeamWriteState extends State<TeamWrite> {
                                     ));
                                   } else {
                                     if (_formKey.currentState.validate()) {
-                                     /* print('ooooooooooooooooooooooooooooooooooooooooooo');
+                                      /* print('ooooooooooooooooooooooooooooooooooooooooooo');
                                       print(selectedMembers);
                                       print(selectedMembers);*/
                                       final FirebaseAuth auth =
                                           FirebaseAuth.instance;
                                       final FirebaseUser user =
-                                      await auth.currentUser();
+                                          await auth.currentUser();
                                       final String email = user.email;
 
                                       String dt = DateFormat(
-                                          "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                              "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                           .format(DateTime.now());
                                       _formKey.currentState.save();
                                       final String teamTitle =
@@ -1042,20 +1040,20 @@ class _TeamWriteState extends State<TeamWrite> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => widget
-                                                  .userRequest ==
-                                                  null
+                                                          .userRequest ==
+                                                      null
                                                   ? TeamLocalAdmin(
-                                                teamrequest: teamrequest,
-                                                selectedMembers:
-                                                selectedMembers,
-                                                user: null,
-                                              )
+                                                      teamrequest: teamrequest,
+                                                      selectedMembers:
+                                                          selectedMembers,
+                                                      user: null,
+                                                    )
                                                   : TeamLocalAdmin(
-                                                teamrequest: teamrequest,
-                                                selectedMembers:
-                                                selectedMembers,
-                                                user: widget.localAdmin,
-                                              )),
+                                                      teamrequest: teamrequest,
+                                                      selectedMembers:
+                                                          selectedMembers,
+                                                      user: widget.localAdmin,
+                                                    )),
                                         );
                                       });
                                     }
@@ -1086,5 +1084,3 @@ Colors.white),),
     );
   }
 }
-
-

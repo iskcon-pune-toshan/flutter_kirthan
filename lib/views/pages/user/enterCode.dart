@@ -47,7 +47,7 @@ class _EnterCodeState extends State<EnterCode> {
           prospectiveUserPageVM.getProspectiveUserRequests(userType);
     });
 
-   /* print(userType);
+    /* print(userType);
     print(email);*/
   }
 
@@ -69,17 +69,14 @@ class _EnterCodeState extends State<EnterCode> {
           AsyncSnapshot<List<ProspectiveUserRequest>> snapshot) {
         if (snapshot.hasData) {
           prospectiveList = snapshot.data;
-         /* print("NO DATA");
+          /* print("NO DATA");
           print(prospectiveList.length);*/
           if (prospectiveList != null) {
             for (var puser in prospectiveList) {
-              if (puser.userEmail == email &&
-                  puser.inviteType.contains("local_admin")) {
+              if (puser.userEmail == email && puser.inviteType == 2) {
                 if (puser.isProcessed == true) {
-
                   return App();
                 } else {
-
                   return Scaffold(
                     key: _scaffoldKey,
                     extendBody: false,
@@ -139,7 +136,7 @@ class _EnterCodeState extends State<EnterCode> {
                                 userList = await Users;
 
                                 String userType = "uEmail:" + email;
-                              //  print(userType);
+                                //  print(userType);
                                 userList = await Users;
                                 for (var users in userList) {
                                   if (users.email == email) {
@@ -179,10 +176,10 @@ class _EnterCodeState extends State<EnterCode> {
                                                 builder: (context) => //App()
                                                     App()));
                                       } else {
-                                      //  print("else");
+                                        //  print("else");
                                       }
                                     } else {
-                                    //  print("2nd else");
+                                      //  print("2nd else");
                                       SnackBar mysnackbar = SnackBar(
                                         content: Text("Invalid Code"),
                                         duration: new Duration(seconds: 4),
@@ -193,7 +190,7 @@ class _EnterCodeState extends State<EnterCode> {
                                     }
                                   }
                                 } else {
-                                 // print("sorry bro");
+                                  // print("sorry bro");
                                   SnackBar mysnackbar = SnackBar(
                                     content: Text("Invalid Code"),
                                     duration: new Duration(seconds: 4),
@@ -245,7 +242,7 @@ class _EnterCodeState extends State<EnterCode> {
           return App();
         }
         return Container();
-       // print("sorry");
+        // print("sorry");
         //print(prospectiveList);
       },
     );

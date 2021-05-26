@@ -39,7 +39,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
   //processEvents
   Future<bool> processEventRequest(
       Map<String, dynamic> processrequestmap) async {
-
     String requestBody = json.encode(processrequestmap);
 
     String token = AutheticationAPIService().sessionJWTToken;
@@ -51,7 +50,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
         body: requestBody);
 
     if (response.statusCode == 200) {
-
       return true;
     } else {
       throw Exception('Failed to get data');
@@ -134,7 +132,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
   //addevent
   Future<EventRequest> submitNewEventRequest(
       Map<String, dynamic> eventrequestmap) async {
-
     String requestBody = json.encode(eventrequestmap);
 
     String token = AutheticationAPIService().sessionJWTToken;
@@ -146,7 +143,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
         body: requestBody);
 
     if (response.statusCode == 200) {
-
       Map<String, dynamic> eventrequestsData = json.decode(response.body);
       EventRequest eventrequests = EventRequest.fromMap(eventrequestsData);
 
@@ -169,7 +165,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
         },
         body: requestBody);
     if (response.statusCode == 200) {
-
       Map<String, dynamic> eventrequestsData = json.decode(response.body);
       EventRequest eventrequests = EventRequest.fromMap(eventrequestsData);
       return eventrequests;
@@ -184,7 +179,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
   }
 
   Future<bool> submitUpdateEventRequest(String eventrequestmap) async {
-
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/event/updateevent',
         headers: {
@@ -193,28 +187,25 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
         },
         body: eventrequestmap);
 
-
     if (response.statusCode == 200) {
     } else {
       throw Exception('Failed to get data');
     }
   }
 
-  Future<bool> submitRegisterEventRequest(String eventrequestmap) async {
-
-    String token = AutheticationAPIService().sessionJWTToken;
-    var response = await client1.put('$baseUrl/api/event/registerevent',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: eventrequestmap);
-    if (response.statusCode == 200) {
-      //print(response.body);
-    //  print("register event called successfully");
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-
+  // Future<bool> submitRegisterEventRequest(String eventrequestmap) async {
+  //   String token = AutheticationAPIService().sessionJWTToken;
+  //   var response = await client1.put('$baseUrl/api/event/registerevent',
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": "Bearer $token"
+  //       },
+  //       body: eventrequestmap);
+  //   if (response.statusCode == 200) {
+  //     //print(response.body);
+  //     //  print("register event called successfully");
+  //   } else {
+  //     throw Exception('Failed to get data');
+  //   }
+  // }
 }
