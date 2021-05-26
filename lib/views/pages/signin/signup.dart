@@ -17,7 +17,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flushbar/flushbar_helper.dart';
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class SignUp extends StatefulWidget {
   SignUp({Key key}) : super(key: key);
@@ -34,7 +34,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailcontroller = new TextEditingController();
   String email;
   final TextEditingController _displaynamecontroller =
-      new TextEditingController();
+  new TextEditingController();
   final TextEditingController _addresscontroller = new TextEditingController();
   String displayName;
   final TextEditingController _confirmpassword = new TextEditingController();
@@ -55,7 +55,7 @@ class _SignUpState extends State<SignUp> {
         .child('${_emailcontroller.text}' + '.jpg');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
-    print('File Uploaded');
+   // print('File Uploaded');
     storageReference.getDownloadURL().then((fileURL) {
       setState(() {
         _uploadedFileURL = fileURL;
@@ -95,11 +95,11 @@ class _SignUpState extends State<SignUp> {
     FirebaseUser s = await auth.currentUser();
     String pass = s.uid;
     String num = s.phoneNumber;
-    print("signup uid");
-    print(pass);
+    //print("signup uid");
+    //print(pass);
     if (_formKey.currentState.validate()) {
       String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
       // user.firstName = _displaynamecontroller.text;
       // user.lastName = _displaynamecontroller.text;
       user.email = _emailcontroller.text;
@@ -127,7 +127,7 @@ class _SignUpState extends State<SignUp> {
       user.updatedTime = null;
       user.profileUrl = _uploadedFileURL;
       Map<String, dynamic> usermap = user.toJson();
-      UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap);
+      UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap).whenComplete(()=>showFlushBar(context,"User registered successfully"));
     }
   }
 
@@ -181,10 +181,10 @@ class _SignUpState extends State<SignUp> {
                               radius: MediaQuery.of(context).size.width / 5.5,
                               backgroundImage: _image != null
                                   ? FileImage(
-                                      _image,
-                                    )
+                                _image,
+                              )
                                   : AssetImage(
-                                      "assets/images/default_profile_picture.png")),
+                                  "assets/images/default_profile_picture.png")),
                         ),
                       ),
                       Padding(
@@ -320,17 +320,23 @@ class _SignUpState extends State<SignUp> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  uploadFile();
+                                  var errorMessage='null';
+
                                   signIn
                                       .signUpWithEmail(_emailcontroller.text,
-                                          _passwordcontroller.text)
+                                      _passwordcontroller.text)
                                       .then(
                                           (FirebaseUser user) => populateData())
-                                      .catchError((e) => print(e))
-                                      .whenComplete(() {
-                                    addUser();
-                                    showFlushBar(context);
-                                  });
+                                      .catchError((e){
+                                    // print(e);
+                                    if(e.code == 'ERROR_EMAIL_ALREADY_IN_USE'){
+                                      errorMessage="Email already in use";
+                                      showFlushBar(context,errorMessage);
+                                    }
+                                  }).whenComplete(() {
+                                    errorMessage=='null'
+                                        ?addUser() :null;
+                                  }).whenComplete(() => errorMessage=='null'?uploadFile():null);
                                 }
                               },
                               shape: RoundedRectangleBorder(
@@ -390,14 +396,13 @@ class _SignUpState extends State<SignUp> {
   }
 }
 
-void showFlushBar(BuildContext context) {
+void showFlushBar(BuildContext context, var error) {
   Flushbar(
     messageText: Text(
-      'User Registered Successfully',
-      style: TextStyle(color: Colors.white),
-    ),
-    backgroundColor: Colors.green,
+        error,
+        style: TextStyle(color: Colors.white)),
+    backgroundColor: error=='Email already in use'?Colors.red:Colors.green,
     duration: Duration(seconds: 4),
-  )..show(context).whenComplete(() => Navigator.push(
+  )..show(context).whenComplete(() => error=='Email already in use'?null:Navigator.push(
       context, MaterialPageRoute(builder: (context) => LoginApp())));
 }

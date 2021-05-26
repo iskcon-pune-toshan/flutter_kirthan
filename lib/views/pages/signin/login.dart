@@ -61,14 +61,14 @@ class _LoginAppState extends State<LoginApp> {
   getCurrentUID() async {
     final FirebaseUser user = await auth.currentUser();
     final String uid = user.uid;
-    print(uid);
+   // print(uid);
     return uid;
   }
 
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
-    print(email);
+   // print(email);
     return email;
   }
 
@@ -130,10 +130,10 @@ class _LoginAppState extends State<LoginApp> {
     String email = s.email;
     String userName = s.displayName;
 
-    print("signup uid");
-    print(pass);
-    print(email);
-    print(userName);
+   // print("signup uid");
+    //print(pass);
+    //print(email);
+    //print(userName);
 
     if (_formKey.currentState.validate()) {
       String dt =
@@ -277,8 +277,8 @@ class _LoginAppState extends State<LoginApp> {
             _uname = username.text;
             _password = _passwordcontroller.text;
             //   _formKey.currentState.save();
-            print(_uname);
-            print(_password);
+          //  print(_uname);
+            //print(_password);
             signInService
                 .signInWithEmail(_uname, _password)
                 .then((FirebaseUser user) => populateData())
@@ -298,7 +298,7 @@ class _LoginAppState extends State<LoginApp> {
               }
             }).whenComplete(
                     () => authenticateService.autheticate().whenComplete(() {
-                          print("MYERROR" + errMessage);
+                        //  print("MYERROR" + errMessage);
                           if (errMessage == 'ellomate') {
                             Navigator.push(
                                 context,
@@ -382,7 +382,7 @@ class _LoginAppState extends State<LoginApp> {
             () => signInService
                 .facebookSignIn(context)
                 .then((FirebaseUser user) => populateData())
-                .catchError((e) => print(e))
+                .catchError((e) => print(''))
                 .whenComplete(() => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => EnterCode()))),
             AssetImage(
@@ -394,7 +394,7 @@ class _LoginAppState extends State<LoginApp> {
                 .googSignIn(context)
                 //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
                 .then((FirebaseUser user) => populateData())
-                .catchError((e) => print(e))
+                .catchError((e) => print(''))
                 .whenComplete(() => addUser())
                 .whenComplete(() => authenticateService
                     .autheticate()

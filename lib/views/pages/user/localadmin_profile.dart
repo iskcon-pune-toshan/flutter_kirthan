@@ -65,8 +65,8 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
       currUserName = user.fullName;
-      print(">>>>>>>>>>>>");
-      print(currUserName);
+      /*print(">>>>>>>>>>>>");
+      print(currUserName);*/
     }
   }
 

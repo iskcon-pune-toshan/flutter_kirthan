@@ -15,9 +15,9 @@ class UserTempleAPIService extends BaseAPIService
 
   Future<List<UserTemple>> submitNewUserTempleMapping(
       List<UserTemple> listofusertemplemap) async {
-    print(listofusertemplemap);
+   // print(listofusertemplemap);
     String requestBody = json.encode(listofusertemplemap);
-    print(requestBody);
+   // print(requestBody);
 
     var response = await client1.put('$baseUrl/api/usertemple/addusertemple',
         headers: {
@@ -32,7 +32,7 @@ class UserTempleAPIService extends BaseAPIService
           .map((usertemplemappingData) =>
               UserTemple.fromMap(usertemplemappingData))
           .toList();
-      print(usertemplemappingData);
+      //print(usertemplemappingData);
       return usertemplemappingData;
     } else {
       throw Exception('Failed to get data');
@@ -41,7 +41,7 @@ class UserTempleAPIService extends BaseAPIService
 
   Future<List<UserTemple>> getUserTempleMapping(String userMapping) async {
     String requestBody = "";
-    print("In get user temple");
+    //print("In get user temple");
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put(
         '$baseUrl/api/usertemple/getusertemplewithdescription',
@@ -51,8 +51,6 @@ class UserTempleAPIService extends BaseAPIService
         },
         body: requestBody);
 
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       List<dynamic> usertemplemappingData = json.decode(response.body);
       List<UserTemple> usertemplemappings = usertemplemappingData
@@ -60,9 +58,6 @@ class UserTempleAPIService extends BaseAPIService
               UserTemple.fromMap(usertemplemappingData))
           .toList();
       //print(response.body);
-      print("UserTemple");
-      print(response.statusCode);
-      print(usertemplemappings);
 
       return usertemplemappings;
     } else {
@@ -72,9 +67,9 @@ class UserTempleAPIService extends BaseAPIService
 
   Future<List<UserTemple>> submitDeleteUserTempleMapping(
       List<UserTemple> listofusertemplemap) async {
-    print(listofusertemplemap);
+   // print(listofusertemplemap);
     String requestBody = json.encode(listofusertemplemap);
-    print(requestBody);
+   // print(requestBody);
 
     var response = await client1.put('$baseUrl/api/usertemple/deleteusertemple',
         headers: {
@@ -89,7 +84,7 @@ class UserTempleAPIService extends BaseAPIService
           .map((usertemplemappingData) =>
               UserTemple.fromMap(usertemplemappingData))
           .toList();
-      print(usertemple);
+      //print(usertemple);
       return usertemple;
     } else {
       throw Exception('Failed to get data');

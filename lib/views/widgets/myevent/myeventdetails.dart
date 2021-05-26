@@ -181,8 +181,8 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
     _updatedByController.text = getCurrentUser().toString();
     _updatedByController.text = widget.eventrequest.updatedTime;
     // approvalStatus = widget.eventrequest.approvalStatus;
-    print("createdTime");
-    print(widget.eventrequest.createdTime);
+   // print("createdTime");
+    //print(widget.eventrequest.createdTime);
     //_teamName.text = widget.selectedteam.teamTitle;
     t = widget.eventrequest.id;
     //eventTeamPageVM.setEvenTeamMappings(widget.eventrequest.id);
@@ -204,7 +204,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     widget.eventrequest.updatedBy = email;
-    print(email);
+   // print(email);
     return email;
   }
 
@@ -221,9 +221,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
               if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
-                print("*********************" +
+              /*  print("*********************" +
                     _photoName +
-                    "*************************");
+                    "*************************");*/
                 final ref = FirebaseStorage.instance.ref().child(_photoName);
                 return FutureBuilder(
                     future: ref.getDownloadURL(),
@@ -668,14 +668,14 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                   ),
                                 );
                               } else if (snapshot.hasError) {
-                                print(snapshot.error);
+                               // print(snapshot.error);
                                 return Container();
                               } else {
                                 return Container();
                               }
                             });
                       } else if (snapshot.hasError) {
-                        print(snapshot.error);
+                       // print(snapshot.error);
                         return Container();
                       } else {
                         return Container();
@@ -800,9 +800,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                     groupValue: _groupValue,
                                                                                     onChanged: (value) {
                                                                                       setState(() {
-                                                                                        print(value);
+                                                                                       // print(value);
                                                                                         widget.eventrequest.cancelReason = 'Health issues/injury';
-                                                                                        print('Health issues/injury');
+                                                                                       // print('Health issues/injury');
 
                                                                                         _groupValue = value;
                                                                                       });
@@ -817,9 +817,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                     groupValue: _groupValue,
                                                                                     onChanged: (value) {
                                                                                       setState(() {
-                                                                                        print(value);
+                                                                                       // print(value);
                                                                                         widget.eventrequest.cancelReason = 'Emergency';
-                                                                                        print('Emergency');
+                                                                                       // print('Emergency');
 
                                                                                         _groupValue = value;
                                                                                       });
@@ -833,9 +833,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                     groupValue: _groupValue,
                                                                                     onChanged: (value) {
                                                                                       setState(() {
-                                                                                        print(value);
+                                                                                      //  print(value);
                                                                                         widget.eventrequest.cancelReason = 'Important event';
-                                                                                        print('Important Event');
+                                                                                       // print('Important Event');
 
                                                                                         _groupValue = value;
                                                                                       });
@@ -849,9 +849,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                     groupValue: _groupValue,
                                                                                     onChanged: (value) {
                                                                                       setState(() {
-                                                                                        print(value);
+                                                                                       // print(value);
                                                                                         widget.eventrequest.cancelReason = 'Others';
-                                                                                        print('Others');
+                                                                                       // print('Others');
 
                                                                                         _groupValue = value;
                                                                                       });

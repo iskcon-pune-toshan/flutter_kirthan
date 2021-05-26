@@ -15,9 +15,7 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
 
   Future<List<EventUser>> submitNewEventTeamUserMapping(
       List<EventUser> listofeventusermap, var callback) async {
-    print(listofeventusermap);
     String requestBody = json.encode(listofeventusermap);
-    print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/eventuser/addeventuser',
@@ -34,8 +32,7 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
               (eventusermappingData) => EventUser.fromMap(eventusermappingData))
           .toList();
       if (callback != null) callback();
-//      TeamUser.fromMap(teamusermappingData);
-      print(eventusers);
+
       return eventusers;
 
       List<dynamic> userrequestsData = json.decode(response.body);
@@ -60,15 +57,13 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       List<dynamic> eventtsermappingData = json.decode(response.body);
       // print(teamtsermappingData);
       List<EventUser> eventusermappings = eventtsermappingData
           .map(
               (eventtsermappingData) => EventUser.fromMap(eventtsermappingData))
           .toList();
-      //print(teamusermappings);
-      //print(userdetails);
+
 
       return eventusermappings;
     } else {
@@ -78,10 +73,9 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
 
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(
       List<EventUser> listofeventusermap) async {
-    print(listofeventusermap);
+
     String requestBody = json.encode(listofeventusermap);
     print("I am in submitDeleteEventTeamUserMapping");
-    print(requestBody);
 
     String token = AutheticationAPIService().sessionJWTToken;
 
@@ -98,8 +92,6 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
           .map(
               (eventusermappingData) => EventUser.fromMap(eventusermappingData))
           .toList();
-//      TeamUser.fromMap(teamusermappingData);
-      print(eventusers);
       return eventusers;
 
       List<dynamic> userrequestsData = json.decode(response.body);

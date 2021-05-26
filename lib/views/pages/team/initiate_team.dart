@@ -40,11 +40,11 @@ class _InitiateTeamState extends State<InitiateTeam> {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       access = prefs.getStringList(widget.screenName);
-      access.forEach((f) {
+    /*  access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
             access.elementAt(1).toLowerCase() == "true" ? true : false;
-      });
+      });*/
       teamPageVM.accessTypes = accessTypes;
     });
   }
@@ -57,10 +57,10 @@ class _InitiateTeamState extends State<InitiateTeam> {
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
     Team = teamPageVM.getTeamRequests("Approved");
-    print('CHECK');
-    print(Users);
-    print('CHECK');
-    print(Team);
+   // print('CHECK');
+   // print(Users);
+    //print('CHECK');
+    //print(Team);
     super.initState();
     loadData();
     loadPref();
@@ -156,7 +156,7 @@ class _InitiateTeamState extends State<InitiateTeam> {
                       if (snapshot.hasData) {
                         userList = snapshot.data;
                         String currentUserName;
-                        print(userList);
+                       // print(userList);
                         List<UserRequest> localadmin1 = userList
                             .where((element) => element.roleId == 2)
                             .toList();
@@ -167,7 +167,7 @@ class _InitiateTeamState extends State<InitiateTeam> {
                             currentUserName = user.fullName;
                           }
                         }
-                        print(listOfUsers);
+                       // print(listOfUsers);
                         return Column(
                           children: <Widget>[
                             SizedBox(

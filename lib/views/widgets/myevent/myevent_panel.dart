@@ -1,28 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
-import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
-import 'package:flutter_kirthan/views/pages/event/home_page_map/Widget.dart';
-import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
-import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/myevent/myevent_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:flutter_kirthan/views/pages/eventuser/eventuser_view.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 class MyEventsPanel extends StatelessWidget {
   String eventType;
   EventRequest eventRequest;
-
 
   final String screenName = "My Events";
 
@@ -61,7 +49,6 @@ class MyEventsPanel extends StatelessWidget {
                             },
                           ),*/
 
-
                           /*RaisedButton(
                             child: const Text("Map v"),
                             onPressed: () {
@@ -71,17 +58,15 @@ class MyEventsPanel extends StatelessWidget {
                                       builder: (context) => TeamUserView()));
                             },
                           ),*/
-
                         ],
                       ),
-
                       Expanded(
                         child: Scrollbar(
                           controller: ScrollController(
                             initialScrollOffset: 2,
                             keepScrollOffset: false,
                           ),
-                          child: Center(
+                          child: Container(color: Colors.black12,
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: eventRequests == null
@@ -107,7 +92,6 @@ class MyEventsPanel extends StatelessWidget {
                       //await model.setSuperAdminUserRequests("SuperAdmin");
                       //await model.setUserRequests("All");
                       await model.setEventRequests("MyEvent");
-
                     },
                   );
                 }
@@ -117,7 +101,8 @@ class MyEventsPanel extends StatelessWidget {
       },
     );
   }
-  Widget eventTeam(var eventteamrequest){
+
+  Widget eventTeam(var eventteamrequest) {
     //String dropdownValue = eventteam.teamName;
     return ScopedModelDescendant<EventTeamPageViewModel>(
       builder: (context, child, model) {
@@ -150,7 +135,6 @@ class MyEventsPanel extends StatelessWidget {
                             },
                           ),*/
 
-
                           /*RaisedButton(
                             child: const Text("Map v"),
                             onPressed: () {
@@ -160,10 +144,8 @@ class MyEventsPanel extends StatelessWidget {
                                       builder: (context) => TeamUserView()));
                             },
                           ),*/
-
                         ],
                       ),
-
                       Expanded(
                         child: Scrollbar(
                           controller: ScrollController(
@@ -179,8 +161,8 @@ class MyEventsPanel extends StatelessWidget {
                               itemBuilder: (_, int index) {
                                 eventteamrequest = eventRequests[index];
                                 return MyEventRequestsListItem(
-                                  // eventteam: eventteamrequest,
-                                );
+                                    // eventteam: eventteamrequest,
+                                    );
                               },
                             ),
                           ),

@@ -56,7 +56,7 @@ class _UserProfileState extends State<UserProfile> {
     final FirebaseUser user = await auth.currentUser();
     userList = await userPageVM.getUserRequests("Approved");
     for (var users in userList) {
-      print("Role Id is");
+     // print("Role Id is");
       if (users.email == user.email) {
         setState(() {
           user_id = users.id;
@@ -106,8 +106,8 @@ class _UserProfileState extends State<UserProfile> {
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
       // UserName = user.userName;
-      print("In User Role function, role id is");
-      print(user.roleId);
+     /* print("In User Role function, role id is");
+      print(user.roleId);*/
       if (user.roleId == 1) {
         currUserRole = "Super Admin";
       } else if (user.roleId == 2) {
@@ -117,7 +117,7 @@ class _UserProfileState extends State<UserProfile> {
       } else if (user.roleId == 4) {
         currUserRole = "Team lead";
       }
-      print("User role $currUserRole");
+    //  print("User role $currUserRole");
     }
     if (currUserRole != null)
       return true;

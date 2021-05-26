@@ -55,8 +55,8 @@ class _members_profileState extends State<members_profile> {
   void updateTeamUser(
       List<UserRequest> userList, String _selectedTeamMember, int index) {
     listofTeamUsers.clear();
-    print("userlist in updateteamuser");
-    print(userList.length);
+  //  print("userlist in updateteamuser");
+    //print(userList.length);
     // if (userList
     //     .where((element) =>
     //         element.userName.toLowerCase() == _selectedTeamMember.toLowerCase())
@@ -75,9 +75,9 @@ class _members_profileState extends State<members_profile> {
     // }
     int count = 0;
     for (var teamUser in teamUserList) {
-      print("for loop");
-      print(teamUser.teamId);
-      print(teamrequest.id);
+      //print("for loop");
+     // print(teamUser.teamId);
+      //print(teamrequest.id);
       if (teamUser.userName.toLowerCase() ==
           _selectedTeamMember.toLowerCase()) {
         break;
@@ -214,15 +214,15 @@ class _members_profileState extends State<members_profile> {
               builder: (context, snapshot) {
                 if (snapshot.data != null) {
                   String email = snapshot.data;
-                  print("EMAIL");
-                  print(email);
+               //  print("EMAIL");
+                 // print(email);
                   return FutureBuilder(
                       future: teamPageVM.getTeamRequests("teamLead:" + email),
                       builder: (context, snapshot) {
                         if (snapshot.data != null) {
                           teamList = snapshot.data;
-                          print("Team list data");
-                          print(teamList);
+                          //print("Team list data");
+                         // print(teamList);
                           if (teamList.isNotEmpty) {
                             for (var u in teamList) {
                               // print("UUUU");
@@ -333,13 +333,13 @@ class _members_profileState extends State<members_profile> {
                                                                                             groupValue: _groupValue,
                                                                                             onChanged: (value) {
                                                                                               setState(() {
-                                                                                                print(value);
+                                                                                              //  print(value);
 
-                                                                                                print(finalTeamUserList[i].userName);
+                                                                                                //print(finalTeamUserList[i].userName);
 
                                                                                                 _groupValue = value;
-                                                                                                print("groupvalue");
-                                                                                                print(_groupValue);
+                                                                                                //print("groupvalue");
+                                                                                                //print(_groupValue);
                                                                                               });
                                                                                             },
                                                                                             title: Consumer<ThemeNotifier>(
@@ -355,8 +355,8 @@ class _members_profileState extends State<members_profile> {
                                                                                       onPressed: () {
                                                                                         List<TeamUser> teamUserToBeDeleted = new List<TeamUser>();
                                                                                         teamUserToBeDeleted.add(finalTeamUserList[_groupValue]);
-                                                                                        print("final");
-                                                                                        print(finalTeamUserList);
+                                                                                        //print("final");
+                                                                                      //  print(finalTeamUserList);
                                                                                         teamUserPageVM.submitDeleteTeamUserMapping(teamUserToBeDeleted);
 
                                                                                         // teamrequestmap["id"] =
@@ -427,11 +427,11 @@ class _members_profileState extends State<members_profile> {
                                                               await userPageVM
                                                                   .getUserRequests(
                                                                       "Approved");
-                                                          print(
+                                                        /*  print(
                                                               "umail inside button");
                                                           print(uMail);
                                                           print("userlist");
-                                                          print(userList);
+                                                          print(userList);*/
                                                           if (uMail.isEmpty) {
                                                             SnackBar
                                                                 mysnackbar =
@@ -565,7 +565,7 @@ class _members_profileState extends State<members_profile> {
   Widget addmember(int counter, List<TeamUser> finalTeamUserList) {
     List<TextEditingController> textEditingController =
         new List<TextEditingController>(finalTeamUserList.length);
-    print(finalTeamUserList.length);
+  //  print(finalTeamUserList.length);
     int y = 0;
     return Card(
       child: Consumer<ThemeNotifier>(
@@ -601,11 +601,11 @@ class _members_profileState extends State<members_profile> {
                           )),
                       onFieldSubmitted: (input) {
                         if (uMail.contains(input)) {
-                          print("it contains");
+                       //   print("it contains");
                         } else {
                           uMail.add(input);
-                          print("uMail");
-                          print(uMail);
+                        //  print("uMail");
+                          //print(uMail);
                         }
                       },
                     ),
@@ -643,11 +643,11 @@ class _members_profileState extends State<members_profile> {
 
                       onSaved: (input) {
                         if (uMail.contains(input)) {
-                          print("it contains");
+                        //  print("it contains");
                         } else {
                           uMail.add(input);
-                          print("uMail");
-                          print(uMail);
+                          //print("uMail");
+                          //print(uMail);
                         }
                       },
                     ),

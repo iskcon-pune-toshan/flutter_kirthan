@@ -52,8 +52,8 @@ class _MyDrawerState extends State<MyDrawer> {
     SignInService().firebaseAuth.currentUser().then((onValue) {
       photoUrl = onValue.photoUrl;
       name = onValue.displayName;
-      print(name);
-      print(photoUrl);
+      //print(name);
+      //print(photoUrl);
     });
     //print(userdetails.length);
   }
@@ -63,7 +63,7 @@ class _MyDrawerState extends State<MyDrawer> {
     final FirebaseUser user = await auth.currentUser();
     userList = await userPageVM.getUserRequests("Approved");
     for (var users in userList) {
-      print("Role Id is");
+     // print("Role Id is");
       if (users.email == user.email) {
         setState(() {
           user_id = users.id;
@@ -102,8 +102,8 @@ class _MyDrawerState extends State<MyDrawer> {
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
       currUserName = user.fullName;
-      print("In User Role function, role id is");
-      print(user.roleId);
+     // print("In User Role function, role id is");
+     // print(user.roleId);
       if (user.id == currentUserId) {
         if (user.roleId == 1) {
           currUserRole = "Admin";
@@ -115,7 +115,7 @@ class _MyDrawerState extends State<MyDrawer> {
           currUserRole = "Team lead";
         }
       }
-      print("User role $currUserRole");
+     // print("User role $currUserRole");
     }
     if (currUserRole != null)
       return true;
@@ -129,9 +129,9 @@ class _MyDrawerState extends State<MyDrawer> {
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             String _email = snapshot.data + '.jpg';
-            print("\n\n\n\n\n\n\n\n\n\n\n Email : " +
+           /* print("\n\n\n\n\n\n\n\n\n\n\n Email : " +
                 _email +
-                "\n\n\n\n\n\n\n\n");
+                "\n\n\n\n\n\n\n\n");*/
             final ref = FirebaseStorage.instance.ref().child(_email);
             return FutureBuilder(
                 future: ref.getDownloadURL(),
@@ -417,10 +417,10 @@ class _MyDrawerState extends State<MyDrawer> {
                                       "We're sad to hear :(", // optional
                                   accentColor: Colors.red, // optional
                                   onSubmitPressed: (int rating) {
-                                    print("onSubmitPressed: rating = $rating");
+                                   // print("onSubmitPressed: rating = $rating");
                                   },
                                   onAlternativePressed: () {
-                                    print("onAlternativePressed: do something");
+                                   // print("onAlternativePressed: do something");
                                   },
                                 );
                               });
@@ -540,7 +540,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                                 SignInService()
                                                     .signOut()
                                                     .then((onValue) =>
-                                                        print(onValue))
+                                                        print(''))
                                                     .whenComplete(() =>
                                                         Navigator.push(
                                                             context,
@@ -591,17 +591,17 @@ class _MyDrawerState extends State<MyDrawer> {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
     for (var users in userRequest) {
-      print("HELLOHELLOHELLOHELLOHELLO");
-      print(users.email);
-      print(user.email);
+      //("HELLOHELLOHELLOHELLOHELLO");
+     // print(users.email);
+     // print(user.email);
       if (users.email == user.email) {
         setState(() {
           role_id = users.roleId;
         });
       }
     }
-    print("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
+   // print("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
     //print(email);
-    print(role_id.toString());
+   // print(role_id.toString());
   }
 }

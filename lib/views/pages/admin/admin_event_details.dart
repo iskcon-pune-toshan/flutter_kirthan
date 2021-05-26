@@ -47,7 +47,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
       photoUrl = onValue.photoUrl;
-      print(photoUrl);
+   //   print(photoUrl);
     });
     //print(userdetails.length);
   }
@@ -64,7 +64,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
     final FirebaseUser user = await auth.currentUser();
     userList = await userPageVM.getUserRequests("Approved");
     for (var users in userList) {
-      print("Role Id is");
+    //  print("Role Id is");
       if (users.email == user.email) {
         setState(() {
           user_id = users.id;
@@ -111,8 +111,8 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
       // UserName = user.userName;
-      print("In User Role function, role id is");
-      print(user.roleId);
+     // print("In User Role function, role id is");
+      //print(user.roleId);
       if (user.roleId == 1) {
         currUserRole = "Admin";
       } else if (user.roleId == 2) {
@@ -122,7 +122,7 @@ class _AdminEventDetailsState extends State<AdminEventDetails> {
       } else if (user.roleId == 4) {
         currUserRole = "Team lead";
       }
-      print("Admin EVENT VIEW User role $currUserRole");
+    //  print("Admin EVENT VIEW User role $currUserRole");
     }
     if (currUserRole != null)
       return true;

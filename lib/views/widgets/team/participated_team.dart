@@ -159,7 +159,7 @@ class _Participated_TeamState extends State<Participated_Team> {
                                 for (var uname in userList) {
                                   if (uname.email == uemail) {
                                     CurrentUserName = uname.fullName;
-                                    print(CurrentUserName);
+                                   // print(CurrentUserName);
                                   }
                                 }
                                 // currentUserName =CurrentUserName;

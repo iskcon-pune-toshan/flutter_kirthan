@@ -16,9 +16,9 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
 
   Future<List<TeamUser>> submitNewTeamUserMapping(
       List<TeamUser> listofteamusermap) async {
-    print(listofteamusermap);
+
     String requestBody = json.encode(listofteamusermap);
-    print(requestBody);
+
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/teamuser/addteamuser',
@@ -34,7 +34,7 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
           .map((teamusermappingData) => TeamUser.fromMap(teamusermappingData))
           .toList();
 //      TeamUser.fromMap(teamusermappingData);
-      print(teamrequests);
+
       return teamrequests;
 
       List<dynamic> userrequestsData = json.decode(response.body);
@@ -85,9 +85,9 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
 
   Future<List<TeamUser>> submitDeleteTeamUserMapping(
       List<TeamUser> listofteamusermap) async {
-    print(listofteamusermap);
+
     String requestBody = json.encode(listofteamusermap);
-    print(requestBody);
+
 
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/teamuser/deleteteamuser',
@@ -103,7 +103,7 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
           .map((teamusermappingData) => TeamUser.fromMap(teamusermappingData))
           .toList();
 //      TeamUser.fromMap(teamusermappingData);
-      print(teamusers);
+
       return teamusers;
 
       List<dynamic> userrequestsData = json.decode(response.body);

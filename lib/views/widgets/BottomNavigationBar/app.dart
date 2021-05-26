@@ -293,8 +293,8 @@ class AppState extends State<App> {
   void initState() {
     getRoleId();
     super.initState();
-    print("+++++++++++++ Role Id");
-    print("//////////");
+   // print("+++++++++++++ Role Id");
+    //print("//////////");
   }
 
   final List<TabItem> tabs = [
@@ -469,17 +469,17 @@ class AppState extends State<App> {
     final FirebaseUser user = await auth.currentUser();
     userRequestList = await userPageVM.getUserRequests("Approved");
     for (var users in userRequestList) {
-      print("HELLOHELLOHELLOHELLOHELLO");
-      print(users.email);
-      print(user.email);
+     // print("HELLOHELLOHELLOHELLOHELLO");
+      //print(users.email);
+     // print(user.email);
       if (users.email == user.email) {
         setState(() {
           role_id = users.roleId;
         });
       }
     }
-    print("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
+   // print("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
     //print(email);
-    print(role_id.toString());
+   // print(role_id.toString());
   }
 }

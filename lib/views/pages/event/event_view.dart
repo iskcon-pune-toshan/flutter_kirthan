@@ -64,56 +64,22 @@ class _EventViewState extends State<EventView> with BaseAPIService {
   Map<String, bool> accessTypes = new Map<String, bool>();
   String photoUrl;
   String name;
-  List<String> event;
-  List<String> tempList = List<String>();
   bool isLoading = false;
-  int length;
   http.Client client1 = http.Client();
-  Future getevent() async {
-    String requestBody = '';
-    requestBody = '{"isPublicEvent" : true}';
-    print(requestBody);
-    String token = AutheticationAPIService().sessionJWTToken;
-    print("search service");
-    var response = await client1.put('$baseUrl/api/event/geteventtitle',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: requestBody);
-    if (response.statusCode == 200) {
-      List<dynamic> eventrequestsData = json.decode(response.body);
-      //print(eventrequestsData);
-      List<String> events =
-          eventrequestsData.map((event) => event.toString()).toList();
-      event = events;
-      print(event);
-      int len = event.length;
-      print(len);
-      length = len;
-      //print(event);
-//print(eventrequests);
-    } else {
-      throw Exception('Failed to get data');
-    }
-  }
-
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       access = prefs.getStringList(widget.screenName);
-      access.forEach((f) {
+      /*access.forEach((f) {
         List<String> access = f.split(":");
         accessTypes[access.elementAt(0)] =
             access.elementAt(1).toLowerCase() == "true" ? true : false;
-      });
+      });*/
       eventPageVM.accessTypes = accessTypes;
       //userdetails = prefs.getStringList("LoginDetails");
       SignInService().firebaseAuth.currentUser().then((onValue) {
         photoUrl = onValue.photoUrl;
         name = onValue.displayName;
-        print(name);
-        print(photoUrl);
       });
       //print(userdetails.length);
     });
@@ -132,8 +98,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     loadData();
     loadPref();
     NotificationManager ntfManger = NotificationManager();
-    getevent();
-    print(event);
   }
 
   Future<Null> refreshList() async {
@@ -153,7 +117,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
     for (var users in userRequest) {
-      print("Role Id is");
+    //  print("Role Id is");
       if (users.email == user.email) {
         setState(() {
           role_id = users.roleId;
@@ -161,8 +125,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
         });
       }
     }
-    //print(email);
-    print(role_id.toString());
   }
 
   SpeedDial buildSpeedDial() {
@@ -228,7 +190,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
           appBar: AppBar(
             title: Text(
               "Events",
-              //style: TextStyle(fontSize: notifier.custFontSize),
             ),
             actions: <Widget>[
               IconButton(
@@ -236,10 +197,9 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                     Icons.search,
                   ),
                   onPressed: () => {
-                        print(event),
                         showSearch(
                           context: context,
-                          delegate: Search(event),
+                          delegate: Search(),
                         )
                       }),
               PopupMenuButton(
@@ -248,7 +208,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                   ),
                   onSelected: (input) {
                     _selectedValue = input;
-                    print(input);
+                   // print(input);
                     if (input == 'Today')
                       eventPageVM.setEventRequests("TODAY");
                     else if (input == 'Tomorrow')
@@ -310,15 +270,9 @@ class _EventViewState extends State<EventView> with BaseAPIService {
 }
 
 class Search extends SearchDelegate {
-  Search(
-    this.listExample, {
-    String hintText = "Search by Event Title",
-  }) : super(
-          searchFieldLabel: hintText,
-          searchFieldStyle: TextStyle(color: Colors.grey),
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.search,
-        );
+  Future<List<EventRequest>> Users = eventPageVM.getEventRequests("All");
+  List<EventRequest> eventlist = new List<EventRequest>();
+  List<String> recentSearch = [];
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
     final ThemeData theme = Theme.of(context);
@@ -364,32 +318,38 @@ class Search extends SearchDelegate {
     );
   }
 
-  final List<String> listExample;
+ // final List<String> listExample;
   List<String> recentList = [];
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestionList = [];
-    query.isEmpty
-        ? suggestionList = recentList //In the true case
-        : suggestionList.addAll(listExample.where(
-            // In the false case
-            (element) =>
-                element.toUpperCase().contains(query) ||
-                element.toLowerCase().contains(query),
-          ));
-
-    return
-        //_widget();
-        ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            suggestionList[index],
-          ),
-          leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-        );
+    return FutureBuilder(
+      future: Users,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<EventRequest>> snapshot) {
+        if (snapshot.data != null) {
+          eventlist = snapshot.data;
+          List<String> EventList =
+          eventlist.map((event) => event.eventTitle).toSet().toList();
+          List<String> suggestionList = [];
+          query.isEmpty
+              ? suggestionList = EventList
+              : suggestionList.addAll(EventList.where((element) =>
+          element.toUpperCase().contains(query) == true ||
+              element.toLowerCase().contains(query) == true));
+          return ListView.builder(
+            itemCount: suggestionList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                  title: Text(
+                    suggestionList[index],
+                  ),
+                  //leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
+                 );
+            },
+          );
+        }
+        return Container();
       },
     );
   }

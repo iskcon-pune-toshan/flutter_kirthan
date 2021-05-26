@@ -17,7 +17,6 @@ class FirebaseMessageService {
 
   void initMessageHandler(BuildContext context) {
     //FirebaseMessaging _fcm = new FirebaseMessaging();
-    print(context);
     _fcm.requestNotificationPermissions();
     _fcm.configure(
         onMessage: (Map<String, dynamic> message) async {
