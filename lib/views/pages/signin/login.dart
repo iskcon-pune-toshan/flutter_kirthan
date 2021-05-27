@@ -401,7 +401,7 @@ class _LoginAppState extends State<LoginApp> {
                     .whenComplete(() => Navigator.push(context,
                         MaterialPageRoute(builder: (context) => EnterCode())))),
             AssetImage(
-              'assets/images/google.jpg',
+              'assets/images/google.png',
             ),
           ),
         ],
