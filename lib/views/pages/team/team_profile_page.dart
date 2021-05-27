@@ -11,11 +11,11 @@ import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 final TeamUserPageViewModel teamUserPageVM =
-TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 
 class TeamProfilePage extends StatefulWidget {
   String teamTitle;
@@ -99,9 +99,9 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
           if (snapshot.data != null) {
             teamusersList = snapshot.data;
             List<TeamUser> listofteamusers =
-            teamusersList.where((user) => user.teamId == id).toList();
+                teamusersList.where((user) => user.teamId == id).toList();
             List<String> memberList =
-            listofteamusers.map((e) => e.userName).toSet().toList();
+                listofteamusers.map((e) => e.userName).toSet().toList();
             return ListView.builder(
                 shrinkWrap: true,
                 itemCount: memberList.length,
@@ -141,7 +141,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
         body: FutureBuilder(
             future: Teams,
             builder: (context, snapshot) {
-              if (snapshot.connectionState =="done") {
+              if (snapshot.hasData) {
                 teamList = snapshot.data;
                 for (var team in snapshot.data) {
                   if (team.teamTitle == this.teamTitle) {
@@ -189,7 +189,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                         margin: EdgeInsets.all(20),
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
                                               'Team',
@@ -234,8 +234,8 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                           children: [
                                             Icon(
                                               Icons.info_outline_rounded,
-                                              color: KirthanStyles
-                                                  .colorPallete30,
+                                              color:
+                                                  KirthanStyles.colorPallete30,
                                             ),
                                             SizedBox(
                                               width: 10,
@@ -255,16 +255,14 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                         Row(
                                           children: [
                                             Align(
-                                                alignment:
-                                                Alignment.centerLeft,
+                                                alignment: Alignment.centerLeft,
                                                 child: Text(
                                                   'Type: ',
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
-                                                      FontWeight.bold,
-                                                      color:
-                                                      Colors.grey[300]),
+                                                          FontWeight.bold,
+                                                      color: Colors.grey[300]),
                                                 )),
                                             Text(
                                               type != null ? type : "New",
@@ -296,16 +294,14 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                         Row(
                                           children: [
                                             Align(
-                                                alignment:
-                                                Alignment.centerLeft,
+                                                alignment: Alignment.centerLeft,
                                                 child: Text(
                                                   'Experience: ',
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
-                                                      FontWeight.bold,
-                                                      color:
-                                                      Colors.grey[300]),
+                                                          FontWeight.bold,
+                                                      color: Colors.grey[300]),
                                                 )),
                                             Text(
                                               experience,
@@ -340,8 +336,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                 'Contact Details:',
                                                 style: TextStyle(
                                                     fontSize: 18,
-                                                    fontWeight:
-                                                    FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     color: Colors.grey[300]),
                                               ),
                                             ],
@@ -404,10 +399,14 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                     );
                   }
                 }
-              }else if (snapshot.hasError){
-                return Center(child: Text('Team Request not accepted'),);
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Team Request not accepted'),
+                );
               }
-              return Center(child: Text('Team Request not accepted'),);
+              return Center(
+                child: Text('Team Request not accepted'),
+              );
             }));
   }
 }
