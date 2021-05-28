@@ -61,7 +61,7 @@ class _contact_details_profileState extends State<contact_details_profile> {
                         child: Consumer<ThemeNotifier>(
                           builder: (context, notifier, child) => Form(
                             key: _formKey,
-                            autovalidate: true,
+                            //autovalidate: true,
                             child: Column(
                               children: [
                                 Divider(),

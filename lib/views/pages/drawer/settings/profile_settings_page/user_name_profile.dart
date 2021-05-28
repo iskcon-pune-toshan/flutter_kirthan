@@ -56,7 +56,7 @@ class _userName_profileState extends State<userName_profile> {
                           child: Center(
                             child: Form(
                               key: _formKey,
-                              autovalidate: true,
+                              // autovalidate: true,
                               child: Column(
                                 children: [
                                   Divider(),
