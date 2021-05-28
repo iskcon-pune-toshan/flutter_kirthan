@@ -27,6 +27,14 @@ class _contact_details_profileState extends State<contact_details_profile> {
     return email;
   }
 
+  String _isValidPhone(String value) {
+    final phoneRegExp = RegExp(r'(^(?:[+0]9)?[0-9]{10}$)');
+    if (!phoneRegExp.hasMatch(value))
+      return 'Enter Valid Phone Number';
+    else
+      return null;
+  }
+
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -53,6 +61,7 @@ class _contact_details_profileState extends State<contact_details_profile> {
                         child: Consumer<ThemeNotifier>(
                           builder: (context, notifier, child) => Form(
                             key: _formKey,
+                            autovalidate: true,
                             child: Column(
                               children: [
                                 Divider(),
@@ -82,6 +91,7 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.phoneNumber = int.parse(input);
                                   },
+                                  validator: _isValidPhone,
                                 ),
                                 Divider(),
                                 TextFormField(
@@ -106,6 +116,9 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.city = input;
                                   },
+                                  validator: (input) => input.isEmpty
+                                      ? "Please enter some text"
+                                      : null,
                                 ),
                                 Divider(),
                                 TextFormField(
@@ -130,6 +143,9 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.addLineOne = input;
                                   },
+                                  validator: (input) => input.isEmpty
+                                      ? "Please enter some text"
+                                      : null,
                                 ),
                                 Divider(),
                                 TextFormField(
@@ -154,6 +170,9 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.addLineTwo = input;
                                   },
+                                  validator: (input) => input.isEmpty
+                                      ? "Please enter some text"
+                                      : null,
                                 ),
                                 Divider(),
                                 TextFormField(
@@ -178,6 +197,9 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.addLineThree = input;
                                   },
+                                  validator: (input) => input.isEmpty
+                                      ? "Please enter some text"
+                                      : null,
                                 ),
                                 Divider(),
                                 TextFormField(
@@ -202,6 +224,9 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.state = input;
                                   },
+                                  validator: (input) => input.isEmpty
+                                      ? "Please enter some text"
+                                      : null,
                                 ),
                                 Divider(),
                                 TextFormField(
@@ -227,6 +252,9 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.country = input;
                                   },
+                                  validator: (input) => input.isEmpty
+                                      ? "Please enter some text"
+                                      : null,
                                 ),
                                 Divider(),
                                 TextFormField(
@@ -252,6 +280,9 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.govtIdType = input;
                                   },
+                                  validator: (input) => input.isEmpty
+                                      ? "Please enter some text"
+                                      : null,
                                 ),
                                 Divider(),
                                 TextFormField(
@@ -277,6 +308,9 @@ class _contact_details_profileState extends State<contact_details_profile> {
                                   onSaved: (input) {
                                     user.govtId = input;
                                   },
+                                  validator: (input) => input.isEmpty
+                                      ? "Please enter some text"
+                                      : null,
                                 ),
                                 Divider(),
                                 Row(

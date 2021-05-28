@@ -65,31 +65,47 @@ class _description_profileState extends State<description_profile> {
                         return Consumer<ThemeNotifier>(
                           builder: (context, notifier, child) => Form(
                             key: _formKey,
+                            autovalidate: true,
                             child: Column(
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: 20.0,
-                                      top: 20.0,
-                                      left: 10.0,
-                                      right: 10.0),
-                                  child: TextFormField(
-                                    initialValue: teamrequest.teamDescription,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                    style: TextStyle(
-                                        fontSize: notifier.custFontSize),
-                                    decoration: InputDecoration(
-                                      labelText: 'Description',
-                                      hintText: 'Please enter the description',
-                                      prefixIcon: Icon(
-                                        Icons.description,
-                                        color: Colors.grey,
+                                Card(
+                                  child: Container(
+                                    //color: Colors.black26,
+                                    padding: const EdgeInsets.all(10),
+                                    child: Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>
+                                          TextFormField(
+                                        initialValue:
+                                            teamrequest.teamDescription,
+                                        decoration: InputDecoration(
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.grey),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.green),
+                                          ),
+                                          labelText: "Enter team description",
+                                          hintText:
+                                              "Please enter the team description",
+                                          labelStyle: TextStyle(
+                                              fontSize: notifier.custFontSize,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey),
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        validator: (input) {
+                                          if (input.isEmpty) {
+                                            return "Enter valid description";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
                                       ),
                                     ),
-                                    onSaved: (input) {
-                                      teamrequest.teamDescription = input;
-                                    },
                                   ),
                                 ),
                                 Padding(

@@ -63,6 +63,7 @@ dependencies:
   url_launcher:
   random_string: ^2.1.0
   flushbar:
+  grouped_buttons:
 
 
 
