@@ -21,6 +21,13 @@ class InviteLocalAdmin extends StatefulWidget {
 }
 
 class _InviteLocalAdminState extends State<InviteLocalAdmin> {
+  void choiceAction(String choice) {
+    if (choice == Constant.invite) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => InviteUser()));
+    }
+  }
+
   FirebaseUser user;
   int superId;
   Future<List<UserRequest>> Users;
@@ -61,21 +68,22 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
     final ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            'Create a Local Admin',
-          ),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                  Icons.search,
-                ),
-                onPressed: () => {
-                      showSearch(
-                        context: context,
-                        delegate: Search(),
-                      )
-                    }),
-          ]),
+        title: Text(
+          'Create a Local Admin',
+        ),
+        //TODO:COMMENT IT IF DONT WONT IT IN APPBAR
+        // actions: [
+        // PopupMenuButton<String>(
+        //   onSelected: choiceAction,
+        //   itemBuilder: (BuildContext context) {
+        //     return Constant.choice.map((String choice) {
+        //       return PopupMenuItem<String>(
+        //           value: choice, child: Text(choice));
+        //     }).toList();
+        //   },
+        // )
+        //],
+      ),
       drawer: MyDrawer(),
       body: RefreshIndicator(
         key: refreshKey,
@@ -88,15 +96,6 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Column(children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 20),
-                  child: Text(
-                    "INITIATED BY YOU",
-                    style: TextStyle(
-                        fontSize: 20, color: KirthanStyles.colorPallete30),
-                  ),
-                ),
                 SizedBox(
                   height: 10,
                 ),
@@ -123,72 +122,189 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
                             .where((element) => element.invitedBy == superId)
                             .map((e) => e.roleId)
                             .toList();
-                        return listOfUsers != null
-                            ? Expanded(
-                                child: SingleChildScrollView(
-                                  physics: ScrollPhysics(),
-                                  child: Container(
-                                    margin: EdgeInsets.fromLTRB(20, 20, 0, 20),
-                                    child: Column(
-                                      children: [
-                                        ListView.builder(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: listOfUsers.length,
-                                            itemBuilder: (_, int index) {
-                                              return Column(
-                                                children: [
-                                                  ListTile(
-                                                    title: Text(
-                                                      listOfUsers[index]
-                                                          .toUpperCase(),
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    trailing: Icon(
-                                                        Icons.navigate_next),
-                                                    subtitle: Text(
-                                                      listOfUsersRole.length ==
-                                                              listOfUsers.length
-                                                          ? listOfUsersRole[
-                                                                      index] ==
-                                                                  2
-                                                              ? "Local Admin"
-                                                              : listOfUsersRole[
-                                                                          index] ==
-                                                                      3
-                                                                  ? "User"
-                                                                  : "Team Lead"
-                                                          : "",
-                                                      style: TextStyle(
-                                                          fontSize: 13),
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  InitiateUserDetails(
-                                                                      UserName:
-                                                                          listOfUsers[
-                                                                              index])));
-                                                    },
-                                                  ),
-                                                  Divider(
-                                                    thickness: 2,
-                                                    endIndent: 20,
-                                                  )
-                                                ],
-                                              );
-                                            })
-                                      ],
+                        return listOfUsers.length != 0
+                            ? Column(
+                                children: [
+                                  Container(
+                                      height: 56,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      margin:
+                                          EdgeInsets.fromLTRB(10, 20, 0, 10),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            style: BorderStyle.solid,
+                                            color: Colors.grey),
+                                      ),
+                                      child: FlatButton(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Icon(
+                                                  Icons.search,
+                                                  color: Colors.grey,
+                                                )),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              'Search User',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                        onPressed: () {
+                                          showSearch(
+                                              context: context,
+                                              delegate: Search());
+                                        },
+                                      )),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    margin: EdgeInsets.only(top: 20, left: 20),
+                                    child: Text(
+                                      "Initiated by you:",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: KirthanStyles.colorPallete30),
                                     ),
                                   ),
-                                ),
+                                  Container(
+                                    child: SingleChildScrollView(
+                                      physics: ScrollPhysics(),
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.fromLTRB(20, 20, 0, 20),
+                                        child: Column(
+                                          children: [
+                                            ListView.builder(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount: listOfUsers.length,
+                                                itemBuilder: (_, int index) {
+                                                  return Column(
+                                                    children: [
+                                                      ListTile(
+                                                        title: Text(
+                                                          listOfUsers[index]
+                                                              .toUpperCase(),
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        trailing: Icon(Icons
+                                                            .navigate_next),
+                                                        subtitle: Text(
+                                                          listOfUsersRole
+                                                                      .length ==
+                                                                  listOfUsers
+                                                                      .length
+                                                              ? listOfUsersRole[
+                                                                          index] ==
+                                                                      2
+                                                                  ? "Local Admin"
+                                                                  : listOfUsersRole[
+                                                                              index] ==
+                                                                          3
+                                                                      ? "User"
+                                                                      : "Team Lead"
+                                                              : "",
+                                                          style: TextStyle(
+                                                              fontSize: 13),
+                                                        ),
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      InitiateUserDetails(
+                                                                          UserName:
+                                                                              listOfUsers[index])));
+                                                        },
+                                                      ),
+                                                      Divider(
+                                                        thickness: 2,
+                                                        endIndent: 20,
+                                                      )
+                                                    ],
+                                                  );
+                                                })
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               )
-                            : Container(child: Text("Nothing to show"));
+                            : Column(
+                                children: [
+                                  Container(
+                                      height: 56,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      margin:
+                                          EdgeInsets.fromLTRB(10, 20, 0, 10),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            style: BorderStyle.solid,
+                                            color: Colors.grey),
+                                      ),
+                                      child: FlatButton(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Icon(
+                                                  Icons.search,
+                                                  color: Colors.grey,
+                                                )),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              'Search User',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                        onPressed: () {
+                                          showSearch(
+                                              context: context,
+                                              delegate: Search());
+                                        },
+                                      )),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    margin: EdgeInsets.only(top: 20, left: 20),
+                                    child: Text(
+                                      "Initiated by you:",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: KirthanStyles.colorPallete30),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    height: MediaQuery.of(context).size.height -
+                                        350,
+                                    child: Text(
+                                      "Nothing to show",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: KirthanStyles.colorPallete60),
+                                    ),
+                                  )
+                                ],
+                              );
                       }
                       return CircularProgressIndicator();
                     }),

@@ -51,6 +51,7 @@ class _LoginAppState extends State<LoginApp> {
   var errMessage = 'ellomate';
   Future<List<UserRequest>> Userreq;
   List<UserRequest> userList = new List<UserRequest>();
+  FocusNode myFocusNode = new FocusNode();
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     //prefs.setString("My Name", "Manjunath Bijinepalli");
@@ -61,14 +62,14 @@ class _LoginAppState extends State<LoginApp> {
   getCurrentUID() async {
     final FirebaseUser user = await auth.currentUser();
     final String uid = user.uid;
-   // print(uid);
+    // print(uid);
     return uid;
   }
 
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
-   // print(email);
+    // print(email);
     return email;
   }
 
@@ -130,43 +131,40 @@ class _LoginAppState extends State<LoginApp> {
     String email = s.email;
     String userName = s.displayName;
 
-   // print("signup uid");
+    // print("signup uid");
     //print(pass);
     //print(email);
     //print(userName);
 
-    if (_formKey.currentState.validate()) {
-      String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+    String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
-      // user.firstName = userName;
-      // user.lastName = userName;
-      user.email = email;
-      user.password = pass;
-      user.phoneNumber = 12345678;
-      user.fullName = userName;
-      user.addLineOne = "xyz";
-      user.addLineTwo = "abc";
-      user.addLineThree = "pqr";
-      user.locality = "Pune";
-      user.city = "Pune";
-      user.pinCode = 400001;
-      user.state = "Maharashtra";
-      user.country = "India";
-      user.govtIdType = "Aadhaar";
-      user.govtId = "Aadhaar";
-      //user.isProcessed = true;
-      // user.approvalComments = "Waiting";
-      user.approvalStatus = "Waiting";
-      user.roleId = 3;
-      user.createdBy = email;
-      user.updatedBy = " ";
-      user.createdTime = dt;
-      user.updatedTime = null;
+    // user.firstName = userName;
+    // user.lastName = userName;
+    user.email = email;
+    user.password = pass;
+    user.phoneNumber = 12345678;
+    user.fullName = userName;
+    user.addLineOne = "xyz";
+    user.addLineTwo = "abc";
+    user.addLineThree = "pqr";
+    user.locality = "Pune";
+    user.city = "Pune";
+    user.pinCode = 400001;
+    user.state = "Maharashtra";
+    user.country = "India";
+    user.govtIdType = "Aadhaar";
+    user.govtId = "Aadhaar";
+    //user.isProcessed = true;
+    // user.approvalComments = "Waiting";
+    user.approvalStatus = "Waiting";
+    user.roleId = 3;
+    user.createdBy = email;
+    user.updatedBy = " ";
+    user.createdTime = dt;
+    user.updatedTime = null;
 
-      Map<String, dynamic> usermap = user.toJson();
-      UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap);
-    }
+    Map<String, dynamic> usermap = user.toJson();
+    UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap);
   }
 
   userCheck() async {}
@@ -188,6 +186,7 @@ class _LoginAppState extends State<LoginApp> {
             decoration: kBoxDecorationStyle,
             height: 60.0,
             child: TextFormField(
+              focusNode: myFocusNode,
               keyboardType: TextInputType.emailAddress,
               style: TextStyle(
                 color: Colors.black,
@@ -276,9 +275,7 @@ class _LoginAppState extends State<LoginApp> {
           if (_formKey.currentState.validate()) {
             _uname = username.text;
             _password = _passwordcontroller.text;
-            //   _formKey.currentState.save();
-          //  print(_uname);
-            //print(_password);
+            errMessage = 'ellomate';
             signInService
                 .signInWithEmail(_uname, _password)
                 .then((FirebaseUser user) => populateData())
@@ -292,22 +289,23 @@ class _LoginAppState extends State<LoginApp> {
                 // errMessage ="ellomate";
               } else if (e.code == 'ERROR_INVALID_EMAIL' ||
                   e.code == 'ERROR_WRONG_PASSWORD') {
-                errMessage = 'INVALID EMAIL OR PASSWORD';
+                errMessage = 'INVALID PASSWORD';
                 showFlushBar(context, errMessage);
                 // errMessage='elloMate';
               }
-            }).whenComplete(
-                    () => authenticateService.autheticate().whenComplete(() {
+            }).whenComplete(() => errMessage == 'ellomate'
+                    ? authenticateService.autheticate().whenComplete(() {
                         //  print("MYERROR" + errMessage);
-                          if (errMessage == 'ellomate') {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EnterCode()));
-                          } else {
-                            return null;
-                          }
-                        }));
+                        if (errMessage == 'ellomate') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EnterCode()));
+                        } else {
+                          return null;
+                        }
+                      })
+                    : null);
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -372,6 +370,7 @@ class _LoginAppState extends State<LoginApp> {
     );
   }
 
+  String error = null;
   Widget _buildSocialBtnRow() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.0),
@@ -394,7 +393,9 @@ class _LoginAppState extends State<LoginApp> {
                 .googSignIn(context)
                 //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
                 .then((FirebaseUser user) => populateData())
-                .catchError((e) => print(''))
+                .catchError((e) {
+                  print(e);
+                })
                 .whenComplete(() => addUser())
                 .whenComplete(() => authenticateService
                     .autheticate()
@@ -559,6 +560,5 @@ void showFlushBar(BuildContext context, String errMessage) {
       size: 28,
       color: Colors.cyanAccent,
     ),
-  )..show(context).whenComplete(() => Navigator.push(
-      context, MaterialPageRoute(builder: (context) => LoginApp())));
+  )..show(context);
 }

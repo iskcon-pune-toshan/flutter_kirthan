@@ -20,6 +20,8 @@ class NonUserTeamInvite extends StatefulWidget {
 
 class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
   String userEmail;
+  var Url;
+  Uri params;
   String inviteCode = randomAlphaNumeric(6);
   String invitedBy;
   Future<String> getEmail() async {
@@ -28,11 +30,11 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
     return email;
   }
 
-  Future<void> emailLaunch(String userEmail) async {
-    if (await canLaunch(userEmail)) {
-      await launch(userEmail);
+  Future<void> emailLaunch(var Url) async {
+    if (await canLaunch(Url)) {
+      await launch(Url);
     } else {
-     // print('Could not launch $userEmail');
+      null;
     }
   }
 
@@ -56,7 +58,7 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
                       onChanged: (value) {
                         setState(() {
                           userEmail = value;
-                         // print(userEmail);
+                          // print(userEmail);
                         });
                       },
                       decoration: InputDecoration(
@@ -96,7 +98,7 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
                             .where((element) => element.userEmail == userEmail)
                             .toList()
                             .isEmpty) {
-                        //  print(userEmail);
+                          //  print(userEmail);
                           ProspectiveUserRequest prospectiveUserRequest =
                               new ProspectiveUserRequest();
                           prospectiveUserRequest.userEmail = userEmail;
@@ -110,11 +112,13 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
                               await prospectiveUserPageVM
                                   .submitNewProspectiveUserRequest(
                                       eventrequestmap);
-                          emailLaunch('mailto:$userEmail?'
-                              'subject=Invitiation%20to%20create%20a%20team&'
-                              'body=Hello\n\nI%20would%20like%20to%20inivte%20you%20to%20download%20our%20app%20using%20the%20link\n\n'
-                              'https://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing\n\n'
-                              'And%20create%20a%20team%20using%20the%20code\n"$inviteCode"\n\nThank%20You');
+                          params = Uri(
+                              scheme: 'mailto',
+                              path: "$userEmail",
+                              query:
+                                  'subject=Invitation to create a team&body=Hello\n\nI would like to invite you to download our app using the link\nhttps://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing\n\nAnd create a team using the code\n"$inviteCode"\n\nThanks & Regards ');
+                          Url = params.toString();
+                          emailLaunch(Url);
                         } else {
                           Scaffold.of(context).showSnackBar(
                               SnackBar(content: Text('Enter Valid Email')));

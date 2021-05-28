@@ -46,7 +46,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
   List<TeamUser> teamusersList = new List<TeamUser>();
   @override
   void initState() {
-    Teams = teamPageVM.getTeamRequests('Approved');
+    Teams = teamPageVM.getTeamRequests("Approved");
     Users = userPageVM.getUserRequests("Approved");
     super.initState();
   }
@@ -127,7 +127,6 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -399,10 +398,6 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                     );
                   }
                 }
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Team Request not accepted'),
-                );
               }
               return Center(
                 child: Text('Team Request not accepted'),
