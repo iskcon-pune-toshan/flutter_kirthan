@@ -173,7 +173,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => members_profile(),
+                        builder: (context) => members_profile(
+                          show: false,
+                        ),
                       ));
                 },
                 selected: true,
