@@ -1,3 +1,4 @@
+import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:flutter_kirthan/models/team.dart';
@@ -795,10 +796,30 @@ class _EventWriteState extends State<EventWrite> {
                             return null;
                           },
                         ),
+                        Container(
+                          child:SelectState(
+                            onCountryChanged: (value) {
+                              setState(() {
+                                eventrequest.country = value;
+                              });
+                            },
+                            onStateChanged:(value) {
+                              setState(() {
+                                eventrequest.state = value;
+                              });
+                            },
+                            onCityChanged:(value) {
+                              setState(() {
+                                eventrequest.city = value;
+                              });
+                            },
+
+                          ),
+                        )
                       ],
                     ),
 
-                    Column(
+                    /*Column(
                       children: <Widget>[
                         DropdownButtonFormField<String>(
                             value: _selectedCity,
@@ -878,7 +899,7 @@ class _EventWriteState extends State<EventWrite> {
                               return null;
                             }),
                       ],
-                    ),
+                    ),*/
                     //getTeamsWidget(),
                     new Container(margin: const EdgeInsets.only(top: 40)),
                     Row(

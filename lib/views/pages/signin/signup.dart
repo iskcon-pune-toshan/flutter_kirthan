@@ -55,7 +55,7 @@ class _SignUpState extends State<SignUp> {
         .child('${_emailcontroller.text}' + '.jpg');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
-   // print('File Uploaded');
+    // print('File Uploaded');
     storageReference.getDownloadURL().then((fileURL) {
       setState(() {
         _uploadedFileURL = fileURL;
@@ -210,9 +210,14 @@ class _SignUpState extends State<SignUp> {
                               Icons.email, "Email", "Email"),
                           controller: _emailcontroller,
                           validator: (value) {
-                            return EmailValidator.validate(value)
-                                ? null
-                                : "Please enter valid email";
+                            if(value.isEmpty) {
+                              return 'Please enter email';
+                            }
+                            else{
+                              return EmailValidator.validate(value)
+                                  ? null
+                                  : "Please enter valid email";
+                            }
                           },
                           //onSaved: (input) => email = input,
                         ),
@@ -251,7 +256,7 @@ class _SignUpState extends State<SignUp> {
                               "Re-Type Password", "Re-Type Password"),
                           controller: _confirmpassword,
                           validator: (val) {
-                            if (val.isEmpty) return 'Empty';
+                            if (val.isEmpty) return 'Please enter a value';
                             if (val != _passwordcontroller.text)
                               return "Not Match";
                             return null;
@@ -336,7 +341,7 @@ class _SignUpState extends State<SignUp> {
                                   }).whenComplete(() {
                                     errorMessage=='null'
                                         ?addUser() :null;
-                                  }).whenComplete(() => errorMessage=='null'?uploadFile():null);
+                                  }).whenComplete(() => errorMessage=='null'&&_image!=null ?uploadFile():null);
                                 }
                               },
                               shape: RoundedRectangleBorder(

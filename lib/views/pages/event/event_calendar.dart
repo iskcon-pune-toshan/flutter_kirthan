@@ -59,7 +59,7 @@ class CalendarClass extends State<CalendarPage> {
             } else {
               return Container(
                 child: Center(
-                  child: Text('Error'),
+                  child: Text(snapshot.error.toString()),
                 ),
               );
             }
@@ -78,16 +78,20 @@ class CalendarClass extends State<CalendarPage> {
       var one = format.parse(eventName.eventStartTime);
       var two = format.parse(eventName.eventEndTime);
       String duration;
-      if(two.difference(one).toString().substring(0,2).contains(":"))
+    if(two.difference(one).toString().substring(0,2).contains(":"))
         duration= two.difference(one).toString().substring(0,1);
       else
         duration= two.difference(one).toString().substring(0,2);
+      print(duration);
       Meeting meetingData = Meeting(
           eventName: eventName.eventTitle,
-          from: DateTime.parse(eventName.eventDate),
-          to: DateTime.parse(eventName.eventDate).add(Duration(hours: int.parse(duration))),
-          background: Colors.blue,);
-          //allDay: data['AllDay']);
+          from:DateTime(DateTime.parse(eventName.eventDate).year,
+              DateTime.parse(eventName.eventDate).month,DateTime.parse(eventName.eventDate).day,one.hour,one.minute),
+          to: DateTime(DateTime.parse(eventName.eventDate).year,
+              DateTime.parse(eventName.eventDate).month,DateTime.parse(eventName.eventDate).day).add(Duration(hours: int.parse(duration))),
+          background: Colors.blue,
+      );
+
       appointmentData.add(meetingData);
     }
     return appointmentData;
@@ -119,7 +123,6 @@ class _AppointmentDataSource extends CalendarDataSource {
 
   @override
   String getEndTimeZone(int index) => appointments[index].endTimeZone;
-
   @override
   Color getColor(int index) => appointments[index].background;
 
@@ -137,8 +140,8 @@ class Meeting {
       this.background = Colors.green,
       this.isAllDay = false,
       this.eventName = '',
-      this.startTimeZone = '',
-      this.endTimeZone = '',
+      @required this.startTimeZone,
+        @required this.endTimeZone,
       this.description = ''});
 
   final String eventName;
@@ -146,8 +149,8 @@ class Meeting {
   final DateTime to;
   final Color background;
   final bool isAllDay;
-  final String startTimeZone;
-  final String endTimeZone;
+  final DateTime startTimeZone;
+  final DateTime endTimeZone;
   final String description;
 }
 

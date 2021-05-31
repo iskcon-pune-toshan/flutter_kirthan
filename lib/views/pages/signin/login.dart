@@ -22,7 +22,7 @@ import 'package:flushbar/flushbar_helper.dart';
 //  MainPageViewModel(apiSvc: RestAPIServices());
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class LoginApp extends StatefulWidget {
   //final MainPageViewModel viewModel;
@@ -61,14 +61,14 @@ class _LoginAppState extends State<LoginApp> {
   getCurrentUID() async {
     final FirebaseUser user = await auth.currentUser();
     final String uid = user.uid;
-   // print(uid);
+    // print(uid);
     return uid;
   }
 
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
-   // print(email);
+    // print(email);
     return email;
   }
 
@@ -115,7 +115,7 @@ class _LoginAppState extends State<LoginApp> {
     if (u.email == uname) {
       ispresent = true;
     } else
-      () {
+          () {
         ispresent == false;
       };
     return ispresent;
@@ -130,14 +130,14 @@ class _LoginAppState extends State<LoginApp> {
     String email = s.email;
     String userName = s.displayName;
 
-   // print("signup uid");
+    // print("signup uid");
     //print(pass);
     //print(email);
     //print(userName);
 
     if (_formKey.currentState.validate()) {
       String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
       // user.firstName = userName;
       // user.lastName = userName;
@@ -205,7 +205,7 @@ class _LoginAppState extends State<LoginApp> {
               ),
               controller: username,
               validator: (input) =>
-                  EmailValidator.validate(input) ? null : "Not a Valid User",
+              EmailValidator.validate(input) ? null : "Not a Valid User",
             ),
           ),
           Divider(),
@@ -239,7 +239,7 @@ class _LoginAppState extends State<LoginApp> {
                   ),
                   controller: _passwordcontroller,
                   validator: (input) => input.length <
-                          8 // need to hold a help icon if the password rule becomes too complicated
+                      8 // need to hold a help icon if the password rule becomes too complicated
                       ? "Not a Valid Password"
                       : null,
                   onSaved: (input) => _password = input,
@@ -276,9 +276,7 @@ class _LoginAppState extends State<LoginApp> {
           if (_formKey.currentState.validate()) {
             _uname = username.text;
             _password = _passwordcontroller.text;
-            //   _formKey.currentState.save();
-          //  print(_uname);
-            //print(_password);
+            errMessage = 'ellomate';
             signInService
                 .signInWithEmail(_uname, _password)
                 .then((FirebaseUser user) => populateData())
@@ -292,22 +290,22 @@ class _LoginAppState extends State<LoginApp> {
                 // errMessage ="ellomate";
               } else if (e.code == 'ERROR_INVALID_EMAIL' ||
                   e.code == 'ERROR_WRONG_PASSWORD') {
-                errMessage = 'INVALID EMAIL OR PASSWORD';
+                errMessage = 'INVALID PASSWORD';
                 showFlushBar(context, errMessage);
                 // errMessage='elloMate';
               }
             }).whenComplete(
-                    () => authenticateService.autheticate().whenComplete(() {
-                        //  print("MYERROR" + errMessage);
-                          if (errMessage == 'ellomate') {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EnterCode()));
-                          } else {
-                            return null;
-                          }
-                        }));
+                    () => errMessage == 'ellomate'?authenticateService.autheticate().whenComplete(() {
+                  //  print("MYERROR" + errMessage);
+                  if (errMessage == 'ellomate') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EnterCode()));
+                  } else {
+                    return null;
+                  }
+                }):null);
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -371,35 +369,38 @@ class _LoginAppState extends State<LoginApp> {
       ),
     );
   }
-
+  String error=null;
   Widget _buildSocialBtnRow() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
+
           _buildSocialBtn(
-            () => signInService
+                () => signInService
                 .facebookSignIn(context)
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) => print(''))
                 .whenComplete(() => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EnterCode()))),
+                MaterialPageRoute(builder: (context) => EnterCode()))),
             AssetImage(
               'assets/images/facebook.jpg',
             ),
           ),
           _buildSocialBtn(
-            () => signInService
+                () => signInService
                 .googSignIn(context)
-                //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+            //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
                 .then((FirebaseUser user) => populateData())
-                .catchError((e) => print(''))
+                .catchError((e) {
+              print(e);
+            })
                 .whenComplete(() => addUser())
                 .whenComplete(() => authenticateService
-                    .autheticate()
-                    .whenComplete(() => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EnterCode())))),
+                .autheticate()
+                .whenComplete(() => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => EnterCode())))),
             AssetImage(
               'assets/images/google.png',
             ),
@@ -559,6 +560,7 @@ void showFlushBar(BuildContext context, String errMessage) {
       size: 28,
       color: Colors.cyanAccent,
     ),
-  )..show(context).whenComplete(() => Navigator.push(
-      context, MaterialPageRoute(builder: (context) => LoginApp())));
+  )..show(context);
+  // .whenComplete(() => Navigator.push(
+  // context, MaterialPageRoute(builder: (context) => LoginApp())));
 }

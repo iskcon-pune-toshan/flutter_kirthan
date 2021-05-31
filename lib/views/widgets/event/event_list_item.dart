@@ -363,18 +363,27 @@ class EventRequestsListItem extends StatelessWidget {
           final eventDate = eventrequest.eventDate;
           DateTime EventDate = DateTime.parse(eventDate);
           DateTime dateTimeNow = DateTime.now();
-          int daysRemaining = EventDate.difference(dateTimeNow).inDays;
-          if (daysRemaining >= 0) {
+          int daysRemaining = EventDate.difference(dateTimeNow).inDays-1;
+          if(daysRemaining ==-1){
             return Text(
-              daysRemaining.toString() + ' days to go',
+              daysRemaining.toString() + 'This Day',
+              //daysRemaining.abs().toString() + ' days ago',
               style: TextStyle(
                 // color: KirthanStyles.subTitleColor,
                   fontSize: notifier.custFontSize,
                   color: Colors.green[700]),
             );
+          }
+          if (daysRemaining >= 0) {
+            return Text(
+              (daysRemaining+1).toString() + ' days to go',
+              style: TextStyle(
+                  fontSize: notifier.custFontSize,
+                  color: Colors.green[700]),
+            );
           } else if (daysRemaining < 0) {
             return Text(
-              'Event ended',
+              daysRemaining.toString() +'Event ended',
               //daysRemaining.abs().toString() + ' days ago',
               style: TextStyle(
                 // color: KirthanStyles.subTitleColor,

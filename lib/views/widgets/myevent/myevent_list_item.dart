@@ -170,7 +170,17 @@ class MyEventRequestsListItem extends StatelessWidget {
                               ),
                               IconButton(
                                 icon: Icon(Icons.keyboard_arrow_right),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EventDetails(eventrequest: eventrequest)),
+//MapView(eventrequest: eventrequest)),
+
+//do something
+                                  );
+
+                                },
                               ),
 /*              Container(
                 child: Align(
