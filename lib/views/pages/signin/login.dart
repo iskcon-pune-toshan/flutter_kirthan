@@ -152,7 +152,7 @@ class _LoginAppState extends State<LoginApp> {
     user.pinCode = 400001;
     user.state = "Maharashtra";
     user.country = "India";
-    user.govtIdType = "Aadhaar";
+    user.govtIdType = 8;
     user.govtId = "Aadhaar";
     //user.isProcessed = true;
     // user.approvalComments = "Waiting";

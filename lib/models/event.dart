@@ -6,7 +6,7 @@ class EventRequest {
   String eventDate;
   String eventStartTime;
   String eventEndTime;
-  String eventType;
+  int eventType;
   int phoneNumber;
   String addLineOneS;
   String addLineTwoS;
@@ -53,7 +53,6 @@ class EventRequest {
       this.pincode,
       this.state,
       this.country,
-
       this.createdBy,
       this.updatedBy,
       this.createdTime,
@@ -139,7 +138,7 @@ class EventRequest {
       updatedBy: map['updatedBy'],
       updatedTime: map['updatedTime'],
       createdTime: map['createdTime'],
-     /* approvalStatus: map['approvalStatus'],
+      /* approvalStatus: map['approvalStatus'],
       approvalComments: map['approvalComments'],*/
       longitudeS: map['longitudeS'],
       latitudeS: map['latitudeS'],

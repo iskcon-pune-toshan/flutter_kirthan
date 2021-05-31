@@ -4,9 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/team.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
@@ -18,12 +21,16 @@ import 'package:intl/intl.dart';
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
 
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
+
 class description_profile extends StatefulWidget {
   @override
   _description_profileState createState() => _description_profileState();
 }
 
 class _description_profileState extends State<description_profile> {
+  String _selectedCategory;
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
   Future<String> getEmail() async {
@@ -31,15 +38,6 @@ class _description_profileState extends State<description_profile> {
     final String email = user.email;
     return email;
   }
-
-  List<String> _category = [
-    'Bhajan',
-    'Kirthan',
-    'Bhajan & Kirthan',
-    'Dance',
-    'Music',
-    'Lecture'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +59,6 @@ class _description_profileState extends State<description_profile> {
                         for (var u in teamList) {
                           teamrequest = u;
                         }
-                        String _selectedCategory = teamrequest.category;
                         return Consumer<ThemeNotifier>(
                           builder: (context, notifier, child) => Form(
                             key: _formKey,
@@ -108,34 +105,102 @@ class _description_profileState extends State<description_profile> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: 20.0,
-                                      top: 20.0,
-                                      left: 10.0,
-                                      right: 10.0),
-                                  child: DropdownButtonFormField<String>(
-                                    value: _selectedCategory,
-                                    //icon: const Icon(Icons.category),
-                                    hint: Text('Select Category',
-                                        style: TextStyle(color: Colors.grey)),
-                                    items: _category
-                                        .map((category) =>
-                                            DropdownMenuItem<String>(
-                                              value: category,
-                                              child: Text(category),
-                                            ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedCategory = input;
-                                      });
-                                    },
-                                    onSaved: (input) {
-                                      teamrequest.category = input;
-                                    },
-                                  ),
-                                ),
+                                FutureBuilder(
+                                    future: commonLookupTablePageVM
+                                        .getCommonLookupTable(
+                                            "lookupType:Event-type-Category"),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.data != null) {
+                                        List<CommonLookupTable> cltList =
+                                            snapshot.data;
+                                        List<CommonLookupTable> currCategory =
+                                            cltList
+                                                .where((element) =>
+                                                    element.id ==
+                                                    teamrequest.category)
+                                                .toList();
+                                        for (var i in currCategory) {
+                                          _selectedCategory = i.description;
+                                        }
+
+                                        List<String> _category = cltList
+                                            .map((user) => user.description)
+                                            .toSet()
+                                            .toList();
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: 20.0,
+                                              top: 20.0,
+                                              left: 10.0,
+                                              right: 10.0),
+                                          child:
+                                              DropdownButtonFormField<String>(
+                                            value: _selectedCategory,
+                                            //icon: const Icon(Icons.category),
+                                            hint: Text('Select Category',
+                                                style: TextStyle(
+                                                    color: Colors.grey)),
+                                            items: _category
+                                                .map((category) =>
+                                                    DropdownMenuItem<String>(
+                                                      value: category,
+                                                      child: Text(category),
+                                                    ))
+                                                .toList(),
+                                            onChanged: (input) {
+                                              setState(() {
+                                                _selectedCategory = input;
+                                              });
+                                            },
+                                            onSaved: (input) {
+                                              _selectedCategory = input;
+                                            },
+                                          ),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return Container();
+                                      } else {
+                                        return Container(
+                                          padding: new EdgeInsets.all(10),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                  child: Text(
+                                                      "It seems like you don't have a team.")),
+                                              Center(
+                                                  child: Text(
+                                                      "Click on the button below to create one")),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              FlatButton(
+                                                textColor: KirthanStyles
+                                                    .colorPallete60,
+                                                color: KirthanStyles
+                                                    .colorPallete30,
+                                                child: Text("Create team"),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              TeamWrite(
+                                                                userRequest:
+                                                                    null,
+                                                                localAdmin:
+                                                                    null,
+                                                              )));
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    }),
                                 Card(
                                   child: Container(
                                     padding: new EdgeInsets.all(10),
@@ -194,6 +259,15 @@ class _description_profileState extends State<description_profile> {
                                             if (_formKey.currentState
                                                 .validate()) {
                                               _formKey.currentState.save();
+                                              List<CommonLookupTable>
+                                                  selectedCategory =
+                                                  await commonLookupTablePageVM
+                                                      .getCommonLookupTable(
+                                                          "description:" +
+                                                              _selectedCategory);
+                                              for (var i in selectedCategory) {
+                                                teamrequest.category = i.id;
+                                              }
                                               String dt = DateFormat(
                                                       "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                                   .format(DateTime.now());
@@ -290,31 +364,4 @@ class _description_profileState extends State<description_profile> {
           }),
     );
   }
-}
-
-InputDecoration buildInputDecoration(
-    IconData icons, String hinttext, String labeltext) {
-  return InputDecoration(
-    labelText: labeltext,
-    hintText: hinttext,
-    prefixIcon: Icon(icons),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(25.0),
-      borderSide: BorderSide(color: Colors.green, width: 1.5),
-    ),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(25.0),
-      borderSide: BorderSide(
-        color: Colors.blue,
-        width: 1.5,
-      ),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(25.0),
-      borderSide: BorderSide(
-        color: Colors.blue,
-        width: 1.5,
-      ),
-    ),
-  );
 }

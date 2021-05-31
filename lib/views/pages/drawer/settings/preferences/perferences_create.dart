@@ -5,17 +5,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/models/usertemple.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
 import 'package:flutter_kirthan/services/temple_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/services/user_temple_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
@@ -36,6 +39,8 @@ final TemplePageViewModel templePageVM =
     TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
     UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
@@ -56,27 +61,60 @@ class _PreferenceState extends State<Preference> {
     return email;
   }
 
-  List<String> _category = [
-    'Bhajan',
-    'Kirthan',
-    'Bhajan & Kirthan',
-    'Dance',
-    'Music',
-    'Lecture'
-  ];
-
-  List<String> _requestAcceptance = [
-    'One week before',
-    '15 days before',
-    'One month before',
-    'Any time'
-  ];
   Future<List<UserRequest>> Users;
   Future<List<Temple>> Temples;
   Future<List<UserTemple>> UserTemples;
   List<UserRequest> userList = new List<UserRequest>();
   List<Temple> templeList = new List<Temple>();
   List<UserTemple> userTempleList = new List<UserTemple>();
+  Widget requestAcceptance(TeamRequest data) {
+    return FutureBuilder(
+        future: commonLookupTablePageVM
+            .getCommonLookupTable("lookupType:Team invite Req-Acceptance"),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            List<CommonLookupTable> cltList = snapshot.data;
+            List<String> _requestAcceptance =
+                cltList.map((user) => user.description).toSet().toList();
+            return Container(
+              padding: new EdgeInsets.all(10),
+              child: DropdownButtonFormField<String>(
+                value: teamrequest.requestAcceptance == null
+                    ? _selectedRequestAcceptance
+                    : getRequestAcceptance(teamrequest.requestAcceptance),
+                icon: const Icon(Icons.add),
+                hint: Text(
+                  'Select request acceptance ',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                items: _requestAcceptance
+                    .map((weekday) => DropdownMenuItem(
+                          value: weekday,
+                          child: Text(weekday),
+                        ))
+                    .toList(),
+                onChanged: (input) {
+                  setState(() {
+                    _selectedRequestAcceptance = input;
+                  });
+                },
+                onSaved: (input) {
+                  if (input.contains("One week before"))
+                    teamrequest.requestAcceptance = 7;
+                  else if (input.contains("15 days before"))
+                    teamrequest.requestAcceptance = 15;
+                  else if (input.contains("One month before"))
+                    teamrequest.requestAcceptance = 31;
+                  else if (input.contains("Anytime"))
+                    teamrequest.requestAcceptance = null;
+                },
+              ),
+            );
+          } else {
+            return Container();
+          }
+        });
+  }
 
   @override
   void initState() {
@@ -169,7 +207,7 @@ class _PreferenceState extends State<Preference> {
                                                           in templeArea) {
                                                         _selectedtempleId =
                                                             temple.templeId;
-                                                       /* print(
+                                                        /* print(
                                                             "work man $_selectedtempleId");*/
                                                       }
                                                     }
@@ -200,7 +238,7 @@ class _PreferenceState extends State<Preference> {
                                                                   in templeList) {
                                                                 _selectedTempleArea =
                                                                     temple.area;
-                                                              /*  print(
+                                                                /*  print(
                                                                     "this is temple area : $_selectedTempleArea");*/
                                                               }
                                                             }
@@ -246,7 +284,7 @@ class _PreferenceState extends State<Preference> {
                                                                                 element.area ==
                                                                                 _selectedTempleArea) +
                                                                             1;
-                                                                   /* print(
+                                                                    /* print(
                                                                         _selectedtempleId);*/
                                                                     _selectedLocalAdmin =
                                                                         null;
@@ -331,7 +369,7 @@ class _PreferenceState extends State<Preference> {
                                                             //     templeList.indexWhere((element) =>
                                                             //         element.area ==
                                                             //         _selectedTempleArea);
-                                                           /* print(
+                                                            /* print(
                                                                 _selectedtempleId);*/
                                                           });
                                                         },
@@ -394,42 +432,7 @@ class _PreferenceState extends State<Preference> {
                                   ),
                                 ),
                                 Divider(),
-                                Container(
-                                  padding: new EdgeInsets.all(10),
-                                  child: DropdownButtonFormField<String>(
-                                    value: teamrequest.requestAcceptance == null
-                                        ? _selectedRequestAcceptance
-                                        : getRequestAcceptance(
-                                            teamrequest.requestAcceptance),
-                                    icon: const Icon(Icons.add),
-                                    hint: Text(
-                                      'Select request acceptance ',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                    items: _requestAcceptance
-                                        .map((weekday) => DropdownMenuItem(
-                                              value: weekday,
-                                              child: Text(weekday),
-                                            ))
-                                        .toList(),
-                                    onChanged: (input) {
-                                      setState(() {
-                                        _selectedRequestAcceptance = input;
-                                      });
-                                    },
-                                    onSaved: (input) {
-                                      if (input.contains("One week before"))
-                                        teamrequest.requestAcceptance = 7;
-                                      else if (input.contains("15 days before"))
-                                        teamrequest.requestAcceptance = 15;
-                                      else if (input
-                                          .contains("One month before"))
-                                        teamrequest.requestAcceptance = 31;
-                                      else if (input.contains("Any time"))
-                                        teamrequest.requestAcceptance = null;
-                                    },
-                                  ),
-                                ),
+                                requestAcceptance(teamrequest),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

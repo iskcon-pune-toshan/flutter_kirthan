@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/description_profile_settings.dart';
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
@@ -16,6 +20,8 @@ final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
 final TeamUserPageViewModel teamUserPageVM =
     TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class TeamProfilePage extends StatefulWidget {
   String teamTitle;
@@ -44,6 +50,8 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
   List<UserRequest> userList = new List<UserRequest>();
   Future<List<TeamUser>> TeamUsers;
   List<TeamUser> teamusersList = new List<TeamUser>();
+  List<CommonLookupTable> cltList = new List<CommonLookupTable>();
+
   @override
   void initState() {
     Teams = teamPageVM.getTeamRequests("Approved");
@@ -125,6 +133,43 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
         });
   }
 
+  Widget teamCategory(TeamRequest data) {
+    return FutureBuilder(
+        future: commonLookupTablePageVM
+            .getCommonLookupTable("lookupType:Event-type-Category"),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            List<CommonLookupTable> cltList = snapshot.data;
+            List<CommonLookupTable> currCategory = cltList
+                .where((element) => element.id == data.category)
+                .toList();
+
+            for (var i in currCategory) {
+              type = i.description;
+            }
+            return Row(
+              children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Type: ',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[300]),
+                    )),
+                Text(
+                  type != null ? type : "New",
+                  style: TextStyle(fontSize: 16, color: Colors.grey[400]),
+                )
+              ],
+            );
+          } else {
+            return Container();
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +189,6 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                 teamList = snapshot.data;
                 for (var team in snapshot.data) {
                   if (team.teamTitle == this.teamTitle) {
-                    type = team.category;
                     // teamTitle = team.teamTitle;
                     experience = team.experience;
                     Email = team.teamLeadId;
@@ -251,26 +295,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                         SizedBox(
                                           height: 20,
                                         ),
-                                        Row(
-                                          children: [
-                                            Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'Type: ',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.grey[300]),
-                                                )),
-                                            Text(
-                                              type != null ? type : "New",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey[400]),
-                                            )
-                                          ],
-                                        ),
+                                        teamCategory(team),
                                         SizedBox(
                                           height: 10,
                                         ),

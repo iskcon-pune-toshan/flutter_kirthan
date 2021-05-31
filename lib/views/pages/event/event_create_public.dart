@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Map_Options.dart';
@@ -21,25 +24,22 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 final EventPageViewModel eventPageVM =
-EventPageViewModel(apiSvc: EventAPIService());
+    EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class EventWritePublic extends StatefulWidget {
-
   final String screenName = SCR_EVENT;
   EventRequest eventrequest;
   UserRequest userRequest;
   UserLogin userLogin;
   UserDetail userDetail;
   @override
-  _EventWriteState createState() =>
-      _EventWriteState();
+  _EventWriteState createState() => _EventWriteState();
 
-  EventWritePublic(
-      {
-        @required this.eventrequest,
-        @required this.userLogin})
+  EventWritePublic({@required this.eventrequest, @required this.userLogin})
       : super();
 }
 
@@ -110,13 +110,15 @@ class _EventWriteState extends State<EventWritePublic> {
   String _selectedCity;
   String _selectedState;
   String _selectedCountry;
+  String _selectedCategory;
+
   void initState() {
     _getUserLocation();
     super.initState();
   }
 
   handleTap(LatLng tappedPoint1) {
-   // print(tappedPoint1);
+    // print(tappedPoint1);
     setState(() {
       myMarkersource = [];
 
@@ -135,7 +137,7 @@ class _EventWriteState extends State<EventWritePublic> {
   }
 
   handleTap2(LatLng tappedPoint1) {
-  //  print(tappedPoint1);
+    //  print(tappedPoint1);
     setState(() {
       myMarker = [];
       myMarker.add(
@@ -156,22 +158,25 @@ class _EventWriteState extends State<EventWritePublic> {
       mapController = controller;
     });
   }
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     eventrequest.createdBy = email;
-   // print("created by " + eventrequest.createdBy);
+    // print("created by " + eventrequest.createdBy);
 
-  //  print(email);
+    //  print(email);
     return email;
   }
+
   GoogleMapController _controller;
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
       _controller = controller;
     });
   }
+
   void _animateCamera() {
     _controller.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -192,11 +197,10 @@ class _EventWriteState extends State<EventWritePublic> {
         target: _initialPosition,
         zoom: 14.4746,
       ),
-      markers:
-      Set.from(
-          myMarker),
+      markers: Set.from(myMarker),
     );
   }
+
   Widget _googleMapsWidget2(MapsState state) {
     return GoogleMap(
       onTap: handleTap,
@@ -207,22 +211,23 @@ class _EventWriteState extends State<EventWritePublic> {
         zoom: 14.4746,
       ),
       //circles: _circle,
-      markers:
-      Set.from(
-          myMarkersource),
+      markers: Set.from(myMarkersource),
     );
   }
+
   LatLng _lastMapPosition = _center;
   static const LatLng _center = const LatLng(-25.4157807, -54.6166762);
   MapsBloc _mapsBloc;
   static LatLng _initialPosition;
 
   void _getUserLocation() async {
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _initialPosition = LatLng(position.latitude, position.longitude);
     });
   }
+
   List type = ["Stationary", "Moving"];
   bool isVisible = false;
   String select;
@@ -233,24 +238,23 @@ class _EventWriteState extends State<EventWritePublic> {
         Radio(
           activeColor: KirthanStyles.colorPallete30,
           value: type[btnValue],
-
           groupValue: select,
           onChanged: (value) {
             setState(() {
-            //  print(value);
+              //  print(value);
               eventrequest.eventMobility = value;
               select = value;
               if (value == 'Moving') {
-                isVisible=true;
+                isVisible = true;
               } else
-                isVisible=false;
+                isVisible = false;
             });
           },
         ),
         Text(
           title,
           style: TextStyle(
-            //color:  KirthanStyles.titleColor ,
+              //color:  KirthanStyles.titleColor ,
               fontWeight: FontWeight.normal),
         )
       ],
@@ -258,7 +262,7 @@ class _EventWriteState extends State<EventWritePublic> {
   }
 
   String validateMobile(String value) {
-    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    String patttern = r'(^(?:[+0]9)?[0-9]{10}$)';
     RegExp regExp = new RegExp(patttern);
     if (value.length == 0) {
       return 'Please enter mobile number';
@@ -396,7 +400,7 @@ class _EventWriteState extends State<EventWritePublic> {
                               eventrequest.eventDate = DateFormat("yyyy-MM-dd")
                                   .format(input)
                                   .toString();
-                             // print(eventrequest.eventDate);
+                              // print(eventrequest.eventDate);
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
@@ -431,7 +435,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             onSaved: (input) {
                               eventrequest.eventStartTime =
                                   DateFormat("HH:mm").format(input).toString();
-                             // print(eventrequest.eventStartTime);
+                              // print(eventrequest.eventStartTime);
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
@@ -466,7 +470,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             onSaved: (input) {
                               eventrequest.eventEndTime =
                                   DateFormat("HH:mm").format(input).toString();
-                             // print(eventrequest.eventEndTime);
+                              // print(eventrequest.eventEndTime);
                             },
                             validator: (value) {
                               if (value.toString().isEmpty) {
@@ -479,46 +483,52 @@ class _EventWriteState extends State<EventWritePublic> {
                       ),
                     ),
 
-                    Container(
-                      //padding: new EdgeInsets.all(10),
-                      child: TextFormField(
-                        //focusNode: myFocusNode,
-                        //attribute: "Type",
-                        decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.green),
-                            ),
-                            // icon: const Icon(Icons.low_priority,
-                            //   color: Colors.grey),
-                            labelText: "Event Type",
-                            hintText: "Event Type eg: Bhajan",
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            labelStyle: TextStyle(
-                                color: myFocusNode.hasFocus
-                                    ? Colors.black
-                                    : Colors.grey)),
-                        onSaved: (input) {
-                          eventrequest.eventType = input;
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Please enter some text";
+                    FutureBuilder(
+                        future: commonLookupTablePageVM.getCommonLookupTable(
+                            "lookupType:Event-type-Category"),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            List<CommonLookupTable> cltList = snapshot.data;
+                            List<String> _category = cltList
+                                .map((user) => user.description)
+                                .toSet()
+                                .toList();
+                            return DropdownButtonFormField<String>(
+                              value: _selectedCategory,
+                              icon: const Icon(Icons.category),
+                              hint: Text('Select Event Type',
+                                  style: TextStyle(color: Colors.grey)),
+                              items: _category
+                                  .map((category) => DropdownMenuItem<String>(
+                                        value: category,
+                                        child: Text(category),
+                                      ))
+                                  .toList(),
+                              onChanged: (input) {
+                                setState(() {
+                                  _selectedCategory = input;
+                                });
+                              },
+                              onSaved: (input) {
+                                _selectedCategory = input;
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return "Please select event type";
+                                }
+                                return null;
+                              },
+                            );
+                          } else {
+                            return Container();
                           }
-                          return null;
-                        },
-                      ),
-                    ),
+                        }),
 
                     Container(
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
 
-                        //attribute: "PhoneNumber",
+                          //attribute: "PhoneNumber",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -539,8 +549,7 @@ class _EventWriteState extends State<EventWritePublic> {
                           onSaved: (input) {
                             eventrequest.phoneNumber = int.parse(input);
                           },
-                          validator: validateMobile
-                      ),
+                          validator: validateMobile),
                     ),
                     new Container(
                         alignment: Alignment.centerLeft,
@@ -557,13 +566,12 @@ class _EventWriteState extends State<EventWritePublic> {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-
                               addRadioButton(0, 'Stationary'),
                               addRadioButton(1, 'Moving'),
                             ]),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children:<Widget>[
+                            children: <Widget>[
                               RaisedButton.icon(
                                 onPressed: () {
                                   Navigator.push(
@@ -572,12 +580,9 @@ class _EventWriteState extends State<EventWritePublic> {
                                       builder: (context) => BlocProvider(
                                         create: (BuildContext context) =>
                                             MapsBloc(),
-
                                         child: Scaffold(
                                           appBar: AppBar(
-
                                             actions: <Widget>[
-
                                               IconButton(
                                                 icon: Icon(Icons.refresh),
                                                 onPressed: () => {
@@ -597,41 +602,55 @@ class _EventWriteState extends State<EventWritePublic> {
                                             ],
                                           ),
                                           body: BlocListener(
-                                            listener: (BuildContext context, MapsState state) {
-                                              if (state is LocationFromPlaceFound) {
-                                                Scaffold.of(context)..hideCurrentSnackBar();
-                                                _lastMapPosition =
-                                                    LatLng(state.locationModel.lat, state.locationModel.long);
+                                            listener: (BuildContext context,
+                                                MapsState state) {
+                                              if (state
+                                                  is LocationFromPlaceFound) {
+                                                Scaffold.of(context)
+                                                  ..hideCurrentSnackBar();
+                                                _lastMapPosition = LatLng(
+                                                    state.locationModel.lat,
+                                                    state.locationModel.long);
                                               }
 
                                               if (state is LocationUserfound) {
-                                                Scaffold.of(context)..hideCurrentSnackBar();
-                                                _lastMapPosition =
-                                                    LatLng(state.locationModel.lat, state.locationModel.long);
+                                                Scaffold.of(context)
+                                                  ..hideCurrentSnackBar();
+                                                _lastMapPosition = LatLng(
+                                                    state.locationModel.lat,
+                                                    state.locationModel.long);
                                                 _animateCamera();
                                               }
                                               if (state is Failure) {
-                                               // print('Failure');
+                                                // print('Failure');
                                                 Scaffold.of(context)
                                                   ..hideCurrentSnackBar()
                                                   ..showSnackBar(
                                                     SnackBar(
                                                       content: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [Text('Error'), Icon(Icons.error)],
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text('Error'),
+                                                          Icon(Icons.error)
+                                                        ],
                                                       ),
-                                                      backgroundColor: Colors.red,
+                                                      backgroundColor:
+                                                          Colors.red,
                                                     ),
                                                   );
                                               }
                                               if (state is Loading) {
-                                               // print('loading');
+                                                // print('loading');
                                                 Scaffold.of(context)
                                                   ..hideCurrentSnackBar()
                                                   ..showSnackBar(
                                                     SnackBar(
                                                       content: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                         children: [
                                                           Text('Loading'),
                                                           CircularProgressIndicator(),
@@ -645,14 +664,20 @@ class _EventWriteState extends State<EventWritePublic> {
                                             bloc: _mapsBloc,
                                             child: BlocBuilder(
                                                 bloc: _mapsBloc,
-                                                builder: (BuildContext context, MapsState state) {
+                                                builder: (BuildContext context,
+                                                    MapsState state) {
                                                   return Scaffold(
                                                     body: Stack(
                                                       children: <Widget>[
-                                                        _googleMapsWidget2(state),
-                                                        MapOption(mapType: MapType.normal),
+                                                        _googleMapsWidget2(
+                                                            state),
+                                                        MapOption(
+                                                            mapType:
+                                                                MapType.normal),
                                                         LocationUser(),
-                                                        SearchPlace(onPressed: _animateCamera),
+                                                        SearchPlace(
+                                                            onPressed:
+                                                                _animateCamera),
                                                         //RangeRadius(isRadiusFixed: _isRadiusFixed),
                                                       ],
                                                     ),
@@ -665,12 +690,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                   );
                                 },
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
                                 label: Text(
                                   'Add Source',
-                                  style: TextStyle(color: Colors.black,fontSize:12.5),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 12.5),
                                 ),
                                 icon: Icon(
                                   Icons.location_on,
@@ -680,9 +705,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 splashColor: Colors.red,
                                 color: Colors.white,
                               ),
-
                             ]),
-
                         TextFormField(
                           //attribute: "Address",
                           decoration: InputDecoration(
@@ -768,24 +791,20 @@ class _EventWriteState extends State<EventWritePublic> {
                         ),
                         Visibility(
                           visible: isVisible,
-                          child:
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children:<Widget>[
-                              RaisedButton.icon(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => BlocProvider(
-                                        create: (BuildContext context) =>
-                                            MapsBloc(),
-
-                                        child: Scaffold(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                RaisedButton.icon(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BlocProvider(
+                                          create: (BuildContext context) =>
+                                              MapsBloc(),
+                                          child: Scaffold(
                                             appBar: AppBar(
-
                                               actions: <Widget>[
-
                                                 IconButton(
                                                   icon: Icon(Icons.refresh),
                                                   onPressed: () => {
@@ -797,7 +816,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                                 IconButton(
                                                   icon: Icon(Icons.done),
                                                   onPressed: () {
-                                                   //handleTap(tappedPoint1);
+                                                    //handleTap(tappedPoint1);
                                                     Navigator.pop(context);
                                                   },
                                                   //onpressed
@@ -805,41 +824,56 @@ class _EventWriteState extends State<EventWritePublic> {
                                               ],
                                             ),
                                             body: BlocListener(
-                                              listener: (BuildContext context, MapsState state) {
-                                                if (state is LocationFromPlaceFound) {
-                                                  Scaffold.of(context)..hideCurrentSnackBar();
-                                                  _lastMapPosition =
-                                                      LatLng(state.locationModel.lat, state.locationModel.long);
+                                              listener: (BuildContext context,
+                                                  MapsState state) {
+                                                if (state
+                                                    is LocationFromPlaceFound) {
+                                                  Scaffold.of(context)
+                                                    ..hideCurrentSnackBar();
+                                                  _lastMapPosition = LatLng(
+                                                      state.locationModel.lat,
+                                                      state.locationModel.long);
                                                 }
 
-                                                if (state is LocationUserfound) {
-                                                  Scaffold.of(context)..hideCurrentSnackBar();
-                                                  _lastMapPosition =
-                                                      LatLng(state.locationModel.lat, state.locationModel.long);
+                                                if (state
+                                                    is LocationUserfound) {
+                                                  Scaffold.of(context)
+                                                    ..hideCurrentSnackBar();
+                                                  _lastMapPosition = LatLng(
+                                                      state.locationModel.lat,
+                                                      state.locationModel.long);
                                                   _animateCamera();
                                                 }
                                                 if (state is Failure) {
-                                                 // print('Failure');
+                                                  // print('Failure');
                                                   Scaffold.of(context)
                                                     ..hideCurrentSnackBar()
                                                     ..showSnackBar(
                                                       SnackBar(
                                                         content: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [Text('Error'), Icon(Icons.error)],
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text('Error'),
+                                                            Icon(Icons.error)
+                                                          ],
                                                         ),
-                                                        backgroundColor: Colors.red,
+                                                        backgroundColor:
+                                                            Colors.red,
                                                       ),
                                                     );
                                                 }
                                                 if (state is Loading) {
-                                                 // print('loading');
+                                                  // print('loading');
                                                   Scaffold.of(context)
                                                     ..hideCurrentSnackBar()
                                                     ..showSnackBar(
                                                       SnackBar(
                                                         content: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
                                                           children: [
                                                             Text('Loading'),
                                                             CircularProgressIndicator(),
@@ -848,141 +882,146 @@ class _EventWriteState extends State<EventWritePublic> {
                                                       ),
                                                     );
                                                 }
-                                               // handleTap(tappedPoint1);
+                                                // handleTap(tappedPoint1);
                                               },
                                               bloc: _mapsBloc,
-                                           child: BlocBuilder(
-                                                bloc: _mapsBloc,
-                                                builder: (BuildContext context, MapsState state) {
-                                                  return Scaffold(
-                                                    body: Stack(
-                                                      children: <Widget>[
-                                                        _googleMapsWidget(state),
-                                                        MapOption(mapType: MapType.normal),
-                                                        LocationUser(),
-                                                        SearchPlace(onPressed: _animateCamera),
-                                                      ],
-                                                    ),
-                                                  );
-                                                }),
+                                              child: BlocBuilder(
+                                                  bloc: _mapsBloc,
+                                                  builder:
+                                                      (BuildContext context,
+                                                          MapsState state) {
+                                                    return Scaffold(
+                                                      body: Stack(
+                                                        children: <Widget>[
+                                                          _googleMapsWidget(
+                                                              state),
+                                                          MapOption(
+                                                              mapType: MapType
+                                                                  .normal),
+                                                          LocationUser(),
+                                                          SearchPlace(
+                                                              onPressed:
+                                                                  _animateCamera),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }),
                                             ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-
-                                label: Text(
-                                  'Add Destination',
-                                  style: TextStyle(color: Colors.black,fontSize:12.5),
+                                    );
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                  label: Text(
+                                    'Add Destination',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 12.5),
+                                  ),
+                                  icon: Icon(
+                                    Icons.location_on,
+                                    color: Colors.black,
+                                  ),
+                                  textColor: Colors.black,
+                                  splashColor: Colors.red,
+                                  color: Colors.white,
                                 ),
-                                icon: Icon(
-                                  Icons.location_on,
-                                  color: Colors.black,
-                                ),
-                                textColor: Colors.black,
-                                splashColor: Colors.red,
-                                color: Colors.white,
-                              ),
-
-                            ]),),
+                              ]),
+                        ),
                         Visibility(
                           visible: isVisible,
-                          child:
-                        TextFormField(
-                          //attribute: "Address",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              icon: const Icon(Icons.home, color: Colors.grey),
-                              labelText: "Destination-Line One",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.addLineOneD = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
+                          child: TextFormField(
+                            //attribute: "Address",
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                icon:
+                                    const Icon(Icons.home, color: Colors.grey),
+                                labelText: "Destination-Line One",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
+                              eventrequest.addLineOneD = input;
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-              ),
-                        Visibility(
-                          visible:isVisible,
-                          child:
-                        TextFormField(
-                          //attribute: "line2",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              labelText: "Destination-Line Two",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.addLineTwoD = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
-              ),
                         Visibility(
                           visible: isVisible,
-                          child:
-                        TextFormField(
-                          //attribute: "locality",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              labelText: "Destination Locality",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.localityD = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
+                          child: TextFormField(
+                            //attribute: "line2",
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "Destination-Line Two",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
+                              eventrequest.addLineTwoD = input;
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-              ),
+                        Visibility(
+                          visible: isVisible,
+                          child: TextFormField(
+                            //attribute: "locality",
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "Destination Locality",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
+                              eventrequest.localityD = input;
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
                         TextFormField(
                           //attribute: "PinCode",
                           decoration: InputDecoration(
@@ -1022,9 +1061,9 @@ class _EventWriteState extends State<EventWritePublic> {
                               style: TextStyle(color: Colors.grey)),
                           items: _cities
                               .map((city) => DropdownMenuItem<String>(
-                            value: city,
-                            child: Text(city),
-                          ))
+                                    value: city,
+                                    child: Text(city),
+                                  ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1044,9 +1083,9 @@ class _EventWriteState extends State<EventWritePublic> {
                           ),
                           items: _states
                               .map((state) => DropdownMenuItem(
-                            value: state,
-                            child: Text(state),
-                          ))
+                                    value: state,
+                                    child: Text(state),
+                                  ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1064,9 +1103,9 @@ class _EventWriteState extends State<EventWritePublic> {
                               style: TextStyle(color: Colors.grey)),
                           items: ['IND', 'Kyrgyzstan']
                               .map((country) => DropdownMenuItem(
-                            value: country,
-                            child: Text(country),
-                          ))
+                                    value: country,
+                                    child: Text(country),
+                                  ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -1102,33 +1141,39 @@ class _EventWriteState extends State<EventWritePublic> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseUser user =
-                                await auth.currentUser();
+                                    await auth.currentUser();
                                 final String email = user.email;
                                 eventrequest.createdBy = email;
-                               // print("created by " + eventrequest.createdBy);
-                               // print(email);
+                                // print("created by " + eventrequest.createdBy);
+                                // print(email);
 
                                 _formKey.currentState.save();
                                 //eventrequest.isProcessed = true;
                                 eventrequest.isPublicEvent = true;
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
                                 // print(eventrequest.createdBy);
+                                List<CommonLookupTable> selectedCategory =
+                                    await commonLookupTablePageVM
+                                        .getCommonLookupTable(
+                                            "description:" + _selectedCategory);
+                                for (var i in selectedCategory)
+                                  eventrequest.eventType = i.id;
                                 String dt =
-                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                    .format(DateTime.now());
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        .format(DateTime.now());
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = email;
                                 eventrequest.updatedTime = null;
                                 //eventrequest.approvalStatus = "Processing";
                                 //eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
-                                eventrequest.toJson();
+                                    eventrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
                                 EventRequest neweventrequest = await eventPageVM
                                     .submitNewEventRequest(teammap);
 
-                              // print(neweventrequest.id);
+                                // print(neweventrequest.id);
                                 String eid = neweventrequest.id.toString();
 
                                 SnackBar mysnackbar = SnackBar(
@@ -1138,17 +1183,16 @@ class _EventWriteState extends State<EventWritePublic> {
                                   backgroundColor: Colors.green,
                                 );
 
-
                                 String dta =
-                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                    .format(DateTime.now());
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        .format(DateTime.now());
 
                                 //eventteam.updatedBy = "SYSTEM";
                                 //eventteam.updatedTime = dt;
 
                                 _scaffoldKey.currentState
                                     .showSnackBar(mysnackbar);
-                                 Scaffold.of(context).showSnackBar(mysnackbar);
+                                Scaffold.of(context).showSnackBar(mysnackbar);
 
                                 //eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
                               }

@@ -1,12 +1,15 @@
 import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/event_team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
@@ -29,6 +32,8 @@ final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class EventWrite extends StatefulWidget {
   // EventWrite({Key key}) : super(key: key);
@@ -124,15 +129,6 @@ class _EventWriteState extends State<EventWrite> {
     'Guntur',
     'Hyderabad',
     'Mumbai',
-  ];
-
-  List<String> _category = [
-    'Bhajan',
-    'Kirthan',
-    'Bhajan & Kirthan',
-    'Dance',
-    'Music',
-    'Lecture'
   ];
 
   String _selectedCity;
@@ -581,32 +577,46 @@ class _EventWriteState extends State<EventWrite> {
                       ),
                       elevation: 5,
                     ),*/
-                    DropdownButtonFormField<String>(
-                      value: _selectedCategory,
-                      icon: const Icon(Icons.category),
-                      hint: Text('Select Event Type',
-                          style: TextStyle(color: Colors.grey)),
-                      items: _category
-                          .map((category) => DropdownMenuItem<String>(
-                                value: category,
-                                child: Text(category),
-                              ))
-                          .toList(),
-                      onChanged: (input) {
-                        setState(() {
-                          _selectedCategory = input;
-                        });
-                      },
-                      onSaved: (input) {
-                        eventrequest.eventType = input;
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return "Please select event type";
-                        }
-                        return null;
-                      },
-                    ),
+                    FutureBuilder(
+                        future: commonLookupTablePageVM.getCommonLookupTable(
+                            "lookupType:Event-type-Category"),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            List<CommonLookupTable> cltList = snapshot.data;
+                            List<String> _category = cltList
+                                .map((user) => user.description)
+                                .toSet()
+                                .toList();
+                            return DropdownButtonFormField<String>(
+                              value: _selectedCategory,
+                              icon: const Icon(Icons.category),
+                              hint: Text('Select Event Type',
+                                  style: TextStyle(color: Colors.grey)),
+                              items: _category
+                                  .map((category) => DropdownMenuItem<String>(
+                                        value: category,
+                                        child: Text(category),
+                                      ))
+                                  .toList(),
+                              onChanged: (input) {
+                                setState(() {
+                                  _selectedCategory = input;
+                                });
+                              },
+                              onSaved: (input) {
+                                _selectedCategory = input;
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return "Please select event type";
+                                }
+                                return null;
+                              },
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }),
                     /*Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
@@ -928,6 +938,12 @@ class _EventWriteState extends State<EventWrite> {
                                 print("created by " + eventrequest.createdBy);
                                 print(email);
                                 _formKey.currentState.save();
+                                List<CommonLookupTable> selectedCategory =
+                                    await commonLookupTablePageVM
+                                        .getCommonLookupTable(
+                                            "description:" + _selectedCategory);
+                                for (var i in selectedCategory)
+                                  eventrequest.eventType = i.id;
                                 // eventrequest.isProcessed = true;
                                 eventrequest.isPublicEvent = false;
 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
