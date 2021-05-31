@@ -30,15 +30,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+    TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 final TeamUserPageViewModel teamUserPageVM =
-TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TemplePageViewModel templePageVM =
-TemplePageViewModel(apiSvc: TempleAPIService());
+    TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
-UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 
 class TeamWrite extends StatefulWidget {
   UserRequest userRequest;
@@ -55,6 +55,7 @@ class TeamWrite extends StatefulWidget {
 class _TeamWriteState extends State<TeamWrite> {
   Future<List<UserRequest>> Users;
   int counter = 0;
+  FocusNode myFocusNode = new FocusNode();
   List<UserRequest> userList = new List<UserRequest>();
   @override
   void initState() {
@@ -133,8 +134,8 @@ class _TeamWriteState extends State<TeamWrite> {
   String _selectedTeamMember2;
   String _selectedTeamMember3;
   String validateMobile(String value) {
-    String patttern = r'(^(?:[+0]9)?[0-9]{10}$)';
-    RegExp regExp = new RegExp(patttern);
+    String pattern = r'(^(?:[+0]9)?[0-9]{10}$)';
+    RegExp regExp = new RegExp(pattern);
     if (value.length == 0) {
       return 'Please enter mobile number';
     } else if (!regExp.hasMatch(value)) {
@@ -146,7 +147,7 @@ class _TeamWriteState extends State<TeamWrite> {
   List<String> selectedMembers = new List<String>();
   Widget addmember(int counter) {
     List<TextEditingController> _member =
-    new List<TextEditingController>(this.counter);
+        new List<TextEditingController>(this.counter);
     return Card(
       child: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Column(
@@ -158,7 +159,7 @@ class _TeamWriteState extends State<TeamWrite> {
                 child: Column(
                   children: [
                     TextFormField(
-                      // controller: _member[i],
+                      //controller: _member[i],
                       //initialValue: finalTeamUserList[i].userName.toString(),
                       decoration: InputDecoration(
                           enabledBorder: UnderlineInputBorder(
@@ -168,6 +169,17 @@ class _TeamWriteState extends State<TeamWrite> {
                             borderSide: BorderSide(color: Colors.green),
                           ),
                           icon: Icon(Icons.people_outline, color: Colors.grey),
+                          suffixIcon: i == counter - 1
+                              ? InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      this.counter--;
+                                    });
+                                  },
+                                  child: Container(
+                                    child: Icon(Icons.cancel_outlined),
+                                  ))
+                              : null,
                           labelText: "Member " + (i + 1).toString(),
                           hintText: "Please enter the name of the member",
                           labelStyle: TextStyle(
@@ -178,7 +190,8 @@ class _TeamWriteState extends State<TeamWrite> {
                           hintStyle: TextStyle(
                             color: Colors.grey,
                           )),
-                      onFieldSubmitted:(value) {
+
+                      onSaved: (value) {
                         setState(() {
                           selectedMembers.add(value);
                         });
@@ -214,7 +227,7 @@ class _TeamWriteState extends State<TeamWrite> {
               child: Form(
                 // context,
                 key: _formKey,
-                autovalidate: true,
+                autovalidate: false,
                 // readonly: true,
                 child: Column(
                   //crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,6 +238,7 @@ class _TeamWriteState extends State<TeamWrite> {
                         //color: Colors.white,
                         padding: new EdgeInsets.all(10),
                         child: TextFormField(
+                          focusNode: myFocusNode,
                           //attribute: "eventTitle",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -243,8 +257,9 @@ class _TeamWriteState extends State<TeamWrite> {
                                 color: Colors.grey,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
+                                  color: myFocusNode.hasFocus
+                                      ? Colors.black
+                                      : Colors.grey)),
                           onSaved: (input) {
                             teamrequest.teamTitle = input;
                           },
@@ -308,9 +323,9 @@ class _TeamWriteState extends State<TeamWrite> {
                               style: TextStyle(color: Colors.grey)),
                           items: _category
                               .map((category) => DropdownMenuItem<String>(
-                            value: category,
-                            child: Text(category),
-                          ))
+                                    value: category,
+                                    child: Text(category),
+                                  ))
                               .toList(),
                           onChanged: (input) {
                             setState(() {
@@ -320,7 +335,7 @@ class _TeamWriteState extends State<TeamWrite> {
                           onSaved: (input) {
                             teamrequest.category = input;
                           },
-                          validator: (value){
+                          validator: (value) {
                             if (value == null) {
                               return "Please select team category";
                             }
@@ -373,8 +388,8 @@ class _TeamWriteState extends State<TeamWrite> {
                         //color: Colors.white,
                         padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                          //attribute: "Description",
-
+                            //attribute: "Description",
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
@@ -398,13 +413,13 @@ class _TeamWriteState extends State<TeamWrite> {
                               teamrequest.phoneNumber = int.parse(input);
                             },
                             validator: validateMobile
-                          //     (value) {
-                          //   if (value.isEmpty) {
-                          //     return "Please enter some text";
-                          //   }
-                          //   return null;
-                          // },
-                        ),
+                            //     (value) {
+                            //   if (value.isEmpty) {
+                            //     return "Please enter some text";
+                            //   }
+                            //   return null;
+                            // },
+                            ),
                       ),
                       elevation: 5,
                     ),
@@ -424,33 +439,33 @@ class _TeamWriteState extends State<TeamWrite> {
                                       snapshot.data;
                                   return FutureBuilder<List<TeamRequest>>(
                                       future:
-                                      teamPageVM.getTeamRequests("Waiting"),
+                                          teamPageVM.getTeamRequests("Waiting"),
                                       builder: (BuildContext context,
                                           AsyncSnapshot<List<TeamRequest>>
-                                          snapshot) {
+                                              snapshot) {
                                         if (snapshot.data != null) {
                                           List<TeamRequest> teamList =
                                               teamListAppr + snapshot.data;
                                           return FutureBuilder<
-                                              List<UserRequest>>(
+                                                  List<UserRequest>>(
                                               future: Users,
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<
-                                                      List<UserRequest>>
-                                                  snapshot) {
+                                                          List<UserRequest>>
+                                                      snapshot) {
                                                 if (snapshot.data != null) {
                                                   List<UserRequest>
-                                                  tempUserList =
-                                                  new List<UserRequest>();
+                                                      tempUserList =
+                                                      new List<UserRequest>();
                                                   if (widget.userRequest ==
                                                       null) {
                                                     tempUserList =
                                                         snapshot.data;
                                                   } else if (teamList
                                                       .where((element) =>
-                                                  element.teamLeadId ==
-                                                      widget.userRequest
-                                                          .email)
+                                                          element.teamLeadId ==
+                                                          widget.userRequest
+                                                              .email)
                                                       .toList()
                                                       .isEmpty) {
                                                     tempUserList.add(
@@ -461,33 +476,33 @@ class _TeamWriteState extends State<TeamWrite> {
                                                   userList = getTeamLeads(
                                                       teamList, tempUserList);
                                                   List<String> teamLeadId =
-                                                  userList
-                                                      .map((user) =>
-                                                  user.email)
-                                                      .toSet()
-                                                      .toList();
+                                                      userList
+                                                          .map((user) =>
+                                                              user.email)
+                                                          .toSet()
+                                                          .toList();
                                                   return DropdownButtonFormField<
                                                       String>(
                                                     value: widget.userRequest ==
-                                                        null
+                                                            null
                                                         ? _selectedTeamLeadId
                                                         : widget
-                                                        .userRequest.email,
+                                                            .userRequest.email,
                                                     icon: const Icon(
                                                         Icons.account_circle),
                                                     hint: Text(
                                                         'Select Team Lead Id',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.grey)),
+                                                                Colors.grey)),
                                                     items: teamLeadId
                                                         .map((teamLeadId) =>
-                                                        DropdownMenuItem<
-                                                            String>(
-                                                          value: teamLeadId,
-                                                          child: Text(
-                                                              teamLeadId),
-                                                        ))
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value: teamLeadId,
+                                                              child: Text(
+                                                                  teamLeadId),
+                                                            ))
                                                         .toList(),
                                                     onChanged: (input) {
                                                       setState(() {
@@ -499,7 +514,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                                       teamrequest.teamLeadId =
                                                           input;
                                                     },
-                                                    validator: (value){
+                                                    validator: (value) {
                                                       if (value == null) {
                                                         return "Please select team lead";
                                                       }
@@ -552,9 +567,9 @@ class _TeamWriteState extends State<TeamWrite> {
                                     style: TextStyle(color: Colors.grey)),
                                 items: _location
                                     .map((location) => DropdownMenuItem(
-                                  value: location,
-                                  child: Text(location),
-                                ))
+                                          value: location,
+                                          child: Text(location),
+                                        ))
                                     .toList(),
                                 onChanged: (input) {
                                   setState(() {
@@ -564,7 +579,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                 onSaved: (input) {
                                   teamrequest.location = input;
                                 },
-                                validator: (value){
+                                validator: (value) {
                                   if (value == null) {
                                     return "Please select location";
                                   }
@@ -576,411 +591,7 @@ class _TeamWriteState extends State<TeamWrite> {
                           SizedBox(
                             height: 35,
                           ),
-                          // Container(
-                          //   padding: new EdgeInsets.all(10),
-                          //   child: Column(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //     children: <Widget>[
-                          //       Text(
-                          //         "Available From",
-                          //         textAlign: TextAlign.left,
-                          //         style: TextStyle(color: Colors.grey),
-                          //       ),
-                          //       DateTimeField(
-                          //         format: DateFormat("HH:mm"),
-                          //         onShowPicker: (context, currentValue) async {
-                          //           final time = await showTimePicker(
-                          //             context: context,
-                          //             initialTime: TimeOfDay.fromDateTime(
-                          //                 currentValue ?? DateTime.now()),
-                          //           );
-                          //           return DateTimeField.convert(time);
-                          //         },
-                          //         onSaved: (input) {
-                          //           teamrequest.availableFrom =
-                          //               DateFormat("HH:mm")
-                          //                   .format(input)
-                          //                   .toString();
-                          //         },
-                          //         validator: (value) {
-                          //           if (value.toString().isEmpty) {
-                          //             return "Please enter some text";
-                          //           }
-                          //           return null;
-                          //         },
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: 30,
-                          // ),
-                          // Container(
-                          //   padding: new EdgeInsets.all(10),
-                          //   child: Column(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //     children: <Widget>[
-                          //       Text(
-                          //         "Available To",
-                          //         textAlign: TextAlign.left,
-                          //         style: TextStyle(color: Colors.grey),
-                          //       ),
-                          //       DateTimeField(
-                          //         format: DateFormat("HH:mm"),
-                          //         onShowPicker: (context, currentValue) async {
-                          //           final time = await showTimePicker(
-                          //             context: context,
-                          //             initialTime: TimeOfDay.fromDateTime(
-                          //                 currentValue ?? DateTime.now()),
-                          //           );
-                          //           return DateTimeField.convert(time);
-                          //         },
-                          //         onSaved: (input) {
-                          //           teamrequest.availableTo =
-                          //               DateFormat("HH:mm")
-                          //                   .format(input)
-                          //                   .toString();
-                          //         },
-                          //         validator: (value) {
-                          //           if (value.toString().isEmpty) {
-                          //             return "Please enter some text";
-                          //           }
-                          //           return null;
-                          //         },
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: 35,
-                          // ),
-                          // FutureBuilder<List<UserRequest>>(
-                          //     future: Users,
-                          //     builder: (BuildContext context,
-                          //         AsyncSnapshot<List<UserRequest>> snapshot) {
-                          //       if (snapshot.data != null) {
-                          //         print(userList);
-                          //         userList = snapshot.data;
-                          //         return Column(
-                          //           children: [
-                          //             Card(
-                          //               child: Container(
-                          //                 //color: Colors.white,
-                          //                 padding: new EdgeInsets.all(10),
-                          //                 child: TextFormField(
-                          //                   //attribute: "Description",
-                          //
-                          //                   decoration: InputDecoration(
-                          //                       enabledBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.grey),
-                          //                       ),
-                          //                       focusedBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.green),
-                          //                       ),
-                          //                       /*icon: const Icon(
-                          //       Icons.description,
-                          //       color: Colors.grey,
-                          //     ),*/
-                          //                       labelText: "Add Team Member1",
-                          //                       hintText: "Add Team Member",
-                          //                       hintStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       ),
-                          //                       labelStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       )),
-                          //                   onChanged: (input) {
-                          //                     setState(() {
-                          //                       _selectedTeamMember1 = input;
-                          //                     });
-                          //                   },
-                          //                   // onEditingComplete: () {
-                          //                   //   setState(() {
-                          //                   //     containUserName(userList,
-                          //                   //             _selectedTeamMember1)
-                          //                   //         ? selectedUsers = userList
-                          //                   //             .where((element) =>
-                          //                   //                 element.userName ==
-                          //                   //                 _selectedTeamMember1)
-                          //                   //             .toList()
-                          //                   //         : addUser(_selectedTeamMember1);
-                          //                   //   });
-                          //                   // },
-                          //                   // validator: (value) {
-                          //                   //   if (value.isEmpty) {
-                          //                   //     return "Please enter some text";
-                          //                   //   }
-                          //                   //   return null;
-                          //                   // },
-                          //                 ),
-                          //               ),
-                          //               elevation: 5,
-                          //             ),
-                          //             Card(
-                          //               child: Container(
-                          //                 //color: Colors.white,
-                          //                 padding: new EdgeInsets.all(10),
-                          //                 child: TextFormField(
-                          //                   //attribute: "Description",
-                          //
-                          //                   decoration: InputDecoration(
-                          //                       enabledBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.grey),
-                          //                       ),
-                          //                       focusedBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.green),
-                          //                       ),
-                          //                       /*icon: const Icon(
-                          //       Icons.description,
-                          //       color: Colors.grey,
-                          //     ),*/
-                          //                       labelText: "Description",
-                          //                       hintText: "Description",
-                          //                       hintStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       ),
-                          //                       labelStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       )),
-                          //                   onSaved: (input) {},
-                          //                   // validator: (value) {
-                          //                   //   if (value.isEmpty) {
-                          //                   //     return "Please enter some text";
-                          //                   //   }
-                          //                   //   return null;
-                          //                   // },
-                          //                 ),
-                          //               ),
-                          //               elevation: 5,
-                          //             ),
-                          //           ],
-                          //         );
-                          //       }
-                          //       return Container();
-                          //     }),
-                          // SizedBox(
-                          //   height: 35,
-                          // ),
-                          // FutureBuilder<List<UserRequest>>(
-                          //     future: Users,
-                          //     builder: (BuildContext context,
-                          //         AsyncSnapshot<List<UserRequest>> snapshot) {
-                          //       if (snapshot.data != null) {
-                          //         userList = snapshot.data;
-                          //         return Column(
-                          //           children: [
-                          //             Card(
-                          //               child: Container(
-                          //                 //color: Colors.white,
-                          //                 padding: new EdgeInsets.all(10),
-                          //                 child: TextFormField(
-                          //                   //attribute: "Description",
-                          //
-                          //                   decoration: InputDecoration(
-                          //                       enabledBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.grey),
-                          //                       ),
-                          //                       focusedBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.green),
-                          //                       ),
-                          //                       /*icon: const Icon(
-                          //       Icons.description,
-                          //       color: Colors.grey,
-                          //     ),*/
-                          //                       labelText: "Add Team Member2",
-                          //                       hintText: "Add Team Member",
-                          //                       hintStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       ),
-                          //                       labelStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       )),
-                          //                   onChanged: (input) {
-                          //                     setState(() {
-                          //                       _selectedTeamMember2 = input;
-                          //                     });
-                          //                   },
-                          //                   // validator: (value) {
-                          //                   //   if (value.isEmpty) {
-                          //                   //     return "Please enter some text";
-                          //                   //   }
-                          //                   //   return null;
-                          //                   // },
-                          //                   // onEditingComplete: () {
-                          //                   //   setState(() {
-                          //                   //     containUserName(userList,
-                          //                   //             _selectedTeamMember2)
-                          //                   //         ? addRegisteredUser(userList,
-                          //                   //             _selectedTeamMember2)
-                          //                   //         : addUser(_selectedTeamMember2);
-                          //                   //   });
-                          //                   // },
-                          //                 ),
-                          //               ),
-                          //               elevation: 5,
-                          //             ),
-                          //             Card(
-                          //               child: Container(
-                          //                 //color: Colors.white,
-                          //                 padding: new EdgeInsets.all(10),
-                          //                 child: TextFormField(
-                          //                   //attribute: "Description",
-                          //
-                          //                   decoration: InputDecoration(
-                          //                       enabledBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.grey),
-                          //                       ),
-                          //                       focusedBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.green),
-                          //                       ),
-                          //                       /*icon: const Icon(
-                          //       Icons.description,
-                          //       color: Colors.grey,
-                          //     ),*/
-                          //                       labelText: "Description",
-                          //                       hintText: "Description",
-                          //                       hintStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       ),
-                          //                       labelStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       )),
-                          //                   onSaved: (input) {},
-                          //                   // validator: (value) {
-                          //                   //   if (value.isEmpty) {
-                          //                   //     return "Please enter some text";
-                          //                   //   }
-                          //                   //   return null;
-                          //                   // },
-                          //                 ),
-                          //               ),
-                          //               elevation: 5,
-                          //             ),
-                          //           ],
-                          //         );
-                          //       }
-                          //       return Container();
-                          //     }),
-                          // SizedBox(
-                          //   height: 35,
-                          // ),
-                          // FutureBuilder<List<UserRequest>>(
-                          //     future: Users,
-                          //     builder: (BuildContext context,
-                          //         AsyncSnapshot<List<UserRequest>> snapshot) {
-                          //       if (snapshot.data != null) {
-                          //         userList = snapshot.data;
-                          //         print(userList);
-                          //         return Column(
-                          //           children: [
-                          //             Card(
-                          //               child: Container(
-                          //                 //color: Colors.white,
-                          //                 padding: new EdgeInsets.all(10),
-                          //                 child: TextFormField(
-                          //                   //attribute: "Description",
-                          //
-                          //                   decoration: InputDecoration(
-                          //                       enabledBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.grey),
-                          //                       ),
-                          //                       focusedBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.green),
-                          //                       ),
-                          //                       /*icon: const Icon(
-                          //       Icons.description,
-                          //       color: Colors.grey,
-                          //     ),*/
-                          //                       labelText: "Add Team Member3",
-                          //                       hintText: "Add Team Member",
-                          //                       hintStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       ),
-                          //                       labelStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       )),
-                          //                   onChanged: (input) {
-                          //                     setState(() {
-                          //                       _selectedTeamMember3 = input;
-                          //                     });
-                          //                   },
-                          //
-                          //                   // validator: (value) {
-                          //                   //   if (value.isEmpty) {
-                          //                   //     return "Please enter some text";
-                          //                   //   }
-                          //                   //   return null;
-                          //                   // },
-                          //                 ),
-                          //               ),
-                          //               elevation: 5,
-                          //             ),
-                          //             Card(
-                          //               child: Container(
-                          //                 //color: Colors.white,
-                          //                 padding: new EdgeInsets.all(10),
-                          //                 child: TextFormField(
-                          //                   //attribute: "Description",
-                          //
-                          //                   decoration: InputDecoration(
-                          //                       enabledBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.grey),
-                          //                       ),
-                          //                       focusedBorder:
-                          //                           UnderlineInputBorder(
-                          //                         borderSide: BorderSide(
-                          //                             color: Colors.green),
-                          //                       ),
-                          //                       /*icon: const Icon(
-                          //       Icons.description,
-                          //       color: Colors.grey,
-                          //     ),*/
-                          //                       labelText: "Description",
-                          //                       hintText: "Description",
-                          //                       hintStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       ),
-                          //                       labelStyle: TextStyle(
-                          //                         color: Colors.grey,
-                          //                       )),
-                          //                   onSaved: (input) {},
-                          //                   // validator: (value) {
-                          //                   //   if (value.isEmpty) {
-                          //                   //     return "Please enter some text";
-                          //                   //   }
-                          //                   //   return null;
-                          //                   // },
-                          //                 ),
-                          //               ),
-                          //               elevation: 5,
-                          //             ),
-                          //           ],
-                          //         );
-                          //       }
-                          //       return Container();
-                          //     }),
+
                           addmember(counter),
                         ],
                       ),
@@ -994,6 +605,7 @@ class _TeamWriteState extends State<TeamWrite> {
                           icon: const Icon(Icons.add_circle),
                           color: Colors.green,
                           onPressed: () {
+//addmember();
                             setState(() {
                               counter++;
                             });
@@ -1017,63 +629,46 @@ class _TeamWriteState extends State<TeamWrite> {
                                 ),
                                 color: KirthanStyles.colorPallete30,
                                 onPressed: () async {
-                                  // List<String> selectedMembers = [
-                                  //   _selectedTeamMember1,
-                                  //   _selectedTeamMember2,
-                                  //   _selectedTeamMember3
-                                  // ];
-                                  print('oooooooooooooooooooo');
-                                  print(selectedMembers);
-                                  if (_selectedTeamLeadId == null) {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                      content: Text('Select a team lead'),
-                                      backgroundColor: Colors.red,
-                                    ));
-                                  } else {
-                                    if (_formKey.currentState.validate()) {
-                                      /* print('ooooooooooooooooooooooooooooooooooooooooooo');
-                                      print(selectedMembers);
-                                      print(selectedMembers);*/
-                                      final FirebaseAuth auth =
-                                          FirebaseAuth.instance;
-                                      final FirebaseUser user =
-                                      await auth.currentUser();
-                                      final String email = user.email;
+                                  if (_formKey.currentState.validate()) {
+                                    final FirebaseAuth auth =
+                                        FirebaseAuth.instance;
+                                    final FirebaseUser user =
+                                        await auth.currentUser();
+                                    final String email = user.email;
 
-                                      String dt = DateFormat(
-                                          "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                          .format(DateTime.now());
-                                      _formKey.currentState.save();
-                                      final String teamTitle =
-                                          teamrequest.teamTitle;
-                                      //teamrequest.isProcessed = false;
-                                      teamrequest.createdBy = email;
-                                      //print(teamrequest.createdBy);
-                                      teamrequest.createdTime = dt;
-                                      teamrequest.updatedBy = null;
-                                      teamrequest.updatedTime = null;
-                                      setState(() {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => widget
-                                                  .userRequest ==
-                                                  null
-                                                  ? TeamLocalAdmin(
-                                                teamrequest: teamrequest,
-                                                selectedMembers:
-                                                selectedMembers,
-                                                user: null,
-                                              )
-                                                  : TeamLocalAdmin(
-                                                teamrequest: teamrequest,
-                                                selectedMembers:
-                                                selectedMembers,
-                                                user: widget.localAdmin,
-                                              )),
-                                        );
-                                      });
-                                    }
+                                    String dt =
+                                        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                            .format(DateTime.now());
+                                    _formKey.currentState.save();
+                                    final String teamTitle =
+                                        teamrequest.teamTitle;
+                                    //teamrequest.isProcessed = false;
+                                    teamrequest.createdBy = email;
+                                    //print(teamrequest.createdBy);
+                                    teamrequest.createdTime = dt;
+                                    teamrequest.updatedBy = null;
+                                    teamrequest.updatedTime = null;
+                                    setState(() {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => widget
+                                                        .userRequest ==
+                                                    null
+                                                ? TeamLocalAdmin(
+                                                    teamrequest: teamrequest,
+                                                    selectedMembers:
+                                                        selectedMembers,
+                                                    user: null,
+                                                  )
+                                                : TeamLocalAdmin(
+                                                    teamrequest: teamrequest,
+                                                    selectedMembers:
+                                                        selectedMembers,
+                                                    user: widget.localAdmin,
+                                                  )),
+                                      );
+                                    });
                                   }
                                   //String s = jsonEncode(userrequest.mapToJson());
                                   //service.registerUser(s);

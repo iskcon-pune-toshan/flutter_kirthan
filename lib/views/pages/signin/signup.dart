@@ -17,7 +17,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flushbar/flushbar_helper.dart';
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class SignUp extends StatefulWidget {
   SignUp({Key key}) : super(key: key);
@@ -29,12 +29,13 @@ class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   File _image;
   String _uploadedFileURL;
+  FocusNode myFocusNode = new FocusNode();
   final TextEditingController _passwordcontroller = new TextEditingController();
   String password;
   final TextEditingController _emailcontroller = new TextEditingController();
   String email;
   final TextEditingController _displaynamecontroller =
-  new TextEditingController();
+      new TextEditingController();
   final TextEditingController _addresscontroller = new TextEditingController();
   String displayName;
   final TextEditingController _confirmpassword = new TextEditingController();
@@ -99,7 +100,7 @@ class _SignUpState extends State<SignUp> {
     //print(pass);
     if (_formKey.currentState.validate()) {
       String dt =
-      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
       // user.firstName = _displaynamecontroller.text;
       // user.lastName = _displaynamecontroller.text;
       user.email = _emailcontroller.text;
@@ -127,7 +128,10 @@ class _SignUpState extends State<SignUp> {
       user.updatedTime = null;
       user.profileUrl = _uploadedFileURL;
       Map<String, dynamic> usermap = user.toJson();
-      UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap).whenComplete(()=>showFlushBar(context,"User registered successfully"));
+      UserRequest userRequest = await userPageVM
+          .submitNewUserRequest(usermap)
+          .whenComplete(
+              () => showFlushBar(context, "User registered successfully"));
     }
   }
 
@@ -158,7 +162,7 @@ class _SignUpState extends State<SignUp> {
               //color: Color.alphaBlend(BlendMode.color, BlendMode.colorDodge),
               child: Form(
                 key: _formKey,
-                autovalidate: true,
+                autovalidate: false,
                 child: Center(
                   child: Column(
                     verticalDirection: VerticalDirection.down,
@@ -181,17 +185,21 @@ class _SignUpState extends State<SignUp> {
                               radius: MediaQuery.of(context).size.width / 5.5,
                               backgroundImage: _image != null
                                   ? FileImage(
-                                _image,
-                              )
+                                      _image,
+                                    )
                                   : AssetImage(
-                                  "assets/images/default_profile_picture.png")),
+                                      "assets/images/default_profile_picture.png")),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15, top: 15),
                         child: TextFormField(
+                          focusNode: myFocusNode,
                           decoration: buildInputDecoration(
-                              Icons.person, "Full Name", "Full Name"),
+                            Icons.person,
+                            "Full Name",
+                            "Full Name",
+                          ),
                           controller: _displaynamecontroller,
                           validator: (value) {
                             if (value.isEmpty) {
@@ -210,10 +218,9 @@ class _SignUpState extends State<SignUp> {
                               Icons.email, "Email", "Email"),
                           controller: _emailcontroller,
                           validator: (value) {
-                            if(value.isEmpty) {
+                            if (value.isEmpty) {
                               return 'Please enter email';
-                            }
-                            else{
+                            } else {
                               return EmailValidator.validate(value)
                                   ? null
                                   : "Please enter valid email";
@@ -275,45 +282,6 @@ class _SignUpState extends State<SignUp> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // SizedBox(
-                          //   width: 140,
-                          //   height: 50,
-                          //   child: RaisedButton(
-                          //     color: Colors.white,
-                          //     child: Text('Cancel'),
-                          //     onPressed: () {
-                          //       Navigator.pop(context);
-                          //     },
-                          //     shape: RoundedRectangleBorder(
-                          //         borderRadius: BorderRadius.circular(50.0),
-                          //         side: BorderSide(color: Colors.blue, width: 2)),
-                          //   ),
-                          // ),
-                          /*SizedBox(
-                            width: 140,
-                            height: 50,
-                            child: (
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                    KirthanStyles.colorPallete30),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      side: BorderSide(
-                                          color: Colors.blue, width: 2)),
-                                ),
-                              ),
-                              child: Text('Submit'),
-                              onPressed: () async {
-                                signIn
-                                    .signUpWithEmail(_emailcontroller.text,
-                                        _passwordcontroller.text)
-                                    .then((FirebaseUser user) => populateData())
-                                    .catchError((e) => print(e))
-                                    .whenComplete(() => addUser());
-                              },
-                            ),
-                          )*/
                           SizedBox(
                             width: 140,
                             height: 50,
@@ -323,25 +291,29 @@ class _SignUpState extends State<SignUp> {
                                 'Register',
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () async {
+                              onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  var errorMessage='null';
-
+                                  var errorMessage = 'null';
+                                  _formKey.currentState.save();
                                   signIn
                                       .signUpWithEmail(_emailcontroller.text,
-                                      _passwordcontroller.text)
+                                          _passwordcontroller.text)
                                       .then(
                                           (FirebaseUser user) => populateData())
-                                      .catchError((e){
+                                      .catchError((e) {
                                     // print(e);
-                                    if(e.code == 'ERROR_EMAIL_ALREADY_IN_USE'){
-                                      errorMessage="Email already in use";
-                                      showFlushBar(context,errorMessage);
+                                    if (e.code ==
+                                        'ERROR_EMAIL_ALREADY_IN_USE') {
+                                      errorMessage = "Email already in use";
+                                      showFlushBar(context, errorMessage);
                                     }
                                   }).whenComplete(() {
-                                    errorMessage=='null'
-                                        ?addUser() :null;
-                                  }).whenComplete(() => errorMessage=='null'&&_image!=null ?uploadFile():null);
+                                    errorMessage == 'null' ? addUser() : null;
+                                  }).whenComplete(() =>
+                                          errorMessage == 'null' &&
+                                                  _image != null
+                                              ? uploadFile()
+                                              : null);
                                 }
                               },
                               shape: RoundedRectangleBorder(
@@ -403,11 +375,12 @@ class _SignUpState extends State<SignUp> {
 
 void showFlushBar(BuildContext context, var error) {
   Flushbar(
-    messageText: Text(
-        error,
-        style: TextStyle(color: Colors.white)),
-    backgroundColor: error=='Email already in use'?Colors.red:Colors.green,
+    messageText: Text(error, style: TextStyle(color: Colors.white)),
+    backgroundColor:
+        error == 'Email already in use' ? Colors.red : Colors.green,
     duration: Duration(seconds: 4),
-  )..show(context).whenComplete(() => error=='Email already in use'?null:Navigator.push(
-      context, MaterialPageRoute(builder: (context) => LoginApp())));
+  )..show(context).whenComplete(() => error == 'Email already in use'
+      ? null
+      : Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginApp())));
 }

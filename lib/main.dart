@@ -37,7 +37,9 @@ class KirthanApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               routes: <String, WidgetBuilder>{
                 '/screen1': (BuildContext context) => MyProfileSettings(),
-                '/screen4': (BuildContext context) => members_profile(),
+                '/screen4': (BuildContext context) => members_profile(
+                      show: false,
+                    ),
               },
             ),
           );

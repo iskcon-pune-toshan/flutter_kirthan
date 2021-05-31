@@ -22,7 +22,7 @@ import 'package:flushbar/flushbar_helper.dart';
 //  MainPageViewModel(apiSvc: RestAPIServices());
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class LoginApp extends StatefulWidget {
   //final MainPageViewModel viewModel;
@@ -51,6 +51,7 @@ class _LoginAppState extends State<LoginApp> {
   var errMessage = 'ellomate';
   Future<List<UserRequest>> Userreq;
   List<UserRequest> userList = new List<UserRequest>();
+  FocusNode myFocusNode = new FocusNode();
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
     //prefs.setString("My Name", "Manjunath Bijinepalli");
@@ -115,7 +116,7 @@ class _LoginAppState extends State<LoginApp> {
     if (u.email == uname) {
       ispresent = true;
     } else
-          () {
+      () {
         ispresent == false;
       };
     return ispresent;
@@ -135,38 +136,35 @@ class _LoginAppState extends State<LoginApp> {
     //print(email);
     //print(userName);
 
-    if (_formKey.currentState.validate()) {
-      String dt =
-      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+    String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
-      // user.firstName = userName;
-      // user.lastName = userName;
-      user.email = email;
-      user.password = pass;
-      user.phoneNumber = 12345678;
-      user.fullName = userName;
-      user.addLineOne = "xyz";
-      user.addLineTwo = "abc";
-      user.addLineThree = "pqr";
-      user.locality = "Pune";
-      user.city = "Pune";
-      user.pinCode = 400001;
-      user.state = "Maharashtra";
-      user.country = "India";
-      user.govtIdType = "Aadhaar";
-      user.govtId = "Aadhaar";
-      //user.isProcessed = true;
-      // user.approvalComments = "Waiting";
-      user.approvalStatus = "Waiting";
-      user.roleId = 3;
-      user.createdBy = email;
-      user.updatedBy = " ";
-      user.createdTime = dt;
-      user.updatedTime = null;
+    // user.firstName = userName;
+    // user.lastName = userName;
+    user.email = email;
+    user.password = pass;
+    user.phoneNumber = 12345678;
+    user.fullName = userName;
+    user.addLineOne = "xyz";
+    user.addLineTwo = "abc";
+    user.addLineThree = "pqr";
+    user.locality = "Pune";
+    user.city = "Pune";
+    user.pinCode = 400001;
+    user.state = "Maharashtra";
+    user.country = "India";
+    user.govtIdType = "Aadhaar";
+    user.govtId = "Aadhaar";
+    //user.isProcessed = true;
+    // user.approvalComments = "Waiting";
+    user.approvalStatus = "Waiting";
+    user.roleId = 3;
+    user.createdBy = email;
+    user.updatedBy = " ";
+    user.createdTime = dt;
+    user.updatedTime = null;
 
-      Map<String, dynamic> usermap = user.toJson();
-      UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap);
-    }
+    Map<String, dynamic> usermap = user.toJson();
+    UserRequest userRequest = await userPageVM.submitNewUserRequest(usermap);
   }
 
   userCheck() async {}
@@ -188,6 +186,7 @@ class _LoginAppState extends State<LoginApp> {
             decoration: kBoxDecorationStyle,
             height: 60.0,
             child: TextFormField(
+              focusNode: myFocusNode,
               keyboardType: TextInputType.emailAddress,
               style: TextStyle(
                 color: Colors.black,
@@ -205,7 +204,7 @@ class _LoginAppState extends State<LoginApp> {
               ),
               controller: username,
               validator: (input) =>
-              EmailValidator.validate(input) ? null : "Not a Valid User",
+                  EmailValidator.validate(input) ? null : "Not a Valid User",
             ),
           ),
           Divider(),
@@ -239,7 +238,7 @@ class _LoginAppState extends State<LoginApp> {
                   ),
                   controller: _passwordcontroller,
                   validator: (input) => input.length <
-                      8 // need to hold a help icon if the password rule becomes too complicated
+                          8 // need to hold a help icon if the password rule becomes too complicated
                       ? "Not a Valid Password"
                       : null,
                   onSaved: (input) => _password = input,
@@ -294,18 +293,19 @@ class _LoginAppState extends State<LoginApp> {
                 showFlushBar(context, errMessage);
                 // errMessage='elloMate';
               }
-            }).whenComplete(
-                    () => errMessage == 'ellomate'?authenticateService.autheticate().whenComplete(() {
-                  //  print("MYERROR" + errMessage);
-                  if (errMessage == 'ellomate') {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EnterCode()));
-                  } else {
-                    return null;
-                  }
-                }):null);
+            }).whenComplete(() => errMessage == 'ellomate'
+                    ? authenticateService.autheticate().whenComplete(() {
+                        //  print("MYERROR" + errMessage);
+                        if (errMessage == 'ellomate') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EnterCode()));
+                        } else {
+                          return null;
+                        }
+                      })
+                    : null);
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -369,40 +369,40 @@ class _LoginAppState extends State<LoginApp> {
       ),
     );
   }
-  String error=null;
+
+  String error = null;
   Widget _buildSocialBtnRow() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-
           _buildSocialBtn(
-                () => signInService
+            () => signInService
                 .facebookSignIn(context)
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) => print(''))
                 .whenComplete(() => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => EnterCode()))),
+                    MaterialPageRoute(builder: (context) => EnterCode()))),
             AssetImage(
               'assets/images/facebook.jpg',
             ),
           ),
           _buildSocialBtn(
-                () => signInService
+            () => signInService
                 .googSignIn(context)
-            //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+                //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) {
-              print(e);
-            })
+                  print(e);
+                })
                 .whenComplete(() => addUser())
                 .whenComplete(() => authenticateService
-                .autheticate()
-                .whenComplete(() => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => EnterCode())))),
+                    .autheticate()
+                    .whenComplete(() => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => EnterCode())))),
             AssetImage(
-              'assets/images/google.png',
+              'assets/images/google.jpg',
             ),
           ),
         ],
@@ -561,6 +561,4 @@ void showFlushBar(BuildContext context, String errMessage) {
       color: Colors.cyanAccent,
     ),
   )..show(context);
-  // .whenComplete(() => Navigator.push(
-  // context, MaterialPageRoute(builder: (context) => LoginApp())));
 }

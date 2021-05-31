@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class userName_profile extends StatefulWidget {
   @override
@@ -56,7 +56,7 @@ class _userName_profileState extends State<userName_profile> {
                           child: Center(
                             child: Form(
                               key: _formKey,
-                              autovalidate: true,
+                              // autovalidate: true,
                               child: Column(
                                 children: [
                                   Divider(),
@@ -67,38 +67,36 @@ class _userName_profileState extends State<userName_profile> {
                                       child: Consumer<ThemeNotifier>(
                                         builder: (context, notifier, child) =>
                                             TextFormField(
-
-                                              initialValue: currentUserName,
-                                              decoration: InputDecoration(
-                                                enabledBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey),
-                                                ),
-                                                focusedBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.green),
-                                                ),
-                                                icon: const Icon(
-                                                  Icons.account_circle,
-                                                  color: Colors.grey,
-                                                ),
-                                                labelText: "Current Username",
-                                                labelStyle: TextStyle(
-                                                  fontSize: notifier.custFontSize,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey,
-                                                ),
-                                                hintStyle: TextStyle(
-                                                  color: Colors.grey,
-                                                ),
-
-                                              ),
-                                              validator: (input) {
-                                                return user.fullName != input
-                                                    ? 'Enter valid username'
-                                                    : null;
-                                              },
+                                          //initialValue: currentUserName,
+                                          decoration: InputDecoration(
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey),
                                             ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.green),
+                                            ),
+                                            icon: const Icon(
+                                              Icons.account_circle,
+                                              color: Colors.grey,
+                                            ),
+                                            labelText: "Current Username",
+                                            labelStyle: TextStyle(
+                                              fontSize: notifier.custFontSize,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey,
+                                            ),
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          validator: (input) {
+                                            return user.fullName != input
+                                                ? 'Enter valid username'
+                                                : null;
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -110,38 +108,46 @@ class _userName_profileState extends State<userName_profile> {
                                       child: Consumer<ThemeNotifier>(
                                         builder: (context, notifier, child) =>
                                             TextFormField(
-                                              decoration: InputDecoration(
-                                                enabledBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey),
-                                                ),
-                                                focusedBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.green),
-                                                ),
-                                                icon: const Icon(
-                                                  Icons.perm_identity,
-                                                  color: Colors.grey,
-                                                ),
-                                                labelText: "New Username",
-                                                hintText:
+                                          decoration: InputDecoration(
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.green),
+                                            ),
+                                            icon: const Icon(
+                                              Icons.perm_identity,
+                                              color: Colors.grey,
+                                            ),
+                                            labelText: "New Username",
+                                            hintText:
                                                 "Please enter new username",
-                                                labelStyle: TextStyle(
-                                                  fontSize: notifier.custFontSize,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey,
-                                                ),
-                                                hintStyle: TextStyle(
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
-                                              onChanged: (input) {
-                                                username = input;
-                                              },
-                                              onSaved: (input) {
-                                                user.fullName = input;
-                                              },
+                                            labelStyle: TextStyle(
+                                              fontSize: notifier.custFontSize,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey,
                                             ),
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          onChanged: (input) {
+                                            username = input;
+                                          },
+                                          onSaved: (input) {
+                                            user.fullName = input;
+                                          },
+                                          validator: (input) {
+                                            if (input.isEmpty) {
+                                              return "Please enter some text";
+                                            } else if (input == user.fullName) {
+                                              return "New user name can't be same as old username";
+                                            } else
+                                              return null;
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -153,43 +159,47 @@ class _userName_profileState extends State<userName_profile> {
                                       child: Consumer<ThemeNotifier>(
                                         builder: (context, notifier, child) =>
                                             TextFormField(
-                                              decoration: InputDecoration(
-                                                enabledBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey),
-                                                ),
-                                                focusedBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.green),
-                                                ),
-                                                icon: const Icon(
-                                                  Icons.offline_pin,
-                                                  color: Colors.grey,
-                                                ),
-                                                labelText: "Confirm New Username",
-                                                hintText:
-                                                "Please confirm the New Username",
-                                                labelStyle: TextStyle(
-                                                    fontSize: notifier.custFontSize,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.grey),
-                                                hintStyle: TextStyle(
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
-                                              validator: (input) {
-                                                return username != input
-                                                    ? 'Username does not match'
-                                                    : null;
-                                              },
+                                          decoration: InputDecoration(
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey),
                                             ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.green),
+                                            ),
+                                            icon: const Icon(
+                                              Icons.offline_pin,
+                                              color: Colors.grey,
+                                            ),
+                                            labelText: "Confirm New Username",
+                                            hintText:
+                                                "Please confirm the New Username",
+                                            labelStyle: TextStyle(
+                                                fontSize: notifier.custFontSize,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey),
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          validator: (input) {
+                                            if (input.isEmpty) {
+                                              return "Re-enter the user name";
+                                            } else {
+                                              return username != input
+                                                  ? 'Username does not match'
+                                                  : null;
+                                            }
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
                                   Divider(),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       RaisedButton(
                                         child: Text('Save'),
@@ -199,15 +209,15 @@ class _userName_profileState extends State<userName_profile> {
                                               .validate()) {
                                             _formKey.currentState.save();
                                             String userrequestStr =
-                                            jsonEncode(user.toStrJson());
+                                                jsonEncode(user.toStrJson());
                                             userPageVM
                                                 .submitUpdateUserRequestDetails(
-                                                userrequestStr);
+                                                    userrequestStr);
                                             SnackBar mysnackbar = SnackBar(
                                               content: Text(
                                                   "User details updated $successful"),
                                               duration:
-                                              new Duration(seconds: 4),
+                                                  new Duration(seconds: 4),
                                               backgroundColor: Colors.green,
                                             );
                                             Scaffold.of(context)
