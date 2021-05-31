@@ -240,7 +240,16 @@ class _EventWriteState extends State<EventWrite> {
     }
     return null;
   }
-
+  String validatePin(String value) {
+    String pattern = r'(^[1-9]{1}[0-9]{2}[0-9]{3}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter pin code';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid pin code';
+    }
+    return null;
+  }
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -308,7 +317,7 @@ class _EventWriteState extends State<EventWrite> {
                         },
                         validator: (value) {
                           if (value.isEmpty) {
-                            return "Please enter some text";
+                            return "Please enter some title";
                           }
                           return null;
                         },
@@ -341,7 +350,7 @@ class _EventWriteState extends State<EventWrite> {
                         },
                         validator: (value) {
                           if (value.isEmpty) {
-                            return "Please enter some text";
+                            return "Please enter some description";
                           }
                           return null;
                         },
@@ -770,32 +779,27 @@ class _EventWriteState extends State<EventWrite> {
                           },
                         ),
                         TextFormField(
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              labelText: "PinCode",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.pincode = int.parse(input);
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "PinCode",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
+                              eventrequest.pincode = int.parse(input);
+                            },
+                            validator: validatePin),
+
                         Container(
                           child:SelectState(
                             onCountryChanged: (value) {
