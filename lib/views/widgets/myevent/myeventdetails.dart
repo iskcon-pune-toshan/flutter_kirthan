@@ -5,16 +5,19 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/event_team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
@@ -36,6 +39,8 @@ final EventTeamPageViewModel eventTeamVM =
     EventTeamPageViewModel(apiSvc: EventTeamAPIService());
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class EventDetails extends StatefulWidget {
   EventRequest eventrequest;
@@ -107,9 +112,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   final TextEditingController _eventTitleController =
       new TextEditingController();
   String eventTitle;
-  final TextEditingController _eventTypeController =
-      new TextEditingController();
-  String eventType;
+  // final TextEditingController _eventTypeController =
+  //     new TextEditingController();
+  // String eventType;
   final TextEditingController _eventDateController =
       new TextEditingController();
   String eventDate;
@@ -160,13 +165,14 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   String Email;
   int Phone;
   String photoUrl;
+  String _selectedCategory;
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
 
   @override
   void initState() {
     _eventTitleController.text = widget.eventrequest.eventTitle;
-    _eventTypeController.text = widget.eventrequest.eventType;
+    // _eventTypeController.text = widget.eventrequest.eventType;
     _eventDateController.text = widget.eventrequest.eventDate.substring(0, 10);
     _eventStartTimeController.text = widget.eventrequest.eventStartTime;
     _eventEndTimeController.text = widget.eventrequest.eventEndTime;
@@ -181,7 +187,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
     _updatedByController.text = getCurrentUser().toString();
     _updatedByController.text = widget.eventrequest.updatedTime;
     // approvalStatus = widget.eventrequest.approvalStatus;
-   // print("createdTime");
+    // print("createdTime");
     //print(widget.eventrequest.createdTime);
     //_teamName.text = widget.selectedteam.teamTitle;
     t = widget.eventrequest.id;
@@ -204,12 +210,13 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     widget.eventrequest.updatedBy = email;
-   // print(email);
+    // print(email);
     return email;
   }
 
   int _groupValue = -1;
   List type = ["Health issues/injury", "Emergency", "Important Event", "Other"];
+
   @override
   Widget ProfilePages() {
     return FutureBuilder<List<UserRequest>>(
@@ -221,7 +228,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
               if (uname.fullName == UserName) {
                 String _email = uname.email;
                 String _photoName = _email + '.jpg';
-              /*  print("*********************" +
+                /*  print("*********************" +
                     _photoName +
                     "*************************");*/
                 final ref = FirebaseStorage.instance.ref().child(_photoName);
@@ -299,31 +306,48 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                     },
                   ),
                 ),
-                new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green),
-                      ),
-                      labelText: "Event Type",
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                      ),
-                      labelStyle: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    autocorrect: false,
-                    readOnly: true,
-                    controller: _eventTypeController,
-                    onSaved: (String value) {
-                      eventType = value;
-                    },
-                  ),
-                ),
+                FutureBuilder(
+                    future: commonLookupTablePageVM
+                        .getCommonLookupTable("lookupType:Event-type-Category"),
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null) {
+                        List<CommonLookupTable> cltList = snapshot.data;
+                        List<CommonLookupTable> currCategory = cltList
+                            .where((element) =>
+                                element.id == widget.eventrequest.eventType)
+                            .toList();
+
+                        for (var i in currCategory) {
+                          _selectedCategory = i.description;
+                        }
+                        List<String> _category = cltList
+                            .map((user) => user.description)
+                            .toSet()
+                            .toList();
+                        return DropdownButtonFormField<String>(
+                          value: _selectedCategory,
+                          icon: const Icon(Icons.category),
+                          hint: Text('Select Category',
+                              style: TextStyle(color: Colors.grey)),
+                          items: _category
+                              .map((category) => DropdownMenuItem<String>(
+                                    value: category,
+                                    child: Text(category),
+                                  ))
+                              .toList(),
+                          onChanged: (input) {
+                            setState(() {
+                              _selectedCategory = input;
+                            });
+                          },
+                          onSaved: (input) {
+                            _selectedCategory = input;
+                          },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(
@@ -668,14 +692,14 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                   ),
                                 );
                               } else if (snapshot.hasError) {
-                               // print(snapshot.error);
+                                // print(snapshot.error);
                                 return Container();
                               } else {
                                 return Container();
                               }
                             });
                       } else if (snapshot.hasError) {
-                       // print(snapshot.error);
+                        // print(snapshot.error);
                         return Container();
                       } else {
                         return Container();
@@ -800,9 +824,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                     groupValue: _groupValue,
                                                                                     onChanged: (value) {
                                                                                       setState(() {
-                                                                                       // print(value);
+                                                                                        // print(value);
                                                                                         widget.eventrequest.cancelReason = 'Health issues/injury';
-                                                                                       // print('Health issues/injury');
+                                                                                        // print('Health issues/injury');
 
                                                                                         _groupValue = value;
                                                                                       });
@@ -817,9 +841,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                     groupValue: _groupValue,
                                                                                     onChanged: (value) {
                                                                                       setState(() {
-                                                                                       // print(value);
+                                                                                        // print(value);
                                                                                         widget.eventrequest.cancelReason = 'Emergency';
-                                                                                       // print('Emergency');
+                                                                                        // print('Emergency');
 
                                                                                         _groupValue = value;
                                                                                       });
@@ -833,9 +857,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                     groupValue: _groupValue,
                                                                                     onChanged: (value) {
                                                                                       setState(() {
-                                                                                      //  print(value);
+                                                                                        //  print(value);
                                                                                         widget.eventrequest.cancelReason = 'Important event';
-                                                                                       // print('Important Event');
+                                                                                        // print('Important Event');
 
                                                                                         _groupValue = value;
                                                                                       });
@@ -849,9 +873,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                                                                     groupValue: _groupValue,
                                                                                     onChanged: (value) {
                                                                                       setState(() {
-                                                                                       // print(value);
+                                                                                        // print(value);
                                                                                         widget.eventrequest.cancelReason = 'Others';
-                                                                                       // print('Others');
+                                                                                        // print('Others');
 
                                                                                         _groupValue = value;
                                                                                       });

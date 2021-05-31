@@ -2,14 +2,21 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/team.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:intl/intl.dart';
 
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class EditTeam extends StatefulWidget {
   TeamRequest teamrequest;
@@ -25,13 +32,6 @@ class _EditTeamState extends State<EditTeam> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
 
-  List<String> _category = [
-    'Bhajan',
-    'Kirthan',
-    'Bhajan & Kirthan',
-    'Dance',
-    'Music'
-  ];
   List<String> _location = [
     'Kant',
     'Adilabad',
@@ -43,25 +43,9 @@ class _EditTeamState extends State<EditTeam> {
     'Guntur',
     'Hyderabad'
   ];
-  List<String> _weekday = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-    'Anyday'
-  ];
-  List<String> _availableTime = [
-    'before 2pm',
-    'after 2pm',
-    'between 2pm & 5pm'
-  ];
+
   List<String> _teamLeadId = [];
   String _selectedCategory;
-  String _selectedAvailableTime;
-  String _selectedWeekday;
   String _selectedLocation;
   String _selectedTeamLeadId;
 
@@ -299,49 +283,48 @@ class _EditTeamState extends State<EditTeam> {
                         },
                       ),
                       SizedBox(height: 35),
-                      DropdownButtonFormField<String>(
-                        value: _selectedCategory,
-                        icon: const Icon(Icons.category),
-                        hint: Text('Select Category',
-                            style: TextStyle(color: Colors.grey)),
-                        items: _category
-                            .map((category) => DropdownMenuItem<String>(
-                                  value: category,
-                                  child: Text(category),
-                                ))
-                            .toList(),
-                        onChanged: (input) {
-                          setState(() {
-                            _selectedCategory = input;
-                          });
-                        },
-                        onSaved: (input) {
-                          teamrequest.category = input;
-                        },
-                      ),
-                      // SizedBox(height: 35),
-                      // DropdownButtonFormField<String>(
-                      //   value: _selectedWeekday,
-                      //   icon: const Icon(Icons.calendar_today_rounded),
-                      //   hint: Text(
-                      //     'Select weekday ',
-                      //     style: TextStyle(color: Colors.grey),
-                      //   ),
-                      //   items: _weekday
-                      //       .map((weekday) => DropdownMenuItem(
-                      //     value: weekday,
-                      //     child: Text(weekday),
-                      //   ))
-                      //       .toList(),
-                      //   onChanged: (input) {
-                      //     setState(() {
-                      //       _selectedWeekday = input;
-                      //     });
-                      //   },
-                      //   onSaved: (input) {
-                      //     teamrequest.weekDay = input;
-                      //   },
-                      // ),
+                      FutureBuilder(
+                          future: commonLookupTablePageVM.getCommonLookupTable(
+                              "lookupType:Event-type-Category"),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              List<CommonLookupTable> cltList = snapshot.data;
+                              List<CommonLookupTable> currCategory = cltList
+                                  .where((element) =>
+                                      element.id == teamrequest.category)
+                                  .toList();
+
+                              for (var i in currCategory) {
+                                _selectedCategory = i.description;
+                              }
+                              List<String> _category = cltList
+                                  .map((user) => user.description)
+                                  .toSet()
+                                  .toList();
+                              return DropdownButtonFormField<String>(
+                                value: _selectedCategory,
+                                icon: const Icon(Icons.category),
+                                hint: Text('Select Category',
+                                    style: TextStyle(color: Colors.grey)),
+                                items: _category
+                                    .map((category) => DropdownMenuItem<String>(
+                                          value: category,
+                                          child: Text(category),
+                                        ))
+                                    .toList(),
+                                onChanged: (input) {
+                                  setState(() {
+                                    _selectedCategory = input;
+                                  });
+                                },
+                                onSaved: (input) {
+                                  _selectedCategory = input;
+                                },
+                              );
+                            } else {
+                              return Container();
+                            }
+                          }),
                       SizedBox(height: 35),
                       DropdownButtonFormField<String>(
                         value: _selectedLocation,
@@ -383,8 +366,14 @@ class _EditTeamState extends State<EditTeam> {
                           color: Colors.blue,
                           textColor: themeData.secondaryHeaderColor,
                           child: new Text('Save'),
-                          onPressed: () {
+                          onPressed: () async {
                             // _handleSubmitted();
+                            List<CommonLookupTable> selectedCategory =
+                                await commonLookupTablePageVM
+                                    .getCommonLookupTable(
+                                        "description:" + _selectedCategory);
+                            for (var i in selectedCategory)
+                              teamrequest.category = i.id;
                             _formKey.currentState.save();
                             Navigator.pop(context);
                             print(widget.teamrequest.teamTitle);

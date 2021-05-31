@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
@@ -18,6 +21,8 @@ final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
 final TeamUserPageViewModel teamUserPageVM =
     TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class TeamProfilePage extends StatefulWidget {
   String teamTitle;
@@ -55,8 +60,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
 
   Widget phone(String email) {
     return Consumer<ThemeNotifier>(
-      builder:(context, notifier, child)=>
-      FutureBuilder<List<UserRequest>>(
+      builder: (context, notifier, child) => FutureBuilder<List<UserRequest>>(
           future: Users,
           builder: (context, snapshot) {
             if (snapshot.data != null) {
@@ -66,7 +70,9 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                   Phone = user.phoneNumber;
                   return Text(
                     ': ' + Phone.toString(),
-                    style: TextStyle(fontSize: notifier.custFontSize, color: Colors.grey[400]),
+                    style: TextStyle(
+                        fontSize: notifier.custFontSize,
+                        color: Colors.grey[400]),
                   );
                 }
               }
@@ -78,8 +84,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
 
   Widget un(String email) {
     return Consumer<ThemeNotifier>(
-      builder:(context, notifier, child)
-      =>FutureBuilder<List<UserRequest>>(
+      builder: (context, notifier, child) => FutureBuilder<List<UserRequest>>(
           future: Users,
           builder: (context, snapshot) {
             if (snapshot.data != null) {
@@ -90,7 +95,9 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
 
                   return Text(
                     username,
-                    style: TextStyle(fontSize: notifier.custFontSize, color: Colors.grey[300]),
+                    style: TextStyle(
+                        fontSize: notifier.custFontSize,
+                        color: Colors.grey[300]),
                   );
                 }
               }
@@ -102,7 +109,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
 
   Widget teamMembers(int id) {
     return Consumer<ThemeNotifier>(
-      builder:(context, notifier, child)=> FutureBuilder<List<TeamUser>>(
+      builder: (context, notifier, child) => FutureBuilder<List<TeamUser>>(
           future: teamUserPageVM.getTeamUserMappings(id.toString()),
           builder: (context, snapshot) {
             if (snapshot.data != null) {
@@ -122,7 +129,9 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                         ),
                         Text(
                           (index + 1).toString() + ". " + memberList[index],
-                          style: TextStyle(fontSize:notifier.custFontSize, color: Colors.grey[400]),
+                          style: TextStyle(
+                              fontSize: notifier.custFontSize,
+                              color: Colors.grey[400]),
                         ),
                       ],
                     );
@@ -133,6 +142,43 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
             return CircularProgressIndicator();
           }),
     );
+  }
+
+  Widget teamCategory(TeamRequest data) {
+    return FutureBuilder(
+        future: commonLookupTablePageVM
+            .getCommonLookupTable("lookupType:Event-type-Category"),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            List<CommonLookupTable> cltList = snapshot.data;
+            List<CommonLookupTable> currCategory = cltList
+                .where((element) => element.id == data.category)
+                .toList();
+
+            for (var i in currCategory) {
+              type = i.description;
+            }
+            return Row(
+              children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Type: ',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[300]),
+                    )),
+                Text(
+                  type != null ? type : "New",
+                  style: TextStyle(fontSize: 16, color: Colors.grey[400]),
+                )
+              ],
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 
   @override
@@ -148,14 +194,13 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
           backgroundColor: KirthanStyles.colorPallete30,
         ),
         body: Consumer<ThemeNotifier>(
-          builder:(context, notifier, child)=> FutureBuilder(
+          builder: (context, notifier, child) => FutureBuilder(
               future: Teams,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   teamList = snapshot.data;
                   for (var team in snapshot.data) {
                     if (team.teamTitle == this.teamTitle) {
-                      type = team.category;
                       // teamTitle = team.teamTitle;
                       experience = team.experience;
                       Email = team.teamLeadId;
@@ -204,7 +249,8 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                               Text(
                                                 'Team',
                                                 style: TextStyle(
-                                                    fontSize: 19+notifier.custFontSize,
+                                                    fontSize: 19 +
+                                                        notifier.custFontSize,
                                                     fontWeight: FontWeight.w800,
                                                     color: Colors.grey[100]),
                                               ),
@@ -214,7 +260,8 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                               Text(
                                                 teamTitle,
                                                 style: TextStyle(
-                                                    fontSize: 6+notifier.custFontSize,
+                                                    fontSize: 6 +
+                                                        notifier.custFontSize,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[200]),
                                               ),
@@ -244,8 +291,8 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                             children: [
                                               Icon(
                                                 Icons.info_outline_rounded,
-                                                color:
-                                                    KirthanStyles.colorPallete30,
+                                                color: KirthanStyles
+                                                    .colorPallete30,
                                               ),
                                               SizedBox(
                                                 width: 10,
@@ -253,7 +300,8 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                               Text(
                                                 "Description",
                                                 style: TextStyle(
-                                                    fontSize: 4+notifier.custFontSize,
+                                                    fontSize: 4 +
+                                                        notifier.custFontSize,
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.grey[300]),
                                               ),
@@ -262,26 +310,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          Row(
-                                            children: [
-                                              Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Text(
-                                                    'Type: ',
-                                                    style: TextStyle(
-                                                        fontSize: notifier.custFontSize,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.grey[300]),
-                                                  )),
-                                              Text(
-                                                type != null ? type : "New",
-                                                style: TextStyle(
-                                                    fontSize: notifier.custFontSize,
-                                                    color: Colors.grey[400]),
-                                              )
-                                            ],
-                                          ),
+                                          teamCategory(team),
                                           SizedBox(
                                             height: 10,
                                           ),
@@ -290,7 +319,8 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                               child: Text(
                                                 'Team Members: ',
                                                 style: TextStyle(
-                                                    fontSize: notifier.custFontSize,
+                                                    fontSize:
+                                                        notifier.custFontSize,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[300]),
                                               )),
@@ -304,19 +334,23 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                           Row(
                                             children: [
                                               Align(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     'Experience: ',
                                                     style: TextStyle(
-                                                        fontSize: notifier.custFontSize,
+                                                        fontSize: notifier
+                                                            .custFontSize,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        color: Colors.grey[300]),
+                                                        color:
+                                                            Colors.grey[300]),
                                                   )),
                                               Text(
                                                 experience,
                                                 style: TextStyle(
-                                                    fontSize: notifier.custFontSize,
+                                                    fontSize:
+                                                        notifier.custFontSize,
                                                     color: Colors.grey[400]),
                                               )
                                             ],
@@ -345,8 +379,10 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                 Text(
                                                   'Contact Details:',
                                                   style: TextStyle(
-                                                      fontSize: 2+notifier.custFontSize,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 2 +
+                                                          notifier.custFontSize,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.grey[300]),
                                                 ),
                                               ],
@@ -382,7 +418,8 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                               Text(
                                                 ': ' + Email,
                                                 style: TextStyle(
-                                                    fontSize: notifier.custFontSize,
+                                                    fontSize:
+                                                        notifier.custFontSize,
                                                     color: Colors.grey[400]),
                                               ),
                                               SizedBox(

@@ -93,6 +93,7 @@ class _UserWriteState extends State<UserWrite> {
         child: Column(
           children: <Widget>[
             TextFormField(
+              keyboardType: TextInputType.number,
               maxLength: 30,
               //attribute: "Username",
               decoration: InputDecoration(
@@ -356,7 +357,7 @@ class _UserWriteState extends State<UserWrite> {
                 hintText: "",
               ),
               onChanged: (input) {
-                userrequest.govtIdType = input;
+                userrequest.govtIdType = int.parse(input);
               },
               validator: (value) {
                 if (value.isEmpty) {

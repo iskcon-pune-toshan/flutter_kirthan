@@ -5,17 +5,20 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_kirthan/models/commonlookuptable.dart';
 import 'package:flutter_kirthan/models/notification.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/models/usertemple.dart';
+import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
 import 'package:flutter_kirthan/services/temple_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/services/user_temple_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
@@ -41,6 +44,8 @@ final TemplePageViewModel templePageVM =
     TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
     UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+final CommonLookupTablePageViewModel commonLookupTablePageVM =
+    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class TeamWrite extends StatefulWidget {
   UserRequest userRequest;
@@ -78,33 +83,8 @@ class _TeamWriteState extends State<TeamWrite> {
     return tempList;
   }
 
-  // void getLocalAdmin() {
-  //   FutureBuilder<List<UserRequest>>(
-  //       future: Users,
-  //       builder:
-  //           (BuildContext context, AsyncSnapshot<List<UserRequest>> snapshot) {
-  //         if (snapshot.data != null) {
-  //           List<UserRequest> user = snapshot.data
-  //               .where((element) => element.id == widget.userRequest.invitedBy);
-  //           for (var la in user) {
-  //             localAdmin = la;
-  //           }
-  //         }
-  //         return Container();
-  //       });
-  // }
-
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
-
-  List<String> _category = [
-    'Bhajan',
-    'Kirthan',
-    'Bhajan & Kirthan',
-    'Dance',
-    'Music',
-    'Lecture'
-  ];
 
   List<String> _location = [
     'Kant',
@@ -119,23 +99,9 @@ class _TeamWriteState extends State<TeamWrite> {
     'Pune',
     'Mumbai'
   ];
-  // List<String> _weekday = [
-  //   'Monday',
-  //   'Tuesday',
-  //   'Wednesday',
-  //   'Thursday',
-  //   'Friday',
-  //   'Saturday',
-  //   'Sunday',
-  //   'Anyday'
-  // ];
   String _selectedCategory;
-  String _selectedWeekday;
   String _selectedLocation;
   String _selectedTeamLeadId;
-  String _selectedTeamMember1;
-  String _selectedTeamMember2;
-  String _selectedTeamMember3;
   String validateMobile(String value) {
     String pattern = r'(^(?:[+0]9)?[0-9]{10}$)';
     RegExp regExp = new RegExp(pattern);
@@ -349,37 +315,52 @@ class _TeamWriteState extends State<TeamWrite> {
                       elevation: 5,
                     ),
                     SizedBox(height: 35),
-                    Card(
-                      child: Container(
-                        padding: new EdgeInsets.all(10),
-                        child: DropdownButtonFormField<String>(
-                          value: _selectedCategory,
-                          icon: const Icon(Icons.category),
-                          hint: Text('Select Category',
-                              style: TextStyle(color: Colors.grey)),
-                          items: _category
-                              .map((category) => DropdownMenuItem<String>(
-                                    value: category,
-                                    child: Text(category),
-                                  ))
-                              .toList(),
-                          onChanged: (input) {
-                            setState(() {
-                              _selectedCategory = input;
-                            });
-                          },
-                          onSaved: (input) {
-                            teamrequest.category = input;
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return "Please select team category";
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
+                    FutureBuilder(
+                        future: commonLookupTablePageVM.getCommonLookupTable(
+                            "lookupType:Event-type-Category"),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            List<CommonLookupTable> cltList = snapshot.data;
+                            List<String> _category = cltList
+                                .map((user) => user.description)
+                                .toSet()
+                                .toList();
+                            return Card(
+                              child: Container(
+                                padding: new EdgeInsets.all(10),
+                                child: DropdownButtonFormField<String>(
+                                  value: _selectedCategory,
+                                  icon: const Icon(Icons.category),
+                                  hint: Text('Select Category',
+                                      style: TextStyle(color: Colors.grey)),
+                                  items: _category
+                                      .map((category) =>
+                                          DropdownMenuItem<String>(
+                                            value: category,
+                                            child: Text(category),
+                                          ))
+                                      .toList(),
+                                  onChanged: (input) {
+                                    setState(() {
+                                      _selectedCategory = input;
+                                    });
+                                  },
+                                  onSaved: (input) {
+                                    _selectedCategory = input;
+                                  },
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Please select team category";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }),
                     Card(
                       child: Container(
                        width: double.infinity,
@@ -713,7 +694,13 @@ class _TeamWriteState extends State<TeamWrite> {
                                     final FirebaseUser user =
                                         await auth.currentUser();
                                     final String email = user.email;
-
+                                    List<CommonLookupTable> selectedCategory =
+                                        await commonLookupTablePageVM
+                                            .getCommonLookupTable(
+                                                "description:" +
+                                                    _selectedCategory);
+                                    for (var i in selectedCategory)
+                                      teamrequest.category = i.id;
                                     String dt =
                                         DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                             .format(DateTime.now());

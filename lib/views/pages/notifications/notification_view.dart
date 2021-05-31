@@ -123,7 +123,8 @@ class NotificationViewState extends State<NotificationView> {
             // Navigator.pop(context);
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => AdminView()));
-            if (data.targetType.contains("event")) {
+            if (data.targetType.contains("event") ||
+                data.message.contains("event")) {
               List<UserRequest> user =
                   await userPageVM.getUserRequests(data.createdBy);
               String userName = " ";
@@ -831,7 +832,7 @@ class NotificationViewState extends State<NotificationView> {
                                             )));
                               });
                             } else if (snapshot.data[itemCount].message
-                                    .contains("Request to create a team") ||
+                                    .contains("team") ||
                                 snapshot.data[itemCount].message
                                     .contains("Invited user")) {
                               // print(snapshot.data[itemCount].targetId);

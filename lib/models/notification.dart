@@ -47,10 +47,11 @@ class NotificationModel {
 
   factory NotificationModel.fromJson(Map<String, dynamic> data) {
     return NotificationModel(
-      createdAt: data["createdTime"] == null
-          ? null
-          : DateTime.parse(data["createdTime"]),
-      createdBy: (data["createdBy"]),
+      createdAt: DateTime.parse(data["createdTime"]),
+      // == null
+      //   ? null
+      //   : DateTime.parse(data["createdTime"]),
+      createdBy: data["createdBy"],
       uuid: data["uuid"],
       message: data["message"],
       type: data["targetType"],
