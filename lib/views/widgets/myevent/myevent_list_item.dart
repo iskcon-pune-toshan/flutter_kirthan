@@ -174,12 +174,12 @@ class MyEventRequestsListItem extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => EventDetails(
-                                            eventrequest: eventrequest)),
+                                        builder: (context) => EventDetails(eventrequest: eventrequest)),
 //MapView(eventrequest: eventrequest)),
 
 //do something
                                   );
+
                                 },
                               ),
 /*              Container(
@@ -431,13 +431,10 @@ class MyEventRequestsListItem extends StatelessWidget {
               padding: EdgeInsets.only(right: 33),
               alignment: Alignment.centerRight,
               //margin: const EdgeInsets.only(left: 4.0),
-
               child: Consumer<ThemeNotifier>(
                 builder: (context, notifier, child) => getstatus(),
                 /*Text(
-
            // eventrequest?.approvalStatus,
-
             style: TextStyle(
               color: getcolor(),
               fontSize: notifier.custFontSize,
@@ -450,7 +447,6 @@ class MyEventRequestsListItem extends StatelessWidget {
         ],
       )
     ]);
-
     return new GestureDetector(
         onTap: () {
           Navigator.push(
@@ -458,7 +454,6 @@ class MyEventRequestsListItem extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => EventDetails(eventrequest: eventrequest)),
 //MapView(eventrequest: eventrequest)),
-
 //do something
           );
           // print("Clicked on Card");
@@ -518,7 +513,6 @@ class MyEventRequestsListItem extends StatelessWidget {
                                             .substring(0, 10),
 //0,10 date
 //11,16 time
-
                                         style: TextStyle(
                                           fontSize: notifier.custFontSize,
                                           //color: KirthanStyles.subTitleColor,
