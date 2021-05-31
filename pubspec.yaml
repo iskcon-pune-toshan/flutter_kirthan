@@ -65,6 +65,7 @@ dependencies:
   flushbar:
   country_state_city_picker: ^1.2.7
   grouped_buttons:
+  numberpicker:
 
 
 

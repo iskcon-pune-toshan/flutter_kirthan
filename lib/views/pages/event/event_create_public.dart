@@ -1,3 +1,4 @@
+import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
 import 'package:flutter_kirthan/models/team.dart';
@@ -1010,11 +1011,31 @@ class _EventWriteState extends State<EventWritePublic> {
                             return null;
                           },
                         ),
+                        Container(
+                          child:SelectState(
+                            onCountryChanged: (value) {
+                              setState(() {
+                                eventrequest.country = value;
+                              });
+                            },
+                            onStateChanged:(value) {
+                              setState(() {
+                                eventrequest.state = value;
+                              });
+                            },
+                            onCityChanged:(value) {
+                              setState(() {
+                                eventrequest.city = value;
+                              });
+                            },
+
+                          ),
+                        )
                       ],
                     ),
 
-                    Column(
-                      children: <Widget>[
+                /*    Column(
+                      children: *//*<Widget>[
                         DropdownButtonFormField<String>(
                           value: _selectedCity,
                           icon: const Icon(Icons.location_city),
@@ -1077,8 +1098,8 @@ class _EventWriteState extends State<EventWritePublic> {
                             eventrequest.country = input;
                           },
                         ),
-                      ],
-                    ),
+                      ],*//*
+                    ),*/
                     //getTeamsWidget(),
                     //getTeamsWidget(),
                     new Container(margin: const EdgeInsets.only(top: 40)),

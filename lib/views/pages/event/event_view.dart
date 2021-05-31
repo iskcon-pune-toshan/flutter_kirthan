@@ -6,6 +6,7 @@ import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create_public.dart';
+import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -32,9 +33,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 int role_id;
 
 class EventView extends StatefulWidget {
@@ -47,6 +48,37 @@ class EventView extends StatefulWidget {
 }
 
 class _EventViewState extends State<EventView> with BaseAPIService {
+  Future<bool> _onWillPop()async{
+    return(await showDialog(context: context,builder: (context)=>
+    new AlertDialog(
+        shape:RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30)
+        ),
+        elevation: 5,
+        title: Text('Sign Out'),
+        content:
+        Text('Are you sure you want to Sign Out?'),
+        actions:<Widget>[
+          SizedBox(width: 30,),
+          FlatButton(
+            onPressed: ()=>Navigator.of(context).pop(false),
+            child: Text("Cancel",style: TextStyle(
+                fontSize: 18,color: Colors.blueGrey
+            ),),
+          ),
+          SizedBox(width: 30,),
+          VerticalDivider(thickness: 2,indent: 50,),
+          FlatButton(
+            onPressed: ()=>Navigator.of(context).pop(true),
+            child: Text("Sign Out",style: TextStyle(
+                fontSize: 18,color: Colors.blueGrey)),
+          ),
+          SizedBox(width: 30,),
+        ]
+    )
+    ))?? false;
+  }
+
   List<String> eventTime = [
     "Today",
     "Tomorrow",
@@ -137,35 +169,35 @@ class _EventViewState extends State<EventView> with BaseAPIService {
       children: [
         role_id == 2 || role_id == 1
             ? SpeedDialChild(
-                child: Icon(Icons.event, color: Colors.white),
-                backgroundColor: KirthanStyles.colorPallete10,
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EventWritePublic())),
-                label: 'Public Event',
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: KirthanStyles.colorPallete60),
-                labelBackgroundColor: KirthanStyles.colorPallete30,
-              )
+          child: Icon(Icons.event, color: Colors.white),
+          backgroundColor: KirthanStyles.colorPallete10,
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EventWritePublic())),
+          label: 'Public Event',
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: KirthanStyles.colorPallete60),
+          labelBackgroundColor: KirthanStyles.colorPallete30,
+        )
             : SpeedDialChild(
-                child: Icon(Icons.event, color: Colors.white),
-                backgroundColor: Colors.grey,
-                onTap: () {
-                  SnackBar mysnackbar = SnackBar(
-                    content: Text("Only Local Admins can create Public Event"),
-                    duration: new Duration(seconds: 4),
-                    backgroundColor: Colors.green,
-                  );
-                  Scaffold.of(context).showSnackBar(mysnackbar);
-                },
-                label: 'Public Event',
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: KirthanStyles.colorPallete60),
-                labelBackgroundColor: KirthanStyles.colorPallete30,
-              ),
+          child: Icon(Icons.event, color: Colors.white),
+          backgroundColor: Colors.grey,
+          onTap: () {
+            SnackBar mysnackbar = SnackBar(
+              content: Text("Only Local Admins can create Public Event"),
+              duration: new Duration(seconds: 4),
+              backgroundColor: Colors.green,
+            );
+            Scaffold.of(context).showSnackBar(mysnackbar);
+          },
+          label: 'Public Event',
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: KirthanStyles.colorPallete60),
+          labelBackgroundColor: KirthanStyles.colorPallete30,
+        ),
         SpeedDialChild(
           child: Icon(Icons.event_note, color: Colors.white),
           backgroundColor: KirthanStyles.colorPallete10,
@@ -185,86 +217,89 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     //accessTypes.containsKey(ACCESS_TYPE_CREATE)
     //print("Accesstype: C: $accessTypes.containsKey(ACCESS_TYPE_CREATE)");
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
-    return Consumer<ThemeNotifier>(
-      builder: (content, notifier, child) => Scaffold(
-          appBar: AppBar(
-            title: Text(
-              "Events",
-            ),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.search,
-                  ),
-                  onPressed: () => {
-                        showSearch(
-                          context: context,
-                          delegate: Search(),
-                        )
-                      }),
-              PopupMenuButton(
-                  icon: Icon(
-                    Icons.tune,
-                  ),
-                  onSelected: (input) {
-                    _selectedValue = input;
-                    // print(input);
-                    if (input == 'Today')
-                      eventPageVM.setEventRequests("TODAY");
-                    else if (input == 'Tomorrow')
-                      eventPageVM.setEventRequests("TOMORROW");
-                    else if (input == 'This Week')
-                      eventPageVM.setEventRequests("This Week");
-                    else if (input == 'This Month')
-                      eventPageVM.setEventRequests("This Month");
-                    else if (input == 'Clear Filter')
-                      eventPageVM.setEventRequests("All");
-                    else if (notifier.duration != null) {
-                      eventPageVM.setEventRequests(notifier.duration);
-                    }
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return eventTime.map((f) {
-                      return CheckedPopupMenuItem<String>(
-                        child: Text(
-                          f,
-                          style: TextStyle(
-                            fontSize: notifier.custFontSize,
-                          ),
-                        ),
-                        value: f,
-                        checked: _selectedValue == f ? true : false,
-                        enabled: true,
-                        //checked: true,
-                      );
-                    }).toList();
-                  }),
-            ],
-            iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
-          ),
-          drawer: MyDrawer(),
-          body: RefreshIndicator(
-            key: refreshKey,
-            child: ScopedModel<EventPageViewModel>(
-              model: eventPageVM,
-              child: EventsPanel(
-                eventType: "Pune",
+    return new WillPopScope(
+      onWillPop: _onWillPop,
+      child: Consumer<ThemeNotifier>(
+        builder: (content, notifier, child) => Scaffold(
+            appBar: AppBar(
+              title: Text(
+                "Events",
               ),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.search,
+                    ),
+                    onPressed: () => {
+                      showSearch(
+                        context: context,
+                        delegate: Search(),
+                      )
+                    }),
+                PopupMenuButton(
+                    icon: Icon(
+                      Icons.tune,
+                    ),
+                    onSelected: (input) {
+                      _selectedValue = input;
+                      // print(input);
+                      if (input == 'Today')
+                        eventPageVM.setEventRequests("TODAY");
+                      else if (input == 'Tomorrow')
+                        eventPageVM.setEventRequests("TOMORROW");
+                      else if (input == 'This Week')
+                        eventPageVM.setEventRequests("This Week");
+                      else if (input == 'This Month')
+                        eventPageVM.setEventRequests("This Month");
+                      else if (input == 'Clear Filter')
+                        eventPageVM.setEventRequests("All");
+                      else if (notifier.duration != null) {
+                        eventPageVM.setEventRequests(notifier.duration);
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return eventTime.map((f) {
+                        return CheckedPopupMenuItem<String>(
+                          child: Text(
+                            f,
+                            style: TextStyle(
+                              fontSize: notifier.custFontSize,
+                            ),
+                          ),
+                          value: f,
+                          checked: _selectedValue == f ? true : false,
+                          enabled: true,
+                          //checked: true,
+                        );
+                      }).toList();
+                    }),
+              ],
+              iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
             ),
-            onRefresh: refreshList,
-          ),
-          floatingActionButton:
-              buildSpeedDial() /*FloatingActionButton(
-          heroTag: "event",
-          child: Icon(Icons.add),
-          backgroundColor: KirthanStyles.colorPallete10,
-          //tooltip: accessTypes["Create"].toString(),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => EventWrite()));
-          },
-        ),*/
-          ),
+            drawer: MyDrawer(),
+            body: RefreshIndicator(
+              key: refreshKey,
+              child: ScopedModel<EventPageViewModel>(
+                model: eventPageVM,
+                child: EventsPanel(
+                  eventType: "Pune",
+                ),
+              ),
+              onRefresh: refreshList,
+            ),
+            floatingActionButton:
+            buildSpeedDial() /*FloatingActionButton(
+            heroTag: "event",
+            child: Icon(Icons.add),
+            backgroundColor: KirthanStyles.colorPallete10,
+            //tooltip: accessTypes["Create"].toString(),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => EventWrite()));
+            },
+          ),*/
+        ),
+      ),
     );
   }
 }
@@ -296,6 +331,7 @@ class Search extends SearchDelegate {
     ];
   }
 
+
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
@@ -305,52 +341,83 @@ class Search extends SearchDelegate {
       },
     );
   }
-
   String selectedResult = "";
-
   @override
   Widget buildResults(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(selectedResult,
-            style: TextStyle(color: KirthanStyles.colorPallete10)),
-      ),
-    );
+    return FutureBuilder(
+        future: Users,
+        builder: (_, AsyncSnapshot<List<EventRequest>> snapshot) {
+          if (snapshot.data != null) {
+            eventlist = snapshot.data;
+            List<EventRequest> suggestionList = [];
+            query.isEmpty
+                ? suggestionList = eventlist
+                : suggestionList.addAll(eventlist.where((element) =>
+            element.eventTitle.toUpperCase().contains(query) == true ||
+                element.eventTitle.toLowerCase().contains(query) == true));
+            return ListView.builder(
+              itemCount: suggestionList.length,
+              itemBuilder: (context, index) {
+                // return Card(
+                //   child: ListTile(
+                //     title: Text(
+                //       suggestionList[index],
+                //     ),
+                //     //leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
+                //   ),
+                // );
+                return EventRequestsListItem(
+                  eventrequest: suggestionList[index],
+                  eventPageVM: eventPageVM,
+                );
+              },
+            );
+          }
+          return Center(
+            child: Container(
+              child: Text("Nothing to show"),
+            ),
+          );
+        });
   }
-
   // final List<String> listExample;
   List<String> recentList = [];
-
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder(
-      future: Users,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<EventRequest>> snapshot) {
-        if (snapshot.data != null) {
-          eventlist = snapshot.data;
-          List<String> EventList =
-              eventlist.map((event) => event.eventTitle).toSet().toList();
-          List<String> suggestionList = [];
-          query.isEmpty
-              ? suggestionList = EventList
-              : suggestionList.addAll(EventList.where((element) =>
-                  element.toUpperCase().contains(query) == true ||
-                  element.toLowerCase().contains(query) == true));
-          return ListView.builder(
-            itemCount: suggestionList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(
-                  suggestionList[index],
-                ),
-                //leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-              );
-            },
+        future: Users,
+        builder: (_, AsyncSnapshot<List<EventRequest>> snapshot) {
+          if (snapshot.data != null) {
+            eventlist = snapshot.data;
+            List<EventRequest> suggestionList = [];
+            query.isEmpty
+                ? suggestionList = eventlist
+                : suggestionList.addAll(eventlist.where((element) =>
+            element.eventTitle.toUpperCase().contains(query) == true ||
+                element.eventTitle.toLowerCase().contains(query) == true));
+            return ListView.builder(
+              itemCount: suggestionList.length,
+              itemBuilder: (context, index) {
+                // return Card(
+                //   child: ListTile(
+                //     title: Text(
+                //       suggestionList[index],
+                //     ),
+                //     //leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
+                //   ),
+                // );
+                return EventRequestsListItem(
+                  eventrequest: suggestionList[index],
+                  eventPageVM: eventPageVM,
+                );
+              },
+            );
+          }
+          return Center(
+            child: Container(
+              child: Text("Nothing to show"),
+            ),
           );
-        }
-        return Container();
-      },
-    );
+        });
   }
 }

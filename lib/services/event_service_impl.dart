@@ -83,17 +83,17 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     // Events on duration
     //requestBody = '{"city":["Pune","Mumbai"]}';
     if (eventType == "TODAY") {
-      requestBody = '{"dateInterval" : "TODAY"}';
+      requestBody = '{"dateInterval" : "TODAY" , "isPublicEvent" : true , "status" : 2}';
     } else if (eventType == "TOMORROW")
-      requestBody = '{"dateInterval" : "TOMORROW"}';
+      requestBody = '{"dateInterval" : "TOMORROW" , "isPublicEvent" : true, "status" : 2}';
     else if (eventType == "This Week") {
-      requestBody = '{"dateInterval" : "This Week"}';
+      requestBody = '{"dateInterval" : "This Week", "isPublicEvent" : true, "status" : 2}';
     } else if (eventType == "This Month") {
-      requestBody = '{"dateInterval": "This Month"}';
+      requestBody = '{"dateInterval": "This Month", "isPublicEvent" : true, "status" : 2}';
     } else if (eventType == "All" ||
         eventType == "AA" ||
         eventType == "Approved") {
-      requestBody = '{"isPublicEvent" : true}';
+      requestBody = '{"isPublicEvent" : true, "status" : 2}';
     } else if (eventType == "Rejected") {
       requestBody = '{"approvalStatus" : "Rejected"}';
     } else if (eventType == "Waiting") {
@@ -102,7 +102,7 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       requestBody = '{"createdBy" : ["$email"],"isProcessed" : true}';
     } else if (eventType == "1" || eventType == "2" || eventType == "4") {
       int status = int.parse(eventType);
-      requestBody = '{"status" : $status}';
+      requestBody = '{"teamInviteStatus" : $status}';
     } else if (eventType.contains("event_id:")) {
       var array = eventType.split(":");
       int eventId = int.parse(array[1]);

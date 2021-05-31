@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:intl/intl.dart';
 import 'dart:core';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_kirthan/view_models/event_user_page_view_model.dart';
 import 'package:flutter_kirthan/models/eventuser.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/event_user_service_impl.dart';
+import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
@@ -78,11 +80,14 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Row(
+
                       children: [
-                        Text(
+                    Consumer<ThemeNotifier>(
+                    builder: (context, notifier, child) =>Text(
                           "RSVP",
-                          //style: TextStyle(color: Colors.white),
+                          style: TextStyle(fontSize: notifier.custFontSize),
                         ),
+                    ),
                         Icon(Icons.check),
                       ],
                     ),
@@ -106,7 +111,8 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                         userList = snapshot.data;
                         print(userList);
 
-                        return FlatButton(
+                        return Consumer<ThemeNotifier>(
+                            builder: (context, notifier, child) =>FlatButton(
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                   color: Colors.grey[700],
@@ -117,7 +123,7 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                             padding: EdgeInsets.symmetric(horizontal: 0),
                             child: Text(
                               "RSVP",
-                              //style: TextStyle(color: Colors.white),
+                              style: TextStyle(fontSize: notifier.custFontSize),
                             ),
                             onPressed: () async {
                               final FirebaseAuth auth = FirebaseAuth.instance;
@@ -157,12 +163,12 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
 
                               String title = widget.eventrequest.eventTitle;
                               SnackBar mysnackbar = SnackBar(
-                                content: Text("Registred for $title"),
+                                content:Text("Registered for $title"),
                                 duration: new Duration(seconds: 4),
-                                backgroundColor: Colors.white,
+                                backgroundColor: notifier.darkTheme?Colors.white:Colors.green,
                               );
                               Scaffold.of(context).showSnackBar(mysnackbar);
-                            });
+                            }));
                       }
                       return Container();
                     });

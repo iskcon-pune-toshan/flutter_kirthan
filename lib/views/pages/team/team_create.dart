@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,6 +57,7 @@ class TeamWrite extends StatefulWidget {
 class _TeamWriteState extends State<TeamWrite> {
   Future<List<UserRequest>> Users;
   int counter = 0;
+  int _currentvalue=0;
   FocusNode myFocusNode = new FocusNode();
   List<UserRequest> userList = new List<UserRequest>();
   @override
@@ -143,7 +146,40 @@ class _TeamWriteState extends State<TeamWrite> {
     }
     return null;
   }
-
+  Future _showIntegerDialog() async {
+    await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return Consumer<ThemeNotifier>(
+          builder: (context, notifier, child) => new NumberPickerDialog.integer(
+          selectedTextStyle:TextStyle(
+            fontSize: notifier.custFontSize,
+            fontWeight: FontWeight.bold,
+            color: KirthanStyles.titleColor,
+          ),
+          textStyle: TextStyle(
+            fontSize: notifier.custFontSize,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
+          ),
+          minValue: 0,
+          maxValue: 10,
+          initialIntegerValue: _currentvalue,
+          title: new Text("Experience: "),
+          )
+        );
+      },
+    ).then(_handleValueChanged);
+  }
+  _handleValueChanged(num value) {
+    if (value != null) {
+      if (value is int) {
+        setState(() => _currentvalue = value);
+      } else {
+        setState(() => _currentvalue = value);
+      }
+    }
+  }
   List<String> selectedMembers = new List<String>();
   Widget addmember(int counter) {
     List<TextEditingController> _member =
@@ -346,9 +382,30 @@ class _TeamWriteState extends State<TeamWrite> {
                     ),
                     Card(
                       child: Container(
+                       width: double.infinity,
+
                         //color: Colors.white,
                         padding: new EdgeInsets.all(10),
-                        child: TextFormField(
+                        child: SizedBox(
+                          width: double.infinity,
+                        child:Consumer<ThemeNotifier>(
+                          builder: (context, notifier, child) =>
+                              FlatButton(
+                          focusColor: myFocusNode.hasFocus
+                              ? Colors.black
+                              : Colors.grey,
+                          focusNode: myFocusNode,
+                          onPressed: () => _showIntegerDialog(),
+                          child:new Align(alignment: Alignment.bottomLeft, child: new Text("Team Experience: $_currentvalue",style:
+                             TextStyle(
+                              fontSize: notifier.custFontSize,
+                              fontWeight: FontWeight.bold,
+                              //color: KirthanStyles.colorPallete60
+                             )
+                          ),),
+                              )  )// color: Colors.grey,
+                        ),
+                        /*TextFormField(
                           //attribute: "Description",
 
                           decoration: InputDecoration(
@@ -358,10 +415,10 @@ class _TeamWriteState extends State<TeamWrite> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                              /*icon: const Icon(
+                              *//*icon: const Icon(
                                 Icons.description,
                                 color: Colors.grey,
-                              ),*/
+                              ),*//*
                               labelText: "Experience",
                               hintText: "Add Experience",
                               hintStyle: TextStyle(
@@ -379,7 +436,7 @@ class _TeamWriteState extends State<TeamWrite> {
                             }
                             return null;
                           },
-                        ),
+                        ),*/
                       ),
                       elevation: 5,
                     ),
@@ -557,7 +614,7 @@ class _TeamWriteState extends State<TeamWrite> {
                           //   },
                           // ),
                           SizedBox(height: 35),
-                          Card(
+                          /*Card(
                             child: Container(
                               //padding: new EdgeInsets.all(10),
                               child: DropdownButtonFormField<String>(
@@ -586,6 +643,27 @@ class _TeamWriteState extends State<TeamWrite> {
                                   return null;
                                 },
                               ),
+                            ),
+                          ),*/
+                          Container(
+                            child:SelectState(
+                              onCountryChanged: (value) {
+                                setState(() {
+                                  //eventrequest.country = value;
+                                });
+                              },
+                              onStateChanged:(value) {
+                                setState(() {
+                                 // eventrequest.state = value;
+                                });
+                              },
+                              onCityChanged:(value) {
+                                setState(() {
+                                  teamrequest.location = value;
+                                });
+                              },
+
+
                             ),
                           ),
                           SizedBox(

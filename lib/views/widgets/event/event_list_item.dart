@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
 import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
@@ -89,7 +90,7 @@ class EventRequestsListItem extends StatelessWidget {
                                       child: Icon(
                                         Icons.location_on_sharp,
                                         color: KirthanStyles.colorPallete30,
-                                        size: 20,
+                                        size: notifier.custFontSize,
                                       ),
                                     ),
                                     Text(
@@ -97,7 +98,7 @@ class EventRequestsListItem extends StatelessWidget {
                                       style: TextStyle(
                                         color: KirthanStyles.colorPallete30,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontSize: notifier.custFontSize,
                                       ),
                                     ),
                                   ],
@@ -310,7 +311,7 @@ class EventRequestsListItem extends StatelessWidget {
     eventrequest.eventDescription +
     "\n" +
     "Event Duration:" +
-    "--" +
+    "--"
     eventrequest.eventDuration +
     " hrs" +
     "\n" +
@@ -331,26 +332,32 @@ class EventRequestsListItem extends StatelessWidget {
                     ),
                   ]),
             )));
-    var subTitle = Row(
-      children: <Widget>[
-        /*Icon(
+    var subTitle = Wrap(
+      children: [
+        Row(
+          children: <Widget>[
+            /*Icon(
           Icons.movie,
           color: KirthanStyles.subTitleColor,
           size: KirthanStyles.subTitleFontSize,
         ),
         */
-        Container(
-          margin: const EdgeInsets.only(left: 10.0),
-          child: Consumer<ThemeNotifier>(
-            builder: (context, notifier, child) => Text(
-              eventrequest?.eventDescription,
-              style: TextStyle(
-                // color: KirthanStyles.subTitleColor,
-                fontSize: notifier.custFontSize,
+            Container(
+              width: MediaQuery.of(context).size.width - 33,
+              margin: const EdgeInsets.only(left: 10.0, top: 10),
+              child: Consumer<ThemeNotifier>(
+                builder: (context, notifier, child) => Text(
+                  eventrequest?.eventDescription,
+                  style: TextStyle(
+                    // color: KirthanStyles.subTitleColor,
+                    color: Colors.grey,
+                    fontSize: notifier.custFontSize - 2,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          ],
+        )
       ],
     );
     var daysToGo = Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -363,19 +370,19 @@ class EventRequestsListItem extends StatelessWidget {
           final eventDate = eventrequest.eventDate;
           DateTime EventDate = DateTime.parse(eventDate);
           DateTime dateTimeNow = DateTime.now();
-          int daysRemaining = EventDate.difference(dateTimeNow).inDays-1;
-          if(daysRemaining ==-1){
+          int daysRemaining = EventDate.difference(dateTimeNow).inDays;
+          if(daysRemaining ==0){
             return Text(
-              daysRemaining.toString() + 'This Day',
+               'Today',
               //daysRemaining.abs().toString() + ' days ago',
               style: TextStyle(
                 // color: KirthanStyles.subTitleColor,
                   fontSize: notifier.custFontSize,
                   color: Colors.green[700]),
-            );
+          );
           }
-          if (daysRemaining >= 0) {
-            return Text(
+          if (daysRemaining > 0) {
+          return Text(
               (daysRemaining+1).toString() + ' days to go',
               style: TextStyle(
                   fontSize: notifier.custFontSize,
@@ -383,7 +390,7 @@ class EventRequestsListItem extends StatelessWidget {
             );
           } else if (daysRemaining < 0) {
             return Text(
-              daysRemaining.toString() +'Event ended',
+              'Event ended',
               //daysRemaining.abs().toString() + ' days ago',
               style: TextStyle(
                 // color: KirthanStyles.subTitleColor,
