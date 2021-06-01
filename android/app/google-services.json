@@ -1,42 +1,210 @@
 {
   "project_info": {
-    "project_number": "88718054042",
-    "firebase_url": "https://kirtan-iskcon-a7822-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "kirtan-iskcon-a7822",
-    "storage_bucket": "kirtan-iskcon-a7822.appspot.com"
+    "project_number": "638627243036",
+    "firebase_url": "https://iskconkirthan.firebaseio.com",
+    "project_id": "iskconkirthan",
+    "storage_bucket": "iskconkirthan.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:88718054042:android:97d2c10967a1050a55c523",
+        "mobilesdk_app_id": "1:638627243036:android:0a65f85988b608730e2bd9",
         "android_client_info": {
           "package_name": "org.iskcon.flutter_kirthan"
         }
       },
       "oauth_client": [
         {
-          "client_id": "88718054042-iu5sk9htbavnisdsqdie87d7861cb68m.apps.googleusercontent.com",
+          "client_id": "638627243036-3j4l39snfksf3fcjt4jn54a2ok2dle7d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "org.iskcon.flutter_kirthan",
-            "certificate_hash": "055b9ab24a03cb536f935c51ed7147b6e05003d5"
+            "certificate_hash": "3cb244ecd99ff3cdbf462ccb1fea4f841fa3562f"
           }
         },
         {
-          "client_id": "88718054042-k7162fque184bel1ird0h5a7va4u9rdr.apps.googleusercontent.com",
+          "client_id": "638627243036-5cscu5bb47dukn5ja0jt4qdq038fl49t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "75d4fedd28b0c4e6cb13eb7d86b253b077b54e2c"
+          }
+        },
+        {
+          "client_id": "638627243036-5gbrdlnmgtjoch7l00jtguhkkq5sqpsh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "6286dc63e758bc4b10185ca68b054899998bed71"
+          }
+        },
+        {
+          "client_id": "638627243036-5j71nf5ek1gt0o23048oju60keqfout2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "ca456b5fbb8adb423473c759b3cccbc2b665adb7"
+          }
+        },
+        {
+          "client_id": "638627243036-6mluumm5qgs7ketov9lof5s32mf6uc56.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "5a01f91a2ed310820947f87c641a02b544b0ce22"
+          }
+        },
+        {
+          "client_id": "638627243036-6p6ni5ekv1b70g4mthmglpd5almse3ap.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "f33ea0674f16679f77d1f54dfb6aacb1dc419ce1"
+          }
+        },
+        {
+          "client_id": "638627243036-74id3jol2234tiekphghheg5tfmbm760.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "69986a85185c0d112e8c8c0002fb166d40e7562f"
+          }
+        },
+        {
+          "client_id": "638627243036-7c5lktvke0i1pbv6gv7e3tl2gt2usaql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "fd19df0a60d775892321fef12e209d41ecd3934b"
+          }
+        },
+        {
+          "client_id": "638627243036-9tjrrdhbgp7gmd7hrp73m4p03utrrqht.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "4b96b5ef05cbbe794448e5048f263ee2e95b9fd5"
+          }
+        },
+        {
+          "client_id": "638627243036-a8rfhuh9b7jkdfnbrufibkb8e0un6e21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "aef38f80ccafd6c7c109bf48911d189ca3e1e4c0"
+          }
+        },
+        {
+          "client_id": "638627243036-d06l8ist1pv08cv81a7r99tcseftp3hr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "da7853fa3c253700b500d66885c5cb897d95f7c9"
+          }
+        },
+        {
+          "client_id": "638627243036-ffrolfohho14g51e4q07881lv8kgfmcn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "b4cd890c1cd51431f4fa910bb516c41ba968cb34"
+          }
+        },
+        {
+          "client_id": "638627243036-hqaa7qgqh0mdrc9ecai2dtebhb8itkua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "277f4138a8e051a21a340b7abb274d330cac90a1"
+          }
+        },
+        {
+          "client_id": "638627243036-jpmi078nolk52idln49cb7k68gt8co4g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "a6105c4f828c39a4dbbc764664ad4d48832bcd25"
+          }
+        },
+        {
+          "client_id": "638627243036-jtfk5ogct1elucreb54cm4uh4k4hbd32.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "d7f03fd616af0f0cabfdd2cfbf5ca8e4579cd259"
+          }
+        },
+        {
+          "client_id": "638627243036-ohk03v2pp002c721ebk3s4h6shd5louj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "ab9864a9fcc6374efb5dc7fd0eeab744eb0b30e8"
+          }
+        },
+        {
+          "client_id": "638627243036-p4pbehhdd5nt7bolsh16ujjmrvtq5qnd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "e0ab9a510011ba45f61d846bbaee0b2ab23feaf5"
+          }
+        },
+        {
+          "client_id": "638627243036-pq6uvr19f1on5r565oggnduu3f8mfj1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "ff6de4a134507c9fc981e43950ae7d36ccb00068"
+          }
+        },
+        {
+          "client_id": "638627243036-r4spg31h8915fe3sovv6mloqod3kcfil.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "0172df447dff11f6b3218c825f7cf3fe03c7150d"
+          }
+        },
+        {
+          "client_id": "638627243036-r7c44n15rm9c0i8u0klt73tvkr4vtmvl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "914f434b069bc3d38b15e6e69f11d9649769270b"
+          }
+        },
+        {
+          "client_id": "638627243036-tvkk07tullfjugub340062l9i68iletl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "e712b5fc07ce0663c5afbd6425b69c98e0af8c8f"
+          }
+        },
+        {
+          "client_id": "638627243036-vt78olpktng01usjfjn2r9lkoqmkmvs8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan",
+            "certificate_hash": "4e4541ffbbf22167e30aa62275aa41fb8ea68073"
+          }
+        },
+        {
+          "client_id": "638627243036-rcudqhc9m1d9rgpj3bmgvl3f1cbmdc65.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDqSZiVohFVyB7b4Ob5OhKXHPkjmieiwLg"
+          "current_key": "AIzaSyAXohJaMpv8JqywiPZoXydUG4mmqZTxxNA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "88718054042-k7162fque184bel1ird0h5a7va4u9rdr.apps.googleusercontent.com",
+              "client_id": "638627243036-rcudqhc9m1d9rgpj3bmgvl3f1cbmdc65.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
