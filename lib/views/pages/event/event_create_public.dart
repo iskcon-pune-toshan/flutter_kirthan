@@ -1,7 +1,11 @@
 import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/commonlookuptable.dart';
-import 'package:flutter_kirthan/models/eventteam.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
@@ -18,19 +22,12 @@ import 'package:flutter_kirthan/views/pages/event/home_page_map/locationuserwidg
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 final CommonLookupTablePageViewModel commonLookupTablePageVM =
-    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
-
+CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 class EventWritePublic extends StatefulWidget {
   final String screenName = SCR_EVENT;
   EventRequest eventrequest;
@@ -39,11 +36,9 @@ class EventWritePublic extends StatefulWidget {
   UserDetail userDetail;
   @override
   _EventWriteState createState() => _EventWriteState();
-
   EventWritePublic({@required this.eventrequest, @required this.userLogin})
       : super();
 }
-
 class _EventWriteState extends State<EventWritePublic> {
   FocusNode myFocusNode = new FocusNode();
   TeamRequest selectedTeam;
@@ -53,7 +48,6 @@ class _EventWriteState extends State<EventWritePublic> {
   List<Marker> get markerssource => myMarkersource;
   GoogleMapController mapController;
   LatLng tappedPoint1;
-
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
   List<String> _states = [
@@ -95,7 +89,6 @@ class _EventWriteState extends State<EventWritePublic> {
     "Lakshadweep",
     "Puducherry"
   ];
-
   List<String> _cities = [
     'Pune',
     'Kant',
@@ -112,17 +105,14 @@ class _EventWriteState extends State<EventWritePublic> {
   String _selectedState;
   String _selectedCountry;
   String _selectedCategory;
-
   void initState() {
     _getUserLocation();
     super.initState();
   }
-
   handleTap(LatLng tappedPoint1) {
     // print(tappedPoint1);
     setState(() {
       myMarkersource = [];
-
       myMarkersource.add(
         Marker(
           markerId: MarkerId(tappedPoint1.toString()),
@@ -136,7 +126,6 @@ class _EventWriteState extends State<EventWritePublic> {
       //print(eventrequest.sourceLatitude);
     });
   }
-
   handleTap2(LatLng tappedPoint1) {
     //  print(tappedPoint1);
     setState(() {
@@ -153,31 +142,26 @@ class _EventWriteState extends State<EventWritePublic> {
       //print(eventrequest.destinationLatitude);
     });
   }
-
   void onMapCreated(controller) {
     setState(() {
       mapController = controller;
     });
   }
-
   final FirebaseAuth auth = FirebaseAuth.instance;
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     eventrequest.createdBy = email;
     // print("created by " + eventrequest.createdBy);
-
     //  print(email);
     return email;
   }
-
   GoogleMapController _controller;
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
       _controller = controller;
     });
   }
-
   void _animateCamera() {
     _controller.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -188,7 +172,6 @@ class _EventWriteState extends State<EventWritePublic> {
       ),
     );
   }
-
   Widget _googleMapsWidget(MapsState state) {
     return GoogleMap(
       onTap: handleTap2,
@@ -201,7 +184,6 @@ class _EventWriteState extends State<EventWritePublic> {
       markers: Set.from(myMarker),
     );
   }
-
   Widget _googleMapsWidget2(MapsState state) {
     return GoogleMap(
       onTap: handleTap,
@@ -215,12 +197,10 @@ class _EventWriteState extends State<EventWritePublic> {
       markers: Set.from(myMarkersource),
     );
   }
-
   LatLng _lastMapPosition = _center;
   static const LatLng _center = const LatLng(-25.4157807, -54.6166762);
   MapsBloc _mapsBloc;
   static LatLng _initialPosition;
-
   void _getUserLocation() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -228,7 +208,6 @@ class _EventWriteState extends State<EventWritePublic> {
       _initialPosition = LatLng(position.latitude, position.longitude);
     });
   }
-
   List type = ["Stationary", "Moving"];
   bool isVisible = false;
   String select;
@@ -255,13 +234,12 @@ class _EventWriteState extends State<EventWritePublic> {
         Text(
           title,
           style: TextStyle(
-              //color:  KirthanStyles.titleColor ,
+            //color:  KirthanStyles.titleColor ,
               fontWeight: FontWeight.normal),
         )
       ],
     );
   }
-
   String validateMobile(String value) {
     String patttern = r'(^(?:[+0]9)?[0-9]{10}$)';
     RegExp regExp = new RegExp(patttern);
@@ -272,14 +250,23 @@ class _EventWriteState extends State<EventWritePublic> {
     }
     return null;
   }
-
+  String validatePin(String value) {
+    String pattern = r'(^[1-9]{1}[0-9]{2}[0-9]{3}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter pin code';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid pin code';
+    }
+    return null;
+  }
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
     return Scaffold(
       key: _scaffoldKey,
       //resizeToAvoidBottomInset: false,
-
       appBar: AppBar(
           elevation: 0.0,
           iconTheme: IconThemeData(
@@ -298,7 +285,6 @@ class _EventWriteState extends State<EventWritePublic> {
               child: Form(
                 // context,
                 key: _formKey,
-              //  autovalidate: true,
                 // readonly: true,
                 child: Column(
                   //crossAxisAlignment: CrossAxisAlignment.center,
@@ -315,7 +301,9 @@ class _EventWriteState extends State<EventWritePublic> {
                     Container(
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
-                        focusNode: myFocusNode,
+                        //autovalidate: true,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        //focusNode: myFocusNode,
                         //attribute: "eventTitle",
                         decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -331,7 +319,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             ),
                             labelStyle: TextStyle(
                                 color: myFocusNode.hasFocus
-                                    ? Colors.black
+                                    ? Colors.grey
                                     : Colors.grey)),
                         onSaved: (input) {
                           eventrequest.eventTitle = input;
@@ -344,10 +332,10 @@ class _EventWriteState extends State<EventWritePublic> {
                         },
                       ),
                     ),
-
                     Container(
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         //attribute: "Description",
                         decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -388,6 +376,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           DateTimeField(
+                            //autocorrect: true,
                             format: DateFormat("yyyy-MM-dd"),
                             onShowPicker: (context, currentValue) async {
                               final date = await showDatePicker(
@@ -404,8 +393,8 @@ class _EventWriteState extends State<EventWritePublic> {
                               // print(eventrequest.eventDate);
                             },
                             validator: (value) {
-                              if (value.toString().isEmpty) {
-                                return "Please enter some text";
+                              if (value.toString().isEmpty || value == null) {
+                                return "Please enter event date";
                               }
                               return null;
                             },
@@ -438,9 +427,14 @@ class _EventWriteState extends State<EventWritePublic> {
                                   DateFormat("HH:mm").format(input).toString();
                               // print(eventrequest.eventStartTime);
                             },
+                            onChanged: (input) {
+                              eventrequest.eventStartTime =
+                                  DateFormat("HH:mm").format(input).toString();
+                              // print(eventrequest.eventStartTime);
+                            },
                             validator: (value) {
-                              if (value.toString().isEmpty) {
-                                return "Please enter some text";
+                              if (value.toString().isEmpty || value == null) {
+                                return "Please enter start time";
                               }
                               return null;
                             },
@@ -474,16 +468,28 @@ class _EventWriteState extends State<EventWritePublic> {
                               // print(eventrequest.eventEndTime);
                             },
                             validator: (value) {
-                              if (value.toString().isEmpty) {
-                                return "Please enter some text";
+                              if (value.toString().isEmpty || value == null) {
+                                return "Please enter end time";
+                              } else {
+                                String time =
+                                    "${value.hour < 10 ? ("0" + value.hour.toString()) : value.hour}:${value.minute < 10 ? ("0" + value.minute.toString()) : value.minute}";
+                                print(time.compareTo(
+                                    eventrequest.eventStartTime != null
+                                        ? eventrequest.eventStartTime
+                                        : ""));
+                                return time.compareTo(
+                                    eventrequest.eventStartTime != null
+                                        ? eventrequest.eventStartTime
+                                        : "") ==
+                                    1
+                                    ? null
+                                    : "End time must be more than start time";
                               }
-                              return null;
                             },
                           ),
                         ],
                       ),
                     ),
-
                     FutureBuilder(
                         future: commonLookupTablePageVM.getCommonLookupTable(
                             "lookupType:Event-type-Category"),
@@ -501,9 +507,9 @@ class _EventWriteState extends State<EventWritePublic> {
                                   style: TextStyle(color: Colors.grey)),
                               items: _category
                                   .map((category) => DropdownMenuItem<String>(
-                                        value: category,
-                                        child: Text(category),
-                                      ))
+                                value: category,
+                                child: Text(category),
+                              ))
                                   .toList(),
                               onChanged: (input) {
                                 setState(() {
@@ -524,11 +530,10 @@ class _EventWriteState extends State<EventWritePublic> {
                             return Container();
                           }
                         }),
-
                     Container(
                       //padding: new EdgeInsets.all(10),
                       child: TextFormField(
-
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           //attribute: "PhoneNumber",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -561,7 +566,6 @@ class _EventWriteState extends State<EventWritePublic> {
                               fontSize: 17.0,
                               color: KirthanStyles.colorPallete30),
                         )),
-
                     Column(
                       children: <Widget>[
                         Row(
@@ -575,7 +579,9 @@ class _EventWriteState extends State<EventWritePublic> {
                             children: <Widget>[
                               RaisedButton.icon(
                                 onPressed: () {
-                                  Navigator.push(
+                                  select == null
+                                      ? null
+                                      : Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => BlocProvider(
@@ -592,34 +598,40 @@ class _EventWriteState extends State<EventWritePublic> {
                                                   }), //setState
                                                 }, //onpressed
                                               ),
-                                              IconButton(
-                                                icon: Icon(Icons.done),
-                                                onPressed: () {
-                                                  //handleTap(tappedPoint1);
-                                                  Navigator.pop(context);
-                                                },
-                                                //onpressed
-                                              ),
+                                       new MaterialButton(
+                                         onPressed:(){ Navigator.pop(context);},
+                                      color: themeData.primaryColor,
+                                      textColor: themeData.secondaryHeaderColor,
+                                      child: new Text(
+                                        'Save',
+                                        style: TextStyle(color: KirthanStyles.colorPallete30),
+                                      ),
+                                    )
                                             ],
                                           ),
                                           body: BlocListener(
-                                            listener: (BuildContext context,
+                                            listener:
+                                                (BuildContext context,
                                                 MapsState state) {
                                               if (state
-                                                  is LocationFromPlaceFound) {
+                                              is LocationFromPlaceFound) {
                                                 Scaffold.of(context)
                                                   ..hideCurrentSnackBar();
                                                 _lastMapPosition = LatLng(
-                                                    state.locationModel.lat,
-                                                    state.locationModel.long);
+                                                    state.locationModel
+                                                        .lat,
+                                                    state.locationModel
+                                                        .long);
                                               }
-
-                                              if (state is LocationUserfound) {
+                                              if (state
+                                              is LocationUserfound) {
                                                 Scaffold.of(context)
                                                   ..hideCurrentSnackBar();
                                                 _lastMapPosition = LatLng(
-                                                    state.locationModel.lat,
-                                                    state.locationModel.long);
+                                                    state.locationModel
+                                                        .lat,
+                                                    state.locationModel
+                                                        .long);
                                                 _animateCamera();
                                               }
                                               if (state is Failure) {
@@ -630,15 +642,16 @@ class _EventWriteState extends State<EventWritePublic> {
                                                     SnackBar(
                                                       content: Row(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                         children: [
                                                           Text('Error'),
-                                                          Icon(Icons.error)
+                                                          Icon(
+                                                              Icons.error)
                                                         ],
                                                       ),
                                                       backgroundColor:
-                                                          Colors.red,
+                                                      Colors.red,
                                                     ),
                                                   );
                                               }
@@ -650,8 +663,8 @@ class _EventWriteState extends State<EventWritePublic> {
                                                     SnackBar(
                                                       content: Row(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                         children: [
                                                           Text('Loading'),
                                                           CircularProgressIndicator(),
@@ -665,7 +678,8 @@ class _EventWriteState extends State<EventWritePublic> {
                                             bloc: _mapsBloc,
                                             child: BlocBuilder(
                                                 bloc: _mapsBloc,
-                                                builder: (BuildContext context,
+                                                builder:
+                                                    (BuildContext context,
                                                     MapsState state) {
                                                   return Scaffold(
                                                     body: Stack(
@@ -673,12 +687,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                                         _googleMapsWidget2(
                                                             state),
                                                         MapOption(
-                                                            mapType:
-                                                                MapType.normal),
+                                                            mapType: MapType
+                                                                .normal),
                                                         LocationUser(),
                                                         SearchPlace(
                                                             onPressed:
-                                                                _animateCamera),
+                                                            _animateCamera),
                                                         //RangeRadius(isRadiusFixed: _isRadiusFixed),
                                                       ],
                                                     ),
@@ -707,7 +721,34 @@ class _EventWriteState extends State<EventWritePublic> {
                                 color: Colors.white,
                               ),
                             ]),
+                        Container(
+                          padding: EdgeInsets.all(0),
+                          width: MediaQuery.of(context).size.width,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              isCollapsed: true,
+                              errorBorder: UnderlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.transparent),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.transparent),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.transparent),
+                              ),
+                            ),
+                            validator: (value) {
+                              return select == null
+                                  ? "Please select at least one venue type"
+                                  : null;
+                            },
+                          ),
+                        ),
                         TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           //attribute: "Address",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -717,7 +758,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 borderSide: BorderSide(color: Colors.green),
                               ),
                               icon: const Icon(Icons.home, color: Colors.grey),
-                              labelText: "Line One",
+                              labelText: "Address",
                               hintText: "",
                               hintStyle: TextStyle(
                                 color: Colors.grey,
@@ -737,6 +778,7 @@ class _EventWriteState extends State<EventWritePublic> {
                           },
                         ),
                         TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           //attribute: "line2",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -764,6 +806,7 @@ class _EventWriteState extends State<EventWritePublic> {
                           },
                         ),
                         TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           //attribute: "locality",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -814,30 +857,30 @@ class _EventWriteState extends State<EventWritePublic> {
                                                     }), //setState
                                                   }, //onpressed
                                                 ),
-                                                IconButton(
-                                                  icon: Icon(Icons.done),
-                                                  onPressed: () {
-                                                    //handleTap(tappedPoint1);
-                                                    Navigator.pop(context);
-                                                  },
-                                                  //onpressed
-                                                ),
+                                                new MaterialButton(
+                                                  onPressed:(){ Navigator.pop(context);},
+                                                  color: themeData.primaryColor,
+                                                  textColor: themeData.secondaryHeaderColor,
+                                                  child: new Text(
+                                                    'Save',
+                                                    style: TextStyle(color: KirthanStyles.colorPallete30),
+                                                  ),
+                                                )
                                               ],
                                             ),
                                             body: BlocListener(
                                               listener: (BuildContext context,
                                                   MapsState state) {
                                                 if (state
-                                                    is LocationFromPlaceFound) {
+                                                is LocationFromPlaceFound) {
                                                   Scaffold.of(context)
                                                     ..hideCurrentSnackBar();
                                                   _lastMapPosition = LatLng(
                                                       state.locationModel.lat,
                                                       state.locationModel.long);
                                                 }
-
                                                 if (state
-                                                    is LocationUserfound) {
+                                                is LocationUserfound) {
                                                   Scaffold.of(context)
                                                     ..hideCurrentSnackBar();
                                                   _lastMapPosition = LatLng(
@@ -853,15 +896,15 @@ class _EventWriteState extends State<EventWritePublic> {
                                                       SnackBar(
                                                         content: Row(
                                                           mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                           children: [
                                                             Text('Error'),
                                                             Icon(Icons.error)
                                                           ],
                                                         ),
                                                         backgroundColor:
-                                                            Colors.red,
+                                                        Colors.red,
                                                       ),
                                                     );
                                                 }
@@ -873,8 +916,8 @@ class _EventWriteState extends State<EventWritePublic> {
                                                       SnackBar(
                                                         content: Row(
                                                           mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                           children: [
                                                             Text('Loading'),
                                                             CircularProgressIndicator(),
@@ -890,7 +933,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                                   bloc: _mapsBloc,
                                                   builder:
                                                       (BuildContext context,
-                                                          MapsState state) {
+                                                      MapsState state) {
                                                     return Scaffold(
                                                       body: Stack(
                                                         children: <Widget>[
@@ -902,7 +945,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                                           LocationUser(),
                                                           SearchPlace(
                                                               onPressed:
-                                                                  _animateCamera),
+                                                              _animateCamera),
                                                         ],
                                                       ),
                                                     );
@@ -934,6 +977,8 @@ class _EventWriteState extends State<EventWritePublic> {
                         Visibility(
                           visible: isVisible,
                           child: TextFormField(
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
                             //attribute: "Address",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -943,7 +988,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                   borderSide: BorderSide(color: Colors.green),
                                 ),
                                 icon:
-                                    const Icon(Icons.home, color: Colors.grey),
+                                const Icon(Icons.home, color: Colors.grey),
                                 labelText: "Destination-Line One",
                                 hintText: "",
                                 hintStyle: TextStyle(
@@ -966,6 +1011,8 @@ class _EventWriteState extends State<EventWritePublic> {
                         Visibility(
                           visible: isVisible,
                           child: TextFormField(
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
                             //attribute: "line2",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -996,6 +1043,8 @@ class _EventWriteState extends State<EventWritePublic> {
                         Visibility(
                           visible: isVisible,
                           child: TextFormField(
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
                             //attribute: "locality",
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -1024,57 +1073,51 @@ class _EventWriteState extends State<EventWritePublic> {
                           ),
                         ),
                         TextFormField(
-                          //attribute: "PinCode",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              labelText: "PinCode",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.pincode = int.parse(input);
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
+                            //attribute: "PinCode",
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "PinCode",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                )),
+                            onSaved: (input) {
+                              eventrequest.pincode = int.parse(input);
+                            },
+                            validator: validatePin),
                         Container(
-                          child:SelectState(
+                          child: SelectState(
                             onCountryChanged: (value) {
                               setState(() {
                                 eventrequest.country = value;
                               });
                             },
-                            onStateChanged:(value) {
+                            onStateChanged: (value) {
                               setState(() {
                                 eventrequest.state = value;
                               });
                             },
-                            onCityChanged:(value) {
+                            onCityChanged: (value) {
                               setState(() {
                                 eventrequest.city = value;
                               });
                             },
-
                           ),
                         )
                       ],
                     ),
-
-                /*    Column(
-                      children: *//*<Widget>[
+                    /*    Column(
+                      children: */ /*<Widget>[
                         DropdownButtonFormField<String>(
                           value: _selectedCity,
                           icon: const Icon(Icons.location_city),
@@ -1137,7 +1180,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             eventrequest.country = input;
                           },
                         ),
-                      ],*//*
+                      ],*/ /*
                     ),*/
                     //getTeamsWidget(),
                     //getTeamsWidget(),
@@ -1162,59 +1205,52 @@ class _EventWriteState extends State<EventWritePublic> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 final FirebaseUser user =
-                                    await auth.currentUser();
+                                await auth.currentUser();
                                 final String email = user.email;
                                 eventrequest.createdBy = email;
                                 // print("created by " + eventrequest.createdBy);
                                 // print(email);
-
                                 _formKey.currentState.save();
                                 //eventrequest.isProcessed = true;
                                 eventrequest.isPublicEvent = true;
                                 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
                                 // print(eventrequest.createdBy);
                                 List<CommonLookupTable> selectedCategory =
-                                    await commonLookupTablePageVM
-                                        .getCommonLookupTable(
-                                            "description:" + _selectedCategory);
+                                await commonLookupTablePageVM
+                                    .getCommonLookupTable(
+                                    "description:" + _selectedCategory);
                                 for (var i in selectedCategory)
                                   eventrequest.eventType = i.id;
                                 String dt =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                    .format(DateTime.now());
                                 eventrequest.createdTime = dt;
                                 eventrequest.updatedBy = email;
                                 eventrequest.updatedTime = null;
                                 //eventrequest.approvalStatus = "Processing";
                                 //eventrequest.approvalComments = "AAA";
                                 Map<String, dynamic> teammap =
-                                    eventrequest.toJson();
+                                eventrequest.toJson();
                                 //TeamRequest newteamrequest = await apiSvc
                                 //  ?.submitNewTeamRequest(teammap);
                                 EventRequest neweventrequest = await eventPageVM
                                     .submitNewEventRequest(teammap);
-
                                 // print(neweventrequest.id);
                                 String eid = neweventrequest.id.toString();
-
                                 SnackBar mysnackbar = SnackBar(
                                   content: Text(
                                       "Event registered $successful with $eid"),
                                   duration: new Duration(seconds: 4),
                                   backgroundColor: Colors.green,
                                 );
-
                                 String dta =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
-
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                    .format(DateTime.now());
                                 //eventteam.updatedBy = "SYSTEM";
                                 //eventteam.updatedTime = dt;
-
                                 _scaffoldKey.currentState
                                     .showSnackBar(mysnackbar);
                                 Scaffold.of(context).showSnackBar(mysnackbar);
-
                                 //eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
                               }
                             }),

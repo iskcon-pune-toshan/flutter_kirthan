@@ -21,16 +21,24 @@ class MapOption extends StatelessWidget {
             top: 150,
             right: 5,
             child: Card(
-              child: IconButton(
+              child: RaisedButton(
+                onPressed: () {
+                  BlocProvider.of<MapsBloc>(context)
+                      .add(MapTypeButtonPressed(currentMapType: mapType));
+                },
+                color: Colors.black54,
+                child: new Text('Check',style: TextStyle(color:Colors.white),),
+              )
+              /*IconButton(
                 icon: Icon(
-                  Icons.map,
+                  Icons.check,
                   color: Colors.grey[700],
                 ),
                 onPressed: () {
                   BlocProvider.of<MapsBloc>(context)
                       .add(MapTypeButtonPressed(currentMapType: mapType));
                 },
-              ),
+              ),*/
             ),
           ),
         );
