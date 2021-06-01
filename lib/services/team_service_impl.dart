@@ -127,7 +127,7 @@ class TeamAPIService extends BaseAPIService implements ITeamRestApi {
       String localAdminName = array[1];
       requestBody = '{"localAdminName":"$localAdminName"}';
     } else if(teamTitle == "Initiated"){
-      requestBody = '{"localAdminName":"$LocalAdminName"}';
+      requestBody = '{"localAdminName":"$LocalAdminName", "approvalStatus": "approved"}';
     }else if (teamTitle.contains("teamLead")) {
       var array = teamTitle.split(":");
       String teamLeadId = array[1];
