@@ -224,6 +224,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
             appBar: AppBar(
               title: Text(
                 "Events",
+                style: TextStyle(fontSize: notifier.custFontSize),
               ),
               actions: <Widget>[
                 IconButton(

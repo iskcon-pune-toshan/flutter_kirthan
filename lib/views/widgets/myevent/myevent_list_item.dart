@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
@@ -55,13 +57,13 @@ class MyEventRequestsListItem extends StatelessWidget {
       Colors.red;
   }
 
-  Text getstatus() {
+  Text getstatus(double font) {
     if (eventrequest?.teamInviteStatus == 1)
       return Text(
         'Processing',
         style: TextStyle(
           color: getcolor(),
-          fontSize: 16,
+          fontSize: font,
         ),
         textAlign: TextAlign.end,
       );
@@ -70,7 +72,7 @@ class MyEventRequestsListItem extends StatelessWidget {
         'Approved',
         style: TextStyle(
           color: getcolor(),
-          fontSize: 16,
+          fontSize: font,
         ),
         textAlign: TextAlign.end,
       );
@@ -79,7 +81,7 @@ class MyEventRequestsListItem extends StatelessWidget {
         'Not Initiated',
         style: TextStyle(
           color: getcolor(),
-          fontSize: 16,
+          fontSize: font,
         ),
         textAlign: TextAlign.end,
       );
@@ -88,12 +90,15 @@ class MyEventRequestsListItem extends StatelessWidget {
         'Cancelled',
         style: TextStyle(
           color: getcolor(),
-          fontSize: 16,
+          fontSize: font,
         ),
         textAlign: TextAlign.end,
       );
   }
-
+getdate(){
+    DateTime date=DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
+    return '${date.toString().substring(0,10)}';
+}
   @override
   Widget build(BuildContext context) {
     var title = Consumer<ThemeNotifier>(
@@ -139,6 +144,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                                       "Location",
                                       style: TextStyle(
                                         color: KirthanStyles.colorPallete60,
+                                        fontSize: notifier.custFontSize,
                                       ),
                                     ),
                                     Container(
@@ -146,7 +152,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                                       child: Icon(
                                         Icons.location_on,
                                         color: KirthanStyles.colorPallete60,
-                                        size: 20,
+                                        size: notifier.custFontSize,
                                       ),
                                     ),
                                   ],
@@ -421,7 +427,7 @@ class MyEventRequestsListItem extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.grey,
                   // color: KirthanStyles.subTitleColor,
-                  fontSize: notifier.custFontSize - 3,
+                  fontSize: notifier.custFontSize - 1,
                 ),
               ),
             ),
@@ -432,7 +438,7 @@ class MyEventRequestsListItem extends StatelessWidget {
               alignment: Alignment.centerRight,
               //margin: const EdgeInsets.only(left: 4.0),
               child: Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => getstatus(),
+                builder: (context, notifier, child) => getstatus(notifier.custFontSize),
                 /*Text(
            // eventrequest?.approvalStatus,
             style: TextStyle(
@@ -509,8 +515,9 @@ class MyEventRequestsListItem extends StatelessWidget {
                                     Container(
                                       padding: EdgeInsets.only(bottom: 15),
                                       child: Text(
-                                        eventrequest?.eventDate
-                                            .substring(0, 10),
+                                        /*eventrequest?.eventDate
+                                            .substring(0, 10),*/
+                                        getdate(),
 //0,10 date
 //11,16 time
                                         style: TextStyle(

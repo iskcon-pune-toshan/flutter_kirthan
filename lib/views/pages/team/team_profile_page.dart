@@ -72,7 +72,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                     ': ' + Phone.toString(),
                     style: TextStyle(
                         fontSize: notifier.custFontSize,
-                        color: Colors.grey[400]),
+                        color: notifier.darkTheme?Colors.grey[400]:Colors.grey[700]),
                   );
                 }
               }
@@ -97,7 +97,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                     username,
                     style: TextStyle(
                         fontSize: notifier.custFontSize,
-                        color: Colors.grey[300]),
+                        color: notifier.darkTheme?Colors.grey[300]:Colors.grey[700]),
                   );
                 }
               }
@@ -131,7 +131,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                           (index + 1).toString() + ". " + memberList[index],
                           style: TextStyle(
                               fontSize: notifier.custFontSize,
-                              color: Colors.grey[400]),
+                              color: notifier.darkTheme?Colors.grey[400]:Colors.grey[700]),
                         ),
                       ],
                     );
@@ -145,40 +145,42 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
   }
 
   Widget teamCategory(TeamRequest data) {
-    return FutureBuilder(
-        future: commonLookupTablePageVM
-            .getCommonLookupTable("lookupType:Event-type-Category"),
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            List<CommonLookupTable> cltList = snapshot.data;
-            List<CommonLookupTable> currCategory = cltList
-                .where((element) => element.id == data.category)
-                .toList();
+    return Consumer<ThemeNotifier>(
+      builder:(context, notifier, child)=> FutureBuilder(
+          future: commonLookupTablePageVM
+              .getCommonLookupTable("lookupType:Event-type-Category"),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              List<CommonLookupTable> cltList = snapshot.data;
+              List<CommonLookupTable> currCategory = cltList
+                  .where((element) => element.id == data.category)
+                  .toList();
 
-            for (var i in currCategory) {
-              type = i.description;
+              for (var i in currCategory) {
+                type = i.description;
+              }
+              return Row(
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Type: ',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: notifier.darkTheme?Colors.grey[300]:Colors.grey[700]),
+                      )),
+                  Text(
+                    type != null ? type : "New",
+                    style: TextStyle(fontSize: 16, color: notifier.darkTheme?Colors.grey[400]:Colors.grey[600]),
+                  )
+                ],
+              );
+            } else {
+              return Container();
             }
-            return Row(
-              children: [
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Type: ',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[300]),
-                    )),
-                Text(
-                  type != null ? type : "New",
-                  style: TextStyle(fontSize: 16, color: Colors.grey[400]),
-                )
-              ],
-            );
-          } else {
-            return Container();
-          }
-        });
+          }),
+    );
   }
 
   @override
@@ -226,7 +228,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(20),
                                     topRight: Radius.circular(20)),
-                                color: Colors.grey[800],
+                                color:notifier.darkTheme? Colors.grey[800]:Colors.white,
                               ),
                               child: SingleChildScrollView(
                                 child: Column(
@@ -252,7 +254,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                     fontSize: 19 +
                                                         notifier.custFontSize,
                                                     fontWeight: FontWeight.w800,
-                                                    color: Colors.grey[100]),
+                                                    color: notifier.darkTheme?Colors.grey[100]:Colors.grey[900]),
                                               ),
                                               SizedBox(
                                                 height: 10,
@@ -263,7 +265,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                     fontSize: 6 +
                                                         notifier.custFontSize,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.grey[200]),
+                                                    color: notifier.darkTheme?Colors.grey[200]:Colors.grey[800]),
                                               ),
                                               SizedBox(
                                                 height: 10,
@@ -303,7 +305,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                     fontSize: 4 +
                                                         notifier.custFontSize,
                                                     fontWeight: FontWeight.w500,
-                                                    color: Colors.grey[300]),
+                                                    color: notifier.darkTheme?Colors.grey[300]:Colors.grey[700]),
                                               ),
                                             ],
                                           ),
@@ -322,7 +324,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                     fontSize:
                                                         notifier.custFontSize,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.grey[300]),
+                                                    color: notifier.darkTheme?Colors.grey[300]:Colors.grey[700]),
                                               )),
                                           SizedBox(
                                             height: 10,
@@ -344,14 +346,14 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color:
-                                                            Colors.grey[300]),
+                                                        notifier.darkTheme?Colors.grey[300]:Colors.grey[700]),
                                                   )),
                                               Text(
                                                 experience,
                                                 style: TextStyle(
                                                     fontSize:
                                                         notifier.custFontSize,
-                                                    color: Colors.grey[400]),
+                                                    color: notifier.darkTheme?Colors.grey[400]:Colors.grey[600]),
                                               )
                                             ],
                                           ),
@@ -383,7 +385,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                           notifier.custFontSize,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: Colors.grey[300]),
+                                                      color: notifier.darkTheme?Colors.grey[300]:Colors.grey[700]),
                                                 ),
                                               ],
                                             ),
@@ -396,7 +398,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                               Icon(
                                                 Icons.call,
                                                 size: 30,
-                                                color: Colors.grey[300],
+                                                color: notifier.darkTheme?Colors.grey[300]:Colors.grey[700],
                                               ),
                                               SizedBox(
                                                 width: 10,
@@ -411,7 +413,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                             children: <Widget>[
                                               Icon(Icons.mail,
                                                   size: 30,
-                                                  color: Colors.grey[300]),
+                                                  color: notifier.darkTheme?Colors.grey[300]:Colors.grey[700]),
                                               SizedBox(
                                                 width: 10,
                                               ),
@@ -420,7 +422,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                 style: TextStyle(
                                                     fontSize:
                                                         notifier.custFontSize,
-                                                    color: Colors.grey[400]),
+                                                    color: notifier.darkTheme?Colors.grey[400]:Colors.grey[700]),
                                               ),
                                               SizedBox(
                                                 height: 5,

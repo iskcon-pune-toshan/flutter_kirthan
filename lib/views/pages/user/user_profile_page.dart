@@ -134,213 +134,215 @@ class _UserProfileState extends State<UserProfile> {
         ),
         backgroundColor: KirthanStyles.colorPallete30,
       ),
-      body: FutureBuilder<List<UserRequest>>(
-          future: Users,
-          builder: (context, snapshot) {
-            if (snapshot.data != null) {
-              userList = snapshot.data;
-              for (var uname in userList) {
-                if (uname.fullName == UserName) {
-                  Email = uname.email;
-                  Phone = uname.phoneNumber;
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      FractionallySizedBox(
-                        alignment: Alignment.topCenter,
-                        heightFactor: 0.2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: KirthanStyles.colorPallete30,
+      body: Consumer<ThemeNotifier>(
+        builder:(context, notifier, child)=> FutureBuilder<List<UserRequest>>(
+            future: Users,
+            builder: (context, snapshot) {
+              if (snapshot.data != null) {
+                userList = snapshot.data;
+                for (var uname in userList) {
+                  if (uname.fullName == UserName) {
+                    Email = uname.email;
+                    Phone = uname.phoneNumber;
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        FractionallySizedBox(
+                          alignment: Alignment.topCenter,
+                          heightFactor: 0.2,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: KirthanStyles.colorPallete30,
+                            ),
                           ),
                         ),
-                      ),
 
-                      FractionallySizedBox(
-                        alignment: Alignment.bottomCenter,
-                        heightFactor: 0.95,
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20)),
-                            color: Colors.grey[800],
-                          ),
-                          child: SingleChildScrollView(
-                            child: Column(children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: Color(0xf0000000),
-                                    child: ClipOval(
-                                      child: new SizedBox(
-                                        width: 100.0,
-                                        height: 100.0,
-                                        child: (photoUrl != null)
-                                            ? Image.network(
-                                          photoUrl,
-                                          fit: BoxFit.contain,
-                                        )
-                                            : ProfilePages(),
+                        FractionallySizedBox(
+                          alignment: Alignment.bottomCenter,
+                          heightFactor: 0.95,
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20)),
+                              color:notifier.darkTheme?Colors.grey[800]:Colors.white,
+                            ),
+                            child: SingleChildScrollView(
+                              child: Column(children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      radius: 50,
+                                      backgroundColor: Color(0xf0000000),
+                                      child: ClipOval(
+                                        child: new SizedBox(
+                                          width: 100.0,
+                                          height: 100.0,
+                                          child: (photoUrl != null)
+                                              ? Image.network(
+                                            photoUrl,
+                                            fit: BoxFit.contain,
+                                          )
+                                              : ProfilePages(),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  Consumer<ThemeNotifier>(
-                                    builder: (context, notifier, child) =>Container(
-                                      margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width:MediaQuery.of(context).size.width*0.5,
-                                            child:UserRole(userList)
-                                                ? Text(
-                                              currUserRole,
-                                              style: TextStyle(
-                                                  fontSize: 19+notifier.custFontSize,
-                                                  fontWeight: FontWeight.w800),
-                                            )
-                                                :null,),
-                                          Divider(),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Container(
-                                            child: Text(
-                                              UserName,
-                                              style: TextStyle(fontSize: 10+notifier.custFontSize),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                    Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child) =>Container(
+                                        margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width:MediaQuery.of(context).size.width*0.5,
+                                              child:UserRole(userList)
+                                                  ? Text(
+                                                currUserRole,
+                                                style: TextStyle(
+                                                    fontSize: 19+notifier.custFontSize,
+                                                    fontWeight: FontWeight.w800),
+                                              )
+                                                  :null,),
+                                            Divider(),
+                                            SizedBox(
+                                              height: 10,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Divider(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Consumer<ThemeNotifier>(
-                                builder: (context, notifier, child)=>
-                                    Container(
-                                      margin: EdgeInsets.fromLTRB(20, 0, 5, 5),
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Contact Details:',
-                                        style: TextStyle(
-                                            fontSize: notifier.custFontSize,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.call,
-                                    size: 30,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    ': ' + Phone.toString(),
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.mail,
-                                    size: 30,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    ': ' + Email,
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Divider(thickness: 3,),
-                                  SizedBox(height: 5),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.pin_drop,
-                                    size: 30,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Consumer<ThemeNotifier>(
-                                    builder: (context, notifier, child)=>
-                                        Center(
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(10, 3, 0, 0),
-                                            width: MediaQuery.of(context).size.width *
-                                                0.7,
-                                            height: 40,
-                                            margin:
-                                            EdgeInsets.fromLTRB(10, 10, 20, 0),
-                                            decoration: BoxDecoration(
-                                                color: Colors.grey[500],
-                                                border: Border.all(
-                                                  style: BorderStyle.solid,
-                                                )),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
+                                            Container(
                                               child: Text(
-                                                uname.locality,
-                                                style: TextStyle(color: Colors.black,fontSize: notifier.custFontSize),
+                                                UserName,
+                                                style: TextStyle(fontSize: 10+notifier.custFontSize),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Divider(),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Consumer<ThemeNotifier>(
+                                  builder: (context, notifier, child)=>
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(20, 0, 5, 5),
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'Contact Details:',
+                                          style: TextStyle(
+                                              fontSize: notifier.custFontSize,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.call,
+                                      size: 30,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      ': ' + Phone.toString(),
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.mail,
+                                      size: 30,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      ': ' + Email,
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Divider(thickness: 3,),
+                                    SizedBox(height: 5),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.pin_drop,
+                                      size: 30,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Consumer<ThemeNotifier>(
+                                      builder: (context, notifier, child)=>
+                                          Center(
+                                            child: Container(
+                                              padding: EdgeInsets.fromLTRB(10, 3, 0, 0),
+                                              width: MediaQuery.of(context).size.width *
+                                                  0.7,
+                                              height: 40,
+                                              margin:
+                                              EdgeInsets.fromLTRB(10, 10, 20, 0),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[500],
+                                                  border: Border.all(
+                                                    style: BorderStyle.solid,
+                                                  )),
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  uname.locality,
+                                                  style: TextStyle(color: Colors.black,fontSize: notifier.custFontSize),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
 
-                            ]),
+                              ]),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
+                      ],
+                    );
+                  }
                 }
               }
-            }
-            return Container();
-          }),
+              return Container();
+            }),
+      ),
     );
   }
 }

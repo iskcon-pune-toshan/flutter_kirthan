@@ -35,6 +35,7 @@ class EditEvent extends StatefulWidget {
 
 class _EditEventState extends State<EditEvent> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  final key = GlobalKey<State<Tooltip>>();
   String _selectedState;
   String state;
   String _hour, _minute, _time;
@@ -119,7 +120,6 @@ class _EditEventState extends State<EditEvent> {
   String updatedTime;
   String approvalStatus;
   String _selectedCategory;
-
   @override
   void initState() {
     _eventTitleController.text = widget.eventrequest.eventTitle;
@@ -158,14 +158,96 @@ class _EditEventState extends State<EditEvent> {
     else
       return true;
   }
+  DateTime selectedDate=DateTime.now();
+  _selectDate(BuildContext context) async {
+    selectedDate=DateTime.parse(widget.eventrequest.eventDate);
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate:DateTime.parse(widget.eventrequest.eventDate),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null) {
+      setState(() {
+      widget.eventrequest.eventDate =
+          DateFormat("yyyy-MM-dd").format(picked).toString();
+      selectedDate=selectedDate.add(new Duration(days: 2));
+     selectedDate = picked;
 
+      });
+    } else
+      setState(() {
+      _eventDateController.text =
+          widget.eventrequest.eventDate;
+      selectedDate=selectedDate.add(new Duration(days: 1));
+      selectedDate = picked;
+  });
+   /* if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });*/
+  }
+  _selectStartTime(BuildContext context) async {
+    selectedDate=DateTime.parse(widget.eventrequest.eventDate);
+   // TimeOfDay time=TimeOfDay.fromDateTime(DateTime.parse(widget.eventrequest.eventStartTime));
+     final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(
+           DateTime.now()),
+    );
+    if (picked != null) {
+      setState(() {
+       DateTime timee= DateTimeField.convert(picked);
+       // TimeOfDay.fromDateTime(DateTime.parse(picked);
+          widget.eventrequest.eventStartTime =
+              DateFormat("HH:mm").format(timee).toString();
+
+
+      });
+    } else
+      setState(() {
+        _eventStartTimeController.text =
+            widget.eventrequest.eventStartTime;
+      });
+    /* if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });*/
+  }
+  _selectEndTime(BuildContext context) async {
+    selectedDate=DateTime.parse(widget.eventrequest.eventDate);
+    // TimeOfDay time=TimeOfDay.fromDateTime(DateTime.parse(widget.eventrequest.eventStartTime));
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(
+          DateTime.now()),
+    );
+    if (picked != null) {
+      setState(() {
+        DateTime timee= DateTimeField.convert(picked);
+        // TimeOfDay.fromDateTime(DateTime.parse(picked);
+        widget.eventrequest.eventEndTime =
+            DateFormat("HH:mm").format(timee).toString();
+
+
+      });
+    } else
+      setState(() {
+        _eventEndTimeController.text =
+            widget.eventrequest.eventEndTime;
+      });
+    /* if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });*/
+  }
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final DateTime today = new DateTime.now();
 
     return new Scaffold(
-        appBar: new AppBar(title: const Text('Edit Profile'), actions: <Widget>[
+        appBar: new AppBar(title: const Text('Edit Event'), actions: <Widget>[
           new Container(
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
               child: new MaterialButton(
@@ -276,16 +358,22 @@ class _EditEventState extends State<EditEvent> {
                         return Container();
                       }
                     }),
-                new Container(
+    Container(child:RaisedButton(
+    onPressed: () => _selectDate(context), // Refer step 3
+    child: Text(
+    "${widget.eventrequest.eventDate.substring(0,10)}".split(' ')[0],)
+    ),
+    )
+              /*  new Container(
                   child: DateTimeField(
                     format: DateFormat("yyyy-MM-dd"),
                     onShowPicker: (context, currentValue) async {
                       final date = await showDatePicker(
                           context: context,
                           firstDate:
-                              DateTime.parse(widget.eventrequest.eventDate),
+                              DateTime.now(),
                           initialDate:
-                              currentValue ?? widget.eventrequest.eventDate,
+                          currentValue ?? DateTime.now(),
                           lastDate: DateTime(2100));
                       return date;
                     },
@@ -302,8 +390,21 @@ class _EditEventState extends State<EditEvent> {
                     //controller: _eventDateController,
                     autocorrect: false,
                   ),
+               )*/,
+                Container(child:RaisedButton(
+                    onPressed: () => _selectStartTime(context), // Refer step 3
+                    child: Text(
+                      "${widget.eventrequest.eventStartTime}",)
                 ),
-                new Container(
+
+                ),
+    Container(child:RaisedButton(
+    onPressed: () => _selectEndTime(context), // Refer step 3
+    child: Text(
+    "${widget.eventrequest.eventEndTime}",)
+    ),
+    ),
+           /*     new Container(
                   child: DateTimeField(
                     format: DateFormat("HH:mm"),
                     onShowPicker: (context, currentValue) async {
@@ -328,8 +429,8 @@ class _EditEventState extends State<EditEvent> {
                             widget.eventrequest.eventStartTime;
                     },
                   ),
-                ),
-                new Container(
+                ),*/
+              /*  new Container(
                   child: DateTimeField(
                     format: DateFormat("HH:mm"),
                     onShowPicker: (context, currentValue) async {
@@ -354,7 +455,7 @@ class _EditEventState extends State<EditEvent> {
                             widget.eventrequest.eventEndTime;
                     },
                   ),
-                ),
+                ),*/
                 new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(
@@ -427,9 +528,23 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
+
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+
+                        suffixIcon: widget.eventrequest.isPublicEvent == false
+                            ? IconButton(
+                                icon: Icon(Icons.info_outline),
+                                tooltip: 'cannot be edited',
+                                onPressed: () {},
+                              )
+                            : IconButton(
+                                icon: Icon(Icons.clear),
+                                tooltip: 'cannot be edited',
+                                onPressed: () {
+                                  _pincodeController.clear();
+                                }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),

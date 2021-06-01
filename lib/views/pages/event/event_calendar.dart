@@ -86,9 +86,9 @@ class CalendarClass extends State<CalendarPage> {
       Meeting meetingData = Meeting(
           eventName: eventName.eventTitle,
           from:DateTime(DateTime.parse(eventName.eventDate).year,
-              DateTime.parse(eventName.eventDate).month,DateTime.parse(eventName.eventDate).day,one.hour,one.minute),
+              DateTime.parse(eventName.eventDate).month,DateTime.parse(eventName.eventDate).add(new Duration(days: 1)).day,one.hour,one.minute),
           to: DateTime(DateTime.parse(eventName.eventDate).year,
-              DateTime.parse(eventName.eventDate).month,DateTime.parse(eventName.eventDate).day).add(Duration(hours: int.parse(duration))),
+              DateTime.parse(eventName.eventDate).month,DateTime.parse(eventName.eventDate).add(new Duration(days: 1)).day).add(Duration(hours: int.parse(duration))),
           background: Colors.blue,
       );
 

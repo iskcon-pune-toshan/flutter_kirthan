@@ -41,7 +41,10 @@ class EventRequestsListItem extends StatelessWidget {
   }
 
   String get index => null;
-
+  getdate(){
+    DateTime date=DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
+    return '${date.toString().substring(0,10)}';
+  }
   @override
   Widget build(BuildContext context) {
     var title = SingleChildScrollView(
@@ -351,7 +354,7 @@ class EventRequestsListItem extends StatelessWidget {
                   style: TextStyle(
                     // color: KirthanStyles.subTitleColor,
                     color: Colors.grey,
-                    fontSize: notifier.custFontSize - 2,
+                    fontSize: notifier.custFontSize - 1,
                   ),
                 ),
               ),
@@ -369,21 +372,23 @@ class EventRequestsListItem extends StatelessWidget {
         child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
           final eventDate = eventrequest.eventDate;
           DateTime EventDate = DateTime.parse(eventDate);
-          DateTime dateTimeNow = DateTime.now();
+          DateTime now = DateTime.now();
+          var dateTime = DateFormat('yyyy-MM-dd').format(now);
+          DateTime dateTimeNow = DateTime.parse(dateTime);
           int daysRemaining = EventDate.difference(dateTimeNow).inDays;
           if(daysRemaining ==0){
             return Text(
-               'Today',
+              'Today',
               //daysRemaining.abs().toString() + ' days ago',
               style: TextStyle(
                 // color: KirthanStyles.subTitleColor,
                   fontSize: notifier.custFontSize,
                   color: Colors.green[700]),
-          );
+            );
           }
-          if (daysRemaining > 0) {
-          return Text(
-              (daysRemaining+1).toString() + ' days to go',
+          if (daysRemaining > 1) {
+            return Text(
+              (daysRemaining).toString() + ' days to go',
               style: TextStyle(
                   fontSize: notifier.custFontSize,
                   color: Colors.green[700]),
@@ -397,7 +402,16 @@ class EventRequestsListItem extends StatelessWidget {
                   fontSize: notifier.custFontSize,
                   color: Colors.red[700]),
             );
-          } else {
+          }else if (daysRemaining ==1) {
+            return Text(
+              'Tomorrow',
+              //daysRemaining.abs().toString() + ' days ago',
+              style: TextStyle(
+                // color: KirthanStyles.subTitleColor,
+                  fontSize: notifier.custFontSize,
+                  color: Colors.green[700]),
+            );
+          }  else {
             return Container();
           }
         }),
@@ -463,7 +477,8 @@ class EventRequestsListItem extends StatelessWidget {
                                 margin: const EdgeInsets.symmetric(
                                     horizontal: 10.0),
                                 child: Text(
-                                  eventrequest?.eventDate.substring(0, 10),
+                                  getdate(),
+                                  //eventrequest?.eventDate.substring(0, 10),
 //0,10 date
 //11,16 time
 

@@ -36,6 +36,7 @@ class BottomNavigation extends StatelessWidget {
       icon: Icon(
         icon,
         color: _tabColor(index: index),
+        //size: 20,
       ),
       title: Text(
         tabName,

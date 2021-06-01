@@ -60,6 +60,7 @@ class MyEventsPanel extends StatelessWidget {
                           ),*/
                         ],
                       ),
+
                       Expanded(
                         child: Scrollbar(
                           controller: ScrollController(

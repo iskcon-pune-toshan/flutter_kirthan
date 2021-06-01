@@ -271,7 +271,7 @@ class _EventWriteState extends State<EventWrite> {
               child: Form(
                 // context,
                 key: _formKey,
-                autovalidate: true,
+               // autovalidate: true,
                 // readonly: true,
                 child: Column(
                   //crossAxisAlignment: CrossAxisAlignment.center,

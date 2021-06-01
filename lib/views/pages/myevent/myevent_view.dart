@@ -130,14 +130,16 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
         appBar: AppBar(
           title: Text(
             "My Events",
-            //style: TextStyle(fontSize: notifier.custFontSize),
+            style: TextStyle(fontSize: notifier.custFontSize),
           ),
           actions: <Widget>[
           ],
           iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
         ),
         drawer: MyDrawer(),
-        body: Column(
+        //resizeToAvoidBottomPadding: false,
+        //resizeToAvoidBottomInset: false,
+        body:SingleChildScrollView(child: Column(
           children: <Widget>[
             SwitchListTile(
                 title: Consumer<ThemeNotifier>(
@@ -161,7 +163,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
             RefreshIndicator(
               key: refreshKey,
               child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.75,
                   child: _v == false
                       ? ScopedModel<EventPageViewModel>(
                           model: eventPageVM,
@@ -174,7 +176,7 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
             ),
           ],
         ),
-
+        )
       ),
     );
   }
