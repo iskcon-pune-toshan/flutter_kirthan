@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
@@ -22,6 +24,15 @@ import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_kirthan/services/authenticate_service.dart';
+import 'package:flutter_kirthan/services/firebasemessage_service.dart';
+import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
+import 'event_calendar.dart';
+import 'package:rating_dialog/rating_dialog.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
+import 'package:move_to_background/move_to_background.dart';
+
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
 final UserPageViewModel userPageVM =
@@ -208,7 +219,10 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     //print("Accesstype: C: $accessTypes.containsKey(ACCESS_TYPE_CREATE)");
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
     return new WillPopScope(
-      onWillPop: _onWillPop,
+      onWillPop:()async {
+        MoveToBackground.moveTaskToBack();
+        return false;
+      },
       child: Consumer<ThemeNotifier>(
         builder: (content, notifier, child) => Scaffold(
             appBar: AppBar(
