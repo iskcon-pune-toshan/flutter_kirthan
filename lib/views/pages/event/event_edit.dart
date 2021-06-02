@@ -39,46 +39,17 @@ class _EditEventState extends State<EditEvent> {
   String _selectedState;
   String state;
   String _hour, _minute, _time;
-  var _states = [
-    "Kant",
-    "Andhra Pradesh",
-    "MH",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jammu and Kashmir",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttarakhand",
-    "Uttar Pradesh",
-    "West Bengal",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli",
-    "Daman and Diu",
-    "Delhi",
-    "Lakshadweep",
-    "Puducherry"
-  ];
+  String validatePin(String value) {
+    String pattern = r'(^[1-9]{1}[0-9]{2}[0-9]{3}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter pin code';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid pin code';
+    }
+    return null;
+  }
+
   // controllers for form text controllers
   final TextEditingController _eventTitleController =
       new TextEditingController();
@@ -294,7 +265,18 @@ class _EditEventState extends State<EditEvent> {
               children: <Widget>[
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
+                        suffixIcon: widget.eventrequest.isPublicEvent == false
+                            ? IconButton(
+                          icon: Icon(Icons.info_outline),
+                          tooltip: 'Private event cannot be edited',
+                          onPressed:(){},
+                        )
+                            : IconButton(icon: Icon(Icons.clear),
+                            //tooltip: 'cannot be edited',
+                            onPressed: () {
+                              _eventTitleController.clear();
+                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -313,6 +295,11 @@ class _EditEventState extends State<EditEvent> {
                     controller: _eventTitleController,
                     onSaved: (String value) {
                       widget.eventrequest.eventTitle = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Please enter some title";
+                      }
                     },
                   ),
                 ),
@@ -358,13 +345,15 @@ class _EditEventState extends State<EditEvent> {
                         return Container();
                       }
                     }),
-    Container(child:RaisedButton(
-    onPressed: () => _selectDate(context), // Refer step 3
-    child: Text(
-    "${widget.eventrequest.eventDate.substring(0,10)}".split(' ')[0],)
-    ),
-    )
-              /*  new Container(
+                Container(
+                  child: RaisedButton(
+                      onPressed: () => _selectDate(context), // Refer step 3
+                      child: Text(
+                        "${widget.eventrequest.eventDate.substring(0, 10)}"
+                            .split(' ')[0],
+                      )),
+                )
+                /*  new Container(
                   child: DateTimeField(
                     format: DateFormat("yyyy-MM-dd"),
                     onShowPicker: (context, currentValue) async {
@@ -398,13 +387,14 @@ class _EditEventState extends State<EditEvent> {
                 ),
 
                 ),
-    Container(child:RaisedButton(
-    onPressed: () => _selectEndTime(context), // Refer step 3
-    child: Text(
-    "${widget.eventrequest.eventEndTime}",)
-    ),
-    ),
-           /*     new Container(
+                Container(
+                  child: RaisedButton(
+                      onPressed: () => _selectEndTime(context), // Refer step 3
+                      child: Text(
+                        "${widget.eventrequest.eventEndTime}",
+                      )),
+                ),
+                /*     new Container(
                   child: DateTimeField(
                     format: DateFormat("HH:mm"),
                     onShowPicker: (context, currentValue) async {
@@ -458,7 +448,17 @@ class _EditEventState extends State<EditEvent> {
                 ),*/
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
+                        suffixIcon: widget.eventrequest.isPublicEvent == false
+                            ? IconButton(
+                          icon: Icon(Icons.info_outline),
+                          tooltip: 'Private event cannot be edited',
+                          onPressed:(){},
+                        )
+                            : IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _eventDescriptionController.clear();
+                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -478,11 +478,28 @@ class _EditEventState extends State<EditEvent> {
                     onSaved: (String value) {
                       widget.eventrequest.eventDescription = value;
                     },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Please enter some text";
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(
+                    enabled: widget.eventrequest.isPublicEvent,
+                    decoration:  InputDecoration(
+                        suffixIcon: widget.eventrequest.isPublicEvent == false
+                            ? IconButton(
+                          icon: Icon(Icons.info_outline),
+                          tooltip: 'Private event cannot be edited',
+                          onPressed:(){},
+                        )
+                            : IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _lineoneController.clear();
+                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -502,11 +519,28 @@ class _EditEventState extends State<EditEvent> {
                     onSaved: (String value) {
                       widget.eventrequest.addLineOneS = value;
                     },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Please enter some text";
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(
+                    enabled: widget.eventrequest.isPublicEvent,
+                    decoration:  InputDecoration(
+                        suffixIcon: widget.eventrequest.isPublicEvent == false
+                            ? IconButton(
+                          icon: Icon(Icons.info_outline),
+                          tooltip: 'Private event cannot be edited',
+                          onPressed:(){},
+                        )
+                            : IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _linetwoController.clear();
+                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -526,25 +560,29 @@ class _EditEventState extends State<EditEvent> {
                     onSaved: (String value) {
                       widget.eventrequest.addLineTwoS = value;
                     },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Please enter some text";
+                      }
+                      return null;
+                    },
                   ),
                 ),
 
                 new Container(
                   child: new TextFormField(
-                    decoration: InputDecoration(
-
+                    enabled: widget.eventrequest.isPublicEvent,
+                    decoration:  InputDecoration(
                         suffixIcon: widget.eventrequest.isPublicEvent == false
                             ? IconButton(
-                                icon: Icon(Icons.info_outline),
-                                tooltip: 'cannot be edited',
-                                onPressed: () {},
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.clear),
-                                tooltip: 'cannot be edited',
-                                onPressed: () {
-                                  _pincodeController.clear();
-                                }),
+                          icon: Icon(Icons.info_outline),
+                          tooltip: 'Private event cannot be edited',
+                          onPressed:(){},
+                        )
+                            : IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _pincodeController.clear();
+                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -562,13 +600,25 @@ class _EditEventState extends State<EditEvent> {
                     readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _pincodeController,
                     onSaved: (String value) {
-                      //  widget.eventrequest.pincode = value;
+                     widget.eventrequest.pincode = int.parse(value);
                     },
+                      validator: validatePin,
                   ),
                 ),
                 new Container(
                   child: new TextFormField(
-                    decoration: const InputDecoration(
+                    enabled: widget.eventrequest.isPublicEvent,
+                    decoration:  InputDecoration(
+                        suffixIcon: widget.eventrequest.isPublicEvent == false
+                            ? IconButton(
+                          icon: Icon(Icons.info_outline),
+                          tooltip: 'Private event cannot be edited',
+                          onPressed:(){},
+                        )
+                            : IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _cityController.clear();
+                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -588,9 +638,15 @@ class _EditEventState extends State<EditEvent> {
                     onSaved: (String value) {
                       widget.eventrequest.city = value;
                     },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Please enter some city name";
+                      }
+                      return null;
+                    },
                   ),
                 ),
-                new Container(
+               /* new Container(
                   child: new TextFormField(
                     decoration: const InputDecoration(
                         enabledBorder: UnderlineInputBorder(
@@ -613,25 +669,47 @@ class _EditEventState extends State<EditEvent> {
                       widget.eventrequest.createdTime = value;
                     },
                   ),
-                ),
-                DropdownButtonFormField<String>(
-                  value: widget.eventrequest.state,
-                  icon: const Icon(Icons.location_city),
-                  hint: Text('Select State'),
-                  items: _states
-                      .map((state) => DropdownMenuItem(
-                            value: state,
-                            child: Text(state),
-                          ))
-                      .toList(),
-                  onChanged: (input) {
-                    setState(() {
-                      _selectedState = input;
-                    });
-                  },
-                  onSaved: (input) {
-                    widget.eventrequest.state = input;
-                  },
+                ),*/
+                new Container(
+                  child: new TextFormField(
+                    enabled: widget.eventrequest.isPublicEvent,
+                    decoration:  InputDecoration(
+                        suffixIcon: widget.eventrequest.isPublicEvent == false
+                            ? IconButton(
+                          icon: Icon(Icons.info_outline),
+                          tooltip: 'Private event cannot be edited',
+                          onPressed:(){},
+                        )
+                            : IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _stateController.clear();
+                            }),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "State",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
+                    autocorrect: false,
+                    readOnly: readonly(widget.eventrequest.isPublicEvent),
+                    controller: _stateController,
+                    onSaved: (String value) {
+                      widget.eventrequest.state = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Please enter State name";
+                      }
+                      return null;
+                    },
+                  ),
                 ),
               ],
             )));

@@ -1116,6 +1116,33 @@ class _EventWriteState extends State<EventWritePublic> {
                         )
                       ],
                     ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        errorBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (eventrequest.city == null) {
+                          if (eventrequest.state == null) {
+                            if (eventrequest.country == null) {
+                              return "Please select country, state, city";
+                            }
+                            return "Please select state, city";
+                          }
+                          return "Please select city";
+                        }
+                        return null;
+                      },
+                    ),
+
                     /*    Column(
                       children: */ /*<Widget>[
                         DropdownButtonFormField<String>(
