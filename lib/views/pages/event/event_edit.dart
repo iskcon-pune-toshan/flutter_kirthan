@@ -12,8 +12,10 @@ import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final EventPageViewModel eventPageVM =
@@ -85,6 +87,8 @@ class _EditEventState extends State<EditEvent> {
   final TextEditingController _stateController = new TextEditingController();
   final TextEditingController _updatedByController =
       new TextEditingController();
+  final TextEditingController _eventTypeController =
+  new TextEditingController();
   String updatedBy;
   final TextEditingController _updatedTimeController =
       new TextEditingController();
@@ -212,6 +216,24 @@ class _EditEventState extends State<EditEvent> {
         selectedDate = picked;
       });*/
   }
+  Widget help() {
+    return GestureDetector(
+      onTap: () {
+        final dynamic tooltip = _toolTipKey.currentState;
+        tooltip.ensureTooltipVisible();
+      },
+      child: Tooltip(
+        key: _toolTipKey,
+        message: 'Title and Description can only be edited for this event',
+        child: IconButton(
+          icon: Icon(Icons.help_outline),
+          color: KirthanStyles.colorPallete30,
+        ),
+      ),
+    )
+    ;
+  }
+  GlobalKey _toolTipKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
@@ -219,42 +241,19 @@ class _EditEventState extends State<EditEvent> {
 
     return new Scaffold(
         appBar: new AppBar(title: const Text('Edit Event'), actions: <Widget>[
-          new Container(
-              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
-              child: new MaterialButton(
-                color: themeData.primaryColor,
-                textColor: themeData.secondaryHeaderColor,
-                child: new Text(
-                  'Save',
-                  style: TextStyle(color: KirthanStyles.colorPallete30),
-                ),
-                onPressed: () async {
-                  // _handleSubmitted();
-                  //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                  //_createTimeController.text = dt;
-                  _formKey.currentState.save();
-                  List<CommonLookupTable> selectedCategory =
-                      await commonLookupTablePageVM.getCommonLookupTable(
-                          "description:" + _selectedCategory);
-                  for (var i in selectedCategory)
-                    widget.eventrequest.eventType = i.id;
-                  String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                      .format(DateTime.now());
-                  _updatedTimeController.text =
-                      widget.eventrequest.updatedTime = dt;
-
-                  Navigator.pop(context);
-                  print(eventTitle);
-                  print(eventDate);
-                  print(eventDuration);
-                  print(widget.eventrequest.eventDescription);
-                  //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
-                  //String eventmap = widget.eventrequest.toStrJsonJson();
-                  String eventrequestStr =
-                      jsonEncode(widget.eventrequest.toStrJson());
-                  eventPageVM.submitUpdateEventRequest(eventrequestStr);
-                },
-              ))
+          if(!widget.eventrequest.isPublicEvent)
+         help(),
+         /* IconButton(
+            icon: Icon(Icons.help_outline),
+            onPressed: () => {
+              setState(()
+    {
+    final dynamic tooltip = _toolTipKey.currentState;
+    tooltip.ensureTooltipVisible();
+              }), //setState
+            },
+            tooltip: "Private Event Cannot be edited",//onpressed
+          ),*/
         ]),
         body: new Form(
             key: _formKey,
@@ -266,17 +265,6 @@ class _EditEventState extends State<EditEvent> {
                 new Container(
                   child: new TextFormField(
                     decoration:  InputDecoration(
-                        suffixIcon: widget.eventrequest.isPublicEvent == false
-                            ? IconButton(
-                          icon: Icon(Icons.info_outline),
-                          tooltip: 'Private event cannot be edited',
-                          onPressed:(){},
-                        )
-                            : IconButton(icon: Icon(Icons.clear),
-                            //tooltip: 'cannot be edited',
-                            onPressed: () {
-                              _eventTitleController.clear();
-                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -303,7 +291,79 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
+                /*new Container(
+                  child: new TextFormField(
+                    decoration:  InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelText: "Description",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
+                    //readOnly: readonly(widget.eventrequest.isPublicEvent),
+                    autocorrect: false,
+                    controller: _eventDescriptionController,
+                    onSaved: (String value) {
+                      widget.eventrequest.eventDescription = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Please enter some text";
+                      }
+                      return null;
+                    },
+                  ),
+                ),*/
                 FutureBuilder(
+                    future: commonLookupTablePageVM
+                        .getCommonLookupTable("lookupType:Event-type-Category"),
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null) {
+                        List<CommonLookupTable> cltList = snapshot.data;
+                        List<CommonLookupTable> currCategory = cltList
+                            .where((element) =>
+                        element.id == widget.eventrequest.eventType)
+                            .toList();
+
+                        for (var i in currCategory) {
+                          _selectedCategory = i.description;
+                        }
+                        List<String> _category = cltList
+                            .map((user) => user.description)
+                            .toSet()
+                            .toList();
+                        return DropdownButtonFormField<String>(
+                          value: _selectedCategory,
+                          icon: const Icon(Icons.category),
+                          hint: Text(_selectedCategory,
+                              style: TextStyle(color: Colors.grey)),
+                          items: _category
+                              .map((category) => DropdownMenuItem<String>(
+                            value: category,
+                            child: Text(category),
+                          ))
+                              .toList(),
+                          // onChanged: (input) {
+                          //   setState(() {
+                          //     _selectedCategory = input;
+                          //   });
+                          // },
+                          // onSaved: (input) {
+                          //   _selectedCategory = input;
+                          // },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
+             /*   FutureBuilder(
                     future: commonLookupTablePageVM
                         .getCommonLookupTable("lookupType:Event-type-Category"),
                     builder: (context, snapshot) {
@@ -321,6 +381,37 @@ class _EditEventState extends State<EditEvent> {
                             .map((user) => user.description)
                             .toSet()
                             .toList();
+                        if(!widget.eventrequest.isPublicEvent)
+                          return new Container(
+                            child: new TextFormField(
+                              decoration:  InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.green),
+                                  ),
+                                  labelText: "Event Type",
+                                  hintText: "Event Type eg: Bhajan, Kirtan",
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                  labelStyle: TextStyle(
+                                    color: Colors.grey,
+                                  )),
+                              autocorrect: false,
+                              controller: _,
+                              onSaved: (String value) {
+                                widget.eventrequest.eventTitle = value;
+                              },
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Please enter some title";
+                                }
+                              },
+                            ),
+                          );
+                              else
                         return DropdownButtonFormField<String>(
                           value: _selectedCategory,
                           icon: const Icon(Icons.category),
@@ -344,15 +435,30 @@ class _EditEventState extends State<EditEvent> {
                       } else {
                         return Container();
                       }
-                    }),
-                Container(
+                    }),*/
+              /*  Row(
+                   // mainAxisAlignment: MainAxisAlignment.start,
+    children:[*/
+              if(widget.eventrequest.isPublicEvent==true)
+              Container(
                   child: RaisedButton(
+                      color:themeData.bottomAppBarColor,
+                     // textColor: KirthanStyles.colorPallete30,
                       onPressed: () => _selectDate(context), // Refer step 3
-                      child: Text(
-                        "${widget.eventrequest.eventDate.substring(0, 10)}"
-                            .split(' ')[0],
-                      )),
-                )
+                      child:
+    Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: <Widget>[
+    Consumer<ThemeNotifier>(
+    builder: (context, notifier, child) =>
+    Text(
+    "${widget.eventrequest.eventDate.substring(0, 10)}",
+   // style:TextStyle(fontSize:notifier.custFontSize) ,
+    textAlign: TextAlign.left,
+    ),
+    )],
+    ),),
+                ),
                 /*  new Container(
                   child: DateTimeField(
                     format: DateFormat("yyyy-MM-dd"),
@@ -379,21 +485,56 @@ class _EditEventState extends State<EditEvent> {
                     //controller: _eventDateController,
                     autocorrect: false,
                   ),
-               )*/,
-                Container(child:RaisedButton(
-                    onPressed: () => _selectStartTime(context), // Refer step 3
-                    child: Text(
-                      "${widget.eventrequest.eventStartTime}",)
-                ),
-
-                ),
+               )*/
+                if(widget.eventrequest.isPublicEvent==true)
                 Container(
+                  child: RaisedButton(
+
+                    color:themeData.bottomAppBarColor,
+                    // textColor: KirthanStyles.colorPallete30,
+                    onPressed: () => _selectStartTime(context), // Refer step 3
+                    child:
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Consumer<ThemeNotifier>(
+                          builder: (context, notifier, child) =>
+                              Text(
+                                "${widget.eventrequest.eventStartTime}",
+                                // style:TextStyle(fontSize:notifier.custFontSize) ,
+                                textAlign: TextAlign.left,
+                              ),
+                        )],
+                    ),),
+                ),
+                if(widget.eventrequest.isPublicEvent==true)
+                Container(
+                  child: RaisedButton(
+
+                    color:themeData.bottomAppBarColor,
+                    // textColor: KirthanStyles.colorPallete30,
+                    onPressed: () =>  _selectEndTime(context), // Refer step 3
+                    child:
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Consumer<ThemeNotifier>(
+                          builder: (context, notifier, child) =>
+                              Text(
+                                "${widget.eventrequest.eventEndTime}",
+                                // style:TextStyle(fontSize:notifier.custFontSize) ,
+                                textAlign: TextAlign.left,
+                              ),
+                        )],
+                    ),),
+                ),
+               /* Container(
                   child: RaisedButton(
                       onPressed: () => _selectEndTime(context), // Refer step 3
                       child: Text(
                         "${widget.eventrequest.eventEndTime}",
                       )),
-                ),
+                ),*/
                 /*     new Container(
                   child: DateTimeField(
                     format: DateFormat("HH:mm"),
@@ -446,60 +587,10 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),*/
+                if(widget.eventrequest.isPublicEvent==true)
                 new Container(
                   child: new TextFormField(
                     decoration:  InputDecoration(
-                        suffixIcon: widget.eventrequest.isPublicEvent == false
-                            ? IconButton(
-                          icon: Icon(Icons.info_outline),
-                          tooltip: 'Private event cannot be edited',
-                          onPressed:(){},
-                        )
-                            : IconButton(icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _eventDescriptionController.clear();
-                            }),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "Description",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    readOnly: readonly(widget.eventrequest.isPublicEvent),
-                    autocorrect: false,
-                    controller: _eventDescriptionController,
-                    onSaved: (String value) {
-                      widget.eventrequest.eventDescription = value;
-                    },
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Please enter some text";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                new Container(
-                  child: new TextFormField(
-                    enabled: widget.eventrequest.isPublicEvent,
-                    decoration:  InputDecoration(
-                        suffixIcon: widget.eventrequest.isPublicEvent == false
-                            ? IconButton(
-                          icon: Icon(Icons.info_outline),
-                          tooltip: 'Private event cannot be edited',
-                          onPressed:(){},
-                        )
-                            : IconButton(icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _lineoneController.clear();
-                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -527,20 +618,10 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
+                if(widget.eventrequest.isPublicEvent==true)
                 new Container(
                   child: new TextFormField(
-                    enabled: widget.eventrequest.isPublicEvent,
                     decoration:  InputDecoration(
-                        suffixIcon: widget.eventrequest.isPublicEvent == false
-                            ? IconButton(
-                          icon: Icon(Icons.info_outline),
-                          tooltip: 'Private event cannot be edited',
-                          onPressed:(){},
-                        )
-                            : IconButton(icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _linetwoController.clear();
-                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -568,21 +649,10 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-
+                if(widget.eventrequest.isPublicEvent==true)
                 new Container(
                   child: new TextFormField(
-                    enabled: widget.eventrequest.isPublicEvent,
                     decoration:  InputDecoration(
-                        suffixIcon: widget.eventrequest.isPublicEvent == false
-                            ? IconButton(
-                          icon: Icon(Icons.info_outline),
-                          tooltip: 'Private event cannot be edited',
-                          onPressed:(){},
-                        )
-                            : IconButton(icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _pincodeController.clear();
-                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -597,6 +667,7 @@ class _EditEventState extends State<EditEvent> {
                           color: Colors.grey,
                         )),
                     autocorrect: false,
+                    keyboardType: TextInputType.number,
                     readOnly: readonly(widget.eventrequest.isPublicEvent),
                     controller: _pincodeController,
                     onSaved: (String value) {
@@ -605,20 +676,10 @@ class _EditEventState extends State<EditEvent> {
                       validator: validatePin,
                   ),
                 ),
+                if(widget.eventrequest.isPublicEvent==true)
                 new Container(
                   child: new TextFormField(
-                    enabled: widget.eventrequest.isPublicEvent,
                     decoration:  InputDecoration(
-                        suffixIcon: widget.eventrequest.isPublicEvent == false
-                            ? IconButton(
-                          icon: Icon(Icons.info_outline),
-                          tooltip: 'Private event cannot be edited',
-                          onPressed:(){},
-                        )
-                            : IconButton(icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _cityController.clear();
-                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -670,20 +731,10 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),*/
+                if(widget.eventrequest.isPublicEvent==true)
                 new Container(
                   child: new TextFormField(
-                    enabled: widget.eventrequest.isPublicEvent,
                     decoration:  InputDecoration(
-                        suffixIcon: widget.eventrequest.isPublicEvent == false
-                            ? IconButton(
-                          icon: Icon(Icons.info_outline),
-                          tooltip: 'Private event cannot be edited',
-                          onPressed:(){},
-                        )
-                            : IconButton(icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _stateController.clear();
-                            }),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
@@ -711,6 +762,48 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
+               Row(  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                   children:[new Container(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
+                    child:new RaisedButton(
+                      color:KirthanStyles.colorPallete30,
+                      textColor: themeData.secondaryHeaderColor,
+                      child:Consumer<ThemeNotifier>(
+    builder: (context, notifier, child) =>new Text(
+                        'Save',
+                        style: TextStyle(fontSize:notifier.custFontSize),
+                      ),
+    ),
+                      onPressed: () async {
+                        // _handleSubmitted();
+                        //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+                        //_createTimeController.text = dt;
+                        _formKey.currentState.save();
+                        List<CommonLookupTable> selectedCategory =
+                        await commonLookupTablePageVM.getCommonLookupTable(
+                            "description:" + _selectedCategory);
+                        for (var i in selectedCategory)
+                          widget.eventrequest.eventType = i.id;
+                        String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                            .format(DateTime.now());
+                        _updatedTimeController.text =
+                            widget.eventrequest.updatedTime = dt;
+
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        print(eventTitle);
+                        print(eventDate);
+                        print(eventDuration);
+                        print(widget.eventrequest.eventDescription);
+                        //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
+                        //String eventmap = widget.eventrequest.toStrJsonJson();
+                        String eventrequestStr =
+                        jsonEncode(widget.eventrequest.toStrJson());
+                        eventPageVM.submitUpdateEventRequest(eventrequestStr);
+                      },
+                    )
+                    )
+              ] )
               ],
             )));
   }
