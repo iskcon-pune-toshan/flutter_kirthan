@@ -33,13 +33,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
-    NotificationViewModel(apiSvc: NotificationManager());
+NotificationViewModel(apiSvc: NotificationManager());
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 
 class NotificationView extends StatefulWidget {
   final String title = "Notifications";
@@ -94,7 +94,7 @@ class NotificationViewState extends State<NotificationView> {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
     List<UserRequest> temp =
-        userRequest.where((element) => element.email == user.email).toList();
+    userRequest.where((element) => element.email == user.email).toList();
     for (var users in temp) {
       if (users.roleId == 1 || users.roleId == 2) {
         setState(() {
@@ -126,7 +126,7 @@ class NotificationViewState extends State<NotificationView> {
             if (data.targetType.contains("event") ||
                 data.message.contains("event")) {
               List<UserRequest> user =
-                  await userPageVM.getUserRequests(data.createdBy);
+              await userPageVM.getUserRequests(data.createdBy);
               String userName = " ";
               for (var u in user) {
                 userName = u.fullName;
@@ -134,7 +134,7 @@ class NotificationViewState extends State<NotificationView> {
 
               String eventId = data.targetId.toString();
               List<EventRequest> eventList =
-                  await eventPageVM.getEventRequests("event_id:$eventId");
+              await eventPageVM.getEventRequests("event_id:$eventId");
               EventRequest eventRequest = new EventRequest();
               for (var event in eventList) {
                 eventRequest = event;
@@ -146,10 +146,10 @@ class NotificationViewState extends State<NotificationView> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => AdminEventDetails(
-                              UserName: userName,
-                              eventRequest: eventRequest,
-                              data: data,
-                            )));
+                          UserName: userName,
+                          eventRequest: eventRequest,
+                          data: data,
+                        )));
               });
             } else {
               Navigator.push(context,
@@ -171,7 +171,7 @@ class NotificationViewState extends State<NotificationView> {
                             children: <Widget>[
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Container(
@@ -179,18 +179,18 @@ class NotificationViewState extends State<NotificationView> {
                                       child: Consumer<ThemeNotifier>(
                                         builder: (context, notifier, child) =>
                                             Text(
-                                          data.message,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: notifier.darkTheme
-                                                  ? Colors.white
-                                                  : Colors.black),
-                                          // softWrap: true,
-                                          // overflow: TextOverflow.clip,
-                                        ),
+                                              data.message,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: notifier.darkTheme
+                                                      ? Colors.white
+                                                      : Colors.black),
+                                              // softWrap: true,
+                                              // overflow: TextOverflow.clip,
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -209,28 +209,28 @@ class NotificationViewState extends State<NotificationView> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     padding: EdgeInsets.only(left: 10, top: 3),
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                        //'By ' + data.createdBy.toString(),
-                                        // data.updatedBy == null
-                                        //     ? "By " + data.createdBy.toString()
-                                        //     :
-                                        data.message.contains("Your")
-                                            ? "By " + data.updatedBy.toString()
-                                            : "By " + data.createdBy.toString(),
-                                        overflow: TextOverflow.clip,
-                                        style: TextStyle(
-                                          //fontWeight: FontWeight.w300,
-                                          color: notifier.darkTheme
-                                              ? Colors.white
-                                              : Colors.grey[500],
-                                        ),
-                                      ),
+                                            //'By ' + data.createdBy.toString(),
+                                            // data.updatedBy == null
+                                            //     ? "By " + data.createdBy.toString()
+                                            //     :
+                                            data.message.contains("Your")
+                                                ? "By " + data.updatedBy.toString()
+                                                : "By " + data.createdBy.toString(),
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
+                                              //fontWeight: FontWeight.w300,
+                                              color: notifier.darkTheme
+                                                  ? Colors.white
+                                                  : Colors.grey[500],
+                                            ),
+                                          ),
                                     ),
                                   ),
                                   Container(
@@ -374,7 +374,7 @@ class NotificationViewState extends State<NotificationView> {
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
+          //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -389,196 +389,196 @@ class NotificationViewState extends State<NotificationView> {
                     contentPadding: EdgeInsets.all(5),
                     title: data.message.contains("Rejected")
                         ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Rejected",
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          )
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Rejected",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
                         : data.message.contains("Registered")
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Registered",
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              )
-                            : data.message
-                                    .contains("Request to update an event")
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Updated",
-                                        style: TextStyle(
-                                          color: Colors.green,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  )
-                                : data.message.contains("cancelled")
-                                    ? Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Cancelled",
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                        ],
-                                      )
-                                    : data.message.contains("Approved")
-                                        ? Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Accepted",
-                                                style: TextStyle(
-                                                  color: Colors.green,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
-                                          )
-                                        : Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                data.message,
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
-                                          ),
+                        ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Registered",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : data.message
+                        .contains("Request to update an event")
+                        ? Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Updated",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : data.message.contains("cancelled")
+                        ? Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Cancelled",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : data.message.contains("Approved")
+                        ? Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Accepted",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.message,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                     subtitle: data.message.contains("Registered")
                         ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                data.message,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          )
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.message,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
                         : data.message.contains("cancelled")
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    data.message,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              )
-                            : data.message.contains("Approved") ||
-                                    data.message.contains("Rejected")
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        data.message +
-                                            " by " +
-                                            data.updatedBy.toString(),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  )
-                                : data.message.contains(
-                                        "You have been invited to create a team by")
-                                    ? Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            data.message +
-                                                " by " +
-                                                data.createdBy.toString(),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          FlatButton(
-                                            textColor:
-                                                KirthanStyles.colorPallete60,
-                                            color: KirthanStyles.colorPallete30,
-                                            child: Text("Create team"),
-                                            onPressed: () async {
-                                              List<UserRequest>
-                                                  userRequestList =
-                                                  await userPageVM
-                                                      .getUserRequests(
-                                                          data.createdBy);
-                                              for (var user
-                                                  in userRequestList) {
-                                                userRequestTeam = user;
-                                              }
-                                              List<UserRequest> localAdminList =
-                                                  await userPageVM
-                                                      .getUserRequests(
-                                                          data.updatedBy);
-                                              for (var user in localAdminList) {
-                                                localAdminTeam = user;
-                                              }
-                                              // Navigator.pop(context);
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          TeamWrite(
-                                                            userRequest:
-                                                                userRequestTeam,
-                                                            localAdmin:
-                                                                localAdminTeam,
-                                                          )));
-                                            },
-                                          ),
-                                        ],
-                                      )
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(" "),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                        ],
-                                      ),
+                        ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.message,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : data.message.contains("Approved") ||
+                        data.message.contains("Rejected")
+                        ? Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.message +
+                              " by " +
+                              data.updatedBy.toString(),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                        : data.message.contains(
+                        "You have been invited to create a team by")
+                        ? Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          data.message +
+                              " by " +
+                              data.createdBy.toString(),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        FlatButton(
+                          textColor:
+                          KirthanStyles.colorPallete60,
+                          color: KirthanStyles.colorPallete30,
+                          child: Text("Create team"),
+                          onPressed: () async {
+                            List<UserRequest>
+                            userRequestList =
+                            await userPageVM
+                                .getUserRequests(
+                                data.createdBy);
+                            for (var user
+                            in userRequestList) {
+                              userRequestTeam = user;
+                            }
+                            List<UserRequest> localAdminList =
+                            await userPageVM
+                                .getUserRequests(
+                                data.updatedBy);
+                            for (var user in localAdminList) {
+                              localAdminTeam = user;
+                            }
+                            // Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TeamWrite(
+                                          userRequest:
+                                          userRequestTeam,
+                                          localAdmin:
+                                          localAdminTeam,
+                                        )));
+                          },
+                        ),
+                      ],
+                    )
+                        : Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(" "),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
@@ -596,7 +596,7 @@ class NotificationViewState extends State<NotificationView> {
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
+          //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -621,42 +621,42 @@ class NotificationViewState extends State<NotificationView> {
                     trailing: icon == Icons.pause
                         ? actions
                         : Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                data.createdAt.toString().substring(11, 16),
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                data.createdAt.toString().substring(0, 10),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              icon == Icons.close
-                                  ? Text(
-                                      "Rejected",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                    )
-                                  : Text(
-                                      "Accepted",
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                            ],
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          data.createdAt.toString().substring(11, 16),
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
                           ),
+                        ),
+                        Text(
+                          data.createdAt.toString().substring(0, 10),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        icon == Icons.close
+                            ? Text(
+                          "Rejected",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        )
+                            : Text(
+                          "Accepted",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    ),
                     onTap: () {
                       /*showNotification(context, data, () {
                         setState(() {
@@ -772,9 +772,9 @@ class NotificationViewState extends State<NotificationView> {
                             EventRequest eventRequest = new EventRequest();
                             if (snapshot.data[itemCount].targetType == "team") {
                               List<TeamRequest> teamList =
-                                  await teamPageVM.getTeamRequests(snapshot
-                                      .data[itemCount].targetId
-                                      .toString());
+                              await teamPageVM.getTeamRequests(snapshot
+                                  .data[itemCount].targetId
+                                  .toString());
                               for (var t in teamList) {
                                 team = t;
                               }
@@ -784,39 +784,39 @@ class NotificationViewState extends State<NotificationView> {
                                     .contains("Invited user")) {
                               List<TeamRequest> teamList = await teamPageVM
                                   .getTeamRequests("teamLeadId:" +
-                                      snapshot.data[itemCount].createdBy);
+                                  snapshot.data[itemCount].createdBy);
                               for (var t in teamList) {
                                 team = t;
                               }
                             }
                             List<UserRequest> userRequestList =
-                                await userPageVM.getUserRequests(
-                                    snapshot.data[itemCount].createdBy);
+                            await userPageVM.getUserRequests(
+                                snapshot.data[itemCount].createdBy);
                             for (var user in userRequestList) {
                               userReq = user;
                             }
                             List<UserRequest> user =
-                                await userPageVM.getUserRequests(
-                                    snapshot.data[itemCount].createdBy);
+                            await userPageVM.getUserRequests(
+                                snapshot.data[itemCount].createdBy);
                             String userName = " ";
                             for (var u in user) {
                               userName = u.fullName;
                             }
                             String eventId =
-                                snapshot.data[itemCount].targetId.toString();
+                            snapshot.data[itemCount].targetId.toString();
                             List<EventRequest> eventList = await eventPageVM
                                 .getEventRequests("event_id:$eventId");
                             for (var event in eventList) {
                               eventRequest = event;
                             }
                             List<UserRequest> localAdminList =
-                                await userPageVM.getUserRequests(
-                                    snapshot.data[itemCount].updatedBy);
+                            await userPageVM.getUserRequests(
+                                snapshot.data[itemCount].updatedBy);
                             for (var user in localAdminList) {
                               localAdmin = user;
                             }
                             if (snapshot.data[itemCount].message
-                                    .contains("Request to create an event") &&
+                                .contains("Request to create an event") &&
                                 snapshot.data[itemCount].targetType
                                     .contains("event")) {
                               //   print("Printing dara");
@@ -826,13 +826,13 @@ class NotificationViewState extends State<NotificationView> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => AdminEventDetails(
-                                              UserName: userName,
-                                              eventRequest: eventRequest,
-                                              data: snapshot.data[itemCount],
-                                            )));
+                                          UserName: userName,
+                                          eventRequest: eventRequest,
+                                          data: snapshot.data[itemCount],
+                                        )));
                               });
                             } else if (snapshot.data[itemCount].message
-                                    .contains("team") ||
+                                .contains("team") ||
                                 snapshot.data[itemCount].message
                                     .contains("Invited user")) {
                               // print(snapshot.data[itemCount].targetId);
@@ -842,8 +842,8 @@ class NotificationViewState extends State<NotificationView> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => TeamProfilePage(
-                                              teamTitle: team.teamTitle,
-                                            )));
+                                          teamTitle: team.teamTitle,
+                                        )));
                               });
                             } else {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -865,31 +865,31 @@ class NotificationViewState extends State<NotificationView> {
                         onTap: () => {
                           setState(() {
                             Map<String, dynamic> processrequestmap =
-                                new Map<String, dynamic>();
+                            new Map<String, dynamic>();
 
                             processrequestmap["id"] =
                                 snapshot.data[itemCount].id;
                             // print(snapshot.data[itemCount].id);
 
                             snapshot.data[itemCount].message.contains("Your") ||
-                                    snapshot.data[itemCount].message
-                                        .contains("Request") ||
-                                    snapshot.data[itemCount].message
-                                        .contains("Registered") ||
-                                    snapshot.data[itemCount].message
-                                        .contains("cancelled") ||
-                                    snapshot.data[itemCount].message
-                                        .contains("has been created") ||
-                                    snapshot.data[itemCount].message
-                                        .contains("have been promoted") ||
-                                    snapshot.data[itemCount].message
-                                        .contains("have been made") ||
-                                    snapshot.data[itemCount].message
-                                        .contains("have been invited")
+                                snapshot.data[itemCount].message
+                                    .contains("Request") ||
+                                snapshot.data[itemCount].message
+                                    .contains("Registered") ||
+                                snapshot.data[itemCount].message
+                                    .contains("cancelled") ||
+                                snapshot.data[itemCount].message
+                                    .contains("has been created") ||
+                                snapshot.data[itemCount].message
+                                    .contains("have been promoted") ||
+                                snapshot.data[itemCount].message
+                                    .contains("have been made") ||
+                                snapshot.data[itemCount].message
+                                    .contains("have been invited")
                                 ? notificationPageVM.deleteNotification(
-                                    processrequestmap, false)
+                                processrequestmap, false)
                                 : notificationPageVM.deleteNotification(
-                                    processrequestmap, true);
+                                processrequestmap, true);
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Navigator.of(context);
                             });
@@ -912,41 +912,41 @@ class NotificationViewState extends State<NotificationView> {
           }
         });
   }
-  // FutureBuilder(
-  //     future: notificationPageVM.getNotificationsBySpec("Today"),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.hasData) {
-  //         ntfList = snapshot.data;
-  //         print(ntfList);
-  //         return ntfList.isNotEmpty
-  //             ? Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   Text(
-  //                     "Today",
-  //                     style: TextStyle(
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                   Divider(),
-  //                   Expanded(
-  //                     child: ListView.builder(
-  //                         itemBuilder: (context, itemCount) =>
-  //                             _buildNotification(
-  //                                 snapshot.data[itemCount], true),
-  //                         itemCount: snapshot.data.length),
-  //                   ),
-  //                 ],
-  //               )
-  //             : Container();
-  //       } else if (snapshot.hasError) {
-  //         print(snapshot);
-  //         print(snapshot.error.toString() + " Error ");
-  //         return Center(child: Text('Error loading notifications'));
-  //       } else {
-  //         return Center(child: CircularProgressIndicator());
-  //       }
-  //     }),
+// FutureBuilder(
+//     future: notificationPageVM.getNotificationsBySpec("Today"),
+//     builder: (context, snapshot) {
+//       if (snapshot.hasData) {
+//         ntfList = snapshot.data;
+//         print(ntfList);
+//         return ntfList.isNotEmpty
+//             ? Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     "Today",
+//                     style: TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   ),
+//                   Divider(),
+//                   Expanded(
+//                     child: ListView.builder(
+//                         itemBuilder: (context, itemCount) =>
+//                             _buildNotification(
+//                                 snapshot.data[itemCount], true),
+//                         itemCount: snapshot.data.length),
+//                   ),
+//                 ],
+//               )
+//             : Container();
+//       } else if (snapshot.hasError) {
+//         print(snapshot);
+//         print(snapshot.error.toString() + " Error ");
+//         return Center(child: Text('Error loading notifications'));
+//       } else {
+//         return Center(child: CircularProgressIndicator());
+//       }
+//     }),
 
 }
 
@@ -958,28 +958,28 @@ void showNotification(
   showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            content: Text(notification.message),
-            title: Center(
-              child: Text(
-                "Notification Alert!",
-              ),
+        content: Text(notification.message),
+        title: Center(
+          child: Text(
+            "Notification Alert!",
+          ),
+        ),
+        actions: <Widget>[
+          Visibility(
+            visible: isVisible,
+            child: FlatButton(
+              child: Text("View"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AdminView()));
+              },
             ),
-            actions: <Widget>[
-              Visibility(
-                visible: isVisible,
-                child: FlatButton(
-                  child: Text("View"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AdminView()));
-                  },
-                ),
-              ),
-              FlatButton(
-                  child: Text("Discard"),
-                  onPressed: () {
-                    /*setState(() {
+          ),
+          FlatButton(
+              child: Text("Discard"),
+              onPressed: () {
+                /*setState(() {
                     Map<String, dynamic> processrequestmap =
                     new Map<String, dynamic>();
                     processrequestmap["id"] = notification.id;
@@ -995,9 +995,9 @@ void showNotification(
                         processrequestmap, true);
                     Navigator.pop(context);
                   });*/
-                  }),
-            ],
-          ));
+              }),
+        ],
+      ));
 }
 
 // void createTeam(
