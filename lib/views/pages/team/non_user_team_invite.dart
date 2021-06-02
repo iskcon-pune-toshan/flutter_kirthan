@@ -30,13 +30,14 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
     return email;
   }
 
-  Future<void> emailLaunch(var Url) async {
-    if (await canLaunch(Url)) {
-      await launch(Url);
+  Future<void> emailLaunch(String userEmail) async {
+    if (await canLaunch(userEmail)) {
+      await launch(userEmail);
     } else {
-      null;
+      print('Could not launch $userEmail');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +113,8 @@ class _NonUserTeamInviteState extends State<NonUserTeamInvite> {
                               await prospectiveUserPageVM
                                   .submitNewProspectiveUserRequest(
                                       eventrequestmap);
-                          params = Uri(
-                              scheme: 'mailto',
-                              path: "$userEmail",
-                              query:
-                                  'subject=Invitation to create a team&body=Hello\n\nI would like to invite you to download our app using the link\nhttps://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing\n\nAnd create a team using the code\n"$inviteCode"\n\nThanks & Regards ');
-                          Url = params.toString();
-                          emailLaunch(Url);
+                          emailLaunch('mailto:$userEmail?'
+                              'subject=Invitiation%20to%20create%20a%20team&body=Hello\n\nI%20would%20like%20to%20invite%20you%20to%20download%20our%20app%20using%20the%20link\nhttps://bit.ly/3yQGZG5\n\nAnd%20create%20a%20team%20using%20the%20code%20:%20"$inviteCode"%20\nThank%20You');
                         } else {
                           Scaffold.of(context).showSnackBar(
                               SnackBar(content: Text('Enter Valid Email')));

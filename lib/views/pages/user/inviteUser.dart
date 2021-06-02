@@ -144,7 +144,7 @@ class _InviteUserState extends State<InviteUser> {
                   emailLaunch('mailto:$uemail?'
                       'subject=Invitiation%20to%20become%20a%20local admin&'
                       'body=Hello\n\nI%20would%20like%20to%20invite%20you%20to%20download%20our%20app%20using%20the%20link\n\n'
-                      'https://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing\n\n'
+                      'https://bit.ly/3yQGZG5\n\n'
                       'And%20become%20a%20local admin%20using%20the%20code\n"$inviteCode"\n\nThank%20You');
                   // SnackBar mysnackbar = SnackBar(
                   //   content: Text("Invited Successfully"),
