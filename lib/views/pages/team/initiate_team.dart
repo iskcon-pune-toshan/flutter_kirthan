@@ -59,8 +59,6 @@ class _InitiateTeamState extends State<InitiateTeam> {
   String currentUserName;
   @override
   void initState() {
-    Users = userPageVM.getUserRequests("Approved");
-    Team = teamPageVM.getTeamRequests("Initiated");
     super.initState();
     loadData();
     // loadPref();
@@ -81,59 +79,59 @@ class _InitiateTeamState extends State<InitiateTeam> {
     return email;
   }
 
-  Widget initializedTeams(String userName) {
-    return RefreshIndicator(
-      key: refreshKey,
-      child: Consumer<ThemeNotifier>(
-        builder:(context, notifier, child)
-        =>FutureBuilder<List<TeamRequest>>(
-            future: Team,
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                teamList = snapshot.data;
-                List<String> teamTitles = this
-                    .teamList
-                    .map((title) => (title.teamTitle))
-                    .toSet()
-                    .toList();
-                return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: teamList.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 10,
-                        child: Container(
-                          height: 70,
-                          child: ListTile(
-                            leading: Icon(Icons.group),
-                            trailing: Icon(Icons.arrow_forward_ios),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TeamProfilePage(
-                                          teamTitle: teamList[index].teamTitle)));
-                            },
-                            title: Text(
-                              teamTitles[index],
-                              style: TextStyle(
-                                  fontSize: 4+notifier.custFontSize,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      );
-                    });
-              }
-              return Center(
-                child: Container(child: Text('No Teams Available',style: TextStyle(fontSize: notifier.custFontSize),)),
-              );
-            }),
-      ),
-      onRefresh: refreshList,
-    );
-  }
+  // Widget initializedTeams(String userName) {
+  //   return RefreshIndicator(
+  //     key: refreshKey,
+  //     child: Consumer<ThemeNotifier>(
+  //       builder:(context, notifier, child)
+  //       =>FutureBuilder<List<TeamRequest>>(
+  //           future: Team,
+  //           builder: (context, snapshot) {
+  //             if (snapshot.data != null) {
+  //               teamList = snapshot.data;
+  //               List<String> teamTitles = this
+  //                   .teamList
+  //                   .map((title) => (title.teamTitle))
+  //                   .toSet()
+  //                   .toList();
+  //               return ListView.builder(
+  //                   shrinkWrap: true,
+  //                   itemCount: teamList.length,
+  //                   itemBuilder: (context, index) {
+  //                     return Card(
+  //                       elevation: 10,
+  //                       child: Container(
+  //                         height: 70,
+  //                         child: ListTile(
+  //                           leading: Icon(Icons.group),
+  //                           trailing: Icon(Icons.arrow_forward_ios),
+  //                           onTap: () {
+  //                             Navigator.push(
+  //                                 context,
+  //                                 MaterialPageRoute(
+  //                                     builder: (context) => TeamProfilePage(
+  //                                         teamTitle: teamList[index].teamTitle)));
+  //                           },
+  //                           title: Text(
+  //                             teamTitles[index],
+  //                             style: TextStyle(
+  //                                 fontSize: 4+notifier.custFontSize,
+  //                                 fontWeight: FontWeight.bold,
+  //                                 color: Colors.grey),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     );
+  //                   });
+  //             }
+  //             return Center(
+  //               child: Container(child: Text('No Teams Available',style: TextStyle(fontSize: notifier.custFontSize),)),
+  //             );
+  //           }),
+  //     ),
+  //     onRefresh: refreshList,
+  //   );
+  // }
 
   final userSelected = TextEditingController();
   String selectUser = "";
@@ -213,7 +211,7 @@ class _InitiateTeamState extends State<InitiateTeam> {
                           height: 10,
                         ),
                         FutureBuilder<List<TeamRequest>>(
-                            future: teamPageVM.getTeamRequests("Approved"),
+                            future: teamPageVM.getTeamRequests("Initiated"),
                             builder: (BuildContext context,
                                 AsyncSnapshot<List<TeamRequest>> snapshot) {
                               if (snapshot.hasData) {
@@ -286,7 +284,7 @@ class _InitiateTeamState extends State<InitiateTeam> {
                                           fontSize: notifier.custFontSize, color: Colors.grey),
                                     ));
                               }
-                              return Center(child: Text("No Team Initiated",style: TextStyle(fontSize: notifier.custFontSize),));
+                              return Center(child: CircularProgressIndicator());
                             })
                       ],
                     ),
