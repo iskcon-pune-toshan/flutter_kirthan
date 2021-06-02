@@ -477,7 +477,7 @@ class _LoginAppState extends State<LoginApp> {
                       ),
 
                       Text(
-                        'Welcome to ISKCON',
+                        'Welcome to Kirtan App',
                         style: TextStyle(
                           color: Color(0xFF61bcbc),
                           fontFamily: 'OpenSans',
