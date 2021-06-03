@@ -1,16 +1,9 @@
 import 'dart:core';
-
 import 'package:country_state_city_picker/country_state_city_picker.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_kirthan/models/commonlookuptable.dart';
-import 'package:flutter_kirthan/models/notification.dart';
-import 'package:flutter_kirthan/models/teamuser.dart';
-import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/models/usertemple.dart';
 import 'package:flutter_kirthan/services/common_lookup_table_service_impl.dart';
 import 'package:flutter_kirthan/services/team_service_impl.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
@@ -32,7 +25,6 @@ import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final TeamPageViewModel teamPageVM =
     TeamPageViewModel(apiSvc: TeamAPIService());
@@ -46,7 +38,7 @@ final UserTemplePageViewModel userTemplePageVM =
     UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 final CommonLookupTablePageViewModel commonLookupTablePageVM =
     CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
-
+int role_id;
 class TeamWrite extends StatefulWidget {
   UserRequest userRequest;
   UserRequest localAdmin;
@@ -68,6 +60,7 @@ class _TeamWriteState extends State<TeamWrite> {
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
+    getRoleId();
     super.initState();
   }
 
@@ -82,7 +75,24 @@ class _TeamWriteState extends State<TeamWrite> {
     }
     return tempList;
   }
-
+  int roleid;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  List<UserRequest> userRequest;
+  List<UserRequest> userRequestList = List<UserRequest>();
+  String email;
+  getRoleId() async {
+    final FirebaseUser user = await auth.currentUser();
+    userRequest = await userPageVM.getUserRequests("Approved");
+    for (var users in userRequest) {
+      email=user.email;
+      if (users.email == user.email) {
+        setState(() {
+          role_id = users.roleId;
+          roleid = role_id;
+        });
+      }
+    }
+  }
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
 
@@ -468,6 +478,7 @@ class _TeamWriteState extends State<TeamWrite> {
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Column(
                         children: <Widget>[
+
                           FutureBuilder<List<TeamRequest>>(
                               future: teamPageVM.getTeamRequests("Approved"),
                               builder: (BuildContext context,
@@ -475,7 +486,47 @@ class _TeamWriteState extends State<TeamWrite> {
                                 if (snapshot.data != null) {
                                   List<TeamRequest> teamListAppr =
                                       snapshot.data;
-                                  return FutureBuilder<List<TeamRequest>>(
+                                  return
+                                    role_id==3
+                                    ?  Card(
+                                      child: Container(
+                                        //color: Colors.white,
+                                        padding: new EdgeInsets.all(10),
+                                        child: TextFormField(
+                                          //attribute: "Description",
+                                           // keyboardType: TextInputType.number,
+                                            decoration: InputDecoration(
+                                                enabledBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.grey),
+                                                ),
+                                                focusedBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.green),
+                                                ),
+                                                /*icon: const Icon(
+                                Icons.description,
+                                color: Colors.grey,
+                              ),*/
+                                                enabled: false,
+                                                labelText: "TeamLead",
+                                                hintText: email,
+                                                hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                                labelStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                )),
+                                           initialValue:email,
+                                          //     (value) {
+                                          //   if (value.isEmpty) {
+                                          //     return "Please enter some text";
+                                          //   }
+                                          //   return null;
+                                          // },
+                                        ),
+                                      ),
+                                      elevation: 5,
+                                    )
+                                    :FutureBuilder<List<TeamRequest>>(
                                       future:
                                           teamPageVM.getTeamRequests("Waiting"),
                                       builder: (BuildContext context,
@@ -522,10 +573,10 @@ class _TeamWriteState extends State<TeamWrite> {
                                                   return DropdownButtonFormField<
                                                       String>(
                                                     value: widget.userRequest ==
-                                                            null
+                                                        null
                                                         ? _selectedTeamLeadId
                                                         : widget
-                                                            .userRequest.email,
+                                                        .userRequest.email,
                                                     icon: const Icon(
                                                         Icons.account_circle),
                                                     hint: Text(
@@ -542,6 +593,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                                                   teamLeadId),
                                                             ))
                                                         .toList(),
+
                                                     onChanged: (input) {
                                                       setState(() {
                                                         _selectedTeamLeadId =

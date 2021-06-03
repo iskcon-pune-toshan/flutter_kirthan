@@ -55,14 +55,6 @@ class SignInService {
 
     FirebaseUser firebaseUser;
 
-    /*if (authResult != null) {
-       firebaseUser = await firebaseAuth.currentUser();
-
-      if (firebaseUser != null) {
-        return firebaseUser;
-      }
-    }*/
-
     assert(email !=
         null); //its a way to check the condition & returns a boolean by the result of which further execution proceeds
     assert(password != null);

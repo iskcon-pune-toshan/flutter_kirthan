@@ -15,6 +15,7 @@ class ProspectiveUserAPIService extends BaseAPIService
   static final ProspectiveUserAPIService _internal =
       ProspectiveUserAPIService.internal();
   ProspectiveUserRequest eventRequest;
+
   factory ProspectiveUserAPIService() => _internal;
 
   ProspectiveUserAPIService.internal();
@@ -50,9 +51,6 @@ class ProspectiveUserAPIService extends BaseAPIService
   Future<List<ProspectiveUserRequest>> getProspectiveUserRequests(
       String eventType) async {
     print("I am in Service: getEventRequests");
-    // final FirebaseUser user = await auth.currentUser();
-    // final String email = user.email;
-    // print(email);
 
     String requestBody = '';
 
@@ -115,10 +113,6 @@ class ProspectiveUserAPIService extends BaseAPIService
         body: requestBody);
 
     if (response.statusCode == 200) {
-      //EventRequest respeventrequest = json.decode(response.body);
-      //print(respeventrequest);
-      //return respeventrequest;
-
       Map<String, dynamic> eventrequestsData = json.decode(response.body);
       ProspectiveUserRequest eventrequests =
           ProspectiveUserRequest.fromMap(eventrequestsData);

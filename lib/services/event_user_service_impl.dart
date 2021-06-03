@@ -34,19 +34,12 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
       if (callback != null) callback();
 
       return eventusers;
-
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData
-          .map((userrequestsData) => UserRequest.fromMap(userrequestsData))
-          .toList();
     } else {
       throw Exception('Failed to get data');
     }
   }
 
   Future<List<EventUser>> getEventTeamUserMappings() async {
-    //String requestBody = '{"createdBy":"SYSTEM"}';
     String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.get(
       '$baseUrl/api/eventuser/geteventusers',
@@ -64,7 +57,6 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
               (eventtsermappingData) => EventUser.fromMap(eventtsermappingData))
           .toList();
 
-
       return eventusermappings;
     } else {
       throw Exception('Failed to get data');
@@ -73,7 +65,6 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
 
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(
       List<EventUser> listofeventusermap) async {
-
     String requestBody = json.encode(listofeventusermap);
     print("I am in submitDeleteEventTeamUserMapping");
 
@@ -93,12 +84,6 @@ class EventUserAPIService extends BaseAPIService implements IEventUserRestApi {
               (eventusermappingData) => EventUser.fromMap(eventusermappingData))
           .toList();
       return eventusers;
-
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData
-          .map((userrequestsData) => UserRequest.fromMap(userrequestsData))
-          .toList();
     } else {
       throw Exception('Failed to get data');
     }

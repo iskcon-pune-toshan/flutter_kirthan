@@ -22,6 +22,7 @@ import 'package:flutter_kirthan/views/pages/event/home_page_map/locationuserwidg
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =

@@ -17,9 +17,6 @@ class CommonLookupTableAPIService extends BaseAPIService
 
   CommonLookupTableAPIService.internal();
 
-  //processEvents
-
-  //getEvent
   Future<List<CommonLookupTable>> getCommonLookupTable(String eventType) async {
     String requestBody = '';
     if (eventType.compareTo("lookupType") >= 0) {
@@ -54,7 +51,6 @@ class CommonLookupTableAPIService extends BaseAPIService
     }
   }
 
-  //addevent
   Future<CommonLookupTable> submitNewCommonLookupTable(
       Map<String, dynamic> rolesrequestmap) async {
     String requestBody = json.encode(rolesrequestmap);

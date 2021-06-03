@@ -19,7 +19,5 @@ abstract class IEventRestApi {
 
   Future<bool> submitUpdateEventRequest(String eventrequestmap);
 
-  //Future<bool> submitRegisterEventRequest(String eventrequestmap);
-
   Future<List<EventRequest>> getDummyEventRequests();
 }

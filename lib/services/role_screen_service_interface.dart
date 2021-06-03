@@ -8,9 +8,4 @@
 //   Future<List<RoleScreen>> submitNewRoleScreenMapping(List<RoleScreen> listofroleScreenMapping);
 //
 //   Future<List<RoleScreen>> submitDeleteRoleScreenMapping(List<RoleScreen> listofroleScreenMapping);
-//
-//
-//
-//
-//
 // }
