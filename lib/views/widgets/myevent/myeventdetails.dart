@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,15 +30,15 @@ import 'package:provider/provider.dart';
 /*final EventTeamPageViewModel eventTeamPageVM =
     EventTeamPageViewModel(apiSvc: EventTeamAPIService());*/
 final EventPageViewModel eventPageVM =
-    EventPageViewModel(apiSvc: EventAPIService());
+EventPageViewModel(apiSvc: EventAPIService());
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final EventTeamPageViewModel eventTeamVM =
-    EventTeamPageViewModel(apiSvc: EventTeamAPIService());
+EventTeamPageViewModel(apiSvc: EventTeamAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 final CommonLookupTablePageViewModel commonLookupTablePageVM =
-    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
+CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class EventDetails extends StatefulWidget {
   EventRequest eventrequest;
@@ -110,45 +108,45 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
 
   // controllers for form text controllers
   final TextEditingController _eventTitleController =
-      new TextEditingController();
+  new TextEditingController();
   String eventTitle;
   // final TextEditingController _eventTypeController =
   //     new TextEditingController();
   // String eventType;
   final TextEditingController _eventDateController =
-      new TextEditingController();
+  new TextEditingController();
   String eventDate;
   final TextEditingController _eventEndTimeController =
-      new TextEditingController();
+  new TextEditingController();
   final TextEditingController _eventStartTimeController =
-      new TextEditingController();
+  new TextEditingController();
   String eventTime;
   final TextEditingController _eventDescriptionController =
-      new TextEditingController();
+  new TextEditingController();
   String eventDescription;
   final TextEditingController _lineoneController = new TextEditingController();
   String lineOne;
   final TextEditingController _eventDurationController =
-      new TextEditingController();
+  new TextEditingController();
   String eventDuration;
   final TextEditingController _linetwoController = new TextEditingController();
   String lineTwo;
   final TextEditingController _linethreeController =
-      new TextEditingController();
+  new TextEditingController();
   String lineThree;
   final TextEditingController _cityController = new TextEditingController();
   String city;
   final TextEditingController _pincodeController = new TextEditingController();
   String pinCode;
   final TextEditingController _createdTimeController =
-      new TextEditingController();
+  new TextEditingController();
   String createdTime;
   final TextEditingController _stateController = new TextEditingController();
   final TextEditingController _updatedByController =
-      new TextEditingController();
+  new TextEditingController();
   String updatedBy;
   final TextEditingController _updatedTimeController =
-      new TextEditingController();
+  new TextEditingController();
   String updatedTime;
   String approvalStatus;
   final TextEditingController _teamName = new TextEditingController();
@@ -257,7 +255,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar:
-            new AppBar(title: const Text('Event Details'), actions: <Widget>[
+        new AppBar(title: const Text('Event Details'), actions: <Widget>[
           if (widget.eventrequest.teamInviteStatus != 3)
             new Container(
                 padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
@@ -268,8 +266,8 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                       context,
                       MaterialPageRoute(
                           builder: (context) => EditEvent(
-                                eventrequest: widget.eventrequest,
-                              )),
+                            eventrequest: widget.eventrequest,
+                          )),
                     );
                   },
                 ))
@@ -314,7 +312,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                         List<CommonLookupTable> cltList = snapshot.data;
                         List<CommonLookupTable> currCategory = cltList
                             .where((element) =>
-                                element.id == widget.eventrequest.eventType)
+                        element.id == widget.eventrequest.eventType)
                             .toList();
 
                         for (var i in currCategory) {
@@ -327,22 +325,22 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                         return DropdownButtonFormField<String>(
                           value: _selectedCategory,
                           icon: const Icon(Icons.category),
-                          hint: Text('Select Category',
+                          hint: Text(_selectedCategory,
                               style: TextStyle(color: Colors.grey)),
                           items: _category
                               .map((category) => DropdownMenuItem<String>(
-                                    value: category,
-                                    child: Text(category),
-                                  ))
+                            value: category,
+                            child: Text(category),
+                          ))
                               .toList(),
-                          onChanged: (input) {
-                            setState(() {
-                              _selectedCategory = input;
-                            });
-                          },
-                          onSaved: (input) {
-                            _selectedCategory = input;
-                          },
+                          // onChanged: (input) {
+                          //   setState(() {
+                          //     _selectedCategory = input;
+                          //   });
+                          // },
+                          // onSaved: (input) {
+                          //   _selectedCategory = input;
+                          // },
                         );
                       } else {
                         return Container();
@@ -579,21 +577,13 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                 DropdownButtonFormField<String>(
                   value: widget.eventrequest.state,
                   icon: const Icon(Icons.location_city),
-                  hint: Text('Select State'),
+                  hint: Text(widget.eventrequest.state),
                   items: _states
                       .map((state) => DropdownMenuItem(
-                            value: state,
-                            child: Text(state),
-                          ))
+                    value: state,
+                    child: Text(state),
+                  ))
                       .toList(),
-                  onChanged: (input) {
-                    setState(() {
-                      _selectedState = input;
-                    });
-                  },
-                  onSaved: (input) {
-                    widget.eventrequest.state = input;
-                  },
                 ),
                 SizedBox(
                   width: 30,
@@ -609,7 +599,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                         for (var team in eventTeam) teamId = team.teamId;
                         return FutureBuilder(
                             future:
-                                teamPageVM.getTeamRequests(teamId.toString()),
+                            teamPageVM.getTeamRequests(teamId.toString()),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 List<TeamRequest> teamList = snapshot.data;
@@ -620,7 +610,7 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                 return Container(
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: <Widget>[
                                       CircleAvatar(
                                         radius: 30,
@@ -631,9 +621,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                             height: 100.0,
                                             child: (photoUrl != null)
                                                 ? Image.network(
-                                                    photoUrl,
-                                                    fit: BoxFit.contain,
-                                                  )
+                                              photoUrl,
+                                              fit: BoxFit.contain,
+                                            )
                                                 : ProfilePages(),
                                           ),
                                         ),
@@ -644,9 +634,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                       Container(
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceAround,
                                           children: <Widget>[
                                             Text(
                                               "Team: " + team.teamTitle,
@@ -666,17 +656,17 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                             ),
                                             FlatButton(
                                               color:
-                                                  KirthanStyles.colorPallete30,
+                                              KirthanStyles.colorPallete30,
                                               onPressed: () {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         TeamProfilePage(
-                                                      teamTitle: team.teamTitle,
-                                                      teamLeadId:
+                                                          teamTitle: team.teamTitle,
+                                                          teamLeadId:
                                                           team.teamLeadId,
-                                                    ),
+                                                        ),
                                                   ),
                                                 );
                                               },
@@ -711,24 +701,24 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                 if (widget.eventrequest.teamInviteStatus == 3)
                   widget.eventrequest.cancelReason == null
                       ? Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            "Event cancelled",
-                            style: TextStyle(fontSize: 20, color: Colors.grey),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      "Event cancelled",
+                      style: TextStyle(fontSize: 20, color: Colors.grey),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
                       : Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            "Event cancelled due to " +
-                                widget.eventrequest.cancelReason,
-                            style: TextStyle(fontSize: 18, color: Colors.grey),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      "Event cancelled due to " +
+                          widget.eventrequest.cancelReason,
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 if (widget.eventrequest.teamInviteStatus != 3)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -755,15 +745,15 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                         padding: const EdgeInsets.all(12.0),
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.spaceEvenly,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                           children: [
                                             Align(
                                               alignment: Alignment.center,
                                               child: Consumer<ThemeNotifier>(
                                                 builder: (context, notifier,
-                                                        child) =>
+                                                    child) =>
                                                     Text(
                                                         "Do you really want to cancel?",
                                                         style: TextStyle(
@@ -773,202 +763,202 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
                                             ),
                                             Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
+                                                MainAxisAlignment
+                                                    .spaceEvenly,
                                                 children: <Widget>[
                                                   RaisedButton(
                                                     onPressed: () {
                                                       showDialog(
                                                           context: context,
                                                           builder: (BuildContext
-                                                              context) {
+                                                          context) {
                                                             return StatefulBuilder(
                                                                 builder: (context,
                                                                     setState) {
-                                                              return Dialog(
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius:
+                                                                  return Dialog(
+                                                                    shape: RoundedRectangleBorder(
+                                                                        borderRadius:
                                                                         BorderRadius.circular(
                                                                             20.0)),
-                                                                //this right here
-                                                                child:
-                                                                    Container(
-                                                                  height: 500,
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .all(
-                                                                        12.0),
+                                                                    //this right here
                                                                     child:
+                                                                    Container(
+                                                                      height: 500,
+                                                                      child:
+                                                                      Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            12.0),
+                                                                        child:
                                                                         Column(
-                                                                      mainAxisAlignment:
+                                                                          mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .spaceEvenly,
-                                                                      crossAxisAlignment:
+                                                                          crossAxisAlignment:
                                                                           CrossAxisAlignment
                                                                               .center,
-                                                                      children: [
-                                                                        new Container(
-                                                                          child:
+                                                                          children: [
+                                                                            new Container(
+                                                                              child:
                                                                               new Column(
-                                                                            mainAxisAlignment:
+                                                                                mainAxisAlignment:
                                                                                 MainAxisAlignment.center,
-                                                                            children: <Widget>[
-                                                                              Consumer<ThemeNotifier>(
-                                                                                builder: (context, notifier, child) => Text('Why do you want to cancel?', style: TextStyle(fontSize: notifier.custFontSize)),
-                                                                              ),
-                                                                              Column(
                                                                                 children: <Widget>[
-                                                                                  RadioListTile(
-                                                                                    value: 1,
-                                                                                    groupValue: _groupValue,
-                                                                                    onChanged: (value) {
-                                                                                      setState(() {
-                                                                                        // print(value);
-                                                                                        widget.eventrequest.cancelReason = 'Health issues/injury';
-                                                                                        // print('Health issues/injury');
-
-                                                                                        _groupValue = value;
-                                                                                      });
-                                                                                    },
-                                                                                    title: Consumer<ThemeNotifier>(
-                                                                                      builder: (context, notifier, child) => Text('Health issues/injury', style: TextStyle(fontSize: notifier.custFontSize)),
-                                                                                    ),
+                                                                                  Consumer<ThemeNotifier>(
+                                                                                    builder: (context, notifier, child) => Text('Why do you want to cancel?', style: TextStyle(fontSize: notifier.custFontSize)),
                                                                                   ),
+                                                                                  Column(
+                                                                                    children: <Widget>[
+                                                                                      RadioListTile(
+                                                                                        value: 1,
+                                                                                        groupValue: _groupValue,
+                                                                                        onChanged: (value) {
+                                                                                          setState(() {
+                                                                                            // print(value);
+                                                                                            widget.eventrequest.cancelReason = 'Health issues/injury';
+                                                                                            // print('Health issues/injury');
 
-                                                                                  RadioListTile(
-                                                                                    value: 2,
-                                                                                    groupValue: _groupValue,
-                                                                                    onChanged: (value) {
-                                                                                      setState(() {
-                                                                                        // print(value);
-                                                                                        widget.eventrequest.cancelReason = 'Emergency';
-                                                                                        // print('Emergency');
+                                                                                            _groupValue = value;
+                                                                                          });
+                                                                                        },
+                                                                                        title: Consumer<ThemeNotifier>(
+                                                                                          builder: (context, notifier, child) => Text('Health issues/injury', style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                        ),
+                                                                                      ),
 
-                                                                                        _groupValue = value;
-                                                                                      });
-                                                                                    },
-                                                                                    title: Consumer<ThemeNotifier>(
-                                                                                      builder: (context, notifier, child) => Text('Emergency', style: TextStyle(fontSize: notifier.custFontSize)),
-                                                                                    ),
+                                                                                      RadioListTile(
+                                                                                        value: 2,
+                                                                                        groupValue: _groupValue,
+                                                                                        onChanged: (value) {
+                                                                                          setState(() {
+                                                                                            // print(value);
+                                                                                            widget.eventrequest.cancelReason = 'Emergency';
+                                                                                            // print('Emergency');
+
+                                                                                            _groupValue = value;
+                                                                                          });
+                                                                                        },
+                                                                                        title: Consumer<ThemeNotifier>(
+                                                                                          builder: (context, notifier, child) => Text('Emergency', style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                        ),
+                                                                                      ),
+                                                                                      RadioListTile(
+                                                                                        value: 3,
+                                                                                        groupValue: _groupValue,
+                                                                                        onChanged: (value) {
+                                                                                          setState(() {
+                                                                                            //  print(value);
+                                                                                            widget.eventrequest.cancelReason = 'Important event';
+                                                                                            // print('Important Event');
+
+                                                                                            _groupValue = value;
+                                                                                          });
+                                                                                        },
+                                                                                        title: Consumer<ThemeNotifier>(
+                                                                                          builder: (context, notifier, child) => Text('Important event', style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                        ),
+                                                                                      ),
+                                                                                      RadioListTile(
+                                                                                        value: 4,
+                                                                                        groupValue: _groupValue,
+                                                                                        onChanged: (value) {
+                                                                                          setState(() {
+                                                                                            // print(value);
+                                                                                            widget.eventrequest.cancelReason = 'Others';
+                                                                                            // print('Others');
+
+                                                                                            _groupValue = value;
+                                                                                          });
+                                                                                        },
+                                                                                        title: Consumer<ThemeNotifier>(
+                                                                                          builder: (context, notifier, child) => Text('Others', style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                        ),
+                                                                                      ),
+
+                                                                                      //Text('$radioItem', style: TextStyle(fontSize: 23),)
+                                                                                    ],
                                                                                   ),
-                                                                                  RadioListTile(
-                                                                                    value: 3,
-                                                                                    groupValue: _groupValue,
-                                                                                    onChanged: (value) {
-                                                                                      setState(() {
-                                                                                        //  print(value);
-                                                                                        widget.eventrequest.cancelReason = 'Important event';
-                                                                                        // print('Important Event');
-
-                                                                                        _groupValue = value;
-                                                                                      });
-                                                                                    },
-                                                                                    title: Consumer<ThemeNotifier>(
-                                                                                      builder: (context, notifier, child) => Text('Important event', style: TextStyle(fontSize: notifier.custFontSize)),
-                                                                                    ),
-                                                                                  ),
-                                                                                  RadioListTile(
-                                                                                    value: 4,
-                                                                                    groupValue: _groupValue,
-                                                                                    onChanged: (value) {
-                                                                                      setState(() {
-                                                                                        // print(value);
-                                                                                        widget.eventrequest.cancelReason = 'Others';
-                                                                                        // print('Others');
-
-                                                                                        _groupValue = value;
-                                                                                      });
-                                                                                    },
-                                                                                    title: Consumer<ThemeNotifier>(
-                                                                                      builder: (context, notifier, child) => Text('Others', style: TextStyle(fontSize: notifier.custFontSize)),
-                                                                                    ),
-                                                                                  ),
-
-                                                                                  //Text('$radioItem', style: TextStyle(fontSize: 23),)
                                                                                 ],
                                                                               ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                        Row(
-                                                                            mainAxisAlignment:
+                                                                            ),
+                                                                            Row(
+                                                                                mainAxisAlignment:
                                                                                 MainAxisAlignment.spaceEvenly,
-                                                                            children: <Widget>[
-                                                                              RaisedButton(
-                                                                                onPressed: () {
-                                                                                  Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
-                                                                                  processrequestmap["id"] = widget.eventrequest?.id;
-                                                                                  //widget.eventrequest?.isProcessed=false;
-                                                                                  //widget.eventrequest?.approvalStatus="Cancelled";
-                                                                                  widget.eventrequest?.teamInviteStatus = 3;
-                                                                                  Map<String, dynamic> eventmap = widget.eventrequest.toJson();
-                                                                                  eventPageVM.deleteEventRequest(eventmap);
-                                                                                  //eventPageVM.deleteEventRequest(processrequestmap);
-                                                                                  SnackBar mysnackbar = SnackBar(
-                                                                                    content: Text("Event $delete "),
-                                                                                    duration: new Duration(seconds: 4),
-                                                                                    backgroundColor: Colors.red,
-                                                                                  );
-                                                                                  Navigator.push(
-                                                                                    context,
-                                                                                    MaterialPageRoute(builder: (context) => App()),
-                                                                                  );
-                                                                                },
-                                                                                child: Consumer<ThemeNotifier>(
-                                                                                  builder: (context, notifier, child) => Text(
-                                                                                    "Send",
-                                                                                    style: TextStyle(fontSize: notifier.custFontSize, color: Colors.white),
+                                                                                children: <Widget>[
+                                                                                  RaisedButton(
+                                                                                    onPressed: () {
+                                                                                      Map<String, dynamic> processrequestmap = new Map<String, dynamic>();
+                                                                                      processrequestmap["id"] = widget.eventrequest?.id;
+                                                                                      //widget.eventrequest?.isProcessed=false;
+                                                                                      //widget.eventrequest?.approvalStatus="Cancelled";
+                                                                                      widget.eventrequest?.teamInviteStatus = 3;
+                                                                                      Map<String, dynamic> eventmap = widget.eventrequest.toJson();
+                                                                                      eventPageVM.deleteEventRequest(eventmap);
+                                                                                      //eventPageVM.deleteEventRequest(processrequestmap);
+                                                                                      SnackBar mysnackbar = SnackBar(
+                                                                                        content: Text("Event $delete "),
+                                                                                        duration: new Duration(seconds: 4),
+                                                                                        backgroundColor: Colors.red,
+                                                                                      );
+                                                                                      Navigator.push(
+                                                                                        context,
+                                                                                        MaterialPageRoute(builder: (context) => App()),
+                                                                                      );
+                                                                                    },
+                                                                                    child: Consumer<ThemeNotifier>(
+                                                                                      builder: (context, notifier, child) => Text(
+                                                                                        "Send",
+                                                                                        style: TextStyle(fontSize: notifier.custFontSize, color: Colors.white),
+                                                                                      ),
+                                                                                    ),
+                                                                                    color: const Color(0xFF1BC0C5),
                                                                                   ),
-                                                                                ),
-                                                                                color: const Color(0xFF1BC0C5),
-                                                                              ),
-                                                                            ]),
-                                                                      ],
+                                                                                ]),
+                                                                          ],
+                                                                        ),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            });
+                                                                  );
+                                                                });
                                                           });
                                                     },
                                                     child:
-                                                        Consumer<ThemeNotifier>(
+                                                    Consumer<ThemeNotifier>(
                                                       builder: (context,
-                                                              notifier,
-                                                              child) =>
+                                                          notifier,
+                                                          child) =>
                                                           Text(
-                                                        "Yes",
-                                                        style: TextStyle(
-                                                            fontSize: notifier
-                                                                .custFontSize,
-                                                            color:
+                                                            "Yes",
+                                                            style: TextStyle(
+                                                                fontSize: notifier
+                                                                    .custFontSize,
+                                                                color:
                                                                 Colors.white),
-                                                      ),
+                                                          ),
                                                     ),
                                                     color:
-                                                        const Color(0xFF1BC0C5),
+                                                    const Color(0xFF1BC0C5),
                                                   ),
                                                   RaisedButton(
                                                     onPressed: () {
                                                       Navigator.pop(context);
                                                     },
                                                     child:
-                                                        Consumer<ThemeNotifier>(
+                                                    Consumer<ThemeNotifier>(
                                                       builder: (context,
-                                                              notifier,
-                                                              child) =>
+                                                          notifier,
+                                                          child) =>
                                                           Text(
-                                                        "No",
-                                                        style: TextStyle(
-                                                            fontSize: notifier
-                                                                .custFontSize,
-                                                            color:
+                                                            "No",
+                                                            style: TextStyle(
+                                                                fontSize: notifier
+                                                                    .custFontSize,
+                                                                color:
                                                                 Colors.white),
-                                                      ),
+                                                          ),
                                                     ),
                                                     color:
-                                                        const Color(0xFF1BC0C5),
+                                                    const Color(0xFF1BC0C5),
                                                   ),
                                                 ]),
                                           ],

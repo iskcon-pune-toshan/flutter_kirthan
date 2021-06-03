@@ -48,14 +48,6 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
   }
 
   Future<List<TeamUser>> getTeamUserMappings(String teamMapping) async {
-    //String requestBody = '{"createdBy":"SYSTEM"}';
-    /*String requestBody = '{"eventdate":"sysdate()"}'; //today
-    requestBody = '{"eventdate":"sysdate()+1"}'; //tomorrow
-    requestBody = '{"eventdate":"sysdate()+7"}'; //week
-    requestBody = '{"eventdate":"sysdate()+30"}'; //month
-*/
-    //print(requestBody);
-
     String requestBody = "";
     int teamid = int.parse(teamMapping);
     requestBody = '{"team_id": $teamid}';
@@ -106,11 +98,6 @@ class TeamUserAPIService extends BaseAPIService implements ITeamUserRestApi {
 
       return teamusers;
 
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData
-          .map((userrequestsData) => UserRequest.fromMap(userrequestsData))
-          .toList();
     } else {
       throw Exception('Failed to get data');
     }

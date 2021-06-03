@@ -22,6 +22,7 @@ import 'package:flutter_kirthan/views/pages/event/home_page_map/locationuserwidg
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
@@ -1116,6 +1117,33 @@ class _EventWriteState extends State<EventWritePublic> {
                         )
                       ],
                     ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        errorBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (eventrequest.city == null) {
+                          if (eventrequest.state == null) {
+                            if (eventrequest.country == null) {
+                              return "Please select country, state, city";
+                            }
+                            return "Please select state, city";
+                          }
+                          return "Please select city";
+                        }
+                        return null;
+                      },
+                    ),
+
                     /*    Column(
                       children: */ /*<Widget>[
                         DropdownButtonFormField<String>(

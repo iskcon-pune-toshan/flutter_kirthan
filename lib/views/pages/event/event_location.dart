@@ -97,7 +97,7 @@ class LocationMark extends State<Location> {
       ),
     );
   }
-
+CameraPosition initialcamera;
   Widget _buildGoogleMap() {
     //var title=widget.eventrequest?.eventTitle;
 
@@ -175,9 +175,38 @@ else
       _southwestCoordinates = destinationCoordinates;
       _northeastCoordinates = startCoordinates;
     }
+    double miny = (startCoordinates.latitude <= destinationCoordinates.latitude)
+        ? startCoordinates.latitude
+        : destinationCoordinates.latitude;
+    double minx = (startCoordinates.longitude <= destinationCoordinates.longitude)
+        ? startCoordinates.longitude
+        : destinationCoordinates.longitude;
+    double maxy = (startCoordinates.latitude <= destinationCoordinates.latitude)
+        ? destinationCoordinates.latitude
+        : startCoordinates.latitude;
+    double maxx = (startCoordinates.longitude <= destinationCoordinates.longitude)
+        ? destinationCoordinates.longitude
+        : startCoordinates.longitude;
 
-// camera view of the map (both locations)
+    double southWestLatitude = miny;
+    double southWestLongitude = minx;
+
+    double northEastLatitude = maxy;
+    double northEastLongitude = maxx;
+
+// Accommodate the two locations within the
+// camera view of the map
     controller.animateCamera(
+      CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+          northeast: LatLng(northEastLatitude, northEastLongitude),
+          southwest: LatLng(southWestLatitude, southWestLongitude),
+        ),
+        100.0,
+      ),
+    );
+// camera view of the map (both locations)
+  /* controller.animateCamera(
       CameraUpdate.newLatLngBounds(
         LatLngBounds(
           northeast: LatLng(
@@ -191,9 +220,10 @@ else
         ),
         100.0, // padding
       ),
-    );
+   );*/
     double totalDistance = 0.0;
-    setState(() async {
+    await createPolylines(startCoordinates, destinationCoordinates);
+    setState(() {
       _markers.clear();
 
       _markers.add(
@@ -206,13 +236,7 @@ else
           //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
-      /* _markers.add(Marker(markerId: MarkerId('Your location'),
-      position: LatLng(position.latitude,position.longitude),
-      infoWindow: InfoWindow(title: 'Your Location'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      ),
-      );*/
-      await createPolylines(startCoordinates, destinationCoordinates);
+
       for (int i = 0; i < polylineCoordinates.length - 1; i++) {
         totalDistance += _coordinateDistance(
           polylineCoordinates[i].latitude,

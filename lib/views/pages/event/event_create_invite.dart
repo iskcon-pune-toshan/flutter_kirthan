@@ -594,7 +594,33 @@ class _EventWriteState extends State<EventWrite> {
                         )
                       ],
                     ),
-
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        errorBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (eventrequest.city == null) {
+                          if (eventrequest.state == null) {
+                            if (eventrequest.country == null) {
+                              return "Please select country, state & city";
+                            }
+                            return "Please select state & city";
+                          }
+                          return "Please select city";
+                        }
+                        return null;
+                      },
+                    ),
                     new Container(margin: const EdgeInsets.only(top: 40)),
                     Row(
                       mainAxisSize: MainAxisSize.max,

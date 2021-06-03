@@ -11,6 +11,7 @@ import 'package:http/http.dart' as _http;
 class EventAPIService extends BaseAPIService implements IEventRestApi {
   static final EventAPIService _internal = EventAPIService.internal();
   EventRequest eventRequest;
+
   factory EventAPIService() => _internal;
 
   EventAPIService.internal();
@@ -29,10 +30,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
   @override
   Future<List<EventRequest>> getData(String status) async {
-    // _http.Response response = await _http.get("$baseUrl/event?status=$status");
-    // List<dynamic> data = json.decode(response.body);
-    // List<EventRequest> newData =
-    //     data.map((e) => EventRequest.fromMap(e)).toList();
     return await getEventRequests("$status");
   }
 
@@ -60,7 +57,6 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
 
   //getEvent
   Future<List<EventRequest>> getEventRequests(String eventType) async {
-    //print("I am in Service: getEventRequests");
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
 
@@ -83,13 +79,17 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
     // Events on duration
     //requestBody = '{"city":["Pune","Mumbai"]}';
     if (eventType == "TODAY") {
-      requestBody = '{"dateInterval" : "TODAY" , "isPublicEvent" : true , "status" : 2}';
+      requestBody =
+          '{"dateInterval" : "TODAY" , "isPublicEvent" : true , "status" : 2}';
     } else if (eventType == "TOMORROW")
-      requestBody = '{"dateInterval" : "TOMORROW" , "isPublicEvent" : true, "status" : 2}';
+      requestBody =
+          '{"dateInterval" : "TOMORROW" , "isPublicEvent" : true, "status" : 2}';
     else if (eventType == "This Week") {
-      requestBody = '{"dateInterval" : "This Week", "isPublicEvent" : true, "status" : 2}';
+      requestBody =
+          '{"dateInterval" : "This Week", "isPublicEvent" : true, "status" : 2}';
     } else if (eventType == "This Month") {
-      requestBody = '{"dateInterval": "This Month", "isPublicEvent" : true, "status" : 2}';
+      requestBody =
+          '{"dateInterval": "This Month", "isPublicEvent" : true, "status" : 2}';
     } else if (eventType == "All" ||
         eventType == "AA" ||
         eventType == "Approved") {
@@ -192,20 +192,4 @@ class EventAPIService extends BaseAPIService implements IEventRestApi {
       throw Exception('Failed to get data');
     }
   }
-
-  // Future<bool> submitRegisterEventRequest(String eventrequestmap) async {
-  //   String token = AutheticationAPIService().sessionJWTToken;
-  //   var response = await client1.put('$baseUrl/api/event/registerevent',
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": "Bearer $token"
-  //       },
-  //       body: eventrequestmap);
-  //   if (response.statusCode == 200) {
-  //     //print(response.body);
-  //     //  print("register event called successfully");
-  //   } else {
-  //     throw Exception('Failed to get data');
-  //   }
-  // }
 }

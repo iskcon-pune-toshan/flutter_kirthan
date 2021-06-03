@@ -56,22 +56,6 @@ class RolesAPIService extends BaseAPIService implements IRolesRestApi  {
     }
   }
 
-/*  Future<EventRequest> submitNewEventRequest(EventRequest pEventrequest) async {
-    String requestBody = ''; Future<List<EventRequest>> getEventRequestsFromJson() async {
-    var userDetailsJson = await rootBundle.loadString(eventdetailsJsonPath);
-    List<dynamic> eventdetailsData = json.decode(eventDetailsJson) as List;
-    List<UserRequest> eventdetails = eventdetailsData.map((eventdetailsData) => EventRequest.fromMap(eventdetailsData)).toList();
-
-    return eventdetails;
-  }
-
-    var response = await _client.put('$_baseUrl/submitneweventrequest', headers: {"Content-Type": "application/json"}, body: requestBody);
-    if (response.statusCode == 200) {
-      EventRequest eventrequestsData = json.decode(response.body);
-      print(eventrequestsData);
-    }
-  }
-*/
 
   //addevent
   Future<Roles> submitNewRoles(
@@ -88,10 +72,6 @@ class RolesAPIService extends BaseAPIService implements IRolesRestApi  {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      //EventRequest respeventrequest = json.decode(response.body);
-      //print(respeventrequest);
-      //return respeventrequest;
-
       Map<String, dynamic> rolesData = json.decode(response.body);
      Roles rolesrequests = Roles.fromMap(rolesData);
       print(rolesrequests);
