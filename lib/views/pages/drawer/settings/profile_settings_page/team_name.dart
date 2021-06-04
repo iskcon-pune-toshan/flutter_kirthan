@@ -38,7 +38,7 @@ class _teamNameState extends State<teamName> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add Team',
+          'Edit Team Name',
         ),
       ),
       body: FutureBuilder(
