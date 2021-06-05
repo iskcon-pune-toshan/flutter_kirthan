@@ -13,7 +13,7 @@ import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class LocalAdminProfile extends StatefulWidget {
   @override
@@ -43,23 +43,26 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
   }
 
   Widget phone(String email) {
-    return FutureBuilder<List<UserRequest>>(
-        future: Users,
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            userList = snapshot.data;
-            for (var user in userList) {
-              if (user.email == email) {
-                Phone = user.phoneNumber;
-                return Text(
-                  ': ' + Phone.toString(),
-                  style: TextStyle(fontSize: 16, color: Colors.grey[400]),
-                );
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) =>(
+        FutureBuilder<List<UserRequest>>(
+            future: Users,
+            builder: (context, snapshot) {
+              if (snapshot.data != null) {
+                userList = snapshot.data;
+                for (var user in userList) {
+                  if (user.email == email) {
+                    Phone = user.phoneNumber;
+                    return Text(
+                      ': ' + Phone.toString(),
+                      style: TextStyle(fontSize: notifier.custFontSize, color: Colors.grey[400]),
+                    );
+                  }
+                }
               }
-            }
-          }
-          return CircularProgressIndicator();
-        });
+              return CircularProgressIndicator();
+            })
+    )
+    );
   }
 
   bool UserRole(List<UserRequest> userList) {
@@ -89,7 +92,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
       builder: (context, notifier, child) => Scaffold(
         appBar: AppBar(
           title: Text(
-            'Profile',
+              'Profile', style: TextStyle(fontSize: notifier.custFontSize)
           ),
         ),
         body: Container(
@@ -119,7 +122,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                             Text(
                               'Local Admin',
                               style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w500),
+                                  fontSize: notifier.custFontSize, fontWeight: FontWeight.w500),
                             ),
                             FutureBuilder(
                                 future: getEmail(),
@@ -141,7 +144,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                                     Text(
                                                       uname.fullName,
                                                       style: TextStyle(
-                                                          fontSize: 16),
+                                                          fontSize: notifier.custFontSize),
                                                     ),
                                                   ],
                                                 );
@@ -168,7 +171,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                           child: Text(
                             " Area:",
                             style: TextStyle(
-                              fontSize: 25,
+                              fontSize: notifier.custFontSize,
                             ),
                           ),
                         ),
@@ -179,7 +182,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                               Text(
                                 " Team initiated:",
                                 style: TextStyle(
-                                  fontSize: 25,
+                                  fontSize: notifier.custFontSize,
                                 ),
                               ),
                             ],
@@ -202,14 +205,14 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
 
                                             return Padding(
                                               padding:
-                                                  const EdgeInsets.all(8.0),
+                                              const EdgeInsets.all(8.0),
                                               child: Row(
                                                 children: [
                                                   Text("  "),
                                                   Text(
                                                     "Call: ",
                                                     style: TextStyle(
-                                                      fontSize: 25,
+                                                      fontSize: notifier.custFontSize,
                                                       decoration: TextDecoration
                                                           .underline,
                                                     ),
@@ -219,7 +222,7 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                                     uname.phoneNumber
                                                         .toString(),
                                                     style:
-                                                        TextStyle(fontSize: 23),
+                                                    TextStyle(fontSize: notifier.custFontSize),
                                                   ),
                                                 ],
                                               ),
@@ -236,16 +239,16 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                             builder: (context, snapshot) {
                               if (snapshot.data != null) {
                                 final String currUserEmail =
-                                    snapshot.data.toString();
+                                snapshot.data.toString();
                                 return FutureBuilder<List<UserRequest>>(
                                     future: Users,
                                     builder: (BuildContext context,
                                         AsyncSnapshot<List<UserRequest>>
-                                            snapshot) {
+                                        snapshot) {
                                       if (snapshot.data != null) {
                                         userList = snapshot.data
                                             .where((element) =>
-                                                element.email == currUserEmail)
+                                        element.email == currUserEmail)
                                             .toList();
 
                                         return Padding(
@@ -256,15 +259,15 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                               Text(
                                                 "Email Id:",
                                                 style: TextStyle(
-                                                  fontSize: 25,
+                                                  fontSize: notifier.custFontSize,
                                                   decoration:
-                                                      TextDecoration.underline,
+                                                  TextDecoration.underline,
                                                 ),
                                               ),
                                               Text(" "),
                                               Text(
                                                 currUserEmail,
-                                                style: TextStyle(fontSize: 23),
+                                                style: TextStyle(fontSize: notifier.custFontSize),
                                               ),
                                             ],
                                           ),

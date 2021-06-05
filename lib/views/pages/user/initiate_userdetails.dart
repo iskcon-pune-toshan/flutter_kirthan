@@ -8,6 +8,8 @@ import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
@@ -83,324 +85,326 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('Profile'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return Consumer<ThemeNotifier>(
+      builder:(context, notifier, child)=> Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text('Profile',style: TextStyle(fontSize: notifier.custFontSize),),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: FutureBuilder<List<UserRequest>>(
-            future: Users,
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                userList = snapshot.data;
+        body: SingleChildScrollView(
+          child: FutureBuilder<List<UserRequest>>(
+              future: Users,
+              builder: (context, snapshot) {
+                if (snapshot.data != null) {
+                  userList = snapshot.data;
 
-                // print("lllll");
-                // print(user.email);
-                String _email = user.email;
-                // print(_email);
-                for (var _users in userList) {
-                  // print("GGGG");
-                  // print(_users.email);
-                  if (_users.email == _email) {
-                    superId = _users.id;
-                  } else {
-                    //  print("BYEBYE");
+                  // print("lllll");
+                  // print(user.email);
+                  String _email = user.email;
+                  // print(_email);
+                  for (var _users in userList) {
+                    // print("GGGG");
+                    // print(_users.email);
+                    if (_users.email == _email) {
+                      superId = _users.id;
+                    } else {
+                      //  print("BYEBYE");
+                    }
                   }
-                }
-                for (var uname in userList) {
-                  if (uname.fullName == UserName) {
-                    Email = uname.email;
-                    Phone = uname.phoneNumber;
-                    prev_role_id = uname.roleId;
-                    return Stack(
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(bottom: 0),
-                              color: Colors.white,
-                              width: MediaQuery.of(context).size.width,
-                              height:
-                                  (MediaQuery.of(context).size.height / 4) + 40,
-                              child: Image.asset(
-                                "assets/images/profile_back.jfif",
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            Divider(
-                              thickness: 2,
-                              height: 0,
-                              color: KirthanStyles.colorPallete30,
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20,
-                              MediaQuery.of(context).size.height / 4, 20, 0),
-                          child: Column(
-                            children: <Widget>[
+                  for (var uname in userList) {
+                    if (uname.fullName == UserName) {
+                      Email = uname.email;
+                      Phone = uname.phoneNumber;
+                      prev_role_id = uname.roleId;
+                      return Stack(
+                        children: [
+                          Column(
+                            children: [
                               Container(
-                                  decoration: BoxDecoration(
-                                      //color: Colors.grey[700],
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 50),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              FittedBox(
-                                                fit: BoxFit.contain,
-                                                child: IntrinsicHeight(
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        UserName,
-                                                        style: TextStyle(
-                                                            fontSize: 20,
-                                                            fontFamily:
-                                                                'OpenSans'),
-                                                      ),
-                                                      VerticalDivider(
-                                                        color: Colors.white,
-                                                        thickness: 2,
-                                                        width: 30,
-                                                      ),
-                                                      Text(
-                                                        uname.roleId == 1
-                                                            ? "Super Admin"
-                                                            : uname.roleId == 2
-                                                                ? "Local Admin"
-                                                                : "User",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight.w800,
-                                                            fontFamily:
-                                                                'OpenSans'),
-                                                      ),
-                                                    ],
+                                margin: EdgeInsets.only(bottom: 0),
+                                color: Colors.white,
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    (MediaQuery.of(context).size.height / 4) + 40,
+                                child: Image.asset(
+                                  "assets/images/profile_back.jfif",
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              Divider(
+                                thickness: 2,
+                                height: 0,
+                                color: KirthanStyles.colorPallete30,
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(20,
+                                MediaQuery.of(context).size.height / 4, 20, 0),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                    decoration: BoxDecoration(
+                                        //color: Colors.grey[700],
+                                        borderRadius: BorderRadius.circular(10)),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 50),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                FittedBox(
+                                                  fit: BoxFit.contain,
+                                                  child: IntrinsicHeight(
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          UserName,
+                                                          style: TextStyle(
+                                                              fontSize: 4+notifier.custFontSize,
+                                                              fontFamily:
+                                                                  'OpenSans'),
+                                                        ),
+                                                        VerticalDivider(
+                                                          color: Colors.white,
+                                                          thickness: 2,
+                                                          width: 30,
+                                                        ),
+                                                        Text(
+                                                          uname.roleId == 1
+                                                              ? "Super Admin"
+                                                              : uname.roleId == 2
+                                                                  ? "Local Admin"
+                                                                  : "User",
+                                                          style: TextStyle(
+                                                              fontSize: notifier.custFontSize,
+                                                              fontWeight:
+                                                                  FontWeight.w800,
+                                                              fontFamily:
+                                                                  'OpenSans'),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              FittedBox(
-                                                fit: BoxFit.contain,
-                                                child: Text(
-                                                  Email,
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                FittedBox(
+                                                  fit: BoxFit.contain,
+                                                  child: Text(
+                                                    Email,
+                                                    style: TextStyle(
+                                                        fontSize: notifier.custFontSize,
+                                                        fontFamily: 'OpenSans'),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  Phone.toString(),
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: notifier.custFontSize,
                                                       fontFamily: 'OpenSans'),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text(
-                                                Phone.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontFamily: 'OpenSans'),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      CircleAvatar(
-                                        radius: 43,
-                                        backgroundColor:
-                                            KirthanStyles.colorPallete30,
-                                        child: CircleAvatar(
-                                          radius: 40,
-                                          //backgroundColor: Colors.white,
-                                          child: ClipOval(
-                                            child: new SizedBox(
-                                              width: 100.0,
-                                              height: 100.0,
-                                              child: (photoUrl != null)
-                                                  ? Image.network(
-                                                      photoUrl,
-                                                      fit: BoxFit.contain,
-                                                    )
-                                                  : ProfilePages(),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  )),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: TextField(
-                                  cursorColor: Colors.white,
-                                  decoration: InputDecoration(
-                                    enabledBorder: const OutlineInputBorder(
-                                      // width: 0.0 produces a thin "hairline" border
-                                      borderSide: const BorderSide(
-                                          color: Colors.white, width: 0.0),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      // width: 0.0 produces a thin "hairline" border
-                                      borderSide: const BorderSide(
-                                          color: Colors.white, width: 1.0),
-                                    ),
-                                    //fillColor: Colors.grey[700],
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.white,
-                                            style: BorderStyle.solid)),
-                                    hintText: 'Add a message',
-                                  ),
-                                  style: TextStyle(color: Colors.white70),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 43,
+                                          backgroundColor:
+                                              KirthanStyles.colorPallete30,
+                                          child: CircleAvatar(
+                                            radius: 40,
+                                            //backgroundColor: Colors.white,
+                                            child: ClipOval(
+                                              child: new SizedBox(
+                                                width: 100.0,
+                                                height: 100.0,
+                                                child: (photoUrl != null)
+                                                    ? Image.network(
+                                                        photoUrl,
+                                                        fit: BoxFit.contain,
+                                                      )
+                                                    : ProfilePages(),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                SizedBox(
+                                  height: 20,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                              ),
-                              uname.roleId != 2
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              Colors.white,
-                                              Colors.grey[300]
-                                            ],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextField(
+                                    cursorColor: Colors.white,
+                                    decoration: InputDecoration(
+                                      enabledBorder: const OutlineInputBorder(
+                                        // width: 0.0 produces a thin "hairline" border
+                                        borderSide: const BorderSide(
+                                            color: Colors.white, width: 0.0),
                                       ),
-                                      child: FlatButton(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 50, vertical: 10),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: Text(
-                                            'Make Local Admin',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                                fontFamily: 'OpenSans'),
-                                          ),
-                                          onPressed: () {
-                                            userRequest = uname;
-                                            print("Printing user request");
-                                            print(prev_role_id);
-                                            // print(userRequest);
-                                            setState(() {
-                                              // print("ooooo");
-                                              userRequest.roleId = 2;
-                                              userRequest.prevRoleId =
-                                                  prev_role_id;
-                                              // print("JJJJJJ");
-                                              // print(superId);
-                                              userRequest.invitedBy = superId;
-                                            });
-
-                                            String userrequestStr = jsonEncode(
-                                                userRequest.toStrJson());
-                                            userPageVM.submitUpdateUserRequest(
-                                                userrequestStr);
-                                            SnackBar mysnackbar = SnackBar(
-                                              content: Text(
-                                                  UserName + " is now Admin"),
-                                              duration:
-                                                  new Duration(seconds: 4),
-                                              backgroundColor: Colors.white,
-                                            );
-                                            Scaffold.of(context)
-                                                .showSnackBar(mysnackbar);
-                                          }),
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              Colors.white,
-                                              Colors.grey[300]
-                                            ],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight),
+                                      focusedBorder: const OutlineInputBorder(
+                                        // width: 0.0 produces a thin "hairline" border
+                                        borderSide: const BorderSide(
+                                            color: Colors.white, width: 1.0),
                                       ),
-                                      child: FlatButton(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 50, vertical: 10),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          color: Colors.white,
-                                          child: Text(
-                                            'Make User',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                                fontFamily: 'OpenSans'),
-                                          ),
-                                          onPressed: () {
-                                            print("Printing user request");
-                                            print(prev_role_id);
-                                            userRequest = uname;
-                                            setState(() {
-                                              userRequest.roleId = 3;
-                                              userRequest.invitedBy = superId;
-                                              userRequest.prevRoleId =
-                                                  prev_role_id;
-                                            });
+                                      //fillColor: Colors.grey[700],
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.white,
+                                              style: BorderStyle.solid)),
+                                      hintText: 'Add a message',
+                                    ),
+                                    style: TextStyle(color: Colors.white70,fontSize: notifier.custFontSize),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                uname.roleId != 2
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          // gradient: LinearGradient(
+                                          //     // colors: [
+                                          //     //   Colors.white,
+                                          //     //   Colors.grey[300]
+                                          //     // ],
+                                          //     begin: Alignment.centerLeft,
+                                          //     end: Alignment.centerRight),
+                                        ),
+                                        child: FlatButton(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 50, vertical: 10),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            child: Text(
+                                              'Make Local Admin',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: notifier.custFontSize,
+                                                  fontFamily: 'OpenSans'),
+                                            ),
+                                            onPressed: () {
+                                              userRequest = uname;
+                                              print("Printing user request");
+                                              print(prev_role_id);
+                                              // print(userRequest);
+                                              setState(() {
+                                                // print("ooooo");
+                                                userRequest.roleId = 2;
+                                                userRequest.prevRoleId =
+                                                    prev_role_id;
+                                                // print("JJJJJJ");
+                                                // print(superId);
+                                                userRequest.invitedBy = superId;
+                                              });
 
-                                            String userrequestStr = jsonEncode(
-                                                userRequest.toStrJson());
-                                            userPageVM.submitUpdateUserRequest(
-                                                userrequestStr);
-                                            SnackBar mysnackbar = SnackBar(
-                                              content: Text(
-                                                  UserName + " is now User"),
-                                              duration:
-                                                  new Duration(seconds: 2),
-                                              backgroundColor: Colors.white,
-                                            );
-                                            Scaffold.of(context)
-                                                .showSnackBar(mysnackbar);
-                                          }),
-                                    )
-                            ],
-                          ),
-                        )
-                      ],
-                    );
+                                              String userrequestStr = jsonEncode(
+                                                  userRequest.toStrJson());
+                                              userPageVM.submitUpdateUserRequest(
+                                                  userrequestStr);
+                                              SnackBar mysnackbar = SnackBar(
+                                                content: Text(
+                                                    UserName + " is now Admin"),
+                                                duration:
+                                                    new Duration(seconds: 4),
+                                                backgroundColor: Colors.white,
+                                              );
+                                              Scaffold.of(context)
+                                                  .showSnackBar(mysnackbar);
+                                            }),
+                                      )
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                        //   gradient: LinearGradient(
+                                        //       // colors: [
+                                        //       //   Colors.white,
+                                        //       //   Colors.grey[300]
+                                        //       // ],
+                                        //       begin: Alignment.centerLeft,
+                                        //       end: Alignment.centerRight),
+                                        ),
+                                        child: FlatButton(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 50, vertical: 10),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            color: Colors.white,
+                                            child: Text(
+                                              'Make User',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize:notifier.custFontSize,
+                                                  fontFamily: 'OpenSans'),
+                                            ),
+                                            onPressed: () {
+                                              print("Printing user request");
+                                              print(prev_role_id);
+                                              userRequest = uname;
+                                              setState(() {
+                                                userRequest.roleId = 3;
+                                                userRequest.invitedBy = superId;
+                                                userRequest.prevRoleId =
+                                                    prev_role_id;
+                                              });
+
+                                              String userrequestStr = jsonEncode(
+                                                  userRequest.toStrJson());
+                                              userPageVM.submitUpdateUserRequest(
+                                                  userrequestStr);
+                                              SnackBar mysnackbar = SnackBar(
+                                                content: Text(
+                                                    UserName + " is now User",style: TextStyle(fontSize: notifier.custFontSize),),
+                                                duration:
+                                                    new Duration(seconds: 2),
+                                                backgroundColor: Colors.white,
+                                              );
+                                              Scaffold.of(context)
+                                                  .showSnackBar(mysnackbar);
+                                            }),
+                                      )
+                              ],
+                            ),
+                          )
+                        ],
+                      );
+                    }
                   }
                 }
-              }
-              return Container();
-            }),
+                return Container();
+              }),
+        ),
       ),
     );
   }

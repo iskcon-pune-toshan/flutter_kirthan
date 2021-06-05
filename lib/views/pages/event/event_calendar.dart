@@ -56,12 +56,14 @@ class CalendarClass extends State<CalendarPage> {
                       showDatePickerButton: true,
                     )),
               );
-            } else {
+            } else if(snapshot.hasError) {
               return Container(
                 child: Center(
                   child: Text(snapshot.error.toString()),
                 ),
               );
+            }else{
+              return Center(child:CircularProgressIndicator());
             }
           },
         ),

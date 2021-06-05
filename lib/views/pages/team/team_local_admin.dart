@@ -220,7 +220,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                 } else if (snapshot.hasError) {
                                   return Text("Error");
                                 } else {
-                                  return Text("Retrieved null values");
+                                  return Container();
                                 }
                               }),
                           SizedBox(height: 35),
@@ -270,7 +270,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                 } else if (snapshot.hasError) {
                                   return Text("Error");
                                 } else {
-                                  return Text("Retrieved null values");
+                                  return Container();
                                 }
                               }),
                         ],
@@ -299,9 +299,8 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                         onPressed: () async {
                                           List<TeamRequest> tempTeamList =
                                               await teamPageVM.getTeamRequests(
-                                                  "teamLead:" +
-                                                      widget.teamrequest
-                                                          .teamLeadId);
+                                                  "teamLead:"+
+                                                      widget.teamrequest.teamLeadId);
                                           if (tempTeamList.isNotEmpty) {
                                             Scaffold.of(context)
                                                 .showSnackBar(SnackBar(
@@ -430,7 +429,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
 void showFlushBar(BuildContext context) {
   Flushbar(
     messageText: Text(
-      'Team Registered $successful',
+      'Your team request sent for approval',
       style: TextStyle(color: Colors.white),
     ),
     backgroundColor: Colors.green,

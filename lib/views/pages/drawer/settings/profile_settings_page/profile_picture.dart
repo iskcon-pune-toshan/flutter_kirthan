@@ -150,94 +150,98 @@ class _profilePictureState extends State<profilePicture> {
       });
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile Picture'),
-      ),
-      body: Builder(
-        builder: (context) => SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) =>(
+        Scaffold(
+          appBar: AppBar(
+            title: Text('Profile Picture',style: TextStyle(
+                fontSize: notifier.custFontSize)),
+          ),
+          body: Builder(
+            builder: (context) => SingleChildScrollView(
+              child: Column(
                 children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      radius: 100,
-                      backgroundColor: Color(0xff476cfb),
-                      child: ClipOval(
-                        child: new SizedBox(
-                            width: 180.0,
-                            height: 180.0,
-                            child: (_image != null)
-                                ? Image.file(
-                                    _image,
-                                    fit: BoxFit.fill,
-                                  )
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.center,
+                        child: CircleAvatar(
+                          radius: 100,
+                          backgroundColor: Color(0xff476cfb),
+                          child: ClipOval(
+                            child: new SizedBox(
+                                width: 180.0,
+                                height: 180.0,
+                                child: (_image != null)
+                                    ? Image.file(
+                                  _image,
+                                  fit: BoxFit.fill,
+                                )
                                 //   :(profilePic==null)
                                 // ?Image.asset("assets/images/default_profile_picture.png",
                                 // fit: BoxFit.fill,)
-                                : ProfilePages()),
+                                    : ProfilePages()),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              Card(
-                //margin: const EdgeInsets.only(top: 200.0),
-                child: SizedBox(
-                    height: 300.0,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 50.0),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Consumer<ThemeNotifier>(
-                              builder: (context, notifier, child) => Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  /* Text(
-                                    'Username:    ',
-                                    style: TextStyle(
-                                        fontSize: notifier.custFontSize),
+                  Card(
+                    //margin: const EdgeInsets.only(top: 200.0),
+                    child: SizedBox(
+                        height: 300.0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Consumer<ThemeNotifier>(
+                                  builder: (context, notifier, child) => Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      /* Text(
+                                      'Username:    ',
+                                      style: TextStyle(
+                                          fontSize: notifier.custFontSize),
+                                    ),
+                                    Text(
+                                      'User 1',
+                                      style: TextStyle(
+                                          fontSize: notifier.custFontSize,
+                                          fontWeight: FontWeight.bold),
+                                    ),*/
+                                    ],
                                   ),
-                                  Text(
-                                    'User 1',
-                                    style: TextStyle(
-                                        fontSize: notifier.custFontSize,
-                                        fontWeight: FontWeight.bold),
-                                  ),*/
-                                ],
-                              ),
-                            ),
-                            FlatButton(
-                              child: Text('Change Profile Picture'),
-                              onPressed: () {
-                                getImage();
-                              },
-                              highlightColor: Colors.amber,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              color: KirthanStyles.colorPallete30,
-                            ),
-                            FlatButton(
-                              child: Text('Delete Profile Picture'),
-                              //padding: EdgeInsets.only(left: 00.0,top: 10.0,right: 10.0,bottom: 0.0),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              color: KirthanStyles.colorPallete30,
-                              onPressed: () async {
-                                //Image.asset('assets/images/default_profile_picture.png');
-                                ProfilePages();
-                                deletePic(context);
-                                List<UserRequest> userrequest =
+                                ),
+                                FlatButton(
+                                  child: Text('Change Profile Picture', style: TextStyle(
+                                      fontSize: notifier.custFontSize)),
+                                  onPressed: () {
+                                    getImage();
+                                  },
+                                  highlightColor: Colors.amber,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  color: KirthanStyles.colorPallete30,
+                                ),
+                                FlatButton(
+                                  child: Text('Delete Profile Picture', style: TextStyle(
+                                      fontSize: notifier.custFontSize)),
+                                  //padding: EdgeInsets.only(left: 00.0,top: 10.0,right: 10.0,bottom: 0.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  color: KirthanStyles.colorPallete30,
+                                  onPressed: () async {
+                                    //Image.asset('assets/images/default_profile_picture.png');
+                                    ProfilePages();
+                                    deletePic(context);
+                                    List<UserRequest> userrequest =
                                     await userPageVM.getUserRequests('$uemail');
                                 //
                                 if (userrequest.isNotEmpty) {
@@ -250,28 +254,29 @@ class _profilePictureState extends State<profilePicture> {
                                   }
                                   String userrequestmap =
                                       jsonEncode(userreq.toStrJson());
-                                  userPageVM
-                                      .submitUpdateUserRequest(userrequestmap);
-                                  // for()
-                                }
-                              },
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                FutureBuilder(
-                                    future: getEmail(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.data != null) {
-                                        String email = snapshot.data;
-                                        {
-                                          {
-                                            return RaisedButton(
-                                              child: Text('Save'),
-                                              color: Colors.blueGrey,
-                                              onPressed: () async {
-                                                uploadPic(context);
-                                                List<UserRequest> userrequest =
+                                      userPageVM
+                                          .submitUpdateUserRequest(userrequestmap);
+                                      // for()
+                                    }
+                                  },
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    FutureBuilder(
+                                        future: getEmail(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.data != null) {
+                                            String email = snapshot.data;
+                                            {
+                                              {
+                                                return RaisedButton(
+                                                  child: Text('Save', style: TextStyle(
+                                                      fontSize: notifier.custFontSize)),
+                                                  color: Colors.blueGrey,
+                                                  onPressed: () async {
+                                                    uploadPic(context);
+                                                    List<UserRequest> userrequest =
                                                     await userPageVM
                                                         .getUserRequests(
                                                             '$email');
@@ -289,33 +294,36 @@ class _profilePictureState extends State<profilePicture> {
                                                   userPageVM
                                                       .submitUpdateUserRequest(
                                                           userrequestmap);
-                                                  // for()
-                                                }
-                                              },
-                                            );
+                                                      // for()
+                                                    }
+                                                  },
+                                                );
+                                              }
+                                            }
                                           }
-                                        }
-                                      }
-                                    }),
-                                RaisedButton(
-                                  child: Text('Cancel'),
-                                  color: Colors.blueGrey,
-                                  //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
+                                        }),
+                                    RaisedButton(
+                                      child: Text('Cancel', style: TextStyle(
+                                          fontSize: notifier.custFontSize)),
+                                      color: Colors.blueGrey,
+                                      //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                    )),
+                          ),
+                        )),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        )
+    ),
     );
   }
 }

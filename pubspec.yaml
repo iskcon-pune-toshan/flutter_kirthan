@@ -67,7 +67,7 @@ dependencies:
   grouped_buttons:
   numberpicker:
   move_to_background:
-
+  flip_card:
 
 
 dev_dependencies:

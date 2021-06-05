@@ -1,3 +1,4 @@
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
@@ -60,12 +61,16 @@ class EventRequestsListItem extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(left: 10),
                       child: Consumer<ThemeNotifier>(
-                        builder: (context, notifier, child) => Text(
-                          eventrequest?.eventTitle,
-                          style: TextStyle(
-                            //color: KirthanStyles.titleColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: notifier.custFontSize,
+                        builder: (context, notifier, child) => Container(width: 180,
+                          child: Center(
+                            child: Text(
+                              eventrequest?.eventTitle,
+                              style: TextStyle(
+                                //color: KirthanStyles.titleColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: notifier.custFontSize,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -79,43 +84,45 @@ class EventRequestsListItem extends StatelessWidget {
                               EventTeamUserRegister(
                                   eventrequest: eventrequest),
                               SizedBox(width: 5),
-                              FlatButton(
-                                // shape: RoundedRectangleBorder(
-                                //   borderRadius: BorderRadius.circular(15.0),
-                                // ),
-                                highlightColor: Colors.grey,
-                                padding: EdgeInsets.all(0),
-                                //color: Colors.black,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(0),
-                                      child: Icon(
-                                        Icons.location_on_sharp,
-                                        color: KirthanStyles.colorPallete30,
-                                        size: notifier.custFontSize,
+                              Container(
+                                child: FlatButton(
+                                  // shape: RoundedRectangleBorder(
+                                  //   borderRadius: BorderRadius.circular(15.0),
+                                  // ),
+                                  highlightColor: Colors.grey,
+                                  padding: EdgeInsets.all(0),
+                                  //color: Colors.black,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(0),
+                                        child: Icon(
+                                          Icons.location_on_sharp,
+                                          color: KirthanStyles.colorPallete30,
+                                          size: notifier.custFontSize,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      "Location",
-                                      style: TextStyle(
-                                        color: KirthanStyles.colorPallete30,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: notifier.custFontSize,
+                                      Text(
+                                        "Location",
+                                        style: TextStyle(
+                                          color: KirthanStyles.colorPallete30,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: notifier.custFontSize,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Location(
-                                            eventrequest: eventrequest)),
-                                  );
-                                },
-                                //splashColor: Colors.red,
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Location(
+                                              eventrequest: eventrequest)),
+                                    );
+                                  },
+                                  //splashColor: Colors.red,
 //shape: Border.all(width: 2.0, color: Colors.black)
+                                ),
                               ),
 /*              Container(
             child: Align(
@@ -274,7 +281,6 @@ class EventRequestsListItem extends StatelessWidget {
               ),
             ),
           ),*/
-
 /*    Consumer<int_item>(
     builder: (context, int_item, child) => IconButton(
     icon: (_isFavorited ? Icon(Icons.star) : Icon(Icons.star_border)),
@@ -347,14 +353,16 @@ class EventRequestsListItem extends StatelessWidget {
         */
             Container(
               width: MediaQuery.of(context).size.width - 33,
-              margin: const EdgeInsets.only(left: 10.0, top: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
               child: Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => Text(
-                  eventrequest?.eventDescription,
-                  style: TextStyle(
-                    // color: KirthanStyles.subTitleColor,
-                    color: Colors.grey,
-                    fontSize: notifier.custFontSize - 1,
+                builder: (context, notifier, child) => Center(
+                  child: Text(
+                    eventrequest?.eventDescription,
+                    style: TextStyle(
+                      // color: KirthanStyles.subTitleColor,
+                      color: Colors.grey,
+                      fontSize: notifier.custFontSize - 1,
+                    ),
                   ),
                 ),
               ),
@@ -419,7 +427,7 @@ class EventRequestsListItem extends StatelessWidget {
     ]);
     return Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: EdgeInsets.fromLTRB(8, 4, 5, 0),
           child: new Card(
             elevation: 8,
             child: Consumer<ThemeNotifier>(
@@ -438,17 +446,9 @@ class EventRequestsListItem extends StatelessWidget {
                 ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: new Column(children: <Widget>[
+                  child: FlipCard(
+                    front: new Column(children: <Widget>[
                     title,
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          subTitle,
-                        ],
-                      ),
-                    ),
                     Divider(),
                     Consumer<ThemeNotifier>(
                       builder: (context, notifier, child) => Container(
@@ -560,6 +560,25 @@ class EventRequestsListItem extends StatelessWidget {
                         width: MediaQuery.of(context).size.width,
                         child: daysToGo),
                   ]),
+                  back: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(child: Container(
+                          margin:EdgeInsets.symmetric(vertical: 10),
+                          child: Text("Event Description",
+                            style: TextStyle(
+                                fontSize: notifier.custFontSize
+                            ),
+                          ),
+                        ),
+                        ),
+                       subTitle,
+                      ],
+                    ),
+                  ),),
                 ),
               ),
             ),
