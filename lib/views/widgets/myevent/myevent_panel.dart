@@ -30,8 +30,10 @@ class MyEventsPanel extends StatelessWidget {
                 return Center(child: const CircularProgressIndicator());
               case ConnectionState.done:
                 if (snapshot.hasData) {
+                  print("INSIDE SNAPSHOT");
                   var eventRequests = snapshot.data;
-                  return new Column(
+                  return eventRequests.isNotEmpty
+                      ? new Column(
                     //mainAxisAlignment: MainAxisAlignment.center,
                     //mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
@@ -60,7 +62,6 @@ class MyEventsPanel extends StatelessWidget {
                           ),*/
                         ],
                       ),
-
                       Expanded(
                         child: Scrollbar(
                           controller: ScrollController(
@@ -87,6 +88,16 @@ class MyEventsPanel extends StatelessWidget {
                         ),
                       ),
                     ],
+                  )
+                  //TODO:added no event created
+                      : Container(
+                    alignment: Alignment.center,
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(
+                      "No events created",
+                      style: TextStyle(fontSize: 20),
+                    ),
                   );
                 } else if (snapshot.hasError) {
                   return NoInternetConnection(
@@ -97,6 +108,7 @@ class MyEventsPanel extends StatelessWidget {
                     },
                   );
                 }
+                return Container();
             }
           },
         );
@@ -150,25 +162,24 @@ class MyEventsPanel extends StatelessWidget {
                       ),
                       Expanded(
                         child: Scrollbar(
-                          controller: ScrollController(
-                            initialScrollOffset: 2,
-                            keepScrollOffset: false,
-                          ),
-                          child: Center(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: eventRequests == null
-                                  ? 0
-                                  : eventRequests.length,
-                              itemBuilder: (_, int index) {
-                                eventteamrequest = eventRequests[index];
-                                return MyEventRequestsListItem(
-                                    // eventteam: eventteamrequest,
-                                    );
-                              },
+                            controller: ScrollController(
+                              initialScrollOffset: 2,
+                              keepScrollOffset: false,
                             ),
-                          ),
-                        ),
+                            child: Center(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: eventRequests == null
+                                    ? 0
+                                    : eventRequests.length,
+                                itemBuilder: (_, int index) {
+                                  eventteamrequest = eventRequests[index];
+                                  return MyEventRequestsListItem(
+                                    // eventteam: eventteamrequest,
+                                  );
+                                },
+                              ),
+                            )),
                       ),
                     ],
                   );
@@ -182,6 +193,7 @@ class MyEventsPanel extends StatelessWidget {
                   );
                 }
             }
+            return null;
           },
         );
       },

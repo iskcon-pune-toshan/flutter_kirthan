@@ -44,7 +44,7 @@ dependencies:
   great_circle_distance:
   flutter_bloc: ^4.0.0
   bloc:
-  image_picker: ^0.5.3+1
+  image_picker: ^0.6.2+1
   firebase_storage:
   flutter_svg:
   get_it: ^4.0.1
@@ -68,6 +68,10 @@ dependencies:
   numberpicker:
   move_to_background:
   flip_card:
+  connectivity:
+  csc_picker:
+  modal_bottom_sheet:
+  image_cropper: ^1.1.2
 
 
 dev_dependencies:

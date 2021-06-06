@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/event.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
 List<EventRequest> eventRequest;
+
 class CalendarPage extends StatefulWidget {
   EventRequest eventrequest;
 
@@ -56,14 +58,9 @@ class CalendarClass extends State<CalendarPage> {
                       showDatePickerButton: true,
                     )),
               );
-            } else if(snapshot.hasError) {
-              return Container(
-                child: Center(
-                  child: Text(snapshot.error.toString()),
-                ),
-              );
-            }else{
-              return Center(child:CircularProgressIndicator());
+            } else {
+              //TODO: solved the null print when shift to calender view
+              return Center(child: CircularProgressIndicator());
             }
           },
         ),
@@ -72,7 +69,6 @@ class CalendarClass extends State<CalendarPage> {
   }
 
   Future<List<Meeting>> getDataFromWeb() async {
-
     final List<Meeting> appointmentData = [];
     eventRequest = await eventPageVM.getEventRequests("MyEvent");
     for(var eventName in eventRequest){
@@ -86,25 +82,34 @@ class CalendarClass extends State<CalendarPage> {
         duration= two.difference(one).toString().substring(0,2);
       print(duration);
       Meeting meetingData = Meeting(
-          eventName: eventName.eventTitle,
-          from:DateTime(DateTime.parse(eventName.eventDate).year,
-              DateTime.parse(eventName.eventDate).month,DateTime.parse(eventName.eventDate).add(new Duration(days: 1)).day,one.hour,one.minute),
-          to: DateTime(DateTime.parse(eventName.eventDate).year,
-              DateTime.parse(eventName.eventDate).month,DateTime.parse(eventName.eventDate).add(new Duration(days: 1)).day).add(Duration(hours: int.parse(duration))),
-          background: Colors.blue,
+        eventName: eventName.eventTitle,
+        from: DateTime(
+            DateTime.parse(eventName.eventDate).year,
+            DateTime.parse(eventName.eventDate).month,
+            DateTime.parse(eventName.eventDate).add(new Duration(days: 1)).day,
+            one.hour,
+            one.minute),
+        to: DateTime(
+            DateTime.parse(eventName.eventDate).year,
+            DateTime.parse(eventName.eventDate).month,
+            DateTime.parse(eventName.eventDate)
+                .add(new Duration(days: 1))
+                .day)
+            .add(Duration(hours: int.parse(duration))),
+        background: Colors.blue,
       );
 
       appointmentData.add(meetingData);
     }
     return appointmentData;
   }
+
   void _viewChanged(ViewChangedDetails viewChangedDetails) {
     SchedulerBinding.instance.addPostFrameCallback((duration) {
       _datePicked = viewChangedDetails
           .visibleDates[viewChangedDetails.visibleDates.length ~/ 2];
     });
   }
-
 }
 
 class _AppointmentDataSource extends CalendarDataSource {
@@ -155,4 +160,3 @@ class Meeting {
   final DateTime endTimeZone;
   final String description;
 }
-

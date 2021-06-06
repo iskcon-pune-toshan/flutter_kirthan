@@ -1,4 +1,4 @@
-import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +31,7 @@ final TeamPageViewModel teamPageVM =
 TeamPageViewModel(apiSvc: TeamAPIService());
 final CommonLookupTablePageViewModel commonLookupTablePageVM =
 CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
+
 class EventWritePublic extends StatefulWidget {
   final String screenName = SCR_EVENT;
   EventRequest eventrequest;
@@ -42,7 +43,9 @@ class EventWritePublic extends StatefulWidget {
   EventWritePublic({@required this.eventrequest, @required this.userLogin})
       : super();
 }
+
 class _EventWriteState extends State<EventWritePublic> {
+  String errorText;
   FocusNode myFocusNode = new FocusNode();
   TeamRequest selectedTeam;
   List<Marker> myMarker = [];
@@ -112,6 +115,7 @@ class _EventWriteState extends State<EventWritePublic> {
     _getUserLocation();
     super.initState();
   }
+
   handleTap(LatLng tappedPoint1) {
     // print(tappedPoint1);
     setState(() {
@@ -129,6 +133,7 @@ class _EventWriteState extends State<EventWritePublic> {
       //print(eventrequest.sourceLatitude);
     });
   }
+
   handleTap2(LatLng tappedPoint1) {
     //  print(tappedPoint1);
     setState(() {
@@ -145,26 +150,31 @@ class _EventWriteState extends State<EventWritePublic> {
       //print(eventrequest.destinationLatitude);
     });
   }
+
   void onMapCreated(controller) {
     setState(() {
       mapController = controller;
     });
   }
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     eventrequest.createdBy = email;
     // print("created by " + eventrequest.createdBy);
+
     //  print(email);
     return email;
   }
+
   GoogleMapController _controller;
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
       _controller = controller;
     });
   }
+
   void _animateCamera() {
     _controller.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -175,6 +185,7 @@ class _EventWriteState extends State<EventWritePublic> {
       ),
     );
   }
+
   Widget _googleMapsWidget(MapsState state) {
     return GoogleMap(
       onTap: handleTap2,
@@ -187,6 +198,7 @@ class _EventWriteState extends State<EventWritePublic> {
       markers: Set.from(myMarker),
     );
   }
+
   Widget _googleMapsWidget2(MapsState state) {
     return GoogleMap(
       onTap: handleTap,
@@ -200,10 +212,12 @@ class _EventWriteState extends State<EventWritePublic> {
       markers: Set.from(myMarkersource),
     );
   }
+
   LatLng _lastMapPosition = _center;
   static const LatLng _center = const LatLng(-25.4157807, -54.6166762);
   MapsBloc _mapsBloc;
   static LatLng _initialPosition;
+
   void _getUserLocation() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -211,6 +225,7 @@ class _EventWriteState extends State<EventWritePublic> {
       _initialPosition = LatLng(position.latitude, position.longitude);
     });
   }
+
   List type = ["Stationary", "Moving"];
   bool isVisible = false;
   String select;
@@ -247,6 +262,7 @@ class _EventWriteState extends State<EventWritePublic> {
       ],
     );
   }
+
   String validateMobile(String value) {
     String patttern = r'(^(?:[+0]9)?[0-9]{10}$)';
     RegExp regExp = new RegExp(patttern);
@@ -257,6 +273,7 @@ class _EventWriteState extends State<EventWritePublic> {
     }
     return null;
   }
+
   String validatePin(String value) {
     String pattern = r'(^[1-9]{1}[0-9]{2}[0-9]{3}$)';
     RegExp regExp = new RegExp(pattern);
@@ -267,12 +284,13 @@ class _EventWriteState extends State<EventWritePublic> {
     }
     return null;
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     return Consumer<ThemeNotifier>(
-      builder:(context, notifier, child)=> Scaffold(
+      builder: (context, notifier, child) => Scaffold(
         key: _scaffoldKey,
         //resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -293,6 +311,7 @@ class _EventWriteState extends State<EventWritePublic> {
                 child: Form(
                   // context,
                   key: _formKey,
+
                   // readonly: true,
                   child: Column(
                     //crossAxisAlignment: CrossAxisAlignment.center,
@@ -343,6 +362,7 @@ class _EventWriteState extends State<EventWritePublic> {
                           },
                         ),
                       ),
+
                       Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
@@ -362,11 +382,11 @@ class _EventWriteState extends State<EventWritePublic> {
                               hintText: "Type Description of event",
                               hintStyle: TextStyle(
                                 color: Colors.grey,
-                                fontSize: notifier.custFontSize,
+                                  fontSize: notifier.custFontSize
                               ),
                               labelStyle: TextStyle(
                                 color: Colors.grey,
-                                fontSize: notifier.custFontSize,
+                                  fontSize: notifier.custFontSize
                               )),
                           onSaved: (input) {
                             eventrequest.eventDescription = input;
@@ -391,7 +411,6 @@ class _EventWriteState extends State<EventWritePublic> {
                             ),
                             DateTimeField(
                               style: TextStyle(fontSize: notifier.custFontSize),
-                              //autocorrect: true,
                               format: DateFormat("yyyy-MM-dd"),
                               onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
@@ -494,6 +513,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                       eventrequest.eventStartTime != null
                                           ? eventrequest.eventStartTime
                                           : ""));
+
                                   return time.compareTo(
                                       eventrequest.eventStartTime != null
                                           ? eventrequest.eventStartTime
@@ -518,7 +538,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                   .toSet()
                                   .toList();
                               return DropdownButtonFormField<String>(
-                                style: TextStyle(fontSize: notifier.custFontSize+10),
+                                style: TextStyle(fontSize: notifier.custFontSize),
                                 value: _selectedCategory,
                                 icon: const Icon(Icons.category),
                                 hint: Text('Select Event Type',
@@ -526,7 +546,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 items: _category
                                     .map((category) => DropdownMenuItem<String>(
                                   value: category,
-                                  child: Text(category, style: TextStyle( fontSize: notifier.custFontSize),),
+                                  child: Text(category, style: TextStyle(fontSize: notifier.custFontSize),),
                                 ))
                                     .toList(),
                                 onChanged: (input) {
@@ -619,15 +639,14 @@ class _EventWriteState extends State<EventWritePublic> {
                                                     }), //setState
                                                   }, //onpressed
                                                 ),
-                                                new MaterialButton(
-                                                  onPressed:(){ Navigator.pop(context);},
-                                                  color: themeData.primaryColor,
-                                                  textColor: themeData.secondaryHeaderColor,
-                                                  child: new Text(
-                                                    'Save',
-                                                    style: TextStyle(color: KirthanStyles.colorPallete30, fontSize: notifier.custFontSize),
-                                                  ),
-                                                )
+                                                IconButton(
+                                                  icon: Icon(Icons.done),
+                                                  onPressed: () {
+                                                    //handleTap(tappedPoint1);
+                                                    Navigator.pop(context);
+                                                  },
+                                                  //onpressed
+                                                ),
                                               ],
                                             ),
                                             body: BlocListener(
@@ -644,6 +663,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                                       state.locationModel
                                                           .long);
                                                 }
+
                                                 if (state
                                                 is LocationUserfound) {
                                                   Scaffold.of(context)
@@ -746,7 +766,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             padding: EdgeInsets.all(0),
                             width: MediaQuery.of(context).size.width,
                             child: TextFormField(
-                              style: TextStyle(fontSize: notifier.custFontSize),
+                            style: TextStyle(fontSize: notifier.custFontSize),
                               decoration: InputDecoration(
                                 isCollapsed: true,
                                 errorBorder: UnderlineInputBorder(
@@ -785,11 +805,11 @@ class _EventWriteState extends State<EventWritePublic> {
                                 hintText: "",
                                 hintStyle: TextStyle(
                                   color: Colors.grey,
-                                  fontSize: notifier.custFontSize
+                                    fontSize: notifier.custFontSize
                                 ),
                                 labelStyle: TextStyle(
                                   color: Colors.grey,
-                                  fontSize: notifier.custFontSize
+                                    fontSize: notifier.custFontSize
                                 )),
                             onSaved: (input) {
                               eventrequest.addLineOneS = input;
@@ -889,12 +909,17 @@ class _EventWriteState extends State<EventWritePublic> {
                                                     }, //onpressed
                                                   ),
                                                   new MaterialButton(
-                                                    onPressed:(){ Navigator.pop(context);},
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
                                                     color: themeData.primaryColor,
-                                                    textColor: themeData.secondaryHeaderColor,
+                                                    textColor: themeData
+                                                        .secondaryHeaderColor,
                                                     child: new Text(
                                                       'Save',
-                                                      style: TextStyle(color: KirthanStyles.colorPallete30, fontSize: notifier.custFontSize),
+                                                      style: TextStyle(
+                                                          color: KirthanStyles
+                                                              .colorPallete30, fontSize: notifier.custFontSize),
                                                     ),
                                                   )
                                                 ],
@@ -1008,7 +1033,7 @@ class _EventWriteState extends State<EventWritePublic> {
                           Visibility(
                             visible: isVisible,
                             child: TextFormField(
-                              style: TextStyle(fontSize: notifier.custFontSize),
+                            style: TextStyle( fontSize: notifier.custFontSize),
                               autovalidateMode:
                               AutovalidateMode.onUserInteraction,
                               //attribute: "Address",
@@ -1139,8 +1164,10 @@ class _EventWriteState extends State<EventWritePublic> {
                               },
                               validator: validatePin),
                           Container(
-                            child: SelectState(
-                              style: TextStyle(fontSize: notifier.custFontSize),
+                            padding: EdgeInsets.only(top: 30),
+                            //TODO:added search bar
+                            child: CSCPicker(
+                              layout: Layout.vertical,
                               onCountryChanged: (value) {
                                 setState(() {
                                   eventrequest.country = value;
@@ -1263,7 +1290,7 @@ class _EventWriteState extends State<EventWritePublic> {
                         children: <Widget>[
                           MaterialButton(
                             color: KirthanStyles.colorPallete60,
-                            child: Text("Cancel",style: TextStyle(fontSize: notifier.custFontSize),),
+                            child: Text("Cancel", style: TextStyle(fontSize: notifier.custFontSize),),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -1282,6 +1309,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                   eventrequest.createdBy = email;
                                   // print("created by " + eventrequest.createdBy);
                                   // print(email);
+
                                   _formKey.currentState.save();
                                   //eventrequest.isProcessed = true;
                                   eventrequest.isPublicEvent = true;
@@ -1311,7 +1339,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                   String eid = neweventrequest.id.toString();
                                   SnackBar mysnackbar = SnackBar(
                                     content: Text(
-                                        "Event registered $successful with $eid",style: TextStyle(fontSize: notifier.custFontSize),),
+                                        "Event registered $successful with $eid"),
                                     duration: new Duration(seconds: 4),
                                     backgroundColor: Colors.green,
                                   );

@@ -1,4 +1,4 @@
-import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,6 @@ import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'package:flutter_kirthan/views/pages/event/service_type.dart';
 //import 'package:flutter_kirthan/views/pages/eventteam/team_selection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -470,9 +469,76 @@ class _EventWriteState extends State<EventWrite> {
                           }),
 
 
-                      Container(
 
-                      ),
+                      /*Container(
+                        //padding: new EdgeInsets.all(10),
+                        child: TextFormField(
+                  //focusNode: myFocusNode,
+                          //attribute: "Type",
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                             // icon: const Icon(Icons.low_priority,
+                               //   color: Colors.grey),
+                              labelText: "Event Type",
+
+                              hintText: "Event Type eg: Bhajan",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: myFocusNode.hasFocus ? Colors.black : Colors.grey
+                              )),
+                          onSaved: (input) {
+                            eventrequest.eventType = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),*/
+
+                    Container(
+                      //padding: new EdgeInsets.all(10),
+                      /*child: TextFormField(
+
+                        //attribute: "PhoneNumber",
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              // icon: const Icon(Icons.phone_iphone,
+                              //   color: Colors.grey),
+                              labelText: "Phone Number",
+                              hintText: "Type Phone Number",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            eventrequest.phoneNumber = int.parse(input);
+                          },
+                          validator: validateMobile
+                        /*  (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },*/
+                      ),*/
+                    ),
                       new Container(
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 20),
@@ -482,210 +548,212 @@ class _EventWriteState extends State<EventWrite> {
                                 fontSize: notifier.custFontSize,
                                 color: KirthanStyles.colorPallete30),
                           )),
-
-                      Column(
-                        children: <Widget>[
-                          TextFormField(
-                            style: TextStyle(fontSize: notifier.custFontSize),
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
-                                icon: const Icon(Icons.home, color: Colors.grey),
-                                labelText: "Address",
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                                ),
-                                labelStyle: TextStyle(
-                                  fontSize: notifier.custFontSize,
-                                  color: Colors.grey,
-                                )),
-                            onSaved: (input) {
-                              eventrequest.addLineOneS = input;
-                              //eventrequest.eventLocation = input;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            style: TextStyle(fontSize: notifier.custFontSize),
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
-                                labelText: "Line 2",
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                                ),
-                                labelStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                                )),
-                            onSaved: (input) {
-                              eventrequest.addLineTwoS = input;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            style: TextStyle(fontSize: notifier.custFontSize),
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
-                                labelText: "Locality",
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                                ),
-                                labelStyle: TextStyle(
-                                  fontSize: notifier.custFontSize,
-                                  color: Colors.grey,
-                                )),
-                            onSaved: (input) {
-                              eventrequest.localityS = input;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.green),
-                                  ),
-                                  labelText: "PinCode",
-                                  hintText: "",
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: notifier.custFontSize
-                                  ),
-                                  labelStyle: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: notifier.custFontSize
-                                  )),
-                              onSaved: (input) {
-                                eventrequest.pincode = int.parse(input);
-                              },
-                              validator: validatePin),
-                          Container(
-                            child: SelectState(
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                              onCountryChanged: (value) {
-                                setState(() {
-                                  eventrequest.country = value;
-                                });
-                              },
-                              onStateChanged: (value) {
-                                setState(() {
-                                  eventrequest.state = value;
-                                });
-                              },
-                              onCityChanged: (value) {
-                                setState(() {
-                                  eventrequest.city = value;
-                                });
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      TextFormField(
-                        style: TextStyle(fontSize: notifier.custFontSize),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (eventrequest.city == null) {
-                            if (eventrequest.state == null) {
-                              if (eventrequest.country == null) {
-                                return "Please select country, state & city";
-                              }
-                              return "Please select state & city";
-                            }
-                            return "Please select city";
-                          }
-                          return null;
-                        },
-                      ),
-                      new Container(margin: const EdgeInsets.only(top: 40)),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          MaterialButton(
-                            color: KirthanStyles.colorPallete60,
-                            child: Text("Back",
-                              style: TextStyle(fontSize: notifier.custFontSize),),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          MaterialButton(
-                              child: Text(
-                                "Next",
-                                style: TextStyle(color: Colors.white,fontSize: notifier.custFontSize),
+                    Column(
+                      children: <Widget>[
+                        TextFormField(
+                          style: TextStyle(fontSize: notifier.custFontSize),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
                               ),
-                              color: KirthanStyles.colorPallete30,
-                              onPressed: () async {
-                                if (_formKey.currentState.validate()) {
-                                  final FirebaseUser user =
-                                  await auth.currentUser();
-                                  final String email = user.email;
-                                  eventrequest.createdBy = email;
-                                  print("created by " + eventrequest.createdBy);
-                                  print(email);
-                                  _formKey.currentState.save();
-                                  List<CommonLookupTable> selectedCategory =
-                                  await commonLookupTablePageVM
-                                      .getCommonLookupTable(
-                                      "description:" + _selectedCategory);
-                                  for (var i in selectedCategory)
-                                    eventrequest.eventType = i.id;
-                                  // eventrequest.isProcessed = true;
-                                  eventrequest.isPublicEvent = false;
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              icon: const Icon(Icons.home, color: Colors.grey),
+                              labelText: "Address",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                  fontSize: notifier.custFontSize
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                                  fontSize: notifier.custFontSize
+                              )),
+                          onSaved: (input) {
+                            eventrequest.addLineOneS = input;
+                            //eventrequest.eventLocation = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          style: TextStyle(fontSize: notifier.custFontSize),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              labelText: "Line 2",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                  fontSize: notifier.custFontSize
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                                  fontSize: notifier.custFontSize
+                              )),
+                          onSaved: (input) {
+                            eventrequest.addLineTwoS = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          style: TextStyle(fontSize: notifier.custFontSize),
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              labelText: "Locality",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                  fontSize: notifier.custFontSize
+                              ),
+                              labelStyle: TextStyle(
+                                fontSize: notifier.custFontSize,
+                                color: Colors.grey,
+                              )),
+                          onSaved: (input) {
+                            eventrequest.localityS = input;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                            style: TextStyle(fontSize: notifier.custFontSize),
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "PinCode",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                    fontSize: notifier.custFontSize
+
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                    fontSize: notifier.custFontSize
+                                )),
+                            onSaved: (input) {
+                              eventrequest.pincode = int.parse(input);
+                            },
+                            validator: validatePin),
+                        Container(
+                          padding: EdgeInsets.only(top: 30),
+                          //TODO:added search bar
+                          child: CSCPicker(
+                            onCountryChanged: (value) {
+                              setState(() {
+                                eventrequest.country = value;
+                              });
+                            },
+                            onStateChanged: (value) {
+                              setState(() {
+                                eventrequest.state = value;
+                              });
+                            },
+                            onCityChanged: (value) {
+                              setState(() {
+                                eventrequest.city = value;
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    TextFormField(
+                      style: TextStyle(fontSize: notifier.custFontSize),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        errorBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (eventrequest.city == null) {
+                          if (eventrequest.state == null) {
+                            if (eventrequest.country == null) {
+                              return "Please select country, state & city";
+                            }
+                            return "Please select state & city";
+                          }
+                          return "Please select city";
+                        }
+                        return null;
+                      },
+                    ),
+                    new Container(margin: const EdgeInsets.only(top: 40)),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        MaterialButton(
+                          color: KirthanStyles.colorPallete60,
+                          child: Text("Back",
+                            style: TextStyle(fontSize: notifier.custFontSize),),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        MaterialButton(
+                            child: Text(
+                              //TODO:changed next to submit
+                              "Submit",
+                              style: TextStyle(color: Colors.white,fontSize: notifier.custFontSize),
+                            ),
+                            color: KirthanStyles.colorPallete30,
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                final FirebaseUser user =
+                                await auth.currentUser();
+                                final String email = user.email;
+                                eventrequest.createdBy = email;
+                                print("created by " + eventrequest.createdBy);
+                                print(email);
+                                _formKey.currentState.save();
+                                List<CommonLookupTable> selectedCategory =
+                                await commonLookupTablePageVM
+                                    .getCommonLookupTable(
+                                    "description:" + _selectedCategory);
+                                for (var i in selectedCategory)
+                                  eventrequest.eventType = i.id;
+                                // eventrequest.isProcessed = true;
+                                eventrequest.isPublicEvent = false;
 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
 // print(eventrequest.createdBy);
                                   String dt =
@@ -699,33 +767,56 @@ class _EventWriteState extends State<EventWrite> {
 
 //TeamRequest newteamrequest = await apiSvc
 //  ?.submitNewTeamRequest(teammap);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ServiceType(
-                                              eventRequest: eventrequest)));
-                                }
-                                //String s = jsonEncode(userrequest.mapToJson());
-                                //service.registerUser(s);
-                                //print(s);
-                              }),
-                          /*MaterialButton(
-                          child: Text("Reset",style: TextStyle(color: Colors.white),),
-                          color: Colors.pink,
-                          onPressed: () {
-                            _fbKey.currentState.reset();
-                          },
-                        ),*/
-                        ],
-                      )
-                    ],
-                  ),
+                                eventrequest.serviceType = "Free";
+
+                                Map<String, dynamic> teammap =
+                                eventrequest.toJson();
+                                EventRequest neweventrequest = await eventPageVM
+                                    .submitNewEventRequest(teammap);
+
+                                print(neweventrequest.id);
+                                String eid = neweventrequest.id.toString();
+                                SnackBar mysnackbar = SnackBar(
+                                  content: Text(
+                                      "Event registered $successful with $eid"),
+                                  duration: new Duration(seconds: 4),
+                                  backgroundColor: Colors.green,
+                                );
+                                _scaffoldKey.currentState
+                                    .showSnackBar(mysnackbar);
+                                new Future.delayed(const Duration(seconds: 3),
+                                        () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    });
+
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ServiceType(
+                                //             eventRequest: eventrequest)));
+                              }
+                              //String s = jsonEncode(userrequest.mapToJson());
+                              //service.registerUser(s);
+                              //print(s);
+                            }),
+                        /*MaterialButton(
+                        child: Text("Reset",style: TextStyle(color: Colors.white),),
+                        color: Colors.pink,
+                        onPressed: () {
+                          _fbKey.currentState.reset();
+                        },
+                      ),*/
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
+    ),
     );
   }
 

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
 import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
@@ -42,10 +41,27 @@ class EventRequestsListItem extends StatelessWidget {
   }
 
   String get index => null;
-  getdate(){
-    DateTime date=DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
-    return '${date.toString().substring(0,10)}';
+  getdate() {
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    DateTime date =
+    DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
+    return '${date.day.toString() + " " + months[date.month - 1].toString()}';
+    //.substring(0,10)
   }
+
   @override
   Widget build(BuildContext context) {
     var title = SingleChildScrollView(
@@ -86,41 +102,41 @@ class EventRequestsListItem extends StatelessWidget {
                               SizedBox(width: 5),
                               Container(
                                 child: FlatButton(
-                                  // shape: RoundedRectangleBorder(
-                                  //   borderRadius: BorderRadius.circular(15.0),
-                                  // ),
-                                  highlightColor: Colors.grey,
-                                  padding: EdgeInsets.all(0),
-                                  //color: Colors.black,
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(0),
-                                        child: Icon(
-                                          Icons.location_on_sharp,
-                                          color: KirthanStyles.colorPallete30,
-                                          size: notifier.custFontSize,
-                                        ),
+                                // shape: RoundedRectangleBorder(
+                                //   borderRadius: BorderRadius.circular(15.0),
+                                // ),
+                                highlightColor: Colors.grey,
+                                padding: EdgeInsets.all(0),
+                                //color: Colors.black,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(0),
+                                      child: Icon(
+                                        Icons.location_on_sharp,
+                                        color: KirthanStyles.colorPallete30,
+                                        size: notifier.custFontSize,
                                       ),
-                                      Text(
-                                        "Location",
-                                        style: TextStyle(
-                                          color: KirthanStyles.colorPallete30,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: notifier.custFontSize,
-                                        ),
+                                    ),
+                                    Text(
+                                      "Location",
+                                      style: TextStyle(
+                                        color: KirthanStyles.colorPallete30,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: notifier.custFontSize,
                                       ),
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Location(
-                                              eventrequest: eventrequest)),
-                                    );
-                                  },
-                                  //splashColor: Colors.red,
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Location(
+                                            eventrequest: eventrequest)),
+                                  );
+                                },
+                                //splashColor: Colors.red,
 //shape: Border.all(width: 2.0, color: Colors.black)
                                 ),
                               ),
@@ -281,6 +297,7 @@ class EventRequestsListItem extends StatelessWidget {
               ),
             ),
           ),*/
+
 /*    Consumer<int_item>(
     builder: (context, int_item, child) => IconButton(
     icon: (_isFavorited ? Icon(Icons.star) : Icon(Icons.star_border)),
@@ -357,14 +374,13 @@ class EventRequestsListItem extends StatelessWidget {
               child: Consumer<ThemeNotifier>(
                 builder: (context, notifier, child) => Center(
                   child: Text(
-                    eventrequest?.eventDescription,
-                    style: TextStyle(
-                      // color: KirthanStyles.subTitleColor,
-                      color: Colors.grey,
-                      fontSize: notifier.custFontSize - 1,
-                    ),
+                  eventrequest?.eventDescription,
+                  style: TextStyle(
+                    // color: KirthanStyles.subTitleColor,
+                    color: Colors.grey,
+                    fontSize: notifier.custFontSize - 1,
                   ),
-                ),
+                ),)
               ),
             ),
           ],
@@ -384,7 +400,7 @@ class EventRequestsListItem extends StatelessWidget {
           var dateTime = DateFormat('yyyy-MM-dd').format(now);
           DateTime dateTimeNow = DateTime.parse(dateTime);
           int daysRemaining = EventDate.difference(dateTimeNow).inDays;
-          if(daysRemaining ==0){
+          if (daysRemaining == 0) {
             return Text(
               'Today',
               //daysRemaining.abs().toString() + ' days ago',
@@ -398,8 +414,7 @@ class EventRequestsListItem extends StatelessWidget {
             return Text(
               (daysRemaining).toString() + ' days to go',
               style: TextStyle(
-                  fontSize: notifier.custFontSize,
-                  color: Colors.green[700]),
+                  fontSize: notifier.custFontSize, color: Colors.green[700]),
             );
           } else if (daysRemaining < 0) {
             return Text(
@@ -410,7 +425,7 @@ class EventRequestsListItem extends StatelessWidget {
                   fontSize: notifier.custFontSize,
                   color: Colors.red[700]),
             );
-          }else if (daysRemaining ==1) {
+          } else if (daysRemaining == 1) {
             return Text(
               'Tomorrow',
               //daysRemaining.abs().toString() + ' days ago',
@@ -419,7 +434,7 @@ class EventRequestsListItem extends StatelessWidget {
                   fontSize: notifier.custFontSize,
                   color: Colors.green[700]),
             );
-          }  else {
+          } else {
             return Container();
           }
         }),

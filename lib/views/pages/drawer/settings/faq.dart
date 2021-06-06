@@ -1,14 +1,11 @@
-import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
-import 'package:screen/screen.dart';
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class FaqApp extends StatefulWidget {
   @override
@@ -76,11 +73,12 @@ class _FaqAppState extends State<FaqApp> {
                           fit: BoxFit.cover,
                           child: Text("Frequently Asked Questions",
                               style: TextStyle(
-                                  //fontFamily: 'Sacramento',
+                                //fontFamily: 'Sacramento',
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold)),
                         ),
                       ),
+
                       SizedBox(
                         height: 30,
                       ),
@@ -134,7 +132,7 @@ class _FaqAppState extends State<FaqApp> {
                         children: <Widget>[
                           ListTile(
                             title: Text(
-                              "",
+                              "1. Login to your account.\n\n2. Navigate to settings inside Drawer.\n\n3. Navigate to Team\n\n4. Navigate to Members\n\n5. Enter new members details\n\n6. Send New Team for Approval.\n",
                               style: TextStyle(fontSize: 14),
                             ),
                           )
@@ -170,7 +168,25 @@ class _FaqAppState extends State<FaqApp> {
                         children: <Widget>[
                           ListTile(
                             title: Text(
-                              "",
+                              "1. Login to your account.\n\n",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          ListTile(
+                            title: Text(
+                              "2. Click on the Circular button located at the bottom of the screen just above the bottom navigation bar\n\n",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          ListTile(
+                            title: Text(
+                              "3. Fill the event details for which you want to invite a team.\n\n",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          ListTile(
+                            title: Text(
+                              "4.Click Submit to send the request for the event.\n",
                               style: TextStyle(fontSize: 14),
                             ),
                           )
@@ -201,8 +217,8 @@ class _FaqAppState extends State<FaqApp> {
                       ExpansionTile(
                         title: Text(
                           'How to change the theme to mode              '
-                          '\n'
-                          'Light/Dark mode and adjust text size?',
+                              '\n'
+                              'Light/Dark mode and adjust text size?',
                           style: TextStyle(fontSize: 16),
                         ),
                         children: <Widget>[
@@ -224,9 +240,9 @@ class _FaqAppState extends State<FaqApp> {
                             if (snapshot.data != null) {
                               userList = snapshot.data;
                               List<String> localAdminNameList =
-                                  userList.map((e) => e.fullName).toList();
+                              userList.map((e) => e.fullName).toList();
                               List<int> localAdminPhoneList =
-                                  userList.map((e) => e.phoneNumber).toList();
+                              userList.map((e) => e.phoneNumber).toList();
                               //  print(
                               //   '***************************************');
                               //print(localAdminList);
@@ -246,7 +262,7 @@ class _FaqAppState extends State<FaqApp> {
                                           padding: EdgeInsets.only(bottom: 10),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 localAdminNameList[index],
