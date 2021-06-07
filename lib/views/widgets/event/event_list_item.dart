@@ -388,8 +388,8 @@ class EventRequestsListItem extends StatelessWidget {
           ],
         )
       ],
-                ),)
-    );
+                );
+
     var daysToGo = Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       Container(
         padding: EdgeInsets.only(bottom: 15),
