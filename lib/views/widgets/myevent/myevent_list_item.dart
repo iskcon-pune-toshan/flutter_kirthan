@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
@@ -95,99 +93,103 @@ class MyEventRequestsListItem extends StatelessWidget {
         textAlign: TextAlign.end,
       );
   }
-getdate(){
-    DateTime date=DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
-    return '${date.toString().substring(0,10)}';
-}
+
+  getdate() {
+    DateTime date =
+    DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
+    return '${date.toString().substring(0, 10)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     var title = Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
-              width: notifier.custFontSize >= 20
-                  ? MediaQuery.of(context).size.width * 1.2
-                  : MediaQuery.of(context).size.width,
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Consumer<ThemeNotifier>(
-                          builder: (context, notifier, child) => Container(
-                            padding: EdgeInsets.only(left: 8),
-                            child: Text(
-                              eventrequest?.eventTitle,
-                              style: TextStyle(
-                                //color: KirthanStyles.titleColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: notifier.custFontSize,
-                              ),
-                            ),
+          width: notifier.custFontSize >= 20
+              ? MediaQuery.of(context).size.width * 1.2
+              : MediaQuery.of(context).size.width,
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
+                        padding: EdgeInsets.only(left: 8),
+                        child: Text(
+                          eventrequest?.eventTitle,
+                          style: TextStyle(
+                            //color: KirthanStyles.titleColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: notifier.custFontSize,
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.only(right: 15),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              FlatButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(right: 15),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FlatButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            //TODO:Added some padding to location button
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Location",
+                                  style: TextStyle(
+                                    color: KirthanStyles.colorPallete60,
+                                    fontSize: notifier.custFontSize,
+                                  ),
                                 ),
-                                padding: EdgeInsets.all(0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Location",
-                                      style: TextStyle(
-                                        color: KirthanStyles.colorPallete60,
-                                        fontSize: notifier.custFontSize,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(0),
-                                      child: Icon(
-                                        Icons.location_on,
-                                        color: KirthanStyles.colorPallete60,
-                                        size: notifier.custFontSize,
-                                      ),
-                                    ),
-                                  ],
+                                Container(
+                                  padding: const EdgeInsets.all(0),
+                                  child: Icon(
+                                    Icons.location_on,
+                                    color: KirthanStyles.colorPallete60,
+                                    size: notifier.custFontSize,
+                                  ),
                                 ),
+                              ],
+                            ),
 //color: KirthanStyles.subTitleColor,
 
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Location(
-                                            eventrequest: eventrequest)),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Location(
+                                        eventrequest: eventrequest)),
 //MapView(eventrequest: eventrequest)),
 
 //do something
-                                  );
-                                },
-                                //splashColor: Colors.red,
-                                color: KirthanStyles.colorPallete30,
+                              );
+                            },
+                            //splashColor: Colors.red,
+                            color: KirthanStyles.colorPallete30,
 //shape: Border.all(width: 2.0, color: Colors.black)
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.keyboard_arrow_right),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => EventDetails(eventrequest: eventrequest)),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.keyboard_arrow_right),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EventDetails(
+                                        eventrequest: eventrequest)),
 //MapView(eventrequest: eventrequest)),
 
 //do something
-                                  );
-
-                                },
-                              ),
+                              );
+                            },
+                          ),
 /*              Container(
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -401,11 +403,11 @@ getdate(){
     },
     ),
     )*/
-                            ]),
-                      ),
-                    ),
-                  ]),
-            ));
+                        ]),
+                  ),
+                ),
+              ]),
+        ));
     var subTitle = Wrap(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -438,7 +440,8 @@ getdate(){
               alignment: Alignment.centerRight,
               //margin: const EdgeInsets.only(left: 4.0),
               child: Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => getstatus(notifier.custFontSize),
+                builder: (context, notifier, child) =>
+                    getstatus(notifier.custFontSize),
                 /*Text(
            // eventrequest?.approvalStatus,
             style: TextStyle(

@@ -213,7 +213,7 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
                                       SizedBox(
                                         width: 30,
                                       ),
-                                      Container(
+                                      Container(width: MediaQuery.of(context).size.width*0.5,
                                         margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
                                         child: Column(
                                           crossAxisAlignment:

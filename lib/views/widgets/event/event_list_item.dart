@@ -1,24 +1,4 @@
-import 'dart:math';
-import 'dart:math' show sin, cos, sqrt, atan2;
-//import 'package:vector_math/vector_math.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
-import 'dart:async';
-import 'package:flutter_kirthan/services/event_service_impl.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'dart:math' show cos, sqrt, asin;
-
-import 'package:geolocator/geolocator.dart' as geolocator;
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'package:geolocator/geolocator.dart' as geolocator;
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
@@ -28,9 +8,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
 import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -64,10 +42,27 @@ class EventRequestsListItem extends StatelessWidget {
   }
 
   String get index => null;
-  getdate(){
-    DateTime date=DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
-    return '${date.toString().substring(0,10)}';
+  getdate() {
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    DateTime date =
+    DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
+    return '${date.day.toString() + " " + months[date.month - 1].toString()}';
+    //.substring(0,10)
   }
+
   @override
   Widget build(BuildContext context) {
 
@@ -84,12 +79,16 @@ class EventRequestsListItem extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(left: 10),
                       child: Consumer<ThemeNotifier>(
-                        builder: (context, notifier, child) => Text(
-                          eventrequest?.eventTitle,
-                          style: TextStyle(
-                            //color: KirthanStyles.titleColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: notifier.custFontSize,
+                        builder: (context, notifier, child) => Container(width: 180,
+                          child: Center(
+                            child: Text(
+                              eventrequest?.eventTitle,
+                              style: TextStyle(
+                                //color: KirthanStyles.titleColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: notifier.custFontSize,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -103,7 +102,8 @@ class EventRequestsListItem extends StatelessWidget {
                               EventTeamUserRegister(
                                   eventrequest: eventrequest),
                               SizedBox(width: 5),
-                              FlatButton(
+                              Container(
+                                child: FlatButton(
                                 // shape: RoundedRectangleBorder(
                                 //   borderRadius: BorderRadius.circular(15.0),
                                 // ),
@@ -140,6 +140,7 @@ class EventRequestsListItem extends StatelessWidget {
                                 },
                                 //splashColor: Colors.red,
 //shape: Border.all(width: 2.0, color: Colors.black)
+                                ),
                               ),
 /*              Container(
             child: Align(
@@ -371,28 +372,30 @@ class EventRequestsListItem extends StatelessWidget {
         */
             Container(
               width: MediaQuery.of(context).size.width - 33,
-              margin: const EdgeInsets.only(left: 10.0, top: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
               child: Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => Text(
-                  eventrequest?.eventDescription,
-                  style: TextStyle(
-                    // color: KirthanStyles.subTitleColor,
-                    color: Colors.grey,
-                    fontSize: notifier.custFontSize - 1,
-                  ),
-                ),
+                  builder: (context, notifier, child) => Center(
+                    child: Text(
+                      eventrequest?.eventDescription,
+                      style: TextStyle(
+                        // color: KirthanStyles.subTitleColor,
+                        color: Colors.grey,
+                        fontSize: notifier.custFontSize - 1,
+                      ),
+                    ),)
               ),
             ),
           ],
         )
       ],
+                ),)
     );
-
-    var daysToGo =
-    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    var daysToGo = Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       Container(
         padding: EdgeInsets.only(bottom: 15),
         margin: const EdgeInsets.symmetric(horizontal: 10.0),
+
+        //margin: const EdgeInsets.only(left: 4.0),
         child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
           final eventDate = eventrequest.eventDate;
           DateTime EventDate = DateTime.parse(eventDate);
@@ -443,7 +446,7 @@ class EventRequestsListItem extends StatelessWidget {
     ]);
     return Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: EdgeInsets.fromLTRB(8, 4, 5, 0),
           child: new Card(
             elevation: 8,
             child: Consumer<ThemeNotifier>(
@@ -462,138 +465,144 @@ class EventRequestsListItem extends StatelessWidget {
                 ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: new Column(children: <Widget>[
+                  child: FlipCard(
+                    front: new Column(children: <Widget>[
                     title,
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          subTitle,
-                        ],
-                      ),
-                    ),
-                    Divider(),
-                    Consumer<ThemeNotifier>(
-                      builder: (context, notifier, child) => Container(
-                        // color: Colors.green,
-                        width: notifier.custFontSize >= 20
-                            ? MediaQuery.of(context).size.width * 1.4
-                            : MediaQuery.of(context).size.width,
-                        child: Row(children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                //color: Colors.yellow,
-                                child: Text(
-                                  "Date",
-                                  style: GoogleFonts.openSans(
-                                    //color: KirthanStyles.titleColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: notifier.custFontSize,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                //color: Colors.yellow,
-                                padding: EdgeInsets.only(bottom: 15),
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Text(
-                                  getdate(),
-                                  //eventrequest?.eventDate.substring(0, 10),
+    Divider(),
+    Consumer<ThemeNotifier>(
+    builder: (context, notifier, child) => Container(
+    // color: Colors.green,
+    width: notifier.custFontSize >= 20
+    ? MediaQuery.of(context).size.width * 1.4
+        : MediaQuery.of(context).size.width,
+    child: Row(children: <Widget>[
+    Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    Container(
+    //color: Colors.yellow,
+    child: Text(
+    "Date",
+    style: GoogleFonts.openSans(
+    //color: KirthanStyles.titleColor,
+    fontWeight: FontWeight.bold,
+    fontSize: notifier.custFontSize,
+    ),
+    ),
+    ),
+    Container(
+    //color: Colors.yellow,
+    padding: EdgeInsets.only(bottom: 15),
+    margin: const EdgeInsets.symmetric(
+    horizontal: 10.0),
+    child: Text(
+    getdate(),
+    //eventrequest?.eventDate.substring(0, 10),
 //0,10 date
 //11,16 time
 
-                                  style: TextStyle(
-                                    fontSize: notifier.custFontSize,
-                                    //color: KirthanStyles.subTitleColor,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  //color: Colors.yellow,
-                                  child: Text(
-                                    "Time",
-                                    style: GoogleFonts.openSans(
-                                      //color: KirthanStyles.titleColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: notifier.custFontSize,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  //color: Colors.yellow,
-                                  padding: EdgeInsets.only(bottom: 15),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 40.0),
-                                  child: Text(
-                                    eventrequest?.eventStartTime,
-                                    style: TextStyle(
-                                      fontSize: notifier.custFontSize,
-                                      //color: KirthanStyles.subTitleColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                // color: Colors.red,
-                                child: Text(
-                                  "Duration",
-                                  style: GoogleFonts.openSans(
-                                    //color: KirthanStyles.titleColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: notifier.custFontSize,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                //color: Colors.yellow,
-                                padding: EdgeInsets.only(bottom: 15),
-                                child: Text(
-                                  //notifier.duration
-                                  duration() == notifier.duration
-                                      ? duration() + " Hrs"
-                                      : duration() + " Hrs",
-                                  style: TextStyle(
-                                    fontSize: notifier.custFontSize,
-                                    // color: KirthanStyles.subTitleColor,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ]),
-                      ),
-                    ),
-                   /* Container(
-                        padding: EdgeInsets.only(right: 23),
-                        width: MediaQuery.of(context).size.width,
-                        child: distancevar,
-                    ),*/
-                    Container(
-                        padding: EdgeInsets.only(right: 23),
-                        width: MediaQuery.of(context).size.width,
-                        child: daysToGo),
-                  ]),
-                ),
-              ),
-            ),
-          ),
-        ));
+    style: TextStyle(
+    fontSize: notifier.custFontSize,
+    //color: KirthanStyles.subTitleColor,
+    ),
+    ),
+    ),
+    ],
+    ),
+    Align(
+    alignment: Alignment.center,
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    Container(
+    //color: Colors.yellow,
+    child: Text(
+    "Time",
+    style: GoogleFonts.openSans(
+    //color: KirthanStyles.titleColor,
+    fontWeight: FontWeight.bold,
+    fontSize: notifier.custFontSize,
+    ),
+    ),
+    ),
+    Container(
+    //color: Colors.yellow,
+    padding: EdgeInsets.only(bottom: 15),
+    margin: const EdgeInsets.symmetric(
+    horizontal: 40.0),
+    child: Text(
+    eventrequest?.eventStartTime,
+    style: TextStyle(
+    fontSize: notifier.custFontSize,
+    //color: KirthanStyles.subTitleColor,
+    ),
+    ),
+    ),
+    ],
+    ),
+    ),
+    Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    Container(
+    // color: Colors.red,
+    child: Text(
+    "Duration",
+    style: GoogleFonts.openSans(
+    //color: KirthanStyles.titleColor,
+    fontWeight: FontWeight.bold,
+    fontSize: notifier.custFontSize,
+    ),
+    ),
+    ),
+    Container(
+    //color: Colors.yellow,
+    padding: EdgeInsets.only(bottom: 15),
+    child: Text(
+    //notifier.duration
+    duration() == notifier.duration
+    ? duration() + " Hrs"
+        : duration() + " Hrs",
+    style: TextStyle(
+    fontSize: notifier.custFontSize,
+    // color: KirthanStyles.subTitleColor,
+    ),
+    ),
+    ),
+    ],
+    ),
+    ]),
+    ),
+    ),
+    Container(
+    padding: EdgeInsets.only(right: 23),
+    width: MediaQuery.of(context).size.width,
+    child: daysToGo),
+    ]),
+    back: Container(
+    width: MediaQuery.of(context).size.width,
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    Center(child: Container(
+    margin:EdgeInsets.symmetric(vertical: 10),
+    child: Text("Event Description",
+    style: TextStyle(
+    fontSize: notifier.custFontSize
+    ),
+    ),
+    ),
+    ),
+    subTitle,
+    ],
+    ),
+    ),),
+    ),
+    ),
+    ),
+    ),
+    ));
   }
+}
 
-  }
