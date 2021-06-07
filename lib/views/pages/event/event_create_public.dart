@@ -24,6 +24,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:country_state_city_picker/country_state_city_picker.dart';
+
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
@@ -1166,8 +1168,7 @@ class _EventWriteState extends State<EventWritePublic> {
                           Container(
                             padding: EdgeInsets.only(top: 30),
                             //TODO:added search bar
-                            child: CSCPicker(
-                              layout: Layout.vertical,
+                            child: SelectState(
                               onCountryChanged: (value) {
                                 setState(() {
                                   eventrequest.country = value;

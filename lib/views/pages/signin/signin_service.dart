@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+// import '../user.dart';
 
 class SignInService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -12,19 +13,19 @@ class SignInService {
   static final SignInService _internal = SignInService.internal();
 
   factory SignInService() => _internal;
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   SignInService.internal();
 
   FirebaseUser fireUser;
 
   User _userFromFirebaseUser(FirebaseUser user) {
-    return fireUser != null ? User(uid: fireUser.uid) : null;
+    return user != null ? User(uid: user.uid) : null;
   }
 
   //auth change user stream
   Stream<User> get user {
-    return auth.onAuthStateChanged.map(_userFromFirebaseUser);
+    return _auth.onAuthStateChanged.map(_userFromFirebaseUser);
   }
 
   Future<FirebaseUser> signUpWithEmail(String email, String password) async {
@@ -45,10 +46,11 @@ class SignInService {
         await firebaseUser.updateProfile(updateInfo);
         await firebaseUser.reload();
         FirebaseUser currentuser = await firebaseAuth.currentUser();
-        _userFromFirebaseUser(currentuser);
+        _userFromFirebaseUser(firebaseUser);
         return currentuser;
       }
     }
+
     return null;
   }
 
@@ -60,11 +62,20 @@ class SignInService {
         uid: authResult.user.uid, fullName: authResult.user.displayName);
   }
 
-  Future<FirebaseUser> signInWithEmail(String email, String password) async {
+  Future<FirebaseUser> signInWithEmail(
+      String email, String password, BuildContext context) async {
     AuthResult authResult = await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
 
     FirebaseUser firebaseUser;
+
+    /*if (authResult != null) {
+       firebaseUser = await firebaseAuth.currentUser();
+
+      if (firebaseUser != null) {
+        return firebaseUser;
+      }
+    }*/
 
     assert(email !=
         null); //its a way to check the condition & returns a boolean by the result of which further execution proceeds
@@ -79,8 +90,8 @@ class SignInService {
 
     fireUser =
         user; //once onComplete returning the user to able to fetch the credentialsreturn user;
-    _userFromFirebaseUser(user);
-    //return null;
+    _userFromFirebaseUser(fireUser);
+    return null;
   }
 
   Future<FirebaseUser> googSignIn(BuildContext context) async {
@@ -97,8 +108,7 @@ class SignInService {
         (await firebaseAuth.signInWithCredential(credential)).user;
 
     fireUser = user;
-    _userFromFirebaseUser(user);
-    print("LLLL");
+    _userFromFirebaseUser(fireUser);
     print(user);
     return user;
   }
@@ -114,8 +124,8 @@ class SignInService {
 
     if (result.status == FacebookLoginStatus.loggedIn) {
       user = (await firebaseAuth.signInWithCredential(credential)).user;
-      print(user.displayName);
       _userFromFirebaseUser(user);
+      print(user.displayName);
     }
     return user;
   }
@@ -137,7 +147,6 @@ class SignInService {
 
   Future<UserRequest> getUser() async {
     var firebaseUser = await firebaseAuth.currentUser();
-    _userFromFirebaseUser(firebaseUser);
     return UserRequest(
         uid: firebaseUser?.uid, fullName: firebaseUser?.displayName);
   }

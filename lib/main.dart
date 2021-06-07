@@ -4,12 +4,13 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings.dar
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/members_name_profile.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/signin/signin_service.dart';
 import 'package:flutter_kirthan/views/widgets/event/int_item.dart';
+import 'package:flutter_kirthan/wrapper.dart';
 import 'package:provider/provider.dart';
+
 import 'connection.dart';
-import 'wrapper.dart';
+
 void main() => runApp(KirthanApp());
 
 class KirthanApp extends StatelessWidget {
@@ -34,7 +35,7 @@ class KirthanApp extends StatelessWidget {
                 child: new MaterialApp(
                   title: 'Kirthan Application',
                   theme: notifier.darkTheme ? dark : light,
-                  // home: LoginApp(),
+                  //home: LoginApp(),
                   home: Wrapper(),
                   //home:SignInApp() ,
                   debugShowCheckedModeBanner: false,

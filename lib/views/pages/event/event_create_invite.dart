@@ -1,4 +1,6 @@
 import 'package:csc_picker/csc_picker.dart';
+import 'package:csc_picker/dropdown_with_search.dart';
+import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -187,8 +189,7 @@ class _EventWriteState extends State<EventWrite> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeNotifier>(
-      builder:(context, notifier, child) =>Scaffold(
+    return Scaffold(
         key: _scaffoldKey,
         //resizeToAvoidBottomInset: false,
 
@@ -198,8 +199,10 @@ class _EventWriteState extends State<EventWrite> {
               color: KirthanStyles.colorPallete60, //change your color here
             ),
             backgroundColor: KirthanStyles.colorPallete30,
-            title: Text('Invite a Team',
-                style: TextStyle(color: KirthanStyles.colorPallete60,fontSize: notifier.custFontSize))),
+            title: Consumer<ThemeNotifier>(
+              builder:(context, notifier,child)=> Text('Invite a Team',
+                  style: TextStyle(color: KirthanStyles.colorPallete60,fontSize: notifier.custFontSize)),
+            )),
         body: Builder(builder: (context) {
           return SingleChildScrollView(
             child: Container(
@@ -215,7 +218,8 @@ class _EventWriteState extends State<EventWrite> {
                   child: Column(
                     //crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      new Container(
+                      new Consumer<ThemeNotifier>(
+                      builder:(context, notifier,child)=>Container(
                           alignment: Alignment.centerLeft,
                           // margin: const EdgeInsets.only(top: 30),
                           child: new Text(
@@ -223,9 +227,10 @@ class _EventWriteState extends State<EventWrite> {
                             style: new TextStyle(
                                 fontSize: notifier.custFontSize,
                                 color: KirthanStyles.colorPallete30),
-                          )),
+                          )),),
 
-                      Container(
+              Consumer<ThemeNotifier>(
+                builder:(context, notifier,child)=>Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
@@ -262,8 +267,10 @@ class _EventWriteState extends State<EventWrite> {
                           },
                         ),
                       ),
+              ),
 
-                      Container(
+              Consumer<ThemeNotifier>(
+                builder:(context, notifier,child)=>Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
@@ -299,9 +306,11 @@ class _EventWriteState extends State<EventWrite> {
                           },
                         ),
                       ),
+              ),
 
 
-                      Container(
+              Consumer<ThemeNotifier>(
+                builder:(context, notifier,child)=>Container(
                         padding: new EdgeInsets.all(10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -337,7 +346,10 @@ class _EventWriteState extends State<EventWrite> {
                           ],
                         ),
                       ),
-                      Container(
+              ),
+
+              Consumer<ThemeNotifier>(
+                builder:(context, notifier,child)=>Container(
                         padding: new EdgeInsets.all(10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -377,7 +389,9 @@ class _EventWriteState extends State<EventWrite> {
                           ],
                         ),
                       ),
-                      Container(
+              ),
+              Consumer<ThemeNotifier>(
+                builder:(context, notifier,child)=>Container(
                         padding: new EdgeInsets.all(10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -426,6 +440,7 @@ class _EventWriteState extends State<EventWrite> {
                           ],
                         ),
                       ),
+              ),
                       FutureBuilder(
                           future: commonLookupTablePageVM.getCommonLookupTable(
                               "lookupType:Event-type-Category"),
@@ -436,8 +451,9 @@ class _EventWriteState extends State<EventWrite> {
                                   .map((user) => user.description)
                                   .toSet()
                                   .toList();
-                              return DropdownButtonFormField<String>(
-                                style: TextStyle(fontSize: notifier.custFontSize+10),
+                              return Consumer<ThemeNotifier>(
+                                  builder:(context, notifier,child)=>DropdownButtonFormField<String>(
+                                style: TextStyle(fontSize: notifier.custFontSize>20?notifier.custFontSize+10:notifier.custFontSize),
                                 value: _selectedCategory,
                                 icon: const Icon(Icons.category),
                                 hint: Text('Select Event Type',
@@ -462,6 +478,7 @@ class _EventWriteState extends State<EventWrite> {
                                   }
                                   return null;
                                 },
+                              ),
                               );
                             } else {
                               return Container();
@@ -539,7 +556,8 @@ class _EventWriteState extends State<EventWrite> {
                           },*/
                       ),*/
                     ),
-                      new Container(
+                      new Consumer<ThemeNotifier>(
+                        builder:(context, notifier,child)=>Container(
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 20),
                           child: new Text(
@@ -548,9 +566,11 @@ class _EventWriteState extends State<EventWrite> {
                                 fontSize: notifier.custFontSize,
                                 color: KirthanStyles.colorPallete30),
                           )),
+                      ),
                     Column(
                       children: <Widget>[
-                        TextFormField(
+                        Consumer<ThemeNotifier>(
+                          builder:(context, notifier,child)=>TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
@@ -582,7 +602,9 @@ class _EventWriteState extends State<EventWrite> {
                             return null;
                           },
                         ),
-                        TextFormField(
+                        ),
+                        Consumer<ThemeNotifier>(
+                          builder:(context, notifier,child)=>TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
@@ -612,7 +634,9 @@ class _EventWriteState extends State<EventWrite> {
                             return null;
                           },
                         ),
-                        TextFormField(
+                        ),
+                        Consumer<ThemeNotifier>(
+                          builder:(context, notifier,child)=>TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -641,7 +665,9 @@ class _EventWriteState extends State<EventWrite> {
                             return null;
                           },
                         ),
-                        TextFormField(
+                        ),
+                        Consumer<ThemeNotifier>(
+                          builder:(context, notifier,child)=>TextFormField(
                             style: TextStyle(fontSize: notifier.custFontSize),
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
@@ -665,31 +691,35 @@ class _EventWriteState extends State<EventWrite> {
                             onSaved: (input) {
                               eventrequest.pincode = int.parse(input);
                             },
-                            validator: validatePin),
-                        Container(
-                          padding: EdgeInsets.only(top: 30),
-                          //TODO:added search bar
-                          child: CSCPicker(
-                            onCountryChanged: (value) {
-                              setState(() {
-                                eventrequest.country = value;
-                              });
-                            },
-                            onStateChanged: (value) {
-                              setState(() {
-                                eventrequest.state = value;
-                              });
-                            },
-                            onCityChanged: (value) {
-                              setState(() {
-                                eventrequest.city = value;
-                              });
-                            },
+                            validator: validatePin
+                          ),),
+                        Consumer<ThemeNotifier>(
+                          builder:(context,notifier,child)=> Container(
+                            padding: EdgeInsets.only(top: 30),
+                            //TODO:added search bar
+                            child: SelectState(
+                              onCountryChanged: (value) {
+                                setState(() {
+                                  eventrequest.country = value;
+                                });
+                              },
+                              onStateChanged: (value) {
+                                setState(() {
+                                  eventrequest.state = value;
+                                });
+                              },
+                              onCityChanged: (value) {
+                                setState(() {
+                                  eventrequest.city = value;
+                                });
+                              },
+                            ),
                           ),
-                        )
+                        ),
                       ],
                     ),
-                    TextFormField(
+              Consumer<ThemeNotifier>(
+                builder:(context, notifier,child)=>TextFormField(
                       style: TextStyle(fontSize: notifier.custFontSize),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       decoration: InputDecoration(
@@ -717,8 +747,10 @@ class _EventWriteState extends State<EventWrite> {
                         return null;
                       },
                     ),
+              ),
                     new Container(margin: const EdgeInsets.only(top: 40)),
-                    Row(
+              Consumer<ThemeNotifier>(
+                builder:(context, notifier,child)=>Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -808,7 +840,8 @@ class _EventWriteState extends State<EventWrite> {
                         },
                       ),*/
                       ],
-                    )
+                    ),
+              )
                   ],
                 ),
               ),
@@ -816,7 +849,6 @@ class _EventWriteState extends State<EventWrite> {
           ),
         );
       }),
-    ),
     );
   }
 

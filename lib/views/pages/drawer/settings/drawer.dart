@@ -301,7 +301,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     Card(
                       child: ListTile(
                         title: Text(
-                          "Events",
+                          "My Events",
                           style: TextStyle(fontSize: notifier.custFontSize),
                         ),
                         trailing: Icon(Icons.event),

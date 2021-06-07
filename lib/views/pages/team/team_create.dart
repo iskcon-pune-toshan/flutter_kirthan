@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -716,9 +717,7 @@ class _TeamWriteState extends State<TeamWrite> {
                           ),*/
                           Container(
                             //TODO:added search bar
-                            child: CSCPicker(
-                              style: TextStyle(color: Colors.black, fontSize: notifier.custFontSize),
-                              layout: Layout.vertical,
+                            child: SelectState(
                               onCountryChanged: (value) {
                                 setState(() {
                                   //eventrequest.country = value;

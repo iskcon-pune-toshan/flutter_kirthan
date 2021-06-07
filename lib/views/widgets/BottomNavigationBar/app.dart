@@ -84,7 +84,7 @@ class AppState extends State<App> {
       page: NotificationView(),
     ),
     TabItem(
-      tabName: "Events",
+      tabName: "My Events",
       icon: Icons.calendar_today,
       page: MyEventView(),
     ),
