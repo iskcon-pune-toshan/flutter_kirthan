@@ -516,6 +516,10 @@ class _TeamWriteState extends State<TeamWrite> {
                                                   color: Colors.grey,
                                                 )),
                                            initialValue:email,
+                                          onSaved: (input) {
+                                            teamrequest.teamLeadId =
+                                                email;
+                                          },
                                           //     (value) {
                                           //   if (value.isEmpty) {
                                           //     return "Please enter some text";

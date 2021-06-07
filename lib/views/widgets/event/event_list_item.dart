@@ -1,3 +1,24 @@
+import 'dart:math';
+import 'dart:math' show sin, cos, sqrt, atan2;
+//import 'package:vector_math/vector_math.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:async';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'dart:math' show cos, sqrt, asin;
+
+import 'package:geolocator/geolocator.dart' as geolocator;
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
@@ -7,7 +28,9 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
 import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -47,6 +70,7 @@ class EventRequestsListItem extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+
     var title = SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Consumer<ThemeNotifier>(
@@ -363,12 +387,12 @@ class EventRequestsListItem extends StatelessWidget {
         )
       ],
     );
-    var daysToGo = Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+
+    var daysToGo =
+    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Container(
         padding: EdgeInsets.only(bottom: 15),
         margin: const EdgeInsets.symmetric(horizontal: 10.0),
-
-        //margin: const EdgeInsets.only(left: 4.0),
         child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
           final eventDate = eventrequest.eventDate;
           DateTime EventDate = DateTime.parse(eventDate);
@@ -555,6 +579,11 @@ class EventRequestsListItem extends StatelessWidget {
                         ]),
                       ),
                     ),
+                   /* Container(
+                        padding: EdgeInsets.only(right: 23),
+                        width: MediaQuery.of(context).size.width,
+                        child: distancevar,
+                    ),*/
                     Container(
                         padding: EdgeInsets.only(right: 23),
                         width: MediaQuery.of(context).size.width,
@@ -566,4 +595,5 @@ class EventRequestsListItem extends StatelessWidget {
           ),
         ));
   }
-}
+
+  }

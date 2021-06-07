@@ -5,8 +5,7 @@ abstract class BaseAPIService {
  final baseUrl = 'http://kirtanappprod.kairavalabs.com:8080'; // Production
  // final baseUrl = 'http://kirtanappdev.kairavalabs.com:9090'; // Development
 
-
-  http.Client client1 = http.Client();
+ http.Client client1 = http.Client();
 
   final int userId = 4;
 

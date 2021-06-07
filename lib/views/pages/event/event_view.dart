@@ -76,7 +76,8 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     "Tomorrow",
     "This Week",
     "This Month",
-    "Clear Filter"
+    "Clear Filter",
+    "Near to you"
   ];
   String date;
   String datetomm;
@@ -249,6 +250,8 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                         eventPageVM.setEventRequests("This Month");
                       else if (input == 'Clear Filter')
                         eventPageVM.setEventRequests("All");
+                     /* else if (input == 'Near to you')
+                        eventPageVM.setEventRequests('NeartoYou');*/
                       else if (notifier.duration != null) {
                         eventPageVM.setEventRequests(notifier.duration);
                       }
