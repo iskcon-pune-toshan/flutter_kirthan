@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -20,6 +22,10 @@ import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
+final GoogleSignIn googleSignIn = new GoogleSignIn();
+TextEditingController _oldPassword = TextEditingController();
+TextEditingController _password = TextEditingController();
+TextEditingController _passwordConfirm = TextEditingController();
 
 class MyProfileSettings extends StatefulWidget {
   @override
@@ -27,6 +33,9 @@ class MyProfileSettings extends StatefulWidget {
 }
 
 class _MyProfileSettingsState extends State<MyProfileSettings> {
+  String currentPassword;
+  String oldPassword;
+  String errMessage;
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   String username;
@@ -35,6 +44,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
   String profilePic;
   String _photoUrl;
   String uemail;
+
   Future<String> getEmail() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var user = await auth.currentUser();
@@ -44,6 +54,18 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
 
   Future loadData() async {
     await userPageVM.getUserRequests(uemail);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    googleSign();
+  }
+
+  googleSign() async {
+    print("EEEE");
+    isGoogleSign = await googleSignIn.isSignedIn();
+    print(isGoogleSign);
   }
 
   Future<Null> refreshList() async {
@@ -64,6 +86,8 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
     else
       return null;
   }
+
+  bool isGoogleSign;
 
   @override
   Widget build(BuildContext context) {
@@ -209,6 +233,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                   currentUserName = u.fullName;
                                 }
                                 return SingleChildScrollView(
+                                  physics: BouncingScrollPhysics(),
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,15 +297,16 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                             ),
                                                                             onTap:
                                                                                 () async {
+                                                                              //
+                                                                              //
                                                                               await getImageFromGallery();
-                                                                              String
-                                                                              email =
-                                                                                  snapshot
-                                                                                      .data;
-                                                                              print(
-                                                                                  "emails");
-                                                                              print(
-                                                                                  email);
+                                                                              // var email =
+                                                                              //     snapshot
+                                                                              //         .data;
+                                                                              // print(
+                                                                              //     "emails");
+                                                                              // print(
+                                                                              //     email);
                                                                               uploadPic(
                                                                                   context);
                                                                               List<UserRequest>
@@ -323,14 +349,14 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                             onTap:
                                                                                 () async {
                                                                               await getImageFromCamera();
-                                                                              String
-                                                                              email =
-                                                                                  snapshot
-                                                                                      .data;
-                                                                              print(
-                                                                                  "emails");
-                                                                              print(
-                                                                                  email);
+                                                                              // String
+                                                                              //     email =
+                                                                              //     snapshot
+                                                                              //         .data;
+                                                                              // print(
+                                                                              //     "emails");
+                                                                              // print(
+                                                                              //     email);
                                                                               uploadPic(
                                                                                   context);
                                                                               List<UserRequest>
@@ -530,73 +556,82 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                     .centerLeft,
                                                                 padding: EdgeInsets.only(
                                                                     top: 20,
+                                                                    bottom:
+                                                                    20,
                                                                     left:
                                                                     20),
                                                                 child: Text(
                                                                     "Enter your name")),
-                                                            Form(
-                                                              key: _formKey,
-                                                              child:
-                                                              TextFormField(
-                                                                initialValue:
-                                                                user.fullName,
-                                                                decoration:
-                                                                InputDecoration(
-                                                                  enabledBorder:
-                                                                  UnderlineInputBorder(
-                                                                    borderSide:
-                                                                    BorderSide(color: Colors.grey),
+                                                            Container(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                  bottom:
+                                                                  20),
+                                                              child: Form(
+                                                                key:
+                                                                _formKey,
+                                                                child:
+                                                                TextFormField(
+                                                                  initialValue:
+                                                                  user.fullName,
+                                                                  decoration:
+                                                                  InputDecoration(
+                                                                    enabledBorder:
+                                                                    UnderlineInputBorder(
+                                                                      borderSide:
+                                                                      BorderSide(color: Colors.grey),
+                                                                    ),
+                                                                    focusedBorder:
+                                                                    UnderlineInputBorder(
+                                                                      borderSide:
+                                                                      BorderSide(color: Colors.green),
+                                                                    ),
+                                                                    icon:
+                                                                    const Icon(
+                                                                      Icons
+                                                                          .perm_identity,
+                                                                      color:
+                                                                      Colors.grey,
+                                                                    ),
+                                                                    hintText:
+                                                                    "Please enter new username",
+                                                                    labelStyle:
+                                                                    TextStyle(
+                                                                      fontSize:
+                                                                      notifier.custFontSize,
+                                                                      fontWeight:
+                                                                      FontWeight.bold,
+                                                                      color:
+                                                                      Colors.grey,
+                                                                    ),
+                                                                    hintStyle:
+                                                                    TextStyle(
+                                                                      color:
+                                                                      Colors.grey,
+                                                                    ),
                                                                   ),
-                                                                  focusedBorder:
-                                                                  UnderlineInputBorder(
-                                                                    borderSide:
-                                                                    BorderSide(color: Colors.green),
-                                                                  ),
-                                                                  icon:
-                                                                  const Icon(
-                                                                    Icons
-                                                                        .perm_identity,
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                  hintText:
-                                                                  "Please enter new username",
-                                                                  labelStyle:
-                                                                  TextStyle(
-                                                                    fontSize:
-                                                                    notifier.custFontSize,
-                                                                    fontWeight:
-                                                                    FontWeight.bold,
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                  hintStyle:
-                                                                  TextStyle(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
+                                                                  onChanged:
+                                                                      (input) {
+                                                                    username =
+                                                                        input;
+                                                                  },
+                                                                  onSaved:
+                                                                      (input) {
+                                                                    user.fullName =
+                                                                        input;
+                                                                  },
+                                                                  validator:
+                                                                      (input) {
+                                                                    if (input
+                                                                        .isEmpty) {
+                                                                      return "Please enter some text";
+                                                                    } else if (input ==
+                                                                        user.fullName) {
+                                                                      return "New user name can't be same as old username";
+                                                                    } else
+                                                                      return null;
+                                                                  },
                                                                 ),
-                                                                onChanged:
-                                                                    (input) {
-                                                                  username =
-                                                                      input;
-                                                                },
-                                                                onSaved:
-                                                                    (input) {
-                                                                  user.fullName =
-                                                                      input;
-                                                                },
-                                                                validator:
-                                                                    (input) {
-                                                                  if (input
-                                                                      .isEmpty) {
-                                                                    return "Please enter some text";
-                                                                  } else if (input ==
-                                                                      user.fullName) {
-                                                                    return "New user name can't be same as old username";
-                                                                  } else
-                                                                    return null;
-                                                                },
                                                               ),
                                                             ),
                                                             Row(
@@ -684,8 +719,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                           TextFormField(
                                             enabled: false,
                                             decoration: InputDecoration(
-                                              disabledBorder:
-                                              UnderlineInputBorder(),
+                                              disabledBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey)),
                                             ),
                                             initialValue: currentUserName,
                                           ),
@@ -863,8 +899,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                           TextFormField(
                                             enabled: false,
                                             decoration: InputDecoration(
-                                              disabledBorder:
-                                              UnderlineInputBorder(),
+                                              disabledBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey)),
                                             ),
                                             initialValue:
                                             user.phoneNumber.toString(),
@@ -1197,7 +1234,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                 enabled: false,
                                                 decoration: InputDecoration(
                                                   disabledBorder:
-                                                  UnderlineInputBorder(),
+                                                  UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey)),
                                                 ),
                                                 initialValue: user.addLineOne,
                                               ),
@@ -1205,7 +1244,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                 enabled: false,
                                                 decoration: InputDecoration(
                                                   disabledBorder:
-                                                  UnderlineInputBorder(),
+                                                  UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey)),
                                                 ),
                                                 initialValue: user.addLineTwo,
                                               ),
@@ -1213,7 +1254,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                 enabled: false,
                                                 decoration: InputDecoration(
                                                   disabledBorder:
-                                                  UnderlineInputBorder(),
+                                                  UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey)),
                                                 ),
                                                 initialValue: user.addLineThree,
                                               ),
@@ -1404,14 +1447,276 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                           TextFormField(
                                             enabled: false,
                                             decoration: InputDecoration(
-                                              disabledBorder:
-                                              UnderlineInputBorder(),
+                                              disabledBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey)),
                                             ),
                                             initialValue: user.govtId,
                                           ),
                                           SizedBox(
-                                            height: 20,
+                                            height: 40,
                                           ),
+                                          !isGoogleSign
+                                              ? Column(
+                                            children: [
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    bottom: 20),
+                                                alignment:
+                                                Alignment.centerLeft,
+                                                child: Text(
+                                                  "Change Password",
+                                                  style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: KirthanStyles
+                                                          .colorPallete30),
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "Password",
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  IconButton(
+                                                    icon: Icon(
+                                                      MaterialCommunityIcons
+                                                          .pencil,
+                                                      color: KirthanStyles
+                                                          .colorPallete30,
+                                                    ),
+                                                    onPressed: () {
+                                                      //TODO:to be modify afterwards
+                                                      showMaterialModalBottomSheet(
+                                                          context: context,
+                                                          builder: (context) =>
+                                                              Container(
+                                                                  width: 200,
+                                                                  height: notifier.custFontSize >=
+                                                                      25
+                                                                      ? 500
+                                                                      : 400,
+                                                                  child:
+                                                                  SingleChildScrollView(
+                                                                    padding: const EdgeInsets
+                                                                        .all(
+                                                                        16.0),
+                                                                    child:
+                                                                    Form(
+                                                                      key:
+                                                                      _formKey,
+                                                                      autovalidate:
+                                                                      true,
+                                                                      child:
+                                                                      Column(
+                                                                        children: [
+                                                                          Divider(),
+                                                                          TextFormField(
+                                                                            autovalidate: false,
+                                                                            controller: _oldPassword,
+                                                                            decoration: InputDecoration(
+                                                                                enabledBorder: UnderlineInputBorder(
+                                                                                  borderSide: BorderSide(color: Colors.grey),
+                                                                                ),
+                                                                                focusedBorder: UnderlineInputBorder(
+                                                                                  borderSide: BorderSide(color: Colors.green),
+                                                                                ),
+                                                                                labelText: "Old Password",
+                                                                                hintText: "Enter current password",
+                                                                                hintStyle: TextStyle(
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                                labelStyle: TextStyle(
+                                                                                  color: Colors.grey,
+                                                                                )),
+                                                                            obscureText: true,
+                                                                            // onSaved: (input) {
+                                                                            //   _current
+                                                                            // },
+                                                                            // onChanged: (input) async {
+                                                                            //   // FirebaseUser firebaseUser =
+                                                                            //   //     await FirebaseAuth.instance.currentUser();
+                                                                            //   // var authCredentials =
+                                                                            //   //     EmailAuthProvider.getCredential(
+                                                                            //   //         email: firebaseUser.email,
+                                                                            //   //         password: _oldPassword.text);
+                                                                            //   // var authResult = await firebaseUser
+                                                                            //   //     .reauthenticateWithCredential(
+                                                                            //   //         authCredentials);
+                                                                            //   // if (authResult.user != null) {
+                                                                            //   //   setState(() {
+                                                                            //   //     _validate = true;
+                                                                            //   //   });
+                                                                            //   // }
+                                                                            // },
+                                                                            validator: (value) {
+                                                                              if (value.isEmpty) {
+                                                                                return "Please select password";
+                                                                              } else
+                                                                                return null;
+                                                                            }
+                                                                            /*value.isNotEmpty
+                                    ? null
+                                    : "Please enter a value"*/
+                                                                            ,
+                                                                          ),
+                                                                          Divider(),
+                                                                          TextFormField(
+                                                                            controller: _password,
+                                                                            decoration: InputDecoration(
+
+                                                                                enabledBorder: UnderlineInputBorder(
+                                                                                  borderSide: BorderSide(color: Colors.grey),
+                                                                                ),
+                                                                                focusedBorder: UnderlineInputBorder(
+                                                                                  borderSide: BorderSide(color: Colors.green),
+                                                                                ),
+                                                                                labelText: "New Password",
+                                                                                hintText: "Enter new password",
+                                                                                hintStyle: TextStyle(
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                                labelStyle: TextStyle(
+                                                                                  color: Colors.grey,
+                                                                                )),
+                                                                            obscureText: true,
+                                                                            // onChanged: (input) {
+                                                                            //
+                                                                            //   password = input;
+                                                                            // },
+                                                                            onSaved: (input) {
+                                                                              //user.password = input;
+                                                                            },
+                                                                            validator: (value) {
+                                                                              // ignore: missing_return
+                                                                              if (value != _password.text) return 'Please enter correct password';
+
+                                                                              if (value.length < 8 && _password.text == null) return 'Must contain 8-30 characters';
+
+                                                                              if (_password.text == _oldPassword.text) return 'New password cannot be same as current password';
+                                                                              return null;
+                                                                            },
+                                                                          ),
+                                                                          Divider(),
+                                                                          TextFormField(
+                                                                            controller: _passwordConfirm,
+                                                                            decoration: InputDecoration(
+                                                                                enabledBorder: UnderlineInputBorder(
+                                                                                  borderSide: BorderSide(color: Colors.grey),
+                                                                                ),
+                                                                                focusedBorder: UnderlineInputBorder(
+                                                                                  borderSide: BorderSide(color: Colors.green),
+                                                                                ),
+                                                                                labelText: "Confirm Password",
+                                                                                hintText: "Confirm the password",
+                                                                                hintStyle: TextStyle(
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                                labelStyle: TextStyle(
+                                                                                  color: Colors.grey,
+                                                                                )),
+                                                                            obscureText: true,
+                                                                            validator: (input) {
+                                                                              return _password.text != input ? "Passwords do no match" : null;
+                                                                              // return password != input
+                                                                              //     ? 'Passwords do not match'
+                                                                              //     : null;
+                                                                            },
+                                                                          ),
+                                                                          Divider(),
+                                                                          Row(
+                                                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                            children: [
+                                                                              RaisedButton(
+                                                                                elevation: 0,
+                                                                                child: Text(
+                                                                                  'Save',
+                                                                                  style: TextStyle(color: KirthanStyles.colorPallete30),
+                                                                                ),
+                                                                                color: Colors.transparent,
+                                                                                onPressed: () async {
+                                                                                  if (_formKey.currentState.validate()) {
+                                                                                    FirebaseUser s = await FirebaseAuth.instance.currentUser();
+
+                                                                                    // //Pass in the password to updatePassword.
+                                                                                    // SignInService signIn = new SignInService();
+                                                                                    // signIn.validatePassword(_oldPassword.text).whenComplete(() => null);
+                                                                                    var authCredentials = EmailAuthProvider.getCredential(email: s.email, password: _oldPassword.text);
+                                                                                    try {
+                                                                                      var authResult = await s.reauthenticateWithCredential(authCredentials);
+                                                                                      if (authResult.user != null) {
+                                                                                        s.updatePassword(_password.text).then((_) {
+                                                                                          print("");
+                                                                                        }).catchError((error) {
+                                                                                          print('');
+                                                                                          //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+                                                                                        });
+                                                                                        _formKey.currentState.save();
+                                                                                        String userrequestStr = jsonEncode(user.toStrJson());
+                                                                                        userPageVM.submitUpdateUserRequestDetails(userrequestStr);
+                                                                                        SnackBar mysnackbar = SnackBar(
+                                                                                          content: Text("User details updated $successful"),
+                                                                                          duration: new Duration(seconds: 4),
+                                                                                          backgroundColor: Colors.green,
+                                                                                        );
+                                                                                        Scaffold.of(context).showSnackBar(mysnackbar);
+                                                                                      }
+                                                                                    } catch (e) {
+                                                                                      if (e.toString() == null) {
+                                                                                        errMessage = null;
+                                                                                      }
+                                                                                      if (e.code == 'ERROR_USER_NOT_FOUND') {
+                                                                                        errMessage = 'No user Found';
+                                                                                      } else if (e.code == 'ERROR_WRONG_PASSWORD') {
+                                                                                        errMessage = 'Old password is wrong. Try Again!';
+                                                                                      }
+                                                                                      Scaffold.of(context).showSnackBar(SnackBar(
+                                                                                        content: Text(errMessage),
+                                                                                        backgroundColor: Colors.red,
+                                                                                      ));
+                                                                                    }
+                                                                                  }
+                                                                                },
+                                                                              ),
+                                                                              RaisedButton(
+                                                                                elevation: 0,
+                                                                                child: Text('Reset'),
+                                                                                color: Colors.transparent,
+                                                                                //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
+                                                                                onPressed: () {
+                                                                                  _passwordConfirm.clear();
+                                                                                  _password.clear();
+                                                                                },
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )));
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              TextFormField(
+                                                enabled: false,
+                                                decoration: InputDecoration(
+                                                  disabledBorder:
+                                                  UnderlineInputBorder(
+                                                      borderSide:
+                                                      BorderSide(
+                                                          color: Colors
+                                                              .grey)),
+                                                ),
+                                                initialValue: "0000000",
+                                                obscureText: true,
+                                              ),
+                                            ],
+                                          )
+                                              : Container()
+                                          // : Container(),
                                         ],
                                       ),
 

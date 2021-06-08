@@ -21,6 +21,7 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
@@ -818,8 +819,11 @@ class _EventWriteState extends State<EventWrite> {
                                     .showSnackBar(mysnackbar);
                                 new Future.delayed(const Duration(seconds: 3),
                                         () {
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => EventView(
+                                                  )));
                                     });
 
                                 // Navigator.push(
