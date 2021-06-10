@@ -698,7 +698,10 @@ class _EventWriteState extends State<EventWrite> {
                           builder:(context,notifier,child)=> Container(
                             padding: EdgeInsets.only(top: 30),
                             //TODO:added search bar
-                            child: SelectState(
+                            child: CSCPicker(
+                              disabled:notifier.darkTheme
+                                  ?false
+                                  :true,
                               onCountryChanged: (value) {
                                 setState(() {
                                   eventrequest.country = value;

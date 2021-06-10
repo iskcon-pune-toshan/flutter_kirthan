@@ -24,8 +24,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:country_state_city_picker/country_state_city_picker.dart';
-
+//import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:csc_picker/csc_picker.dart';
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
@@ -576,6 +576,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             style: TextStyle(fontSize: notifier.custFontSize),
                             autovalidateMode: AutovalidateMode.onUserInteraction,
                             //attribute: "PhoneNumber",
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
@@ -1143,6 +1144,7 @@ class _EventWriteState extends State<EventWritePublic> {
                               style: TextStyle(fontSize: notifier.custFontSize),
                               autovalidateMode:
                               AutovalidateMode.onUserInteraction,
+                              keyboardType: TextInputType.number,
                               //attribute: "PinCode",
                               decoration: InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
@@ -1165,10 +1167,15 @@ class _EventWriteState extends State<EventWritePublic> {
                                 eventrequest.pincode = int.parse(input);
                               },
                               validator: validatePin),
+                          Theme(data:Theme.of(context) , child:
                           Container(
                             padding: EdgeInsets.only(top: 30),
                             //TODO:added search bar
-                            child: SelectState(
+                            child: CSCPicker(
+                              //style:TextStyle(fontSize: notifier.custFontSize,color: KirthanStyles.titleColor),
+                              disabled:notifier.darkTheme
+                                  ?false
+                              :true,
                               onCountryChanged: (value) {
                                 setState(() {
                                   eventrequest.country = value;
@@ -1185,6 +1192,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                 });
                               },
                             ),
+                          )
                           )
                         ],
                       ),
