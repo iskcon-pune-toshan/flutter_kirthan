@@ -1,25 +1,45 @@
+import 'package:flutter_kirthan/models/teamuser.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/storage_repo.dart';
 
 class TeamRequest {
   final int id;
   String teamTitle;
   String teamDescription;
-  bool isProcessed;
   String createdBy;
-  String createTime;
+  String createdTime;
   String updatedBy;
-  String updateTime;
+  String updatedTime;
   String approvalStatus;
-  String approvalComments;
-
-
+  String location;
+  int category;
+  String experience;
+  int phoneNumber;
+  String teamLeadId;
+  String localAdminArea;
+  String localAdminName;
+  List<TeamUser> listOfTeamMembers;
+  int requestAcceptance;
+  int duration;
 //Typically called form service layer to create a new user
-  TeamRequest({this.id, this.teamTitle, this.teamDescription, this.isProcessed,
-    this.createdBy,
-    this.updatedBy,
-    this.createTime,
-    this.updateTime,
-    this.approvalStatus,
-    this.approvalComments });
+  TeamRequest(
+      {this.id,
+      this.teamTitle,
+      this.teamDescription,
+      this.createdBy,
+      this.updatedBy,
+      this.createdTime,
+      this.updatedTime,
+      this.approvalStatus,
+      this.location,
+      this.category,
+      this.experience,
+      this.phoneNumber,
+      this.teamLeadId,
+      this.localAdminArea,
+      this.localAdminName,
+      this.listOfTeamMembers,
+      this.requestAcceptance,
+      this.duration});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory TeamRequest.fromJson(Map<String, dynamic> data) {
@@ -27,13 +47,21 @@ class TeamRequest {
       id: data['id'],
       teamTitle: data['teamTitle'],
       teamDescription: data['teamDescription'],
-      isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
       updatedBy: data['updatedBy'],
-      updateTime: data['updateTime'],
-      createTime: data['createTime'],
+      updatedTime: data['updatedTime'],
+      createdTime: data['createdTime'],
       approvalStatus: data['approvalStatus'],
-      approvalComments: data['approvalComments'],
+      location: data['location'],
+      category: data['category'],
+      experience: data['experience'],
+      phoneNumber: data['phoneNumber'],
+      teamLeadId: data['teamLeadId'],
+      localAdminArea: data['localAdminArea'],
+      localAdminName: data['localAdminName'],
+      listOfTeamMembers: data['listOfTeamMembers'],
+      requestAcceptance: data['requestAcceptance'],
+      duration: data['duration'],
     );
   }
 
@@ -42,13 +70,20 @@ class TeamRequest {
       id: map['id'],
       teamTitle: map['teamTitle'],
       teamDescription: map['teamDescription'],
-      isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
       updatedBy: map['updatedBy'],
-      updateTime: map['updateTime'],
-      createTime: map['createTime'],
+      updatedTime: map['updatedTime'],
+      createdTime: map['createdTime'],
       approvalStatus: map['approvalStatus'],
-      approvalComments: map['approvalComments'],
+      location: map['location'],
+      category: map['category'],
+      experience: map['experience'],
+      phoneNumber: map['phoneNumber'],
+      teamLeadId: map['teamLeadId'],
+      localAdminArea: map['localAdminArea'],
+      localAdminName: map['localAdminName'],
+      requestAcceptance: map['requestAcceptance'],
+      duration: map['duration'],
     );
   }
 
@@ -57,33 +92,44 @@ class TeamRequest {
     data['id'] = this.id;
     data['teamTitle'] = this.teamTitle;
     data['teamDescription'] = this.teamDescription;
-    data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
-    data['updateTime'] = this.updateTime;
-    data['createTime'] = this.createTime;
+    data['updatedTime'] = this.updatedTime;
+    data['createdTime'] = this.createdTime;
     data['approvalStatus'] = this.approvalStatus;
-    data['approvalComments'] = this.approvalComments;
-
+    data['location'] = this.location;
+    data['category'] = this.category;
+    data['experience'] = this.experience;
+    data['phoneNumber'] = this.phoneNumber;
+    data['teamLeadId'] = this.teamLeadId;
+    data['localAdminArea'] = this.localAdminArea;
+    data['localAdminName'] = this.localAdminName;
+    data['listOfTeamMembers'] = this.listOfTeamMembers;
+    data['requestAcceptance'] = this.requestAcceptance;
+    data['duration'] = this.duration;
     return data;
   }
 
   Map toStrJson() {
     return {
       "id": this.id,
-
       "teamDescription": this.teamDescription,
-
       "teamTitle": this.teamTitle,
-
-      "isProcessed": this.isProcessed,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
-      "updateTime": this.updateTime,
-      "createTime": this.createTime,
+      "updatedTime": this.updatedTime,
+      "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
-      "approvalComments": this.approvalComments
+      "location": this.location,
+      "category": this.category,
+      "experience": this.experience,
+      "phoneNumber": this.phoneNumber,
+      "teamLeadId": this.teamLeadId,
+      "localAdminArea": this.localAdminArea,
+      "localAdminName": this.localAdminName,
+      "listOfTeamMembers": this.listOfTeamMembers,
+      "requestAcceptance": this.requestAcceptance,
+      "duration": this.duration,
     };
   }
-
 }

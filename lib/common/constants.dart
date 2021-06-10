@@ -46,16 +46,22 @@ const String SCR_FORGOT_PASSWORD = "Forgot password";
 const String SCR_LOGIN_SCREEN = "Login screen";
 const String SCR_TEAM = "Team";
 const String SCR_EVENT = "Event";
+const String SCR_MYEVENT = "My Events";
 const String SCR_TEAM_USER = "Team-user";
 const String SCR_EVENT_USER = "Event-User";
 const String SCR_NOTIFICATION_HUB = "Notification Hub";
+const String SCR_TEMPLE = "Temple";
+const String SCR_ROLES = "Roles";
+const String SCR_USER_TEMPLE = "User_Temple";
+const String SCR_ROLE_SCREEN = "Role_Screen";
+const String SCR_PERMISSIONS = "Permissions";
+const String SCR_SCREENS = "Screens";
+const String SCR_PREF = "Preferences";
+const String SCR_DISPLAY = "Display Settings";
+const String SCR_NTF = "Notifications";
 
 const String ACCESS_TYPE_CREATE = "Create";
 const String ACCESS_TYPE_EDIT = "Edit";
 const String ACCESS_TYPE_DELETE = "Delete";
 const String ACCESS_TYPE_VIEW = "View";
 const String ACCESS_TYPE_PROCESS = "Process";
-
-
-
-

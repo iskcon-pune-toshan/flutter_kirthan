@@ -1,4 +1,4 @@
-name: Flutter CI
+me: Flutter CI
 
 # This workflow is triggered on pushes to the repository or pull request to the repository.
 on:

@@ -1,42 +1,116 @@
 {
   "project_info": {
-    "project_number": "638627243036",
-    "firebase_url": "https://iskconkirthan.firebaseio.com",
-    "project_id": "iskconkirthan",
-    "storage_bucket": "iskconkirthan.appspot.com"
+    "project_number": "88718054042",
+    "firebase_url": "https://kirtan-iskcon-a7822-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "kirtan-iskcon-a7822",
+    "storage_bucket": "kirtan-iskcon-a7822.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:638627243036:android:0a65f85988b608730e2bd9",
+        "mobilesdk_app_id": "1:88718054042:android:b8ee57c1a4ad400155c523",
         "android_client_info": {
-          "package_name": "org.iskcon.flutter_kirthan"
+          "package_name": "com.example.kirtan_prod"
         }
       },
       "oauth_client": [
         {
-          "client_id": "638627243036-9tjrrdhbgp7gmd7hrp73m4p03utrrqht.apps.googleusercontent.com",
+          "client_id": "88718054042-f0l1rgtpk2srqnu9v4uku1tob8l0mhl1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "org.iskcon.flutter_kirthan",
-            "certificate_hash": "4b96b5ef05cbbe794448e5048f263ee2e95b9fd5"
+            "package_name": "com.example.kirtan_prod",
+            "certificate_hash": "3cb244ecd99ff3cdbf462ccb1fea4f841fa3562f"
           }
         },
         {
-          "client_id": "638627243036-rcudqhc9m1d9rgpj3bmgvl3f1cbmdc65.apps.googleusercontent.com",
+          "client_id": "88718054042-k7162fque184bel1ird0h5a7va4u9rdr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAXohJaMpv8JqywiPZoXydUG4mmqZTxxNA"
+          "current_key": "AIzaSyDqSZiVohFVyB7b4Ob5OhKXHPkjmieiwLg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "638627243036-rcudqhc9m1d9rgpj3bmgvl3f1cbmdc65.apps.googleusercontent.com",
+              "client_id": "88718054042-k7162fque184bel1ird0h5a7va4u9rdr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88718054042:android:97d2c10967a1050a55c523",
+        "android_client_info": {
+          "package_name": "org.iskcon.flutter_kirthan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88718054042-k7162fque184bel1ird0h5a7va4u9rdr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqSZiVohFVyB7b4Ob5OhKXHPkjmieiwLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "88718054042-k7162fque184bel1ird0h5a7va4u9rdr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88718054042:android:d66afa783aa56a0555c523",
+        "android_client_info": {
+          "package_name": "org.iskcon.flutter_kirthan.flutter_kirthan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88718054042-gg9dkl92v8h5qr8k34eb30a1836qtlq7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan.flutter_kirthan",
+            "certificate_hash": "055b9ab24a03cb536f935c51ed7147b6e05003d5"
+          }
+        },
+        {
+          "client_id": "88718054042-trhh3b2b2jkk7kkjc86aknl3ags994jr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.iskcon.flutter_kirthan.flutter_kirthan",
+            "certificate_hash": "3cb244ecd99ff3cdbf462ccb1fea4f841fa3562f"
+          }
+        },
+        {
+          "client_id": "88718054042-k7162fque184bel1ird0h5a7va4u9rdr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqSZiVohFVyB7b4Ob5OhKXHPkjmieiwLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "88718054042-k7162fque184bel1ird0h5a7va4u9rdr.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

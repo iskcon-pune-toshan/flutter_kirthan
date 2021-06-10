@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_kirthan/services/event_service_interface.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -8,7 +9,7 @@ class EventPageViewModel extends Model {
   Future<List<EventRequest>> _eventrequests;
   final IEventRestApi apiSvc;
 
-  Map<String,bool> accessTypes;
+  Map<String, bool> accessTypes;
 
   EventPageViewModel({@required this.apiSvc});
 
@@ -19,6 +20,16 @@ class EventPageViewModel extends Model {
     notifyListeners();
   }
 
+  Future<List<int>> getEventCount() async {
+    List<int> result = await apiSvc?.getEventCount();
+    return result;
+  }
+
+  Future<List<EventRequest>> getData(status) async {
+    eventrequests = apiSvc?.getData(status);
+    return eventrequests;
+  }
+
   Future<bool> setEventRequests(String eventType) async {
     eventrequests = apiSvc?.getEventRequests(eventType);
     return eventrequests != null;
@@ -26,7 +37,7 @@ class EventPageViewModel extends Model {
 
   Future<List<EventRequest>> getEventRequests(String userType) {
     Future<List<EventRequest>> eventRequests =
-    apiSvc?.getEventRequests(userType);
+        apiSvc?.getEventRequests(userType);
     return eventRequests;
   }
 
@@ -42,8 +53,10 @@ class EventPageViewModel extends Model {
     return processFlag;
   }
 
-  Future<bool> deleteEventRequest(Map<String, dynamic> processrequestmap) {
-    Future<bool> deleteFlag = apiSvc?.deleteEventRequest(processrequestmap);
+  Future<EventRequest> deleteEventRequest(
+      Map<String, dynamic> processrequestmap) {
+    Future<EventRequest> deleteFlag =
+        apiSvc?.deleteEventRequest(processrequestmap);
     return deleteFlag;
   }
 
@@ -51,4 +64,10 @@ class EventPageViewModel extends Model {
     Future<bool> updateFlag = apiSvc?.submitUpdateEventRequest(eventrequestmap);
     return updateFlag;
   }
+
+  // Future<bool> submitRegisterEventRequest(String eventrequestmap) {
+  //   Future<bool> updateFlag =
+  //   apiSvc?.submitRegisterEventRequest(eventrequestmap);
+  //   return updateFlag;
+  // }
 }

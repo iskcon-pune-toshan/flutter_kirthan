@@ -2,21 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/junk/main_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/event/home_page_map.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
+import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/views/pages/eventuser/eventuser_view.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
 
 class EventsPanel extends StatelessWidget {
   String eventType;
+  EventRequest eventRequest;
 
   final String screenName = "Event";
 
-  EventsPanel({@required this.eventType});
+  EventsPanel({@required this.eventType, @required this.eventRequest});
   @override
   Widget build(BuildContext context) {
+    String dropdownValue = eventRequest?.city;
     return ScopedModelDescendant<EventPageViewModel>(
       builder: (context, child, model) {
         return FutureBuilder<List<EventRequest>>(
@@ -34,6 +36,9 @@ class EventsPanel extends StatelessWidget {
                     //mainAxisAlignment: MainAxisAlignment.center,
                     //mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
+                      SizedBox(
+                        height: 3,
+                      ),
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -44,25 +49,99 @@ class EventsPanel extends StatelessWidget {
                               model.setEventRequests("1");
                             },
                           ),*/
-                          RaisedButton(
-                            child: const Text("Event-User Add"),
+
+                          /* RaisedButton(
+                            color: KirthanStyles.colorPallete30,
+                            child: const Text(
+                              "Event-User Add",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => TeamUserView()));
                             },
-                          ),
-                          RaisedButton(
+                          ),*/
+                          /*RaisedButton(
+                            child: const Text("Map v"),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TeamUserView()));
+                            },
+                          ),*/
+                          /*RaisedButton(
                             //child: const Text("This Week"),
-                            child: const Text("Event-User View"),
+                            color: KirthanStyles.colorPallete30,
+                            child: const Text(
+                              "Event-User View",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => EventUserView()));
                             },
+                          ),*/
+                        ],
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      new Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Container(
+                            height: 110,
+                            decoration: new BoxDecoration(
+                              image: new DecorationImage(
+                                image: new AssetImage('assets/images/map.jpg'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: FlatButton(
+                              //child: const Text("This Week"),
+                              child: Center(
+                                child: Consumer<ThemeNotifier>(
+                                    builder: (context, notifier, child) => Text(
+                                      'Map',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: notifier.custFontSize),
+                                    )),
+                              ),
+
+                              // child: const Text("Map"),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MapPage(
+                                            eventrequest: eventRequest)));
+                                /*Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BlocProvider(
+                                      create: (BuildContext context) =>
+                                          MapsBloc(),
+                                      child: Maps(),
+                                    ),
+                                  ),
+                                );*/
+                              },
+                              //child: Image.asset("assets/images/map.jpg")
+                            ),
                           ),
+                          //          ),
                         ],
                       ),
                       Expanded(
@@ -71,7 +150,9 @@ class EventsPanel extends StatelessWidget {
                             initialScrollOffset: 2,
                             keepScrollOffset: false,
                           ),
-                          child: Center(
+                          child: Container(
+                            //TODO
+                            color: Colors.black12,
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: eventRequests == null

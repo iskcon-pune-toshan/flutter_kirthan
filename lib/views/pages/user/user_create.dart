@@ -7,8 +7,7 @@ import 'package:flutter_kirthan/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
-
+    UserPageViewModel(apiSvc: UserAPIService());
 
 class UserWrite extends StatefulWidget {
   UserWrite({Key key}) : super(key: key);
@@ -94,6 +93,7 @@ class _UserWriteState extends State<UserWrite> {
         child: Column(
           children: <Widget>[
             TextFormField(
+              keyboardType: TextInputType.number,
               maxLength: 30,
               //attribute: "Username",
               decoration: InputDecoration(
@@ -101,7 +101,7 @@ class _UserWriteState extends State<UserWrite> {
                   hintText: "",
                   labelText: "Username"),
               onChanged: (input) {
-                userrequest.userName = input;
+                userrequest.fullName = input;
               },
               validator: (value) {
                 if (value.isEmpty) {
@@ -174,40 +174,40 @@ class _UserWriteState extends State<UserWrite> {
         autovalidate: true,
         child: Column(
           children: <Widget>[
-            TextFormField(
-              //attribute: "FirstName",
-              decoration: InputDecoration(
-                icon: const Icon(Icons.people_outline),
-                labelText: "FirstName",
-                hintText: "",
-              ),
-              onChanged: (input) {
-                userrequest.firstName = input;
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Please enter some text";
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              //attribute: "FirstName",
-              decoration: InputDecoration(
-                icon: const Icon(Icons.people_outline),
-                labelText: "LastName",
-                hintText: "",
-              ),
-              onChanged: (input) {
-                userrequest.lastName = input;
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Please enter some text";
-                }
-                return null;
-              },
-            ),
+            // TextFormField(
+            //   //attribute: "FirstName",
+            //   decoration: InputDecoration(
+            //     icon: const Icon(Icons.people_outline),
+            //     labelText: "FirstName",
+            //     hintText: "",
+            //   ),
+            //   onChanged: (input) {
+            //     userrequest.firstName = input;
+            //   },
+            //   validator: (value) {
+            //     if (value.isEmpty) {
+            //       return "Please enter some text";
+            //     }
+            //     return null;
+            //   },
+            // ),
+            // TextFormField(
+            //   //attribute: "FirstName",
+            //   decoration: InputDecoration(
+            //     icon: const Icon(Icons.people_outline),
+            //     labelText: "LastName",
+            //     hintText: "",
+            //   ),
+            //   onChanged: (input) {
+            //     userrequest.lastName = input;
+            //   },
+            //   validator: (value) {
+            //     if (value.isEmpty) {
+            //       return "Please enter some text";
+            //     }
+            //     return null;
+            //   },
+            // ),
             TextFormField(
               //attribute: "Email",
               decoration: InputDecoration(
@@ -357,7 +357,7 @@ class _UserWriteState extends State<UserWrite> {
                 hintText: "",
               ),
               onChanged: (input) {
-                userrequest.govtIdType = input;
+                userrequest.govtIdType = int.parse(input);
               },
               validator: (value) {
                 if (value.isEmpty) {
@@ -479,77 +479,77 @@ class _UserWriteState extends State<UserWrite> {
         children: <Widget>[
           complete
               ? Expanded(
-            child: Center(
-              child: AlertDialog(
-                title: new Text("Details Filled !"),
-                content: new Text(
-                  "Click Submit on top right corner of the screen.",
-                ),
-                actions: <Widget>[
-                  new FlatButton(
-                    child: new Text("Submit"),
-                    onPressed: () async {
-                      /*_formKey.currentState.save();
+                  child: Center(
+                    child: AlertDialog(
+                      title: new Text("Details Filled !"),
+                      content: new Text(
+                        "Click Submit on top right corner of the screen.",
+                      ),
+                      actions: <Widget>[
+                        new FlatButton(
+                          child: new Text("Submit"),
+                          onPressed: () async {
+                            /*_formKey.currentState.save();
                             _formKey1.currentState.save();
                             _formKey2.currentState.save();
                             _formKey3.currentState.save();
                             */
-                      userrequest.userId = userrequest.firstName +
+                            /*userrequest.roleId = userrequest.firstName +
                           '_' +
-                          userrequest.lastName;
-                      userrequest.city = "Pune";
-                      userrequest.state = "Maharashtra";
-                      userrequest.country = "IND";
-                      userrequest.userType = "Admin";
-                      userrequest.isProcessed = false;
-                      userrequest.createdBy = "SYSTEM";
-                      String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                          .format(DateTime.now());
-                      userrequest.createTime = dt;
-                      userrequest.updatedBy = "SYSTEM";
-                      userrequest.updateTime = dt;
-                      userrequest.approvalStatus = "Approved";
-                      userrequest.approvalComments = "AAA";
+                          userrequest.lastName;*/
+                            userrequest.city = "Pune";
+                            userrequest.state = "Maharashtra";
+                            userrequest.country = "IND";
+                            //userrequest.userType = "Admin";
+                            //userrequest.isProcessed = false;
+                            userrequest.createdBy = "SYSTEM";
+                            String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                .format(DateTime.now());
+                            userrequest.createdTime = dt;
+                            userrequest.updatedBy = "SYSTEM";
+                            //userrequest.updateTime = dt;
+                            userrequest.approvalStatus = "approved";
+                            // userrequest.approvalComments = "AAA";
 
-                      Map<String, dynamic> usermap = userrequest.toJson();
-                      print(usermap);
-                      UserRequest newuserrequest =
-                      await userPageVM.submitNewUserRequest(usermap);
-                      print(newuserrequest.id);
-                      String uid = newuserrequest.id.toString();
-                      SnackBar mysnackbar = SnackBar(
-                        content: Text(
-                            "User registered $successful with id : $uid "),
-                        duration: new Duration(seconds: 4),
-                        backgroundColor: Colors.green,
-                      );
-                      Scaffold.of(context).showSnackBar(mysnackbar);
+                            Map<String, dynamic> usermap = userrequest.toJson();
+                            print(usermap);
+                            UserRequest newuserrequest =
+                                await userPageVM.submitNewUserRequest(usermap);
+                            print(newuserrequest.id);
+                            String uid = newuserrequest.id.toString();
+                            SnackBar mysnackbar = SnackBar(
+                              content: Text(
+                                  "User registered $successful with id : $uid "),
+                              duration: new Duration(seconds: 4),
+                              backgroundColor: Colors.green,
+                            );
+                            Scaffold.of(context).showSnackBar(mysnackbar);
 
-                      //String s = jsonEncode(userrequest.mapToJson());
-                      //service.registerUser(s);
-                      //print(s);
-                    },
+                            //String s = jsonEncode(userrequest.mapToJson());
+                            //service.registerUser(s);
+                            //print(s);
+                          },
+                        ),
+                        new FlatButton(
+                          child: new Text("Close"),
+                          onPressed: () {
+                            setState(() => complete = false);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  new FlatButton(
-                    child: new Text("Close"),
-                    onPressed: () {
-                      setState(() => complete = false);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          )
+                )
               : Expanded(
-            child: Stepper(
-              type: stepperType,
-              steps: steps,
-              currentStep: currentStep,
-              onStepContinue: next,
-              onStepTapped: (step) => goTo(step),
-              onStepCancel: cancel,
-            ),
-          ),
+                  child: Stepper(
+                    type: stepperType,
+                    steps: steps,
+                    currentStep: currentStep,
+                    onStepContinue: next,
+                    onStepTapped: (step) => goTo(step),
+                    onStepCancel: cancel,
+                  ),
+                ),
         ],
       ),
       /*floatingActionButton: FloatingActionButton(

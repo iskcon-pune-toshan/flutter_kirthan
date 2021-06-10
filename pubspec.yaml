@@ -5,7 +5,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
-  #flutter: ">=1.12.0 <2.0.0"
+  flutter: ">=1.12.0 <2.0.0"
 
 dependencies:
   flutter:
@@ -14,7 +14,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   scoped_model: ^0.3.0
   font_awesome_flutter: ^8.0.1
-  flutter_form_builder: ^3.8.1
+  flutter_form_builder:
   http: ^0.12.0
   shared_preferences: 0.5.7+1
   google_sign_in: ^4.4.4
@@ -39,6 +39,35 @@ dependencies:
   autocomplete_textfield:
   flutter_polyline_points:
   flutter_spinkit:
+  dio:
+  equatable: ^0.2.6
+  great_circle_distance:
+  flutter_bloc: ^4.0.0
+  bloc:
+  image_picker: ^0.5.3+1
+  firebase_storage:
+  flutter_svg:
+  get_it: ^4.0.1
+  flutter_icons: ^1.0.0+1
+  firebase_helpers:
+  cloud_firestore:
+  share: ^0.6.5+4
+  draggable_fab: ^0.1.1
+  syncfusion_flutter_calendar:
+  datetime_picker_formfield:
+  flutter_speed_dial:
+  flutter_datetime_picker:
+  dropdownfield:
+  flutter_slidable: ^0.5.7
+  email_validator:
+  url_launcher:
+  random_string: ^2.1.0
+  flushbar:
+  country_state_city_picker: ^1.2.7
+  grouped_buttons:
+  numberpicker:
+  move_to_background:
+
 
 
 dev_dependencies:
@@ -55,10 +84,16 @@ flutter:
   assets:
     - assets/
     - assets/data/
-    #- assets/markdown/
     - assets/fonts/
     - assets/images/
+    - assets/images/default_icon.png
   fonts:
     - family: Distant Galaxy
       fonts:
         - asset: assets/fonts/DISTGRG_.ttf
+    - family: Sacramento
+      fonts:
+        - asset: assets/fonts/Sacramento-Regular.ttf
+    - family: OpenSans
+      fonts:
+          - asset: assets/fonts/OpenSans.ttf

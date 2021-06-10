@@ -1,37 +1,44 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/perferences_create.dart';
 
 class MySettingsApp extends StatefulWidget {
   @override
-  //static double custFontSize = 16;
   _MyAppState createState() => new _MyAppState();
 }
 
 class _MyAppState extends State<MySettingsApp> {
-  //double _brightness = 1.0;
+  final String _allowNotification = "";
+  bool _v = false;
 
-  /*void changeFontSize() async {
-    setState(() {
-      MySettingsApp.custFontSize += 2;
-    });
+  Future<bool> setNotifcation(bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.setBool(_allowNotification, value);
+  }
+
+  Future<bool> getNotification() async {
+    print("Entered");
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool(_allowNotification);
   }
 
   @override
-  initState() {
+  void initState() {
+    getNotification();
     super.initState();
-    initPlatformState();
   }
-
-  initPlatformState() async {
-    double brightness = await Screen.brightness;
-    setState(() {
-      _brightness = brightness;
-    });
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -44,87 +51,154 @@ class _MyAppState extends State<MySettingsApp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            /* Consumer<ThemeNotifier>(
-              builder: (context, notifier, child) => SwitchListTile(
-                title: Text("Dark Mode",
-                style: TextStyle(
-                  fontSize: MyPrefSettingsApp.custFontSize,
-                )
-                ),
-                onChanged: (val) {
-                  notifier.toggleTheme();
-                },
-                value: notifier.darkTheme,
-              ),
-            ),*/
-            //Divider(),
-            /* new Text(
-              "Brightness:",
-                  style: TextStyle(fontSize:MySettingsApp.custFontSize),
-            ),
-            Card(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    Text(MySettingsApp.custFontSize.toString(),
-                        style: TextStyle(fontSize: 20)
-                        ),
-                    Slider(
-                        value: _brightness,
-                      activeColor: Color(0xFFEB1555),
-                      inactiveColor: Color(0xFF8D8E98),
-                        onChanged: (double b) {
-                          setState(() {
-                            _brightness = b;
-                          });
-                          Screen.setBrightness(b);
-                        }),
-                  ],
-                ),
-              ),
-            ),*/
-            /*RaisedButton(
-              onPressed: () {
-                changeFontSize();
-              },
-              child: Text('Change size'),
-            ),*/
-            /* Text("TextSize :",
-              style: TextStyle(fontSize:MyPrefSettingsApp.custFontSize),
-            ),
-            Card(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    Text(MyPrefSettingsApp.custFontSize.toString(),
-                        style: TextStyle(fontSize: 20)),
-                    Slider(
-                      value: MyPrefSettingsApp.custFontSize,
-                      min: 16,
-                      max: 30,
-                      activeColor: Color(0xFFEB1555),
-                      inactiveColor: Color(0xFF8D8E98),
-                      onChanged: (double newValue) {
-                        setState(() {
-                          MyPrefSettingsApp.custFontSize =
-                              newValue.floor().toDouble();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),*/
             Divider(),
             Card(
               child: ListTile(
-                trailing: Icon(Icons.keyboard_arrow_right),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.perm_contact_calendar,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                title: Consumer<ThemeNotifier>(
+                  builder: (context, notifier, child) => Text(
+                    'Profile',
+                    style: TextStyle(
+                      fontSize: notifier.custFontSize,
+                      color: KirthanStyles.colorPallete30,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyProfileSettings()));
+                },
+                selected: true,
+              ),
+            ),
+            Divider(),
+            Card(
+              child: ListTile(
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.check_circle_outline,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                title: Consumer<ThemeNotifier>(
+                  builder: (context, notifier, child) => Text(
+                    "Preferences",
+                    style: TextStyle(
+                      fontSize: notifier.custFontSize,
+                      color: KirthanStyles.colorPallete30,
+                    ),
+                  ),
+                ),
+                onTap: () async {
+                  //List<UserRequest> uList
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Preference(
+                                user: null,
+                              )));
+                },
+                selected: true,
+              ),
+            ),
+            Divider(),
+            Card(
+              /*child: ListTile(
+                leading: Icon(Icons.notifications_active),
+
                 title: Text(
-                  "Preference Settings",
+                  "Notifications",
+
                   style: TextStyle(
                     fontSize: MyPrefSettingsApp.custFontSize,
+                  ),
+                ),
+                onTap: () {
+                  _showMaterialDialog();
+
+                },
+                selected: true,
+              ),
+
+               */
+              child: SwitchListTile(
+                activeColor: Colors.cyan,
+                title: Consumer<ThemeNotifier>(
+                  builder: (context, notifier, child) => Text(
+                    "Notifications",
+                    style: TextStyle(
+                        fontSize: notifier.custFontSize,
+                        color: KirthanStyles.colorPallete30),
+                  ),
+                ),
+                onChanged: (value) {
+                  return showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Notifications'),
+                          content: Text(
+                              'Do you want to get notifications on phone?'),
+                          actions: [
+                            FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  getNotification();
+                                  _v = true;
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Text('Yes'),
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  _v = false;
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Text('No'),
+                            ),
+                          ],
+                        );
+                      });
+                },
+                value: _v,
+                secondary: Icon(
+                  Icons.notifications_active,
+                  color: KirthanStyles.colorPallete30,
+                ),
+              ),
+            ),
+            Divider(),
+            Card(
+              child: ListTile(
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                leading: Icon(
+                  Icons.brightness_4,
+                  color: KirthanStyles.colorPallete30,
+                ),
+                title: Consumer<ThemeNotifier>(
+                  builder: (context, notifier, child) => Text(
+                    "Display",
+                    style: TextStyle(
+                      fontSize: notifier.custFontSize,
+                      color: KirthanStyles.colorPallete30,
+                    ),
                   ),
                 ),
                 onTap: () {
@@ -136,103 +210,46 @@ class _MyAppState extends State<MySettingsApp> {
                 selected: true,
               ),
             ),
-            Divider(),
-            Card(
-              child: ListTile(
-                title: Text(
-                  "Notifications",
-                  style: TextStyle(
-                    fontSize: MyPrefSettingsApp.custFontSize,
-                  ),
-                ),
-                onTap: () {
-                  _showMaterialDialog();
-                },
-                selected: true,
-              ),
-            ),
-
-            /*Divider(),
-            Card(
-              child:ListTile(
-                title: Text("About us",
-                  style: TextStyle(
-                    fontSize: MyPrefSettingsApp.custFontSize,
-                  ),),
-                onTap: (){
-                  _showMaterialDialog();
-                },
-                selected: true,
-              ),
-            ),
-
-            Divider(),
-            Card(
-              child:ListTile(
-                title: Text("Help and FAQs",
-                  style: TextStyle(
-                    fontSize: MyPrefSettingsApp.custFontSize,
-                  ),),
-                onTap: (){
-                  _showMaterialDialog();
-                },
-                selected: true,
-              ),
-            ),
-
-            Divider(),
-            Card(
-              child:ListTile(
-                title: Text("Rate us",
-                  style: TextStyle(
-                    fontSize: MyPrefSettingsApp.custFontSize,
-                  ),),
-                onTap: (){
-                  _showMaterialDialog();
-                },
-                selected: true,
-              ),
-            ),
-
-            Divider(),
-            Card(
-              child:ListTile(
-                title: Text("Share the app",
-                  style: TextStyle(
-                    fontSize: MyPrefSettingsApp.custFontSize,
-                  ),),
-                onTap: (){
-                  _showMaterialDialog();
-                },
-                selected: true,
-              ),
-            ),*/
           ],
         ),
       ),
     );
   }
 
-  _showMaterialDialog() {
-    showDialog(
-        context: context,
-        builder: (_) => new AlertDialog(
-              title: new Text("Notifications"),
-              content: new Text("Do you want to get notifications on phone?"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Yes'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                FlatButton(
-                  child: Text('No'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ));
-  }
+//   _showMaterialDialog() {
+//     showDialog(
+//         context: context,
+//         builder: (_) => new AlertDialog(
+//           title: new Text("Notifications"),
+//           content: new Text("Do you want to get notifications on phone?"),
+//           actions: <Widget>[
+//             FlatButton(
+//               child: Text('Yes'),
+//               onPressed: () {
+//                 return true;
+//               },
+//             ),
+//             FlatButton(
+//               child: Text('No'),
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//           ],
+//         ));
+//   //   bool _v = false;
+//   //   return SwitchListTile(
+//   //   onChanged: (value) {
+//   //     setState(() {
+//   //       getNotification();
+//   //       _v = value;
+//   //     });
+//   //
+//   //
+//   //   },
+//   //   value: _v,
+//   //
+//   // );
+//
+//   }
 }

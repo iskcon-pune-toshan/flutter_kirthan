@@ -1,51 +1,75 @@
-
+//added service type (Free / Premium )
 class EventRequest {
   final int id;
   String eventTitle;
   String eventDescription;
   String eventDate;
-  String eventDuration;
-  String eventLocation;
-  String eventType;
+  String eventStartTime;
+  String eventEndTime;
+  int eventType;
   int phoneNumber;
-  String addLineOne;
-  String addLineTwo;
-  String addLineThree;
-  String locality;
+  String addLineOneS;
+  String addLineTwoS;
+  String localityS;
+  String addLineOneD;
+  String addLineTwoD;
+  String localityD;
   String city;
-  int pinCode;
+  int pincode;
   String state;
   String country;
-  bool isProcessed;
   String createdBy;
-  String createTime;
+  String createdTime;
   String updatedBy;
-  String updateTime;
-  String approvalStatus;
-  String approvalComments;
-
+  String updatedTime;
+  double longitudeS;
+  double latitudeS;
+  double longitudeD;
+  double latitudeD;
+  String eventMobility;
+  bool isPublicEvent;
+  int teamInviteStatus;
+  String cancelReason;
+  String serviceType;
+  String zoomId;
 
 //Typically called form service layer to create a new user
   EventRequest(
-      {this.id, this.eventTitle, this.eventDescription, this.eventDate, this.eventDuration,
-        this.eventLocation,
-        this.eventType,
-        this.phoneNumber,
-        this.addLineOne,
-        this.addLineTwo,
-        this.addLineThree,
-        this.locality,
-        this.city,
-        this.pinCode,
-        this.state,
-        this.country,
-        this.isProcessed,
-        this.createdBy,
-        this.updatedBy,
-        this.createTime,
-        this.updateTime,
-        this.approvalStatus,
-        this.approvalComments });
+      {this.id,
+      this.eventTitle,
+      this.eventDescription,
+      this.eventDate,
+      this.eventStartTime,
+      this.eventEndTime,
+      this.eventType,
+      this.phoneNumber,
+      this.addLineOneS,
+      this.addLineTwoS,
+      this.localityS,
+      this.addLineOneD,
+      this.addLineTwoD,
+      this.localityD,
+      this.city,
+      this.pincode,
+      this.state,
+      this.country,
+      this.createdBy,
+      this.updatedBy,
+      this.createdTime,
+      this.updatedTime,
+      /*this.approvalStatus,
+      this.approvalComments,*/
+      this.latitudeS,
+      this.longitudeS,
+      this.latitudeD,
+      this.longitudeD,
+      this.eventMobility,
+      //this.eventTime,
+      this.isPublicEvent,
+      this.teamInviteStatus,
+      this.cancelReason,
+      this.serviceType,
+      this.zoomId});
 
 //Typically called from the data_source layer after getting data from an external source.
   factory EventRequest.fromJson(Map<String, dynamic> data) {
@@ -54,25 +78,38 @@ class EventRequest {
       eventTitle: data['eventTitle'],
       eventDescription: data['eventDescription'],
       eventDate: data['eventDate'],
-      eventDuration: data['eventDuration'],
-      eventLocation: data['eventLocation'],
+      eventStartTime: data['eventStartTime'],
+      eventEndTime: data['eventEndTime'],
       eventType: data['eventType'],
       phoneNumber: data['phoneNumber'],
-      addLineOne: data['addLineOne'],
-      addLineTwo: data['addLineTwo'],
-      addLineThree: data['addLineThree'],
-      locality: data['locality'],
+      addLineOneS: data['addLineOneS'],
+      addLineTwoS: data['addLineTwoS'],
+      localityS: data['localityS'],
+      addLineOneD: data['addLineOneD'],
+      addLineTwoD: data['addLineTwoD'],
+      localityD: data['localityD'],
       city: data['city'],
-      pinCode: data['pinCode'],
+      pincode: data['pincode'],
       state: data['state'],
       country: data['country'],
-      isProcessed: data['isProcessed'],
+      //isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
       updatedBy: data['updatedBy'],
-      updateTime: data['updateTime'],
-      createTime: data['createTime'],
-      approvalStatus: data['approvalStatus'],
-      approvalComments: data['approvalComments'],
+      updatedTime: data['updatedTime'],
+      createdTime: data['createdTime'],
+      /*approvalStatus: data['approvalStatus'],
+      approvalComments: data['approvalComments'],*/
+      longitudeS: data['longitudeS'],
+      latitudeS: data['latitudeS'],
+      longitudeD: data['longitudeD'],
+      latitudeD: data['latitudeD'],
+      eventMobility: data['eventMobility'],
+      //eventTime: data['eventTime'],
+      isPublicEvent: data['isPublicEvent'],
+      teamInviteStatus: data['teamInviteStatus'],
+      cancelReason: data['cancelReason'],
+      serviceType: data['serviceType'],
+      zoomId: data['zoomId'],
     );
   }
 
@@ -82,86 +119,120 @@ class EventRequest {
       eventTitle: map['eventTitle'],
       eventDescription: map['eventDescription'],
       eventDate: map['eventDate'],
-      eventDuration: map['eventDuration'],
-      eventLocation: map['eventLocation'],
+      eventStartTime: map['eventStartTime'],
+      eventEndTime: map['eventEndTime'],
       eventType: map['eventType'],
       phoneNumber: map['phoneNumber'],
-      addLineOne: map['addLineOne'],
-      addLineTwo: map['addLineTwo'],
-      addLineThree: map['addLineThree'],
-      locality: map['locality'],
+      addLineOneS: map['addLineOneS'],
+      addLineTwoS: map['addLineTwoS'],
+      localityS: map['localityS'],
+      addLineOneD: map['addLineOneD'],
+      addLineTwoD: map['addLineTwoD'],
+      localityD: map['localityD'],
       city: map['city'],
-      pinCode: map['pinCode'],
+      pincode: map['pincode'],
       state: map['state'],
       country: map['country'],
-      isProcessed: map['isProcessed'],
+      //isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
       updatedBy: map['updatedBy'],
-      updateTime: map['updateTime'],
-      createTime: map['createTime'],
-      approvalStatus: map['approvalStatus'],
-      approvalComments: map['approvalComments'],
+      updatedTime: map['updatedTime'],
+      createdTime: map['createdTime'],
+      /* approvalStatus: map['approvalStatus'],
+      approvalComments: map['approvalComments'],*/
+      longitudeS: map['longitudeS'],
+      latitudeS: map['latitudeS'],
+      longitudeD: map['longitudeD'],
+      latitudeD: map['latitudeD'],
+      eventMobility: map['eventMobility'],
+      //eventTime: map['eventTime'],
+      isPublicEvent: map['isPublicEvent'],
+      teamInviteStatus: map['teamInviteStatus'],
+      cancelReason: map['cancelReason'],
+      serviceType: map['serviceType'],
+      zoomId: map['zoomId'],
     );
   }
 
   Map<String, dynamic> toJson() {
-
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['eventTitle'] = this.eventTitle;
     data['eventDescription'] = this.eventDescription;
     data['eventDate'] = this.eventDate;
-    data['eventDuration'] = this.eventDuration;
-    data['eventLocation'] = this.eventLocation;
+    data['eventStartTime'] = this.eventStartTime;
+    data['eventEndTime'] = this.eventEndTime;
     data['eventType'] = this.eventType;
     data['phoneNumber'] = this.phoneNumber;
-    data['addLineOne'] = this.addLineOne;
-    data['addLineTwo'] = this.addLineTwo;
-    data['addLineThree'] = this.addLineThree;
-    data['locality'] = this.locality;
+    data['addLineOneS'] = this.addLineOneS;
+    data['addLineTwoS'] = this.addLineTwoS;
+    data['localityS'] = this.localityS;
+    data['addLineOneD'] = this.addLineOneD;
+    data['addLineTwoD'] = this.addLineTwoD;
+    data['localityD'] = this.localityD;
     data['city'] = this.city;
-    data['pinCode'] = this.pinCode;
+    data['pincode'] = this.pincode;
     data['state'] = this.state;
     data['country'] = this.country;
-    data['isProcessed'] = this.isProcessed;
+    //data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
-    data['updateTime'] = this.updateTime;
-    data['createTime']=this.createTime;
-    data['approvalStatus'] = this.approvalStatus;
-    data['approvalComments'] = this.approvalComments;
-
+    data['updatedTime'] = this.updatedTime;
+    data['createdTime'] = this.createdTime;
+    /*data['approvalStatus'] = this.approvalStatus;
+    data['approvalComments'] = this.approvalComments;*/
+    data['longitudeS'] = this.longitudeS;
+    data['latitudeS'] = this.latitudeS;
+    data['longitudeD'] = this.longitudeD;
+    data['latitudeD'] = this.latitudeD;
+    data['eventMobility'] = this.eventMobility;
+    //data['eventTime'] = this.eventTime;
+    data['isPublicEvent'] = this.isPublicEvent;
+    data['teamInviteStatus'] = this.teamInviteStatus;
+    data['cancelReason'] = this.cancelReason;
+    data['serviceType'] = this.serviceType;
+    data['zoomId'] = this.zoomId;
     return data;
   }
 
   Map toStrJson() {
-
     return {
-      "id":this.id,
-      "eventTitle":this.eventTitle,
-      "eventDescription":this.eventDescription,
-      "eventDate":this.eventDate,
-      "eventDuration":this.eventDuration,
-      "eventLocation":this.eventLocation,
-      "eventType":this.eventType,
-      "phoneNumber":this.phoneNumber,
-      "addLineOne":this.addLineOne,
-      "addLineTwo":this.addLineTwo,
-      "addLineThree":this.addLineThree,
-      "locality":this.locality,
-      "city":this.city,
-      "pinCode":this.pinCode,
-      "state":this.state,
-      "country":this.country,
-      "isProcessed":this.isProcessed,
-      "createdBy":this.createdBy,
-      "updatedBy":this.updatedBy,
-      "updateTime":this.updateTime,
-      "createTime":this.createTime,
-      "approvalStatus":this.approvalStatus,
-      "approvalComments":this.approvalComments
+      "id": this.id,
+      "eventTitle": this.eventTitle,
+      "eventDescription": this.eventDescription,
+      "eventDate": this.eventDate,
+      "eventStartTime": this.eventStartTime,
+      "eventEndTime": this.eventEndTime,
+      "eventType": this.eventType,
+      "phoneNumber": this.phoneNumber,
+      "addLineOneS": this.addLineOneS,
+      "addLineTwoS": this.addLineTwoS,
+      "localityS": this.localityS,
+      "addLineOneD": this.addLineOneD,
+      "addLineTwoD": this.addLineTwoD,
+      "localityD": this.localityD,
+      "city": this.city,
+      "pincode": this.pincode,
+      "state": this.state,
+      "country": this.country,
+      //"isProcessed": this.isProcessed,
+      "createdBy": this.createdBy,
+      "updatedBy": this.updatedBy,
+      "updatedTime": this.updatedTime,
+      "createdTime": this.createdTime,
+      /*"approvalStatus": this.approvalStatus,
+      "approvalComments": this.approvalComments,*/
+      "longitudeS": this.longitudeS,
+      "latitudeS": this.latitudeS,
+      "longitudeD": this.longitudeD,
+      "latitudeD": this.latitudeD,
+      "eventMobility": this.eventMobility,
+      //"eventTime": this.eventTime,
+      "isPublicEvent": this.isPublicEvent,
+      "teamInviteStatus": this.teamInviteStatus,
+      "cancelReason": this.cancelReason,
+      "serviceType": this.serviceType,
+      "zoomId": this.zoomId,
     };
-
   }
-
 }

@@ -8,7 +8,7 @@ class EventUserPageViewModel extends Model {
   Future<List<EventUser>> _eventUsers;
   final IEventUserRestApi apiSvc;
 
-  Map<String,bool> accessTypes;
+  Map<String, bool> accessTypes;
 
   EventUserPageViewModel({@required this.apiSvc});
 
@@ -19,20 +19,22 @@ class EventUserPageViewModel extends Model {
     notifyListeners();
   }
 
-  Future<List<EventUser>> getEventTeamUserMappings(String eventMapping) {
-    Future<List<EventUser>> eventusers = apiSvc?.getEventTeamUserMappings(eventMapping);
+  Future<List<EventUser>> getEventTeamUserMappings() {
+    Future<List<EventUser>> eventusers = apiSvc?.getEventTeamUserMappings();
     return eventusers;
   }
 
   Future<List<EventUser>> submitNewEventTeamUserMapping(
-      List<EventUser> listofeventsermap) {
-    Future<List<EventUser>> eventusers = apiSvc?.submitNewEventTeamUserMapping(listofeventsermap);
+      List<EventUser> listofeventsermap, var callback) {
+    Future<List<EventUser>> eventusers =
+        apiSvc?.submitNewEventTeamUserMapping(listofeventsermap, callback);
     return eventusers;
   }
 
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(
       List<EventUser> listofeventsermap) {
-    Future<List<EventUser>> eventusers = apiSvc?.submitDeleteEventTeamUserMapping (listofeventsermap);
+    Future<List<EventUser>> eventusers =
+        apiSvc?.submitDeleteEventTeamUserMapping(listofeventsermap);
     return eventusers;
   }
 }

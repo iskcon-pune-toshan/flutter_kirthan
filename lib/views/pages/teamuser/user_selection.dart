@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_create.dart';
 import 'package:flutter_kirthan/common/constants.dart';
@@ -8,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
-
 
 class UserSelection extends StatefulWidget {
   UserSelection({Key key}) : super(key: key);
@@ -22,16 +22,17 @@ class UserSelection extends StatefulWidget {
 
 class _UserSelectionState extends State<UserSelection> {
   final _formKey = GlobalKey<FormState>();
+
   //final IKirthanRestApi apiSvc = new RestAPIServices();
   Future<List<UserRequest>> users;
-  List<UserRequest> selectedUsers ;
+  List<UserRequest> selectedUsers;
   bool sort;
 
   @override
   void initState() {
     sort = false;
     selectedUsers = [];
-    users = userPageVM.getUserRequests("SA");
+    users = userPageVM.getUserRequests("All");
     super.initState();
   }
 
@@ -77,15 +78,15 @@ class _UserSelectionState extends State<UserSelection> {
                         setState(() {
                           sort = !sort;
                           if (ascending) {
-                            snapshot.data.sort((a,b) => a.firstName.compareTo(b.firstName));
+                            snapshot.data.sort(
+                                    (a, b) => a.fullName.compareTo(b.fullName));
                           } else {
-                            snapshot.data.sort((a,b) => b.firstName.compareTo(a.firstName));
+                            snapshot.data.sort(
+                                    (a, b) => b.fullName.compareTo(a.fullName));
                           }
-
                         });
                         //onSortColum(columnIndex, ascending);
-                      }
-                      ),
+                      }),
                   DataColumn(
                     label: Text("LastName"),
                     numeric: false,
@@ -97,26 +98,27 @@ class _UserSelectionState extends State<UserSelection> {
                 ],
                 rows: snapshot.data
                     .map(
-                      (user) => DataRow(
+                      (user) =>
+                      DataRow(
                           selected: selectedUsers.contains(user),
                           onSelectChanged: (b) {
                             onSelectedRow(b, user);
                           },
                           cells: [
                             DataCell(
-                              Text(user.firstName),
+                              Text(user.fullName),
                               onTap: () {
-                                print('Selected ${user.firstName}');
+                              //  print('Selected ${user.fullName}');
                               },
                             ),
                             DataCell(
-                              Text(user.lastName),
+                              Text(user.fullName),
                             ),
                             DataCell(
-                              Text(user.userName),
+                              Text(user.fullName),
                             ),
                           ]),
-                    )
+                )
                     .toList(),
               );
             } else {
@@ -151,8 +153,10 @@ class _UserSelectionState extends State<UserSelection> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: OutlineButton(
-                  child: Text('SELECTED ${selectedUsers.length}'),
+                child: RaisedButton(
+                  color: KirthanStyles.colorPallete30,
+                  //child: Text('SELECTED ${selectedUsers.length}'),
+                  child: Text("Next"),
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -162,7 +166,7 @@ class _UserSelectionState extends State<UserSelection> {
                   },
                 ),
               ),
-              Padding(
+              /*Padding(
                 padding: EdgeInsets.all(20.0),
                 child: OutlineButton(
                   child: Text('DELETE SELECTED'),
@@ -172,7 +176,7 @@ class _UserSelectionState extends State<UserSelection> {
                           //deleteSelected();
                         },
                 ),
-              ),
+              ),*/
             ],
           ),
         ],

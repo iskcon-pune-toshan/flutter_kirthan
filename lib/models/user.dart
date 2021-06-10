@@ -1,4 +1,4 @@
-import 'package:flutter_kirthan/exceptions/validation_exception.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class UserLogin {
   String username;
@@ -7,12 +7,14 @@ class UserLogin {
 
 //Typically called form service layer to create a new user
   UserLogin({this.username, this.password, this.usertype});
+
 //Typically called from the data_source layer after getting data from an external source.
   UserLogin.fromJson(Map<String, dynamic> map) {
     username = map['username'];
     password = map['password'];
     usertype = map['usertype'];
   }
+
 //Typically called from service or data_source layer just before persisting data.
   //Here is the appropriate place to check data validity before persistence.
   Map<String, dynamic> toJson() {
@@ -27,34 +29,49 @@ class UserLogin {
 
   static List<UserLogin> getUsers() {
     List<UserLogin> users = List<UserLogin>();
-    users.add(
-        UserLogin(username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
-    users.add(
-        UserLogin(username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
-    users.add(
-        UserLogin(username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
-    users
-        .add(UserLogin(username: "writetoanuka@gmail.com", password: "", usertype: "User"));
-    users.add(
-        UserLogin(username: "janicem995@gmail.com", password: "", usertype: "Local Admin"));
-    users.add(
-        UserLogin(username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
-    users.add(
-        UserLogin(username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
-    users.add(
-        UserLogin(username: "parthprandas.rns@gmail.com", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "manjunath_biji@yahoo.com", password: "", usertype: "Admin"));
+    users.add(UserLogin(
+        username: "srinivasvn84@gmail.com", password: "", usertype: "Admin"));
+    users.add(UserLogin(
+        username: "meetkashyap@outlook.com", password: "", usertype: "Team"));
+    users.add(UserLogin(
+        username: "writetoanuka@gmail.com", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "janicem995@gmail.com",
+        password: "",
+        usertype: "Local Admin"));
+    users.add(UserLogin(
+        username: "vardhan.biji@yahoo.co.uk", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "toshannimaidas@gmail.com", password: "", usertype: "User"));
+    users.add(UserLogin(
+        username: "parthprandas.rns@gmail.com",
+        password: "",
+        usertype: "User"));
+    users.add(UserLogin(
+        username: "afrah.17u278@viit.ac.in", password: "", usertype: "Admin"));
+
+    users.add(UserLogin(
+        username: "nisha.khandelwal1225@gmail.com",
+        password: "",
+        usertype: "Admin"));
     return users;
   }
 }
 
-class UserRequest {
+class UserRequest extends Model {
   final int id;
-  String userId;
-  String userName;
+
+  String uid;
+  int roleId;
+  int prevRoleId;
+  String fullName;
   String password;
-  String userType;
-  String firstName;
-  String lastName;
+
+  //String userType;
+  // String firstName;
+  // String lastName;
   String email;
   int phoneNumber;
   String addLineOne;
@@ -65,25 +82,28 @@ class UserRequest {
   int pinCode;
   String state;
   String country;
-  String govtIdType;
+  int govtIdType;
   String govtId;
-  bool isProcessed;
+  //bool isProcessed;
   String createdBy;
-  String createTime;
+  String createdTime;
   String updatedBy;
-  String updateTime;
+  String updatedTime;
   String approvalStatus;
-  String approvalComments;
+  String avatarUrl;
+  int invitedBy;
+  String profileUrl;
 
 //Typically called form service layer to create a new user
   UserRequest(
       {this.id,
-      this.userId,
-      this.userName,
+      this.uid,
+      this.fullName,
       this.password,
-      this.userType,
-      this.firstName,
-      this.lastName,
+      this.prevRoleId,
+      this.roleId,
+      // this.firstName,
+      // this.lastName,
       this.email,
       this.phoneNumber,
       this.addLineOne,
@@ -96,22 +116,27 @@ class UserRequest {
       this.country,
       this.govtIdType,
       this.govtId,
-      this.isProcessed,
+      //this.isProcessed,
       this.createdBy,
+      this.createdTime,
       this.updatedBy,
-      this.updateTime,
+      this.updatedTime,
       this.approvalStatus,
-      this.approvalComments});
+      this.avatarUrl,
+      this.invitedBy,
+      this.profileUrl});
+
 //Typically called from the data_source layer after getting data from an external source.
   factory UserRequest.fromJson(Map<String, dynamic> data) {
     return UserRequest(
       id: data['id'],
-      userId: data['userId'],
-      userName: data['userName'],
+      uid: data['uid'],
+      fullName: data['fullName'],
       password: data['password'],
-      userType: data['userType'],
-      firstName: data['firstName'],
-      lastName: data['lastName'],
+      prevRoleId: data['prevRoleId'],
+      roleId: data['roleId'],
+      // firstName: data['firstName'],
+      // lastName: data['lastName'],
       email: data['email'],
       phoneNumber: data['phoneNumber'],
       addLineOne: data['addLineOne'],
@@ -124,23 +149,29 @@ class UserRequest {
       country: data['country'],
       govtIdType: data['govtIdType'],
       govtId: data['govtId'],
-      isProcessed: data['isProcessed'],
+      //isProcessed: data['isProcessed'],
       createdBy: data['createdBy'],
+      createdTime: data['createdTime'],
       updatedBy: data['updatedBy'],
-      updateTime: data['updateTime'],
+      updatedTime: data['updatedTime'],
       approvalStatus: data['approvalStatus'],
-      approvalComments: data['approvalComments'],
+      // approvalComments: data['approvalComments'],
+      avatarUrl: data['avatarUrl'],
+      invitedBy: data['invitedBy'],
+      profileUrl: data['profileUrl'],
     );
   }
+
   factory UserRequest.fromMap(Map<String, dynamic> map) {
     return UserRequest(
       id: map['id'],
-      userId: map['userId'],
-      userName: map['userName'],
+      uid: map['uid'],
+      fullName: map['fullName'],
       password: map['password'],
-      userType: map['userType'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
+      prevRoleId: map['prevRoleId'],
+      roleId: map['roleId'],
+      // firstName: map['firstName'],
+      // lastName: map['lastName'],
       email: map['email'],
       phoneNumber: map['phoneNumber'],
       addLineOne: map['addLineOne'],
@@ -153,12 +184,16 @@ class UserRequest {
       country: map['country'],
       govtIdType: map['govtIdType'],
       govtId: map['govtId'],
-      isProcessed: map['isProcessed'],
+      //isProcessed: map['isProcessed'],
       createdBy: map['createdBy'],
+      createdTime: map['createdTime'],
       updatedBy: map['updatedBy'],
-      updateTime: map['updateTime'],
+      updatedTime: map['updatedTime'],
       approvalStatus: map['approvalStatus'],
-      approvalComments: map['approvalComments'],
+      //approvalComments: map['approvalComments'],
+      avatarUrl: map['avatarUrl'],
+      invitedBy: map['invitedBy'],
+      profileUrl: map['profileUrl'],
     );
   }
 
@@ -167,12 +202,13 @@ class UserRequest {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['userId'] = this.userId;
-    data['userName'] = this.userName;
+    data['uid'] = this.uid;
+    data['fullName'] = this.fullName;
     data['password'] = this.password;
-    data['userType'] = this.userType;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
+    data['prevRoleId'] = this.prevRoleId;
+    data['roleId'] = this.roleId;
+    // data['firstName'] = this.firstName;
+    // data['lastName'] = this.lastName;
     data['email'] = this.email;
     data['phoneNumber'] = this.phoneNumber;
     data['addLineOne'] = this.addLineOne;
@@ -185,26 +221,29 @@ class UserRequest {
     data['country'] = this.country;
     data['govtIdType'] = this.govtIdType;
     data['govtId'] = this.govtId;
-    data['isProcessed'] = this.isProcessed;
+    //data['isProcessed'] = this.isProcessed;
     data['createdBy'] = this.createdBy;
-    data['createTime'] = this.createTime;
+    data['createdTime'] = this.createdTime;
     data['updatedBy'] = this.updatedBy;
-    data['updateTime'] = this.updateTime;
+    data['updatedTime'] = this.updatedTime;
     data['approvalStatus'] = this.approvalStatus;
-    data['approvalComments'] = this.approvalComments;
-
+    // data['approvalComments'] = this.approvalComments;
+    data['avatarUrl'] = this.avatarUrl;
+    data['invitedBy'] = this.invitedBy;
+    data['profileUrl'] = this.profileUrl;
     return data;
   }
 
   Map toStrJson() {
     return {
       "id": this.id,
-      "userId": this.userId,
-      "userName": this.userName,
-      "userType": this.userType,
+      "uid": this.uid,
+      "fullName": this.fullName,
+      "prevRoleId": this.prevRoleId,
+      "roleId": this.roleId,
       "password": this.password,
-      "firstName": this.firstName,
-      "lastName": this.lastName,
+      // "firstName": this.firstName,
+      // "lastName": this.lastName,
       "email": this.email,
       "phoneNumber": this.phoneNumber,
       "addLineOne": this.addLineOne,
@@ -217,13 +256,16 @@ class UserRequest {
       "country": this.country,
       "govtIdType": this.govtIdType,
       "govtId": this.govtId,
-      "isProcessed": this.isProcessed,
+      //"isProcessed": this.isProcessed,
       "createdBy": this.createdBy,
       "updatedBy": this.updatedBy,
-      "updateTime": this.updateTime,
-      "createTime": this.createTime,
+      "updatedTime": this.updatedTime,
+      "createdTime": this.createdTime,
       "approvalStatus": this.approvalStatus,
-      "approvalComments": this.approvalComments
+      // "approvalComments": this.approvalComments,
+      "avatarUrl": this.avatarUrl,
+      "invitedBy": this.invitedBy,
+      "profileUrl": this.profileUrl,
     };
   }
 }
@@ -268,6 +310,7 @@ class UserAccess {
     "Event-User",
     "Notification Hub"
   ];
+
   //List<String> roles = [];
   //List<Map<String,List<String>>> roles;
   static Map<String, List<String>> _userRole = {
@@ -547,4 +590,9 @@ class UserEntitlements {
   set screenAccess(List<String> value) {
     _screenAccess = value;
   }
+}
+
+class User {
+  final String uid;
+  User({this.uid});
 }

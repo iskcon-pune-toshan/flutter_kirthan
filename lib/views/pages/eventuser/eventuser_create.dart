@@ -11,11 +11,10 @@ import 'package:flutter_kirthan/common/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final EventUserPageViewModel eventUserPageVM =
-EventUserPageViewModel(apiSvc: EventUserAPIService());
+    EventUserPageViewModel(apiSvc: EventUserAPIService());
 
 final EventPageViewModel eventPageVM =
-EventPageViewModel(apiSvc: EventAPIService());
-
+    EventPageViewModel(apiSvc: EventAPIService());
 
 class EventUserCreate extends StatefulWidget {
   EventUserCreate({this.selectedTeamUsers}) : super();
@@ -79,7 +78,7 @@ class _EventUserCreateState extends State<EventUserCreate> {
                     child: DropdownButtonFormField<EventRequest>(
                       value: _selectedEvent,
                       icon: const Icon(Icons.supervisor_account),
-                      hint: Text('Select Team'),
+                      hint: Text('Select Event'),
                       items: snapshot.data
                           .map((event) => DropdownMenuItem<EventRequest>(
                                 value: event,
@@ -107,13 +106,17 @@ class _EventUserCreateState extends State<EventUserCreate> {
         });
   }
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   Widget rederDataTable() {
     return DataTable(
       sortAscending: sort,
       sortColumnIndex: 0,
       columns: [
         DataColumn(
-            label: Text("Team Name",overflow: TextOverflow.ellipsis,),
+            label: Text(
+              "Team Name",
+              overflow: TextOverflow.ellipsis,
+            ),
             //numeric: false,
             onSort: (columnIndex, ascending) {
               setState(() {
@@ -129,7 +132,10 @@ class _EventUserCreateState extends State<EventUserCreate> {
               //onSortColum(columnIndex, ascending);
             }),
         DataColumn(
-          label: Text("User Name",overflow: TextOverflow.ellipsis,),
+          label: Text(
+            "User Name",
+            overflow: TextOverflow.ellipsis,
+          ),
           numeric: false,
         ),
         DataColumn(
@@ -146,13 +152,19 @@ class _EventUserCreateState extends State<EventUserCreate> {
                 },
                 cells: [
                   DataCell(
-                    Text(teamuser.teamName.toString(), overflow: TextOverflow.ellipsis,),
+                    Text(
+                      teamuser.teamName.toString(),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     onTap: () {
                       print('Selected ${teamuser.teamId.toString()}');
                     },
                   ),
                   DataCell(
-                    Text(teamuser.userName.toString(),overflow: TextOverflow.ellipsis,),
+                    Text(
+                      teamuser.userName.toString(),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   DataCell(
                     Text(teamuser.id.toString()),
@@ -166,6 +178,7 @@ class _EventUserCreateState extends State<EventUserCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -182,36 +195,45 @@ class _EventUserCreateState extends State<EventUserCreate> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(20.0),
-                  child: OutlineButton(
-                    child: Text('SELECTED ${selectedTeamUsers.length}'),
+                  child: RaisedButton(
+                    color: Colors.green,
+                    //child: Text('SELECTED ${selectedTeamUsers.length}'),
+                    child: Text("Submit"),
                     onPressed: () {
                       List<EventUser> listofEventUsers = new List<EventUser>();
                       for (var teamuser in selectedTeamUsers) {
                         EventUser eventUser = new EventUser();
                         eventUser.userId = teamuser.userId;
-                        eventUser.teamId = teamuser.teamId;
                         eventUser.eventId = _selectedEvent.id;
                         eventUser.createdBy = "SYSTEM";
                         String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                             .format(DateTime.now());
-                        eventUser.createTime = dt;
+                        eventUser.createdTime = dt;
                         eventUser.updatedBy = "SYSTEM";
-                        eventUser.updateTime = dt;
+                        eventUser.updatedTime = dt;
                         listofEventUsers.add(eventUser);
+                        SnackBar mysnackbar = SnackBar(
+                          content: Text("Event-User registered $successful "),
+                          duration: new Duration(seconds: 4),
+                          backgroundColor: Colors.green,
+                        );
+                        // Scaffold.of(context).showSnackBar(mysnackbar);
+                        _scaffoldKey.currentState.showSnackBar(mysnackbar);
                       }
                       //Map<String,dynamic> teamusermap = teamUser.toJson();
                       print(listofEventUsers);
-                      eventUserPageVM.submitNewEventTeamUserMapping(listofEventUsers);
+                      eventUserPageVM.submitNewEventTeamUserMapping(
+                          listofEventUsers, null);
                     },
                   ),
                 ),
-                Padding(
+                /*Padding(
                   padding: EdgeInsets.all(20.0),
                   child: OutlineButton(
                     child: Text('DELETE SELECTED'),
                     onPressed: null,
                   ),
-                ),
+                ),*/
               ],
             ),
           ]),

@@ -26,14 +26,14 @@ class TeamUserPageViewModel extends Model {
   Future<List<TeamUser>> submitNewTeamUserMapping(
       List<TeamUser> listofteamusermap) {
     Future<List<TeamUser>> teamusers =
-        apiSvc?.submitNewTeamUserMapping(listofteamusermap);
+    apiSvc?.submitNewTeamUserMapping(listofteamusermap);
     return teamusers;
   }
 
   Future<List<TeamUser>> submitDeleteTeamUserMapping(
       List<TeamUser> listofteamusermap) {
     Future<List<TeamUser>> teamusers =
-        apiSvc?.submitDeleteTeamUserMapping(listofteamusermap);
+    apiSvc?.submitDeleteTeamUserMapping(listofteamusermap);
     return teamusers;
   }
 }

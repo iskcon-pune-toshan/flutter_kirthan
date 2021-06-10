@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/team.dart';
-import 'package:flutter_kirthan/junk/main_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/team/team_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:flutter_kirthan/views/pages/teamuser/teamuser_view.dart';
 
@@ -33,6 +31,9 @@ class TeamsPanel extends StatelessWidget {
                     //mainAxisAlignment: MainAxisAlignment.center,
                     //mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
+                      SizedBox(
+                        height: 3,
+                      ),
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -64,20 +65,11 @@ class TeamsPanel extends StatelessWidget {
                                       builder: (context) => TeamUserView()));
                             },
                           ),
-                          /*                        Expanded(
-                            child: RaisedButton(
-                              child: const Text("Create a Team"),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            TeamWrite()));
-                              },
-                          ),
-                          ),
-*/
+
                         ],
+                      ),
+                      SizedBox(
+                        height: 3,
                       ),
                       Expanded(
                         child: Scrollbar(
@@ -98,7 +90,7 @@ class TeamsPanel extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return NoInternetConnection(
                     action: () async {
-                      await model.setTeamRequests("All");
+                      await model.setTeamRequests("Approved");
                     },
                   );
                 }

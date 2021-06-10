@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/services/team_user_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/eventuser/eventuser_create.dart';
 import 'package:flutter_kirthan/common/constants.dart';
@@ -238,21 +239,25 @@ class _TeamUserViewState extends State<TeamUserView> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: OutlineButton(
+                child: RaisedButton(
+                  color: KirthanStyles.colorPallete30,
                   child: Text('SELECTED ${selectedTeamUsers.length}'),
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                EventUserCreate(selectedTeamUsers: selectedTeamUsers)));
+                                EventUserCreate(selectedTeamUsers : selectedTeamUsers)));
                   },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: OutlineButton(
-                  child: Text('DELETE SELECTED ${selectedTeamUsers.length}'),
+                child: RaisedButton(
+                  color: Colors.redAccent,
+                  //padding: EdgeInsets.all(20.0),
+                  //child: Text('DELETE SELECTED ${selectedTeamUsers.length}'),
+                  child: Text("Delete"),
                   onPressed: () {
                     print(selectedTeamUsers);
                     teamUserPageVM.submitDeleteTeamUserMapping(selectedTeamUsers);
