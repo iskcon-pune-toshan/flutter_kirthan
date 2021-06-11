@@ -902,11 +902,11 @@ class NotificationViewState extends State<NotificationView> {
                 },
                 itemCount: snapshot.data.length);
           } else if (snapshot.hasError) {
-            // print(snapshot);
+            //print(snapshot);
             //print(snapshot.error.toString() + " Error ");
             return Center(
                 child: Text(
-                    'Error loading notifications' + snapshot.error.toString()));
+                    'Error loading notifications'));
           } else {
             return Center(child: CircularProgressIndicator());
           }
