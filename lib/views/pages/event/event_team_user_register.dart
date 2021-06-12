@@ -68,6 +68,12 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                 .where((element) => element.eventId == widget.eventrequest.id)
                 .toList();
             print(eventUserList);
+            final eventDate = widget.eventrequest?.eventDate;
+            DateTime EventDate = DateTime.parse(eventDate);
+            DateTime now = DateTime.now();
+            var dateTime = DateFormat('yyyy-MM-dd').format(now);
+            DateTime dateTimeNow = DateTime.parse(dateTime);
+            int daysRemaining = EventDate.difference(dateTimeNow).inDays;
             return eventUserList.isNotEmpty
                 ? FlatButton(
                     //color: const Color(0xFF1BC0C5),
@@ -83,15 +89,25 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
 
                       children: [
                     Consumer<ThemeNotifier>(
-                    builder: (context, notifier, child) =>Text(
-                          "RSVP",
-                          style: TextStyle(fontSize: notifier.custFontSize),
-                        ),
+                    builder: (context, notifier, child) =>
+                    daysRemaining<0
+                        ?Text(
+                      "RSVP",
+                      style: TextStyle(color: Colors.grey,fontSize: notifier.custFontSize),
+                    )
+                        :Text(
+                      "RSVP",
+                      style: TextStyle(fontSize: notifier.custFontSize),
+                    ),
                     ),
                         Icon(Icons.check),
                       ],
                     ),
                     onPressed: () async {
+                      if(daysRemaining<0){
+
+                      }
+                      else
                       setState(() {
                         List<EventUser> eventUserTempList =
                             new List<EventUser>();
@@ -121,53 +137,65 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             padding: EdgeInsets.symmetric(horizontal: 0),
-                            child: Text(
+                            child:
+                                daysRemaining<0
+                            ?Text(
                               "RSVP",
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                            ),
+                              style: TextStyle(color: Colors.grey,fontSize: notifier.custFontSize),
+                            )
+                                :Text(
+                                  "RSVP",
+                                  style: TextStyle(fontSize: notifier.custFontSize),
+                                ),
                             onPressed: () async {
-                              final FirebaseAuth auth = FirebaseAuth.instance;
-                              final FirebaseUser user =
-                                  await auth.currentUser();
-                              final String email = user.email;
-                              userTempList = userList
-                                  .where((element) => element.email == email)
-                                  .toList();
-                              for (var user in userTempList) {
-                                EventUser eventUser = new EventUser();
-                                eventUser.createdBy = user.email;
-                                eventUser.userId = user.id;
-                                eventUser.userName = user.email;
-                                eventUser.eventId = widget.eventrequest?.id;
-                                String dt =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                        .format(DateTime.now());
-                                eventUser.createdTime = dt;
-                                eventUser.updatedBy = null;
-                                eventUser.updatedTime = null;
-                                widget.eventrequest?.updatedTime;
+                              if(daysRemaining<0){
 
-                                eventUserList.add(eventUser);
                               }
+                              else {
+                                final FirebaseAuth auth = FirebaseAuth.instance;
+                                final FirebaseUser user =
+                                await auth.currentUser();
+                                final String email = user.email;
+                                userTempList = userList
+                                    .where((element) => element.email == email)
+                                    .toList();
+                                for (var user in userTempList) {
+                                  EventUser eventUser = new EventUser();
+                                  eventUser.createdBy = user.email;
+                                  eventUser.userId = user.id;
+                                  eventUser.userName = user.email;
+                                  eventUser.eventId = widget.eventrequest?.id;
+                                  String dt =
+                                  DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                      .format(DateTime.now());
+                                  eventUser.createdTime = dt;
+                                  eventUser.updatedBy = null;
+                                  eventUser.updatedTime = null;
+                                  widget.eventrequest?.updatedTime;
 
-                              eventUserPageVM.submitNewEventTeamUserMapping(
-                                  eventUserList, () {
-                                setState(() {
-                                  // String eventrequestStr = jsonEncode(
-                                  //     widget.eventrequest.toStrJson());
-                                  // eventPageVM.submitRegisterEventRequest(
-                                  //     eventrequestStr);
-                                  null;
+                                  eventUserList.add(eventUser);
+                                }
+
+                                eventUserPageVM.submitNewEventTeamUserMapping(
+                                    eventUserList, () {
+                                  setState(() {
+                                    // String eventrequestStr = jsonEncode(
+                                    //     widget.eventrequest.toStrJson());
+                                    // eventPageVM.submitRegisterEventRequest(
+                                    //     eventrequestStr);
+                                    null;
+                                  });
                                 });
-                              });
 
-                              String title = widget.eventrequest.eventTitle;
-                              SnackBar mysnackbar = SnackBar(
-                                content:Text("Registered for $title"),
-                                duration: new Duration(seconds: 4),
-                                backgroundColor: notifier.darkTheme?Colors.white:Colors.green,
-                              );
-                              Scaffold.of(context).showSnackBar(mysnackbar);
+                                String title = widget.eventrequest.eventTitle;
+                                SnackBar mysnackbar = SnackBar(
+                                  content: Text("Registered for $title"),
+                                  duration: new Duration(seconds: 4),
+                                  backgroundColor: notifier.darkTheme ? Colors
+                                      .white : Colors.green,
+                                );
+                                Scaffold.of(context).showSnackBar(mysnackbar);
+                              }
                             }));
                       }
                       return Container();

@@ -93,9 +93,8 @@ class CalendarClass extends State<CalendarPage> {
             DateTime.parse(eventName.eventDate).year,
             DateTime.parse(eventName.eventDate).month,
             DateTime.parse(eventName.eventDate)
-                .add(new Duration(days: 1))
-                .day)
-            .add(Duration(hours: int.parse(duration))),
+                .add(new Duration(days: 1)).day,
+            two.hour,two.minute),
         background: Colors.blue,
       );
 
