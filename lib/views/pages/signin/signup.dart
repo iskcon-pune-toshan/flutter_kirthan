@@ -1,7 +1,9 @@
 import 'dart:io';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
@@ -9,15 +11,12 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
-import 'package:flutter_kirthan/views/pages/teamuser/user_selection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flushbar/flushbar_helper.dart';
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class SignUp extends StatefulWidget {
   SignUp({Key key}) : super(key: key);
@@ -27,6 +26,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
+  bool _isHidden = true;
   File _image;
   String _uploadedFileURL;
   FocusNode myFocusNode = new FocusNode();
@@ -35,7 +35,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailcontroller = new TextEditingController();
   String email;
   final TextEditingController _displaynamecontroller =
-      new TextEditingController();
+  new TextEditingController();
   final TextEditingController _addresscontroller = new TextEditingController();
   String displayName;
   final TextEditingController _confirmpassword = new TextEditingController();
@@ -49,7 +49,11 @@ class _SignUpState extends State<SignUp> {
       });
     });
   }
-
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
+  }
   Future uploadFile() async {
     StorageReference storageReference = await FirebaseStorage.instance
         .ref()
@@ -100,7 +104,7 @@ class _SignUpState extends State<SignUp> {
     //print(pass);
     if (_formKey.currentState.validate()) {
       String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
       // user.firstName = _displaynamecontroller.text;
       // user.lastName = _displaynamecontroller.text;
       user.email = _emailcontroller.text;
@@ -185,15 +189,16 @@ class _SignUpState extends State<SignUp> {
                               radius: MediaQuery.of(context).size.width / 5.5,
                               backgroundImage: _image != null
                                   ? FileImage(
-                                      _image,
-                                    )
+                                _image,
+                              )
                                   : AssetImage(
-                                      "assets/images/default_profile_picture.png")),
+                                  "assets/images/default_profile_picture.png")),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15, top: 15),
                         child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           focusNode: myFocusNode,
                           decoration: buildInputDecoration(
                             Icons.person,
@@ -202,7 +207,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           controller: _displaynamecontroller,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value.trimLeft().isEmpty) {
                               // ignore: missing_return
                               return "Please enter some text";
                             }
@@ -214,11 +219,12 @@ class _SignUpState extends State<SignUp> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: buildInputDecoration(
                               Icons.email, "Email", "Email"),
                           controller: _emailcontroller,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value.trimLeft().isEmpty) {
                               return 'Please enter email';
                             } else {
                               return EmailValidator.validate(value)
@@ -232,39 +238,125 @@ class _SignUpState extends State<SignUp> {
                       Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: TextFormField(
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
                             decoration: buildInputDecoration(
                                 Icons.location_on, "Address", "Address"),
                             controller: _addresscontroller,
                             validator: (value) {
                               // ignore: missing_return
-                              if (value.isEmpty) return 'Please enter a value';
+                              if (value.trimLeft().isEmpty)
+                                return 'Please enter a value';
                               return null;
                             },
                           )),
                       Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: TextFormField(
-                            decoration: buildInputDecoration(Icons.lock,
-                                "Must contain 8-30 characters", "Password"),
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.5,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.zero,
+                                borderSide: BorderSide(
+                                  color: KirthanStyles.colorPallete30,
+                                  width: 1.5,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                borderSide: BorderSide(
+                                  color: KirthanStyles.colorPallete30,
+                                  width: 1.5,
+                                ),
+                              ),
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Color(0xFF61bcbc),
+                                ),
+                                hintText: 'Must contain 8-30 characters',
+                                hintStyle: kHintTextStyle,
+                                labelText: 'Password',
+                              suffixIcon: InkWell(
+                                onTap: _togglePasswordView,
+                                child: Icon(
+                                  _isHidden
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Color(0xFF61bcbc),
+                                ),
+                              ),
+                                // Icons.lock,
+                                // "Must contain 8-30 characters", "Password"
+                            ),
+
                             controller: _passwordcontroller,
                             validator: (value) {
                               // ignore: missing_return
-                              if (value.isEmpty) return 'Please enter a value';
-                              if (value.length < 8)
+                              if (value.trim().isEmpty)
+                                return 'Please enter a value';
+                              if (value.trim().length < 8)
                                 return 'Must contain 8-30 characters';
                               return null;
                             },
-                            obscureText: true,
+                            obscureText: _isHidden,
+
                           )),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: TextFormField(
-                          decoration: buildInputDecoration(Icons.lock,
-                              "Re-Type Password", "Re-Type Password"),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                                width: 1.5,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.zero,
+                              borderSide: BorderSide(
+                                color: KirthanStyles.colorPallete30,
+                                width: 1.5,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              borderSide: BorderSide(
+                                color: KirthanStyles.colorPallete30,
+                                width: 1.5,
+                              ),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Color(0xFF61bcbc),
+                            ),
+                            hintText: 'Confirm Password',
+                            hintStyle: kHintTextStyle,
+                            labelText: 'Confirm Password',
+                            suffixIcon: InkWell(
+                              onTap: _togglePasswordView,
+                              child: Icon(
+                                _isHidden
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Color(0xFF61bcbc),
+                              ),
+                            ),
+                          ),
                           controller: _confirmpassword,
                           validator: (val) {
-                            if (val.isEmpty) return 'Please enter a value';
-                            if (val != _passwordcontroller.text)
+                            if (val.trim().isEmpty)
+                              return 'Please enter a value';
+                            if (val.trim() != _passwordcontroller.text.trim())
                               return "Not Match";
                             return null;
                           },
@@ -297,7 +389,7 @@ class _SignUpState extends State<SignUp> {
                                   _formKey.currentState.save();
                                   signIn
                                       .signUpWithEmail(_emailcontroller.text,
-                                          _passwordcontroller.text)
+                                      _passwordcontroller.text)
                                       .then(
                                           (FirebaseUser user) => populateData())
                                       .catchError((e) {
@@ -310,10 +402,10 @@ class _SignUpState extends State<SignUp> {
                                   }).whenComplete(() {
                                     errorMessage == 'null' ? addUser() : null;
                                   }).whenComplete(() =>
-                                          errorMessage == 'null' &&
-                                                  _image != null
-                                              ? uploadFile()
-                                              : null);
+                                  errorMessage == 'null' &&
+                                      _image != null
+                                      ? uploadFile()
+                                      : null);
                                 }
                               },
                               shape: RoundedRectangleBorder(
@@ -377,10 +469,10 @@ void showFlushBar(BuildContext context, var error) {
   Flushbar(
     messageText: Text(error, style: TextStyle(color: Colors.white)),
     backgroundColor:
-        error == 'Email already in use' ? Colors.red : Colors.green,
+    error == 'Email already in use' ? Colors.red : Colors.green,
     duration: Duration(seconds: 4),
   )..show(context).whenComplete(() => error == 'Email already in use'
       ? null
       : Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginApp())));
+      context, MaterialPageRoute(builder: (context) => LoginApp())));
 }

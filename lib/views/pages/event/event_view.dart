@@ -174,7 +174,8 @@ class _EventViewState extends State<EventView> with BaseAPIService {
               color: KirthanStyles.colorPallete60),
           labelBackgroundColor: KirthanStyles.colorPallete30,
         )
-            : SpeedDialChild(
+            :
+        SpeedDialChild(
           child: Icon(Icons.event, color: Colors.white),
           backgroundColor: Colors.grey,
           onTap: () {
@@ -287,7 +288,9 @@ class _EventViewState extends State<EventView> with BaseAPIService {
               onRefresh: refreshList,
             ),
             floatingActionButton:
-            buildSpeedDial() /*FloatingActionButton(
+            role_id==2 || role_id ==1
+            ?buildSpeedDial()
+          :FloatingActionButton(
             heroTag: "event",
             child: Icon(Icons.add),
             backgroundColor: KirthanStyles.colorPallete10,
@@ -296,7 +299,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => EventWrite()));
             },
-          ),*/
+          ),
         ),
       ),
     );

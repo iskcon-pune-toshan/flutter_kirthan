@@ -24,7 +24,6 @@ class EventRequestsListItem extends StatelessWidget {
   final EventPageViewModel eventPageVM;
   bool _isFavorited = false;
   EventRequestsListItem({@required this.eventrequest, this.eventPageVM});
-
   List<Choice> popupList = [
     Choice(id: 1, description: "Process"),
     Choice(id: 2, description: "Edit"),
@@ -79,16 +78,12 @@ class EventRequestsListItem extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(left: 10),
                       child: Consumer<ThemeNotifier>(
-                        builder: (context, notifier, child) => Container(width: 180,
-                          child: Center(
-                            child: Text(
-                              eventrequest?.eventTitle,
-                              style: TextStyle(
-                                //color: KirthanStyles.titleColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: notifier.custFontSize,
-                              ),
-                            ),
+                        builder: (context, notifier, child) => Text(
+                          eventrequest?.eventTitle,
+                          style: TextStyle(
+                            //color: KirthanStyles.titleColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: notifier.custFontSize,
                           ),
                         ),
                       ),

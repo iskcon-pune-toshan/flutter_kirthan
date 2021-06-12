@@ -37,6 +37,7 @@ class LoginApp extends StatefulWidget {
 }
 
 class _LoginAppState extends State<LoginApp> {
+  bool _isHidden = true;
   final _formKey = GlobalKey<FormState>();
   final _passwordcontroller = new TextEditingController();
   final TextEditingController username = new TextEditingController();
@@ -142,7 +143,7 @@ class _LoginAppState extends State<LoginApp> {
     // user.lastName = userName;
     user.email = email;
     user.password = pass;
-    user.phoneNumber = 12345678;
+    user.phoneNumber = 1234567890;
     user.fullName = userName;
     user.addLineOne = "xyz";
     user.addLineTwo = "abc";
@@ -169,6 +170,11 @@ class _LoginAppState extends State<LoginApp> {
 
   userCheck() async {}
 
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
+  }
   Widget _buildEmailTF() {
     return Form(
       key: _formKey,
@@ -221,7 +227,7 @@ class _LoginAppState extends State<LoginApp> {
                 decoration: kBoxDecorationStyle,
                 height: 60.0,
                 child: TextFormField(
-                  obscureText: true,
+                  obscureText:  _isHidden,
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'OpenSans',
@@ -235,10 +241,22 @@ class _LoginAppState extends State<LoginApp> {
                     ),
                     hintText: 'Password',
                     hintStyle: kHintTextStyle,
+                    suffixIcon: InkWell(
+                      onTap: _togglePasswordView,
+                      child: Icon(
+                        _isHidden
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Color(0xFF61bcbc),
+                      ),
+                    ),
+                    /*suffix: InkWell(
+                        //onTap: _togglePasswordView,
+                        child: Icon(Icons.visibility)),*/
                   ),
                   controller: _passwordcontroller,
                   validator: (input) => input.length <
-                          8 // need to hold a help icon if the password rule becomes too complicated
+                      8 // need to hold a help icon if the password rule becomes too complicated
                       ? "Not a Valid Password"
                       : null,
                   onSaved: (input) => _password = input,
@@ -251,11 +269,15 @@ class _LoginAppState extends State<LoginApp> {
     );
   }
 
+
   Widget _buildForgotPasswordBtn() {
     return Container(
       alignment: Alignment.centerRight,
       child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
+        onPressed: () => /* Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => ResetScreen()),*/
+        print("forget password is pressed"),
+
         padding: EdgeInsets.only(right: 0.0),
         child: Text(
           'Forgot Password?',
@@ -294,18 +316,18 @@ class _LoginAppState extends State<LoginApp> {
                 // errMessage='elloMate';
               }
             }).whenComplete(() => errMessage == 'ellomate'
-                    ? authenticateService.autheticate().whenComplete(() {
-                        //  print("MYERROR" + errMessage);
-                        if (errMessage == 'ellomate') {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EnterCode()));
-                        } else {
-                          return null;
-                        }
-                      })
-                    : null);
+                ? authenticateService.autheticate().whenComplete(() {
+              //  print("MYERROR" + errMessage);
+              if (errMessage == 'ellomate') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EnterCode()));
+              } else {
+                return null;
+              }
+            })
+                : null);
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -378,29 +400,29 @@ class _LoginAppState extends State<LoginApp> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildSocialBtn(
-            () => signInService
+                () => signInService
                 .facebookSignIn(context)
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) => print(''))
                 .whenComplete(() => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EnterCode()))),
+                MaterialPageRoute(builder: (context) => EnterCode()))),
             AssetImage(
               'assets/images/facebook.jpg',
             ),
           ),
           _buildSocialBtn(
-            () => signInService
+                () => signInService
                 .googSignIn(context)
-                //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+            //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) {
-                  print(e);
-                })
+              print(e);
+            })
                 .whenComplete(() => addUser())
                 .whenComplete(() => authenticateService
-                    .autheticate()
-                    .whenComplete(() => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EnterCode())))),
+                .autheticate()
+                .whenComplete(() => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => EnterCode())))),
             AssetImage(
               'assets/images/google.jpg',
             ),
@@ -477,7 +499,7 @@ class _LoginAppState extends State<LoginApp> {
                       ),
 
                       Text(
-                        'Welcome to Kirtan App',
+                        'Welcome to ISKCON',
                         style: TextStyle(
                           color: Color(0xFF61bcbc),
                           fontFamily: 'OpenSans',
@@ -561,4 +583,5 @@ void showFlushBar(BuildContext context, String errMessage) {
       color: Colors.cyanAccent,
     ),
   )..show(context);
+
 }

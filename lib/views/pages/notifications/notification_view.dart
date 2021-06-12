@@ -815,23 +815,24 @@ class NotificationViewState extends State<NotificationView> {
                             for (var user in localAdminList) {
                               localAdmin = user;
                             }
-                            if (snapshot.data[itemCount].message
-                                .contains("Request to create an event") &&
-                                snapshot.data[itemCount].targetType
-                                    .contains("event")) {
-                              //   print("Printing dara");
-                              // print(snapshot.data[itemCount]);
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AdminEventDetails(
-                                          UserName: userName,
-                                          eventRequest: eventRequest,
-                                          data: snapshot.data[itemCount],
-                                        )));
-                              });
-                            } else if (snapshot.data[itemCount].message
+                            // if (snapshot.data[itemCount].message
+                            //     .contains("Request to create an event") &&
+                            //     snapshot.data[itemCount].targetType
+                            //         .contains("event")) {
+                            //   //   print("Printing dara");
+                            //   // print(snapshot.data[itemCount]);
+                            //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) => AdminEventDetails(
+                            //               UserName: userName,
+                            //               eventRequest: eventRequest,
+                            //               data: snapshot.data[itemCount],
+                            //             )));
+                            //   });
+                            // } else
+                              if (snapshot.data[itemCount].message
                                 .contains("team") ||
                                 snapshot.data[itemCount].message
                                     .contains("Invited user")) {
@@ -845,15 +846,16 @@ class NotificationViewState extends State<NotificationView> {
                                           teamTitle: team.teamTitle,
                                         )));
                               });
-                            } else {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AdminView()));
-                              });
                             }
+                            // else {
+                            //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                            //     Navigator.pop(context);
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) => AdminView()));
+                            //   });
+                            // }
                           },
                           closeOnTap: false,
                         ),

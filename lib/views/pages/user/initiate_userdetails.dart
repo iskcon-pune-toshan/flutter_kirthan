@@ -103,18 +103,12 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
               builder: (context, snapshot) {
                 if (snapshot.data != null) {
                   userList = snapshot.data;
-
-                  // print("lllll");
-                  // print(user.email);
                   String _email = user.email;
-                  // print(_email);
                   for (var _users in userList) {
-                    // print("GGGG");
-                    // print(_users.email);
                     if (_users.email == _email) {
                       superId = _users.id;
                     } else {
-                      //  print("BYEBYE");
+                      null;
                     }
                   }
                   for (var uname in userList) {
@@ -256,50 +250,50 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                       ],
                                     )),
                                 SizedBox(
-                                  height: 20,
+                                  height: 60,
                                 ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: TextField(
-                                    cursorColor: Colors.white,
-                                    decoration: InputDecoration(
-                                      enabledBorder: const OutlineInputBorder(
-                                        // width: 0.0 produces a thin "hairline" border
-                                        borderSide: const BorderSide(
-                                            color: Colors.white, width: 0.0),
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                        // width: 0.0 produces a thin "hairline" border
-                                        borderSide: const BorderSide(
-                                            color: Colors.white, width: 1.0),
-                                      ),
-                                      //fillColor: Colors.grey[700],
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.white,
-                                              style: BorderStyle.solid)),
-                                      hintText: 'Add a message',
-                                    ),
-                                    style: TextStyle(color: Colors.white70,fontSize: notifier.custFontSize),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 40,
-                                ),
+                                // Align(
+                                //   alignment: Alignment.centerLeft,
+                                //   child: TextField(
+                                //     cursorColor: Colors.white,
+                                //     decoration: InputDecoration(
+                                //       enabledBorder: const OutlineInputBorder(
+                                //         // width: 0.0 produces a thin "hairline" border
+                                //         borderSide: const BorderSide(
+                                //             color: Colors.white, width: 0.0),
+                                //       ),
+                                //       focusedBorder: const OutlineInputBorder(
+                                //         // width: 0.0 produces a thin "hairline" border
+                                //         borderSide: const BorderSide(
+                                //             color: Colors.white, width: 1.0),
+                                //       ),
+                                //       //fillColor: Colors.grey[700],
+                                //       border: OutlineInputBorder(
+                                //           borderSide: BorderSide(
+                                //               color: Colors.white,
+                                //               style: BorderStyle.solid)),
+                                //       hintText: 'Add a message',
+                                //     ),
+                                //     style: TextStyle(color: Colors.white70,fontSize: notifier.custFontSize),
+                                //   ),
+                                // ),
+
                                 uname.roleId != 2
                                     ? Container(
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(20)),
+                                          color: KirthanStyles.colorPallete30
                                           // gradient: LinearGradient(
-                                          //     // colors: [
-                                          //     //   Colors.white,
-                                          //     //   Colors.grey[300]
-                                          //     // ],
+                                          //     colors: [
+                                          //       Colors.white,
+                                          //       Colors.grey[300]
+                                          //     ],
                                           //     begin: Alignment.centerLeft,
                                           //     end: Alignment.centerRight),
                                         ),
                                         child: FlatButton(
+                                          color:KirthanStyles.colorPallete30,
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 50, vertical: 10),
                                             shape: RoundedRectangleBorder(
@@ -360,7 +354,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(20)),
-                                            color: Colors.white,
+                                            color: KirthanStyles.colorPallete30,
                                             child: Text(
                                               'Make User',
                                               style: TextStyle(
