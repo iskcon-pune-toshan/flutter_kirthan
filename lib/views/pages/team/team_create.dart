@@ -360,7 +360,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                         .map((category) =>
                                             DropdownMenuItem<String>(
                                               value: category,
-                                              child: Text(category,style: TextStyle(fontSize: notifier.custFontSize),),
+                                              child: Text(category,style: TextStyle(fontSize: notifier.custFontSize,color : notifier.darkTheme ? Colors.white : Colors.black),),
                                             ))
                                         .toList(),
                                     onChanged: (input) {
