@@ -21,11 +21,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 final TeamUserPageViewModel teamUserPageVM =
-TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+  TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TeamPageViewModel teamPageVM =
-TeamPageViewModel(apiSvc: TeamAPIService());
+  TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-UserPageViewModel(apiSvc: UserAPIService());
+  UserPageViewModel(apiSvc: UserAPIService());
 
 class members_profile extends StatefulWidget {
   bool show;
