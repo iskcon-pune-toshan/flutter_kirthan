@@ -76,8 +76,8 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     "Tomorrow",
     "This Week",
     "This Month",
-    "Clear Filter",
-
+    "Clear Filter"
+   // "Near to you"
   ];
   String date;
   String datetomm;

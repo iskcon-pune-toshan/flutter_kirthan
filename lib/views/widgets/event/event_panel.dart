@@ -19,6 +19,8 @@ class EventsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String dropdownValue = eventRequest?.city;
+    //DateTime date = DateTime.parse(eventRequest?.eventDate).add(new Duration(days: 1));
+    //String eventdate = date.toString();
     return ScopedModelDescendant<EventPageViewModel>(
         builder: (context, child, model) {
           return FutureBuilder<List<EventRequest>>(
@@ -38,19 +40,22 @@ class EventsPanel extends StatelessWidget {
                     print("currenttime");
                     print(currentTime);
                     for (var event in eventRequests) {
+                      DateTime date = DateTime.parse(event.eventDate).add(new Duration(days: 1));
+                      String eventdate = date.toString();
                       print(event.eventEndTime);
-                      print(event.eventDate.split("T")[0]);
+                      print(eventdate.split("T")[0]);
                     }
 
                     eventRequests = eventRequests
                         .where((e) =>
-                    (e.eventDate + " " + e.eventEndTime)
+                    (DateTime.parse(e.eventDate).add(new Duration(days: 1)).toString() + " " + e.eventEndTime)
                         .compareTo(currentTime) ==
                         1)
                         .toList();
+                   // DateTime date = DateTime.parse(widget.eventrequest?.eventDate).add(new Duration(days: 1));
                     endedEvents = eventRequests
                         .where((e) =>
-                    (e.eventDate + " " + e.eventEndTime)
+                    (DateTime.parse(e.eventDate).add(new Duration(days: 1)).toString() + " " + e.eventEndTime)
                         .compareTo(currentTime) ==
                         -1)
                         .toList();

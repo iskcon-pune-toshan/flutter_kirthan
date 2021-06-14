@@ -111,7 +111,7 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
           widget.eventrequest.state;
       var addresses = await Geocoder.local.findAddressesFromQuery(query);
       var first = addresses.first;
-      print(query);
+     // print(query);
       lat = first.coordinates.latitude;
       long = first.coordinates.longitude;
     } else {
@@ -122,11 +122,11 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
 
     geolocator.Position position = await geolocation.Geolocator()
         .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
-    print("COORD");
-    print(position.latitude);
-    print(position.longitude);
-    print(_destination.latitude);
-    print(_destination.longitude);
+   // print("COORD");
+   // print(position.latitude);
+   // print(position.longitude);
+   // print(_destination.latitude);
+   // print(_destination.longitude);
 
     return await _coordinateDistance(position.latitude, position.longitude,
         _destination?.latitude, _destination?.longitude);
