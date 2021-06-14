@@ -173,22 +173,19 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
                   ? MediaQuery.of(context).size.width * 1.2
                   : MediaQuery.of(context).size.width,
               child: Row(
-                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                //crossAxisAlignment: CrossAxisAlignment.stret
+                // ch,
                   children: <Widget>[
                     Container(
+                      width: MediaQuery.of(context).size.width*0.4,
                       padding: EdgeInsets.only(left: 10),
                       child: Consumer<ThemeNotifier>(
-                        builder: (context, notifier, child) => Container(
-                          width: 180,
-                          child: Center(
-                            child: Text(
-                              widget.eventrequest?.eventTitle,
-                              style: TextStyle(
-                                //color: KirthanStyles.titleColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: notifier.custFontSize,
-                              ),
-                            ),
+                        builder: (context, notifier, child) => Text(
+                          widget.eventrequest?.eventTitle,
+                          style: TextStyle(
+                            //color: KirthanStyles.titleColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: notifier.custFontSize,
                           ),
                         ),
                       ),
@@ -197,7 +194,7 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
                       child: Container(
                         padding: EdgeInsets.only(right: 33),
                         child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               EventTeamUserRegister(
                                   eventrequest: widget.eventrequest),
