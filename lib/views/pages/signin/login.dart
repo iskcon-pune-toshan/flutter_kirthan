@@ -589,7 +589,7 @@ class _LoginAppState extends State<LoginApp> {
                       _buildEmailTF(),
 
                       //_buildPasswordTF(),
-                      _buildForgotPasswordBtn(),
+                      // _buildForgotPasswordBtn(),
                       _buildLoginBtn(),
                       _buildSignInWithText(),
                       _buildSocialBtnRow(),

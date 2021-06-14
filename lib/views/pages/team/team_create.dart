@@ -717,7 +717,8 @@ class _TeamWriteState extends State<TeamWrite> {
                           ),*/
                           Container(
                             //TODO:added search bar
-                            child: SelectState(
+                            child: CSCPicker(
+                              disabled: notifier.darkTheme ? false : true,
                               onCountryChanged: (value) {
                                 setState(() {
                                   //eventrequest.country = value;
