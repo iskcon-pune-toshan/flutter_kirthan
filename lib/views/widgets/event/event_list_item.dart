@@ -177,7 +177,7 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
                 // ch,
                   children: <Widget>[
                     Container(
-                      width: MediaQuery.of(context).size.width*0.4,
+                      width: MediaQuery.of(context).size.width* 0.4,
                       padding: EdgeInsets.only(left: 10),
                       child: Consumer<ThemeNotifier>(
                         builder: (context, notifier, child) => Text(
