@@ -21,11 +21,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 final TeamUserPageViewModel teamUserPageVM =
-    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class members_profile extends StatefulWidget {
   bool show;
@@ -93,11 +93,12 @@ class _members_profileState extends State<members_profile> {
       //print("for loop");
       // print(teamUser.teamId);
       //print(teamrequest.id);
-      if (teamUser.userName.toLowerCase() ==
-              _selectedTeamMember.toLowerCase() &&
+      if(teamUser.userName!=null){
+        if (teamUser.userName.toLowerCase() ==
+          _selectedTeamMember.toLowerCase() &&
           teamId.contains(teamrequest.id)) {
         break;
-      }
+      }}
       count++;
     }
     if (count == teamUserList.length) {
@@ -116,7 +117,7 @@ class _members_profileState extends State<members_profile> {
       teamUser.userName = _selectedTeamMember;
       teamUser.createdBy = "SYSTEM";
       String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
       teamUser.createdTime = dt;
       teamUser.updatedBy = "SYSTEM";
       teamUser.updatedTime = dt;
@@ -264,47 +265,47 @@ class _members_profileState extends State<members_profile> {
                                       AsyncSnapshot<List<TeamUser>> snapshot) {
                                     finalTeamUserList.clear();
 
-                                if (snapshot.hasData) {
-                                  teamUserList = snapshot.data;
-                                  for (var teamUser in teamUserList) {
-                                    if (teamUser.teamId == teamrequest.id) {
-                                      // print("HELLO");
-                                      // print(teamrequest.id);
-                                      // print(teamUser.teamId);
-                                      finalTeamUserList.contains(teamUser)
-                                          ? null
-                                          : finalTeamUserList.add(teamUser);
-                                    }
-                                  }
-                                  return SingleChildScrollView(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Form(
-                                          key: _formKey,
-                                          // autovalidateMode: AutovalidateMode
-                                          //     .onUserInteraction,
-                                          // onChanged: () {
-                                          //   _formKey.currentState.validate();
-                                          // },
-                                          child: Consumer<ThemeNotifier>(
-                                            builder:
-                                                (context, notifier, child) =>
+                                    if (snapshot.hasData) {
+                                      teamUserList = snapshot.data;
+                                      for (var teamUser in teamUserList) {
+                                        if (teamUser.teamId == teamrequest.id) {
+                                          // print("HELLO");
+                                          // print(teamrequest.id);
+                                          // print(teamUser.teamId);
+                                          finalTeamUserList.contains(teamUser)
+                                              ? null
+                                              : finalTeamUserList.add(teamUser);
+                                        }
+                                      }
+                                      return SingleChildScrollView(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Form(
+                                              key: _formKey,
+                                              // autovalidateMode: AutovalidateMode
+                                              //     .onUserInteraction,
+                                              // onChanged: () {
+                                              //   _formKey.currentState.validate();
+                                              // },
+                                              child: Consumer<ThemeNotifier>(
+                                                builder:
+                                                    (context, notifier, child) =>
                                                     Column(
-                                              children: [
-                                                Text("Members",
-                                                    style: TextStyle(
-                                                        fontSize: notifier
-                                                            .custFontSize,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                finalTeamUserList.isEmpty
-                                                    ? Container(
-                                                        margin: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 10),
-                                                        child: Text(
-                                                          "No members in the team",
-                                                          style: TextStyle(
+                                                      children: [
+                                                        Text("Members",
+                                                            style: TextStyle(
+                                                                fontSize: notifier
+                                                                    .custFontSize,
+                                                                fontWeight:
+                                                                FontWeight.bold)),
+                                                        finalTeamUserList.isEmpty
+                                                            ? Container(
+                                                          margin: EdgeInsets
+                                                              .symmetric(
+                                                              vertical: 10),
+                                                          child: Text(
+                                                            "No members in the team",
+                                                            style: TextStyle(
                                                               color: KirthanStyles
                                                                   .colorPallete30, fontSize: notifier
                                                                 .custFontSize,),
@@ -569,24 +570,24 @@ class _members_profileState extends State<members_profile> {
                                                                   .custFontSize)),
 //color: Colors.redAccent,
 //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
-                                                            onPressed:
-                                                                () async {
-                                                              _formKey
-                                                                  .currentState
-                                                                  .validate();
-                                                              if (_formKey
-                                                                  .currentState
-                                                                  .validate()) {
+                                                              onPressed:
+                                                                  () async {
                                                                 _formKey
                                                                     .currentState
-                                                                    .save();
-                                                                int i = 0;
-                                                                List<UserRequest>
-                                                                    userList =
-                                                                    await userPageVM
-                                                                        .getUserRequests(
-                                                                            "Approved");
-                                                                /*  print(
+                                                                    .validate();
+                                                                if (_formKey
+                                                                    .currentState
+                                                                    .validate()) {
+                                                                  _formKey
+                                                                      .currentState
+                                                                      .save();
+                                                                  int i = 0;
+                                                                  List<UserRequest>
+                                                                  userList =
+                                                                  await userPageVM
+                                                                      .getUserRequests(
+                                                                      "Approved");
+                                                                  /*  print(
                                                               "umail inside button");
                                                           print(uMail);
                                                           print("userlist");
@@ -851,7 +852,7 @@ class _members_profileState extends State<members_profile> {
     print(counter);
 
     List<TextEditingController> textEditingController =
-        new List<TextEditingController>(finalTeamUserList.length);
+    new List<TextEditingController>(finalTeamUserList.length);
     //  print(finalTeamUserList.length);
     int y = 0;
     return Card(
@@ -915,17 +916,17 @@ class _members_profileState extends State<members_profile> {
                       style: TextStyle(fontSize: notifier.custFontSize),
                       validator: (value) {
                         if (value.isEmpty) {
-                            return "Field cannot be empty";
+                          return "Field cannot be empty";
                           // setState(() {
                           //   error = "Field cannot be empty";
                           // });
                         } else {
                           return finalTeamUserList
-                                  .where((element) =>
-                                      element.userName.toLowerCase() ==
-                                      value.toLowerCase())
-                                  .toList()
-                                  .isNotEmpty
+                              .where((element) =>
+                          element.userName.toLowerCase() ==
+                              value.toLowerCase())
+                              .toList()
+                              .isNotEmpty
                               ? "User Exist with such name"
                               : null;
                         }
@@ -933,7 +934,7 @@ class _members_profileState extends State<members_profile> {
 
                       //initialValue: finalTeamUserList[i].userName.toString(),
                       decoration: InputDecoration(
-                          // errorText: error,
+                        // errorText: error,
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
                           ),
@@ -978,13 +979,13 @@ class _members_profileState extends State<members_profile> {
                     ),
                     i == counter - 1
                         ? IconButton(
-                            alignment: Alignment.bottomRight,
-                            onPressed: () {
-                              setState(() {
-                                this.counter--;
-                              });
-                            },
-                            icon: Icon(Icons.cancel_outlined))
+                        alignment: Alignment.bottomRight,
+                        onPressed: () {
+                          setState(() {
+                            this.counter--;
+                          });
+                        },
+                        icon: Icon(Icons.cancel_outlined))
                         : Container(),
                   ],
                 ),
@@ -1000,7 +1001,7 @@ void showFlushBar(BuildContext context, var error) {
   Flushbar(
     messageText: Text(error, style: TextStyle(color: Colors.white)),
     backgroundColor:
-        error == 'Email already in use' ? Colors.red : Colors.green,
+    error == 'Email already in use' ? Colors.red : Colors.green,
     duration: Duration(seconds: 4),
   )..show(context);
 }
