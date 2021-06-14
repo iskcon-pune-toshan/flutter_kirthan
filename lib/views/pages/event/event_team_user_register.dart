@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/LocalNotifyManager.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
 import 'package:intl/intl.dart';
 import 'dart:core';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_kirthan/models/eventuser.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/event_user_service_impl.dart';
 import 'package:provider/provider.dart';
+
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
@@ -41,13 +44,21 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
   List<EventUser> eventUserList = new List<EventUser>();
   List<TeamUser> listofTeamUsers = new List<TeamUser>();
   String email;
+
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
     email = getCurrentUser().toString();
     super.initState();
+    localNotifyManager.setOnNotificationReceived(onNotificationReceived);
+    localNotifyManager.seOnNotificationClick(onNotificationClick);
   }
-
+  onNotificationReceived(ReceivedNotification notification) {
+    print('Notification Recieved: ${notification.id}');
+  }
+  onNotificationClick(String payload){
+    print('Payload:$payload');
+  }
   final FirebaseAuth auth = FirebaseAuth.instance;
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
@@ -86,7 +97,6 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Row(
-
                       children: [
                     Consumer<ThemeNotifier>(
                     builder: (context, notifier, child) =>
@@ -116,7 +126,8 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                                 element.eventId == widget.eventrequest.id)
                             .toList();
                         eventUserPageVM.submitDeleteEventTeamUserMapping(
-                            eventUserTempList);
+                            eventUserTempList)
+                        .whenComplete(() => Scaffold.of(context).showSnackBar(SnackBar(content: Text('Successfully unregistered'),)));
                       });
                     })
                 : FutureBuilder<List<UserRequest>>(
@@ -186,6 +197,11 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                                     null;
                                   });
                                 });
+                                DateTime EventDate = DateTime.now().add(Duration(seconds: 5));
+                                await localNotifyManager.scheduleNotification(
+                                    'Event reminder',
+                                    widget.eventrequest.eventTitle +' is scheduled for tomorrow @ '+widget.eventrequest.eventStartTime +"\nHope to see you at the event :)" ,
+                                    EventDate);
 
                                 String title = widget.eventrequest.eventTitle;
                                 SnackBar mysnackbar = SnackBar(

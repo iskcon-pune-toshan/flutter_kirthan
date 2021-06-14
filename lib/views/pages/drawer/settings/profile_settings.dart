@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/user.dart';
@@ -23,6 +24,7 @@ import 'package:provider/provider.dart';
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
 final GoogleSignIn googleSignIn = new GoogleSignIn();
+final FacebookLogin facebookLogin = new FacebookLogin();
 TextEditingController _oldPassword = TextEditingController();
 TextEditingController _password = TextEditingController();
 TextEditingController _passwordConfirm = TextEditingController();
@@ -44,12 +46,24 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
   String profilePic;
   String _photoUrl;
   String uemail;
-
   Future<String> getEmail() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var user = await auth.currentUser();
     var email = user.email;
     return email;
+  }
+
+  String isValidAadharNumber(String value) {
+    // Regex to check valid Aadhar number.
+    String pattern = r"^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$";
+    RegExp regExp = new RegExp(pattern);
+    // Compile the ReGex
+    if (value.length == 0) {
+      return 'Please enter Aadhaar Number';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid Aadhaar Number';
+    }
+    return null;
   }
 
   Future loadData() async {
@@ -59,13 +73,19 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
   @override
   void initState() {
     super.initState();
+    userPageVM.getUserRequests(uemail);
     googleSign();
+    facebookSign();
   }
 
   googleSign() async {
-    print("EEEE");
     isGoogleSign = await googleSignIn.isSignedIn();
     print(isGoogleSign);
+  }
+
+  facebookSign() async {
+    isFaceBookSign = await facebookLogin.isLoggedIn;
+    print(isFaceBookSign);
   }
 
   Future<Null> refreshList() async {
@@ -88,6 +108,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
   }
 
   bool isGoogleSign;
+  bool isFaceBookSign;
 
   @override
   Widget build(BuildContext context) {
@@ -183,12 +204,13 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
       //     .getDownloadURL()
       //     .then((value) => {photoUrl = value});
       // retrievePic(photoUrl);
-      setState(() {
-        // print("Profile Picture uploaded");
-        // print(_photoUrl);
-        Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
-      });
+      // setState(() {
+      //   // print("Profile Picture uploaded");
+      //   // print(_photoUrl);
+      //   Scaffold.of(context)
+      //       .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+      //   Navigator.pop(context);
+      // });
     }
 
     Future deletePic(BuildContext context) async {
@@ -202,11 +224,11 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
       StorageReference firebaseStorageRef =
       FirebaseStorage.instance.ref().child(uemail + '.jpg');
       await firebaseStorageRef.delete();
-      setState(() {
-        //  print("Profile Picture deleted");
-        Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
-      });
+      // setState(() {
+      //   //  print("Profile Picture deleted");
+      //   Scaffold.of(context)
+      //       .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
+      // });
     }
 
     return Consumer<ThemeNotifier>(
@@ -297,8 +319,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                             ),
                                                                             onTap:
                                                                                 () async {
-                                                                              //
-                                                                              //
                                                                               await getImageFromGallery();
                                                                               // var email =
                                                                               //     snapshot
@@ -309,6 +329,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                               //     email);
                                                                               uploadPic(
                                                                                   context);
+                                                                              Navigator.pop(context);
+                                                                                  Scaffold.of(context)
+                                                                                  .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
                                                                               List<UserRequest>
                                                                               userrequest =
                                                                               await userPageVM
@@ -349,16 +372,12 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                             onTap:
                                                                                 () async {
                                                                               await getImageFromCamera();
-                                                                              // String
-                                                                              //     email =
-                                                                              //     snapshot
-                                                                              //         .data;
-                                                                              // print(
-                                                                              //     "emails");
-                                                                              // print(
-                                                                              //     email);
+
                                                                               uploadPic(
                                                                                   context);
+                                                                              Navigator.pop(context);
+                                                                              Scaffold.of(context)
+                                                                                  .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
                                                                               List<UserRequest>
                                                                               userrequest =
                                                                               await userPageVM
@@ -390,8 +409,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                       leading: Icon(
                                                                         MaterialCommunityIcons
                                                                             .trash_can_outline,
-                                                                        color:
-                                                                        Colors.red,
+                                                                        color:Colors.red,
                                                                       ),
                                                                       title: Text(
                                                                         'Remove current profile picture',
@@ -415,6 +433,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                         ProfilePages();
                                                                         deletePic(
                                                                             context);
+                                                                        Navigator.pop(context);
+                                                                        Scaffold.of(context)
+                                                                            .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
                                                                         List<UserRequest>
                                                                         userrequest =
                                                                         await userPageVM
@@ -623,8 +644,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                   validator:
                                                                       (input) {
                                                                     if (input
+                                                                        .trimLeft()
                                                                         .isEmpty) {
-                                                                      return "Please enter some text";
+                                                                      return "Please enter valid name";
                                                                     } else if (input ==
                                                                         user.fullName) {
                                                                       return "New user name can't be same as old username";
@@ -762,14 +784,13 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                     left:
                                                                     20),
                                                                 child: Text(
-                                                                    "Enter your name")),
+                                                                    "Enter your phone number")),
                                                             Form(
                                                               key: _formKey,
                                                               child:
                                                               TextFormField(
                                                                 autovalidate:
-                                                                true,
-                                                                initialValue: user
+                                                                true, initialValue: user
                                                                     .phoneNumber
                                                                     .toString(),
                                                                 keyboardType:
@@ -981,88 +1002,88 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                       ),
                                                                       Divider(),
                                                                       TextFormField(
-                                                                        initialValue:
-                                                                        user.addLineOne,
-                                                                        decoration:
-                                                                        InputDecoration(
-                                                                          enabledBorder: UnderlineInputBorder(
-                                                                            borderSide: BorderSide(color: Colors.grey),
+                                                                          autovalidate: true,
+                                                                          initialValue: user.addLineOne,
+                                                                          decoration: InputDecoration(
+                                                                            enabledBorder: UnderlineInputBorder(
+                                                                              borderSide: BorderSide(color: Colors.grey),
+                                                                            ),
+                                                                            focusedBorder: UnderlineInputBorder(
+                                                                              borderSide: BorderSide(color: Colors.green),
+                                                                            ),
+                                                                            //icon: Icon(Icons.home, color: Colors.grey),
+                                                                            labelText: "address",
+                                                                            labelStyle: TextStyle(
+                                                                              fontSize: notifier.custFontSize,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                            hintText: "",
                                                                           ),
-                                                                          focusedBorder: UnderlineInputBorder(
-                                                                            borderSide: BorderSide(color: Colors.green),
-                                                                          ),
-                                                                          //icon: Icon(Icons.home, color: Colors.grey),
-                                                                          labelText: "address",
-                                                                          labelStyle: TextStyle(
-                                                                            fontSize: notifier.custFontSize,
-                                                                            color: Colors.grey,
-                                                                          ),
-                                                                          hintText: "",
-                                                                        ),
-                                                                        onSaved:
-                                                                            (input) {
-                                                                          user.addLineOne = input;
-                                                                        },
-                                                                        validator: (input) => input.isEmpty
-                                                                            ? "Please enter some text"
-                                                                            : null,
-                                                                      ),
+                                                                          onSaved: (input) {
+                                                                            user.addLineOne = input;
+                                                                          },
+                                                                          validator: (input) {
+                                                                            if (input.trimLeft().isEmpty) {
+                                                                              return "Please enter Address";
+                                                                            }
+                                                                            return null;
+                                                                          }),
                                                                       Divider(),
                                                                       TextFormField(
-                                                                        initialValue:
-                                                                        user.addLineTwo,
-                                                                        decoration:
-                                                                        InputDecoration(
-                                                                          enabledBorder: UnderlineInputBorder(
-                                                                            borderSide: BorderSide(color: Colors.grey),
+                                                                          autovalidate: true,
+                                                                          initialValue: user.addLineTwo,
+                                                                          decoration: InputDecoration(
+                                                                            enabledBorder: UnderlineInputBorder(
+                                                                              borderSide: BorderSide(color: Colors.grey),
+                                                                            ),
+                                                                            focusedBorder: UnderlineInputBorder(
+                                                                              borderSide: BorderSide(color: Colors.green),
+                                                                            ),
+                                                                            //icon: Icon(Icons.home, color: Colors.grey),
+                                                                            labelText: "address",
+                                                                            labelStyle: TextStyle(
+                                                                              fontSize: notifier.custFontSize,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                            hintText: "",
                                                                           ),
-                                                                          focusedBorder: UnderlineInputBorder(
-                                                                            borderSide: BorderSide(color: Colors.green),
-                                                                          ),
-                                                                          //icon: Icon(Icons.home, color: Colors.grey),
-                                                                          labelText: "address",
-                                                                          labelStyle: TextStyle(
-                                                                            fontSize: notifier.custFontSize,
-                                                                            color: Colors.grey,
-                                                                          ),
-                                                                          hintText: "",
-                                                                        ),
-                                                                        onSaved:
-                                                                            (input) {
-                                                                          user.addLineTwo = input;
-                                                                        },
-                                                                        validator: (input) => input.isEmpty
-                                                                            ? "Please enter some text"
-                                                                            : null,
-                                                                      ),
+                                                                          onSaved: (input) {
+                                                                            user.addLineTwo = input;
+                                                                          },
+                                                                          validator: (input) {
+                                                                            if (input.trimLeft().isEmpty) {
+                                                                              return "Please enter Address";
+                                                                            }
+                                                                            return null;
+                                                                          }),
                                                                       Divider(),
                                                                       TextFormField(
-                                                                        initialValue:
-                                                                        user.addLineThree,
-                                                                        decoration:
-                                                                        InputDecoration(
-                                                                          enabledBorder: UnderlineInputBorder(
-                                                                            borderSide: BorderSide(color: Colors.grey),
+                                                                          autovalidate: true,
+                                                                          initialValue: user.addLineThree,
+                                                                          decoration: InputDecoration(
+                                                                            enabledBorder: UnderlineInputBorder(
+                                                                              borderSide: BorderSide(color: Colors.grey),
+                                                                            ),
+                                                                            focusedBorder: UnderlineInputBorder(
+                                                                              borderSide: BorderSide(color: Colors.green),
+                                                                            ),
+                                                                            //icon: Icon(Icons.home, color: Colors.grey),
+                                                                            labelText: "address",
+                                                                            labelStyle: TextStyle(
+                                                                              fontSize: notifier.custFontSize,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                            hintText: "",
                                                                           ),
-                                                                          focusedBorder: UnderlineInputBorder(
-                                                                            borderSide: BorderSide(color: Colors.green),
-                                                                          ),
-                                                                          //icon: Icon(Icons.home, color: Colors.grey),
-                                                                          labelText: "address",
-                                                                          labelStyle: TextStyle(
-                                                                            fontSize: notifier.custFontSize,
-                                                                            color: Colors.grey,
-                                                                          ),
-                                                                          hintText: "",
-                                                                        ),
-                                                                        onSaved:
-                                                                            (input) {
-                                                                          user.addLineThree = input;
-                                                                        },
-                                                                        validator: (input) => input.isEmpty
-                                                                            ? "Please enter some text"
-                                                                            : null,
-                                                                      ),
+                                                                          onSaved: (input) {
+                                                                            user.addLineThree = input;
+                                                                          },
+                                                                          validator: (input) {
+                                                                            if (input.trimLeft().isEmpty) {
+                                                                              return "Please enter Address";
+                                                                            }
+                                                                            return null;
+                                                                          }),
                                                                       Divider(),
                                                                       TextFormField(
                                                                         initialValue:
@@ -1231,6 +1252,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                           Column(
                                             children: [
                                               TextFormField(
+                                                autovalidate: true,
                                                 enabled: false,
                                                 decoration: InputDecoration(
                                                   disabledBorder:
@@ -1239,8 +1261,14 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                           color: Colors.grey)),
                                                 ),
                                                 initialValue: user.addLineOne,
+                                                validator: (input) {
+                                                  if (input.trimLeft() == "") {
+                                                    return "Please enter Address";
+                                                  }
+                                                },
                                               ),
                                               TextFormField(
+                                                autovalidate: true,
                                                 enabled: false,
                                                 decoration: InputDecoration(
                                                   disabledBorder:
@@ -1251,6 +1279,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                 initialValue: user.addLineTwo,
                                               ),
                                               TextFormField(
+                                                autovalidate: true,
                                                 enabled: false,
                                                 decoration: InputDecoration(
                                                   disabledBorder:
@@ -1267,179 +1296,161 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                           ),
                                           Row(
                                             children: [
-                                              Text("Aadhaar"),
+                                              Text("Aadhaar No."),
                                               SizedBox(
                                                 width: 20,
                                               ),
                                               IconButton(
                                                 icon: Icon(
-                                                  Icons.attach_file_sharp,
+                                                  MaterialCommunityIcons.pencil,
                                                   color:
                                                   KirthanStyles.colorPallete30,
                                                 ),
                                                 onPressed: () {
-                                                  //TODO:to be modify afterwards
-                                                  // showMaterialModalBottomSheet(
-                                                  //     context: context,
-                                                  //     builder:
-                                                  //         (context) => Container(
-                                                  //               width: 200,
-                                                  //               height:
-                                                  //                   notifier.custFontSize >=
-                                                  //                           25
-                                                  //                       ? 300
-                                                  //                       : 200,
-                                                  //               child: Column(
-                                                  //                 children: [
-                                                  //                   Container(
-                                                  //                       alignment:
-                                                  //                           Alignment
-                                                  //                               .centerLeft,
-                                                  //                       padding: EdgeInsets.only(
-                                                  //                           top: 20,
-                                                  //                           left:
-                                                  //                               20),
-                                                  //                       child: Text(
-                                                  //                           "Aadhaar Details")),
-                                                  //                   Form(
-                                                  //                     key: _formKey,
-                                                  //                     child:
-                                                  //                         TextFormField(
-                                                  //                       initialValue:
-                                                  //                           user.govtId,
-                                                  //                       decoration:
-                                                  //                           InputDecoration(
-                                                  //                         enabledBorder:
-                                                  //                             UnderlineInputBorder(
-                                                  //                           borderSide:
-                                                  //                               BorderSide(color: Colors.grey),
-                                                  //                         ),
-                                                  //                         focusedBorder:
-                                                  //                             UnderlineInputBorder(
-                                                  //                           borderSide:
-                                                  //                               BorderSide(color: Colors.green),
-                                                  //                         ),
-                                                  //                         icon:
-                                                  //                             const Icon(
-                                                  //                           Icons
-                                                  //                               .perm_identity,
-                                                  //                           color: Colors
-                                                  //                               .grey,
-                                                  //                         ),
-                                                  //                         hintText:
-                                                  //                             "Please enter new username",
-                                                  //                         labelStyle:
-                                                  //                             TextStyle(
-                                                  //                           fontSize:
-                                                  //                               notifier.custFontSize,
-                                                  //                           fontWeight:
-                                                  //                               FontWeight.bold,
-                                                  //                           color: Colors
-                                                  //                               .grey,
-                                                  //                         ),
-                                                  //                         hintStyle:
-                                                  //                             TextStyle(
-                                                  //                           color: Colors
-                                                  //                               .grey,
-                                                  //                         ),
-                                                  //                       ),
-                                                  //                       onChanged:
-                                                  //                           (input) {
-                                                  //                         username =
-                                                  //                             input;
-                                                  //                       },
-                                                  //                       onSaved:
-                                                  //                           (input) {
-                                                  //                         user.fullName =
-                                                  //                             input;
-                                                  //                       },
-                                                  //                       validator:
-                                                  //                           (input) {
-                                                  //                         if (input
-                                                  //                             .isEmpty) {
-                                                  //                           return "Please enter some text";
-                                                  //                         } else
-                                                  //                           return null;
-                                                  //                       },
-                                                  //                     ),
-                                                  //                   ),
-                                                  //                   Row(
-                                                  //                     mainAxisAlignment:
-                                                  //                         MainAxisAlignment
-                                                  //                             .spaceEvenly,
-                                                  //                     children: [
-                                                  //                       RaisedButton(
-                                                  //                         elevation:
-                                                  //                             0,
-                                                  //                         child:
-                                                  //                             Text(
-                                                  //                           'Save',
-                                                  //                           style: TextStyle(
-                                                  //                               color:
-                                                  //                                   KirthanStyles.colorPallete30),
-                                                  //                         ),
-                                                  //                         color: Colors
-                                                  //                             .transparent,
-                                                  //                         onPressed:
-                                                  //                             () async {
-                                                  //                           if (_formKey
-                                                  //                               .currentState
-                                                  //                               .validate()) {
-                                                  //                             _formKey
-                                                  //                                 .currentState
-                                                  //                                 .save();
-                                                  //                             String
-                                                  //                                 userrequestStr =
-                                                  //                                 jsonEncode(user.toStrJson());
-                                                  //                             // userPageVM
-                                                  //                             //     .submitUpdateUserRequestDetails(
-                                                  //                             //         userrequestStr);
-                                                  //                             SnackBar
-                                                  //                                 mysnackbar =
-                                                  //                                 SnackBar(
-                                                  //                               content:
-                                                  //                                   Text("Aadhaar details updated $successful"),
-                                                  //                               duration:
-                                                  //                                   new Duration(seconds: 4),
-                                                  //                               backgroundColor:
-                                                  //                                   Colors.green,
-                                                  //                             );
-                                                  //                             Scaffold.of(context)
-                                                  //                                 .showSnackBar(mysnackbar);
-                                                  //                             Navigator.pop(
-                                                  //                                 context);
-                                                  //                             Navigator.pop(
-                                                  //                                 context);
-                                                  //                             Navigator.push(
-                                                  //                                 context,
-                                                  //                                 MaterialPageRoute(builder: (context) => MyProfileSettings()));
-                                                  //                           }
-                                                  //                         },
-                                                  //                       ),
-                                                  //                       RaisedButton(
-                                                  //                         elevation:
-                                                  //                             0,
-                                                  //                         child:
-                                                  //                             Text(
-                                                  //                           'Cancel',
-                                                  //                           style: TextStyle(
-                                                  //                               color:
-                                                  //                                   Colors.grey),
-                                                  //                         ),
-                                                  //                         color: Colors
-                                                  //                             .transparent,
-                                                  //                         //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
-                                                  //                         onPressed:
-                                                  //                             () {
-                                                  //                           Navigator.of(context)
-                                                  //                               .pop();
-                                                  //                         },
-                                                  //                       ),
-                                                  //                     ],
-                                                  //                   ),
-                                                  //                 ],
-                                                  //               ),
-                                                  //             ));
+                                                  showMaterialModalBottomSheet(
+                                                      context: context,
+                                                      builder:
+                                                          (context) => Container(
+                                                        width: 200,
+                                                        height:
+                                                        notifier.custFontSize >=
+                                                            25
+                                                            ? 300
+                                                            : 200,
+                                                        child: Column(
+                                                          children: [
+                                                            Container(
+                                                                alignment:
+                                                                Alignment
+                                                                    .centerLeft,
+                                                                padding: EdgeInsets.only(
+                                                                    top: 20,
+                                                                    left:
+                                                                    20),
+                                                                child: Text(
+                                                                    "Aadhaar Details")),
+                                                            Form(
+                                                              key: _formKey,
+                                                              child: TextFormField(
+                                                                  autovalidate: true,
+                                                                  initialValue: user.govtId,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder:
+                                                                    UnderlineInputBorder(
+                                                                      borderSide:
+                                                                      BorderSide(color: Colors.grey),
+                                                                    ),
+                                                                    focusedBorder:
+                                                                    UnderlineInputBorder(
+                                                                      borderSide:
+                                                                      BorderSide(color: Colors.green),
+                                                                    ),
+                                                                    icon:
+                                                                    const Icon(
+                                                                      Icons
+                                                                          .perm_identity,
+                                                                      color:
+                                                                      Colors.grey,
+                                                                    ),
+                                                                    hintText:
+                                                                    "Please enter Aadhaar Number",
+                                                                    labelStyle:
+                                                                    TextStyle(
+                                                                      fontSize:
+                                                                      notifier.custFontSize,
+                                                                      fontWeight:
+                                                                      FontWeight.bold,
+                                                                      color:
+                                                                      Colors.grey,
+                                                                    ),
+                                                                    hintStyle:
+                                                                    TextStyle(
+                                                                      color:
+                                                                      Colors.grey,
+                                                                    ),
+                                                                  ),
+                                                                  onSaved: (input) {
+                                                                    user.govtId =
+                                                                        input;
+                                                                  },
+                                                                  validator: isValidAadharNumber),
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                              children: [
+                                                                RaisedButton(
+                                                                  elevation:
+                                                                  0,
+                                                                  child:
+                                                                  Text(
+                                                                    'Save',
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                        KirthanStyles.colorPallete30),
+                                                                  ),
+                                                                  color: Colors
+                                                                      .transparent,
+                                                                  onPressed:
+                                                                      () async {
+                                                                    if (_formKey
+                                                                        .currentState
+                                                                        .validate()) {
+                                                                      _formKey
+                                                                          .currentState
+                                                                          .save();
+                                                                      String
+                                                                      userrequestStr =
+                                                                      jsonEncode(user.toStrJson());
+                                                                      userPageVM
+                                                                          .submitUpdateUserRequestDetails(userrequestStr);
+                                                                      SnackBar
+                                                                      mysnackbar =
+                                                                      SnackBar(
+                                                                        content:
+                                                                        Text("Aadhaar details updated $successful"),
+                                                                        duration:
+                                                                        new Duration(seconds: 4),
+                                                                        backgroundColor:
+                                                                        Colors.green,
+                                                                      );
+                                                                      Scaffold.of(context)
+                                                                          .showSnackBar(mysnackbar);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(builder: (context) => MyProfileSettings()));
+                                                                    }
+                                                                  },
+                                                                ),
+                                                                RaisedButton(
+                                                                  elevation:
+                                                                  0,
+                                                                  child:
+                                                                  Text(
+                                                                    'Cancel',
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                        Colors.grey),
+                                                                  ),
+                                                                  color: Colors
+                                                                      .transparent,
+                                                                  //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(context)
+                                                                        .pop();
+                                                                  },
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ));
                                                 },
                                               ),
                                             ],
@@ -1456,8 +1467,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                           SizedBox(
                                             height: 40,
                                           ),
-                                          !isGoogleSign
-                                              ? Column(
+                                          isGoogleSign || isFaceBookSign
+                                              ? Container()
+                                              : Column(
                                             children: [
                                               Container(
                                                 margin: EdgeInsets.only(
@@ -1566,7 +1578,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                           TextFormField(
                                                                             controller: _password,
                                                                             decoration: InputDecoration(
-
                                                                                 enabledBorder: UnderlineInputBorder(
                                                                                   borderSide: BorderSide(color: Colors.grey),
                                                                                 ),
@@ -1715,7 +1726,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                               ),
                                             ],
                                           )
-                                              : Container()
                                           // : Container(),
                                         ],
                                       ),

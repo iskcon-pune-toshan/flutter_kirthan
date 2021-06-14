@@ -355,12 +355,12 @@ class _TeamWriteState extends State<TeamWrite> {
                                     value: _selectedCategory,
                                     icon: const Icon(Icons.category),
                                     hint: Text('Select Category',
-                                        style: TextStyle(color: Colors.grey,fontSize: notifier.custFontSize)),
+                                        style: TextStyle(color:Colors.grey,fontSize: notifier.custFontSize)),
                                     items: _category
                                         .map((category) =>
                                             DropdownMenuItem<String>(
                                               value: category,
-                                              child: Text(category,style: TextStyle(fontSize: notifier.custFontSize),),
+                                              child: Text(category,style: TextStyle(fontSize: notifier.custFontSize,color : notifier.darkTheme ? Colors.white : Colors.black),),
                                             ))
                                         .toList(),
                                     onChanged: (input) {

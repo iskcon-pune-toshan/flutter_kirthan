@@ -72,6 +72,7 @@ dependencies:
   csc_picker:
   modal_bottom_sheet:
   image_cropper: ^1.1.2
+  geocoding:
 
 
 dev_dependencies:

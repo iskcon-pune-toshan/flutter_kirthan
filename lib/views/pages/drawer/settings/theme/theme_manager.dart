@@ -60,7 +60,7 @@ class ThemeNotifier extends ChangeNotifier {
   //Custom Text Size
   double custFontSize = 16;
 
-  bool get darkTheme => _darkTheme;
+  bool get darkTheme => !_darkTheme;
 
   ThemeNotifier() {
     _darkTheme = false;

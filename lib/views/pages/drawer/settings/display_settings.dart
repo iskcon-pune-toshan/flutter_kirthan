@@ -93,26 +93,34 @@ class _MyAppState extends State<MyPrefSettingsApp> {
                 style: TextStyle(fontSize: notifier.custFontSize),
               ),
             ),
-            Card(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Consumer<ThemeNotifier>(
-                  builder: (context, notifier, child) => Column(
-                    children: <Widget>[
-                      Text(notifier.custFontSize.toString(),
-                          style: TextStyle(fontSize: 20)),
-                      Slider(
-                        value: notifier.custFontSize,
-                        min: 16,
-                        max: 30,
-                        activeColor: KirthanStyles.colorPallete10,
-                        inactiveColor: Color(0xFF8D8E98),
-                        onChanged: notifier.changeFontSize,
+            Consumer<ThemeNotifier>(
+              builder: (context, notifier, child) =>
+                  Card(
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => Column(
+                          children: <Widget>[
+                            Text(notifier.custFontSize.toString(),
+                                style: TextStyle(fontSize: 20)),
+                            Slider(
+                              value: notifier.custFontSize,
+                              min: 16,
+                              max: 30,
+
+                              activeColor: KirthanStyles.colorPallete10,
+                              inactiveColor: Color(0xFF8D8E98),
+                              onChanged: (changeFontSize){
+                                setState(() {
+                                  notifier.custFontSize = changeFontSize;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
             ),
             Divider(),
             MyColorPicker(),

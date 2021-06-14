@@ -179,81 +179,81 @@ class _MyAppState extends State<MySettingsApp> {
                         selected: true,
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.black, width: 0.5),
-                          borderRadius: BorderRadius.circular(8)),
-                      /*child: ListTile(
-                    leading: Icon(Icons.notifications_active),
-
-                    title: Text(
-                      "Notifications",
-
-                      style: TextStyle(
-                        fontSize: MyPrefSettingsApp.custFontSize,
-                      ),
-                    ),
-                    onTap: () {
-                      _showMaterialDialog();
-
-                    },
-                    selected: true,
-                  ),
-
-                   */
-                      child: SwitchListTile(
-                        activeColor: Colors.cyan,
-                        title: Consumer<ThemeNotifier>(
-                          builder: (context, notifier, child) => Text(
-                            "Notification",
-                            style: TextStyle(
-                              fontSize: notifier.custFontSize,
-                              color: notifier.darkTheme
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          return showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Notifications'),
-                                  content: Text(
-                                      'Do you want to get notifications on phone?'),
-                                  actions: [
-                                    FlatButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          getNotification();
-                                          _v = true;
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Yes'),
-                                    ),
-                                    FlatButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _v = false;
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('No'),
-                                    ),
-                                  ],
-                                );
-                              });
-                        },
-                        value: _v,
-                        secondary: Icon(
-                          Icons.notifications_outlined,
-                          size: 30,
-                          color: KirthanStyles.colorPallete30,
-                        ),
-                      ),
-                    ),
+                  //   Card(
+                  //     shape: RoundedRectangleBorder(
+                  //         side: BorderSide(color: Colors.black, width: 0.5),
+                  //         borderRadius: BorderRadius.circular(8)),
+                  //     /*child: ListTile(
+                  //   leading: Icon(Icons.notifications_active),
+                  //
+                  //   title: Text(
+                  //     "Notifications",
+                  //
+                  //     style: TextStyle(
+                  //       fontSize: MyPrefSettingsApp.custFontSize,
+                  //     ),
+                  //   ),
+                  //   onTap: () {
+                  //     _showMaterialDialog();
+                  //
+                  //   },
+                  //   selected: true,
+                  // ),
+                  //
+                  //  */
+                  //     child: SwitchListTile(
+                  //       activeColor: Colors.cyan,
+                  //       title: Consumer<ThemeNotifier>(
+                  //         builder: (context, notifier, child) => Text(
+                  //           "Notification",
+                  //           style: TextStyle(
+                  //             fontSize: notifier.custFontSize,
+                  //             color: notifier.darkTheme
+                  //                 ? Colors.white
+                  //                 : Colors.black,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       onChanged: (value) {
+                  //         return showDialog(
+                  //             context: context,
+                  //             builder: (BuildContext context) {
+                  //               return AlertDialog(
+                  //                 title: Text('Notifications'),
+                  //                 content: Text(
+                  //                     'Do you want to get notifications on phone?'),
+                  //                 actions: [
+                  //                   FlatButton(
+                  //                     onPressed: () {
+                  //                       setState(() {
+                  //                         getNotification();
+                  //                         _v = true;
+                  //                       });
+                  //                       Navigator.pop(context);
+                  //                     },
+                  //                     child: Text('Yes'),
+                  //                   ),
+                  //                   FlatButton(
+                  //                     onPressed: () {
+                  //                       setState(() {
+                  //                         _v = false;
+                  //                       });
+                  //                       Navigator.pop(context);
+                  //                     },
+                  //                     child: Text('No'),
+                  //                   ),
+                  //                 ],
+                  //               );
+                  //             });
+                  //       },
+                  //       value: _v,
+                  //       secondary: Icon(
+                  //         Icons.notifications_outlined,
+                  //         size: 30,
+                  //         color: KirthanStyles.colorPallete30,
+                  //       ),
+                  //     ),
+                  //   ),
                   ],
                 ),
               ))),

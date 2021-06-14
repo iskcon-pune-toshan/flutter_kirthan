@@ -911,14 +911,14 @@ class _members_profileState extends State<members_profile> {
                   alignment: Alignment.centerRight,
                   children: [
                     TextFormField(
+                      autovalidateMode:AutovalidateMode.onUserInteraction,
                       style: TextStyle(fontSize: notifier.custFontSize),
                       validator: (value) {
                         if (value.isEmpty) {
-                          setState(() {
-                            error = "Field cannot be empty";
-                          });
-
-                          return error;
+                            return "Field cannot be empty";
+                          // setState(() {
+                          //   error = "Field cannot be empty";
+                          // });
                         } else {
                           return finalTeamUserList
                                   .where((element) =>
@@ -933,7 +933,7 @@ class _members_profileState extends State<members_profile> {
 
                       //initialValue: finalTeamUserList[i].userName.toString(),
                       decoration: InputDecoration(
-                          errorText: error,
+                          // errorText: error,
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
                           ),
