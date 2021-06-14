@@ -501,7 +501,8 @@ class _EventWriteState extends State<EventWrite> {
                                         category,
                                         style: TextStyle(
                                             fontSize:
-                                            notifier.custFontSize),
+                                            notifier.custFontSize,color: notifier.darkTheme
+                                            ?Colors.white:Colors.black),
                                       ),
                                     ))
                                         .toList(),
