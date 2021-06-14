@@ -23,7 +23,6 @@ import 'package:flutter_kirthan/views/pages/user/user_profile_page.dart';
 import 'package:flutter_kirthan/views/pages/user/inviteLocalAdmin.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
-import 'package:flutter_kirthan/views/pages/event/registered_events.dart';
 import 'package:share/share.dart';
 import 'faq.dart';
 

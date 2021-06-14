@@ -176,7 +176,6 @@ class _TeamWriteState extends State<TeamWrite> {
                 child: Column(
                   children: [
                     TextFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       //controller: _member[i],
                       //initialValue: finalTeamUserList[i].userName.toString(),
                       decoration: InputDecoration(
@@ -214,12 +213,6 @@ class _TeamWriteState extends State<TeamWrite> {
                           selectedMembers.add(value);
                         });
                       },
-                        validator: (value) {
-                          if (value.trimLeft().isEmpty) {
-                            return "Please enter some text";
-                          }
-                          return null;
-                        },
                     ),
                     Divider()
                   ],
@@ -263,7 +256,6 @@ class _TeamWriteState extends State<TeamWrite> {
                           //color: Colors.white,
                           padding: new EdgeInsets.all(10),
                           child: TextFormField(
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             style: TextStyle(fontSize: notifier.custFontSize),
                             focusNode: myFocusNode,
                             //attribute: "eventTitle",
@@ -293,7 +285,7 @@ class _TeamWriteState extends State<TeamWrite> {
                               teamrequest.teamTitle = input;
                             },
                             validator: (value) {
-                              if (value.trimLeft().isEmpty) {
+                              if (value.isEmpty) {
                                 return "Please enter some text";
                               }
                               return null;
@@ -307,7 +299,6 @@ class _TeamWriteState extends State<TeamWrite> {
                           //color: Colors.white,
                           padding: new EdgeInsets.all(10),
                           child: TextFormField(
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             style: TextStyle(fontSize: notifier.custFontSize),
                             //attribute: "Description",
 
@@ -336,7 +327,7 @@ class _TeamWriteState extends State<TeamWrite> {
                               teamrequest.teamDescription = input;
                             },
                             validator: (value) {
-                              if (value.trimLeft().isEmpty) {
+                              if (value.isEmpty) {
                                 return "Please enter some text";
                               }
                               return null;
@@ -369,13 +360,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                         .map((category) =>
                                             DropdownMenuItem<String>(
                                               value: category,
-                                              child: Text(category,
-                                                style: TextStyle(
-                                                    fontSize: notifier.custFontSize,
-                                                    color: notifier.darkTheme
-                                                        ?Colors.white70
-                                                :Colors.black
-                                                ),),
+                                              child: Text(category,style: TextStyle(fontSize: notifier.custFontSize,color : notifier.darkTheme ? Colors.white : Colors.black),),
                                             ))
                                         .toList(),
                                     onChanged: (input) {
@@ -467,7 +452,6 @@ class _TeamWriteState extends State<TeamWrite> {
                         //color: Colors.white,
                         padding: new EdgeInsets.all(10),
                         child: TextFormField(
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             style: TextStyle(fontSize: notifier.custFontSize),
                           //attribute: "Description",
                             keyboardType: TextInputType.number,
@@ -733,10 +717,7 @@ class _TeamWriteState extends State<TeamWrite> {
                           ),*/
                           Container(
                             //TODO:added search bar
-                            child: CSCPicker(
-                              disabled:notifier.darkTheme
-                                  ?false
-                                  :true,
+                            child: SelectState(
                               onCountryChanged: (value) {
                                 setState(() {
                                   //eventrequest.country = value;

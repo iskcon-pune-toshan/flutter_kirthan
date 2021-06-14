@@ -356,7 +356,7 @@ class Search extends SearchDelegate {
                 ? suggestionList = eventlist
                 : suggestionList.addAll(eventlist.where((element) =>
             element.eventTitle.toUpperCase().contains(query) == true ||
-                element.eventTitle.toLowerCase().contains(query) == true));
+                element.eventTitle.toLowerCase().contains(query) == true || element.eventTitle.contains(query) == true )) ;
             return ListView.builder(
               itemCount: suggestionList.length,
               itemBuilder: (context, index) {
@@ -396,7 +396,7 @@ class Search extends SearchDelegate {
                 ? suggestionList = eventlist
                 : suggestionList.addAll(eventlist.where((element) =>
             element.eventTitle.toUpperCase().contains(query) == true ||
-                element.eventTitle.toLowerCase().contains(query) == true));
+                element.eventTitle.toLowerCase().contains(query) == true || element.eventTitle.contains(query) == true ));
             return ListView.builder(
               itemCount: suggestionList.length,
               itemBuilder: (context, index) {
