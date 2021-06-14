@@ -200,10 +200,7 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                                 DateTime EventDate = DateTime.now().add(Duration(seconds: 5));
                                 await localNotifyManager.scheduleNotification(
                                     'Event reminder',
-                                    'Reminder for event ' +
-                                        widget.eventrequest.eventTitle +
-                                        '\nTime:' +
-                                        widget.eventrequest.eventStartTime,
+                                    widget.eventrequest.eventTitle +' is scheduled for tomorrow @ '+widget.eventrequest.eventStartTime +"\nHope to see you at the event :)" ,
                                     EventDate);
 
                                 String title = widget.eventrequest.eventTitle;
