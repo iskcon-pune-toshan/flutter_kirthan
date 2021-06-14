@@ -32,6 +32,28 @@ class EventsPanel extends StatelessWidget {
                 case ConnectionState.done:
                   if (snapshot.hasData) {
                     var eventRequests = snapshot.data;
+                    var endedEvents = snapshot.data;
+                    String currentTime =
+                        "${DateTime.now().year}-${DateTime.now().month < 10 ? ("0" + DateTime.now().month.toString()) : DateTime.now().month.toString()}-${DateTime.now().day < 10 ? ("0" + DateTime.now().day.toString()) : DateTime.now().day.toString()} ${DateTime.now().hour < 10 ? ("0" + DateTime.now().hour.toString()) : DateTime.now().hour.toString()}:${DateTime.now().minute < 10 ? ("0" + DateTime.now().minute.toString()) : DateTime.now().minute.toString()}";
+                    print("currenttime");
+                    print(currentTime);
+                    for (var event in eventRequests) {
+                      print(event.eventEndTime);
+                      print(event.eventDate.split("T")[0]);
+                    }
+
+                    eventRequests = eventRequests
+                        .where((e) =>
+                    (e.eventDate + " " + e.eventEndTime)
+                        .compareTo(currentTime) ==
+                        1)
+                        .toList();
+                    endedEvents = eventRequests
+                        .where((e) =>
+                    (e.eventDate + " " + e.eventEndTime)
+                        .compareTo(currentTime) ==
+                        -1)
+                        .toList();
                     return new Column(
                       //mainAxisAlignment: MainAxisAlignment.center,
                       //mainAxisSize: MainAxisSize.max,
@@ -160,8 +182,10 @@ class EventsPanel extends StatelessWidget {
                                     : eventRequests.length,
                                 itemBuilder: (_, int index) {
                                   //TODO:sorting of events according to date
+
                                   eventRequests.sort(
                                           (a, b) => a.eventDate.compareTo(b.eventDate));
+
                                   var eventrequest = eventRequests[index];
                                   return EventRequestsListItem(
                                     eventrequest: eventrequest,

@@ -1,6 +1,4 @@
 import 'package:csc_picker/csc_picker.dart';
-import 'package:csc_picker/dropdown_with_search.dart';
-import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +15,14 @@ import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/event/event_view.dart';
+import 'package:geocoding/geocoding.dart';
 //import 'package:flutter_kirthan/views/pages/eventteam/team_selection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 
+TextEditingController pincodeController = new TextEditingController();
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
 final TeamPageViewModel teamPageVM =
@@ -51,13 +51,32 @@ class EventWrite extends StatefulWidget {
 }
 
 class _EventWriteState extends State<EventWrite> {
+  List<String> pinCode;
+
+  getPinCode(String city) async {
+    List<Location> location;
+    List<Placemark> placemark;
+    print("city");
+    print(city);
+    location = await locationFromAddress(city);
+    print("location");
+    print(location);
+
+    placemark = await placemarkFromCoordinates(
+        location[0].latitude, location[0].longitude);
+    pincodeController.text = placemark[0].postalCode;
+    //pinCode = placemark.postalCode;
+
+    // return placemark;
+  }
+
   bool mapToggle = false;
   FocusNode myFocusNode = new FocusNode();
   bool locationToggle = false;
   bool resetToggle = false;
   TeamRequest selectedTeam;
   TeamRequest selectedTeamfor;
-  //final IKirthanRestApi apiSvc = new RestAPIServices();
+
   _EventWriteState({this.selectedTeam});
   List<Marker> myMarker = [];
   List<Marker> get markers => myMarker;
@@ -72,10 +91,12 @@ class _EventWriteState extends State<EventWrite> {
   EventRequest eventrequest = new EventRequest();
 
   String _selectedCategory;
+  String _selectedPin;
   bool selected;
   Future<List<TeamRequest>> teams;
   void initState() {
     super.initState();
+    pincodeController.text = "";
   }
 
   handleTap(LatLng tappedPoint1) {
@@ -154,7 +175,7 @@ class _EventWriteState extends State<EventWrite> {
           },
         ),
         Consumer<ThemeNotifier>(
-          builder:(context, notifier, child)=> Text(
+          builder: (context, notifier, child) => Text(
             title,
             style: TextStyle(
               //color:  KirthanStyles.titleColor ,
@@ -191,36 +212,38 @@ class _EventWriteState extends State<EventWrite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        //resizeToAvoidBottomInset: false,
+      key: _scaffoldKey,
+      //resizeToAvoidBottomInset: false,
 
-        appBar: AppBar(
-            elevation: 0.0,
-            iconTheme: IconThemeData(
-              color: KirthanStyles.colorPallete60, //change your color here
-            ),
-            backgroundColor: KirthanStyles.colorPallete30,
-            title: Consumer<ThemeNotifier>(
-              builder:(context, notifier,child)=> Text('Invite a Team',
-                  style: TextStyle(color: KirthanStyles.colorPallete60,fontSize: notifier.custFontSize)),
-            )),
-        body: Builder(builder: (context) {
-          return SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(5),
-              //color: Colors.black,
-              child: Center(
-                child: Form(
-                  // context,
-                  key: _formKey,
+      appBar: AppBar(
+          elevation: 0.0,
+          iconTheme: IconThemeData(
+            color: KirthanStyles.colorPallete60, //change your color here
+          ),
+          backgroundColor: KirthanStyles.colorPallete30,
+          title: Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Text('Invite a Team',
+                style: TextStyle(
+                    color: KirthanStyles.colorPallete60,
+                    fontSize: notifier.custFontSize)),
+          )),
+      body: Builder(builder: (context) {
+        return SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
+            //color: Colors.black,
+            child: Center(
+              child: Form(
+                // context,
+                key: _formKey,
 
-                  // readonly: true,
-                  child: Column(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      new Consumer<ThemeNotifier>(
-                      builder:(context, notifier,child)=>Container(
+                // readonly: true,
+                child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
                           alignment: Alignment.centerLeft,
                           // margin: const EdgeInsets.only(top: 30),
                           child: new Text(
@@ -228,10 +251,10 @@ class _EventWriteState extends State<EventWrite> {
                             style: new TextStyle(
                                 fontSize: notifier.custFontSize,
                                 color: KirthanStyles.colorPallete30),
-                          )),),
-
-              Consumer<ThemeNotifier>(
-                builder:(context, notifier,child)=>Container(
+                          )),
+                    ),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
@@ -249,29 +272,27 @@ class _EventWriteState extends State<EventWrite> {
                               labelText: "Title",
                               hintText: "Type title of Event",
                               hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: notifier.custFontSize
-                              ),
+                                  color: Colors.grey,
+                                  fontSize: notifier.custFontSize),
                               labelStyle: TextStyle(
                                   color: myFocusNode.hasFocus
                                       ? Colors.black
                                       : Colors.grey,
-                              fontSize: notifier.custFontSize)),
+                                  fontSize: notifier.custFontSize)),
                           onSaved: (input) {
                             eventrequest.eventTitle = input;
                           },
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value.trimLeft().isEmpty) {
                               return "Please enter some title";
                             }
                             return null;
                           },
                         ),
                       ),
-              ),
-
-              Consumer<ThemeNotifier>(
-                builder:(context, notifier,child)=>Container(
+                    ),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
@@ -289,29 +310,27 @@ class _EventWriteState extends State<EventWrite> {
                               labelText: "Description",
                               hintText: "Type Description of event",
                               hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: notifier.custFontSize
-                              ),
+                                  color: Colors.grey,
+                                  fontSize: notifier.custFontSize),
                               labelStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: notifier.custFontSize
-                              )),
+                                  color: Colors.grey,
+                                  fontSize: notifier.custFontSize)),
                           onSaved: (input) {
                             eventrequest.eventDescription = input;
                           },
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value.trimLeft().isEmpty) {
                               return "Please enter some description";
                             }
                             return null;
                           },
                         ),
                       ),
-              ),
+                    ),
 
 
-              Consumer<ThemeNotifier>(
-                builder:(context, notifier,child)=>Container(
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
                         padding: new EdgeInsets.all(10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -319,7 +338,9 @@ class _EventWriteState extends State<EventWrite> {
                             Text(
                               "Event Date",
                               textAlign: TextAlign.start,
-                              style: TextStyle(color: Colors.grey,fontSize: notifier.custFontSize),
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: notifier.custFontSize),
                             ),
                             DateTimeField(
                               style: TextStyle(fontSize: notifier.custFontSize),
@@ -333,9 +354,10 @@ class _EventWriteState extends State<EventWrite> {
                                 return date;
                               },
                               onSaved: (input) {
-                                eventrequest.eventDate = DateFormat("yyyy-MM-dd")
-                                    .format(input)
-                                    .toString();
+                                eventrequest.eventDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(input)
+                                        .toString();
                               },
                               validator: (value) {
                                 if (value.toString().isEmpty || value == null) {
@@ -347,10 +369,9 @@ class _EventWriteState extends State<EventWrite> {
                           ],
                         ),
                       ),
-              ),
-
-              Consumer<ThemeNotifier>(
-                builder:(context, notifier,child)=>Container(
+                    ),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
                         padding: new EdgeInsets.all(10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -358,7 +379,9 @@ class _EventWriteState extends State<EventWrite> {
                             Text(
                               "Event Start Time",
                               textAlign: TextAlign.start,
-                              style: TextStyle(color: Colors.grey,fontSize: notifier.custFontSize),
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: notifier.custFontSize),
                             ),
                             DateTimeField(
                               style: TextStyle(fontSize: notifier.custFontSize),
@@ -373,11 +396,15 @@ class _EventWriteState extends State<EventWrite> {
                               },
                               onSaved: (input) {
                                 eventrequest.eventStartTime =
-                                    DateFormat("HH:mm").format(input).toString();
+                                    DateFormat("HH:mm")
+                                        .format(input)
+                                        .toString();
                               },
                               onChanged: (input) {
                                 eventrequest.eventStartTime =
-                                    DateFormat("HH:mm").format(input).toString();
+                                    DateFormat("HH:mm")
+                                        .format(input)
+                                        .toString();
                                 // print(eventrequest.eventStartTime);
                               },
                               validator: (value) {
@@ -390,9 +417,9 @@ class _EventWriteState extends State<EventWrite> {
                           ],
                         ),
                       ),
-              ),
-              Consumer<ThemeNotifier>(
-                builder:(context, notifier,child)=>Container(
+                    ),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
                         padding: new EdgeInsets.all(10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -400,7 +427,9 @@ class _EventWriteState extends State<EventWrite> {
                             Text(
                               "Event End Time",
                               textAlign: TextAlign.start,
-                              style: TextStyle(color: Colors.grey,fontSize: notifier.custFontSize),
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: notifier.custFontSize),
                             ),
                             DateTimeField(
                               style: TextStyle(fontSize: notifier.custFontSize),
@@ -414,8 +443,9 @@ class _EventWriteState extends State<EventWrite> {
                                 return DateTimeField.convert(time);
                               },
                               onSaved: (input) {
-                                eventrequest.eventEndTime =
-                                    DateFormat("HH:mm").format(input).toString();
+                                eventrequest.eventEndTime = DateFormat("HH:mm")
+                                    .format(input)
+                                    .toString();
                               },
                               validator: (value) {
                                 if (value.toString().isEmpty || value == null) {
@@ -429,7 +459,8 @@ class _EventWriteState extends State<EventWrite> {
                                           : ""));
 
                                   return time.compareTo(
-                                      eventrequest.eventStartTime != null
+                                      eventrequest.eventStartTime !=
+                                          null
                                           ? eventrequest.eventStartTime
                                           : "") ==
                                       1
@@ -441,54 +472,61 @@ class _EventWriteState extends State<EventWrite> {
                           ],
                         ),
                       ),
-              ),
-                      FutureBuilder(
-                          future: commonLookupTablePageVM.getCommonLookupTable(
-                              "lookupType:Event-type-Category"),
-                          builder: (context, snapshot) {
-                            if (snapshot.data != null) {
-                              List<CommonLookupTable> cltList = snapshot.data;
-                              List<String> _category = cltList
-                                  .map((user) => user.description)
-                                  .toSet()
-                                  .toList();
-                              return Consumer<ThemeNotifier>(
-                                  builder:(context, notifier,child)=>DropdownButtonFormField<String>(
-                                style: TextStyle(fontSize: notifier.custFontSize>20?notifier.custFontSize+10:notifier.custFontSize),
-                                value: _selectedCategory,
-                                icon: const Icon(Icons.category),
-                                hint: Text('Select Event Type',
-                                    style: TextStyle(color: Colors.grey)),
-                                items: _category
-                                    .map((category) => DropdownMenuItem<String>(
-                                  value: category,
-                                  child: Text(category,style: TextStyle(fontSize: notifier.custFontSize),),
-                                ))
-                                    .toList(),
-                                onChanged: (input) {
-                                  setState(() {
-                                    _selectedCategory = input;
-                                  });
-                                },
-                                onSaved: (input) {
-                                  _selectedCategory = input;
-                                },
-                                validator: (value) {
-                                  if (value == null) {
-                                    return "Please select event type";
-                                  }
-                                  return null;
-                                },
-                              ),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          }),
+                    ),
+                    FutureBuilder(
+                        future: commonLookupTablePageVM.getCommonLookupTable(
+                            "lookupType:Event-type-Category"),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            List<CommonLookupTable> cltList = snapshot.data;
+                            List<String> _category = cltList
+                                .map((user) => user.description)
+                                .toSet()
+                                .toList();
+                            return Consumer<ThemeNotifier>(
+                              builder: (context, notifier, child) =>
+                                  DropdownButtonFormField<String>(
+                                    style: TextStyle(
+                                        fontSize: notifier.custFontSize > 20
+                                            ? notifier.custFontSize + 10
+                                            : notifier.custFontSize),
+                                    value: _selectedCategory,
+                                    icon: const Icon(Icons.category),
+                                    hint: Text('Select Event Type',
+                                        style: TextStyle(color: Colors.grey)),
+                                    items: _category
+                                        .map((category) => DropdownMenuItem<String>(
+                                      value: category,
+                                      child: Text(
+                                        category,
+                                        style: TextStyle(
+                                            fontSize:
+                                            notifier.custFontSize),
+                                      ),
+                                    ))
+                                        .toList(),
+                                    onChanged: (input) {
+                                      setState(() {
+                                        _selectedCategory = input;
+                                      });
+                                    },
+                                    onSaved: (input) {
+                                      _selectedCategory = input;
+                                    },
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return "Please select event type";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }),
 
-
-
-                      /*Container(
+                    /*Container(
                         //padding: new EdgeInsets.all(10),
                         child: TextFormField(
                   //focusNode: myFocusNode,
@@ -557,8 +595,8 @@ class _EventWriteState extends State<EventWrite> {
                           },*/
                       ),*/
                     ),
-                      new Consumer<ThemeNotifier>(
-                        builder:(context, notifier,child)=>Container(
+                    new Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Container(
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 20),
                           child: new Text(
@@ -567,110 +605,14 @@ class _EventWriteState extends State<EventWrite> {
                                 fontSize: notifier.custFontSize,
                                 color: KirthanStyles.colorPallete30),
                           )),
-                      ),
+                    ),
                     Column(
                       children: <Widget>[
                         Consumer<ThemeNotifier>(
-                          builder:(context, notifier,child)=>TextFormField(
-                          style: TextStyle(fontSize: notifier.custFontSize),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              icon: const Icon(Icons.home, color: Colors.grey),
-                              labelText: "Address",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                              )),
-                          onSaved: (input) {
-                            eventrequest.addLineOneS = input;
-                            //eventrequest.eventLocation = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
-                        ),
-                        Consumer<ThemeNotifier>(
-                          builder:(context, notifier,child)=>TextFormField(
-                          style: TextStyle(fontSize: notifier.custFontSize),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              labelText: "Line 2",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                              )),
-                          onSaved: (input) {
-                            eventrequest.addLineTwoS = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
-                        ),
-                        Consumer<ThemeNotifier>(
-                          builder:(context, notifier,child)=>TextFormField(
-                          style: TextStyle(fontSize: notifier.custFontSize),
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              labelText: "Locality",
-                              hintText: "",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                  fontSize: notifier.custFontSize
-                              ),
-                              labelStyle: TextStyle(
-                                fontSize: notifier.custFontSize,
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.localityS = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
-                        ),
-                        Consumer<ThemeNotifier>(
-                          builder:(context, notifier,child)=>TextFormField(
+                          builder: (context, notifier, child) => TextFormField(
                             style: TextStyle(fontSize: notifier.custFontSize),
-                            keyboardType: TextInputType.number,
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
@@ -678,30 +620,155 @@ class _EventWriteState extends State<EventWrite> {
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.green),
                                 ),
-                                labelText: "PinCode",
+                                icon:
+                                const Icon(Icons.home, color: Colors.grey),
+                                labelText: "Address",
                                 hintText: "",
                                 hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                    fontSize: notifier.custFontSize
-
-                                ),
+                                    color: Colors.grey,
+                                    fontSize: notifier.custFontSize),
                                 labelStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: notifier.custFontSize)),
+                            onSaved: (input) {
+                              eventrequest.addLineOneS = input;
+                              //eventrequest.eventLocation = input;
+                            },
+                            validator: (value) {
+                              if (value.trimLeft().isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Consumer<ThemeNotifier>(
+                          builder: (context, notifier, child) => TextFormField(
+                            style: TextStyle(fontSize: notifier.custFontSize),
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "Line 2",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: notifier.custFontSize),
+                                labelStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: notifier.custFontSize)),
+                            onSaved: (input) {
+                              eventrequest.addLineTwoS = input;
+                            },
+                            validator: (value) {
+                              if (value.trimLeft().isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Consumer<ThemeNotifier>(
+                          builder: (context, notifier, child) => TextFormField(
+                            style: TextStyle(fontSize: notifier.custFontSize),
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                                labelText: "Locality",
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: notifier.custFontSize),
+                                labelStyle: TextStyle(
+                                  fontSize: notifier.custFontSize,
                                   color: Colors.grey,
-                                    fontSize: notifier.custFontSize
                                 )),
                             onSaved: (input) {
-                              eventrequest.pincode = int.parse(input);
+                              eventrequest.localityS = input;
                             },
-                            validator: validatePin
-                          ),),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Please enter some text";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+
+                        // Consumer<ThemeNotifier>(
+                        //     builder: (context, notifier, child) =>
+                        //         FutureBuilder(
+                        //             future: getPinCode(eventrequest.city),
+                        //             builder: (context, snapshot) {
+                        //               if (snapshot.hasData) {
+                        //                 List<Placemark> cltList = snapshot.data;
+                        //                 print("cltlist");
+                        //                 print(cltList);
+                        //                 List<String> _category = cltList
+                        //                             .length !=
+                        //                         0
+                        //                     ? cltList
+                        //                         .map((user) => user.postalCode)
+                        //                         .toSet()
+                        //                         .toList()
+                        //                     : ["No Pincode"];
+                        //
+                        //                 return DropdownButtonFormField<String>(
+                        //                   style: TextStyle(
+                        //                       fontSize: notifier.custFontSize >
+                        //                               20
+                        //                           ? notifier.custFontSize + 10
+                        //                           : notifier.custFontSize),
+                        //                   value: _selectedPin,
+                        //                   icon: const Icon(Icons.category),
+                        //                   hint: Text('Select Pincode',
+                        //                       style: TextStyle(
+                        //                           color: Colors.grey)),
+                        //                   items: _category
+                        //                       .map((category) =>
+                        //                           DropdownMenuItem<String>(
+                        //                             value: category,
+                        //                             child: Text(
+                        //                               category,
+                        //                               style: TextStyle(
+                        //                                   fontSize: notifier
+                        //                                       .custFontSize),
+                        //                             ),
+                        //                           ))
+                        //                       .toList(),
+                        //                   onChanged: (input) {
+                        //                     setState(() {
+                        //                       _selectedPin = input;
+                        //                     });
+                        //                   },
+                        //                   onSaved: (input) {
+                        //                     _selectedPin = input;
+                        //                   },
+                        //                   validator: (value) {
+                        //                     if (value == null) {
+                        //                       return "Please select event type";
+                        //                     }
+                        //                     return null;
+                        //                   },
+                        //                 );
+                        //               }
+                        //               return Container();
+                        //             })),
                         Consumer<ThemeNotifier>(
-                          builder:(context,notifier,child)=> Container(
+                          builder: (context, notifier, child) => Container(
                             padding: EdgeInsets.only(top: 30),
                             //TODO:added search bar
                             child: CSCPicker(
-                              disabled:notifier.darkTheme
-                                  ?false
-                                  :true,
+                              disabled: notifier.darkTheme ? false : true,
                               onCountryChanged: (value) {
                                 setState(() {
                                   eventrequest.country = value;
@@ -716,80 +783,112 @@ class _EventWriteState extends State<EventWrite> {
                                 setState(() {
                                   eventrequest.city = value;
                                 });
+                                getPinCode(eventrequest.city);
                               },
                             ),
                           ),
                         ),
                       ],
                     ),
-              Consumer<ThemeNotifier>(
-                builder:(context, notifier,child)=>TextFormField(
-                      style: TextStyle(fontSize: notifier.custFontSize),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      decoration: InputDecoration(
-                        isCollapsed: true,
-                        errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) =>
+                          TextFormField(
+                        style: TextStyle(fontSize: notifier.custFontSize),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
                         ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (eventrequest.city == null) {
-                          if (eventrequest.state == null) {
-                            if (eventrequest.country == null) {
-                              return "Please select country, state & city";
+                        validator: (value) {
+                          if (eventrequest.city == null) {
+                            if (eventrequest.state == null) {
+                              if (eventrequest.country == null) {
+                                return "Please select country, state & city";
+                              }
+                              return "Please select state & city";
                             }
-                            return "Please select state & city";
+                            return "Please select city";
                           }
-                          return "Please select city";
-                        }
-                        return null;
-                      },
+                          return null;
+                        },
+                      ),
                     ),
-              ),
-                    new Container(margin: const EdgeInsets.only(top: 40)),
-              Consumer<ThemeNotifier>(
-                builder:(context, notifier,child)=>Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        MaterialButton(
-                          color: KirthanStyles.colorPallete60,
-                          child: Text("Back",
-                            style: TextStyle(fontSize: notifier.custFontSize),),
-                          onPressed: () {
-                            Navigator.pop(context);
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => TextFormField(
+                          style: TextStyle(fontSize: notifier.custFontSize),
+                          keyboardType: TextInputType.number,
+                          controller: pincodeController,
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              labelText: "PinCode",
+                              hintText: "",
+                              hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: notifier.custFontSize),
+                              labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: notifier.custFontSize)),
+                          onSaved: (input) {
+                            eventrequest.pincode = int.parse(input);
                           },
-                        ),
-                        MaterialButton(
+                          validator: validatePin),
+                    ),
+                    new Container(margin: const EdgeInsets.only(top: 40)),
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          MaterialButton(
+                            color: KirthanStyles.colorPallete60,
                             child: Text(
-                              //TODO:changed next to submit
-                              "Submit",
-                              style: TextStyle(color: Colors.white,fontSize: notifier.custFontSize),
+                              "Back",
+                              style: TextStyle(fontSize: notifier.custFontSize),
                             ),
-                            color: KirthanStyles.colorPallete30,
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                final FirebaseUser user =
-                                await auth.currentUser();
-                                final String email = user.email;
-                                eventrequest.createdBy = email;
-                                print("created by " + eventrequest.createdBy);
-                                print(email);
-                                _formKey.currentState.save();
-                                List<CommonLookupTable> selectedCategory =
-                                await commonLookupTablePageVM
-                                    .getCommonLookupTable(
-                                    "description:" + _selectedCategory);
-                                for (var i in selectedCategory)
-                                  eventrequest.eventType = i.id;
-                                // eventrequest.isProcessed = true;
-                                eventrequest.isPublicEvent = false;
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          MaterialButton(
+                              child: Text(
+                                //TODO:changed next to submit
+                                "Submit",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: notifier.custFontSize),
+                              ),
+                              color: KirthanStyles.colorPallete30,
+                              onPressed: () async {
+                                if (_formKey.currentState.validate()) {
+                                  final FirebaseUser user =
+                                  await auth.currentUser();
+                                  final String email = user.email;
+                                  eventrequest.createdBy = email;
+                                  print("created by " + eventrequest.createdBy);
+                                  print(email);
+                                  _formKey.currentState.save();
+                                  List<CommonLookupTable> selectedCategory =
+                                  await commonLookupTablePageVM
+                                      .getCommonLookupTable("description:" +
+                                      _selectedCategory);
+                                  for (var i in selectedCategory)
+                                    eventrequest.eventType = i.id;
+                                  // eventrequest.isProcessed = true;
+                                  eventrequest.isPublicEvent = false;
 // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
 // print(eventrequest.createdBy);
                                   String dt =
@@ -803,52 +902,52 @@ class _EventWriteState extends State<EventWrite> {
 
 //TeamRequest newteamrequest = await apiSvc
 //  ?.submitNewTeamRequest(teammap);
-                                eventrequest.serviceType = "Free";
+                                  eventrequest.serviceType = "Free";
 
-                                Map<String, dynamic> teammap =
-                                eventrequest.toJson();
-                                EventRequest neweventrequest = await eventPageVM
-                                    .submitNewEventRequest(teammap);
+                                  Map<String, dynamic> teammap =
+                                  eventrequest.toJson();
+                                  EventRequest neweventrequest =
+                                  await eventPageVM
+                                      .submitNewEventRequest(teammap);
 
-                                print(neweventrequest.id);
-                                String eid = neweventrequest.id.toString();
-                                SnackBar mysnackbar = SnackBar(
-                                  content: Text(
-                                      "Event registered $successful with $eid"),
-                                  duration: new Duration(seconds: 4),
-                                  backgroundColor: Colors.green,
-                                );
-                                _scaffoldKey.currentState
-                                    .showSnackBar(mysnackbar);
-                                new Future.delayed(const Duration(seconds: 3),
-                                        () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => EventView(
-                                                  )));
-                                    });
+                                  print(neweventrequest.id);
+                                  String eid = neweventrequest.id.toString();
+                                  SnackBar mysnackbar = SnackBar(
+                                    content: Text(
+                                        "Event registered $successful with $eid"),
+                                    duration: new Duration(seconds: 4),
+                                    backgroundColor: Colors.green,
+                                  );
+                                  _scaffoldKey.currentState
+                                      .showSnackBar(mysnackbar);
+                                  new Future.delayed(const Duration(seconds: 3),
+                                          () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => EventView()));
+                                      });
 
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => ServiceType(
-                                //             eventRequest: eventrequest)));
-                              }
-                              //String s = jsonEncode(userrequest.mapToJson());
-                              //service.registerUser(s);
-                              //print(s);
-                            }),
-                        /*MaterialButton(
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => ServiceType(
+                                  //             eventRequest: eventrequest)));
+                                }
+                                //String s = jsonEncode(userrequest.mapToJson());
+                                //service.registerUser(s);
+                                //print(s);
+                              }),
+                          /*MaterialButton(
                         child: Text("Reset",style: TextStyle(color: Colors.white),),
                         color: Colors.pink,
                         onPressed: () {
                           _fbKey.currentState.reset();
                         },
                       ),*/
-                      ],
-                    ),
-              )
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

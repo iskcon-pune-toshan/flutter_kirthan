@@ -1,22 +1,26 @@
+import 'dart:async';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_kirthan/common/constants.dart';
+import 'package:flutter_kirthan/connection.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/authenticate_service.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:flutter_kirthan/views/pages/user/enterCode.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flushbar/flushbar_route.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flushbar/flushbar_helper.dart';
+
 
 //final MainPageViewModel mainPageVM =
 //  MainPageViewModel(apiSvc: RestAPIServices());
@@ -74,18 +78,31 @@ class _LoginAppState extends State<LoginApp> {
     return email;
   }
 
+  StreamSubscription _connectionChangeStream;
+
+  bool isOffline = false;
+
   @override
   void initState() {
     super.initState();
     //users = UserLogin.getUsers();
     entitlements = UserAccess.getUserEntitlements();
     loadPref();
+    ConnectionStatus connectionStatus = ConnectionStatus.getInstance();
+    _connectionChangeStream =
+        connectionStatus.connectionChange.listen(connectionChanged);
 
 //    NotificationManager _config = new NotificationManager();
 //    _config.initMessageHandler(context);
 
 //    NotificationView _config = new NotificationView();
 //    _config.initMessageHandler(context);
+  }
+
+  void connectionChanged(dynamic hasConnection) {
+    setState(() {
+      isOffline = !hasConnection;
+    });
   }
 
   void populateData() {
@@ -143,16 +160,16 @@ class _LoginAppState extends State<LoginApp> {
     // user.lastName = userName;
     user.email = email;
     user.password = pass;
-    user.phoneNumber = 1234567890;
+    user.phoneNumber = null;
     user.fullName = userName;
-    user.addLineOne = "xyz";
-    user.addLineTwo = "abc";
-    user.addLineThree = "pqr";
-    user.locality = "Pune";
-    user.city = "Pune";
-    user.pinCode = 400001;
-    user.state = "Maharashtra";
-    user.country = "India";
+    user.addLineOne = " ";
+    user.addLineTwo = " ";
+    user.addLineThree = " ";
+    user.locality = " ";
+    user.city = " ";
+    user.pinCode = null;
+    user.state = " ";
+    user.country = " ";
     user.govtIdType = 8;
     user.govtId = "Aadhaar";
     //user.isProcessed = true;
@@ -175,6 +192,7 @@ class _LoginAppState extends State<LoginApp> {
       _isHidden = !_isHidden;
     });
   }
+
   Widget _buildEmailTF() {
     return Form(
       key: _formKey,
@@ -187,30 +205,57 @@ class _LoginAppState extends State<LoginApp> {
             style: kLabelStyle,
           ),*/
           SizedBox(height: 10.0),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15),
             child: TextFormField(
-              focusNode: myFocusNode,
               keyboardType: TextInputType.emailAddress,
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'OpenSans',
-              ),
+              style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: KirthanStyles.colorPallete30,
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: KirthanStyles.colorPallete30,
+                    width: 1.5,
+                  ),
                 ),
-                hintText: 'Email address',
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: KirthanStyles.colorPallete30,
+                    width: 1.5,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.zero,
+                  borderSide: BorderSide(
+                    color: KirthanStyles.colorPallete30,
+                    width: 1.5,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(
+                    color: KirthanStyles.colorPallete30,
+                    width: 1.5,
+                  ),
+
+                ),
+                prefixIcon: Icon(Icons.email,
+                    color: Color(0xFF61bcbc)),
+                hintText: 'Enter Email',
                 hintStyle: kHintTextStyle,
-              ),
+                  ),
               controller: username,
-              validator: (input) =>
-                  EmailValidator.validate(input) ? null : "Not a Valid User",
+              validator: (value) {
+                if (value.trimLeft().isEmpty) {
+                  return 'Please enter email';
+                } else {
+                  return EmailValidator.validate(value)
+                      ? null
+                      : "Please enter valid email";
+                }
+              },
+              //onSaved: (input) => email = input,
             ),
           ),
           Divider(),
@@ -221,47 +266,71 @@ class _LoginAppState extends State<LoginApp> {
                 'Password',
                 style: kLabelStyle,
               ),*/
-              SizedBox(height: 10.0),
-              Container(
-                alignment: Alignment.centerLeft,
-                decoration: kBoxDecorationStyle,
-                height: 60.0,
-                child: TextFormField(
-                  obscureText:  _isHidden,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'OpenSans',
-                  ),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 14.0),
-                    prefixIcon: Icon(
-                      Icons.lock,
-                      color: Color(0xFF61bcbc),
-                    ),
-                    hintText: 'Password',
-                    hintStyle: kHintTextStyle,
-                    suffixIcon: InkWell(
-                      onTap: _togglePasswordView,
-                      child: Icon(
-                        _isHidden
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+
+              Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: TextFormField(
+                    style: TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: KirthanStyles.colorPallete30,
+                          width: 1.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: KirthanStyles.colorPallete30,
+                          width: 1.5,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.zero,
+                        borderSide: BorderSide(
+                          color: KirthanStyles.colorPallete30,
+                          width: 1.5,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: KirthanStyles.colorPallete30,
+                          width: 1.5,
+                        ),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.lock,
                         color: Color(0xFF61bcbc),
                       ),
+                      hintText: 'Enter Password',
+                      hintStyle: kHintTextStyle,
+                      suffixIcon: InkWell(
+                        onTap: _togglePasswordView,
+                        child: Icon(
+                          _isHidden
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Color(0xFF61bcbc),
+                        ),
+                      ),
+                      // Icons.lock,
+                      // "Must contain 8-30 characters", "Password"
                     ),
-                    /*suffix: InkWell(
-                        //onTap: _togglePasswordView,
-                        child: Icon(Icons.visibility)),*/
-                  ),
-                  controller: _passwordcontroller,
-                  validator: (input) => input.length <
-                      8 // need to hold a help icon if the password rule becomes too complicated
-                      ? "Not a Valid Password"
-                      : null,
-                  onSaved: (input) => _password = input,
-                ),
-              ),
+
+                    controller: _passwordcontroller,
+                    validator: (value) {
+                      // ignore: missing_return
+                      if (value.trim().isEmpty)
+                        return 'Please enter a value';
+                      if (value.trim().length < 8)
+                        return 'Must contain 8-30 characters';
+                      return null;
+                    },
+                    obscureText: _isHidden,
+
+                  )),
             ],
           ),
         ],
@@ -323,8 +392,6 @@ class _LoginAppState extends State<LoginApp> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EnterCode()));
-              } else {
-                return null;
               }
             })
                 : null);
@@ -404,8 +471,10 @@ class _LoginAppState extends State<LoginApp> {
                 .facebookSignIn(context)
                 .then((FirebaseUser user) => populateData())
                 .catchError((e) => print(''))
-                .whenComplete(() => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => EnterCode()))),
+                .whenComplete(() => null
+                    // Navigator.push(context,
+                // MaterialPageRoute(builder: (context) => EnterCode()))
+                ),
             AssetImage(
               'assets/images/facebook.jpg',
             ),
@@ -414,17 +483,21 @@ class _LoginAppState extends State<LoginApp> {
                 () => signInService
                 .googSignIn(context)
             //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
-                .then((FirebaseUser user) => populateData())
+                .then((FirebaseUser user) { if(user !=null){
+                  populateData();
+                  error="noerror";
+                }})
                 .catchError((e) {
               print(e);
             })
                 .whenComplete(() => addUser())
                 .whenComplete(() => authenticateService
                 .autheticate()
-                .whenComplete(() => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => EnterCode())))),
+                .whenComplete(() => error=="noerror"?Navigator.push(context,
+                MaterialPageRoute(builder: (context) => EnterCode()))
+                    :error=null)),
             AssetImage(
-              'assets/images/google.jpg',
+              'assets/images/google.png',
             ),
           ),
         ],
@@ -433,38 +506,40 @@ class _LoginAppState extends State<LoginApp> {
   }
 
   Widget _buildSignupBtn() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Center(
-          child: Text('Don\'t have an Account? ',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold)),
-        ),
-        FlatButton(
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Text(
-                'Click here',
-                style: TextStyle(
-                    color: Color(0xFF61bcbc),
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600),
-              ),
+    return FittedBox(
+      fit: BoxFit.cover,
+      child: Container(
+        child: Row(
+          children: [
+            Container(
+              child: Text('Don\'t have an Account? ',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold)),
             ),
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => SignUp()));
-            }),
-      ],
+            FlatButton(
+                child: Text(
+                  'Click here',
+                  style: TextStyle(
+                      color: Color(0xFF61bcbc),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600),
+                ),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => SignUp()));
+                })
+          ],
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return !(isOffline)
+        ? Scaffold(
       appBar: AppBar(
           toolbarHeight: 40.0,
           backgroundColor: Color(0xFF61bcbc),
@@ -524,6 +599,59 @@ class _LoginAppState extends State<LoginApp> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    )
+        : Consumer<ThemeNotifier>(
+      builder: (context, notifier, child) => Scaffold(
+        backgroundColor: notifier.darkTheme ? Colors.black : Colors.white,
+        body: Column(
+          children: [
+            Container(
+                padding: EdgeInsets.only(top: 100),
+                alignment: Alignment.topLeft,
+                child: Image.asset("assets/images/no_internet.png")),
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  "No connection",
+                  style: TextStyle(
+                      color: notifier.darkTheme
+                          ? Colors.white
+                          : Colors.black,
+                      fontSize: 20),
+                )),
+            Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Text(
+                  "No internet connection found",
+                  style: TextStyle(
+                    color: notifier.darkTheme
+                        ? Colors.white
+                        : Colors.black54,
+                    fontSize: 16,
+                  ),
+                )),
+            Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                child: Text(
+                  "Check your connection or try again.",
+                  style: TextStyle(
+                    color: notifier.darkTheme
+                        ? Colors.white
+                        : Colors.black54,
+                    fontSize: 16,
+                  ),
+                )),
+            RaisedButton.icon(
+                label: Text("TRY AGAIN"),
+                icon: Icon(Icons.refresh),
+                onPressed: () {})
           ],
         ),
       ),

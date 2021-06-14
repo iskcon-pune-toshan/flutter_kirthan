@@ -19,9 +19,9 @@ import 'package:provider/provider.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final ProspectiveUserPageViewModel prospectiveUserPageVM =
-    ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
+ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
 
 class App extends StatefulWidget {
   @override
@@ -179,118 +179,117 @@ class AppState extends State<App> {
     // WillPopScope handle android back btn
     return !(isOffline)
         ? WillPopScope(
-            onWillPop: () async {
-              if (role_id == 2) {
-                final isFirstRouteInCurrentTab =
-                    !await tabs_alternative[currentTab]
-                        .key
-                        .currentState
-                        .maybePop();
-                if (isFirstRouteInCurrentTab) {
-                  // if not on the 'main' tab
-                  if (currentTab != 0) {
-                    // select 'main' tab
-                    _selectTab(0);
-                    // back button handled by app
-                    return false;
-                  }
-                }
-                // let system handle back button if we're on the first route
-                return isFirstRouteInCurrentTab;
-              } else {
-                final isFirstRouteInCurrentTab =
-                    !await tabs[currentTab].key.currentState.maybePop();
-                if (isFirstRouteInCurrentTab) {
-                  // if not on the 'main' tab
-                  if (currentTab != 0) {
-                    // select 'main' tab
-                    _selectTab(0);
-                    // back button handled by app
-                    return false;
-                  }
-                }
-                // let system handle back button if we're on the first route
-                return isFirstRouteInCurrentTab;
-              }
-            },
-            // this is the base scaffold
-            // don't put appbar in here otherwise you might end up
-            // with multiple appbars on one screen
-            // eventually breaking the app
-            child: Scaffold(
-              // indexed stack shows only one child
-              body: IndexedStack(
-                index: currentTab,
-                children: role_id == 2
-                    ? tabs_alternative.map((e) => e.page).toList()
-                    : tabs.map((e) => e.page).toList(),
-              ),
-              // Bottom navigation
-              bottomNavigationBar: BottomNavigation(
-                onSelectTab: _selectTab,
-                tabs: role_id == 2 ? tabs_alternative : tabs,
-              ),
-            ),
-          )
+      onWillPop: () async {
+        if (role_id == 2) {
+          final isFirstRouteInCurrentTab =
+          !await tabs_alternative[currentTab]
+              .key
+              .currentState
+              .maybePop();
+          if (isFirstRouteInCurrentTab) {
+            // if not on the 'main' tab
+            if (currentTab != 0) {
+              // select 'main' tab
+              _selectTab(0);
+              // back button handled by app
+              return false;
+            }
+          }
+          // let system handle back button if we're on the first route
+          return isFirstRouteInCurrentTab;
+        } else {
+          final isFirstRouteInCurrentTab =
+          !await tabs[currentTab].key.currentState.maybePop();
+          if (isFirstRouteInCurrentTab) {
+            // if not on the 'main' tab
+            if (currentTab != 0) {
+              // select 'main' tab
+              _selectTab(0);
+              // back button handled by app
+              return false;
+            }
+          }
+          // let system handle back button if we're on the first route
+          return isFirstRouteInCurrentTab;
+        }
+      },
+      // this is the base scaffold
+      // don't put appbar in here otherwise you might end up
+      // with multiple appbars on one screen
+      // eventually breaking the app
+      child: Scaffold(
+        // indexed stack shows only one child
+        body: IndexedStack(
+          index: currentTab,
+          children: role_id == 2
+              ? tabs_alternative.map((e) => e.page).toList()
+              : tabs.map((e) => e.page).toList(),
+        ),
+        // Bottom navigation
+        bottomNavigationBar: BottomNavigation(
+          onSelectTab: _selectTab,
+          tabs: role_id == 2 ? tabs_alternative : tabs,
+        ),
+      ),
+    )
         : Consumer<ThemeNotifier>(
-            builder: (context, notifier, child) => Scaffold(
-              backgroundColor: notifier.darkTheme ? Colors.black : Colors.white,
-              body: Column(
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(top: 100),
-                      alignment: Alignment.topLeft,
-                      child: Image.asset(
-                          "assets/images/no_internet_connection.gif")),
-                  Container(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Text(
-                        "No connection",
-                        style: TextStyle(
-                            color: notifier.darkTheme
-                                ? Colors.white
-                                : Colors.black,
-                            fontSize: 20),
-                      )),
-                  Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
-                      child: Text(
-                        "No internet connection found",
-                        style: TextStyle(
-                          color: notifier.darkTheme
-                              ? Colors.white
-                              : Colors.black54,
-                          fontSize: 16,
-                        ),
-                      )),
-                  Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                      child: Text(
-                        "Check your connection or try again.",
-                        style: TextStyle(
-                          color: notifier.darkTheme
-                              ? Colors.white
-                              : Colors.black54,
-                          fontSize: 16,
-                        ),
-                      )),
-                  RaisedButton.icon(
-                      label: Text("TRY AGAIN"),
-                      icon: Icon(Icons.refresh),
-                      onPressed: () {
-                        BottomNavigation(
-                          onSelectTab: _selectTab,
-                          tabs: role_id == 2 ? tabs_alternative : tabs,
-                        );
-                      })
-                ],
-              ),
-            ),
-          );
+      builder: (context, notifier, child) => Scaffold(
+        backgroundColor: notifier.darkTheme ? Colors.black : Colors.white,
+        body: Column(
+          children: [
+            Container(
+                padding: EdgeInsets.only(top: 100),
+                alignment: Alignment.topLeft,
+                child: Image.asset("assets/images/no_internet.png")),
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  "No connection",
+                  style: TextStyle(
+                      color: notifier.darkTheme
+                          ? Colors.white
+                          : Colors.black,
+                      fontSize: 20),
+                )),
+            Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Text(
+                  "No internet connection found",
+                  style: TextStyle(
+                    color: notifier.darkTheme
+                        ? Colors.white
+                        : Colors.black54,
+                    fontSize: 16,
+                  ),
+                )),
+            Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                child: Text(
+                  "Check your connection or try again.",
+                  style: TextStyle(
+                    color: notifier.darkTheme
+                        ? Colors.white
+                        : Colors.black54,
+                    fontSize: 16,
+                  ),
+                )),
+            RaisedButton.icon(
+                label: Text("TRY AGAIN"),
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  BottomNavigation(
+                    onSelectTab: _selectTab,
+                    tabs: role_id == 2 ? tabs_alternative : tabs,
+                  );
+                })
+          ],
+        ),
+      ),
+    );
   }
 
   getRoleId() async {

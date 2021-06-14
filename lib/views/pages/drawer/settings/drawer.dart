@@ -15,6 +15,7 @@ import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:flutter_kirthan/views/pages/team/request_code.dart';
+import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/pages/team/team_profile_page.dart';
 import 'package:flutter_kirthan/views/pages/user/inviteLocalAdmin.dart';
 import 'package:flutter_kirthan/views/pages/user/localadmin_profile.dart';
@@ -133,8 +134,9 @@ class _MyDrawerState extends State<MyDrawer> {
            /* print("\n\n\n\n\n\n\n\n\n\n\n Email : " +
                 _email +
                 "\n\n\n\n\n\n\n\n");*/
+            final ref = FirebaseStorage.instance.ref().child(_email);
             return FutureBuilder(
-                future:FireStorageService.loadImage(context,_email),
+                future: ref.getDownloadURL(),
                 builder: (context, snapshot) {
                   if (snapshot.data != null) {
                     return new Image.network(snapshot.data, fit: BoxFit.fill);
@@ -325,7 +327,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RequestCode()));
+                              builder: (context) => TeamWrite()));
                     },
                   ),
                 ),

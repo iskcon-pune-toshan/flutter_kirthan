@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:screen/screen.dart';
 
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
@@ -78,7 +81,6 @@ class _FaqAppState extends State<FaqApp> {
                                   fontWeight: FontWeight.bold)),
                         ),
                       ),
-
                       SizedBox(
                         height: 30,
                       ),
@@ -249,39 +251,44 @@ class _FaqAppState extends State<FaqApp> {
 
                               // String CurrentUserName = "string";
                               // String uemail = snapshot.data;
-                              return ExpansionTile(
-                                title: Container(
-                                    padding: EdgeInsets.only(bottom: 10),
-                                    child: Text("Local Admin list")),
-                                children: [
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: localAdminPhoneList.length,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                localAdminNameList[index],
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.grey[400]),
+                              return SingleChildScrollView(
+                                child: ExpansionTile(
+                                  title: Container(
+                                      padding: EdgeInsets.only(bottom: 10),
+                                      child: Text("Local Admin list")),
+                                  children: [
+                                    SingleChildScrollView(
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: ClampingScrollPhysics(),
+                                          itemCount: localAdminPhoneList.length,
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                              padding: EdgeInsets.only(bottom: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    localAdminNameList[index],
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.grey[400]),
+                                                  ),
+                                                  Text(
+                                                    localAdminPhoneList[index]
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.grey[400]),
+                                                  ),
+                                                ],
                                               ),
-                                              Text(
-                                                localAdminPhoneList[index]
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.grey[400]),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      })
-                                ],
+                                            );
+                                          }),
+                                    )
+                                  ],
+                                ),
                               );
                             }
                             return Center(
