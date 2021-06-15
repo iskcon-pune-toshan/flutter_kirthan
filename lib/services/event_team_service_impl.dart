@@ -31,28 +31,14 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
       List<EventTeam> teamrequests = teamusermappingData
           .map((teamusermappingData) => EventTeam.fromMap(teamusermappingData))
           .toList();
-//      TeamUser.fromMap(teamusermappingData);
-      return teamrequests;
 
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData
-          .map((userrequestsData) => UserRequest.fromMap(userrequestsData))
-          .toList();
+      return teamrequests;
     } else {
       throw Exception('Failed to get data');
     }
   }
 
   Future<List<EventTeam>> getEventTeamMappings(int teamMapping) async {
-    //String requestBody = '{"createdBy":"SYSTEM"}';
-    /*String requestBody = '{"eventdate":"sysdate()"}'; //today
-    requestBody = '{"eventdate":"sysdate()+1"}'; //tomorrow
-    requestBody = '{"eventdate":"sysdate()+7"}'; //week
-    requestBody = '{"eventdate":"sysdate()+30"}'; //month
-*/
-    //print(requestBody);
-//print(teamMapping);
     String requestBody = "";
 
     requestBody = '{"eventId" : $teamMapping}';
@@ -65,7 +51,6 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
         },
         body: requestBody);
     if (response.statusCode == 200) {
-
       List<dynamic> teamtsermappingData = json.decode(response.body);
 
       List<EventTeam> teamusermappings = teamtsermappingData
@@ -80,7 +65,6 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
 
   Future<List<EventTeam>> submitDeleteEventTeamMapping(
       Map<String, dynamic> listofteamusermap) async {
-
     String requestBody = json.encode(listofteamusermap);
 
     String token = AutheticationAPIService().sessionJWTToken;
@@ -96,15 +80,8 @@ class EventTeamAPIService extends BaseAPIService implements IEventTeamRestApi {
       List<EventTeam> teamusers = teamusermappingData
           .map((teamusermappingData) => EventTeam.fromMap(teamusermappingData))
           .toList();
-//      TeamUser.fromMap(teamusermappingData);
 
       return teamusers;
-
-      List<dynamic> userrequestsData = json.decode(response.body);
-      //print(userdetailsData);
-      List<UserRequest> userrequests = userrequestsData
-          .map((userrequestsData) => UserRequest.fromMap(userrequestsData))
-          .toList();
     } else {
       throw Exception('Failed to get data');
     }

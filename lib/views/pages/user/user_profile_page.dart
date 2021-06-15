@@ -212,10 +212,23 @@ class _UserProfileState extends State<UserProfile> {
                                             SizedBox(
                                               height: 10,
                                             ),
-                                            Container(
-                                              child: Text(
-                                                UserName,
-                                                style: TextStyle(fontSize: 10+notifier.custFontSize),
+                                            FittedBox(
+                                              fit: BoxFit.cover,
+                                              child: FittedBox(
+                                                fit: BoxFit.cover,
+                                                child: Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                      180,
+                                                  child: Text(
+                                                    UserName,
+                                                    style: TextStyle(
+                                                        fontSize: 5 +
+                                                            notifier
+                                                                .custFontSize),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             SizedBox(
@@ -261,7 +274,7 @@ class _UserProfileState extends State<UserProfile> {
                                     ),
                                     Text(
                                       ': ' + Phone.toString(),
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: notifier.custFontSize+2,),
                                     ),
                                   ],
                                 ),
@@ -279,7 +292,7 @@ class _UserProfileState extends State<UserProfile> {
                                     ),
                                     Text(
                                       ': ' + Email,
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: notifier.custFontSize+2,),
                                     ),
                                     SizedBox(
                                       height: 5,

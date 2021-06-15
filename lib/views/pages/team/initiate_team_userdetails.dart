@@ -213,7 +213,7 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
                                       SizedBox(
                                         width: 30,
                                       ),
-                                      Container(
+                                      Container(width: MediaQuery.of(context).size.width*0.5,
                                         margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
                                         child: Column(
                                           crossAxisAlignment:
@@ -355,17 +355,17 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
                                     thickness: 1,
                                   ),
                                   SizedBox(height: 20),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                          fillColor: Colors.grey[700],
-                                          border: OutlineInputBorder(),
-                                          hintText: 'Add a message',
-                                          icon: Icon(Icons.add)),
-                                      style: TextStyle(color: Colors.white70,fontSize: notifier.custFontSize),
-                                    ),
-                                  ),
+                                  // Align(
+                                  //   alignment: Alignment.centerLeft,
+                                  //   child: TextField(
+                                  //     decoration: InputDecoration(
+                                  //         fillColor: Colors.grey[700],
+                                  //         border: OutlineInputBorder(),
+                                  //         hintText: 'Add a message',
+                                  //         icon: Icon(Icons.add)),
+                                  //     style: TextStyle(color: Colors.white70,fontSize: notifier.custFontSize),
+                                  //   ),
+                                  // ),
                                   SizedBox(
                                     height: 30,
                                   ),

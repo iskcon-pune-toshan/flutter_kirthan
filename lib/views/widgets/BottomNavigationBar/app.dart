@@ -1,34 +1,27 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/prospectiveuser.dart';
+import 'package:flutter_kirthan/connection.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/prospective_user_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/prospective_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
-import 'package:flutter_kirthan/views/pages/role_screen/role_screen_view.dart';
-import 'package:flutter_kirthan/views/pages/roles/roles_view.dart';
-import 'package:flutter_kirthan/views/pages/screens/screens_view.dart';
 import 'package:flutter_kirthan/views/pages/team/initiate_team.dart';
-import 'package:flutter_kirthan/views/pages/team/team_view.dart';
-import 'package:flutter_kirthan/views/pages/temple/temple_view.dart';
-import 'package:flutter_kirthan/views/pages/user/inviteUser.dart';
-import 'package:flutter_kirthan/views/pages/user/user_view.dart';
-import 'package:flutter_kirthan/views/pages/user_temple/user_temple_view.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/CommonBottomNavigationBar.dart';
-import 'package:flutter_kirthan/views/pages/user/inviteLocalAdmin.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/tabItem.dart';
-import 'package:flutter_kirthan/views/pages/user/enterCode.dart';
+import 'package:provider/provider.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final ProspectiveUserPageViewModel prospectiveUserPageVM =
-    ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
+ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
 
 class App extends StatefulWidget {
   @override
@@ -49,12 +42,24 @@ class AppState extends State<App> {
     return email;
   }
 
+  StreamSubscription _connectionChangeStream;
+
+  bool isOffline = false;
   @override
   void initState() {
     getRoleId();
     super.initState();
     // print("+++++++++++++ Role Id");
     //print("//////////");
+    ConnectionStatus connectionStatus = ConnectionStatus.getInstance();
+    _connectionChangeStream =
+        connectionStatus.connectionChange.listen(connectionChanged);
+  }
+
+  void connectionChanged(dynamic hasConnection) {
+    setState(() {
+      isOffline = !hasConnection;
+    });
   }
 
   final List<TabItem> tabs = [
@@ -79,7 +84,7 @@ class AppState extends State<App> {
       page: NotificationView(),
     ),
     TabItem(
-      tabName: "Events",
+      tabName: "My Events",
       icon: Icons.calendar_today,
       page: MyEventView(),
     ),
@@ -172,11 +177,15 @@ class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     // WillPopScope handle android back btn
-    return WillPopScope(
+    return !(isOffline)
+        ? WillPopScope(
       onWillPop: () async {
         if (role_id == 2) {
           final isFirstRouteInCurrentTab =
-              !await tabs_alternative[currentTab].key.currentState.maybePop();
+          !await tabs_alternative[currentTab]
+              .key
+              .currentState
+              .maybePop();
           if (isFirstRouteInCurrentTab) {
             // if not on the 'main' tab
             if (currentTab != 0) {
@@ -190,7 +199,7 @@ class AppState extends State<App> {
           return isFirstRouteInCurrentTab;
         } else {
           final isFirstRouteInCurrentTab =
-              !await tabs[currentTab].key.currentState.maybePop();
+          !await tabs[currentTab].key.currentState.maybePop();
           if (isFirstRouteInCurrentTab) {
             // if not on the 'main' tab
             if (currentTab != 0) {
@@ -220,6 +229,64 @@ class AppState extends State<App> {
         bottomNavigationBar: BottomNavigation(
           onSelectTab: _selectTab,
           tabs: role_id == 2 ? tabs_alternative : tabs,
+        ),
+      ),
+    )
+        : Consumer<ThemeNotifier>(
+      builder: (context, notifier, child) => Scaffold(
+        backgroundColor: notifier.darkTheme ? Colors.black : Colors.white,
+        body: Column(
+          children: [
+            Container(
+                padding: EdgeInsets.only(top: 100),
+                alignment: Alignment.topLeft,
+                child: Image.asset("assets/images/no_internet.png")),
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  "No connection",
+                  style: TextStyle(
+                      color: notifier.darkTheme
+                          ? Colors.white
+                          : Colors.black,
+                      fontSize: 20),
+                )),
+            Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Text(
+                  "No internet connection found",
+                  style: TextStyle(
+                    color: notifier.darkTheme
+                        ? Colors.white
+                        : Colors.black54,
+                    fontSize: 16,
+                  ),
+                )),
+            Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                child: Text(
+                  "Check your connection or try again.",
+                  style: TextStyle(
+                    color: notifier.darkTheme
+                        ? Colors.white
+                        : Colors.black54,
+                    fontSize: 16,
+                  ),
+                )),
+            RaisedButton.icon(
+                label: Text("TRY AGAIN"),
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  BottomNavigation(
+                    onSelectTab: _selectTab,
+                    tabs: role_id == 2 ? tabs_alternative : tabs,
+                  );
+                })
+          ],
         ),
       ),
     );

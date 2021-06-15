@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
@@ -24,13 +22,6 @@ import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_kirthan/services/authenticate_service.dart';
-import 'package:flutter_kirthan/services/firebasemessage_service.dart';
-import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
-import 'event_calendar.dart';
-import 'package:rating_dialog/rating_dialog.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:move_to_background/move_to_background.dart';
 
 final EventPageViewModel eventPageVM =
@@ -86,6 +77,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     "This Week",
     "This Month",
     "Clear Filter"
+   // "Near to you"
   ];
   String date;
   String datetomm;
@@ -182,7 +174,8 @@ class _EventViewState extends State<EventView> with BaseAPIService {
               color: KirthanStyles.colorPallete60),
           labelBackgroundColor: KirthanStyles.colorPallete30,
         )
-            : SpeedDialChild(
+            :
+        SpeedDialChild(
           child: Icon(Icons.event, color: Colors.white),
           backgroundColor: Colors.grey,
           onTap: () {
@@ -258,6 +251,8 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                         eventPageVM.setEventRequests("This Month");
                       else if (input == 'Clear Filter')
                         eventPageVM.setEventRequests("All");
+                     /* else if (input == 'Near to you')
+                        eventPageVM.setEventRequests('NeartoYou');*/
                       else if (notifier.duration != null) {
                         eventPageVM.setEventRequests(notifier.duration);
                       }
@@ -293,7 +288,9 @@ class _EventViewState extends State<EventView> with BaseAPIService {
               onRefresh: refreshList,
             ),
             floatingActionButton:
-            buildSpeedDial() /*FloatingActionButton(
+            role_id==2 || role_id ==1
+            ?buildSpeedDial()
+          :FloatingActionButton(
             heroTag: "event",
             child: Icon(Icons.add),
             backgroundColor: KirthanStyles.colorPallete10,
@@ -302,7 +299,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => EventWrite()));
             },
-          ),*/
+          ),
         ),
       ),
     );
@@ -359,7 +356,7 @@ class Search extends SearchDelegate {
                 ? suggestionList = eventlist
                 : suggestionList.addAll(eventlist.where((element) =>
             element.eventTitle.toUpperCase().contains(query) == true ||
-                element.eventTitle.toLowerCase().contains(query) == true));
+                element.eventTitle.toLowerCase().contains(query) == true || element.eventTitle.contains(query) == true )) ;
             return ListView.builder(
               itemCount: suggestionList.length,
               itemBuilder: (context, index) {
@@ -399,7 +396,7 @@ class Search extends SearchDelegate {
                 ? suggestionList = eventlist
                 : suggestionList.addAll(eventlist.where((element) =>
             element.eventTitle.toUpperCase().contains(query) == true ||
-                element.eventTitle.toLowerCase().contains(query) == true));
+                element.eventTitle.toLowerCase().contains(query) == true || element.eventTitle.contains(query) == true ));
             return ListView.builder(
               itemCount: suggestionList.length,
               itemBuilder: (context, index) {

@@ -21,11 +21,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 final TeamUserPageViewModel teamUserPageVM =
-    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+  TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+  TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+  UserPageViewModel(apiSvc: UserAPIService());
 
 class members_profile extends StatefulWidget {
   bool show;
@@ -93,11 +93,12 @@ class _members_profileState extends State<members_profile> {
       //print("for loop");
       // print(teamUser.teamId);
       //print(teamrequest.id);
-      if (teamUser.userName.toLowerCase() ==
-              _selectedTeamMember.toLowerCase() &&
+      if(teamUser.userName!=null){
+        if (teamUser.userName.toLowerCase() ==
+          _selectedTeamMember.toLowerCase() &&
           teamId.contains(teamrequest.id)) {
         break;
-      }
+      }}
       count++;
     }
     if (count == teamUserList.length) {
@@ -116,7 +117,7 @@ class _members_profileState extends State<members_profile> {
       teamUser.userName = _selectedTeamMember;
       teamUser.createdBy = "SYSTEM";
       String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
       teamUser.createdTime = dt;
       teamUser.updatedBy = "SYSTEM";
       teamUser.updatedTime = dt;
@@ -226,602 +227,621 @@ class _members_profileState extends State<members_profile> {
   @override
   Widget build(BuildContext context) {
     List<TeamUser> finalTeamUserList = new List<TeamUser>();
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text("Edit members"),
-      ),
-      body: RefreshIndicator(
-        key: refreshKey,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: FutureBuilder(
-              future: getEmail(),
-              builder: (context, snapshot) {
-                if (snapshot.data != null) {
-                  String email = snapshot.data;
-                  //  print("EMAIL");
-                  // print(email);
-                  return FutureBuilder(
-                      future: teamPageVM.getTeamRequests("teamLead:" + email),
-                      builder: (context, snapshot) {
-                        if (snapshot.data != null) {
-                          teamList = snapshot.data;
-                          //print("Team list data");
-                          // print(teamList);
-                          if (teamList.isNotEmpty) {
-                            for (var u in teamList) {
-                              // print("UUUU");
-                              // print(u.id);
-                              teamrequest = u;
-                            }
-                            return FutureBuilder<List<TeamUser>>(
-                              future: teamUserPageVM.getTeamUserMappings(
-                                  teamrequest.id.toString()),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<TeamUser>> snapshot) {
-                                finalTeamUserList.clear();
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) =>(
+        Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: Text("Edit members", style: TextStyle(
+                fontSize: notifier.custFontSize)),
+          ),
+          body: RefreshIndicator(
+            key: refreshKey,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: FutureBuilder(
+                  future: getEmail(),
+                  builder: (context, snapshot) {
+                    if (snapshot.data != null) {
+                      String email = snapshot.data;
+                      //  print("EMAIL");
+                      // print(email);
+                      return FutureBuilder(
+                          future: teamPageVM.getTeamRequests("teamLead:" + email),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              teamList = snapshot.data;
+                              //print("Team list data");
+                              // print(teamList);
+                              if (teamList.isNotEmpty) {
+                                for (var u in teamList) {
+                                  // print("UUUU");
+                                  // print(u.id);
+                                  teamrequest = u;
+                                }
+                                return FutureBuilder<List<TeamUser>>(
+                                  future: teamUserPageVM.getTeamUserMappings(
+                                      teamrequest.id.toString()),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<TeamUser>> snapshot) {
+                                    finalTeamUserList.clear();
 
-                                if (snapshot.hasData) {
-                                  teamUserList = snapshot.data;
-                                  for (var teamUser in teamUserList) {
-                                    if (teamUser.teamId == teamrequest.id) {
-                                      // print("HELLO");
-                                      // print(teamrequest.id);
-                                      // print(teamUser.teamId);
-                                      finalTeamUserList.contains(teamUser)
-                                          ? null
-                                          : finalTeamUserList.add(teamUser);
-                                    }
-                                  }
-                                  return SingleChildScrollView(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Form(
-                                          key: _formKey,
-                                          // autovalidateMode: AutovalidateMode
-                                          //     .onUserInteraction,
-                                          // onChanged: () {
-                                          //   _formKey.currentState.validate();
-                                          // },
-                                          child: Consumer<ThemeNotifier>(
-                                            builder:
-                                                (context, notifier, child) =>
+                                    if (snapshot.hasData) {
+                                      teamUserList = snapshot.data;
+                                      for (var teamUser in teamUserList) {
+                                        if (teamUser.teamId == teamrequest.id) {
+                                          // print("HELLO");
+                                          // print(teamrequest.id);
+                                          // print(teamUser.teamId);
+                                          finalTeamUserList.contains(teamUser)
+                                              ? null
+                                              : finalTeamUserList.add(teamUser);
+                                        }
+                                      }
+                                      return SingleChildScrollView(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Form(
+                                              key: _formKey,
+                                              // autovalidateMode: AutovalidateMode
+                                              //     .onUserInteraction,
+                                              // onChanged: () {
+                                              //   _formKey.currentState.validate();
+                                              // },
+                                              child: Consumer<ThemeNotifier>(
+                                                builder:
+                                                    (context, notifier, child) =>
                                                     Column(
-                                              children: [
-                                                Text("Members",
-                                                    style: TextStyle(
-                                                        fontSize: notifier
-                                                            .custFontSize,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                finalTeamUserList.isEmpty
-                                                    ? Container(
-                                                        margin: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 10),
-                                                        child: Text(
-                                                          "No members in the team",
-                                                          style: TextStyle(
+                                                      children: [
+                                                        Text("Members",
+                                                            style: TextStyle(
+                                                                fontSize: notifier
+                                                                    .custFontSize,
+                                                                fontWeight:
+                                                                FontWeight.bold)),
+                                                        finalTeamUserList.isEmpty
+                                                            ? Container(
+                                                          margin: EdgeInsets
+                                                              .symmetric(
+                                                              vertical: 10),
+                                                          child: Text(
+                                                            "No members in the team",
+                                                            style: TextStyle(
                                                               color: KirthanStyles
-                                                                  .colorPallete30),
-                                                        ),
-                                                      )
-                                                    : Container(),
-                                                addmember(finalTeamUserList),
-                                                Divider(),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
+                                                                  .colorPallete30, fontSize: notifier
+                                                                .custFontSize,),
+                                                          ),
+                                                        )
+                                                            : Container(),
+                                                        addmember(finalTeamUserList),
+                                                        Divider(),
+                                                        Column(
+                                                          mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceEvenly,
-                                                      children: [
-                                                        RaisedButton.icon(
-                                                          label: Text('Add'),
-                                                          icon: const Icon(
-                                                              Icons.add_circle),
-                                                          color: Colors.green,
-                                                          onPressed: () {
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                              children: [
+                                                                RaisedButton.icon(
+                                                                  label: Text('Add', style: TextStyle(fontSize: notifier
+                                                                      .custFontSize),),
+                                                                  icon: const Icon(
+                                                                      Icons.add_circle),
+                                                                  color: Colors.green,
+                                                                  onPressed: () {
 //addmember();
 
-                                                            setState(() {
-                                                              this.counter++;
-                                                            });
-                                                          },
-                                                        ),
-                                                        RaisedButton.icon(
-                                                            label:
-                                                                Text('Remove'),
-                                                            icon: const Icon(
-                                                                Icons.cancel),
-                                                            color: Colors.red,
-                                                            onPressed: () {
-                                                              return showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
+                                                                    setState(() {
+                                                                      this.counter++;
+                                                                    });
+                                                                  },
+                                                                ),
+                                                                RaisedButton.icon(
+                                                                    label:
+                                                                    Text('Remove', style: TextStyle(fontSize: notifier
+                                                                        .custFontSize),),
+                                                                    icon: const Icon(
+                                                                        Icons.cancel),
+                                                                    color: Colors.red,
+                                                                    onPressed: () {
+                                                                      return showDialog(
+                                                                          context:
+                                                                          context,
+                                                                          builder:
+                                                                              (BuildContext
                                                                           context) {
-                                                                    return StatefulBuilder(builder:
-                                                                        (context,
-                                                                            setState) {
-                                                                      return Dialog(
-                                                                        shape: RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(20.0)), //this right here
-                                                                        child:
-                                                                            Container(
-                                                                          height:
-                                                                              400,
-                                                                          child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(12.0),
-                                                                            child:
+                                                                            return StatefulBuilder(builder:
+                                                                                (context,
+                                                                                setState) {
+                                                                              return Dialog(
+                                                                                shape: RoundedRectangleBorder(
+                                                                                    borderRadius:
+                                                                                    BorderRadius.circular(20.0)), //this right here
+                                                                                child:
                                                                                 Container(
-                                                                              child: Stack(
-                                                                                children: [
-                                                                                  //for (int i = 0; i < finalTeamUserList.length; i++)
-                                                                                  // RadioListTile(
-                                                                                  //   value: i,
-                                                                                  //   groupValue: _groupValue,
-                                                                                  //   onChanged: (value) {
-                                                                                  //     setState(() {
-                                                                                  //     //  print(value);
-                                                                                  //
-                                                                                  //       //print(finalTeamUserList[i].userName);
-                                                                                  //
-                                                                                  //       _groupValue = value;
-                                                                                  //       //print("groupvalue");
-                                                                                  //       //print(_groupValue);
-                                                                                  //     });
-                                                                                  //   },
-                                                                                  //   title: Consumer<ThemeNotifier>(
-                                                                                  //     builder: (context, notifier, child) => Text(finalTeamUserList[i].userName, style: TextStyle(fontSize: notifier.custFontSize)),
-                                                                                  //   ),
-                                                                                  // ),
-                                                                                  finalTeamUserList.length == 0
-                                                                                      ? Container(
-                                                                                          alignment: Alignment.topCenter,
-                                                                                          height: 400,
-                                                                                          margin: EdgeInsets.only(top: 100),
-                                                                                          child: Text("Nothing to show"),
-                                                                                        )
-                                                                                      : SingleChildScrollView(
-                                                                                          physics: BouncingScrollPhysics(),
-                                                                                          child: Column(
-                                                                                            children: [
-                                                                                              Container(
-                                                                                                height: 55,
-                                                                                              ),
-                                                                                              CheckboxGroup(
-                                                                                                activeColor: KirthanStyles.colorPallete30,
-                                                                                                checkColor: Colors.white,
-                                                                                                labels: finalTeamUserList.map((e) => e.userName).toList(),
-                                                                                                checked: _checked,
-                                                                                                onChange: (bool isChecked, String label, int index) => print(""),
-                                                                                                onSelected: (List selected) => setState(() {
-                                                                                                  _checked = selected;
-                                                                                                  setState(() {
-                                                                                                    error2 = "";
-                                                                                                  });
-                                                                                                }),
-                                                                                              ),
-                                                                                              Container(
-                                                                                                height: 45,
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                  Container(
-                                                                                    //color: Colors.blue,
-                                                                                    height: 400,
-                                                                                    child: Column(
-                                                                                      children: [
-                                                                                        Container(
-                                                                                          color: Theme.of(context).dialogBackgroundColor,
-                                                                                          alignment: Alignment.center,
-                                                                                          padding: EdgeInsets.only(bottom: 20),
-                                                                                          width: MediaQuery.of(context).size.width,
-                                                                                          //decoration: BoxDecoration(color: Colors.red),
-                                                                                          child: Column(
-                                                                                            children: [
-                                                                                              Text(
-                                                                                                'Remove Member?',
-                                                                                                style: TextStyle(color: KirthanStyles.colorPallete30, fontSize: 18),
-                                                                                              ),
-                                                                                              Container(
-                                                                                                padding: EdgeInsets.only(top: 5),
-                                                                                                child: Text(
-                                                                                                  error2,
-                                                                                                  style: TextStyle(color: Colors.red),
+                                                                                  height:
+                                                                                  400,
+                                                                                  child:
+                                                                                  Padding(
+                                                                                    padding:
+                                                                                    const EdgeInsets.all(12.0),
+                                                                                    child:
+                                                                                    Container(
+                                                                                      child: Stack(
+                                                                                        children: [
+                                                                                          //for (int i = 0; i < finalTeamUserList.length; i++)
+                                                                                          // RadioListTile(
+                                                                                          //   value: i,
+                                                                                          //   groupValue: _groupValue,
+                                                                                          //   onChanged: (value) {
+                                                                                          //     setState(() {
+                                                                                          //     //  print(value);
+                                                                                          //
+                                                                                          //       //print(finalTeamUserList[i].userName);
+                                                                                          //
+                                                                                          //       _groupValue = value;
+                                                                                          //       //print("groupvalue");
+                                                                                          //       //print(_groupValue);
+                                                                                          //     });
+                                                                                          //   },
+                                                                                          //   title: Consumer<ThemeNotifier>(
+                                                                                          //     builder: (context, notifier, child) => Text(finalTeamUserList[i].userName, style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                                          //   ),
+                                                                                          // ),
+                                                                                          finalTeamUserList.length == 0
+                                                                                              ? Container(
+                                                                                            alignment: Alignment.topCenter,
+                                                                                            height: 400,
+                                                                                            margin: EdgeInsets.only(top: 100),
+                                                                                            child: Text("Nothing to show", style: TextStyle(fontSize: notifier
+                                                                                                .custFontSize)),
+                                                                                          )
+                                                                                              : SingleChildScrollView(
+                                                                                            physics: BouncingScrollPhysics(),
+                                                                                            child: Column(
+                                                                                              children: [
+                                                                                                Container(
+                                                                                                  height: 55,
                                                                                                 ),
-                                                                                              )
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                        Spacer(),
-                                                                                        Container(
-                                                                                          padding: EdgeInsets.only(top: 10),
-                                                                                          color: Theme.of(context).dialogBackgroundColor,
-                                                                                          child: Row(
-                                                                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                                                                            children: [
-                                                                                              Expanded(
-                                                                                                  child: Container(
-                                                                                                // decoration: BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10))),
-                                                                                                child: RaisedButton.icon(
-                                                                                                  icon: Icon(
-                                                                                                    Icons.navigate_before,
-                                                                                                    color: Colors.white,
-                                                                                                  ),
-                                                                                                  onPressed: () {
+                                                                                                CheckboxGroup(labelStyle: TextStyle(fontSize: notifier.custFontSize),
+                                                                                                  activeColor: KirthanStyles.colorPallete30,
+                                                                                                  checkColor: Colors.white,
+                                                                                                  labels: finalTeamUserList.map((e) => e.userName).toList(),
+                                                                                                  checked: _checked,
+                                                                                                  onChange: (bool isChecked, String label, int index) => print(""),
+                                                                                                  onSelected: (List selected) => setState(() {
+                                                                                                    _checked = selected;
                                                                                                     setState(() {
                                                                                                       error2 = "";
                                                                                                     });
-
-                                                                                                    Navigator.pop(context);
-                                                                                                  },
-                                                                                                  label: Consumer<ThemeNotifier>(
-                                                                                                    builder: (context, notifier, child) => Container(
-                                                                                                      alignment: Alignment.centerLeft,
-                                                                                                      child: Text(
-                                                                                                        "Back",
-                                                                                                        style: TextStyle(fontSize: 14, color: Colors.white),
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  color: KirthanStyles.colorPallete30,
-                                                                                                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.zero, topRight: Radius.zero, bottomLeft: Radius.zero, bottomRight: Radius.circular(10))),
+                                                                                                  }),
                                                                                                 ),
-                                                                                              )),
-                                                                                              SizedBox(
-                                                                                                width: 10,
-                                                                                              ),
-                                                                                              Expanded(
-                                                                                                child: Container(
-                                                                                                  child: RaisedButton.icon(
-                                                                                                    icon: Icon(Icons.highlight_remove_rounded),
-                                                                                                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.zero, topRight: Radius.zero, bottomRight: Radius.zero, bottomLeft: Radius.circular(10))),
-                                                                                                    onPressed: () async {
-                                                                                                      List<TeamUser> teamUserToBeDeleted = new List<TeamUser>();
-                                                                                                      if (_checked.length != 0) {
-                                                                                                        for (var user in _checked) {
-                                                                                                          teamUserToBeDeleted += finalTeamUserList.where((element) => element.userName == user).toList();
-                                                                                                        }
-
-                                                                                                        //print("final");
-                                                                                                        //  print(finalTeamUserList);
-                                                                                                        teamUserPageVM.submitDeleteTeamUserMapping(teamUserToBeDeleted);
-
-                                                                                                        // teamrequestmap["id"] =
-                                                                                                        //     permissionsrequest?.id;
-                                                                                                        // permissionsPageVM
-                                                                                                        //     .deletePermissions(teamrequestmap);
-                                                                                                        //Navigator.of(context).pushReplacementNamed('/screen4');
-                                                                                                        SnackBar mysnackbar = SnackBar(
-                                                                                                          content: Text("Member $delete "),
-                                                                                                          duration: new Duration(seconds: 4),
-                                                                                                          backgroundColor: Colors.green,
-                                                                                                        );
-                                                                                                        // _scaffoldKey.currentState.showSnackBar(mysnackbar);
-                                                                                                        // await Future.delayed(Duration(seconds: 4));
-                                                                                                        Navigator.of(context).pushNamedAndRemoveUntil('/screen1', ModalRoute.withName('/screen4'));
-                                                                                                        bool result = await Navigator.of(context).push(MaterialPageRoute(
-                                                                                                            builder: (context) => //App()
-                                                                                                                members_profile(show: true)));
-                                                                                                        if (result != null && result == true) {
-                                                                                                          _scaffoldKey.currentState.showSnackBar(mysnackbar);
-                                                                                                        }
-                                                                                                      } else {
-                                                                                                        setState(() {
-                                                                                                          error2 = "Please select at least one member";
-                                                                                                        });
-                                                                                                      }
-                                                                                                    },
-                                                                                                    label: Consumer<ThemeNotifier>(
-                                                                                                      builder: (context, notifier, child) => Text(
-                                                                                                        "Remove",
-                                                                                                        style: TextStyle(fontSize: 14, color: Colors.white),
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                    color: Colors.red,
-                                                                                                  ),
+                                                                                                Container(
+                                                                                                  height: 45,
                                                                                                 ),
-                                                                                              ),
-                                                                                            ],
+                                                                                              ],
+                                                                                            ),
                                                                                           ),
-                                                                                        )
-                                                                                      ],
+                                                                                          Container(
+                                                                                            //color: Colors.blue,
+                                                                                            height: 400,
+                                                                                            child: Column(
+                                                                                              children: [
+                                                                                                Container(
+                                                                                                  color: Theme.of(context).dialogBackgroundColor,
+                                                                                                  alignment: Alignment.center,
+                                                                                                  padding: EdgeInsets.only(bottom: 20),
+                                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                                  //decoration: BoxDecoration(color: Colors.red),
+                                                                                                  child: Column(
+                                                                                                    children: [
+                                                                                                      Text(
+                                                                                                        'Remove Member?',
+                                                                                                        style: TextStyle(color: KirthanStyles.colorPallete30, fontSize: notifier.custFontSize),
+                                                                                                      ),
+                                                                                                      Container(
+                                                                                                        padding: EdgeInsets.only(top: 5),
+                                                                                                        child: Text(
+                                                                                                          error2,
+                                                                                                          style: TextStyle(color: Colors.red, fontSize: notifier
+                                                                                                              .custFontSize),
+                                                                                                        ),
+                                                                                                      )
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Spacer(),
+                                                                                                Container(
+                                                                                                  padding: EdgeInsets.only(top: 10),
+                                                                                                  color: Theme.of(context).dialogBackgroundColor,
+                                                                                                  child: Row(
+                                                                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                                                                    children: [
+                                                                                                      Expanded(
+                                                                                                          child: Container(
+                                                                                                            // decoration: BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10))),
+                                                                                                            child: RaisedButton(
+                                                                                                              // icon: Icon(
+                                                                                                              //   Icons.navigate_before,
+                                                                                                              //   color: Colors.white,
+                                                                                                              // ),
+                                                                                                              onPressed: () {
+                                                                                                                setState(() {
+                                                                                                                  error2 = "";
+                                                                                                                });
+
+                                                                                                                Navigator.pop(context);
+                                                                                                              },
+                                                                                                              child: Consumer<ThemeNotifier>(
+                                                                                                                builder: (context, notifier, child) => Container(
+                                                                                                                  alignment: Alignment.center,
+                                                                                                                  child: Text(
+                                                                                                                    "Back",
+                                                                                                                    style: TextStyle(fontSize: notifier.custFontSize, color: Colors.white),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              color: KirthanStyles.colorPallete30,
+                                                                                                              //shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.zero, topRight: Radius.zero, bottomLeft: Radius.zero, bottomRight: Radius.circular(10))),
+                                                                                                            ),
+                                                                                                          )),
+                                                                                                      SizedBox(
+                                                                                                        width: 10,
+                                                                                                      ),
+                                                                                                      Expanded(
+                                                                                                        child: Container(
+                                                                                                          child: RaisedButton(
+                                                                                                            // icon: Icon(Icons.highlight_remove_rounded),
+                                                                                                            //shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.zero, topRight: Radius.zero, bottomRight: Radius.zero, bottomLeft: Radius.circular(10))),
+                                                                                                            onPressed: () async {
+                                                                                                              List<TeamUser> teamUserToBeDeleted = new List<TeamUser>();
+                                                                                                              if (_checked.length != 0) {
+                                                                                                                for (var user in _checked) {
+                                                                                                                  teamUserToBeDeleted += finalTeamUserList.where((element) => element.userName == user).toList();
+                                                                                                                }
+
+                                                                                                                //print("final");
+                                                                                                                //  print(finalTeamUserList);
+                                                                                                                teamUserPageVM.submitDeleteTeamUserMapping(teamUserToBeDeleted);
+
+                                                                                                                // teamrequestmap["id"] =
+                                                                                                                //     permissionsrequest?.id;
+                                                                                                                // permissionsPageVM
+                                                                                                                //     .deletePermissions(teamrequestmap);
+                                                                                                                //Navigator.of(context).pushReplacementNamed('/screen4');
+                                                                                                                SnackBar mysnackbar = SnackBar(
+                                                                                                                  content: Text("Member $delete ", style: TextStyle(fontSize: notifier
+                                                                                                                      .custFontSize)),
+                                                                                                                  duration: new Duration(seconds: 4),
+                                                                                                                  backgroundColor: Colors.green,
+                                                                                                                );
+                                                                                                                // _scaffoldKey.currentState.showSnackBar(mysnackbar);
+                                                                                                                // await Future.delayed(Duration(seconds: 4));
+                                                                                                                Navigator.of(context).pushNamedAndRemoveUntil('/screen1', ModalRoute.withName('/screen4'));
+                                                                                                                bool result = await Navigator.of(context).push(MaterialPageRoute(
+                                                                                                                    builder: (context) => //App()
+                                                                                                                    members_profile(show: true)));
+                                                                                                                if (result != null && result == true) {
+                                                                                                                  _scaffoldKey.currentState.showSnackBar(mysnackbar);
+                                                                                                                }
+                                                                                                              } else {
+                                                                                                                setState(() {
+                                                                                                                  error2 = "Please select at least one member";
+                                                                                                                });
+                                                                                                              }
+                                                                                                            },
+                                                                                                            child: Consumer<ThemeNotifier>(
+                                                                                                              builder: (context, notifier, child) => Center(
+                                                                                                                child: Text(
+                                                                                                                  "Remove",
+                                                                                                                  style: TextStyle(fontSize: notifier.custFontSize, color: Colors.white),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            color: Colors.red,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                )
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
                                                                                     ),
                                                                                   ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    });
-                                                                  });
-                                                            }),
+                                                                                ),
+                                                                              );
+                                                                            });
+                                                                          });
+                                                                    }),
+                                                              ],
+                                                            ),
+                                                            this.counter != 0
+                                                                ? RaisedButton(
+                                                              color: KirthanStyles
+                                                                  .colorPallete30,
+                                                              child: Text(
+                                                                  'Get Approved', style: TextStyle(fontSize: notifier
+                                                                  .custFontSize)),
+//color: Colors.redAccent,
+//padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
+                                                              onPressed:
+                                                                  () async {
+                                                                _formKey
+                                                                    .currentState
+                                                                    .validate();
+                                                                if (_formKey
+                                                                    .currentState
+                                                                    .validate()) {
+                                                                  _formKey
+                                                                      .currentState
+                                                                      .save();
+                                                                  int i = 0;
+                                                                  List<UserRequest>
+                                                                  userList =
+                                                                  await userPageVM
+                                                                      .getUserRequests(
+                                                                      "Approved");
+                                                                  /*  print(
+                                                              "umail inside button");
+                                                          print(uMail);
+                                                          print("userlist");
+                                                          print(userList);*/
+
+                                                                  if (uMail
+                                                                      .isEmpty) {
+                                                                    SnackBar
+                                                                    mysnackbar =
+                                                                    SnackBar(
+                                                                      content: Text(
+                                                                          "Please add Members", style: TextStyle(fontSize: notifier
+                                                                          .custFontSize,)),
+                                                                      duration: new Duration(
+                                                                          seconds:
+                                                                          4),
+                                                                      backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                    );
+                                                                    _scaffoldKey
+                                                                        .currentState
+                                                                        .showSnackBar(
+                                                                        mysnackbar);
+                                                                  } else {
+                                                                    for (var member
+                                                                    in uMail) {
+                                                                      // UserRequest userRequest= userList.where((element) => element.fullName.toLowerCase()==member.toLowerCase()).single;
+                                                                      // String teamId = userRequest.
+                                                                      updateTeamUser(
+                                                                          userList,
+                                                                          member,
+                                                                          i);
+                                                                      i++;
+                                                                    }
+                                                                    showOnce = 1;
+                                                                  }
+
+                                                                  // for (var user
+                                                                  //     in selectedUsers) {
+                                                                  //   TeamUser teamUser =
+                                                                  //       new TeamUser();
+                                                                  //   teamUser.userId =
+                                                                  //       user.id;
+                                                                  //   teamUser.teamId =
+                                                                  //       teamrequest.id;
+                                                                  //   teamUser.userName =
+                                                                  //       user.userName;
+                                                                  //   teamUser.createdBy =
+                                                                  //       "SYSTEM";
+                                                                  //   String dt = DateFormat(
+                                                                  //           "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                                                  //       .format(DateTime
+                                                                  //           .now());
+                                                                  //   teamUser.createdTime =
+                                                                  //       dt;
+                                                                  //   teamUser.updatedBy =
+                                                                  //       "SYSTEM";
+                                                                  //   teamUser.updatedTime =
+                                                                  //       dt;
+                                                                  //   listofTeamUsers
+                                                                  //       .add(teamUser);
+                                                                  // }
+                                                                  // print(listofTeamUsers);
+                                                                  // teamrequest.updatedBy =
+                                                                  //     email;
+                                                                  // teamrequest
+                                                                  //         .listOfTeamMembers =
+                                                                  //     listofTeamUsers;
+                                                                  // String teamrequestStr =
+                                                                  //     jsonEncode(teamrequest
+                                                                  //         .toStrJson());
+                                                                  // teamPageVM
+                                                                  //     .submitUpdateTeamRequest(
+                                                                  //         teamrequestStr);
+                                                                } else {
+                                                                  print(
+                                                                      "BUZZINGA");
+                                                                }
+                                                              },
+                                                            )
+                                                                : RaisedButton(
+                                                              color: Colors.grey,
+                                                              child: Text(
+                                                                'Get Approved',
+                                                                style: TextStyle(
+                                                                    fontSize: notifier.custFontSize,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+//color: Colors.redAccent,
+//padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
+                                                              onPressed:
+                                                                  () async {
+                                                                _formKey
+                                                                    .currentState
+                                                                    .validate();
+                                                                if (_formKey
+                                                                    .currentState
+                                                                    .validate()) {
+                                                                  _formKey
+                                                                      .currentState
+                                                                      .save();
+                                                                  int i = 0;
+                                                                  List<UserRequest>
+                                                                  userList =
+                                                                  await userPageVM
+                                                                      .getUserRequests(
+                                                                      "Approved");
+                                                                  /*  print(
+                                                                "umail inside button");
+                                                            print(uMail);
+                                                            print("userlist");
+                                                            print(userList);*/
+                                                                  if (uMail
+                                                                      .isEmpty) {
+                                                                    SnackBar
+                                                                    mysnackbar =
+                                                                    SnackBar(
+                                                                      content: Text(
+                                                                          "Please add Members", style: TextStyle(fontSize: notifier
+                                                                          .custFontSize,)),
+                                                                      duration: new Duration(
+                                                                          seconds:
+                                                                          4),
+                                                                      backgroundColor:
+                                                                      Colors
+                                                                          .green,
+                                                                    );
+                                                                    _scaffoldKey
+                                                                        .currentState
+                                                                        .showSnackBar(
+                                                                        mysnackbar);
+                                                                  } else {
+                                                                    for (var member
+                                                                    in uMail) {
+                                                                      updateTeamUser(
+                                                                          userList,
+                                                                          member,
+                                                                          i);
+                                                                      i++;
+                                                                    }
+                                                                    showOnce = 1;
+                                                                  }
+
+                                                                  // for (var user
+                                                                  //     in selectedUsers) {
+                                                                  //   TeamUser teamUser =
+                                                                  //       new TeamUser();
+                                                                  //   teamUser.userId =
+                                                                  //       user.id;
+                                                                  //   teamUser.teamId =
+                                                                  //       teamrequest.id;
+                                                                  //   teamUser.userName =
+                                                                  //       user.userName;
+                                                                  //   teamUser.createdBy =
+                                                                  //       "SYSTEM";
+                                                                  //   String dt = DateFormat(
+                                                                  //           "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                                                  //       .format(DateTime
+                                                                  //           .now());
+                                                                  //   teamUser.createdTime =
+                                                                  //       dt;
+                                                                  //   teamUser.updatedBy =
+                                                                  //       "SYSTEM";
+                                                                  //   teamUser.updatedTime =
+                                                                  //       dt;
+                                                                  //   listofTeamUsers
+                                                                  //       .add(teamUser);
+                                                                  // }
+                                                                  // print(listofTeamUsers);
+                                                                  // teamrequest.updatedBy =
+                                                                  //     email;
+                                                                  // teamrequest
+                                                                  //         .listOfTeamMembers =
+                                                                  //     listofTeamUsers;
+                                                                  // String teamrequestStr =
+                                                                  //     jsonEncode(teamrequest
+                                                                  //         .toStrJson());
+                                                                  // teamPageVM
+                                                                  //     .submitUpdateTeamRequest(
+                                                                  //         teamrequestStr);
+                                                                } else {
+                                                                  print(
+                                                                      "BUZZINGA");
+                                                                }
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ],
                                                     ),
-                                                    this.counter != 0
-                                                        ? RaisedButton(
-                                                            color: KirthanStyles
-                                                                .colorPallete30,
-                                                            child: Text(
-                                                                'Get Approved'),
-//color: Colors.redAccent,
-//padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
-                                                            onPressed:
-                                                                () async {
-                                                              _formKey
-                                                                  .currentState
-                                                                  .validate();
-                                                              if (_formKey
-                                                                  .currentState
-                                                                  .validate()) {
-                                                                _formKey
-                                                                    .currentState
-                                                                    .save();
-                                                                int i = 0;
-                                                                List<UserRequest>
-                                                                    userList =
-                                                                    await userPageVM
-                                                                        .getUserRequests(
-                                                                            "Approved");
-                                                                /*  print(
-                                                              "umail inside button");
-                                                          print(uMail);
-                                                          print("userlist");
-                                                          print(userList);*/
-
-                                                                if (uMail
-                                                                    .isEmpty) {
-                                                                  SnackBar
-                                                                      mysnackbar =
-                                                                      SnackBar(
-                                                                    content: Text(
-                                                                        "Please add Members"),
-                                                                    duration: new Duration(
-                                                                        seconds:
-                                                                            4),
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .red,
-                                                                  );
-                                                                  _scaffoldKey
-                                                                      .currentState
-                                                                      .showSnackBar(
-                                                                          mysnackbar);
-                                                                } else {
-                                                                  for (var member
-                                                                      in uMail) {
-                                                                    // UserRequest userRequest= userList.where((element) => element.fullName.toLowerCase()==member.toLowerCase()).single;
-                                                                    // String teamId = userRequest.
-                                                                    updateTeamUser(
-                                                                        userList,
-                                                                        member,
-                                                                        i);
-                                                                    i++;
-                                                                  }
-                                                                  showOnce = 1;
-                                                                }
-
-                                                                // for (var user
-                                                                //     in selectedUsers) {
-                                                                //   TeamUser teamUser =
-                                                                //       new TeamUser();
-                                                                //   teamUser.userId =
-                                                                //       user.id;
-                                                                //   teamUser.teamId =
-                                                                //       teamrequest.id;
-                                                                //   teamUser.userName =
-                                                                //       user.userName;
-                                                                //   teamUser.createdBy =
-                                                                //       "SYSTEM";
-                                                                //   String dt = DateFormat(
-                                                                //           "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                                                //       .format(DateTime
-                                                                //           .now());
-                                                                //   teamUser.createdTime =
-                                                                //       dt;
-                                                                //   teamUser.updatedBy =
-                                                                //       "SYSTEM";
-                                                                //   teamUser.updatedTime =
-                                                                //       dt;
-                                                                //   listofTeamUsers
-                                                                //       .add(teamUser);
-                                                                // }
-                                                                // print(listofTeamUsers);
-                                                                // teamrequest.updatedBy =
-                                                                //     email;
-                                                                // teamrequest
-                                                                //         .listOfTeamMembers =
-                                                                //     listofTeamUsers;
-                                                                // String teamrequestStr =
-                                                                //     jsonEncode(teamrequest
-                                                                //         .toStrJson());
-                                                                // teamPageVM
-                                                                //     .submitUpdateTeamRequest(
-                                                                //         teamrequestStr);
-                                                              } else {
-                                                                print(
-                                                                    "BUZZINGA");
-                                                              }
-                                                            },
-                                                          )
-                                                        : RaisedButton(
-                                                            color: Colors.grey,
-                                                            child: Text(
-                                                              'Get Approved',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-//color: Colors.redAccent,
-//padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
-                                                            onPressed:
-                                                                () async {
-                                                              _formKey
-                                                                  .currentState
-                                                                  .validate();
-                                                              if (_formKey
-                                                                  .currentState
-                                                                  .validate()) {
-                                                                _formKey
-                                                                    .currentState
-                                                                    .save();
-                                                                int i = 0;
-                                                                List<UserRequest>
-                                                                    userList =
-                                                                    await userPageVM
-                                                                        .getUserRequests(
-                                                                            "Approved");
-                                                                /*  print(
-                                                              "umail inside button");
-                                                          print(uMail);
-                                                          print("userlist");
-                                                          print(userList);*/
-                                                                if (uMail
-                                                                    .isEmpty) {
-                                                                  SnackBar
-                                                                      mysnackbar =
-                                                                      SnackBar(
-                                                                    content: Text(
-                                                                        "Please add Members"),
-                                                                    duration: new Duration(
-                                                                        seconds:
-                                                                            4),
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .green,
-                                                                  );
-                                                                  _scaffoldKey
-                                                                      .currentState
-                                                                      .showSnackBar(
-                                                                          mysnackbar);
-                                                                } else {
-                                                                  for (var member
-                                                                      in uMail) {
-                                                                    updateTeamUser(
-                                                                        userList,
-                                                                        member,
-                                                                        i);
-                                                                    i++;
-                                                                  }
-                                                                  showOnce = 1;
-                                                                }
-
-                                                                // for (var user
-                                                                //     in selectedUsers) {
-                                                                //   TeamUser teamUser =
-                                                                //       new TeamUser();
-                                                                //   teamUser.userId =
-                                                                //       user.id;
-                                                                //   teamUser.teamId =
-                                                                //       teamrequest.id;
-                                                                //   teamUser.userName =
-                                                                //       user.userName;
-                                                                //   teamUser.createdBy =
-                                                                //       "SYSTEM";
-                                                                //   String dt = DateFormat(
-                                                                //           "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                                                //       .format(DateTime
-                                                                //           .now());
-                                                                //   teamUser.createdTime =
-                                                                //       dt;
-                                                                //   teamUser.updatedBy =
-                                                                //       "SYSTEM";
-                                                                //   teamUser.updatedTime =
-                                                                //       dt;
-                                                                //   listofTeamUsers
-                                                                //       .add(teamUser);
-                                                                // }
-                                                                // print(listofTeamUsers);
-                                                                // teamrequest.updatedBy =
-                                                                //     email;
-                                                                // teamrequest
-                                                                //         .listOfTeamMembers =
-                                                                //     listofTeamUsers;
-                                                                // String teamrequestStr =
-                                                                //     jsonEncode(teamrequest
-                                                                //         .toStrJson());
-                                                                // teamPageVM
-                                                                //     .submitUpdateTeamRequest(
-                                                                //         teamrequestStr);
-                                                              } else {
-                                                                print(
-                                                                    "BUZZINGA");
-                                                              }
-                                                            },
-                                                          ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          )),
-                                    ),
-                                  );
-                                }
+                                              )),
+                                        ),
+                                      );
+                                    }
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery.of(context).size.height,
+                                      child: Center(
+                                          child: CircularProgressIndicator()),
+                                    );
+                                  },
+                                );
+                              } else {
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: MediaQuery.of(context).size.height,
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
-                                );
-                              },
-                            );
-                          } else {
-                            return Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height,
-                              padding: new EdgeInsets.all(10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Center(
-                                      child: Text(
-                                          "It seems like you don't have a team.")),
-                                  Center(
-                                      child: Text(
-                                          "Click on the button below to create one")),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  FlatButton(
-                                    textColor: KirthanStyles.colorPallete60,
-                                    color: KirthanStyles.colorPallete30,
-                                    child: Text("Create team"),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => TeamWrite(
+                                  padding: new EdgeInsets.all(10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                          child: Text(
+                                              "It seems like you don't have a team.", style: TextStyle(fontSize: notifier
+                                              .custFontSize,))),
+                                      Center(
+                                          child: Text(
+                                              "Click on the button below to create one", style: TextStyle(fontSize: notifier
+                                              .custFontSize,))),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      FlatButton(
+                                        textColor: KirthanStyles.colorPallete60,
+                                        color: KirthanStyles.colorPallete30,
+                                        child: Text("Create team", style: TextStyle(fontSize: notifier
+                                            .custFontSize,)),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => TeamWrite(
                                                     userRequest: null,
                                                     localAdmin: null,
                                                   )));
-                                    },
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            );
-                          }
-                        }
-                        return Container();
-                      });
-                }
-                return Container();
-              }),
-        ),
-        onRefresh: refreshList,
-      ),
+                                );
+                              }
+                            }
+                            return Container();
+                          });
+                    }
+                    return Container();
+                  }),
+            ),
+            onRefresh: refreshList,
+          ),
+        )
+    ),
     );
   }
 
@@ -832,7 +852,7 @@ class _members_profileState extends State<members_profile> {
     print(counter);
 
     List<TextEditingController> textEditingController =
-        new List<TextEditingController>(finalTeamUserList.length);
+    new List<TextEditingController>(finalTeamUserList.length);
     //  print(finalTeamUserList.length);
     int y = 0;
     return Card(
@@ -846,6 +866,7 @@ class _members_profileState extends State<members_profile> {
                 child: Column(
                   children: [
                     TextFormField(
+                      style: TextStyle(fontSize: notifier.custFontSize),
                       enabled: false,
                       initialValue: finalTeamUserList[y].userName.toString(),
                       controller: textEditingController[y],
@@ -866,6 +887,7 @@ class _members_profileState extends State<members_profile> {
                           ),
                           hintStyle: TextStyle(
                             color: Colors.grey,
+                            fontSize: notifier.custFontSize,
                           )),
                       onFieldSubmitted: (input) {
                         _formKey.currentState.validate();
@@ -890,20 +912,21 @@ class _members_profileState extends State<members_profile> {
                   alignment: Alignment.centerRight,
                   children: [
                     TextFormField(
+                      autovalidateMode:AutovalidateMode.onUserInteraction,
+                      style: TextStyle(fontSize: notifier.custFontSize),
                       validator: (value) {
                         if (value.isEmpty) {
-                          setState(() {
-                            error = "Field cannot be empty";
-                          });
-
-                          return error;
+                          return "Field cannot be empty";
+                          // setState(() {
+                          //   error = "Field cannot be empty";
+                          // });
                         } else {
                           return finalTeamUserList
-                                  .where((element) =>
-                                      element.userName.toLowerCase() ==
-                                      value.toLowerCase())
-                                  .toList()
-                                  .isNotEmpty
+                              .where((element) =>
+                          element.userName.toLowerCase() ==
+                              value.toLowerCase())
+                              .toList()
+                              .isNotEmpty
                               ? "User Exist with such name"
                               : null;
                         }
@@ -911,7 +934,7 @@ class _members_profileState extends State<members_profile> {
 
                       //initialValue: finalTeamUserList[i].userName.toString(),
                       decoration: InputDecoration(
-                          errorText: error,
+                        // errorText: error,
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
                           ),
@@ -956,13 +979,13 @@ class _members_profileState extends State<members_profile> {
                     ),
                     i == counter - 1
                         ? IconButton(
-                            alignment: Alignment.bottomRight,
-                            onPressed: () {
-                              setState(() {
-                                this.counter--;
-                              });
-                            },
-                            icon: Icon(Icons.cancel_outlined))
+                        alignment: Alignment.bottomRight,
+                        onPressed: () {
+                          setState(() {
+                            this.counter--;
+                          });
+                        },
+                        icon: Icon(Icons.cancel_outlined))
                         : Container(),
                   ],
                 ),
@@ -978,7 +1001,7 @@ void showFlushBar(BuildContext context, var error) {
   Flushbar(
     messageText: Text(error, style: TextStyle(color: Colors.white)),
     backgroundColor:
-        error == 'Email already in use' ? Colors.red : Colors.green,
+    error == 'Email already in use' ? Colors.red : Colors.green,
     duration: Duration(seconds: 4),
   )..show(context);
 }

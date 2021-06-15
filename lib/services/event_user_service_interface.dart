@@ -10,6 +10,4 @@ abstract class IEventUserRestApi {
 
   Future<List<EventUser>> submitDeleteEventTeamUserMapping(
       List<EventUser> listofeventsermap);
-//Future<void> submitUpdateTeamRequest(String teamrequestmap);
-//Future<bool> processTeamRequest(Map<String,dynamic> processrequestmap);
 }

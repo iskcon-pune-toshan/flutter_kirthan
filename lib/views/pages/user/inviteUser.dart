@@ -6,13 +6,15 @@ import 'package:flutter_kirthan/services/prospective_user_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/prospective_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:random_string/random_string.dart';
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final ProspectiveUserPageViewModel prospectiveUserPageVM =
-    ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
+ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
 
 class InviteUser extends StatefulWidget {
   @override
@@ -57,108 +59,121 @@ class _InviteUserState extends State<InviteUser> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Invite a LocalAdmin"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter E-mail',
-                  errorText: _validate ? 'Value Can\'t Be Empty' : null,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            RaisedButton.icon(
-              icon: Icon(Icons.keyboard),
-              onPressed: () async {
-                setState(() {
-                  _emailController.text.isEmpty
-                      ? _validate = true
-                      : _validate = false;
-                });
-                /* print("clicked");
-                print("CHECK0");*/
-                userList = await Users;
-                present = false;
-                String userType = "uEmail:" + _emailController.text;
-                // print(userType);
-                ProspectiveUsers =
-                    prospectiveUserPageVM.getProspectiveUserRequests(userType);
-                prospectiveList = await ProspectiveUsers;
-                for (var puser in prospectiveList) {
-                  if (puser.userEmail == _emailController.text) {
-                    present = true;
-                  }
-                }
-                for (var user in userList) {
-                  /*  print("check3");
-                  print(email);*/
-                  if (email == user.email) {
-                    user_id = user.email;
-                    /*print("CHECK4");
-                    print(user_id);*/
-                  }
-                  /*print("PRESENT");
-                  print(present);*/
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) =>(
+        Scaffold(
+          appBar: AppBar(
+            title: Text("Invite a LocalAdmin",style: TextStyle(
+                fontSize: notifier.custFontSize)),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: TextField(
+                    style: TextStyle(
+                        fontSize: notifier.custFontSize),
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(
+                          fontSize: notifier.custFontSize),
 
-                  if (user.email == _emailController.text || present) {
-                    // print("HELLO");
-                    SnackBar mysnackbar = SnackBar(
-                      content: Text("User is in system"),
-                      duration: new Duration(seconds: 4),
-                      backgroundColor: Colors.red,
-                    );
-                    Scaffold.of(context).showSnackBar(mysnackbar);
-                    return Container(
-                      child: Text("User in system"),
-                    );
-                  }
-                }
-                if (!_emailController.text.contains("@")) {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('Enter a valid email'),
-                    backgroundColor: Colors.red,
-                  ));
-                } else {
-                  String uemail = _emailController.text;
-                  prospectiveUserRequest.invitedBy = user_id;
-                  prospectiveUserRequest.userEmail = _emailController.text;
-                  prospectiveUserRequest.inviteCode = inviteCode;
-                  prospectiveUserRequest.inviteType = 2;
-                  prospectiveUserRequest.isProcessed = false;
-                  Map<String, dynamic> prospectivemap =
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter E-mail',
+                      errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                RaisedButton.icon(
+                  icon: Icon(Icons.keyboard),
+                  onPressed: () async {
+                    setState(() {
+                      _emailController.text.isEmpty
+                          ? _validate = true
+                          : _validate = false;
+                    });
+                    /* print("clicked");
+                  print("CHECK0");*/
+                    userList = await Users;
+                    present = false;
+                    String userType = "uEmail:" + _emailController.text;
+                    // print(userType);
+                    ProspectiveUsers =
+                        prospectiveUserPageVM.getProspectiveUserRequests(userType);
+                    prospectiveList = await ProspectiveUsers;
+                    for (var puser in prospectiveList) {
+                      if (puser.userEmail == _emailController.text) {
+                        present = true;
+                      }
+                    }
+                    for (var user in userList) {
+                      /*  print("check3");
+                    print(email);*/
+                      if (email == user.email) {
+                        user_id = user.email;
+                        /*print("CHECK4");
+                      print(user_id);*/
+                      }
+                      /*print("PRESENT");
+                    print(present);*/
+
+                      if (user.email == _emailController.text || present) {
+                        // print("HELLO");
+                        SnackBar mysnackbar = SnackBar(
+                          content: Text("User is in system", style: TextStyle(
+                              fontSize: notifier.custFontSize)),
+                          duration: new Duration(seconds: 4),
+                          backgroundColor: Colors.red,
+                        );
+                        Scaffold.of(context).showSnackBar(mysnackbar);
+                        return Container(
+                          child: Text("User in system", style: TextStyle(
+                              fontSize: notifier.custFontSize)),
+                        );
+                      }
+                    }
+                    if (!_emailController.text.contains("@")) {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('Enter a valid email', style: TextStyle(
+                            fontSize: notifier.custFontSize)),
+                        backgroundColor: Colors.red,
+                      ));
+                    } else {
+                      String uemail = _emailController.text;
+                      prospectiveUserRequest.invitedBy = user_id;
+                      prospectiveUserRequest.userEmail = _emailController.text;
+                      prospectiveUserRequest.inviteCode = inviteCode;
+                      prospectiveUserRequest.inviteType = 2;
+                      prospectiveUserRequest.isProcessed = false;
+                      Map<String, dynamic> prospectivemap =
                       prospectiveUserRequest.toJson();
-                  prospectiveUserPageVM
-                      .submitNewProspectiveUserRequest(prospectivemap);
-                  emailLaunch('mailto:$uemail?'
-                      'subject=Invitiation%20to%20become%20a%20local admin&'
-                      'body=Hello\n\nI%20would%20like%20to%20invite%20you%20to%20download%20our%20app%20using%20the%20link\n\n'
-                      'https://drive.google.com/file/d/1HR4NYkhIbbjgFB4RFF-JidjFkb0HwdGQ/view?usp=sharing\n\n'
-                      'And%20become%20a%20local admin%20using%20the%20code\n"$inviteCode"\n\nThank%20You');
-                  // SnackBar mysnackbar = SnackBar(
-                  //   content: Text("Invited Successfully"),
-                  //   duration: new Duration(seconds: 4),
-                  //   backgroundColor: Colors.green,
-                  // );
-                  // Scaffold.of(context).showSnackBar(mysnackbar);
-                }
-              },
-              label: Text("Send a code"),
-            )
-          ],
-        ),
-      ),
+                      prospectiveUserPageVM
+                          .submitNewProspectiveUserRequest(prospectivemap);
+                      emailLaunch('mailto:$uemail?'
+                          'subject=Invitiation%20to%20become%20a%20local admin&'
+                          'body=Hello\n\nI%20would%20like%20to%20invite%20you%20to%20download%20our%20app%20using%20the%20link\n\n'
+                          'https://bit.ly/3yQGZG5\n\n'
+                          'And%20become%20a%20local admin%20using%20the%20code\n"$inviteCode"\n\nThank%20You');
+                      // SnackBar mysnackbar = SnackBar(
+                      //   content: Text("Invited Successfully"),
+                      //   duration: new Duration(seconds: 4),
+                      //   backgroundColor: Colors.green,
+                      // );
+                      // Scaffold.of(context).showSnackBar(mysnackbar);
+                    }
+                  },
+                  label: Text("Send a code", style: TextStyle(
+                      fontSize: notifier.custFontSize)),
+                )
+              ],
+            ),
+          ),
+        )
+    ),
     );
   }
 }

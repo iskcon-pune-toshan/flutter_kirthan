@@ -1,13 +1,20 @@
+import 'dart:async';
+import 'dart:math';
+
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/pref_settings.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_location.dart';
 import 'package:flutter_kirthan/views/pages/event/event_team_user_register.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart' as geolocation;
+import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -18,11 +25,19 @@ class Choice {
   final String description;
 }
 
-class EventRequestsListItem extends StatelessWidget {
+class EventRequestsListItem extends StatefulWidget {
   final EventRequest eventrequest;
   final EventPageViewModel eventPageVM;
-  bool _isFavorited = false;
+
   EventRequestsListItem({@required this.eventrequest, this.eventPageVM});
+
+  @override
+  _EventRequestsListItemState createState() => _EventRequestsListItemState();
+}
+
+class _EventRequestsListItemState extends State<EventRequestsListItem> {
+  LatLng _destination;
+  bool _isFavorited = false;
 
   List<Choice> popupList = [
     Choice(id: 1, description: "Process"),
@@ -30,10 +45,11 @@ class EventRequestsListItem extends StatelessWidget {
     Choice(id: 3, description: "Delete"),
     //Choice(id: 4, description: "Location"),
   ];
+
   String duration() {
     var format = DateFormat("HH:mm");
-    var one = format.parse(eventrequest.eventStartTime);
-    var two = format.parse(eventrequest.eventEndTime);
+    var one = format.parse(widget.eventrequest.eventStartTime);
+    var two = format.parse(widget.eventrequest.eventEndTime);
     if (two.difference(one).toString().substring(0, 2).contains(":"))
       return two.difference(one).toString().substring(0, 1);
     else
@@ -41,12 +57,114 @@ class EventRequestsListItem extends StatelessWidget {
   }
 
   String get index => null;
-  getdate(){
-    DateTime date=DateTime.parse(eventrequest?.eventDate).add(new Duration(days: 1));
-    return '${date.toString().substring(0,10)}';
+
+  getdate() {
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    DateTime date = DateTime.parse(widget.eventrequest?.eventDate)
+        .add(new Duration(days: 1));
+    return '${date.day.toString() + " " + months[date.month - 1].toString()}';
+    //.substring(0,10)
   }
+
+  getDestination() async {
+    double lat;
+    double long;
+    if (widget.eventrequest?.latitudeS == null) {
+      final query = widget.eventrequest?.addLineOneS +
+          widget.eventrequest?.addLineTwoS +
+          widget.eventrequest?.localityS +
+          widget.eventrequest?.city +
+          widget.eventrequest.state;
+      var addresses = await Geocoder.local.findAddressesFromQuery(query);
+      var first = addresses.first;
+      print(query);
+      lat = first.coordinates.latitude;
+      long = first.coordinates.longitude;
+    } else {
+      lat = widget.eventrequest.latitudeS;
+      long = widget.eventrequest.longitudeS;
+    }
+    _destination = LatLng(lat, long);
+  }
+
+  getDetails() async {
+    double lat;
+    double long;
+    if (widget.eventrequest?.latitudeS == null) {
+      final query = widget.eventrequest?.addLineOneS +
+          widget.eventrequest?.addLineTwoS +
+          widget.eventrequest?.localityS +
+          widget.eventrequest?.city +
+          widget.eventrequest.state;
+      var addresses = await Geocoder.local.findAddressesFromQuery(query);
+      var first = addresses.first;
+     // print(query);
+      lat = first.coordinates.latitude;
+      long = first.coordinates.longitude;
+    } else {
+      lat = widget.eventrequest.latitudeS;
+      long = widget.eventrequest.longitudeS;
+    }
+    _destination = LatLng(lat, long);
+
+    geolocator.Position position = await geolocation.Geolocator()
+        .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
+   // print("COORD");
+   // print(position.latitude);
+   // print(position.longitude);
+   // print(_destination.latitude);
+   // print(_destination.longitude);
+
+    return await _coordinateDistance(position.latitude, position.longitude,
+        _destination?.latitude, _destination?.longitude);
+  }
+
+  double _coordinateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  LatLng currentPosition;
+  StreamSubscription subscription;
+  getUserLocation() async {
+    geolocator.Position position = await geolocation.Geolocator()
+        .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
+    // subscription = geolocator
+    //     .getPositionStream(locationOptions)
+    //     .listen((Position position) {
+    //   currentPosition = LatLng(position.latitude, position.longitude);
+    // });
+  }
+
+  // @override
+  // void dispose() {
+  //   subscription?.cancel();
+  //   getDetails();
+  //   super.dispose();
+  // }
+  var distanceValue;
   @override
   Widget build(BuildContext context) {
+    print("distance");
+    print(getDetails().toString());
+
     var title = SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Consumer<ThemeNotifier>(
@@ -55,13 +173,15 @@ class EventRequestsListItem extends StatelessWidget {
                   ? MediaQuery.of(context).size.width * 1.2
                   : MediaQuery.of(context).size.width,
               child: Row(
-                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                //crossAxisAlignment: CrossAxisAlignment.stret
+                // ch,
                   children: <Widget>[
                     Container(
+                      width: MediaQuery.of(context).size.width*0.4,
                       padding: EdgeInsets.only(left: 10),
                       child: Consumer<ThemeNotifier>(
                         builder: (context, notifier, child) => Text(
-                          eventrequest?.eventTitle,
+                          widget.eventrequest?.eventTitle,
                           style: TextStyle(
                             //color: KirthanStyles.titleColor,
                             fontWeight: FontWeight.bold,
@@ -74,48 +194,53 @@ class EventRequestsListItem extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.only(right: 33),
                         child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               EventTeamUserRegister(
-                                  eventrequest: eventrequest),
+                                  eventrequest: widget.eventrequest),
                               SizedBox(width: 5),
-                              FlatButton(
-                                // shape: RoundedRectangleBorder(
-                                //   borderRadius: BorderRadius.circular(15.0),
-                                // ),
-                                highlightColor: Colors.grey,
-                                padding: EdgeInsets.all(0),
-                                //color: Colors.black,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(0),
-                                      child: Icon(
-                                        Icons.location_on_sharp,
-                                        color: KirthanStyles.colorPallete30,
-                                        size: notifier.custFontSize,
+                              Container(
+                                child: FlatButton(
+                                  // shape: RoundedRectangleBorder(
+                                  //   borderRadius: BorderRadius.circular(15.0),
+                                  // ),
+                                  highlightColor: Colors.grey,
+                                  padding: EdgeInsets.all(0),
+                                  //color: Colors.black,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(0),
+                                        child: Icon(
+                                          Icons.location_on_sharp,
+                                          color:
+                                          KirthanStyles.colorPallete30,
+                                          size: notifier.custFontSize,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      "Location",
-                                      style: TextStyle(
-                                        color: KirthanStyles.colorPallete30,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: notifier.custFontSize,
+                                      Text(
+                                        "Location",
+                                        style: TextStyle(
+                                          color:
+                                          KirthanStyles.colorPallete30,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: notifier.custFontSize,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Location(
-                                            eventrequest: eventrequest)),
-                                  );
-                                },
-                                //splashColor: Colors.red,
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Location(
+                                              eventrequest:
+                                              widget.eventrequest)),
+                                    );
+                                  },
+                                  //splashColor: Colors.red,
 //shape: Border.all(width: 2.0, color: Colors.black)
+                                ),
                               ),
 /*              Container(
             child: Align(
@@ -347,22 +472,24 @@ class EventRequestsListItem extends StatelessWidget {
         */
             Container(
               width: MediaQuery.of(context).size.width - 33,
-              margin: const EdgeInsets.only(left: 10.0, top: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => Text(
-                  eventrequest?.eventDescription,
-                  style: TextStyle(
-                    // color: KirthanStyles.subTitleColor,
-                    color: Colors.grey,
-                    fontSize: notifier.custFontSize - 1,
-                  ),
-                ),
-              ),
+                  builder: (context, notifier, child) => Center(
+                    child: Text(
+                      widget.eventrequest?.eventDescription,
+                      style: TextStyle(
+                        // color: KirthanStyles.subTitleColor,
+                        color: Colors.grey,
+                        fontSize: notifier.custFontSize - 1,
+                      ),
+                    ),
+                  )),
             ),
           ],
         )
       ],
     );
+
     var daysToGo = Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       Container(
         padding: EdgeInsets.only(bottom: 15),
@@ -370,13 +497,13 @@ class EventRequestsListItem extends StatelessWidget {
 
         //margin: const EdgeInsets.only(left: 4.0),
         child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
-          final eventDate = eventrequest.eventDate;
+          final eventDate = widget.eventrequest.eventDate;
           DateTime EventDate = DateTime.parse(eventDate);
           DateTime now = DateTime.now();
           var dateTime = DateFormat('yyyy-MM-dd').format(now);
           DateTime dateTimeNow = DateTime.parse(dateTime);
           int daysRemaining = EventDate.difference(dateTimeNow).inDays;
-          if(daysRemaining ==0){
+          if (daysRemaining == 0) {
             return Text(
               'Today',
               //daysRemaining.abs().toString() + ' days ago',
@@ -390,8 +517,7 @@ class EventRequestsListItem extends StatelessWidget {
             return Text(
               (daysRemaining).toString() + ' days to go',
               style: TextStyle(
-                  fontSize: notifier.custFontSize,
-                  color: Colors.green[700]),
+                  fontSize: notifier.custFontSize, color: Colors.green[700]),
             );
           } else if (daysRemaining < 0) {
             return Text(
@@ -402,7 +528,7 @@ class EventRequestsListItem extends StatelessWidget {
                   fontSize: notifier.custFontSize,
                   color: Colors.red[700]),
             );
-          }else if (daysRemaining ==1) {
+          } else if (daysRemaining == 1) {
             return Text(
               'Tomorrow',
               //daysRemaining.abs().toString() + ' days ago',
@@ -411,7 +537,7 @@ class EventRequestsListItem extends StatelessWidget {
                   fontSize: notifier.custFontSize,
                   color: Colors.green[700]),
             );
-          }  else {
+          } else {
             return Container();
           }
         }),
@@ -419,7 +545,7 @@ class EventRequestsListItem extends StatelessWidget {
     ]);
     return Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: EdgeInsets.fromLTRB(8, 4, 5, 0),
           child: new Card(
             elevation: 8,
             child: Consumer<ThemeNotifier>(
@@ -438,67 +564,24 @@ class EventRequestsListItem extends StatelessWidget {
                 ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: new Column(children: <Widget>[
-                    title,
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          subTitle,
-                        ],
-                      ),
-                    ),
-                    Divider(),
-                    Consumer<ThemeNotifier>(
-                      builder: (context, notifier, child) => Container(
-                        // color: Colors.green,
-                        width: notifier.custFontSize >= 20
-                            ? MediaQuery.of(context).size.width * 1.4
-                            : MediaQuery.of(context).size.width,
-                        child: Row(children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                //color: Colors.yellow,
-                                child: Text(
-                                  "Date",
-                                  style: GoogleFonts.openSans(
-                                    //color: KirthanStyles.titleColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: notifier.custFontSize,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                //color: Colors.yellow,
-                                padding: EdgeInsets.only(bottom: 15),
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Text(
-                                  getdate(),
-                                  //eventrequest?.eventDate.substring(0, 10),
-//0,10 date
-//11,16 time
-
-                                  style: TextStyle(
-                                    fontSize: notifier.custFontSize,
-                                    //color: KirthanStyles.subTitleColor,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Column(
+                  child: FlipCard(
+                    front: new Column(children: <Widget>[
+                      title,
+                      Divider(),
+                      Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => Container(
+                          // color: Colors.green,
+                          width: notifier.custFontSize >= 20
+                              ? MediaQuery.of(context).size.width * 1.4
+                              : MediaQuery.of(context).size.width,
+                          child: Row(children: <Widget>[
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
                                   //color: Colors.yellow,
                                   child: Text(
-                                    "Time",
+                                    "Date",
                                     style: GoogleFonts.openSans(
                                       //color: KirthanStyles.titleColor,
                                       fontWeight: FontWeight.bold,
@@ -510,9 +593,13 @@ class EventRequestsListItem extends StatelessWidget {
                                   //color: Colors.yellow,
                                   padding: EdgeInsets.only(bottom: 15),
                                   margin: const EdgeInsets.symmetric(
-                                      horizontal: 40.0),
+                                      horizontal: 10.0),
                                   child: Text(
-                                    eventrequest?.eventStartTime,
+                                    getdate(),
+                                    //eventrequest?.eventDate.substring(0, 10),
+//0,10 date
+//11,16 time
+
                                     style: TextStyle(
                                       fontSize: notifier.custFontSize,
                                       //color: KirthanStyles.subTitleColor,
@@ -521,45 +608,154 @@ class EventRequestsListItem extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                // color: Colors.red,
-                                child: Text(
-                                  "Duration",
-                                  style: GoogleFonts.openSans(
-                                    //color: KirthanStyles.titleColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: notifier.custFontSize,
+                            Align(
+                              alignment: Alignment.center,
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    //color: Colors.yellow,
+                                    child: Text(
+                                      "Time",
+                                      style: GoogleFonts.openSans(
+                                        //color: KirthanStyles.titleColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: notifier.custFontSize,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    //color: Colors.yellow,
+                                    padding: EdgeInsets.only(bottom: 15),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 40.0),
+                                    child: Text(
+                                      widget.eventrequest?.eventStartTime,
+                                      style: TextStyle(
+                                        fontSize: notifier.custFontSize,
+                                        //color: KirthanStyles.subTitleColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  // color: Colors.red,
+                                  child: Text(
+                                    "Duration",
+                                    style: GoogleFonts.openSans(
+                                      //color: KirthanStyles.titleColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: notifier.custFontSize,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                //color: Colors.yellow,
-                                padding: EdgeInsets.only(bottom: 15),
-                                child: Text(
-                                  //notifier.duration
-                                  duration() == notifier.duration
-                                      ? duration() + " Hrs"
-                                      : duration() + " Hrs",
-                                  style: TextStyle(
-                                    fontSize: notifier.custFontSize,
-                                    // color: KirthanStyles.subTitleColor,
+                                Container(
+                                  //color: Colors.yellow,
+                                  padding: EdgeInsets.only(bottom: 15),
+                                  child: Text(
+                                    //notifier.duration
+                                    duration() == notifier.duration
+                                        ? duration() + " Hrs"
+                                        : duration() + " Hrs",
+                                    style: TextStyle(
+                                      fontSize: notifier.custFontSize,
+                                      // color: KirthanStyles.subTitleColor,
+                                    ),
                                   ),
                                 ),
+                              ],
+                            ),
+                          ]),
+                        ),
+                      ),
+                      FutureBuilder(
+                          future: getDetails(),
+                          builder: (_, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData) {
+                              distanceValue = snapshot.data;
+                              if (distanceValue < 3) {
+                                return Container(
+                                  width: notifier.custFontSize >= 20
+                                      ? MediaQuery.of(context).size.width *
+                                      1.2
+                                      : MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                          KirthanStyles.colorPallete30,
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20.0),
+                                            bottomRight:
+                                            Radius.circular(20.0),
+                                          ),
+                                        ),
+                                        padding: EdgeInsets.only(
+                                          left: 10,
+                                          bottom: 10,
+                                          right: 10,
+                                          top: 10,
+                                        ),
+                                        margin: EdgeInsets.only(bottom: 15),
+                                        child: Text(
+                                          "Near to You",
+                                          style: TextStyle(
+                                              fontSize:
+                                              notifier.custFontSize),
+                                        ),
+                                      ),
+                                      Container(
+                                          padding:
+                                          EdgeInsets.only(right: 23),
+                                          child: daysToGo),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                return Container(
+                                    width:
+                                    MediaQuery.of(context).size.width,
+                                    padding: EdgeInsets.only(right: 23),
+                                    child: daysToGo);
+                              }
+                            }
+                            return Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.only(right: 23),
+                                child: daysToGo);
+                            ;
+                          })
+                    ]),
+                    back: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                "Event Description",
+                                style: TextStyle(
+                                    fontSize: notifier.custFontSize),
                               ),
-                            ],
+                            ),
                           ),
-                        ]),
+                          subTitle,
+                        ],
                       ),
                     ),
-                    Container(
-                        padding: EdgeInsets.only(right: 23),
-                        width: MediaQuery.of(context).size.width,
-                        child: daysToGo),
-                  ]),
+                  ),
                 ),
               ),
             ),

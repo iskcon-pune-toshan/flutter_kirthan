@@ -1,33 +1,21 @@
-import 'dart:convert';
-import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
-import 'package:flutter_kirthan/services/base_service.dart';
-import 'package:flutter_kirthan/views/widgets/myevent/myevent_panel.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/services/authenticate_service.dart';
+import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
-import 'package:flutter_kirthan/services/firebasemessage_service.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:flutter_kirthan/views/widgets/event/Interested_events.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-
-import 'package:flutter_kirthan/views/pages/event/event_create_invite.dart';
-
-import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
-import 'package:rating_dialog/rating_dialog.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/event/event_calendar.dart';
+import 'package:flutter_kirthan/views/widgets/myevent/myevent_panel.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final EventPageViewModel eventPageVM =
     EventPageViewModel(apiSvc: EventAPIService());
@@ -65,7 +53,6 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
   bool isLoading = false;
   int length;
   http.Client client1 = http.Client();
-
 
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
@@ -127,58 +114,57 @@ class _MyEventViewState extends State<MyEventView> with BaseAPIService {
     //print(accessTypes[ACCESS_TYPE_PROCESS]);
     return Consumer<ThemeNotifier>(
       builder: (content, notifier, child) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "My Events",
-            style: TextStyle(fontSize: notifier.custFontSize),
+          appBar: AppBar(
+            title: Text(
+              "My Events",
+              style: TextStyle(fontSize: notifier.custFontSize),
+            ),
+            actions: <Widget>[],
+            iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
           ),
-          actions: <Widget>[
-          ],
-          iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
-        ),
-        drawer: MyDrawer(),
-        //resizeToAvoidBottomPadding: false,
-        //resizeToAvoidBottomInset: false,
-        body:SingleChildScrollView(child: Column(
-          children: <Widget>[
-            SwitchListTile(
-                title: Consumer<ThemeNotifier>(
-                  builder: (context, notifier, child) => Text(
-                    "Calender View",
-                    style: TextStyle(
-                        fontSize: notifier.custFontSize,
-                        color: KirthanStyles.colorPallete30),
-                  ),
-                ),
-                activeColor: KirthanStyles.colorPallete30,
-                value: _v,
-                onChanged: (value) {
-                  setState(() {
-                    _v = value;
-                  });
-                }),
-            /*Divider(
+          drawer: MyDrawer(),
+          //resizeToAvoidBottomPadding: false,
+          //resizeToAvoidBottomInset: false,
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SwitchListTile(
+                    title: Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => Text(
+                        //TODO:Changed the calendar spelling
+                        "Calendar View",
+                        style: TextStyle(
+                            fontSize: notifier.custFontSize,
+                            color: KirthanStyles.colorPallete30),
+                      ),
+                    ),
+                    activeColor: KirthanStyles.colorPallete30,
+                    value: _v,
+                    onChanged: (value) {
+                      setState(() {
+                        _v = value;
+                      });
+                    }),
+                /*Divider(
               thickness: 2,
             ),*/
-            RefreshIndicator(
-              key: refreshKey,
-              child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.75,
-                  child: _v == false
-                      ? ScopedModel<EventPageViewModel>(
-                          model: eventPageVM,
-                          child: MyEventsPanel(
-                            eventType: "Pune",
-                          ),
-                        )
-                      : CalendarPage(eventrequest: null)),
-              onRefresh: refreshList,
+                RefreshIndicator(
+                  key: refreshKey,
+                  child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      child: _v == false
+                          ? ScopedModel<EventPageViewModel>(
+                        model: eventPageVM,
+                        child: MyEventsPanel(
+                          eventType: "Pune",
+                        ),
+                      )
+                          : CalendarPage(eventrequest: null)),
+                  onRefresh: refreshList,
+                ),
+              ],
             ),
-          ],
-        ),
-        )
-      ),
+          )),
     );
   }
 }
-

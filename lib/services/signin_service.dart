@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignInService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -12,10 +12,20 @@ class SignInService {
   static final SignInService _internal = SignInService.internal();
 
   factory SignInService() => _internal;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   SignInService.internal();
 
   FirebaseUser fireUser;
+
+  User _userFromFirebaseUser(FirebaseUser user) {
+    return fireUser != null ? User(uid: fireUser.uid) : null;
+  }
+
+  //auth change user stream
+  Stream<User> get user {
+    return auth.onAuthStateChanged.map(_userFromFirebaseUser);
+  }
 
   Future<FirebaseUser> signUpWithEmail(String email, String password) async {
     AuthResult authResult = await firebaseAuth.createUserWithEmailAndPassword(
@@ -35,6 +45,7 @@ class SignInService {
         await firebaseUser.updateProfile(updateInfo);
         await firebaseUser.reload();
         FirebaseUser currentuser = await firebaseAuth.currentUser();
+        _userFromFirebaseUser(currentuser);
         return currentuser;
       }
     }
@@ -55,14 +66,6 @@ class SignInService {
 
     FirebaseUser firebaseUser;
 
-    /*if (authResult != null) {
-       firebaseUser = await firebaseAuth.currentUser();
-
-      if (firebaseUser != null) {
-        return firebaseUser;
-      }
-    }*/
-
     assert(email !=
         null); //its a way to check the condition & returns a boolean by the result of which further execution proceeds
     assert(password != null);
@@ -70,20 +73,20 @@ class SignInService {
     final AuthCredential auth = EmailAuthProvider.getCredential(
         email: email,
         password:
-            password); // to fetch the user Credential by signInwithemailandpassword method
+        password); // to fetch the user Credential by signInwithemailandpassword method
 
     FirebaseUser user = (await firebaseAuth.signInWithCredential(auth)).user;
 
     fireUser =
         user; //once onComplete returning the user to able to fetch the credentialsreturn user;
-
+    _userFromFirebaseUser(user);
     //return null;
   }
 
   Future<FirebaseUser> googSignIn(BuildContext context) async {
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -94,6 +97,8 @@ class SignInService {
         (await firebaseAuth.signInWithCredential(credential)).user;
 
     fireUser = user;
+    _userFromFirebaseUser(user);
+    print("LLLL");
     print(user);
     return user;
   }
@@ -110,6 +115,7 @@ class SignInService {
     if (result.status == FacebookLoginStatus.loggedIn) {
       user = (await firebaseAuth.signInWithCredential(credential)).user;
       print(user.displayName);
+      _userFromFirebaseUser(user);
     }
     return user;
   }
@@ -131,6 +137,7 @@ class SignInService {
 
   Future<UserRequest> getUser() async {
     var firebaseUser = await firebaseAuth.currentUser();
+    _userFromFirebaseUser(firebaseUser);
     return UserRequest(
         uid: firebaseUser?.uid, fullName: firebaseUser?.displayName);
   }
@@ -142,7 +149,7 @@ class SignInService {
         email: firebaseUser.email, password: password);
     try {
       var authResult =
-          await firebaseUser.reauthenticateWithCredential(authCredentials);
+      await firebaseUser.reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
       print(e);

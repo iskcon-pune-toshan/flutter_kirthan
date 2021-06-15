@@ -62,9 +62,13 @@ class LocationMark extends State<MapPage> {
   @override
   final Map<String, Marker> _markers = {};
 
+  void initState() {
+    //getloc();
+    super.initState();
+  }
   //Set<Marker> _markers = {};
   //final Map<String, Marker> _markerss = {};
-  getloc() async {
+/*  getloc() async {
     double lat;
     double long;
     if (widget.eventrequest?.latitudeS == null) {
@@ -84,8 +88,14 @@ class LocationMark extends State<MapPage> {
       long = widget.eventrequest.longitudeS;
       print("else part exceuted");
     }
-  }
-
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
+    List<Placemark> placemark = await Geolocator()
+        .placemarkFromCoordinates(position.latitude, position.longitude);
+    _initialPosition = LatLng(position.latitude, position.longitude);
+    print(_initialPosition.longitude);
+    print("locationssss");
+  }*/
   _onMapCreated(GoogleMapController controller) async {
     eventRequest = await eventPageVM.getEventRequests("All");
 
@@ -111,7 +121,24 @@ class LocationMark extends State<MapPage> {
           long = eventName.longitudeS;
           print("else part exceuted");
         }
-
+        Position position = await Geolocator()
+            .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
+        List<Placemark> placemark = await Geolocator()
+            .placemarkFromCoordinates(position.latitude, position.longitude);
+        _initialPosition = LatLng(position.latitude, position.longitude);
+        print(_initialPosition.longitude);
+        print("locationssss");
+        controller.animateCamera(
+          CameraUpdate.newCameraPosition(CameraPosition(
+              target: LatLng(_initialPosition.latitude,_initialPosition.longitude), zoom: 12))
+          /*.newLatLngBounds(
+            LatLngBounds(
+              northeast: LatLng(_initialPosition, northEastLongitude),
+              southwest: LatLng(southWestLatitude, southWestLongitude),
+            ),
+            100.0,
+          ),*/
+        );
 String id=eventName.id.toString();
         setState(() {
           listMarkers.add(Marker(
@@ -120,7 +147,6 @@ String id=eventName.id.toString();
               infoWindow: InfoWindow(title: eventName.eventTitle),
               icon: customIcon
           ));
-
         });
         print('length of markerssss');
         print(listMarkers.length);
@@ -144,7 +170,7 @@ String id=eventName.id.toString();
         mapType: MapType.normal,
         initialCameraPosition:
         CameraPosition(
-            target: LatLng(19.121108218152006, 74.73401894306447), zoom: 16),
+            target: LatLng(17,22), zoom: 16),
         onMapCreated: _onMapCreated,
         markers: listMarkers,
         //polylines: Set<Polyline>.of(polylines.values),
