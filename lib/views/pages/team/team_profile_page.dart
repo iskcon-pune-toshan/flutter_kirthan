@@ -454,7 +454,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                     }
                   }
                   return Center(
-                    child: Text('Team Request not accepted'),
+                    child: CircularProgressIndicator(),
                   );
                 }),
           )),

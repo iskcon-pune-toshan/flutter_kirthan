@@ -237,7 +237,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                                     Text(
                                                       currUserName,
                                                       style: TextStyle(
-                                                          fontSize: 14),
+                                                          fontSize: notifier.custFontSize-3),
                                                     ),
                                                   ],
                                                 );

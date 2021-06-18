@@ -193,6 +193,7 @@ class _UserProfileState extends State<UserProfile> {
                                     ),
                                     Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>Container(
+                                        width: MediaQuery.of(context).size.width*0.5,
                                         margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
                                         child: Column(
                                           crossAxisAlignment:
@@ -290,9 +291,11 @@ class _UserProfileState extends State<UserProfile> {
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Text(
-                                      ': ' + Email,
-                                      style: TextStyle(fontSize: notifier.custFontSize+2,),
+                                    Container(width: MediaQuery.of(context).size.width *0.8,
+                                      child: Text(
+                                        ':' + Email,
+                                        style: TextStyle(fontSize: notifier.custFontSize+2,),
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 5,
