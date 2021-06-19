@@ -33,8 +33,6 @@ class InitiateUserDetails extends StatefulWidget {
 class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   FirebaseUser user;
   UserRequest userRequest;
-  Temple templeRequest;
-  UserTemple userTempleRequest;
   String UserName;
   _InitiateUserDetailsState(this.UserName);
   String Email;
@@ -42,11 +40,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   String photoUrl;
   Future<List<UserRequest>> Users;
   final _formKey = GlobalKey<FormState>();
- // Future<List<Temple>> Temple;
   List<UserRequest> userList = new List<UserRequest>();
-  List<Temple> templelist = new List<Temple>();
-  List<UserTemple> usertemplelist = new List<UserTemple>();
-  //List<Temple> templelist = new List<Temple>();
   int superId;
   int prev_role_id;
   String _selectedCategory;
@@ -99,52 +93,6 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
         });
   }
   Temple _selectedTemple;
-  FutureBuilder getTempleWidget() {
-    return FutureBuilder<List<Temple>>(
-        future: temples,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<Temple>> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return Center(child: const CircularProgressIndicator());
-            case ConnectionState.done:
-              if (snapshot.hasData) {
-                return Container(
-                  //width: 20.0,
-                  //height: 10.0,
-                  child: Center(
-                    child: DropdownButtonFormField<Temple>(
-                      value: _selectedTemple,
-                      icon: const Icon(Icons.supervisor_account),
-                      hint: Text('Select Temple'),
-                      items: snapshot.data
-                          .map((team) => DropdownMenuItem<Temple>(
-                        value: team,
-                        child: Text(team.templeName),
-                      ))
-                          .toList(),
-                      onChanged: (input) {
-                        setState(() {
-                          _selectedTemple = input;
-                        });
-                      },
-                    ),
-                  ),
-                );
-              } else {
-                return Container(
-                  width: 20.0,
-                  height: 10.0,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-          }
-        });
-  }
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(
@@ -542,10 +490,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   }
 
   void getSuperAdminId() async {
-    //print("helllloo");
     final FirebaseAuth auth = FirebaseAuth.instance;
     user = await auth.currentUser();
-    //print("helo");
-    //print(user.email);
   }
 }
