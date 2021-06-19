@@ -46,6 +46,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
   String profilePic;
   String _photoUrl;
   String uemail;
+
   Future<String> getEmail() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var user = await auth.currentUser();
@@ -59,9 +60,21 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
     String pattern = r"^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$";
     RegExp regExp = new RegExp(pattern);
     // Compile the ReGex
-    if (value.length == 0) {
+    if (value.trim().length == 0) {
       return 'Please enter Aadhaar Number';
-    } else if (!regExp.hasMatch(value)) {
+    } else if (!regExp.hasMatch(value.trim())) {
+      if (value.trim().contains(RegExp(r'(?:[A-Z]|[a-z])'))) {
+        if (value.trim()[0].contains("1") || value.trim()[0].contains("0")) {
+          return "Aadhaar number cannot contain alphabets and also cannot contain 0 or 1 as first digit";
+        }
+        return "Aadhaar number cannot contain alphabets";
+      }
+      if (value.trim()[0].contains("1") || value.trim()[0].contains("0")) {
+        if (value.trim().contains(RegExp(r'(?:[A-Z]|[a-z])'))) {
+          return "Aadhaar number cannot contain 0 or 1 as first digit and also cannot contain alphabets";
+        }
+        return "Aadhaar number cannot contain 0 or 1 as first digit";
+      }
       return 'Please enter valid Aadhaar Number';
     }
     return null;
@@ -70,6 +83,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
   @override
   void initState() {
     super.initState();
+    getEmail();
     userPageVM.getUserRequests(uemail);
     googleSign();
     facebookSign();
@@ -77,26 +91,25 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
 
   googleSign() async {
     isGoogleSign = await googleSignIn.isSignedIn();
-    print(isGoogleSign);
   }
 
   facebookSign() async {
     isFaceBookSign = await facebookLogin.isLoggedIn;
-    print(isFaceBookSign);
   }
 
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
-    getEmail();
-    print("refreshlistumail");
-    print(uemail);
 
+    loadData();
+
+    return null;
+  }
+
+  Future loadData() async {
     setState(() {
       userPageVM.getUserRequests(uemail);
     });
-
-    return null;
   }
 
   String _isValidPhone(String value) {
@@ -152,11 +165,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
             if (snapshot.data != null) {
               // final String email = snapshot.data.toString();
               String _email = snapshot.data + '.jpg';
-              // print("\n\n\n\n\n\n\n\n\n\n\n" + _email + "\n\n\n\n\n\n\n\n");
+
               final ref = FirebaseStorage.instance.ref().child(_email);
-              // var url = ref.getDownloadURL();
-              // print("\n\n\n\n\n\n\n" + snapshot.data + "\n\n\n\n\n\n");
-              //  var url =await ref.getDownloadURL();
+
               return FutureBuilder(
                   future: ref.getDownloadURL(),
                   builder: (context, snapshot) {
@@ -197,9 +208,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
         setState(() {
           _photoUrl = value;
         });
-        print("path");
-        print(firebaseStorageRef.path);
-        print(_photoUrl);
       });
       // FirebaseStorage.instance
       //     .ref()
@@ -208,8 +216,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
       //     .then((value) => {photoUrl = value});
       // retrievePic(photoUrl);
       // setState(() {
-      //   // print("Profile Picture uploaded");
-      //   // print(_photoUrl);
+
       //   Scaffold.of(context)
       //       .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
       //   Navigator.pop(context);
@@ -228,11 +235,8 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
       StorageReference firebaseStorageRef =
       FirebaseStorage.instance.ref().child(uemail + '.jpg');
       await firebaseStorageRef.delete();
-      print("path");
-      print(firebaseStorageRef.path);
 
       setState(() {
-        //  print("Profile Picture deleted");
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
       });
@@ -244,16 +248,17 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
               appBar: AppBar(
                 title: Text('Profile Settings'),
               ),
-              body: RefreshIndicator(
-                key: refreshKey,
-                child: FutureBuilder(
-                    future: getEmail(),
-                    builder: (context, snapshot) {
-                      if (snapshot.data != null) {
-                        String email = snapshot.data;
-                        return FutureBuilder(
+              body: FutureBuilder(
+                  future: getEmail(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.data != null) {
+                      String email = snapshot.data;
+                      return RefreshIndicator(
+                        key: refreshKey,
+                        child: FutureBuilder<List<UserRequest>>(
                             future: userPageVM.getUserRequests(email),
-                            builder: (context, snapshot) {
+                            builder: (context,
+                                AsyncSnapshot<List<UserRequest>> snapshot) {
                               if (snapshot.data != null) {
                                 List<UserRequest> userList = snapshot.data;
                                 UserRequest user = new UserRequest();
@@ -327,13 +332,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                             onTap:
                                                                                 () async {
                                                                               await getImageFromGallery();
-                                                                              // var email =
-                                                                              //     snapshot
-                                                                              //         .data;
-                                                                              // print(
-                                                                              //     "emails");
-                                                                              // print(
-                                                                              //     email);
+
                                                                               uploadPic(
                                                                                   context);
                                                                               Navigator.pop(
@@ -348,8 +347,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                                   .getUserRequests('$email');
                                                                               if (userrequest
                                                                                   .isNotEmpty) {
-                                                                                print(
-                                                                                    "entered");
                                                                                 UserRequest
                                                                                 userreq =
                                                                                 new UserRequest();
@@ -397,8 +394,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                                   .getUserRequests('$email');
                                                                               if (userrequest
                                                                                   .isNotEmpty) {
-                                                                                print(
-                                                                                    "entered");
                                                                                 UserRequest
                                                                                 userreq =
                                                                                 new UserRequest();
@@ -471,8 +466,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                         //
                                                                         if (userrequest
                                                                             .isNotEmpty) {
-                                                                          //  print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
-                                                                          //print(_photoUrl);
                                                                           UserRequest
                                                                           userreq =
                                                                           new UserRequest();
@@ -513,65 +506,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                       SizedBox(
                                         height: 30,
                                       ),
-                                      // Card(
-                                      //   child: ListTile(
-                                      //     trailing: Icon(
-                                      //       Icons.keyboard_arrow_right,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     leading: Icon(
-                                      //       Icons.people,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     title: Consumer<ThemeNotifier>(
-                                      //       builder: (context, notifier, child) => Text(
-                                      //         'Team Name',
-                                      //         style: TextStyle(
-                                      //           fontSize: notifier.custFontSize,
-                                      //           color: KirthanStyles.colorPallete30,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     onTap: () {
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //             builder: (context) => teamName(),
-                                      //           ));
-                                      //     },
-                                      //     selected: true,
-                                      //   ),
-                                      // ),
-                                      // Divider(),
-                                      // Card(
-                                      //   child: ListTile(
-                                      //     trailing: Icon(
-                                      //       Icons.keyboard_arrow_right,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     leading: Icon(
-                                      //       Icons.perm_identity,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     title: Consumer<ThemeNotifier>(
-                                      //       builder: (context, notifier, child) => Text(
-                                      //         'User Name',
-                                      //         style: TextStyle(
-                                      //           fontSize: notifier.custFontSize,
-                                      //           color: KirthanStyles.colorPallete30,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     onTap: () {
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //             builder: (context) => userName_profile(),
-                                      //           ));
-                                      //     },
-                                      //     selected: true,
-                                      //   ),
-                                      // ),
                                       Column(
                                         children: [
                                           Row(
@@ -732,9 +666,24 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                           context);
                                                                       Navigator.pop(
                                                                           context);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      Navigator.popAndPushNamed(
+                                                                          context,
+                                                                          "/screen1");
+                                                                      // Navigator.pushReplacementNamed(
+                                                                      //     context,
+                                                                      //     "/screen1");
+                                                                      // Navigator.of(context).pushNamedAndRemoveUntil(
+                                                                      //     '/screen2',
+                                                                      //     ModalRoute.withName('/screen1'));
+
                                                                       Navigator.push(
                                                                           context,
                                                                           MaterialPageRoute(builder: (context) => MyProfileSettings()));
+                                                                      // Navigator.of(context).push(MaterialPageRoute(
+                                                                      //     builder: (context) => //App()
+                                                                      //         MyProfileSettings()));
                                                                     }
                                                                   },
                                                                 ),
@@ -1392,6 +1341,8 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                       color:
                                                                       Colors.grey,
                                                                     ),
+                                                                    errorMaxLines:
+                                                                    3,
                                                                     hintStyle:
                                                                     TextStyle(
                                                                       color:
@@ -1599,8 +1550,8 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                                 return null;
                                                                             }
                                                                             /*value.isNotEmpty
-                                    ? null
-                                    : "Please enter a value"*/
+                                  ? null
+                                  : "Please enter a value"*/
                                                                             ,
                                                                           ),
                                                                           Divider(),
@@ -1765,14 +1716,14 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                               return Center(
                                 child: CircularProgressIndicator(),
                               );
-                            });
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(),
+                            }),
+                        onRefresh: refreshList,
                       );
-                    }),
-                onRefresh: refreshList,
-              ));
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }));
         });
   }
 }
