@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,18 +16,16 @@ import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/admin/admin_event_details.dart';
 import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/preferences/perferences_create.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/pages/team/team_profile_page.dart';
-import 'package:flutter_kirthan/views/pages/user/user_profile_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'notificationDetails.dart';
 
 /* The view for the notifications */
 final NotificationViewModel notificationPageVM =
@@ -50,9 +46,9 @@ class NotificationView extends StatefulWidget {
   }
 }
 
-class NotificationViewState extends State<NotificationView> with AutomaticKeepAliveClientMixin<NotificationView> {
-  @override
-  bool get wantKeepAlive => false;
+class NotificationViewState extends State<NotificationView> {
+  int teamId;
+  String teamLeadId;
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   //final Firestore _db = Firestore.instance;
   // final FirebaseMessaging _fcm = FirebaseMessaging();
@@ -144,18 +140,18 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
               //  print("Printing dara");
               //print(data);
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AdminEventDetails(
-                          UserName: userName,
-                          eventRequest: eventRequest,
-                          data: data,
-                        )));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => AdminEventDetails(
+                //           UserName: userName,
+                //           eventRequest: eventRequest,
+                //           data: data,
+                //         )));
               });
             } else {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AdminView()));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => AdminView()));
             }
           },
           child: Column(children: [
@@ -268,14 +264,15 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                           width: 10,
                         ),
                         FlatButton(
+                          color: Colors.red,
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(
+                            /*  side: BorderSide(
                                 color: Colors.grey[700],
                                 width: 1,
-                                style: BorderStyle.solid),
+                                style: BorderStyle.solid),*/
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          textColor: Colors.grey[700],
+                          textColor: KirthanStyles.colorPallete60,
                           child: Text('Reject'),
                           onPressed: () {
                             notificationPageVM.updateNotifications(
@@ -393,11 +390,44 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                         ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Rejected",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Rejected",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    data.createdAt
+                                        .toString()
+                                        .substring(11, 16),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    data.createdAt
+                                        .toString()
+                                        .substring(0, 10),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                         SizedBox(
                           height: 10,
@@ -408,11 +438,45 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                         ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Registered",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Registered",
+                              style: TextStyle(
+                                color: Colors.green,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    data.createdAt
+                                        .toString()
+                                        .substring(11, 16),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    data.createdAt
+                                        .toString()
+                                        .substring(0, 11),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                         SizedBox(
                           height: 10,
@@ -425,11 +489,45 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                       crossAxisAlignment:
                       CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Updated",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Updated",
+                              style: TextStyle(
+                                color: Colors.green,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    data.createdAt
+                                        .toString()
+                                        .substring(11, 16),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    data.createdAt
+                                        .toString()
+                                        .substring(0, 10),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                         SizedBox(
                           height: 10,
@@ -441,11 +539,48 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                       crossAxisAlignment:
                       CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Cancelled",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Cancelled",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      data.createdAt
+                                          .toString()
+                                          .substring(11, 16),
+                                      overflow:
+                                      TextOverflow.clip,
+                                      style: TextStyle(
+                                        color:
+                                        Colors.grey[500],
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      data.createdAt
+                                          .toString()
+                                          .substring(0, 10),
+                                      overflow:
+                                      TextOverflow.clip,
+                                      style: TextStyle(
+                                        color:
+                                        Colors.grey[500],
+                                      ),
+                                    ),
+                                  ),
+                                ])
+                          ],
                         ),
                         SizedBox(
                           height: 10,
@@ -457,11 +592,54 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                       crossAxisAlignment:
                       CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Accepted",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment
+                              .spaceBetween,
+                          children: [
+                            Text(
+                              "Accepted",
+                              style: TextStyle(
+                                color: Colors.green,
+                              ),
+                            ),
+                            Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment
+                                    .end,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      data.createdAt
+                                          .toString()
+                                          .substring(
+                                          11, 16),
+                                      overflow:
+                                      TextOverflow
+                                          .clip,
+                                      style: TextStyle(
+                                        color: Colors
+                                            .grey[500],
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      data.createdAt
+                                          .toString()
+                                          .substring(
+                                          0, 10),
+                                      overflow:
+                                      TextOverflow
+                                          .clip,
+                                      style: TextStyle(
+                                        color: Colors
+                                            .grey[500],
+                                      ),
+                                    ),
+                                  ),
+                                ])
+                          ],
                         ),
                         SizedBox(
                           height: 10,
@@ -472,8 +650,55 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                       crossAxisAlignment:
                       CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          data.message,
+                        Row(
+                          children: [
+                            Container(
+                              width:
+                              MediaQuery.of(context)
+                                  .size
+                                  .width *
+                                  0.6,
+                              child: Text(
+                                data.message,
+                              ),
+                            ),
+                            Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment
+                                    .end,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      data.createdAt
+                                          .toString()
+                                          .substring(
+                                          11, 16),
+                                      overflow:
+                                      TextOverflow
+                                          .clip,
+                                      style: TextStyle(
+                                        color: Colors
+                                            .grey[500],
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      data.createdAt
+                                          .toString()
+                                          .substring(
+                                          0, 10),
+                                      overflow:
+                                      TextOverflow
+                                          .clip,
+                                      style: TextStyle(
+                                        color: Colors
+                                            .grey[500],
+                                      ),
+                                    ),
+                                  ),
+                                ])
+                          ],
                         ),
                         SizedBox(
                           height: 10,
@@ -484,9 +709,7 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                         ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          data.message,
-                        ),
+                        Text(data.message),
                         SizedBox(
                           height: 10,
                         ),
@@ -510,7 +733,24 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                       crossAxisAlignment:
                       CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        data.message.contains(
+                            "Approved(Request to create a team") //&& data.action.toString()=="Approved"
+                            ? Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "You are now a Team Lead",
+                              style: TextStyle(
+                                  fontWeight:
+                                  FontWeight.bold),
+                            ),
+                            Text(data.message +
+                                " by " +
+                                data.updatedBy.toString()),
+                          ],
+                        )
+                            : Text(
                           data.message +
                               " by " +
                               data.updatedBy.toString(),
@@ -523,14 +763,11 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                         : data.message.contains(
                         "You have been invited to create a team by")
                         ? Column(
+                      mainAxisAlignment:
+                      MainAxisAlignment.start,
                       crossAxisAlignment:
                       CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          data.message +
-                              " by " +
-                              data.createdBy.toString(),
-                        ),
                         SizedBox(
                           height: 10,
                         ),
@@ -584,11 +821,71 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
-                      /*showNotification(context, data, () {
-                        setState(() {
-                          notificationPageVM.getNotifications();
-                        });
-                      });*/
+                      print("Target id");
+                      print(data.targetId);
+                      if (data.targetType.contains("user")) {
+                        if (data.message.contains("team")) {
+                          if (data.message.contains("Approved"))
+                            getTeamId(data.createdBy, "Approved");
+                          else if (data.message.contains("Waiting"))
+                            getTeamId(data.createdBy, "Waiting");
+                          else
+                            getTeamId(data.createdBy, "Rejected");
+                        }
+                      }
+                      data.message.contains("event")
+                          ? data.message.contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Approved")))
+                          : data.message.contains("Waiting")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Waiting")))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Rejected")))
+                          : data.targetType.contains("team")
+                          ? data.message.contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  teamId: data.targetId,
+                                  status: "Approved")))
+                          : data.message.contains("Waiting")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  teamId: data.targetId,
+                                  status: "Waiting")))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  NotificationDetails(
+                                      teamId: data.targetId,
+                                      status: "Rejected")))
+                      // : data.targetType.contains("user")
+                      //     ? data.message.contains("team")
+                      //         ? Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) => TeamProfilePage(
+                      //                       teamLeadId: teamLeadId,
+                      //                     )))
+                      //         : null
+                          : null;
                     }),
               ),
             ]),
@@ -611,9 +908,24 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                 child: ListTile(
                     dense: false,
                     contentPadding: EdgeInsets.all(5),
-                    title: Text(
-                      data.message,
-                      overflow: TextOverflow.clip,
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: Text(
+                            data.message,
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
+                        // Text(
+                        //   data.createdAt
+                        //       .toString()
+                        //       .substring(11, 16),
+                        //   overflow: TextOverflow.clip,
+                        //   style: TextStyle(color: Colors.grey[500]),
+                        // ),
+                      ],
                     ),
                     subtitle: Text(
                       //"By " +//data.createdBy.toString(),
@@ -646,7 +958,7 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                         ),
                         icon == Icons.close
                             ? Text(
-                          "Rejected",
+                          "Rejected ",
                           style: TextStyle(
                             color: Colors.red,
                           ),
@@ -660,14 +972,71 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                       ],
                     ),
                     onTap: () {
-                      /*showNotification(context, data, () {
-                        setState(() {
-                          flag
-                              ? notificationPageVM
-                                  .getNotificationsBySpec("Today")
-                              : notificationPageVM.getNotifications();
-                        });
-                      });*/
+                      print("Target id");
+                      print(data.targetId);
+                      if (data.targetType.contains("user")) {
+                        if (data.message.contains("team")) {
+                          if (data.message.contains("Approved"))
+                            getTeamId(data.createdBy, "Approved");
+                          else if (data.message.contains("Waiting"))
+                            getTeamId(data.createdBy, "Waiting");
+                          else
+                            getTeamId(data.createdBy, "Rejected");
+                        }
+                      }
+                      data.message.contains("event")
+                          ? data.message.contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Approved")))
+                          : data.message.contains("Waiting")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Waiting")))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Rejected")))
+                          : data.targetType.contains("team")
+                          ? data.message.contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  teamId: data.targetId,
+                                  status: "Approved")))
+                          : data.message.contains("Waiting")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  teamId: data.targetId,
+                                  status: "Waiting")))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  NotificationDetails(
+                                      teamId: data.targetId,
+                                      status: "Rejected")))
+                      // : data.targetType.contains("user")
+                      //     ? data.message.contains("team")
+                      //         ? Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) => TeamProfilePage(
+                      //                       teamLeadId: teamLeadId,
+                      //                     )))
+
+                          : null;
                     }),
               ),
             ]),
@@ -834,7 +1203,7 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                             //             )));
                             //   });
                             // } else
-                              if (snapshot.data[itemCount].message
+                            if (snapshot.data[itemCount].message
                                 .contains("team") ||
                                 snapshot.data[itemCount].message
                                     .contains("Invited user")) {
@@ -906,52 +1275,32 @@ class NotificationViewState extends State<NotificationView> with AutomaticKeepAl
                 },
                 itemCount: snapshot.data.length);
           } else if (snapshot.hasError) {
-            //print(snapshot);
+            // print(snapshot);
             //print(snapshot.error.toString() + " Error ");
             return Center(
                 child: Text(
-                    'Error loading notifications'));
+                    'Error loading notifications' + snapshot.error.toString()));
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
   }
-// FutureBuilder(
-//     future: notificationPageVM.getNotificationsBySpec("Today"),
-//     builder: (context, snapshot) {
-//       if (snapshot.hasData) {
-//         ntfList = snapshot.data;
-//         print(ntfList);
-//         return ntfList.isNotEmpty
-//             ? Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     "Today",
-//                     style: TextStyle(
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   Divider(),
-//                   Expanded(
-//                     child: ListView.builder(
-//                         itemBuilder: (context, itemCount) =>
-//                             _buildNotification(
-//                                 snapshot.data[itemCount], true),
-//                         itemCount: snapshot.data.length),
-//                   ),
-//                 ],
-//               )
-//             : Container();
-//       } else if (snapshot.hasError) {
-//         print(snapshot);
-//         print(snapshot.error.toString() + " Error ");
-//         return Center(child: Text('Error loading notifications'));
-//       } else {
-//         return Center(child: CircularProgressIndicator());
-//       }
-//     }),
 
+  getTeamId(String userEmail, String status) async {
+    List<TeamRequest> teamList;
+    teamList = await teamPageVM.getTeamRequests(status);
+    for (var team in teamList) {
+      print("TEAM");
+      if (team.teamLeadId == userEmail) {
+        setState(() {
+          teamId = team.id;
+          teamLeadId = team.teamLeadId;
+          print("TEAMID");
+          print(teamId);
+        });
+      }
+    }
+  }
 }
 
 bool isVisible;

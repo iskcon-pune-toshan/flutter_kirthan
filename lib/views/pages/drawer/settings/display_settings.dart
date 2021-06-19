@@ -110,9 +110,9 @@ class _MyAppState extends State<MyPrefSettingsApp> {
 
                               activeColor: KirthanStyles.colorPallete10,
                               inactiveColor: Color(0xFF8D8E98),
-                              onChanged: (changeFontSize){
+                              onChanged: (double changeFontSize){
                                 setState(() {
-                                  notifier.custFontSize = changeFontSize;
+                                  notifier.custFontSize = changeFontSize.roundToDouble();
                                 });
                               },
                             ),
@@ -123,7 +123,7 @@ class _MyAppState extends State<MyPrefSettingsApp> {
                   ),
             ),
             Divider(),
-            MyColorPicker(),
+            // MyColorPicker(),
           ],
         ),
       ),

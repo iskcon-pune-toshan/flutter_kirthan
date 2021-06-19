@@ -14,6 +14,7 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/signin/resetscreen.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:flutter_kirthan/views/pages/user/enterCode.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
@@ -343,9 +344,9 @@ class _LoginAppState extends State<LoginApp> {
     return Container(
       alignment: Alignment.centerRight,
       child: FlatButton(
-        onPressed: () => /* Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => ResetScreen()),*/
-        print("forget password is pressed"),
+        onPressed: () =>  Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => ResetScreen())),
+        // print("forget password is pressed"),
 
         padding: EdgeInsets.only(right: 0.0),
         child: Text(
@@ -589,7 +590,7 @@ class _LoginAppState extends State<LoginApp> {
                       _buildEmailTF(),
 
                       //_buildPasswordTF(),
-                      // _buildForgotPasswordBtn(),
+                      _buildForgotPasswordBtn(),
                       _buildLoginBtn(),
                       _buildSignInWithText(),
                       _buildSocialBtnRow(),
@@ -687,29 +688,28 @@ void showFlushBar(BuildContext context, String errMessage) {
   Flushbar(
     padding: EdgeInsets.all(10),
     borderRadius: 8,
-    backgroundColor: Colors.grey.shade800,
+    backgroundColor: Colors.blueGrey.withOpacity(0.7),
     // boxShadows: [
     //   BoxShadow(color: Colors.black45,offset: Offset(3,3),blurRadius: 3),
     // ],
     margin: EdgeInsets.all(20),
-    leftBarIndicatorColor: Colors.cyanAccent,
+    leftBarIndicatorColor: Colors.black,
     // dismissDirection: FlushbarDismissDirection.HORIZONTAL,
     // forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
     titleText: Text(
       errMessage,
-      style: TextStyle(fontSize: 18),
+      style: TextStyle(fontSize: 18,color:Colors.black),
     ),
     messageText: errMessage == 'No user Found'
-        ? Text('Sign up Instead')
-        : Text('Enter correct password'),
+        ? Text('Sign up Instead',style: TextStyle(color:Colors.black, fontWeight: FontWeight.bold),)
+        : Text('Enter correct password',style: TextStyle(color:Colors.black, fontWeight: FontWeight.bold),),
     duration: errMessage == 'No user Found'
-        ? Duration(seconds: 3)
-        : Duration(seconds: 3),
+        ? Duration(seconds: 5)
+        : Duration(seconds: 5),
     icon: Icon(
       Icons.info_outline,
       size: 28,
-      color: Colors.cyanAccent,
+      color: Colors.black,
     ),
   )..show(context);
-
 }
