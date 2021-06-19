@@ -449,9 +449,21 @@ class _EventWriteState extends State<EventWritePublic> {
                               },
                               validator: (value) {
                                 if (value.toString().isEmpty || value == null) {
-                                  return "Please enter start time";
+                                  return "Please select time";
+                                } else
+                                {
+                                  DateFormat dateFormat = new DateFormat.Hm();
+                                  DateTime currenttime=dateFormat.parse(DateTime.now().toString().substring(11,15));
+                                  if(eventrequest.eventDate ==  DateFormat("yyyy-MM-dd")
+                                      .format(DateTime.now())
+                                      .toString()){
+                                    return value.isAfter(currenttime) ==true
+                                        ? null
+                                        : "Enter correct time";
+                                  }
+                                  else
+                                    return null;
                                 }
-                                return null;
                               },
                             ),
                           ],

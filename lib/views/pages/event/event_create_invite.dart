@@ -353,6 +353,12 @@ class _EventWriteState extends State<EventWrite> {
                                     lastDate: DateTime(2100));
                                 return date;
                               },
+                              onChanged: (input) {
+                                eventrequest.eventDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(input)
+                                        .toString();
+                              },
                               onSaved: (input) {
                                 eventrequest.eventDate =
                                     DateFormat("yyyy-MM-dd")
@@ -411,7 +417,22 @@ class _EventWriteState extends State<EventWrite> {
                                 if (value.toString().isEmpty || value == null) {
                                   return "Please select time";
                                 } else
-                                  return null;
+                                  {
+
+                                    DateFormat dateFormat = new DateFormat.Hm();
+                                    DateTime currenttime=dateFormat.parse(DateTime.now().toString().substring(11,15));
+                                    if(eventrequest.eventDate ==  DateFormat("yyyy-MM-dd")
+                                        .format(DateTime.now())
+                                        .toString()){
+                                      return value.isAfter(currenttime) ==true
+                                      ? null
+                                      : "Enter correct time";
+                                    }
+                                    else
+                                      return null;
+
+                                  }
+
                               },
                             ),
                           ],
@@ -453,10 +474,10 @@ class _EventWriteState extends State<EventWrite> {
                                 } else {
                                   String time =
                                       "${value.hour < 10 ? ("0" + value.hour.toString()) : value.hour}:${value.minute < 10 ? ("0" + value.minute.toString()) : value.minute}";
-                                  print(time.compareTo(
+                                  /*print(time.compareTo(
                                       eventrequest.eventStartTime != null
                                           ? eventrequest.eventStartTime
-                                          : ""));
+                                          : ""));*/
 
                                   return time.compareTo(
                                       eventrequest.eventStartTime !=
