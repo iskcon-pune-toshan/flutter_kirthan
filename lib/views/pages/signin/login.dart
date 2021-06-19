@@ -338,7 +338,6 @@ class _LoginAppState extends State<LoginApp> {
         ),
       ),
     );
-
   }
 
   Widget _buildLoginBtn() {
@@ -423,8 +422,10 @@ class _LoginAppState extends State<LoginApp> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        alignment: Alignment.centerRight,
         height: 55.0,
-        width: MediaQuery.of(context).size.width*0.85,
+        width: MediaQuery.of(context).size.width * 0.85,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           shape: BoxShape.rectangle,
@@ -437,8 +438,13 @@ class _LoginAppState extends State<LoginApp> {
             ),
           ],
           image: DecorationImage(
+            alignment: Alignment.centerLeft,
             image: logo,
           ),
+        ),
+        child: Text(
+          "Sign in with Google",
+          style: TextStyle(fontSize: 15, color: Colors.grey[700]),
         ),
       ),
     );
@@ -447,50 +453,31 @@ class _LoginAppState extends State<LoginApp> {
   String error = null;
   Widget _buildSocialBtnRow() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          // _buildSocialBtn(
-          //       () => signInService
-          //       .facebookSignIn(context)
-          //       .then((FirebaseUser user) => populateData())
-          //       .catchError((e) => print(''))
-          //       .whenComplete(() => null
-          //     // Navigator.push(context,
-          //     // MaterialPageRoute(builder: (context) => EnterCode()))
-          //   ),
-          //   AssetImage(
-          //     'assets/images/facebook.jpg',
-          //   ),
-          // ),
-          _buildSocialBtn(
-                () => signInService
-                .googSignIn(context)
-            //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
-                .then((FirebaseUser user) {
-              if (user != null) {
-                populateData();
-                error = "noerror";
-              }
-            })
-                .catchError((e) {
-              print(e);
-            })
-                .whenComplete(() => addUser())
-                .whenComplete(() => authenticateService
-                .autheticate()
-                .whenComplete(() => error == "noerror"
-                ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EnterCode()))
+      padding: EdgeInsets.symmetric(
+        vertical: 30.0,
+      ),
+      child: _buildSocialBtn(
+            () => signInService
+            .googSignIn(context)
+        //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+            .then((FirebaseUser user) {
+          if (user != null) {
+            populateData();
+            error = "noerror";
+          }
+        })
+            .catchError((e) {
+          print(e);
+        })
+            .whenComplete(() => addUser())
+            .whenComplete(() => authenticateService.autheticate().whenComplete(
+                () => error == "noerror"
+                ? Navigator.push(context,
+                MaterialPageRoute(builder: (context) => EnterCode()))
                 : error = null)),
-            AssetImage(
-              'assets/images/googlesignin.png',
-            ),
-          ),
-        ],
+        AssetImage(
+          'assets/images/google.png',
+        ),
       ),
     );
   }
