@@ -291,7 +291,7 @@ class _UserProfileState extends State<UserProfile> {
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Container(width: MediaQuery.of(context).size.width *0.8,
+                                    Container(width: MediaQuery.of(context).size.width *0.75,
                                       child: Text(
                                         ':' + Email,
                                         style: TextStyle(fontSize: notifier.custFontSize+2,),
