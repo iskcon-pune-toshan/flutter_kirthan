@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/base_service.dart';
@@ -5,7 +7,11 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create_public.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart' as geolocation;
+import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
@@ -152,6 +158,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     }
   }
 
+
   SpeedDial buildSpeedDial() {
     return SpeedDial(
       animatedIcon: AnimatedIcons.add_event,
@@ -241,8 +248,9 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                     onSelected: (input) {
                       _selectedValue = input;
                       // print(input);
-                      if (input == 'Today')
+                      if (input == 'Today') {
                         eventPageVM.setEventRequests("TODAY");
+                      }
                       else if (input == 'Tomorrow')
                         eventPageVM.setEventRequests("TOMORROW");
                       else if (input == 'This Week')
@@ -251,8 +259,9 @@ class _EventViewState extends State<EventView> with BaseAPIService {
                         eventPageVM.setEventRequests("This Month");
                       else if (input == 'Clear Filter')
                         eventPageVM.setEventRequests("All");
-                     /* else if (input == 'Near to you')
-                        eventPageVM.setEventRequests('NeartoYou');*/
+                      else if (input == 'Near to you') {
+                       // eventPageVM.setEventRequests('NeartoYou');
+                      }
                       else if (notifier.duration != null) {
                         eventPageVM.setEventRequests(notifier.duration);
                       }

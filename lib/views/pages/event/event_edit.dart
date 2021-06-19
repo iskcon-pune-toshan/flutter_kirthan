@@ -787,9 +787,10 @@ class _EditEventState extends State<EditEvent> {
                             .format(DateTime.now());
                         _updatedTimeController.text =
                             widget.eventrequest.updatedTime = dt;
-
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        eventPageVM.getEventRequests("MyEvent");
+                       // Navigator.pop(context);
+                        //Navigator.pop(context);
+                        Navigator.of(context).pushNamed('/screen3');
                         print(eventTitle);
                         print(eventDate);
                         print(eventDuration);

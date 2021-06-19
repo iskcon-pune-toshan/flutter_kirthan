@@ -29,7 +29,9 @@ class MyEventView extends StatefulWidget {
   _MyEventViewState createState() => _MyEventViewState();
 }
 
-class _MyEventViewState extends State<MyEventView> with BaseAPIService {
+class _MyEventViewState extends State<MyEventView> with BaseAPIService , AutomaticKeepAliveClientMixin<MyEventView>{
+@override
+bool get wantKeepAlive => false;
   bool _v = false;
   List<String> eventTime = [
     "Today",

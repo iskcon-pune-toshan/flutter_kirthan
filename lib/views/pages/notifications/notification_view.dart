@@ -50,7 +50,9 @@ class NotificationView extends StatefulWidget {
   }
 }
 
-class NotificationViewState extends State<NotificationView> {
+class NotificationViewState extends State<NotificationView> with AutomaticKeepAliveClientMixin<NotificationView> {
+  @override
+  bool get wantKeepAlive => false;
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   //final Firestore _db = Firestore.instance;
   // final FirebaseMessaging _fcm = FirebaseMessaging();

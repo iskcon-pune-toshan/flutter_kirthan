@@ -122,12 +122,6 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
 
     geolocator.Position position = await geolocation.Geolocator()
         .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
-   // print("COORD");
-   // print(position.latitude);
-   // print(position.longitude);
-   // print(_destination.latitude);
-   // print(_destination.longitude);
-
     return await _coordinateDistance(position.latitude, position.longitude,
         _destination?.latitude, _destination?.longitude);
   }
@@ -163,7 +157,7 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
   @override
   Widget build(BuildContext context) {
     print("distance");
-    print(getDetails().toString());
+    //print(getDetails().toString());
 
     var title = SingleChildScrollView(
         scrollDirection: Axis.horizontal,
