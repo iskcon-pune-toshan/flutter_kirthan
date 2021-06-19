@@ -327,10 +327,10 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                   userrequestStr);
                                               SnackBar mysnackbar = SnackBar(
                                                 content: Text(
-                                                    UserName + " is now Admin"),
+                                                    UserName + " is now Admin",style: TextStyle(color: Colors.black),),
                                                 duration:
                                                     new Duration(seconds: 4),
-                                                backgroundColor: Colors.white,
+                                                backgroundColor: Colors.green,
                                               );
                                               Scaffold.of(context)
                                                   .showSnackBar(mysnackbar);

@@ -50,6 +50,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var user = await auth.currentUser();
     var email = user.email;
+    uemail = user.email;
     return email;
   }
 
@@ -64,10 +65,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
       return 'Please enter valid Aadhaar Number';
     }
     return null;
-  }
-
-  Future loadData() async {
-    await userPageVM.getUserRequests(uemail);
   }
 
   @override
@@ -91,9 +88,12 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
+    getEmail();
+    print("refreshlistumail");
+    print(uemail);
 
     setState(() {
-      loadData();
+      userPageVM.getUserRequests(uemail);
     });
 
     return null;
@@ -197,6 +197,9 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
         setState(() {
           _photoUrl = value;
         });
+        print("path");
+        print(firebaseStorageRef.path);
+        print(_photoUrl);
       });
       // FirebaseStorage.instance
       //     .ref()
@@ -218,17 +221,21 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
       //String fileName = basename(_image.path);
       //profilePic=getCurrentUser() as String;
       getEmail();
+
       final FirebaseAuth auth = FirebaseAuth.instance;
       var user = await auth.currentUser();
-      String uemail = user.email;
+      uemail = user.email;
       StorageReference firebaseStorageRef =
       FirebaseStorage.instance.ref().child(uemail + '.jpg');
       await firebaseStorageRef.delete();
-      // setState(() {
-      //   //  print("Profile Picture deleted");
-      //   Scaffold.of(context)
-      //       .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
-      // });
+      print("path");
+      print(firebaseStorageRef.path);
+
+      setState(() {
+        //  print("Profile Picture deleted");
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
+      });
     }
 
     return Consumer<ThemeNotifier>(
@@ -329,9 +336,12 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                               //     email);
                                                                               uploadPic(
                                                                                   context);
-                                                                              Navigator.pop(context);
-                                                                                  Scaffold.of(context)
-                                                                                  .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+                                                                              Navigator.pop(
+                                                                                  context);
+                                                                              Scaffold.of(
+                                                                                  context)
+                                                                                  .showSnackBar(
+                                                                                  SnackBar(content: Text('Profile Picture Uploaded')));
                                                                               List<UserRequest>
                                                                               userrequest =
                                                                               await userPageVM
@@ -375,9 +385,12 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
 
                                                                               uploadPic(
                                                                                   context);
-                                                                              Navigator.pop(context);
-                                                                              Scaffold.of(context)
-                                                                                  .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+                                                                              Navigator.pop(
+                                                                                  context);
+                                                                              Scaffold.of(
+                                                                                  context)
+                                                                                  .showSnackBar(
+                                                                                  SnackBar(content: Text('Profile Picture Uploaded')));
                                                                               List<UserRequest>
                                                                               userrequest =
                                                                               await userPageVM
@@ -409,7 +422,8 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                       leading: Icon(
                                                                         MaterialCommunityIcons
                                                                             .trash_can_outline,
-                                                                        color:Colors.red,
+                                                                        color:
+                                                                        Colors.red,
                                                                       ),
                                                                       title: Text(
                                                                         'Remove current profile picture',
@@ -433,9 +447,22 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                         ProfilePages();
                                                                         deletePic(
                                                                             context);
-                                                                        Navigator.pop(context);
-                                                                        Scaffold.of(context)
-                                                                            .showSnackBar(SnackBar(content: Text('Deleted Profile Picture')));
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                        Navigator.pop(
+                                                                            context);
+
+                                                                        Navigator.push(
+                                                                            context,
+                                                                            MaterialPageRoute(
+                                                                                builder:
+                                                                                    (context) =>
+                                                                                    MyProfileSettings()));
+                                                                        // Scaffold.of(
+                                                                        //         context)
+                                                                        //     .showSnackBar(SnackBar(
+                                                                        //         content:
+                                                                        //             Text('Deleted Profile Picture')));
                                                                         List<UserRequest>
                                                                         userrequest =
                                                                         await userPageVM
@@ -464,6 +491,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                                           userPageVM
                                                                               .submitUpdateUserRequest(
                                                                               userrequestmap);
+
                                                                           // for()
                                                                         }
                                                                       },
@@ -790,7 +818,8 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                                               child:
                                                               TextFormField(
                                                                 autovalidate:
-                                                                true, initialValue: user
+                                                                true,
+                                                                initialValue: user
                                                                     .phoneNumber
                                                                     .toString(),
                                                                 keyboardType:
@@ -1729,158 +1758,6 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                                           // : Container(),
                                         ],
                                       ),
-
-                                      // Card(
-                                      //   child: ListTile(
-                                      //     trailing: Icon(
-                                      //       Icons.keyboard_arrow_right,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     leading: Icon(
-                                      //       Icons.content_paste,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     title: Consumer<ThemeNotifier>(
-                                      //       builder: (context, notifier, child) => Text(
-                                      //         'Description/Type',
-                                      //         style: TextStyle(
-                                      //           fontSize: notifier.custFontSize,
-                                      //           color: KirthanStyles.colorPallete30,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     onTap: () {
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //             builder: (context) => description_profile(),
-                                      //           ));
-                                      //     },
-                                      //     selected: true,
-                                      //   ),
-                                      // ),
-                                      // Divider(),
-                                      // Card(
-                                      //   child: ListTile(
-                                      //     trailing: Icon(
-                                      //       Icons.keyboard_arrow_right,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     leading: Icon(
-                                      //       Icons.group_add,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     title: Consumer<ThemeNotifier>(
-                                      //       builder: (context, notifier, child) => Text(
-                                      //         'Members',
-                                      //         style: TextStyle(
-                                      //           fontSize: notifier.custFontSize,
-                                      //           color: KirthanStyles.colorPallete30,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     onTap: () {
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //             builder: (context) => members_profile(
-                                      //               show: false,
-                                      //             ),
-                                      //           ));
-                                      //     },
-                                      //     selected: true,
-                                      //   ),
-                                      // ),
-                                      // Divider(),
-                                      // Card(
-                                      //   child: ListTile(
-                                      //     trailing: Icon(
-                                      //       Icons.keyboard_arrow_right,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     leading: Icon(
-                                      //       Icons.contacts,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     title: Consumer<ThemeNotifier>(
-                                      //       builder: (context, notifier, child) => Text(
-                                      //         'Contact Details',
-                                      //         style: TextStyle(
-                                      //           fontSize: notifier.custFontSize,
-                                      //           color: KirthanStyles.colorPallete30,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     onTap: () {
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //             builder: (context) => contact_details_profile(),
-                                      //           ));
-                                      //     },
-                                      //     selected: true,
-                                      //   ),
-                                      // ),
-                                      // Divider(),
-                                      // Card(
-                                      //   child: ListTile(
-                                      //     trailing: Icon(
-                                      //       Icons.keyboard_arrow_right,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     leading: Icon(
-                                      //       Icons.my_location,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     title: Consumer<ThemeNotifier>(
-                                      //       builder: (context, notifier, child) => Text(
-                                      //         'Location',
-                                      //         style: TextStyle(
-                                      //           fontSize: notifier.custFontSize,
-                                      //           color: KirthanStyles.colorPallete30,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     onTap: () {
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //             builder: (context) => location_profile(),
-                                      //           ));
-                                      //     },
-                                      //     selected: true,
-                                      //   ),
-                                      // ),
-                                      // Divider(),
-                                      // Card(
-                                      //   child: ListTile(
-                                      //     trailing: Icon(
-                                      //       Icons.keyboard_arrow_right,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     leading: Icon(
-                                      //       Icons.keyboard,
-                                      //       color: KirthanStyles.colorPallete30,
-                                      //     ),
-                                      //     title: Consumer<ThemeNotifier>(
-                                      //       builder: (context, notifier, child) => Text(
-                                      //         'Password',
-                                      //         style: TextStyle(
-                                      //           fontSize: notifier.custFontSize,
-                                      //           color: KirthanStyles.colorPallete30,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     onTap: () {
-                                      //       Navigator.push(
-                                      //         context,
-                                      //         MaterialPageRoute(
-                                      //             builder: (context) => password_profile()),
-                                      //       );
-                                      //     },
-                                      //     selected: true,
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 );
