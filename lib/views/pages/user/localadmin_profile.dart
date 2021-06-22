@@ -1,15 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/team_name.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/user_name_profile.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
@@ -43,8 +37,9 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
   }
 
   Widget phone(String email) {
-    return Consumer<ThemeNotifier>(builder: (context, notifier, child) =>(
-        FutureBuilder<List<UserRequest>>(
+    return Consumer<ThemeNotifier>(
+        builder: (context, notifier, child) =>
+        (FutureBuilder<List<UserRequest>>(
             future: Users,
             builder: (context, snapshot) {
               if (snapshot.data != null) {
@@ -54,22 +49,20 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                     Phone = user.phoneNumber;
                     return Text(
                       ': ' + Phone.toString(),
-                      style: TextStyle(fontSize: notifier.custFontSize, color: Colors.grey[400]),
+                      style: TextStyle(
+                          fontSize: notifier.custFontSize,
+                          color: Colors.grey[400]),
                     );
                   }
                 }
               }
               return CircularProgressIndicator();
-            })
-    )
-    );
+            })));
   }
 
   bool UserRole(List<UserRequest> userList) {
     for (var user in userList) {
       currUserName = user.fullName;
-      /*print(">>>>>>>>>>>>");
-      print(currUserName);*/
     }
   }
 
@@ -91,9 +84,8 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
     return Consumer<ThemeNotifier>(
       builder: (context, notifier, child) => Scaffold(
         appBar: AppBar(
-          title: Text(
-              'Profile', style: TextStyle(fontSize: notifier.custFontSize)
-          ),
+          title: Text('Profile',
+              style: TextStyle(fontSize: notifier.custFontSize)),
         ),
         body: Container(
           // height: 500.0,
@@ -122,7 +114,8 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                             Text(
                               'Local Admin',
                               style: TextStyle(
-                                  fontSize: notifier.custFontSize, fontWeight: FontWeight.w500),
+                                  fontSize: notifier.custFontSize,
+                                  fontWeight: FontWeight.w500),
                             ),
                             FutureBuilder(
                                 future: getEmail(),
@@ -144,7 +137,8 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                                     Text(
                                                       uname.fullName,
                                                       style: TextStyle(
-                                                          fontSize: notifier.custFontSize),
+                                                          fontSize: notifier
+                                                              .custFontSize),
                                                     ),
                                                   ],
                                                 );
@@ -212,7 +206,8 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                                   Text(
                                                     "Call: ",
                                                     style: TextStyle(
-                                                      fontSize: notifier.custFontSize,
+                                                      fontSize:
+                                                      notifier.custFontSize,
                                                       decoration: TextDecoration
                                                           .underline,
                                                     ),
@@ -221,8 +216,9 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                                   Text(
                                                     uname.phoneNumber
                                                         .toString(),
-                                                    style:
-                                                    TextStyle(fontSize: notifier.custFontSize),
+                                                    style: TextStyle(
+                                                        fontSize: notifier
+                                                            .custFontSize),
                                                   ),
                                                 ],
                                               ),
@@ -259,7 +255,8 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                               Text(
                                                 "Email Id:",
                                                 style: TextStyle(
-                                                  fontSize: notifier.custFontSize,
+                                                  fontSize:
+                                                  notifier.custFontSize,
                                                   decoration:
                                                   TextDecoration.underline,
                                                 ),
@@ -267,7 +264,9 @@ class _LocalAdminProfileState extends State<LocalAdminProfile> {
                                               Text(" "),
                                               Text(
                                                 currUserEmail,
-                                                style: TextStyle(fontSize: notifier.custFontSize),
+                                                style: TextStyle(
+                                                    fontSize:
+                                                    notifier.custFontSize),
                                               ),
                                             ],
                                           ),
