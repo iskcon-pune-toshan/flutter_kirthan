@@ -121,9 +121,6 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
 
     geolocator.Position position = await geolocation.Geolocator()
         .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
-    distanceValue=_coordinateDistance(position.latitude, position.longitude, _destination?.latitude, _destination?.longitude);
-    distance=distanceValue;
-    print(distance);
     return await _coordinateDistance(position.latitude, position.longitude,
         _destination?.latitude, _destination?.longitude);
   }
