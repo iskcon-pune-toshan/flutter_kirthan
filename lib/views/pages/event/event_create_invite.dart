@@ -76,6 +76,7 @@ class _EventWriteState extends State<EventWrite> {
   bool resetToggle = false;
   TeamRequest selectedTeam;
   TeamRequest selectedTeamfor;
+  bool isDisabled;
 
   _EventWriteState({this.selectedTeam});
   List<Marker> myMarker = [];
@@ -97,8 +98,14 @@ class _EventWriteState extends State<EventWrite> {
   void initState() {
     super.initState();
     pincodeController.text = "";
+    isDisabled = false;
   }
+  void incrementCounter(){
+    setState(() {
+      isDisabled = true;
 
+    });
+  }
   handleTap(LatLng tappedPoint1) {
     print(tappedPoint1);
     //print(tappedPoint2);
@@ -228,6 +235,7 @@ class _EventWriteState extends State<EventWrite> {
                     fontSize: notifier.custFontSize)),
           )),
       body: Builder(builder: (context) {
+
         return SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.all(10),
@@ -894,8 +902,9 @@ class _EventWriteState extends State<EventWrite> {
                                     fontSize: notifier.custFontSize),
                               ),
                               color: KirthanStyles.colorPallete30,
-                              onPressed: () async {
+                              onPressed:isDisabled?null: () async {
                                 if (_formKey.currentState.validate()) {
+                                  incrementCounter();
                                   final FirebaseUser user =
                                   await auth.currentUser();
                                   final String email = user.email;
@@ -936,7 +945,7 @@ class _EventWriteState extends State<EventWrite> {
                                   String eid = neweventrequest.id.toString();
                                   SnackBar mysnackbar = SnackBar(
                                     content: Text(
-                                        "Event registered $successful with $eid"),
+                                        "Event registered $successful"),
                                     duration: new Duration(seconds: 4),
                                     backgroundColor: Colors.green,
                                   );
@@ -959,7 +968,7 @@ class _EventWriteState extends State<EventWrite> {
                                 //String s = jsonEncode(userrequest.mapToJson());
                                 //service.registerUser(s);
                                 //print(s);
-                              }),
+                              })
                           /*MaterialButton(
                         child: Text("Reset",style: TextStyle(color: Colors.white),),
                         color: Colors.pink,

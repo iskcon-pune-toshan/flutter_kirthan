@@ -1,6 +1,11 @@
 import 'dart:convert';
 import 'dart:core';
+
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/prospectiveuser.dart';
+import 'package:flutter_kirthan/models/team.dart';
 import 'package:flutter_kirthan/models/teamuser.dart';
 import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
@@ -18,28 +23,22 @@ import 'package:flutter_kirthan/view_models/team_user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/team/non_user_team_invite.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/team.dart';
-import 'package:flutter_kirthan/common/constants.dart';
-import 'package:flutter_kirthan/views/pages/event/event_view.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flushbar/flushbar_route.dart';
-import 'package:flushbar/flushbar_helper.dart';
 
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final TeamUserPageViewModel teamUserPageVM =
-    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TemplePageViewModel templePageVM =
-    TemplePageViewModel(apiSvc: TempleAPIService());
+TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
-    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 final ProspectiveUserPageViewModel prospectiveUserPageViewModel =
-    ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
+ProspectiveUserPageViewModel(apiSvc: ProspectiveUserAPIService());
 
 class TeamLocalAdmin extends StatefulWidget {
   TeamRequest teamrequest;
@@ -47,9 +46,9 @@ class TeamLocalAdmin extends StatefulWidget {
   UserRequest user;
   TeamLocalAdmin(
       {Key key,
-      @required this.teamrequest,
-      @required this.selectedMembers,
-      @required this.user})
+        @required this.teamrequest,
+        @required this.selectedMembers,
+        @required this.user})
       : super(key: key);
 
   final String screenName = SCR_TEAM;
@@ -105,7 +104,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
       teamUser.userName = _selectedTeamMember;
       teamUser.createdBy = "SYSTEM";
       String dt =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
+      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
       teamUser.createdTime = dt;
       teamUser.updatedBy = "SYSTEM";
       teamUser.updatedTime = dt;
@@ -153,7 +152,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                   if (widget.user != null) {
                                     List<UserTemple> templeArea = userTempleList
                                         .where((user) =>
-                                            user.userId == widget.user.id)
+                                    user.userId == widget.user.id)
                                         .toList();
                                     for (var temple in templeArea) {
                                       _selectedtempleId = temple.templeId;
@@ -163,15 +162,15 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                       future: Temples,
                                       builder: (BuildContext context,
                                           AsyncSnapshot<List<Temple>>
-                                              snapshot) {
+                                          snapshot) {
                                         if (snapshot.data != null) {
                                           if (widget.user == null) {
                                             templeList = snapshot.data;
                                           } else {
                                             templeList = snapshot.data
                                                 .where((element) =>
-                                                    element.id ==
-                                                    _selectedtempleId)
+                                            element.id ==
+                                                _selectedtempleId)
                                                 .toList();
                                             for (var temple in templeList) {
                                               _selectedTempleArea = temple.area;
@@ -192,18 +191,18 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                     color: Colors.grey)),
                                             items: templeArea
                                                 .map((templeArea) =>
-                                                    DropdownMenuItem<String>(
-                                                      value: templeArea,
-                                                      child: Text(templeArea),
-                                                    ))
+                                                DropdownMenuItem<String>(
+                                                  value: templeArea,
+                                                  child: Text(templeArea),
+                                                ))
                                                 .toList(),
                                             onChanged: (input) {
                                               setState(() {
                                                 _selectedTempleArea = input;
                                                 _selectedtempleId = templeList
-                                                        .indexWhere((element) =>
-                                                            element.area ==
-                                                            _selectedTempleArea) +
+                                                    .indexWhere((element) =>
+                                                element.area ==
+                                                    _selectedTempleArea) +
                                                     1;
                                                 print(_selectedtempleId);
                                                 _selectedLocalAdmin = null;
@@ -232,7 +231,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                 if (snapshot.data != null) {
                                   userTempleList = snapshot.data
                                       .where((element) =>
-                                          element.templeId == _selectedtempleId)
+                                  element.templeId == _selectedtempleId)
                                       .toList();
                                   List<String> templeArea = userTempleList
                                       .map((user) => user.userName)
@@ -243,7 +242,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                   }
                                   return DropdownButtonFormField<String>(
                                     disabledHint:
-                                        Text("No Local Admin Available"),
+                                    Text("No Local Admin Available"),
                                     value: widget.user == null
                                         ? _selectedLocalAdmin
                                         : widget.user.fullName,
@@ -252,10 +251,10 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                         style: TextStyle(color: Colors.grey)),
                                     items: templeArea
                                         .map((templeArea) =>
-                                            DropdownMenuItem<String>(
-                                              value: templeArea,
-                                              child: Text(templeArea),
-                                            ))
+                                        DropdownMenuItem<String>(
+                                          value: templeArea,
+                                          child: Text(templeArea),
+                                        ))
                                         .toList(),
                                     onChanged: (input) {
                                       setState(() {
@@ -298,18 +297,22 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                         color: KirthanStyles.colorPallete30,
                                         onPressed: () async {
                                           List<TeamRequest> tempTeamList =
-                                              await teamPageVM.getTeamRequests(
-                                                  "teamLead:"+
-                                                      widget.teamrequest.teamLeadId);
+                                          await teamPageVM.getTeamRequests(
+                                              "teamLead:" +
+                                                  widget.teamrequest
+                                                      .teamLeadId);
+                                          tempTeamList.removeWhere((element) =>
+                                          element.approvalStatus ==
+                                              "Rejected");
                                           if (tempTeamList.isNotEmpty) {
                                             Scaffold.of(context)
                                                 .showSnackBar(SnackBar(
                                               content:
-                                                  Text('Team already exits'),
+                                              Text('Team already exits'),
                                               backgroundColor: Colors.red,
                                             ));
                                           } else if (widget
-                                                  .teamrequest.teamLeadId ==
+                                              .teamrequest.teamLeadId ==
                                               null) {
                                             Scaffold.of(context)
                                                 .showSnackBar(SnackBar(
@@ -339,13 +342,13 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                               _formKey.currentState.save();
                                               int i = 0;
                                               for (var member
-                                                  in widget.selectedMembers) {
+                                              in widget.selectedMembers) {
                                                 addUser(userList, member, i);
                                                 i++;
                                               }
                                               for (var user in selectedUsers) {
                                                 TeamUser teamUser =
-                                                    new TeamUser();
+                                                new TeamUser();
                                                 teamUser.userId = user.id;
                                                 teamUser.teamId =
                                                     widget.teamrequest.id;
@@ -353,7 +356,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                                     user.fullName;
                                                 teamUser.createdBy = "SYSTEM";
                                                 String dt = DateFormat(
-                                                        "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                                    "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                                     .format(DateTime.now());
                                                 teamUser.createdTime = dt;
                                                 teamUser.updatedBy = "SYSTEM";
@@ -362,49 +365,49 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                               }
                                               print(listofTeamUsers);
                                               widget.teamrequest
-                                                      .listOfTeamMembers =
+                                                  .listOfTeamMembers =
                                                   listofTeamUsers;
                                               List<ProspectiveUserRequest>
-                                                  puReq =
-                                                  await prospectiveUserPageVM
-                                                      .getProspectiveUserRequests(
-                                                          "uEmail:" +
-                                                              widget.teamrequest
-                                                                  .teamLeadId);
+                                              puReq =
+                                              await prospectiveUserPageVM
+                                                  .getProspectiveUserRequests(
+                                                  "uEmail:" +
+                                                      widget.teamrequest
+                                                          .teamLeadId);
                                               if (puReq.isNotEmpty) {
                                                 for (var user in puReq) {
                                                   if (user.inviteType == 4) {
                                                     ProspectiveUserRequest
-                                                        purequest =
-                                                        new ProspectiveUserRequest();
+                                                    purequest =
+                                                    new ProspectiveUserRequest();
                                                     user.isProcessed = true;
                                                     purequest = user;
                                                     String prospectiveStr =
-                                                        jsonEncode(purequest
-                                                            .toStrJson());
+                                                    jsonEncode(purequest
+                                                        .toStrJson());
                                                     prospectiveUserPageVM
                                                         .submitUpdateProspectiveUserRequest(
-                                                            prospectiveStr);
+                                                        prospectiveStr);
                                                   }
                                                 }
                                               }
                                               if (widget.user != null) {
                                                 widget.teamrequest
-                                                        .approvalStatus =
-                                                    "Approved";
+                                                    .approvalStatus =
+                                                "Approved";
                                               } else {
                                                 widget.teamrequest
                                                     .approvalStatus = "Waiting";
                                               }
                                               Map<String, dynamic> teammap =
-                                                  widget.teamrequest.toJson();
+                                              widget.teamrequest.toJson();
                                               TeamRequest newteamrequest =
-                                                  await teamPageVM
-                                                      .submitNewTeamRequest(
-                                                          teammap)
-                                                      .whenComplete(() =>
-                                                          showFlushBar(
-                                                              context));
+                                              await teamPageVM
+                                                  .submitNewTeamRequest(
+                                                  teammap)
+                                                  .whenComplete(() =>
+                                                  showFlushBar(
+                                                      context));
                                             }
                                           }
                                         });

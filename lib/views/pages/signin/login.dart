@@ -338,6 +338,7 @@ class _LoginAppState extends State<LoginApp> {
         ),
       ),
     );
+
   }
 
   Widget _buildLoginBtn() {
@@ -409,11 +410,11 @@ class _LoginAppState extends State<LoginApp> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 20.0),
-        Text(
-          'Sign in with',
-          style: kLabelStyle,
-        ),
+        // SizedBox(height: 20.0),
+        // Text(
+        //   'Sign in with',
+        //   style: kLabelStyle,
+        // ),
       ],
     );
   }
@@ -423,9 +424,10 @@ class _LoginAppState extends State<LoginApp> {
       onTap: onTap,
       child: Container(
         height: 55.0,
-        width: 55.0,
+        width: MediaQuery.of(context).size.width*0.85,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(30),
+          shape: BoxShape.rectangle,
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -449,19 +451,19 @@ class _LoginAppState extends State<LoginApp> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildSocialBtn(
-                () => signInService
-                .facebookSignIn(context)
-                .then((FirebaseUser user) => populateData())
-                .catchError((e) => print(''))
-                .whenComplete(() => null
-              // Navigator.push(context,
-              // MaterialPageRoute(builder: (context) => EnterCode()))
-            ),
-            AssetImage(
-              'assets/images/facebook.jpg',
-            ),
-          ),
+          // _buildSocialBtn(
+          //       () => signInService
+          //       .facebookSignIn(context)
+          //       .then((FirebaseUser user) => populateData())
+          //       .catchError((e) => print(''))
+          //       .whenComplete(() => null
+          //     // Navigator.push(context,
+          //     // MaterialPageRoute(builder: (context) => EnterCode()))
+          //   ),
+          //   AssetImage(
+          //     'assets/images/facebook.jpg',
+          //   ),
+          // ),
           _buildSocialBtn(
                 () => signInService
                 .googSignIn(context)
@@ -485,7 +487,7 @@ class _LoginAppState extends State<LoginApp> {
                     builder: (context) => EnterCode()))
                 : error = null)),
             AssetImage(
-              'assets/images/google.png',
+              'assets/images/googlesignin.png',
             ),
           ),
         ],

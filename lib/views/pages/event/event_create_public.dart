@@ -82,10 +82,18 @@ class _EventWriteState extends State<EventWritePublic> {
   String _selectedState;
   String _selectedCountry;
   String _selectedCategory;
+  bool isDisabled;
   void initState() {
     _getUserLocation();
     super.initState();
     pincodeController.text = "";
+    isDisabled=false;
+  }
+  void incrementCounter(){
+    setState(() {
+      isDisabled = true;
+
+    });
   }
 
   handleTap(LatLng tappedPoint1) {
@@ -1340,8 +1348,9 @@ class _EventWriteState extends State<EventWritePublic> {
                                     fontSize: notifier.custFontSize),
                               ),
                               color: KirthanStyles.colorPallete30,
-                              onPressed: () async {
+                              onPressed: isDisabled?null:() async {
                                 if (_formKey.currentState.validate()) {
+                                  incrementCounter();
                                   final FirebaseUser user =
                                   await auth.currentUser();
                                   final String email = user.email;
