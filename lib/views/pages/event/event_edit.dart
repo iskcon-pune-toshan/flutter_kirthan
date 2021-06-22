@@ -451,7 +451,9 @@ class _EditEventState extends State<EditEvent> {
     Consumer<ThemeNotifier>(
     builder: (context, notifier, child) =>
     Text(
-    "${widget.eventrequest.eventDate.substring(0, 10)}",
+
+    "${DateTime.parse(widget.eventrequest.eventDate)
+        .add(new Duration(days: 1)).toString().substring(0, 10)}",
    // style:TextStyle(fontSize:notifier.custFontSize) ,
     textAlign: TextAlign.left,
     ),

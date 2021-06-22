@@ -17,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+var distance;
 
 class Choice {
   const Choice({this.id, this.description});
@@ -122,6 +123,9 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
 
     geolocator.Position position = await geolocation.Geolocator()
         .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
+    distanceValue=_coordinateDistance(position.latitude, position.longitude, _destination?.latitude, _destination?.longitude);
+    distance=distanceValue;
+    print(distance);
     return await _coordinateDistance(position.latitude, position.longitude,
         _destination?.latitude, _destination?.longitude);
   }
@@ -512,6 +516,7 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
                           ]),
                         ),
                       ),
+
                       FutureBuilder(
                           future: getDetails(),
                           builder: (_, AsyncSnapshot snapshot) {
