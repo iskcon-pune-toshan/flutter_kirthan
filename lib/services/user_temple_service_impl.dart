@@ -18,7 +18,7 @@ class UserTempleAPIService extends BaseAPIService
    // print(listofusertemplemap);
     String requestBody = json.encode(listofusertemplemap);
    // print(requestBody);
-
+    String token = AutheticationAPIService().sessionJWTToken;
     var response = await client1.put('$baseUrl/api/usertemple/addusertemple',
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +33,7 @@ class UserTempleAPIService extends BaseAPIService
               UserTemple.fromMap(usertemplemappingData))
           .toList();
       //print(usertemplemappingData);
-      return usertemplemappingData;
+      return usertemplerequests;
     } else {
       throw Exception('Failed to get data');
     }

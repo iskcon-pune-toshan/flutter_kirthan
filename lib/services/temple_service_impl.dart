@@ -54,7 +54,7 @@ class TempleAPIService extends BaseAPIService implements ITempleRestApi {
     if (eventType == ["bmg"]) {
       requestBody = '{"id":"4"}';
     } else if (eventType == "All") {
-      requestBody = '{"state":["MH"]}';
+      requestBody = '{"city":["Pune","Mumbai"]}';
     } else {
       int id = int.parse(eventType);
       requestBody = '{"id":$id}';
