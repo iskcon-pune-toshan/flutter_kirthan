@@ -3,17 +3,29 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_kirthan/models/temple.dart';
+import 'package:flutter_kirthan/models/temple.dart';
+import 'package:flutter_kirthan/models/temple.dart';
+import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/models/usertemple.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
+import 'package:flutter_kirthan/services/temple_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
+import 'package:flutter_kirthan/services/user_temple_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
+import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
-
+final UserTemplePageViewModel usertemplePageVM =
+    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+final TemplePageViewModel templePageVM =
+    TemplePageViewModel(apiSvc: TempleAPIService());
 class InitiateUserDetails extends StatefulWidget {
   String UserName;
   InitiateUserDetails({this.UserName});
@@ -25,16 +37,22 @@ class InitiateUserDetails extends StatefulWidget {
 class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   FirebaseUser user;
   UserRequest userRequest;
+  Temple templeRequest;
+  UserTemple userTempleRequest;
   String UserName;
   _InitiateUserDetailsState(this.UserName);
   String Email;
   int Phone;
   String photoUrl;
   Future<List<UserRequest>> Users;
+ // Future<List<Temple>> Temple;
   List<UserRequest> userList = new List<UserRequest>();
+  List<Temple> templelist = new List<Temple>();
+  List<UserTemple> usertemplelist = new List<UserTemple>();
+  //List<Temple> templelist = new List<Temple>();
   int superId;
   int prev_role_id;
-
+  String _selectedCategory;
   void loadPref() async {
     SignInService().firebaseAuth.currentUser().then((onValue) {
       photoUrl = onValue.photoUrl;
@@ -42,10 +60,11 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
     });
     //print(userdetails.length);
   }
-
+  Future<List<Temple>> temples;
   @override
   void initState() {
     Users = userPageVM.getUserRequests('Approved');
+    temples = templePageVM.getTemples("All");
     getSuperAdminId();
     super.initState();
   }
@@ -82,7 +101,53 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
           );
         });
   }
-
+  Temple _selectedTemple;
+  FutureBuilder getTempleWidget() {
+    return FutureBuilder<List<Temple>>(
+        future: temples,
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Temple>> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return Center(child: const CircularProgressIndicator());
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return Container(
+                  //width: 20.0,
+                  //height: 10.0,
+                  child: Center(
+                    child: DropdownButtonFormField<Temple>(
+                      value: _selectedTemple,
+                      icon: const Icon(Icons.supervisor_account),
+                      hint: Text('Select Temple'),
+                      items: snapshot.data
+                          .map((team) => DropdownMenuItem<Temple>(
+                        value: team,
+                        child: Text(team.templeName),
+                      ))
+                          .toList(),
+                      onChanged: (input) {
+                        setState(() {
+                          _selectedTemple = input;
+                        });
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                return Container(
+                  width: 20.0,
+                  height: 10.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+          }
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(
@@ -252,32 +317,11 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                 SizedBox(
                                   height: 60,
                                 ),
-                                // Align(
-                                //   alignment: Alignment.centerLeft,
-                                //   child: TextField(
-                                //     cursorColor: Colors.white,
-                                //     decoration: InputDecoration(
-                                //       enabledBorder: const OutlineInputBorder(
-                                //         // width: 0.0 produces a thin "hairline" border
-                                //         borderSide: const BorderSide(
-                                //             color: Colors.white, width: 0.0),
-                                //       ),
-                                //       focusedBorder: const OutlineInputBorder(
-                                //         // width: 0.0 produces a thin "hairline" border
-                                //         borderSide: const BorderSide(
-                                //             color: Colors.white, width: 1.0),
-                                //       ),
-                                //       //fillColor: Colors.grey[700],
-                                //       border: OutlineInputBorder(
-                                //           borderSide: BorderSide(
-                                //               color: Colors.white,
-                                //               style: BorderStyle.solid)),
-                                //       hintText: 'Add a message',
-                                //     ),
-                                //     style: TextStyle(color: Colors.white70,fontSize: notifier.custFontSize),
-                                //   ),
-                                // ),
-
+                                if(uname.roleId==3||uname.roleId==4)
+                            getTempleWidget(),
+                                SizedBox(
+                                  height: 60,
+                                ),
                                 uname.roleId != 2
                                     ? Container(
                                         decoration: BoxDecoration(
@@ -307,12 +351,14 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                   fontFamily: 'OpenSans'),
                                             ),
                                             onPressed: () {
+
                                               userRequest = uname;
                                               print("Printing user request");
                                               print(prev_role_id);
                                               // print(userRequest);
                                               setState(() {
                                                 // print("ooooo");
+                                                //userTempleRequest.templeId = _selectedCategory.
                                                 userRequest.roleId = 2;
                                                 userRequest.prevRoleId =
                                                     prev_role_id;
@@ -334,6 +380,28 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                               );
                                               Scaffold.of(context)
                                                   .showSnackBar(mysnackbar);
+                                               List<UserTemple> listofUserTemples = new List<UserTemple>();
+                                                //for (var user in templelist) {
+                                                  UserTemple userTemple = new UserTemple();
+                                                  userTemple.templeId = _selectedTemple.id;
+                                                  userTemple.userId = uname.id;
+                                                  userTemple.roleId = 2;
+                                                  //userTemple.userName = uname.fullName;
+                                                 // userTemple.templeName = user.templeName;
+
+                                                  listofUserTemples.add(
+                                                      userTemple);
+                                               // }
+                                              usertemplePageVM.submitNewUserTempleMapping(listofUserTemples);
+                                              SnackBar mysnackbar2 = SnackBar(
+                                                content: Text(
+                                                  "usertemple registered",style: TextStyle(fontSize: notifier.custFontSize),),
+                                                duration:
+                                                new Duration(seconds: 8),
+                                                backgroundColor: Colors.white,
+                                              );
+                                              Scaffold.of(context)
+                                                  .showSnackBar(mysnackbar2);
                                             }),
                                       )
                                     : Container(
