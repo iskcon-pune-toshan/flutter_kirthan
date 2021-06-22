@@ -90,7 +90,6 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
           widget.eventrequest.state;
       var addresses = await Geocoder.local.findAddressesFromQuery(query);
       var first = addresses.first;
-      print(query);
       lat = first.coordinates.latitude;
       long = first.coordinates.longitude;
     } else {
@@ -111,7 +110,6 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
           widget.eventrequest.state;
       var addresses = await Geocoder.local.findAddressesFromQuery(query);
       var first = addresses.first;
-     // print(query);
       lat = first.coordinates.latitude;
       long = first.coordinates.longitude;
     } else {
@@ -156,9 +154,6 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
   var distanceValue;
   @override
   Widget build(BuildContext context) {
-    print("distance");
-    //print(getDetails().toString());
-
     var title = SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Consumer<ThemeNotifier>(

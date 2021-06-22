@@ -1,34 +1,28 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_kirthan/models/user.dart';
-import 'package:flutter_kirthan/services/base_service.dart';
-import 'package:flutter_kirthan/services/user_service_impl.dart';
-import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/event/event_create_public.dart';
-import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart' as http;
-import 'package:geolocator/geolocator.dart' as geolocation;
-import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
 import 'package:flutter_kirthan/models/event.dart';
+import 'package:flutter_kirthan/models/user.dart';
+import 'package:flutter_kirthan/services/base_service.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/services/notification_service_impl.dart';
 import 'package:flutter_kirthan/services/signin_service.dart';
+import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
+import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
+import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_create_invite.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_kirthan/views/pages/event/event_create_public.dart';
+import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:http/http.dart' as http;
 import 'package:move_to_background/move_to_background.dart';
+import 'package:provider/provider.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final EventPageViewModel eventPageVM =
 EventPageViewModel(apiSvc: EventAPIService());
@@ -46,35 +40,45 @@ class EventView extends StatefulWidget {
 }
 
 class _EventViewState extends State<EventView> with BaseAPIService {
-  Future<bool> _onWillPop()async{
-    return(await showDialog(context: context,builder: (context)=>
-    new AlertDialog(
-        shape:RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30)
-        ),
-        elevation: 5,
-        title: Text('Sign Out'),
-        content:
-        Text('Are you sure you want to Sign Out?'),
-        actions:<Widget>[
-          SizedBox(width: 30,),
-          FlatButton(
-            onPressed: ()=>Navigator.of(context).pop(false),
-            child: Text("Cancel",style: TextStyle(
-                fontSize: 18,color: Colors.blueGrey
-            ),),
-          ),
-          SizedBox(width: 30,),
-          VerticalDivider(thickness: 2,indent: 50,),
-          FlatButton(
-            onPressed: ()=>Navigator.of(context).pop(true),
-            child: Text("Sign Out",style: TextStyle(
-                fontSize: 18,color: Colors.blueGrey)),
-          ),
-          SizedBox(width: 30,),
-        ]
-    )
-    ))?? false;
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+        context: context,
+        builder: (context) => new AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30)),
+            elevation: 5,
+            title: Text('Sign Out'),
+            content: Text('Are you sure you want to Sign Out?'),
+            actions: <Widget>[
+              SizedBox(
+                width: 30,
+              ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  "Cancel",
+                  style:
+                  TextStyle(fontSize: 18, color: Colors.blueGrey),
+                ),
+              ),
+              SizedBox(
+                width: 30,
+              ),
+              VerticalDivider(
+                thickness: 2,
+                indent: 50,
+              ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text("Sign Out",
+                    style: TextStyle(
+                        fontSize: 18, color: Colors.blueGrey)),
+              ),
+              SizedBox(
+                width: 30,
+              ),
+            ]))) ??
+        false;
   }
 
   List<String> eventTime = [
@@ -83,7 +87,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     "This Week",
     "This Month",
     "Clear Filter"
-   // "Near to you"
+    // "Near to you"
   ];
   String date;
   String datetomm;
@@ -112,7 +116,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
         photoUrl = onValue.photoUrl;
         name = onValue.displayName;
       });
-      //print(userdetails.length);
     });
   }
 
@@ -148,7 +151,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     final FirebaseUser user = await auth.currentUser();
     userRequest = await userPageVM.getUserRequests("Approved");
     for (var users in userRequest) {
-      //  print("Role Id is");
       if (users.email == user.email) {
         setState(() {
           role_id = users.roleId;
@@ -157,7 +159,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
       }
     }
   }
-
 
   SpeedDial buildSpeedDial() {
     return SpeedDial(
@@ -181,8 +182,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
               color: KirthanStyles.colorPallete60),
           labelBackgroundColor: KirthanStyles.colorPallete30,
         )
-            :
-        SpeedDialChild(
+            : SpeedDialChild(
           child: Icon(Icons.event, color: Colors.white),
           backgroundColor: Colors.grey,
           onTap: () {
@@ -216,97 +216,92 @@ class _EventViewState extends State<EventView> with BaseAPIService {
   @override
   Widget build(BuildContext context) {
     //accessTypes.containsKey(ACCESS_TYPE_CREATE)
-    //print("Accesstype: C: $accessTypes.containsKey(ACCESS_TYPE_CREATE)");
-    //print(accessTypes[ACCESS_TYPE_PROCESS]);
+
     return new WillPopScope(
-      onWillPop:()async {
+      onWillPop: () async {
         MoveToBackground.moveTaskToBack();
         return false;
       },
       child: Consumer<ThemeNotifier>(
         builder: (content, notifier, child) => Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "Events",
-                style: TextStyle(fontSize: notifier.custFontSize),
-              ),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.search,
-                    ),
-                    onPressed: () => {
-                      showSearch(
-                        context: context,
-                        delegate: Search(),
-                      )
-                    }),
-                PopupMenuButton(
-                    icon: Icon(
-                      Icons.tune,
-                    ),
-                    onSelected: (input) {
-                      _selectedValue = input;
-                      // print(input);
-                      if (input == 'Today') {
-                        eventPageVM.setEventRequests("TODAY");
-                      }
-                      else if (input == 'Tomorrow')
-                        eventPageVM.setEventRequests("TOMORROW");
-                      else if (input == 'This Week')
-                        eventPageVM.setEventRequests("This Week");
-                      else if (input == 'This Month')
-                        eventPageVM.setEventRequests("This Month");
-                      else if (input == 'Clear Filter')
-                        eventPageVM.setEventRequests("All");
-                      else if (input == 'Near to you') {
-                       // eventPageVM.setEventRequests('NeartoYou');
-                      }
-                      else if (notifier.duration != null) {
-                        eventPageVM.setEventRequests(notifier.duration);
-                      }
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return eventTime.map((f) {
-                        return CheckedPopupMenuItem<String>(
-                          child: Text(
-                            f,
-                            style: TextStyle(
-                              fontSize: notifier.custFontSize,
-                            ),
+          appBar: AppBar(
+            title: Text(
+              "Events",
+              style: TextStyle(fontSize: notifier.custFontSize),
+            ),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.search,
+                  ),
+                  onPressed: () => {
+                    showSearch(
+                      context: context,
+                      delegate: Search(),
+                    )
+                  }),
+              PopupMenuButton(
+                  icon: Icon(
+                    Icons.tune,
+                  ),
+                  onSelected: (input) {
+                    _selectedValue = input;
+                    if (input == 'Today') {
+                      eventPageVM.setEventRequests("TODAY");
+                    } else if (input == 'Tomorrow')
+                      eventPageVM.setEventRequests("TOMORROW");
+                    else if (input == 'This Week')
+                      eventPageVM.setEventRequests("This Week");
+                    else if (input == 'This Month')
+                      eventPageVM.setEventRequests("This Month");
+                    else if (input == 'Clear Filter')
+                      eventPageVM.setEventRequests("All");
+                    else if (input == 'Near to you') {
+                      // eventPageVM.setEventRequests('NeartoYou');
+                    } else if (notifier.duration != null) {
+                      eventPageVM.setEventRequests(notifier.duration);
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return eventTime.map((f) {
+                      return CheckedPopupMenuItem<String>(
+                        child: Text(
+                          f,
+                          style: TextStyle(
+                            fontSize: notifier.custFontSize,
                           ),
-                          value: f,
-                          checked: _selectedValue == f ? true : false,
-                          enabled: true,
-                          //checked: true,
-                        );
-                      }).toList();
-                    }),
-              ],
-              iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
-            ),
-            drawer: MyDrawer(),
-            body: RefreshIndicator(
-              key: refreshKey,
-              child: ScopedModel<EventPageViewModel>(
-                model: eventPageVM,
-                child: EventsPanel(
-                  eventType: "Pune",
-                ),
+                        ),
+                        value: f,
+                        checked: _selectedValue == f ? true : false,
+                        enabled: true,
+                        //checked: true,
+                      );
+                    }).toList();
+                  }),
+            ],
+            iconTheme: IconThemeData(color: KirthanStyles.colorPallete30),
+          ),
+          drawer: MyDrawer(),
+          body: RefreshIndicator(
+            key: refreshKey,
+            child: ScopedModel<EventPageViewModel>(
+              model: eventPageVM,
+              child: EventsPanel(
+                eventType: "Pune",
               ),
-              onRefresh: refreshList,
             ),
-            floatingActionButton:
-            role_id==2 || role_id ==1
-            ?buildSpeedDial()
-          :FloatingActionButton(
+            onRefresh: refreshList,
+          ),
+          floatingActionButton: role_id == 2 || role_id == 1
+              ? buildSpeedDial()
+              : FloatingActionButton(
             heroTag: "event",
             child: Icon(Icons.add),
             backgroundColor: KirthanStyles.colorPallete10,
             //tooltip: accessTypes["Create"].toString(),
             onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => EventWrite()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EventWrite()));
             },
           ),
         ),
@@ -342,7 +337,6 @@ class Search extends SearchDelegate {
     ];
   }
 
-
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
@@ -352,6 +346,7 @@ class Search extends SearchDelegate {
       },
     );
   }
+
   String selectedResult = "";
   @override
   Widget buildResults(BuildContext context) {
@@ -365,7 +360,8 @@ class Search extends SearchDelegate {
                 ? suggestionList = eventlist
                 : suggestionList.addAll(eventlist.where((element) =>
             element.eventTitle.toUpperCase().contains(query) == true ||
-                element.eventTitle.toLowerCase().contains(query) == true || element.eventTitle.contains(query) == true )) ;
+                element.eventTitle.toLowerCase().contains(query) == true ||
+                element.eventTitle.contains(query) == true));
             return ListView.builder(
               itemCount: suggestionList.length,
               itemBuilder: (context, index) {
@@ -391,6 +387,7 @@ class Search extends SearchDelegate {
           );
         });
   }
+
   // final List<String> listExample;
   List<String> recentList = [];
   @override
@@ -405,7 +402,8 @@ class Search extends SearchDelegate {
                 ? suggestionList = eventlist
                 : suggestionList.addAll(eventlist.where((element) =>
             element.eventTitle.toUpperCase().contains(query) == true ||
-                element.eventTitle.toLowerCase().contains(query) == true || element.eventTitle.contains(query) == true ));
+                element.eventTitle.toLowerCase().contains(query) == true ||
+                element.eventTitle.contains(query) == true));
             return ListView.builder(
               itemCount: suggestionList.length,
               itemBuilder: (context, index) {

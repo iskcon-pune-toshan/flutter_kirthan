@@ -373,10 +373,10 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
                                       color: KirthanStyles.colorPallete30,
                                       child: Text('Send invite'),
                                       onPressed: () async {
-                                        List<TeamRequest> checkTeamPresent =
-                                        await teamPageVM.getTeamRequests(
-                                            "teamLeadId:" + Email);
-                                        if (checkTeamPresent.isEmpty) {
+                                        // List<TeamRequest> checkTeamPresent =
+                                        // await teamPageVM.getTeamRequests(
+                                        //     "teamLeadId:" + Email);
+                                        // if (checkTeamPresent.isEmpty) {
                                           setState(() {
                                             uname.invitedBy = currentUserId;
                                             String userrequestStr =
@@ -391,14 +391,14 @@ class _TeamInitiateUserDetailsState extends State<TeamInitiateUserDetails> {
                                                   backgroundColor: Colors.green,
                                                 )));
                                           });
-                                        } else {
-                                          Scaffold.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: Text(
-                                                '${uname.fullName} already has a team'),
-                                            backgroundColor: Colors.red,
-                                          ));
-                                        }
+                                        // } else {
+                                        //   Scaffold.of(context)
+                                        //       .showSnackBar(SnackBar(
+                                        //     content: Text(
+                                        //         '${uname.fullName} already has a team'),
+                                        //     backgroundColor: Colors.red,
+                                        //   ));
+                                        // }
                                       })
                                 ]),
                               ),
