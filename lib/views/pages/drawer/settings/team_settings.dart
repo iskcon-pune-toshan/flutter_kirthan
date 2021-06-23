@@ -84,7 +84,8 @@ class _Team_SettingsState extends State<Team_Settings> {
                                     MainAxisAlignment.center,
                                     children: [
                                       SpinKitPouringHourglass(
-                                        color: Colors.blue,
+                                        color: KirthanStyles
+                                            .colorPallete30,
                                         size: 50,
                                       ),
                                       SizedBox(height: 10),
@@ -127,27 +128,7 @@ class _Team_SettingsState extends State<Team_Settings> {
                                                   "\n",
                                             ),
                                           )), //     child: RichText(
-                                      //   text: TextSpan(
-                                      //     text:
-                                      //         'Your team request for team',
-                                      //     style:
-                                      //         DefaultTextStyle.of(
-                                      //                 context)
-                                      //             .style,
-                                      //     children: const <
-                                      //         TextSpan>[
-                                      //       TextSpan(
-                                      //           text: teamrequest.teamTitle,
-                                      //           style: TextStyle(
-                                      //               fontWeight:
-                                      //                   FontWeight
-                                      //                       .bold)),
-                                      //       TextSpan(
-                                      //           text:
-                                      //               'has been rejected'),
-                                      //     ],
-                                      //   ),
-                                      // )),
+
                                       Center(
                                           child: Text(
                                             "Click on the button below to create other",

@@ -24,6 +24,7 @@ import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
+import 'package:flutter_kirthan/views/pages/team/initiate_team_userdetails.dart';
 import 'package:flutter_kirthan/views/pages/team/team_local_admin.dart';
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:intl/intl.dart';
@@ -31,17 +32,17 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 TextEditingController title = new TextEditingController();
 final TeamPageViewModel teamPageVM =
-    TeamPageViewModel(apiSvc: TeamAPIService());
+TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final TeamUserPageViewModel teamUserPageVM =
-    TeamUserPageViewModel(apiSvc: TeamUserAPIService());
+TeamUserPageViewModel(apiSvc: TeamUserAPIService());
 final TemplePageViewModel templePageVM =
-    TemplePageViewModel(apiSvc: TempleAPIService());
+TemplePageViewModel(apiSvc: TempleAPIService());
 final UserTemplePageViewModel userTemplePageVM =
-    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 final CommonLookupTablePageViewModel commonLookupTablePageVM =
-    CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
+CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 int role_id;
 
 class TeamWrite extends StatefulWidget {
@@ -59,15 +60,25 @@ class TeamWrite extends StatefulWidget {
 class _TeamWriteState extends State<TeamWrite> {
   Future<List<UserRequest>> Users;
   int counter = 0;
+  String team_title;
   int _currentvalue=0;
+  String currUserEmail;
+  String currUserName;
+  String currUserRole;
+  String country, state;
   FocusNode myFocusNode = new FocusNode();
   List<UserRequest> userList = new List<UserRequest>();
+  Future<List<TeamRequest>> Teams;
+  List<TeamRequest> teamList = new List<TeamRequest>();
   @override
   void initState() {
     Users = userPageVM.getUserRequests("Approved");
+    Teams = teamPageVM.getTeamRequests('Approved');
     getRoleId();
     super.initState();
   }
+
+
 
   List<UserRequest> getTeamLeads(
       List<TeamRequest> teamList, List<UserRequest> tempList) {
@@ -99,6 +110,41 @@ class _TeamWriteState extends State<TeamWrite> {
       }
     }
   }
+
+
+  Future<String> getEmail() async {
+    final FirebaseUser user = await auth.currentUser();
+    final String email = user.email;
+    return email;
+  }
+
+
+  int currentUserId;
+  getUserId() async {
+    final FirebaseUser user = await auth.currentUser();
+    userList = await userPageVM.getUserRequests("Approved");
+    for (var users in userList) {
+      // print("Role Id is");
+      if (users.email == user.email) {
+        setState(() {
+          user_id = users.id;
+          currentUserId = user_id;
+        });
+      }
+    }
+    //print(email);
+    // print(role_id.toString());
+  }
+
+
+  getTeamTitle(List<TeamRequest> teamList, String currUserEmail) {
+    for (var team in teamList) {
+      if (team.teamLeadId == currUserEmail) {
+        team_title = team.teamTitle;
+      }
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   TeamRequest teamrequest = new TeamRequest();
 
@@ -133,22 +179,22 @@ class _TeamWriteState extends State<TeamWrite> {
       context: context,
       builder: (BuildContext context) {
         return Consumer<ThemeNotifier>(
-          builder: (context, notifier, child) => new NumberPickerDialog.integer(
-          selectedTextStyle:TextStyle(
-            fontSize: notifier.custFontSize,
-            fontWeight: FontWeight.bold,
-            color: KirthanStyles.titleColor,
-          ),
-          textStyle: TextStyle(
-            fontSize: notifier.custFontSize,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-          ),
-          minValue: 0,
-          maxValue: 10,
-          initialIntegerValue: _currentvalue,
-          title: new Text("Experience: "),
-          )
+            builder: (context, notifier, child) => new NumberPickerDialog.integer(
+              selectedTextStyle:TextStyle(
+                fontSize: notifier.custFontSize,
+                fontWeight: FontWeight.bold,
+                color: KirthanStyles.titleColor,
+              ),
+              textStyle: TextStyle(
+                fontSize: notifier.custFontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+              minValue: 0,
+              maxValue: 10,
+              initialIntegerValue: _currentvalue,
+              title: new Text("Experience: "),
+            )
         );
       },
     ).then(_handleValueChanged);
@@ -166,7 +212,7 @@ class _TeamWriteState extends State<TeamWrite> {
   List<String> selectedMembers = new List<String>();
   Widget addmember(int counter) {
     List<TextEditingController> _member =
-        new List<TextEditingController>(this.counter);
+    new List<TextEditingController>(this.counter);
     return Card(
       child: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Column(
@@ -191,14 +237,14 @@ class _TeamWriteState extends State<TeamWrite> {
                           icon: Icon(Icons.people_outline, color: Colors.grey),
                           suffixIcon: i == counter - 1
                               ? InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      this.counter--;
-                                    });
-                                  },
-                                  child: Container(
-                                    child: Icon(Icons.cancel_outlined),
-                                  ))
+                              onTap: () {
+                                setState(() {
+                                  this.counter--;
+                                });
+                              },
+                              child: Container(
+                                child: Icon(Icons.cancel_outlined),
+                              ))
                               : null,
                           labelText: "Member " + (i + 1).toString(),
                           hintText: "Please enter the name of the member",
@@ -316,14 +362,14 @@ class _TeamWriteState extends State<TeamWrite> {
                                   labelText: "Title",
                                   hintText: "Add a title",
                                   hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: notifier.custFontSize
+                                      color: Colors.grey,
+                                      fontSize: notifier.custFontSize
                                   ),
                                   labelStyle: TextStyle(
                                       color: myFocusNode.hasFocus
                                           ? Colors.black
                                           : Colors.grey,
-                                  fontSize: notifier.custFontSize)),
+                                      fontSize: notifier.custFontSize)),
                               onSaved: (input) {
                                 teamrequest.teamTitle = input;
                               },
@@ -360,8 +406,8 @@ class _TeamWriteState extends State<TeamWrite> {
                                   labelText: "Description",
                                   hintText: "Add a description",
                                   hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: notifier.custFontSize
+                                      color: Colors.grey,
+                                      fontSize: notifier.custFontSize
                                   ),
                                   labelStyle: TextStyle(
                                     fontSize: notifier.custFontSize,
@@ -380,7 +426,7 @@ class _TeamWriteState extends State<TeamWrite> {
                           ),
                           elevation: 5,
                         ),
-                        SizedBox(height: 35),
+                        //   SizedBox(height: 35),
                         FutureBuilder(
                             future: commonLookupTablePageVM.getCommonLookupTable(
                                 "lookupType:Event-type-Category"),
@@ -402,10 +448,10 @@ class _TeamWriteState extends State<TeamWrite> {
                                           style: TextStyle(color:Colors.grey,fontSize: notifier.custFontSize)),
                                       items: _category
                                           .map((category) =>
-                                              DropdownMenuItem<String>(
-                                                value: category,
-                                                child: Text(category,style: TextStyle(fontSize: notifier.custFontSize,color : notifier.darkTheme ? Colors.white : Colors.black),),
-                                              ))
+                                          DropdownMenuItem<String>(
+                                            value: category,
+                                            child: Text(category,style: TextStyle(fontSize: notifier.custFontSize,color : notifier.darkTheme ? Colors.white : Colors.black),),
+                                          ))
                                           .toList(),
                                       onChanged: (input) {
                                         setState(() {
@@ -430,33 +476,33 @@ class _TeamWriteState extends State<TeamWrite> {
                             }),
                         Card(
                           child: Container(
-                           width: double.infinity,
+                            width: double.infinity,
 
                             //color: Colors.white,
                             padding: new EdgeInsets.all(10),
                             child: SizedBox(
-                              width: double.infinity,
-                              child: Consumer<ThemeNotifier>(
-                                  builder: (context, notifier, child) =>
-                                      FlatButton(
-                                        focusColor: myFocusNode.hasFocus
-                                            ? Colors.black
-                                            : Colors.grey,
-                                        focusNode: myFocusNode,
-                                        onPressed: () => _showIntegerDialog(),
-                                        child: new Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: new Text(
-                                              "Team Experience: $_currentvalue",
-                                              style: TextStyle(
-                                                fontSize: notifier.custFontSize,
-                                                fontWeight: FontWeight.bold,
-                                                //color: KirthanStyles.colorPallete60
-                                              )),
-                                        ),
-                                      )) // color: Colors.grey,
-                          ),
-                          /*TextFormField(
+                                width: double.infinity,
+                                child: Consumer<ThemeNotifier>(
+                                    builder: (context, notifier, child) =>
+                                        FlatButton(
+                                          focusColor: myFocusNode.hasFocus
+                                              ? Colors.black
+                                              : Colors.grey,
+                                          focusNode: myFocusNode,
+                                          onPressed: () => _showIntegerDialog(),
+                                          child: new Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: new Text(
+                                                "Team Experience: $_currentvalue",
+                                                style: TextStyle(
+                                                  fontSize: notifier.custFontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                  //color: KirthanStyles.colorPallete60
+                                                )),
+                                          ),
+                                        )) // color: Colors.grey,
+                            ),
+                            /*TextFormField(
                             //attribute: "Description",
 
                             decoration: InputDecoration(
@@ -488,61 +534,61 @@ class _TeamWriteState extends State<TeamWrite> {
                               return null;
                             },
                           ),*/
+                          ),
+                          elevation: 5,
                         ),
-                        elevation: 5,
-                      ),
-                      Card(
-                        child: Container(
-                          //color: Colors.white,
-                          padding: new EdgeInsets.all(10),
-                          child: TextFormField(
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                            //attribute: "Description",
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.green),
-                                  ),
-                                  /*icon: const Icon(
+                        Card(
+                          child: Container(
+                            //color: Colors.white,
+                            padding: new EdgeInsets.all(10),
+                            child: TextFormField(
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                style: TextStyle(fontSize: notifier.custFontSize),
+                                //attribute: "Description",
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.green),
+                                    ),
+                                    /*icon: const Icon(
                                   Icons.description,
                                   color: Colors.grey,
                                 ),*/
-                                  labelText: "Phone Number",
-                                  hintText: "Add Phone Number",
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                      fontSize: notifier.custFontSize
-                                  ),
-                                  labelStyle: TextStyle(
-                                    color: Colors.grey,
-                                      fontSize: notifier.custFontSize
-                                  )),
-                              onSaved: (input) {
-                                teamrequest.phoneNumber = int.parse(input);
-                              },
-                              validator: validateMobile
+                                    labelText: "Phone Number",
+                                    hintText: "Add Phone Number",
+                                    hintStyle: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: notifier.custFontSize
+                                    ),
+                                    labelStyle: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: notifier.custFontSize
+                                    )),
+                                onSaved: (input) {
+                                  teamrequest.phoneNumber = int.parse(input);
+                                },
+                                validator: validateMobile
                               //     (value) {
                               //   if (value.isEmpty) {
                               //     return "Please enter some text";
                               //   }
                               //   return null;
                               // },
-                              ),
+                            ),
+                          ),
+                          elevation: 5,
                         ),
-                        elevation: 5,
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        child: Column(
-                          children: <Widget>[
-                            FutureBuilder<List<TeamRequest>>(
+                        // SizedBox(
+                        //    height: 30,
+                        //  ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Column(
+                            children: <Widget>[
+                              /* FutureBuilder<List<TeamRequest>>(
                                 future: teamPageVM.getTeamRequests("Approved"),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<List<TeamRequest>> snapshot) {
@@ -555,7 +601,8 @@ class _TeamWriteState extends State<TeamWrite> {
                                         //color: Colors.white,
                                         padding: new EdgeInsets.all(10),
                                         child: TextFormField(
-                                          style: TextStyle(fontSize: notifier.custFontSize),
+                                          style: TextStyle(
+                                              fontSize: notifier.custFontSize),
                                           //attribute: "Description",
                                           // keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
@@ -573,163 +620,138 @@ class _TeamWriteState extends State<TeamWrite> {
                                   Icons.description,
                                   color: Colors.grey,
                                 ),*/
-                                                  enabled: false,
-                                                  labelText: "TeamLead",
-                                                  hintText: email,
-                                                  hintStyle: TextStyle(
-                                                    color: Colors.grey,
-                                                      fontSize: notifier.custFontSize
-                                                  ),
-                                                  labelStyle: TextStyle(
-                                                    color: Colors.grey,
-                                                      fontSize: notifier.custFontSize
-                                                  )),
-                                             initialValue:email,
-                                            onSaved: (input) {
-                                              teamrequest.teamLeadId =
-                                                  email;
-                                            },
-                                            //     (value) {
-                                            //   if (value.isEmpty) {
-                                            //     return "Please enter some text";
-                                            //   }
-                                            //   return null;
-                                            // },
-                                          ),
+                                              enabled: false,
+                                              labelText: "TeamLead",
+                                              hintText: email,
+                                              hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: notifier
+                                                      .custFontSize
+                                              ),
+                                              labelStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: notifier
+                                                      .custFontSize
+                                              )),
+                                          initialValue: email,
+                                          onSaved: (input) {
+                                            teamrequest.teamLeadId =
+                                                email;
+                                          },
+                                          //     (value) {
+                                          //   if (value.isEmpty) {
+                                          //     return "Please enter some text";
+                                          //   }
+                                          //   return null;
+                                          // },
                                         ),
-                                        elevation: 5,
-                                      )
-                                   : FutureBuilder<List<TeamRequest>>(
-                                        future: teamPageVM
-                                            .getTeamRequests("Waiting"),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<List<TeamRequest>>
-                                            snapshot) {
-                                          if (snapshot.data != null) {
-                                            List<TeamRequest> teamList =
-                                                teamListAppr + snapshot.data;
-                                            return FutureBuilder<
-                                                List<UserRequest>>(
-                                                future: Users,
-                                                builder: (BuildContext
-                                                context,
-                                                    AsyncSnapshot<
-                                                        List<UserRequest>>
-                                                    snapshot) {
-                                                  if (snapshot.data != null) {
-                                                    List<UserRequest>
-                                                    tempUserList =
-                                                    new List<
-                                                        UserRequest>();
-                                                    if (widget.userRequest ==
-                                                        null) {
-                                                      tempUserList =
-                                                          snapshot.data;
-                                                    } else if (teamList
-                                                        .where((element) =>
-                                                    element
-                                                        .teamLeadId ==
-                                                        widget.userRequest
-                                                            .email)
-                                                        .toList()
-                                                        .isEmpty) {
-                                                      tempUserList.add(
-                                                          widget.userRequest);
-                                                      _selectedTeamLeadId =
-                                                          widget.userRequest
-                                                              .email;
-                                                    }
-                                                    userList = getTeamLeads(
-                                                        teamList,
-                                                        tempUserList);
-                                                    List<String> teamLeadId =
-                                                    userList
-                                                        .map((user) =>
-                                                    user.email)
-                                                        .toSet()
-                                                        .toList();
-                                                    return DropdownButtonFormField<
-                                                        String>(
+                                      ),
+                                      elevation: 5,
+                                    )
 
-                                                      value: widget
-                                                          .userRequest ==
-                                                          null
-                                                          ? _selectedTeamLeadId
-                                                          : widget.userRequest
-                                                          .email,
-                                                      icon: const Icon(Icons
-                                                          .account_circle),
-                                                      hint: Text(
-                                                          'Select Team Lead Id',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .grey)),
-                                                      items: teamLeadId
-                                                          .map((teamLeadId) =>
-                                                          DropdownMenuItem<
-                                                              String>(
-                                                            value:
-                                                            teamLeadId,
-                                                            child: Text(
-                                                              teamLeadId,style: TextStyle(fontSize: notifier.custFontSize),),
-                                                          ))
-                                                          .toList(),
-                                                      onChanged: (input) {
-                                                        setState(() {
-                                                          _selectedTeamLeadId =
-                                                              input;
-                                                        });
-                                                      },
-                                                      onSaved: (input) {
-                                                        teamrequest
-                                                            .teamLeadId =
-                                                            input;
-                                                      },
-                                                      validator: (value) {
-                                                        if (value == null) {
-                                                          return "Please select team lead";
-                                                        }
-                                                        return null;
-                                                      },
-                                                    );
-                                                  } else if (snapshot
-                                                      .hasError) {
-                                                    Text(
-                                                        "You already have a team");
-                                                  }
-                                                  return Container();
-                                                });
-                                          }
-                                          return Container();
-                                        });
+                                   : Container();
+
                                   }
-                                  return Container();
-                                }),
-                            // SizedBox(height: 35),
-                            // DropdownButtonFormField<String>(
-                            //   value: _selectedWeekday,
-                            //   icon: const Icon(Icons.calendar_today_rounded),
-                            //   hint: Text(
-                            //     'Select weekday ',
-                            //     style: TextStyle(color: Colors.grey),
-                            //   ),
-                            //   items: _weekday
-                            //       .map((weekday) => DropdownMenuItem(
-                            //             value: weekday,
-                            //             child: Text(weekday),
-                            //           ))
-                            //       .toList(),
-                            //   onChanged: (input) {
-                            //     setState(() {
-                            //       _selectedWeekday = input;
-                            //     });
-                            //   },
-                            //   onSaved: (input) {
-                            //     teamrequest.weekDay = input;
-                            //   },
-                            // ),
-                            SizedBox(height: 35),
-                            /*Card(
+                                }),*/
+
+                              FutureBuilder(
+                                  future: getEmail(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.data != null) {
+                                      currUserEmail = snapshot.data.toString();
+                                      return FutureBuilder<List<UserRequest>>(
+                                          future: Users,
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<List<UserRequest>>
+                                              snapshot) {
+                                            if (snapshot.data != null) {
+                                              userList = snapshot.data
+                                                  .where((element) =>
+                                              element.email ==
+                                                  currUserEmail)
+                                                  .toList();
+                                              for (var username in userList) {
+                                                currUserName = username.fullName;
+                                                return FutureBuilder<
+                                                    List<TeamRequest>>(
+                                                    future: Teams,
+                                                    builder: (context, snapshot) {
+                                                      if (snapshot.data != null) {
+                                                        teamList = snapshot.data;
+                                                        getTeamTitle(teamList,
+                                                            currUserEmail);
+                                                      }
+                                                      return Container
+                                                        (
+
+                                                        child: Card(
+                                                          child: Container(
+                                                            height: 70,
+                                                            width: double.infinity,
+                                                            padding: new EdgeInsets.all(10),
+                                                            child: Row(
+                                                                children:[
+                                                                  Align(
+                                                                      alignment: Alignment.topLeft,
+                                                                      child: Text("Team Lead",style: TextStyle(
+                                                                          color: Colors.grey,
+                                                                          fontSize: notifier.custFontSize
+                                                                      ))),
+                                                                  Align(
+                                                                    alignment: Alignment.bottomLeft,
+                                                                    child: Expanded(
+                                                                      child: Text(
+                                                                          currUserEmail,
+                                                                          textAlign: TextAlign.left ,
+                                                                          style: TextStyle(fontSize: notifier.custFontSize)),
+                                                                    ),
+                                                                  ),
+                                                                ]
+                                                            ),
+
+                                                            decoration: BoxDecoration(
+                                                                border: Border.all(color: Colors.white)
+
+                                                            ),
+                                                          ),
+                                                          elevation: 5,
+                                                        ),);
+                                                    }
+                                                );
+                                              }
+                                            }
+                                            return Container();
+                                          });
+                                    }
+
+                                    return Container();
+                                  }),
+
+
+                              // DropdownButtonFormField<String>(
+                              //   value: _selectedWeekday,
+                              //   icon: const Icon(Icons.calendar_today_rounded),
+                              //   hint: Text(
+                              //     'Select weekday ',
+                              //     style: TextStyle(color: Colors.grey),
+                              //   ),
+                              //   items: _weekday
+                              //       .map((weekday) => DropdownMenuItem(
+                              //             value: weekday,
+                              //             child: Text(weekday),
+                              //           ))
+                              //       .toList(),
+                              //   onChanged: (input) {
+                              //     setState(() {
+                              //       _selectedWeekday = input;
+                              //     });
+                              //   },
+                              //   onSaved: (input) {
+                              //     teamrequest.weekDay = input;
+                              //   },
+                              // ),
+
+                              /*Card(
                               child: Container(
                                 //padding: new EdgeInsets.all(10),
                                 child: DropdownButtonFormField<String>(
@@ -760,35 +782,65 @@ class _TeamWriteState extends State<TeamWrite> {
                                 ),
                               ),
                             ),*/
-                            Container(
-                              //TODO:added search bar
-                              child: CSCPicker(
-                                disabled: notifier.darkTheme ? false : true,
-                                onCountryChanged: (value) {
-                                  setState(() {
-                                    //eventrequest.country = value;
-                                  });
-                                },
-                                onStateChanged: (value) {
-                                  setState(() {
-                                    // eventrequest.state = value;
-                                  });
-                                },
-                                onCityChanged: (value) {
-                                  setState(() {
-                                    teamrequest.location = value;
-                                  });
+                              Container(
+                                padding: EdgeInsets.all(30.0),
+                                //TODO:added search bar
+                                child: CSCPicker(
+                                  disabled: notifier.darkTheme ? false : true,
+                                  onCountryChanged: (value) {
+                                    setState(() {
+                                      country = value;
+                                    });
+                                  },
+                                  onStateChanged: (value) {
+                                    setState(() {
+                                      state = value;
+                                    });
+                                  },
+                                  onCityChanged: (value) {
+                                    setState(() {
+                                      teamrequest.location = value;
+                                    });
+                                  },
+                                ),
+                              ),
+                              TextFormField(
+                                style: TextStyle(fontSize: notifier.custFontSize),
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  isCollapsed: true,
+                                  errorBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (teamrequest.location == null) {
+                                    if (state == null) {
+                                      if (country == null) {
+                                        return "Please select country, state & city";
+                                      }
+                                      return "Please select state & city";
+                                    }
+                                    return "Please select city";
+                                  }
+                                  return null;
                                 },
                               ),
-                            ),
-                            SizedBox(
-                              height: 35,
-                            ),
+                              SizedBox(
+                                height: 35,
+                              ),
 
-                            addmember(counter),
-                          ],
+                              addmember(counter),
+                            ],
+                          ),
                         ),
-                      ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -897,3 +949,115 @@ Colors.white),),
     );
   }
 }
+
+
+
+
+
+
+
+
+/* : FutureBuilder<List<TeamRequest>>(
+                                        future: teamPageVM
+                                            .getTeamRequests("Approved"),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<List<TeamRequest>>
+                                            snapshot) {
+                                          if (snapshot.data != null) {
+                                            List<TeamRequest> teamList =
+                                                teamListAppr + snapshot.data;
+
+
+                                            return FutureBuilder<
+                                                List<TeamRequest>>(
+                                                future: Teams,
+                                                builder: (BuildContext
+                                                context,
+                                                    AsyncSnapshot<
+                                                        List<TeamRequest>>
+                                                    snapshot) {
+                                                  if (snapshot.data != null) {
+                                                    List<TeamRequest>
+                                                    tempUserList =
+                                                    new List<
+                                                        TeamRequest>();
+                                                    if (teamrequest.teamLeadId ==
+                                                        null) {
+                                                      tempUserList =
+                                                          snapshot.data;
+                                                    } else if (teamList
+                                                        .where((element) =>
+                                                    element
+                                                        .teamLeadId ==
+                                                        teamrequest.teamLeadId)
+                                                        .toList()
+                                                        .isEmpty) {
+                                                     // tempUserList.add(
+                                                    //      widget.userRequest);
+                                                      _selectedTeamLeadId =
+                                                          teamrequest.teamLeadId;
+                                                              //.email;
+                                                    }
+                                                  /*  userList = getTeamLeads(
+                                                        teamList,
+                                                        tempUserList);*/
+                                                    List<String> teamLeadId =
+                                                    teamList
+                                                        .map((teamLeadId) =>
+                                                        teamLeadId.teamLeadId)
+                                                        .toSet()
+                                                        .toList();
+                                                    return DropdownButtonFormField<
+                                                        String>(
+
+                                                      value: teamrequest.teamLeadId ==
+                                                          null
+                                                          ? _selectedTeamLeadId
+                                                          : teamrequest.teamLeadId,
+                                                        //  .email,
+                                                      icon: const Icon(Icons
+                                                          .account_circle),
+                                                      hint: Text(
+                                                          'Select Team Lead Id',
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .grey)),
+                                                      items: teamLeadId
+                                                          .map((teamLeadId) =>
+                                                          DropdownMenuItem<
+                                                              String>(
+                                                            value:
+                                                            teamLeadId,
+                                                            child: Text(
+                                                              teamLeadId,style: TextStyle(fontSize: notifier.custFontSize),),
+                                                          ))
+                                                          .toList(),
+                                                      onChanged: (input) {
+                                                        setState(() {
+                                                          _selectedTeamLeadId =
+                                                              input;
+                                                        });
+                                                      },
+                                                      onSaved: (input) {
+                                                        teamrequest
+                                                            .teamLeadId =
+                                                            input;
+                                                      },
+                                                      validator: (value) {
+                                                        if (value == null) {
+                                                          return "Please select team lead";
+                                                        }
+                                                        return null;
+                                                      },
+                                                    );
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    Text(
+                                                        "You already have a team");
+                                                  }
+                                                  return Container();
+                                                });
+                                          }
+                                          return Container();
+                                        });
+                                  }*/

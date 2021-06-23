@@ -197,7 +197,7 @@ class _EventTeamUserRegisterState extends State<EventTeamUserRegister> {
                                     null;
                                   });
                                 });
-                                DateTime EventDate = DateTime.now().add(Duration(seconds: 5));
+                                DateTime EventDate = DateTime.parse(widget.eventrequest.eventDate).subtract(Duration(hours: 24));
                                 await localNotifyManager.scheduleNotification(
                                     'Event reminder',
                                     widget.eventrequest.eventTitle +' is scheduled for tomorrow @ '+widget.eventrequest.eventStartTime +"\nHope to see you at the event :)" ,
