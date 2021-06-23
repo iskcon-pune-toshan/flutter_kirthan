@@ -76,6 +76,7 @@ class _EventWriteState extends State<EventWrite> {
   bool resetToggle = false;
   TeamRequest selectedTeam;
   TeamRequest selectedTeamfor;
+  bool isDisabled;
 
   _EventWriteState({this.selectedTeam});
   List<Marker> myMarker = [];
@@ -97,8 +98,14 @@ class _EventWriteState extends State<EventWrite> {
   void initState() {
     super.initState();
     pincodeController.text = "";
+    isDisabled = false;
   }
+  void incrementCounter(){
+    setState(() {
+      isDisabled = true;
 
+    });
+  }
   handleTap(LatLng tappedPoint1) {
     print(tappedPoint1);
     //print(tappedPoint2);
@@ -228,6 +235,7 @@ class _EventWriteState extends State<EventWrite> {
                     fontSize: notifier.custFontSize)),
           )),
       body: Builder(builder: (context) {
+
         return SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.all(10),
@@ -353,6 +361,12 @@ class _EventWriteState extends State<EventWrite> {
                                     lastDate: DateTime(2100));
                                 return date;
                               },
+                              onChanged: (input) {
+                                eventrequest.eventDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(input)
+                                        .toString();
+                              },
                               onSaved: (input) {
                                 eventrequest.eventDate =
                                     DateFormat("yyyy-MM-dd")
@@ -411,7 +425,22 @@ class _EventWriteState extends State<EventWrite> {
                                 if (value.toString().isEmpty || value == null) {
                                   return "Please select time";
                                 } else
-                                  return null;
+                                  {
+
+                                    DateFormat dateFormat = new DateFormat.Hm();
+                                    DateTime currenttime=dateFormat.parse(DateTime.now().toString().substring(11,15));
+                                    if(eventrequest.eventDate ==  DateFormat("yyyy-MM-dd")
+                                        .format(DateTime.now())
+                                        .toString()){
+                                      return value.isAfter(currenttime) ==true
+                                      ? null
+                                      : "Enter correct time";
+                                    }
+                                    else
+                                      return null;
+
+                                  }
+
                               },
                             ),
                           ],
@@ -453,10 +482,10 @@ class _EventWriteState extends State<EventWrite> {
                                 } else {
                                   String time =
                                       "${value.hour < 10 ? ("0" + value.hour.toString()) : value.hour}:${value.minute < 10 ? ("0" + value.minute.toString()) : value.minute}";
-                                  print(time.compareTo(
+                                  /*print(time.compareTo(
                                       eventrequest.eventStartTime != null
                                           ? eventrequest.eventStartTime
-                                          : ""));
+                                          : ""));*/
 
                                   return time.compareTo(
                                       eventrequest.eventStartTime !=
@@ -873,8 +902,9 @@ class _EventWriteState extends State<EventWrite> {
                                     fontSize: notifier.custFontSize),
                               ),
                               color: KirthanStyles.colorPallete30,
-                              onPressed: () async {
+                              onPressed:isDisabled?null: () async {
                                 if (_formKey.currentState.validate()) {
+                                  incrementCounter();
                                   final FirebaseUser user =
                                   await auth.currentUser();
                                   final String email = user.email;
@@ -915,7 +945,7 @@ class _EventWriteState extends State<EventWrite> {
                                   String eid = neweventrequest.id.toString();
                                   SnackBar mysnackbar = SnackBar(
                                     content: Text(
-                                        "Event registered $successful with $eid"),
+                                        "Event registered $successful"),
                                     duration: new Duration(seconds: 4),
                                     backgroundColor: Colors.green,
                                   );
@@ -938,7 +968,7 @@ class _EventWriteState extends State<EventWrite> {
                                 //String s = jsonEncode(userrequest.mapToJson());
                                 //service.registerUser(s);
                                 //print(s);
-                              }),
+                              })
                           /*MaterialButton(
                         child: Text("Reset",style: TextStyle(color: Colors.white),),
                         color: Colors.pink,

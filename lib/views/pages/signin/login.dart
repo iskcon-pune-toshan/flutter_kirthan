@@ -14,19 +14,18 @@ import 'package:flutter_kirthan/services/user_service_impl.dart';
 import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/signin/resetscreen.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:flutter_kirthan/views/pages/user/enterCode.dart';
-import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 //final MainPageViewModel mainPageVM =
 //  MainPageViewModel(apiSvc: RestAPIServices());
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 
 class LoginApp extends StatefulWidget {
   //final MainPageViewModel viewModel;
@@ -67,14 +66,14 @@ class _LoginAppState extends State<LoginApp> {
   getCurrentUID() async {
     final FirebaseUser user = await auth.currentUser();
     final String uid = user.uid;
-    // print(uid);
+
     return uid;
   }
 
   getCurrentUser() async {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
-    // print(email);
+
     return email;
   }
 
@@ -125,7 +124,7 @@ class _LoginAppState extends State<LoginApp> {
     //listofUserdetails.add("phoneNumber:" + (user.phoneNumber.isEmpty?0:1).toString());
     listofUserdetails.add("uid:" + user.uid);
     prefs.setStringList("LoginDetails", listofUserdetails);
-    //print("LoginDetails Updated");
+
   }*/
   bool ispresent = false;
   checkUser(String uname) async {
@@ -134,7 +133,7 @@ class _LoginAppState extends State<LoginApp> {
     if (u.email == uname) {
       ispresent = true;
     } else
-      () {
+          () {
         ispresent == false;
       };
     return ispresent;
@@ -148,11 +147,6 @@ class _LoginAppState extends State<LoginApp> {
     String pass = s.uid;
     String email = s.email;
     String userName = s.displayName;
-
-    // print("signup uid");
-    //print(pass);
-    //print(email);
-    //print(userName);
 
     String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
@@ -238,13 +232,11 @@ class _LoginAppState extends State<LoginApp> {
                     color: KirthanStyles.colorPallete30,
                     width: 1.5,
                   ),
-
                 ),
-                prefixIcon: Icon(Icons.email,
-                    color: Color(0xFF61bcbc)),
+                prefixIcon: Icon(Icons.email, color: Color(0xFF61bcbc)),
                 hintText: 'Enter Email',
                 hintStyle: kHintTextStyle,
-                  ),
+              ),
               controller: username,
               validator: (value) {
                 if (value.trimLeft().isEmpty) {
@@ -309,27 +301,22 @@ class _LoginAppState extends State<LoginApp> {
                       suffixIcon: InkWell(
                         onTap: _togglePasswordView,
                         child: Icon(
-                          _isHidden
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                          _isHidden ? Icons.visibility : Icons.visibility_off,
                           color: Color(0xFF61bcbc),
                         ),
                       ),
                       // Icons.lock,
                       // "Must contain 8-30 characters", "Password"
                     ),
-
                     controller: _passwordcontroller,
                     validator: (value) {
                       // ignore: missing_return
-                      if (value.trim().isEmpty)
-                        return 'Please enter a value';
+                      if (value.trim().isEmpty) return 'Please enter a value';
                       if (value.trim().length < 8)
                         return 'Must contain 8-30 characters';
                       return null;
                     },
                     obscureText: _isHidden,
-
                   )),
             ],
           ),
@@ -338,15 +325,12 @@ class _LoginAppState extends State<LoginApp> {
     );
   }
 
-
   Widget _buildForgotPasswordBtn() {
     return Container(
       alignment: Alignment.centerRight,
       child: FlatButton(
-        onPressed: () => /* Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => ResetScreen()),*/
-        print("forget password is pressed"),
-
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ResetScreen())),
         padding: EdgeInsets.only(right: 0.0),
         child: Text(
           'Forgot Password?',
@@ -386,7 +370,6 @@ class _LoginAppState extends State<LoginApp> {
               }
             }).whenComplete(() => errMessage == 'ellomate'
                 ? authenticateService.autheticate().whenComplete(() {
-              //  print("MYERROR" + errMessage);
               if (errMessage == 'ellomate') {
                 Navigator.push(
                     context,
@@ -426,11 +409,11 @@ class _LoginAppState extends State<LoginApp> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 20.0),
-        Text(
-          'Sign in with',
-          style: kLabelStyle,
-        ),
+        // SizedBox(height: 20.0),
+        // Text(
+        //   'Sign in with',
+        //   style: kLabelStyle,
+        // ),
       ],
     );
   }
@@ -439,10 +422,13 @@ class _LoginAppState extends State<LoginApp> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        alignment: Alignment.centerRight,
         height: 55.0,
-        width: 55.0,
+        width: MediaQuery.of(context).size.width * 0.85,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(30),
+          shape: BoxShape.rectangle,
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -452,8 +438,13 @@ class _LoginAppState extends State<LoginApp> {
             ),
           ],
           image: DecorationImage(
+            alignment: Alignment.centerLeft,
             image: logo,
           ),
+        ),
+        child: Text(
+          "Sign in with Google",
+          style: TextStyle(fontSize: 15, color: Colors.grey[700]),
         ),
       ),
     );
@@ -462,45 +453,31 @@ class _LoginAppState extends State<LoginApp> {
   String error = null;
   Widget _buildSocialBtnRow() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildSocialBtn(
-                () => signInService
-                .facebookSignIn(context)
-                .then((FirebaseUser user) => populateData())
-                .catchError((e) => print(''))
-                .whenComplete(() => null
-                    // Navigator.push(context,
-                // MaterialPageRoute(builder: (context) => EnterCode()))
-                ),
-            AssetImage(
-              'assets/images/facebook.jpg',
-            ),
-          ),
-          _buildSocialBtn(
-                () => signInService
-                .googSignIn(context)
-            //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
-                .then((FirebaseUser user) { if(user !=null){
-                  populateData();
-                  error="noerror";
-                }})
-                .catchError((e) {
-              print(e);
-            })
-                .whenComplete(() => addUser())
-                .whenComplete(() => authenticateService
-                .autheticate()
-                .whenComplete(() => error=="noerror"?Navigator.push(context,
+      padding: EdgeInsets.symmetric(
+        vertical: 30.0,
+      ),
+      child: _buildSocialBtn(
+            () => signInService
+            .googSignIn(context)
+        //.timeout(const Duration(seconds: 30),onTimeout: _onTimeout() => (FirebaseUser user))
+            .then((FirebaseUser user) {
+          if (user != null) {
+            populateData();
+            error = "noerror";
+          }
+        })
+            .catchError((e) {
+          print(e);
+        })
+            .whenComplete(() => addUser())
+            .whenComplete(() => authenticateService.autheticate().whenComplete(
+                () => error == "noerror"
+                ? Navigator.push(context,
                 MaterialPageRoute(builder: (context) => EnterCode()))
-                    :error=null)),
-            AssetImage(
-              'assets/images/google.png',
-            ),
-          ),
-        ],
+                : error = null)),
+        AssetImage(
+          'assets/images/google.png',
+        ),
       ),
     );
   }
@@ -589,7 +566,7 @@ class _LoginAppState extends State<LoginApp> {
                       _buildEmailTF(),
 
                       //_buildPasswordTF(),
-                      // _buildForgotPasswordBtn(),
+                      _buildForgotPasswordBtn(),
                       _buildLoginBtn(),
                       _buildSignInWithText(),
                       _buildSocialBtnRow(),
@@ -687,29 +664,34 @@ void showFlushBar(BuildContext context, String errMessage) {
   Flushbar(
     padding: EdgeInsets.all(10),
     borderRadius: 8,
-    backgroundColor: Colors.grey.shade800,
+    backgroundColor: Colors.blueGrey.withOpacity(0.7),
     // boxShadows: [
     //   BoxShadow(color: Colors.black45,offset: Offset(3,3),blurRadius: 3),
     // ],
     margin: EdgeInsets.all(20),
-    leftBarIndicatorColor: Colors.cyanAccent,
+    leftBarIndicatorColor: Colors.black,
     // dismissDirection: FlushbarDismissDirection.HORIZONTAL,
     // forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
     titleText: Text(
       errMessage,
-      style: TextStyle(fontSize: 18),
+      style: TextStyle(fontSize: 18, color: Colors.black),
     ),
     messageText: errMessage == 'No user Found'
-        ? Text('Sign up Instead')
-        : Text('Enter correct password'),
+        ? Text(
+      'Sign up Instead',
+      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    )
+        : Text(
+      'Enter correct password',
+      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    ),
     duration: errMessage == 'No user Found'
-        ? Duration(seconds: 3)
-        : Duration(seconds: 3),
+        ? Duration(seconds: 5)
+        : Duration(seconds: 5),
     icon: Icon(
       Icons.info_outline,
       size: 28,
-      color: Colors.cyanAccent,
+      color: Colors.black,
     ),
   )..show(context);
-
 }

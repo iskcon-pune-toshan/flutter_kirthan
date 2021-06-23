@@ -49,7 +49,6 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
   List<TeamRequest> teamList = new List<TeamRequest>();
   Future<List<UserRequest>> Users;
   List<UserRequest> userList = new List<UserRequest>();
-  Future<List<TeamUser>> TeamUsers;
   List<TeamUser> teamusersList = new List<TeamUser>();
   @override
   void initState() {
@@ -454,7 +453,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                     }
                   }
                   return Center(
-                    child: Text('Team Request not accepted'),
+                    child: CircularProgressIndicator(),
                   );
                 }),
           )),

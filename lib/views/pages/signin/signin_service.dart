@@ -109,7 +109,7 @@ class SignInService {
 
     fireUser = user;
     _userFromFirebaseUser(fireUser);
-    print(user);
+
     return user;
   }
 
@@ -125,7 +125,6 @@ class SignInService {
     if (result.status == FacebookLoginStatus.loggedIn) {
       user = (await firebaseAuth.signInWithCredential(credential)).user;
       _userFromFirebaseUser(user);
-      print(user.displayName);
     }
     return user;
   }
@@ -161,7 +160,6 @@ class SignInService {
       await firebaseUser.reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
-      print(e);
       return false;
     }
   }

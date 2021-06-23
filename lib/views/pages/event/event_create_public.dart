@@ -82,10 +82,18 @@ class _EventWriteState extends State<EventWritePublic> {
   String _selectedState;
   String _selectedCountry;
   String _selectedCategory;
+  bool isDisabled;
   void initState() {
     _getUserLocation();
     super.initState();
     pincodeController.text = "";
+    isDisabled=false;
+  }
+  void incrementCounter(){
+    setState(() {
+      isDisabled = true;
+
+    });
   }
 
   handleTap(LatLng tappedPoint1) {
@@ -449,9 +457,21 @@ class _EventWriteState extends State<EventWritePublic> {
                               },
                               validator: (value) {
                                 if (value.toString().isEmpty || value == null) {
-                                  return "Please enter start time";
+                                  return "Please select time";
+                                } else
+                                {
+                                  DateFormat dateFormat = new DateFormat.Hm();
+                                  DateTime currenttime=dateFormat.parse(DateTime.now().toString().substring(11,15));
+                                  if(eventrequest.eventDate ==  DateFormat("yyyy-MM-dd")
+                                      .format(DateTime.now())
+                                      .toString()){
+                                    return value.isAfter(currenttime) ==true
+                                        ? null
+                                        : "Enter correct time";
+                                  }
+                                  else
+                                    return null;
                                 }
-                                return null;
                               },
                             ),
                           ],
@@ -1328,8 +1348,9 @@ class _EventWriteState extends State<EventWritePublic> {
                                     fontSize: notifier.custFontSize),
                               ),
                               color: KirthanStyles.colorPallete30,
-                              onPressed: () async {
+                              onPressed: isDisabled?null:() async {
                                 if (_formKey.currentState.validate()) {
+                                  incrementCounter();
                                   final FirebaseUser user =
                                   await auth.currentUser();
                                   final String email = user.email;

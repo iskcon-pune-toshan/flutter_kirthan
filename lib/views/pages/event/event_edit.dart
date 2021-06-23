@@ -451,7 +451,9 @@ class _EditEventState extends State<EditEvent> {
     Consumer<ThemeNotifier>(
     builder: (context, notifier, child) =>
     Text(
-    "${widget.eventrequest.eventDate.substring(0, 10)}",
+
+    "${DateTime.parse(widget.eventrequest.eventDate)
+        .add(new Duration(days: 1)).toString().substring(0, 10)}",
    // style:TextStyle(fontSize:notifier.custFontSize) ,
     textAlign: TextAlign.left,
     ),
@@ -787,9 +789,10 @@ class _EditEventState extends State<EditEvent> {
                             .format(DateTime.now());
                         _updatedTimeController.text =
                             widget.eventrequest.updatedTime = dt;
-
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        eventPageVM.getEventRequests("MyEvent");
+                       // Navigator.pop(context);
+                        //Navigator.pop(context);
+                        Navigator.of(context).pushNamed('/screen3');
                         print(eventTitle);
                         print(eventDate);
                         print(eventDuration);

@@ -98,13 +98,13 @@ class SignInService {
 
     fireUser = user;
     _userFromFirebaseUser(user);
-    print("LLLL");
-    print(user);
+
     return user;
   }
 
   Future<FirebaseUser> facebookSignIn(BuildContext context) async {
-    final FacebookLoginResult result = await facebookLogin.logIn(['email']);
+    final FacebookLoginResult result =
+    await facebookLogin.logIn(['email', 'public_profile']);
 
     final AuthCredential credential = FacebookAuthProvider.getCredential(
       accessToken: result.accessToken.token,
@@ -114,7 +114,7 @@ class SignInService {
 
     if (result.status == FacebookLoginStatus.loggedIn) {
       user = (await firebaseAuth.signInWithCredential(credential)).user;
-      print(user.displayName);
+
       _userFromFirebaseUser(user);
     }
     return user;
@@ -152,7 +152,6 @@ class SignInService {
       await firebaseUser.reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
-      print(e);
       return false;
     }
   }

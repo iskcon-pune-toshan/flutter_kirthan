@@ -49,18 +49,20 @@ class _SignUpState extends State<SignUp> {
       });
     });
   }
+
   void _togglePasswordView() {
     setState(() {
       _isHidden = !_isHidden;
     });
   }
+
   Future uploadFile() async {
     StorageReference storageReference = await FirebaseStorage.instance
         .ref()
         .child('${_emailcontroller.text}' + '.jpg');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
-    // print('File Uploaded');
+
     storageReference.getDownloadURL().then((fileURL) {
       setState(() {
         _uploadedFileURL = fileURL;
@@ -100,8 +102,7 @@ class _SignUpState extends State<SignUp> {
     FirebaseUser s = await auth.currentUser();
     String pass = s.uid;
     String num = s.phoneNumber;
-    //print("signup uid");
-    //print(pass);
+
     if (_formKey.currentState.validate()) {
       String dt =
       DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
@@ -116,7 +117,7 @@ class _SignUpState extends State<SignUp> {
       user.addLineThree = " ";
       user.locality = " ";
       user.city = _addresscontroller.text;
-      user.pinCode =  null;
+      user.pinCode = null;
       user.state = " ";
       user.country = " ";
       user.govtIdType = 8;
@@ -277,13 +278,13 @@ class _SignUpState extends State<SignUp> {
                                   width: 1.5,
                                 ),
                               ),
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  color: Color(0xFF61bcbc),
-                                ),
-                                hintText: 'Must contain 8-30 characters',
-                                hintStyle: kHintTextStyle,
-                                labelText: 'Password',
+                              prefixIcon: Icon(
+                                Icons.lock,
+                                color: Color(0xFF61bcbc),
+                              ),
+                              hintText: 'Must contain 8-30 characters',
+                              hintStyle: kHintTextStyle,
+                              labelText: 'Password',
                               suffixIcon: InkWell(
                                 onTap: _togglePasswordView,
                                 child: Icon(
@@ -293,10 +294,9 @@ class _SignUpState extends State<SignUp> {
                                   color: Color(0xFF61bcbc),
                                 ),
                               ),
-                                // Icons.lock,
-                                // "Must contain 8-30 characters", "Password"
+                              // Icons.lock,
+                              // "Must contain 8-30 characters", "Password"
                             ),
-
                             controller: _passwordcontroller,
                             validator: (value) {
                               // ignore: missing_return
@@ -307,7 +307,6 @@ class _SignUpState extends State<SignUp> {
                               return null;
                             },
                             obscureText: _isHidden,
-
                           )),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
@@ -393,7 +392,6 @@ class _SignUpState extends State<SignUp> {
                                       .then(
                                           (FirebaseUser user) => populateData())
                                       .catchError((e) {
-                                    // print(e);
                                     if (e.code ==
                                         'ERROR_EMAIL_ALREADY_IN_USE') {
                                       errorMessage = "Email already in use";

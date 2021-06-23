@@ -171,7 +171,9 @@ class _EventDetailsState extends State<EventDetails> with BaseAPIService {
   void initState() {
     _eventTitleController.text = widget.eventrequest.eventTitle;
     // _eventTypeController.text = widget.eventrequest.eventType;
-    _eventDateController.text = widget.eventrequest.eventDate.substring(0, 10);
+    DateTime date = DateTime.parse(widget.eventrequest.eventDate)
+        .add(new Duration(days: 1));
+    _eventDateController.text = date.toString().substring(0, 10);
     _eventStartTimeController.text = widget.eventrequest.eventStartTime;
     _eventEndTimeController.text = widget.eventrequest.eventEndTime;
     _eventDescriptionController.text = widget.eventrequest.eventDescription;

@@ -4,6 +4,8 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings.dar
 import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_page/members_name_profile.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
+import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/signin_service.dart';
 import 'package:flutter_kirthan/views/widgets/event/int_item.dart';
 import 'package:flutter_kirthan/wrapper.dart';
@@ -44,6 +46,8 @@ class KirthanApp extends StatelessWidget {
                     '/screen4': (BuildContext context) => members_profile(
                       show: false,
                     ),
+                    '/screen3': (BuildContext context) => MyEventView(),
+                    '/screen5': (BuildContext context) => NotificationView(),
                     '/screen2': (BuildContext context) => MySettingsApp()
                   },
                 ),
