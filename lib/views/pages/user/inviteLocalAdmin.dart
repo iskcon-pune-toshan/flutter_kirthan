@@ -94,7 +94,6 @@ class _InviteLocalAdminState extends State<InviteLocalAdmin> {
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               child: Container(
-                height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: Column(children: <Widget>[
                   SizedBox(
@@ -437,7 +436,8 @@ class Search extends SearchDelegate {
                   ? suggestionList = UserList
                   : suggestionList.addAll(UserList.where((element) =>
               element.toUpperCase().contains(query) == true ||
-                  element.toLowerCase().contains(query) == true || element.contains(query) == true));
+                  element.toLowerCase().contains(query) == true ||
+                  element.contains(query) == true));
               return ListView.builder(
                 itemCount: suggestionList.length,
                 itemBuilder: (context, index) {

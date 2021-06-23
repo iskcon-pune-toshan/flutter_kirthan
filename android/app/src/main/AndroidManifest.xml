@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Kirthan"
+        android:label="Kirthan Dev"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
