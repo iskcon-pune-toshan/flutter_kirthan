@@ -1,11 +1,7 @@
 import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/models/temple.dart';
-import 'package:flutter_kirthan/models/temple.dart';
-import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/temple.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/models/usertemple.dart';
@@ -45,6 +41,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
   int Phone;
   String photoUrl;
   Future<List<UserRequest>> Users;
+  final _formKey = GlobalKey<FormState>();
  // Future<List<Temple>> Temple;
   List<UserRequest> userList = new List<UserRequest>();
   List<Temple> templelist = new List<Temple>();
@@ -318,7 +315,68 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                   height: 60,
                                 ),
                                 if(uname.roleId==3||uname.roleId==4)
-                            getTempleWidget(),
+                                  FutureBuilder<List<Temple>>(
+                                      future: temples,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<Temple>>
+                                              snapshot) {
+                                        switch (snapshot.connectionState) {
+                                          case ConnectionState.none:
+                                          case ConnectionState.active:
+                                          case ConnectionState.waiting:
+                                            return Center(
+                                                child:
+                                                    const CircularProgressIndicator());
+                                          case ConnectionState.done:
+                                            if (snapshot.hasData) {
+                                              return Container(
+                                                //width: 20.0,
+                                                //height: 10.0,
+                                                child: Center(
+                                                  child:Form(
+                                                    key: _formKey,
+                                                     child: DropdownButtonFormField<
+                                                          Temple>(
+                                                    value: _selectedTemple,
+                                                    icon: const Icon(Icons
+                                                        .supervisor_account),
+                                                    hint: Text('Select Temple'),
+                                                    items: snapshot.data
+                                                        .map((team) =>
+                                                            DropdownMenuItem<
+                                                                Temple>(
+                                                              value: team,
+                                                              child: Text(team
+                                                                  .templeName),
+                                                            ))
+                                                        .toList(),
+                                                    onChanged: (input) {
+                                                      setState(() {
+                                                        _selectedTemple = input;
+                                                      });
+                                                    },
+                                                        validator: (value){
+                                                          if (value == null) {
+                                                            return "Please select temple";
+                                                          }
+                                                          return null;
+                                                        },
+                                                  ),
+                                                ),
+                                                ),
+                                              );
+                                            } else {
+                                              return Container(
+                                                width: 20.0,
+                                                height: 10.0,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              );
+                                            }
+                                        }
+                                      }),
                                 SizedBox(
                                   height: 60,
                                 ),
@@ -351,7 +409,8 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                   fontFamily: 'OpenSans'),
                                             ),
                                             onPressed: () {
-
+                                              if (_formKey.currentState.validate()) {
+                                                _formKey.currentState.save();
                                               userRequest = uname;
                                               print("Printing user request");
                                               print(prev_role_id);
@@ -369,40 +428,51 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
 
                                               String userrequestStr = jsonEncode(
                                                   userRequest.toStrJson());
-                                              userPageVM.submitUpdateUserRequest(
+                                              userPageVM
+                                                  .submitUpdateUserRequest(
                                                   userrequestStr);
                                               SnackBar mysnackbar = SnackBar(
                                                 content: Text(
-                                                    UserName + " is now Admin",style: TextStyle(color: Colors.black),),
+                                                  UserName + " is now Admin",
+                                                  style: TextStyle(
+                                                      color: Colors.black),),
                                                 duration:
-                                                    new Duration(seconds: 4),
+                                                new Duration(seconds: 4),
                                                 backgroundColor: Colors.green,
                                               );
                                               Scaffold.of(context)
                                                   .showSnackBar(mysnackbar);
-                                               List<UserTemple> listofUserTemples = new List<UserTemple>();
-                                                //for (var user in templelist) {
-                                                  UserTemple userTemple = new UserTemple();
-                                                  userTemple.templeId = _selectedTemple.id;
-                                                  userTemple.userId = uname.id;
-                                                  userTemple.roleId = 2;
-                                                  //userTemple.userName = uname.fullName;
-                                                 // userTemple.templeName = user.templeName;
+                                              List<
+                                                  UserTemple> listofUserTemples = new List<
+                                                  UserTemple>();
+                                              //for (var user in templelist) {
+                                              UserTemple userTemple = new UserTemple();
+                                              userTemple.templeId =
+                                                  _selectedTemple.id;
+                                              userTemple.userId = uname.id;
+                                              userTemple.roleId = 2;
+                                              //userTemple.userName = uname.fullName;
+                                              // userTemple.templeName = user.templeName;
 
-                                                  listofUserTemples.add(
-                                                      userTemple);
-                                               // }
-                                              usertemplePageVM.submitNewUserTempleMapping(listofUserTemples);
+                                              listofUserTemples.add(
+                                                  userTemple);
+                                              // }
+                                              usertemplePageVM
+                                                  .submitNewUserTempleMapping(
+                                                  listofUserTemples);
                                               SnackBar mysnackbar2 = SnackBar(
                                                 content: Text(
-                                                  "usertemple registered",style: TextStyle(fontSize: notifier.custFontSize),),
+                                                  "usertemple registered",
+                                                  style: TextStyle(
+                                                      fontSize: notifier
+                                                          .custFontSize),),
                                                 duration:
                                                 new Duration(seconds: 8),
                                                 backgroundColor: Colors.white,
                                               );
                                               Scaffold.of(context)
                                                   .showSnackBar(mysnackbar2);
-                                            }),
+                                            } }),
                                       )
                                     : Container(
                                         decoration: BoxDecoration(
