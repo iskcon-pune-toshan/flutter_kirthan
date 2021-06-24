@@ -5,7 +5,8 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/profile_settings_pag
 import 'package:flutter_kirthan/views/pages/drawer/settings/settings_list_item.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
-import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
+import 'package:flutter_kirthan/views/pages/user/initiate_userdetails.dart';
+import 'package:flutter_kirthan/views/pages/user/inviteLocalAdmin.dart';
 import 'package:flutter_kirthan/views/pages/signin/signin_service.dart';
 import 'package:flutter_kirthan/views/widgets/event/int_item.dart';
 import 'package:flutter_kirthan/wrapper.dart';
@@ -47,8 +48,9 @@ class KirthanApp extends StatelessWidget {
                       show: false,
                     ),
                     '/screen3': (BuildContext context) => MyEventView(),
-                    '/screen5': (BuildContext context) => NotificationView(),
-                    '/screen2': (BuildContext context) => MySettingsApp()
+                    '/screen2': (BuildContext context) => MySettingsApp(),
+                    '/screen5': (BuildContext context) => InitiateUserDetails(),
+                    '/screen6': (BuildContext context) => InviteLocalAdmin()
                   },
                 ),
               );
