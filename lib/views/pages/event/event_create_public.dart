@@ -16,6 +16,7 @@ import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Map_Options.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/SearchWidget.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
@@ -1388,7 +1389,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                   String eid = neweventrequest.id.toString();
                                   SnackBar mysnackbar = SnackBar(
                                     content: Text(
-                                        "Event registered $successful with $eid"),
+                                        "Event registered $successful"),
                                     duration: new Duration(seconds: 4),
                                     backgroundColor: Colors.green,
                                   );
@@ -1399,7 +1400,15 @@ class _EventWriteState extends State<EventWritePublic> {
                                   //eventteam.updatedTime = dt;
                                   _scaffoldKey.currentState
                                       .showSnackBar(mysnackbar);
-                                  Scaffold.of(context).showSnackBar(mysnackbar);
+                                  new Future.delayed(const Duration(seconds: 3),
+                                          () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => EventView()));
+                                      });
+
+                                  // Scaffold.of(context).showSnackBar(mysnackbar);
                                   //eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
                                 }
                               }),

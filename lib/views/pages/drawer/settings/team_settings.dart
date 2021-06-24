@@ -325,7 +325,8 @@ class _Team_SettingsState extends State<Team_Settings> {
                                         ),
                                       ],
                                     ));
-                              } else {
+                              }
+                              else {
                                 return Container(
                                   padding: new EdgeInsets.all(10),
                                   child: Column(

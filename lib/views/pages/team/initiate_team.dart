@@ -304,8 +304,10 @@ class _InitiateTeamState extends State<InitiateTeam> {
 }
 
 class userSearch extends SearchDelegate<String> {
-  Future<List<UserRequest>> Users = userPageVM.getUserRequests("Approved");
+  Future<List<UserRequest>> Users = userPageVM.getUserRequests("U");
+  Future<List<UserRequest>> localadmins = userPageVM.getUserRequests("A");
   List<UserRequest> userList = new List<UserRequest>();
+  List<UserRequest> localAdmin = new List<UserRequest>();
   List<String> recentSearch = [];
 
   ThemeData appBarTheme(BuildContext context) {
@@ -382,7 +384,15 @@ class userSearch extends SearchDelegate<String> {
               userList = snapshot.data;
               List<String> UserList =
               userList.map((user) => user.fullName).toSet().toList();
-              List<String> suggestionList = [];
+
+             return FutureBuilder(
+             future:localadmins,
+                 builder:(BuildContext context, AsyncSnapshot<List<UserRequest>> snapshot) {
+               if(snapshot.data!=null){
+                 localAdmin = snapshot.data;
+                 Iterable<String> la = localAdmin.map((user) => user.fullName).toSet().toList();
+                 UserList.addAll(la);
+                 List<String> suggestionList = [];
               query.isEmpty
                   ? suggestionList = recentSearch
                   : suggestionList.addAll(UserList.where((element) =>
@@ -408,6 +418,9 @@ class userSearch extends SearchDelegate<String> {
                       });
                 },
               );
+                 }return Container();
+               }
+               );
             }
             return Container();
           },
