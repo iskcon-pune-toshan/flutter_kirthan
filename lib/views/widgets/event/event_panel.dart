@@ -5,6 +5,7 @@ import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -36,26 +37,33 @@ class EventsPanel extends StatelessWidget {
                     var eventRequests = snapshot.data;
                     var endedEvents = snapshot.data;
                     String currentTime =
-                        "${DateTime.now().year}-${DateTime.now().month < 10 ? ("0" + DateTime.now().month.toString()) : DateTime.now().month.toString()}-${DateTime.now().day < 10 ? ("0" + DateTime.now().day.toString()) : DateTime.now().day.toString()} ${DateTime.now().hour < 10 ? ("0" + DateTime.now().hour.toString()) : DateTime.now().hour.toString()}:${DateTime.now().minute < 10 ? ("0" + DateTime.now().minute.toString()) : DateTime.now().minute.toString()}";
-                    print("currenttime");
-                    print(currentTime);
+                        "${DateTime.now().year}-${DateTime.now().month < 10 ? ("0" + DateTime.now().month.toString()) : DateTime.now().month.toString()}-${DateTime.now().day < 10 ? ("0" + DateTime.now().day.toString()) : DateTime.now().day.toString()}:${DateTime.now().hour < 10 ? ("0" + DateTime.now().hour.toString()) : DateTime.now().hour.toString()}:${DateTime.now().minute < 10 ? ("0" + DateTime.now().minute.toString()) : DateTime.now().minute.toString()}";
+                    final format = DateFormat("yyyy-MM-dd");
                     for (var event in eventRequests) {
-                      DateTime date = DateTime.parse(event.eventDate).add(new Duration(days: 1));
+                      DateTime date = DateTime.parse(event.eventDate)
+                          .add(new Duration(days: 1));
                       String eventdate = date.toString();
-                      print(event.eventEndTime);
-                      print(eventdate.split("T")[0]);
                     }
 
                     eventRequests = eventRequests
                         .where((e) =>
-                    (DateTime.parse(e.eventDate).add(new Duration(days: 1)).toString() + " " + e.eventEndTime)
+                    (format.format(DateTime.parse(e.eventDate)
+                        .add(new Duration(days: 1)))
+
+                        // .toString()
+                        +
+                        ":" +
+                        e.eventEndTime)
                         .compareTo(currentTime) ==
                         1)
                         .toList();
-                   // DateTime date = DateTime.parse(widget.eventrequest?.eventDate).add(new Duration(days: 1));
+                    // DateTime date = DateTime.parse(widget.eventrequest?.eventDate).add(new Duration(days: 1));
                     endedEvents = eventRequests
                         .where((e) =>
-                    (DateTime.parse(e.eventDate).add(new Duration(days: 1)).toString() + " " + e.eventEndTime)
+                    (DateTime.parse(e.eventDate)
+                        .add(new Duration(days: 1))
+                        .toString() +
+                        e.eventEndTime)
                         .compareTo(currentTime) ==
                         -1)
                         .toList();
@@ -188,8 +196,9 @@ class EventsPanel extends StatelessWidget {
                                 itemBuilder: (_, int index) {
                                   //TODO:sorting of events according to date
 
-                                  eventRequests.sort(
-                                          (a, b) => a.eventDate.compareTo(b.eventDate));
+                                  eventRequests.sort((a, b) => (a.eventDate +
+                                      a.eventStartTime)
+                                      .compareTo(b.eventDate + b.eventStartTime));
 
                                   var eventrequest = eventRequests[index];
                                   return EventRequestsListItem(
@@ -204,8 +213,6 @@ class EventsPanel extends StatelessWidget {
                       ],
                     );
                   } else if (snapshot.hasError) {
-                    print("error");
-                    print(snapshot.error);
 //TODO
                     return Center(
                       child: CircularProgressIndicator(),

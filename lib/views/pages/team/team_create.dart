@@ -29,7 +29,6 @@ import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
-TextEditingController title = new TextEditingController();
 final TeamPageViewModel teamPageVM =
 TeamPageViewModel(apiSvc: TeamAPIService());
 final UserPageViewModel userPageVM =
@@ -387,7 +386,7 @@ class _TeamWriteState extends State<TeamWrite> {
                             //color: Colors.white,
                             padding: new EdgeInsets.all(10),
                             child: TextFormField(
-                              controller: title,
+                              //controller: title,
                               style: TextStyle(fontSize: notifier.custFontSize),
                               //attribute: "Description",
                               autovalidateMode:
