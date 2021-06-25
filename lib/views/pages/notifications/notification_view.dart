@@ -108,6 +108,7 @@ class NotificationViewState extends State<NotificationView> {
 
   //Yet to be approved events
   Widget CustomTile(NotificationModel data, var callback) {
+    String createdAt = DateTime.parse(data.createdAt.toString()).add(Duration(hours: 5, minutes: 30)).toString();
     return Container(
       margin: EdgeInsets.all(5),
       child: FlatButton(
@@ -194,7 +195,7 @@ class NotificationViewState extends State<NotificationView> {
                                   ),
                                   Container(
                                     child: Text(
-                                      data.createdAt
+                                      createdAt
                                           .toString()
                                           .substring(11, 16),
                                       overflow: TextOverflow.clip,
@@ -233,7 +234,7 @@ class NotificationViewState extends State<NotificationView> {
                                   ),
                                   Container(
                                     child: Text(
-                                      data.createdAt
+                                      createdAt
                                           .toString()
                                           .substring(0, 10),
                                       overflow: TextOverflow.clip,
@@ -290,6 +291,7 @@ class NotificationViewState extends State<NotificationView> {
   }
 
   Widget _buildNotification(NotificationModel data, bool flag) {
+    String createdAt = DateTime.parse(data.createdAt.toString()).add(Duration(hours: 5, minutes: 30)).toString();
     IconData icon;
     Widget actions = Container(
         padding: EdgeInsets.all(0),
@@ -405,7 +407,7 @@ class NotificationViewState extends State<NotificationView> {
                               children: [
                                 Container(
                                   child: Text(
-                                    data.createdAt
+                                    createdAt
                                         .toString()
                                         .substring(11, 16),
                                     overflow: TextOverflow.clip,
@@ -416,7 +418,7 @@ class NotificationViewState extends State<NotificationView> {
                                 ),
                                 Container(
                                   child: Text(
-                                    data.createdAt
+                                   createdAt
                                         .toString()
                                         .substring(0, 10),
                                     overflow: TextOverflow.clip,
@@ -454,7 +456,7 @@ class NotificationViewState extends State<NotificationView> {
                               children: [
                                 Container(
                                   child: Text(
-                                    data.createdAt
+                                    createdAt
                                         .toString()
                                         .substring(11, 16),
                                     overflow: TextOverflow.clip,
@@ -465,7 +467,7 @@ class NotificationViewState extends State<NotificationView> {
                                 ),
                                 Container(
                                   child: Text(
-                                    data.createdAt
+                                    createdAt
                                         .toString()
                                         .substring(0, 11),
                                     overflow: TextOverflow.clip,
@@ -505,7 +507,7 @@ class NotificationViewState extends State<NotificationView> {
                               children: [
                                 Container(
                                   child: Text(
-                                    data.createdAt
+                                    createdAt
                                         .toString()
                                         .substring(11, 16),
                                     overflow: TextOverflow.clip,
@@ -516,7 +518,7 @@ class NotificationViewState extends State<NotificationView> {
                                 ),
                                 Container(
                                   child: Text(
-                                    data.createdAt
+                                   createdAt
                                         .toString()
                                         .substring(0, 10),
                                     overflow: TextOverflow.clip,
@@ -555,7 +557,7 @@ class NotificationViewState extends State<NotificationView> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      data.createdAt
+                                      createdAt
                                           .toString()
                                           .substring(11, 16),
                                       overflow:
@@ -568,7 +570,7 @@ class NotificationViewState extends State<NotificationView> {
                                   ),
                                   Container(
                                     child: Text(
-                                      data.createdAt
+                                      createdAt
                                           .toString()
                                           .substring(0, 10),
                                       overflow:
@@ -610,7 +612,7 @@ class NotificationViewState extends State<NotificationView> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      data.createdAt
+                                      createdAt
                                           .toString()
                                           .substring(
                                           11, 16),
@@ -625,7 +627,7 @@ class NotificationViewState extends State<NotificationView> {
                                   ),
                                   Container(
                                     child: Text(
-                                      data.createdAt
+                                      createdAt
                                           .toString()
                                           .substring(
                                           0, 10),
@@ -669,7 +671,7 @@ class NotificationViewState extends State<NotificationView> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      data.createdAt
+                                      createdAt
                                           .toString()
                                           .substring(
                                           11, 16),
@@ -684,7 +686,7 @@ class NotificationViewState extends State<NotificationView> {
                                   ),
                                   Container(
                                     child: Text(
-                                      data.createdAt
+                                      createdAt
                                           .toString()
                                           .substring(
                                           0, 10),
