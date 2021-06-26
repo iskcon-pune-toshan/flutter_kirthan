@@ -428,6 +428,7 @@ class Search extends SearchDelegate {
             if (snapshot.data != null) {
               userlist = snapshot.data;
               userlist.removeWhere((element) => element.id == superId);
+              userlist.removeWhere((element) => element.roleId == 1);
               List<String> UserList =
               userlist.map((user) => user.fullName).toSet().toList();
 

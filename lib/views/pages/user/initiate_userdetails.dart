@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +15,16 @@ import 'package:flutter_kirthan/view_models/temple_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_kirthan/views/pages/temple/temple_create.dart';
+import 'package:provider/provider.dart';
 
 final UserPageViewModel userPageVM =
-    UserPageViewModel(apiSvc: UserAPIService());
+UserPageViewModel(apiSvc: UserAPIService());
 final UserTemplePageViewModel usertemplePageVM =
-    UserTemplePageViewModel(apiSvc: UserTempleAPIService());
+UserTemplePageViewModel(apiSvc: UserTempleAPIService());
 final TemplePageViewModel templePageVM =
-    TemplePageViewModel(apiSvc: TempleAPIService());
+TemplePageViewModel(apiSvc: TempleAPIService());
+
 class InitiateUserDetails extends StatefulWidget {
   String UserName;
   InitiateUserDetails({this.UserName});
@@ -52,6 +54,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
     });
     //print(userdetails.length);
   }
+
   Future<List<Temple>> temples;
   @override
   void initState() {
@@ -93,14 +96,18 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
           );
         });
   }
+
   Temple _selectedTemple;
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(
-      builder:(context, notifier, child)=> Scaffold(
+      builder: (context, notifier, child) => Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text('Profile',style: TextStyle(fontSize: notifier.custFontSize),),
+          title: Text(
+            'Profile',
+            style: TextStyle(fontSize: notifier.custFontSize),
+          ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -136,7 +143,8 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                 color: Colors.white,
                                 width: MediaQuery.of(context).size.width,
                                 height:
-                                    (MediaQuery.of(context).size.height / 4) + 40,
+                                (MediaQuery.of(context).size.height / 4) +
+                                    40,
                                 child: Image.asset(
                                   "assets/images/profile_back.jfif",
                                   fit: BoxFit.fill,
@@ -156,21 +164,22 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                               children: <Widget>[
                                 Container(
                                     decoration: BoxDecoration(
-                                        //color: Colors.grey[700],
-                                        borderRadius: BorderRadius.circular(10)),
+                                      //color: Colors.grey[700],
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
                                     child: Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           child: Padding(
                                             padding:
-                                                const EdgeInsets.only(top: 50),
+                                            const EdgeInsets.only(top: 50),
                                             child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 FittedBox(
                                                   fit: BoxFit.contain,
@@ -180,27 +189,38 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                         Text(
                                                           UserName,
                                                           style: TextStyle(
-                                                              fontSize: 4+notifier.custFontSize,
+                                                              fontSize: 4 +
+                                                                  notifier
+                                                                      .custFontSize,
                                                               fontFamily:
-                                                                  'OpenSans'),
+                                                              'OpenSans'),
                                                         ),
                                                         VerticalDivider(
-                                                          color: Colors.white,
+                                                          color: notifier
+                                                              .darkTheme
+                                                              ? Colors.white
+                                                              : Colors.black,
                                                           thickness: 2,
                                                           width: 30,
                                                         ),
                                                         Text(
                                                           uname.roleId == 1
                                                               ? "Super Admin"
-                                                              : uname.roleId == 2
-                                                                  ? "Local Admin"
-                                                                  : "User",
+                                                              : uname.roleId ==
+                                                              2
+                                                              ? "Local Admin"
+                                                              : uname.roleId ==
+                                                              3
+                                                              ? "User"
+                                                              : "Team Lead",
                                                           style: TextStyle(
-                                                              fontSize: notifier.custFontSize,
+                                                              fontSize: notifier
+                                                                  .custFontSize,
                                                               fontWeight:
-                                                                  FontWeight.w800,
+                                                              FontWeight
+                                                                  .w800,
                                                               fontFamily:
-                                                                  'OpenSans'),
+                                                              'OpenSans'),
                                                         ),
                                                       ],
                                                     ),
@@ -214,7 +234,8 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                   child: Text(
                                                     Email,
                                                     style: TextStyle(
-                                                        fontSize: notifier.custFontSize,
+                                                        fontSize: notifier
+                                                            .custFontSize,
                                                         fontFamily: 'OpenSans'),
                                                   ),
                                                 ),
@@ -224,7 +245,8 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                 Text(
                                                   Phone.toString(),
                                                   style: TextStyle(
-                                                      fontSize: notifier.custFontSize,
+                                                      fontSize:
+                                                      notifier.custFontSize,
                                                       fontFamily: 'OpenSans'),
                                                 ),
                                                 SizedBox(
@@ -240,7 +262,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                         CircleAvatar(
                                           radius: 43,
                                           backgroundColor:
-                                              KirthanStyles.colorPallete30,
+                                          KirthanStyles.colorPallete30,
                                           child: CircleAvatar(
                                             radius: 40,
                                             //backgroundColor: Colors.white,
@@ -250,9 +272,9 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                 height: 100.0,
                                                 child: (photoUrl != null)
                                                     ? Image.network(
-                                                        photoUrl,
-                                                        fit: BoxFit.contain,
-                                                      )
+                                                  photoUrl,
+                                                  fit: BoxFit.contain,
+                                                )
                                                     : ProfilePages(),
                                               ),
                                             ),
@@ -263,54 +285,58 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                 SizedBox(
                                   height: 45,
                                 ),
-                                if(uname.roleId==3||uname.roleId==4)
+                                if (uname.roleId == 3 || uname.roleId == 4)
                                   FutureBuilder<List<Temple>>(
                                       future: temples,
                                       builder: (BuildContext context,
                                           AsyncSnapshot<List<Temple>>
-                                              snapshot) {
+                                          snapshot) {
                                         switch (snapshot.connectionState) {
                                           case ConnectionState.none:
                                           case ConnectionState.active:
                                           case ConnectionState.waiting:
                                             return Center(
                                                 child:
-                                                    const CircularProgressIndicator());
+                                                const CircularProgressIndicator());
                                           case ConnectionState.done:
                                             if (snapshot.hasData) {
                                               return Container(
                                                 //width: 20.0,
                                                 //height: 10.0,
                                                 child: Center(
-                                                  child:Form(
+                                                  child: Form(
                                                     key: _formKey,
-                                                     child: DropdownButtonFormField<
-                                                          Temple>(
-                                                    value: _selectedTemple,
-                                                    icon: const Icon(Icons.title),
-                                                    hint: Text('Select Temple'),
-                                                    items: snapshot.data
-                                                        .map((team) =>
-                                                            DropdownMenuItem<
-                                                                Temple>(
-                                                              value: team,
-                                                              child: Text(team
-                                                                  .templeName),
-                                                            ))
-                                                        .toList(),
-                                                    onChanged: (input) {
-                                                      setState(() {
-                                                        _selectedTemple = input;
-                                                      });
-                                                    },
-                                                        validator: (value){
-                                                          if (value == null) {
-                                                            return "Please select temple";
-                                                          }
-                                                          return null;
-                                                        },
+                                                    child:
+                                                    DropdownButtonFormField<
+                                                        Temple>(
+                                                      value: _selectedTemple,
+                                                      icon: const Icon(
+                                                          Icons.title),
+                                                      hint:
+                                                      Text('Select Temple'),
+                                                      items: snapshot.data
+                                                          .map((team) =>
+                                                          DropdownMenuItem<
+                                                              Temple>(
+                                                            value: team,
+                                                            child: Text(team
+                                                                .templeName),
+                                                          ))
+                                                          .toList(),
+                                                      onChanged: (input) {
+                                                        setState(() {
+                                                          _selectedTemple =
+                                                              input;
+                                                        });
+                                                      },
+                                                      validator: (value) {
+                                                        if (value == null) {
+                                                          return "Please select temple";
+                                                        }
+                                                        return null;
+                                                      },
+                                                    ),
                                                   ),
-                                                ),
                                                 ),
                                               );
                                             } else {
@@ -319,173 +345,190 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                 height: 10.0,
                                                 child: Center(
                                                   child:
-                                                      CircularProgressIndicator(),
+                                                  CircularProgressIndicator(),
                                                 ),
                                               );
                                             }
                                         }
                                       }),
+                                if (uname.roleId == 3 || uname.roleId == 4)
                                 Align(
                                   alignment: Alignment.centerRight,
-                                child:FlatButton(
-                                  child:Text('Add Temple'),
-                                  onPressed: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                        builder: (context) => TempleWrite()));
-                                  },
-                                ),
+                                  child: FlatButton(
+                                    child: Text('Add Temple'),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TempleWrite()));
+                                    },
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 45,
                                 ),
                                 uname.roleId != 2
                                     ? Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          color: KirthanStyles.colorPallete30
-                                          // gradient: LinearGradient(
-                                          //     colors: [
-                                          //       Colors.white,
-                                          //       Colors.grey[300]
-                                          //     ],
-                                          //     begin: Alignment.centerLeft,
-                                          //     end: Alignment.centerRight),
-                                        ),
-                                        child: FlatButton(
-                                          color:KirthanStyles.colorPallete30,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 50, vertical: 10),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            child: Text(
-                                              'Make Local Admin',
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20)),
+                                      color: KirthanStyles.colorPallete30
+                                    // gradient: LinearGradient(
+                                    //     colors: [
+                                    //       Colors.white,
+                                    //       Colors.grey[300]
+                                    //     ],
+                                    //     begin: Alignment.centerLeft,
+                                    //     end: Alignment.centerRight),
+                                  ),
+                                  child: FlatButton(
+                                      color: KirthanStyles.colorPallete30,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 50, vertical: 10),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(20)),
+                                      child: Text(
+                                        'Make Local Admin',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize:
+                                            notifier.custFontSize,
+                                            fontFamily: 'OpenSans'),
+                                      ),
+                                      onPressed: () {
+                                        if (_formKey.currentState
+                                            .validate()) {
+                                          _formKey.currentState.save();
+                                          userRequest = uname;
+                                          print("Printing user request");
+                                          print(prev_role_id);
+                                          // print(userRequest);
+                                          setState(() {
+                                            // print("ooooo");
+                                            //userTempleRequest.templeId = _selectedCategory.
+                                            userRequest.roleId = 2;
+                                            userRequest.prevRoleId =
+                                                prev_role_id;
+                                            // print("JJJJJJ");
+                                            // print(superId);
+                                            userRequest.invitedBy =
+                                                superId;
+                                          });
+
+                                          String userrequestStr =
+                                          jsonEncode(userRequest
+                                              .toStrJson());
+                                          userPageVM
+                                              .submitUpdateUserRequest(
+                                              userrequestStr);
+                                          SnackBar mysnackbar = SnackBar(
+                                            content: Text(
+                                              UserName + " is now Admin",
                                               style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: notifier.custFontSize,
-                                                  fontFamily: 'OpenSans'),
+                                                  color: Colors.black),
                                             ),
-                                            onPressed: () {
-                                              if (_formKey.currentState.validate()) {
-                                                _formKey.currentState.save();
-                                              userRequest = uname;
-                                              print("Printing user request");
-                                              print(prev_role_id);
-                                              // print(userRequest);
-                                              setState(() {
-                                                // print("ooooo");
-                                                //userTempleRequest.templeId = _selectedCategory.
-                                                userRequest.roleId = 2;
-                                                userRequest.prevRoleId =
-                                                    prev_role_id;
-                                                // print("JJJJJJ");
-                                                // print(superId);
-                                                userRequest.invitedBy = superId;
-                                              });
+                                            duration:
+                                            new Duration(seconds: 4),
+                                            backgroundColor: Colors.green,
+                                          );
+                                          Scaffold.of(context)
+                                              .showSnackBar(mysnackbar);
+                                          List<UserTemple>
+                                          listofUserTemples =
+                                          new List<UserTemple>();
+                                          //for (var user in templelist) {
+                                          UserTemple userTemple =
+                                          new UserTemple();
+                                          userTemple.templeId =
+                                              _selectedTemple.id;
+                                          userTemple.userId = uname.id;
+                                          userTemple.roleId = 2;
+                                          //userTemple.userName = uname.fullName;
+                                          // userTemple.templeName = user.templeName;
 
-                                              String userrequestStr = jsonEncode(
-                                                  userRequest.toStrJson());
-                                              userPageVM
-                                                  .submitUpdateUserRequest(
-                                                  userrequestStr);
-                                              SnackBar mysnackbar = SnackBar(
-                                                content: Text(
-                                                  UserName + " is now Admin",
-                                                  style: TextStyle(
-                                                      color: Colors.black),),
-                                                duration:
-                                                new Duration(seconds: 4),
-                                                backgroundColor: Colors.green,
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(mysnackbar);
-                                              List<
-                                                  UserTemple> listofUserTemples = new List<
-                                                  UserTemple>();
-                                              //for (var user in templelist) {
-                                              UserTemple userTemple = new UserTemple();
-                                              userTemple.templeId =
-                                                  _selectedTemple.id;
-                                              userTemple.userId = uname.id;
-                                              userTemple.roleId = 2;
-                                              //userTemple.userName = uname.fullName;
-                                              // userTemple.templeName = user.templeName;
-
-                                              listofUserTemples.add(
-                                                  userTemple);
-                                              // }
-                                              usertemplePageVM
-                                                  .submitNewUserTempleMapping(
-                                                  listofUserTemples);
-                                              SnackBar mysnackbar2 = SnackBar(
-                                                content: Text(
-                                                  "usertemple registered",
-                                                  style: TextStyle(
-                                                      fontSize: notifier
-                                                          .custFontSize),),
-                                                duration:
-                                                new Duration(seconds: 8),
-                                                backgroundColor: Colors.white,
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(mysnackbar2);
-                                            } }),
-                                      )
+                                          listofUserTemples
+                                              .add(userTemple);
+                                          // }
+                                          usertemplePageVM
+                                              .submitNewUserTempleMapping(
+                                              listofUserTemples);
+                                          SnackBar mysnackbar2 = SnackBar(
+                                            content: Text(
+                                              "usertemple registered",
+                                              style: TextStyle(
+                                                  fontSize: notifier
+                                                      .custFontSize),
+                                            ),
+                                            duration:
+                                            new Duration(seconds: 8),
+                                            backgroundColor: Colors.white,
+                                          );
+                                          Scaffold.of(context)
+                                              .showSnackBar(mysnackbar2);
+                                        }
+                                      }),
+                                )
                                     : Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                        //   gradient: LinearGradient(
-                                        //       // colors: [
-                                        //       //   Colors.white,
-                                        //       //   Colors.grey[300]
-                                        //       // ],
-                                        //       begin: Alignment.centerLeft,
-                                        //       end: Alignment.centerRight),
-                                        ),
-                                        child: FlatButton(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 50, vertical: 10),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            color: KirthanStyles.colorPallete30,
-                                            child: Text(
-                                              'Make User',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize:notifier.custFontSize,
-                                                  fontFamily: 'OpenSans'),
-                                            ),
-                                            onPressed: () {
-                                              print("Printing user request");
-                                              print(prev_role_id);
-                                              userRequest = uname;
-                                              setState(() {
-                                                userRequest.roleId = 3;
-                                                userRequest.invitedBy = superId;
-                                                userRequest.prevRoleId =
-                                                    prev_role_id;
-                                              });
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20)),
+                                    //   gradient: LinearGradient(
+                                    //       // colors: [
+                                    //       //   Colors.white,
+                                    //       //   Colors.grey[300]
+                                    //       // ],
+                                    //       begin: Alignment.centerLeft,
+                                    //       end: Alignment.centerRight),
+                                  ),
+                                  child: FlatButton(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 50, vertical: 10),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(20)),
+                                      color: KirthanStyles.colorPallete30,
+                                      child: Text(
+                                        'Make User',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize:
+                                            notifier.custFontSize,
+                                            fontFamily: 'OpenSans'),
+                                      ),
+                                      onPressed: () {
+                                        print("Printing user request");
+                                        print(prev_role_id);
+                                        userRequest = uname;
+                                        setState(() {
+                                          userRequest.roleId = 3;
+                                          userRequest.invitedBy = superId;
+                                          userRequest.prevRoleId =
+                                              prev_role_id;
+                                        });
 
-                                              String userrequestStr = jsonEncode(
-                                                  userRequest.toStrJson());
-                                              userPageVM.submitUpdateUserRequest(
-                                                  userrequestStr);
-                                              SnackBar mysnackbar = SnackBar(
-                                                content: Text(
-                                                    UserName + " is now User",style: TextStyle(fontSize: notifier.custFontSize),),
-                                                duration:
-                                                    new Duration(seconds: 2),
-                                                backgroundColor: Colors.green,
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(mysnackbar);
-                                            }),
-                                      )
+                                        String userrequestStr =
+                                        jsonEncode(
+                                            userRequest.toStrJson());
+                                        userPageVM
+                                            .submitUpdateUserRequest(
+                                            userrequestStr);
+                                        SnackBar mysnackbar = SnackBar(
+                                          content: Text(
+                                            UserName + " is now User",
+                                            style: TextStyle(
+                                                fontSize: notifier
+                                                    .custFontSize),
+                                          ),
+                                          duration:
+                                          new Duration(seconds: 2),
+                                          backgroundColor: Colors.green,
+                                        );
+                                        Scaffold.of(context)
+                                            .showSnackBar(mysnackbar);
+                                      }),
+                                )
                               ],
                             ),
                           )
