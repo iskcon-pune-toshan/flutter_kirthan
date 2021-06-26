@@ -398,6 +398,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                         .format(input)
                                         .toString();
                               },
+                              onChanged: (input) {
+                                eventrequest.eventDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(input)
+                                        .toString();
+                              },
                               validator: (value) {
                                 if (value.toString().isEmpty || value == null) {
                                   return "Please enter event date";
@@ -408,61 +414,68 @@ class _EventWriteState extends State<EventWritePublic> {
                           ],
                         ),
                       ),
-                      Container(
-                        padding: new EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text(
-                              "Event Start Time",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: notifier.custFontSize),
-                            ),
-                            DateTimeField(
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                              format: DateFormat("HH:mm"),
-                              onShowPicker: (context, currentValue) async {
-                                final time = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.fromDateTime(
-                                      currentValue ?? DateTime.now()),
-                                );
-                                return DateTimeField.convert(time);
-                              },
-                              onSaved: (input) {
-                                eventrequest.eventStartTime =
-                                    DateFormat("HH:mm")
-                                        .format(input)
-                                        .toString();
-                              },
-                              onChanged: (input) {
-                                eventrequest.eventStartTime =
-                                    DateFormat("HH:mm")
-                                        .format(input)
-                                        .toString();
-                              },
-                              validator: (value) {
-                                if (value.toString().isEmpty || value == null) {
-                                  return "Please select time";
-                                } else {
-                                  DateFormat dateFormat = new DateFormat.Hm();
-                                  DateTime currenttime = dateFormat.parse(DateTime.now().toString().substring(11, 15));
-                                  if (eventrequest.eventDate ==
-                                      DateFormat("yyyy-MM-dd")
-                                          .format(DateTime.now())
-                                          .toString()) {
-                                    print(value.isAfter(currenttime));
-                                    return value.isAfter(currenttime) == true
-                                        ? null
-                                        : "Enter correct time";
-                                  } else
-                                    return null;
-                                }
-                              },
-                            ),
-                          ],
+                      Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => Container(
+                          padding: new EdgeInsets.all(10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(
+                                "Event Start Time",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: notifier.custFontSize),
+                              ),
+                              DateTimeField(
+                                style:
+                                TextStyle(fontSize: notifier.custFontSize),
+                                format: DateFormat("HH:mm"),
+                                onShowPicker: (context, currentValue) async {
+                                  final time = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.fromDateTime(
+                                        currentValue ?? DateTime.now()),
+                                  );
+                                  return DateTimeField.convert(time);
+                                },
+                                onSaved: (input) {
+                                  eventrequest.eventStartTime =
+                                      DateFormat("HH:mm")
+                                          .format(input)
+                                          .toString();
+                                },
+                                onChanged: (input) {
+                                  eventrequest.eventStartTime =
+                                      DateFormat("HH:mm")
+                                          .format(input)
+                                          .toString();
+                                  // print(eventrequest.eventStartTime);
+                                },
+                                validator: (value) {
+                                  if (value.toString().isEmpty ||
+                                      value == null) {
+                                    return "Please select time";
+                                  } else {
+                                    DateFormat dateFormat = new DateFormat.Hm();
+                                    DateTime currenttime = dateFormat.parse(
+                                        DateTime.now()
+                                            .toString()
+                                            .substring(11, 15));
+                                    if (eventrequest.eventDate ==
+                                        DateFormat("yyyy-MM-dd")
+                                            .format(DateTime.now())
+                                            .toString()) {
+                                      return value.isAfter(currenttime) == true
+                                          ? null
+                                          : "Enter correct time";
+                                    } else
+                                      return null;
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Container(
