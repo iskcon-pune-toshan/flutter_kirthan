@@ -16,6 +16,7 @@ import 'package:flutter_kirthan/view_models/common_lookup_table_page_view_model.
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
+import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/Map_Options.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/SearchWidget.dart';
 import 'package:flutter_kirthan/views/pages/event/home_page_map/bloc.dart';
@@ -52,11 +53,8 @@ class _EventWriteState extends State<EventWritePublic> {
   getPinCode(String city) async {
     List<geo.Location> location;
     List<geo.Placemark> placemark;
-    print("city");
-    print(city);
+
     location = await geo.locationFromAddress(city);
-    print("location");
-    print(location);
 
     placemark = await geo.placemarkFromCoordinates(
         location[0].latitude, location[0].longitude);
@@ -87,17 +85,16 @@ class _EventWriteState extends State<EventWritePublic> {
     _getUserLocation();
     super.initState();
     pincodeController.text = "";
-    isDisabled=false;
+    isDisabled = false;
   }
-  void incrementCounter(){
+
+  void incrementCounter() {
     setState(() {
       isDisabled = true;
-
     });
   }
 
   handleTap(LatLng tappedPoint1) {
-    // print(tappedPoint1);
     setState(() {
       myMarkersource = [];
       myMarkersource.add(
@@ -110,12 +107,10 @@ class _EventWriteState extends State<EventWritePublic> {
       CircularProgressIndicator();
       eventrequest.longitudeS = tappedPoint1.longitude;
       eventrequest.latitudeS = tappedPoint1.latitude;
-      //print(eventrequest.sourceLatitude);
     });
   }
 
   handleTap2(LatLng tappedPoint1) {
-    //  print(tappedPoint1);
     setState(() {
       myMarker = [];
       myMarker.add(
@@ -127,7 +122,6 @@ class _EventWriteState extends State<EventWritePublic> {
       );
       eventrequest.longitudeD = tappedPoint1.longitude;
       eventrequest.latitudeD = tappedPoint1.latitude;
-      //print(eventrequest.destinationLatitude);
     });
   }
 
@@ -142,9 +136,7 @@ class _EventWriteState extends State<EventWritePublic> {
     final FirebaseUser user = await auth.currentUser();
     final String email = user.email;
     eventrequest.createdBy = email;
-    // print("created by " + eventrequest.createdBy);
 
-    //  print(email);
     return email;
   }
 
@@ -219,7 +211,6 @@ class _EventWriteState extends State<EventWritePublic> {
           groupValue: select,
           onChanged: (value) {
             setState(() {
-              //  print(value);
               eventrequest.eventMobility = value;
               select = value;
               if (value == 'Moving') {
@@ -406,7 +397,12 @@ class _EventWriteState extends State<EventWritePublic> {
                                     DateFormat("yyyy-MM-dd")
                                         .format(input)
                                         .toString();
-                                // print(eventrequest.eventDate);
+                              },
+                              onChanged: (input) {
+                                eventrequest.eventDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(input)
+                                        .toString();
                               },
                               validator: (value) {
                                 if (value.toString().isEmpty || value == null) {
@@ -418,63 +414,68 @@ class _EventWriteState extends State<EventWritePublic> {
                           ],
                         ),
                       ),
-                      Container(
-                        padding: new EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text(
-                              "Event Start Time",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: notifier.custFontSize),
-                            ),
-                            DateTimeField(
-                              style: TextStyle(fontSize: notifier.custFontSize),
-                              format: DateFormat("HH:mm"),
-                              onShowPicker: (context, currentValue) async {
-                                final time = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.fromDateTime(
-                                      currentValue ?? DateTime.now()),
-                                );
-                                return DateTimeField.convert(time);
-                              },
-                              onSaved: (input) {
-                                eventrequest.eventStartTime =
-                                    DateFormat("HH:mm")
-                                        .format(input)
-                                        .toString();
-                                // print(eventrequest.eventStartTime);
-                              },
-                              onChanged: (input) {
-                                eventrequest.eventStartTime =
-                                    DateFormat("HH:mm")
-                                        .format(input)
-                                        .toString();
-                                // print(eventrequest.eventStartTime);
-                              },
-                              validator: (value) {
-                                if (value.toString().isEmpty || value == null) {
-                                  return "Please select time";
-                                } else
-                                {
-                                  DateFormat dateFormat = new DateFormat.Hm();
-                                  DateTime currenttime=dateFormat.parse(DateTime.now().toString().substring(11,15));
-                                  if(eventrequest.eventDate ==  DateFormat("yyyy-MM-dd")
-                                      .format(DateTime.now())
-                                      .toString()){
-                                    return value.isAfter(currenttime) ==true
-                                        ? null
-                                        : "Enter correct time";
+                      Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => Container(
+                          padding: new EdgeInsets.all(10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(
+                                "Event Start Time",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: notifier.custFontSize),
+                              ),
+                              DateTimeField(
+                                style:
+                                TextStyle(fontSize: notifier.custFontSize),
+                                format: DateFormat("HH:mm"),
+                                onShowPicker: (context, currentValue) async {
+                                  final time = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.fromDateTime(
+                                        currentValue ?? DateTime.now()),
+                                  );
+                                  return DateTimeField.convert(time);
+                                },
+                                onSaved: (input) {
+                                  eventrequest.eventStartTime =
+                                      DateFormat("HH:mm")
+                                          .format(input)
+                                          .toString();
+                                },
+                                onChanged: (input) {
+                                  eventrequest.eventStartTime =
+                                      DateFormat("HH:mm")
+                                          .format(input)
+                                          .toString();
+                                  // print(eventrequest.eventStartTime);
+                                },
+                                validator: (value) {
+                                  if (value.toString().isEmpty ||
+                                      value == null) {
+                                    return "Please select time";
+                                  } else {
+                                    DateFormat dateFormat = new DateFormat.Hm();
+                                    DateTime currenttime = dateFormat.parse(
+                                        DateTime.now()
+                                            .toString()
+                                            .substring(11, 15));
+                                    if (eventrequest.eventDate ==
+                                        DateFormat("yyyy-MM-dd")
+                                            .format(DateTime.now())
+                                            .toString()) {
+                                      return value.isAfter(currenttime) == true
+                                          ? null
+                                          : "Enter correct time";
+                                    } else
+                                      return null;
                                   }
-                                  else
-                                    return null;
-                                }
-                              },
-                            ),
-                          ],
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Container(
@@ -505,7 +506,6 @@ class _EventWriteState extends State<EventWritePublic> {
                                 eventrequest.eventEndTime = DateFormat("HH:mm")
                                     .format(input)
                                     .toString();
-                                // print(eventrequest.eventEndTime);
                               },
                               validator: (value) {
                                 if (value.toString().isEmpty || value == null) {
@@ -513,10 +513,6 @@ class _EventWriteState extends State<EventWritePublic> {
                                 } else {
                                   String time =
                                       "${value.hour < 10 ? ("0" + value.hour.toString()) : value.hour}:${value.minute < 10 ? ("0" + value.minute.toString()) : value.minute}";
-                                  print(time.compareTo(
-                                      eventrequest.eventStartTime != null
-                                          ? eventrequest.eventStartTime
-                                          : ""));
 
                                   return time.compareTo(
                                       eventrequest.eventStartTime !=
@@ -557,9 +553,10 @@ class _EventWriteState extends State<EventWritePublic> {
                                   child: Text(
                                     category,
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,color: notifier.darkTheme
-                                        ?Colors.white:Colors.black),
+                                        fontSize: notifier.custFontSize,
+                                        color: notifier.darkTheme
+                                            ? Colors.white
+                                            : Colors.black),
                                   ),
                                 ))
                                     .toList(),
@@ -695,7 +692,6 @@ class _EventWriteState extends State<EventWritePublic> {
                                                       _animateCamera();
                                                     }
                                                     if (state is Failure) {
-                                                      // print('Failure');
                                                       Scaffold.of(context)
                                                         ..hideCurrentSnackBar()
                                                         ..showSnackBar(
@@ -721,7 +717,6 @@ class _EventWriteState extends State<EventWritePublic> {
                                                         );
                                                     }
                                                     if (state is Loading) {
-                                                      // print('loading');
                                                       Scaffold.of(context)
                                                         ..hideCurrentSnackBar()
                                                         ..showSnackBar(
@@ -797,6 +792,7 @@ class _EventWriteState extends State<EventWritePublic> {
                             padding: EdgeInsets.all(0),
                             width: MediaQuery.of(context).size.width,
                             child: TextFormField(
+                              readOnly: true,
                               style: TextStyle(fontSize: notifier.custFontSize),
                               decoration: InputDecoration(
                                 isCollapsed: true,
@@ -980,7 +976,6 @@ class _EventWriteState extends State<EventWritePublic> {
                                                     _animateCamera();
                                                   }
                                                   if (state is Failure) {
-                                                    // print('Failure');
                                                     Scaffold.of(context)
                                                       ..hideCurrentSnackBar()
                                                       ..showSnackBar(
@@ -1004,7 +999,6 @@ class _EventWriteState extends State<EventWritePublic> {
                                                       );
                                                   }
                                                   if (state is Loading) {
-                                                    // print('loading');
                                                     Scaffold.of(context)
                                                       ..hideCurrentSnackBar()
                                                       ..showSnackBar(
@@ -1205,6 +1199,7 @@ class _EventWriteState extends State<EventWritePublic> {
                         ],
                       ),
                       TextFormField(
+                        readOnly: true,
                         style: TextStyle(fontSize: notifier.custFontSize),
                         decoration: InputDecoration(
                           isCollapsed: true,
@@ -1348,29 +1343,31 @@ class _EventWriteState extends State<EventWritePublic> {
                                     fontSize: notifier.custFontSize),
                               ),
                               color: KirthanStyles.colorPallete30,
-                              onPressed: isDisabled?null:() async {
+                              onPressed: isDisabled
+                                  ? null
+                                  : () async {
                                 if (_formKey.currentState.validate()) {
                                   incrementCounter();
                                   final FirebaseUser user =
                                   await auth.currentUser();
                                   final String email = user.email;
                                   eventrequest.createdBy = email;
-                                  // print("created by " + eventrequest.createdBy);
-                                  // print(email);
 
                                   _formKey.currentState.save();
                                   //eventrequest.isProcessed = true;
                                   eventrequest.isPublicEvent = true;
                                   // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
-                                  // print(eventrequest.createdBy);
-                                  List<CommonLookupTable> selectedCategory =
+
+                                  List<CommonLookupTable>
+                                  selectedCategory =
                                   await commonLookupTablePageVM
-                                      .getCommonLookupTable("description:" +
-                                      _selectedCategory);
+                                      .getCommonLookupTable(
+                                      "description:" +
+                                          _selectedCategory);
                                   for (var i in selectedCategory)
                                     eventrequest.eventType = i.id;
-                                  String dt =
-                                  DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                  String dt = DateFormat(
+                                      "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                       .format(DateTime.now());
                                   eventrequest.createdTime = dt;
                                   eventrequest.updatedBy = email;
@@ -1384,22 +1381,32 @@ class _EventWriteState extends State<EventWritePublic> {
                                   EventRequest neweventrequest =
                                   await eventPageVM
                                       .submitNewEventRequest(teammap);
-                                  // print(neweventrequest.id);
-                                  String eid = neweventrequest.id.toString();
+
+                                  String eid =
+                                  neweventrequest.id.toString();
                                   SnackBar mysnackbar = SnackBar(
                                     content: Text(
-                                        "Event registered $successful with $eid"),
+                                        "Event registered $successful"),
                                     duration: new Duration(seconds: 4),
                                     backgroundColor: Colors.green,
                                   );
-                                  String dta =
-                                  DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                  String dta = DateFormat(
+                                      "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                       .format(DateTime.now());
                                   //eventteam.updatedBy = "SYSTEM";
                                   //eventteam.updatedTime = dt;
                                   _scaffoldKey.currentState
                                       .showSnackBar(mysnackbar);
-                                  Scaffold.of(context).showSnackBar(mysnackbar);
+                                  new Future.delayed(
+                                      const Duration(seconds: 3), () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EventView()));
+                                  });
+
+                                  // Scaffold.of(context).showSnackBar(mysnackbar);
                                   //eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
                                 }
                               }),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/common/constants.dart';
@@ -307,7 +308,7 @@ class _TeamLocalAdminState extends State<TeamLocalAdmin> {
                                             Scaffold.of(context)
                                                 .showSnackBar(SnackBar(
                                               content:
-                                              Text('Team already exits'),
+                                              Text('Team already exist'),
                                               backgroundColor: Colors.red,
                                             ));
                                           } else if (widget

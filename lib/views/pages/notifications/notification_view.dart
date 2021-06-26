@@ -47,8 +47,8 @@ class NotificationView extends StatefulWidget {
 }
 
 class NotificationViewState extends State<NotificationView> {
-  int teamId;
-  String teamLeadId;
+  // int teamId;
+  String teamLead;
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   //final Firestore _db = Firestore.instance;
   // final FirebaseMessaging _fcm = FirebaseMessaging();
@@ -150,8 +150,14 @@ class NotificationViewState extends State<NotificationView> {
                 //         )));
               });
             } else {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => AdminView()));
+              getTeamId(data.message.split("\"")[1], "Waiting");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NotificationDetails(
+                          eventId: null,
+                          teamLeadId: teamLead,
+                          status: "Waiting")));
             }
           },
           child: Column(children: [
@@ -821,16 +827,26 @@ class NotificationViewState extends State<NotificationView> {
                     //isThreeLine: true,
                     //trailing:
                     onTap: () {
-                      print("Target id");
-                      print(data.targetId);
-                      if (data.targetType.contains("user")) {
+                      // print("Target id");
+                      // print(data.targetId);
+
+                      if (data.targetType == "team") {
+                        if (data.message.contains("Approved")) {
+                          getTeamId(data.message.split("\"")[1], "Approved");
+                        } else if (data.message.contains("Waiting"))
+                          getTeamId(data.message.split("\"")[1], "Waiting");
+                        else
+                          getTeamId(data.message.split("\"")[1], "Rejected");
+                      }
+                      if (data.targetType == "user") {
                         if (data.message.contains("team")) {
-                          if (data.message.contains("Approved"))
-                            getTeamId(data.createdBy, "Approved");
-                          else if (data.message.contains("Waiting"))
-                            getTeamId(data.createdBy, "Waiting");
+                          if (data.message.contains("Approved")) {
+                            print("Inside approve");
+                            getTeamId(data.message.split("\"")[1], "Approved");
+                          } else if (data.message.contains("Waiting"))
+                            getTeamId(data.message.split("\"")[1], "Waiting");
                           else
-                            getTeamId(data.createdBy, "Rejected");
+                            getTeamId(data.message.split("\"")[1], "Rejected");
                         }
                       }
                       data.message.contains("event")
@@ -876,15 +892,40 @@ class NotificationViewState extends State<NotificationView> {
                                   NotificationDetails(
                                       teamId: data.targetId,
                                       status: "Rejected")))
-                      // : data.targetType.contains("user")
-                      //     ? data.message.contains("team")
-                      //         ? Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //                 builder: (context) => TeamProfilePage(
-                      //                       teamLeadId: teamLeadId,
-                      //                     )))
-                      //         : null
+                          : data.targetType.contains("user")
+                          ? data.message.contains("team")
+                          ? data.message.contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId: teamLead,
+                                status: "Approved",
+                              )))
+                          : data.message.contains("Waiting")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId:
+                                teamLead,
+                                status: "Waiting",
+                              )))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId:
+                                teamLead,
+                                status: "Rejected",
+                              )))
+                          : null
                           : null;
                     }),
               ),
@@ -971,18 +1012,26 @@ class NotificationViewState extends State<NotificationView> {
                         ),
                       ],
                     ),
-                    onTap: () {
-                      print("Target id");
-                      print(data.targetId);
-                      if (data.targetType.contains("user")) {
+                    onTap: () async {
+                      // print("Target id");
+                      // print(data.targetId);
+
+                      if (data.targetType == "user") {
                         if (data.message.contains("team")) {
                           if (data.message.contains("Approved"))
-                            getTeamId(data.createdBy, "Approved");
+                            getTeamId(data.message.split("\"")[1], "Approved");
                           else if (data.message.contains("Waiting"))
-                            getTeamId(data.createdBy, "Waiting");
+                            getTeamId(data.message.split("\"")[1], "Waiting");
                           else
-                            getTeamId(data.createdBy, "Rejected");
+                            getTeamId(data.message.split("\"")[1], "Rejected");
                         }
+                      } else if (data.targetType == "team") {
+                        if (data.message.contains("Approved"))
+                          getTeamId(data.message.split("\"")[1], "Approved");
+                        else if (data.message.contains("Waiting"))
+                          getTeamId(data.message.split("\"")[1], "Waiting");
+                        else
+                          getTeamId(data.message.split("\"")[1], "Rejected");
                       }
                       data.message.contains("event")
                           ? data.message.contains("Approved")
@@ -1005,7 +1054,7 @@ class NotificationViewState extends State<NotificationView> {
                               builder: (context) => NotificationDetails(
                                   eventId: data.targetId,
                                   status: "Rejected")))
-                          : data.targetType.contains("team")
+                          : data.targetType == "team"
                           ? data.message.contains("Approved")
                           ? Navigator.push(
                           context,
@@ -1013,29 +1062,54 @@ class NotificationViewState extends State<NotificationView> {
                               builder: (context) => NotificationDetails(
                                   teamId: data.targetId,
                                   status: "Approved")))
-                          : data.message.contains("Waiting")
+                          : data.message.contains("Rejected")
                           ? Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => NotificationDetails(
                                   teamId: data.targetId,
-                                  status: "Waiting")))
+                                  status: "Rejected")))
                           : Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   NotificationDetails(
                                       teamId: data.targetId,
-                                      status: "Rejected")))
-                      // : data.targetType.contains("user")
-                      //     ? data.message.contains("team")
-                      //         ? Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //                 builder: (context) => TeamProfilePage(
-                      //                       teamLeadId: teamLeadId,
-                      //                     )))
-
+                                      status: "Waiting")))
+                          : data.targetType == "user"
+                          ? data.message.contains("team")
+                          ? data.message.contains("Rejected")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId: teamLead,
+                                status: "Rejected",
+                              )))
+                          : data.message.contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId:
+                                teamLead,
+                                status: "Approved",
+                              )))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId:
+                                teamLead,
+                                status: "Waiting",
+                              )))
+                          : null
                           : null;
                     }),
               ),
@@ -1286,18 +1360,13 @@ class NotificationViewState extends State<NotificationView> {
         });
   }
 
-  getTeamId(String userEmail, String status) async {
-    List<TeamRequest> teamList;
-    teamList = await teamPageVM.getTeamRequests(status);
+  getTeamId(String teamTitle, String status) async {
+    print("team title");
+    print(teamTitle);
+    List<TeamRequest> teamList = await teamPageVM.getTeamRequests(status);
     for (var team in teamList) {
-      print("TEAM");
-      if (team.teamLeadId == userEmail) {
-        setState(() {
-          teamId = team.id;
-          teamLeadId = team.teamLeadId;
-          print("TEAMID");
-          print(teamId);
-        });
+      if (team.teamTitle == teamTitle) {
+        teamLead = team.teamLeadId;
       }
     }
   }

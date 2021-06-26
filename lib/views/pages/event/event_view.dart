@@ -19,6 +19,7 @@ import 'package:flutter_kirthan/views/widgets/event/event_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/event/event_panel.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -312,6 +313,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
 
 class Search extends SearchDelegate {
   Future<List<EventRequest>> Users = eventPageVM.getEventRequests("All");
+
   List<EventRequest> eventlist = new List<EventRequest>();
   List<String> recentSearch = [];
   ThemeData appBarTheme(BuildContext context) {
@@ -355,6 +357,29 @@ class Search extends SearchDelegate {
         builder: (_, AsyncSnapshot<List<EventRequest>> snapshot) {
           if (snapshot.data != null) {
             eventlist = snapshot.data;
+            String currentTime =
+                "${DateTime.now().year}-${DateTime.now().month < 10 ? ("0" + DateTime.now().month.toString()) : DateTime.now().month.toString()}-${DateTime.now().day < 10 ? ("0" + DateTime.now().day.toString()) : DateTime.now().day.toString()}:${DateTime.now().hour < 10 ? ("0" + DateTime.now().hour.toString()) : DateTime.now().hour.toString()}:${DateTime.now().minute < 10 ? ("0" + DateTime.now().minute.toString()) : DateTime.now().minute.toString()}";
+            final format = DateFormat("yyyy-MM-dd");
+            for (var event in eventlist) {
+              DateTime date =
+              DateTime.parse(event.eventDate).add(new Duration(days: 1));
+              String eventdate = date.toString();
+            }
+
+            eventlist = eventlist
+                .where((e) =>
+            (format.format(DateTime.parse(e.eventDate)
+                .add(new Duration(days: 1)))
+
+                // .toString()
+                +
+                ":" +
+                e.eventEndTime)
+                .compareTo(currentTime) ==
+                1)
+                .toList();
+            eventlist.sort((a, b) => (a.eventDate + a.eventStartTime)
+                .compareTo(b.eventDate + b.eventStartTime));
             List<EventRequest> suggestionList = [];
             query.isEmpty
                 ? suggestionList = eventlist
@@ -397,6 +422,29 @@ class Search extends SearchDelegate {
         builder: (_, AsyncSnapshot<List<EventRequest>> snapshot) {
           if (snapshot.data != null) {
             eventlist = snapshot.data;
+            String currentTime =
+                "${DateTime.now().year}-${DateTime.now().month < 10 ? ("0" + DateTime.now().month.toString()) : DateTime.now().month.toString()}-${DateTime.now().day < 10 ? ("0" + DateTime.now().day.toString()) : DateTime.now().day.toString()}:${DateTime.now().hour < 10 ? ("0" + DateTime.now().hour.toString()) : DateTime.now().hour.toString()}:${DateTime.now().minute < 10 ? ("0" + DateTime.now().minute.toString()) : DateTime.now().minute.toString()}";
+            final format = DateFormat("yyyy-MM-dd");
+            for (var event in eventlist) {
+              DateTime date =
+              DateTime.parse(event.eventDate).add(new Duration(days: 1));
+              String eventdate = date.toString();
+            }
+
+            eventlist = eventlist
+                .where((e) =>
+            (format.format(DateTime.parse(e.eventDate)
+                .add(new Duration(days: 1)))
+
+                // .toString()
+                +
+                ":" +
+                e.eventEndTime)
+                .compareTo(currentTime) ==
+                1)
+                .toList();
+            eventlist.sort((a, b) => (a.eventDate + a.eventStartTime)
+                .compareTo(b.eventDate + b.eventStartTime));
             List<EventRequest> suggestionList = [];
             query.isEmpty
                 ? suggestionList = eventlist

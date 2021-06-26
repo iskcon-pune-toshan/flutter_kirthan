@@ -198,7 +198,7 @@ class _TempleWriteState extends State<TempleWrite> {
                   child: AlertDialog(
                       title: new Text("Details Filled !"),
                       content: new Text(
-                        "Click Submit on top right corner of the screen.",
+                        "Click Submit to continue",
                       ),
                       actions: <Widget>[
                         new FlatButton(
@@ -219,7 +219,8 @@ class _TempleWriteState extends State<TempleWrite> {
                             );
 
                             _scaffoldKey.currentState.showSnackBar(mysnackbar);
-
+                           // Navigator.of(context).pushNamedAndRemoveUntil('/screen6', ModalRoute.withName('/screen5'));
+                            Navigator.pop(context);
                             //String s = jsonEncode(userrequest.mapToJson());
                             //service.registerUser(s);
                             //print(s);
@@ -229,9 +230,10 @@ class _TempleWriteState extends State<TempleWrite> {
                           child: new Text("Close"),
                           onPressed: () {
                             setState(() => complete = false);
+                            Navigator.pop(context);
                           },
                         ),
-                        Card(
+                    /*    Card(
                           child: Column(
                             children: <Widget>[
                               RaisedButton.icon(
@@ -253,7 +255,7 @@ class _TempleWriteState extends State<TempleWrite> {
                               ),
                             ],
                           ),
-                        ),
+                        ),*/
                       ]),
                 ))
               : Expanded(

@@ -15,6 +15,7 @@ import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_temple_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_kirthan/views/pages/temple/temple_create.dart';
 
 final UserPageViewModel userPageVM =
     UserPageViewModel(apiSvc: UserAPIService());
@@ -260,7 +261,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                       ],
                                     )),
                                 SizedBox(
-                                  height: 60,
+                                  height: 45,
                                 ),
                                 if(uname.roleId==3||uname.roleId==4)
                                   FutureBuilder<List<Temple>>(
@@ -286,8 +287,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                      child: DropdownButtonFormField<
                                                           Temple>(
                                                     value: _selectedTemple,
-                                                    icon: const Icon(Icons
-                                                        .supervisor_account),
+                                                    icon: const Icon(Icons.title),
                                                     hint: Text('Select Temple'),
                                                     items: snapshot.data
                                                         .map((team) =>
@@ -325,8 +325,20 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                             }
                                         }
                                       }),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                child:FlatButton(
+                                  child:Text('Add Temple'),
+                                  onPressed: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                        builder: (context) => TempleWrite()));
+                                  },
+                                ),
+                                ),
                                 SizedBox(
-                                  height: 60,
+                                  height: 45,
                                 ),
                                 uname.roleId != 2
                                     ? Container(
@@ -468,7 +480,7 @@ class _InitiateUserDetailsState extends State<InitiateUserDetails> {
                                                     UserName + " is now User",style: TextStyle(fontSize: notifier.custFontSize),),
                                                 duration:
                                                     new Duration(seconds: 2),
-                                                backgroundColor: Colors.white,
+                                                backgroundColor: Colors.green,
                                               );
                                               Scaffold.of(context)
                                                   .showSnackBar(mysnackbar);

@@ -426,7 +426,6 @@ class _EventWriteState extends State<EventWrite> {
                                   return "Please select time";
                                 } else
                                   {
-
                                     DateFormat dateFormat = new DateFormat.Hm();
                                     DateTime currenttime=dateFormat.parse(DateTime.now().toString().substring(11,15));
                                     if(eventrequest.eventDate ==  DateFormat("yyyy-MM-dd")

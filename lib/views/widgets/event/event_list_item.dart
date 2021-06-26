@@ -17,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 var distance;
 
 class Choice {
@@ -167,7 +168,7 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
                 // ch,
                   children: <Widget>[
                     Container(
-                      width: MediaQuery.of(context).size.width*0.4,
+                      width: MediaQuery.of(context).size.width * 0.4,
                       padding: EdgeInsets.only(left: 10),
                       child: Consumer<ThemeNotifier>(
                         builder: (context, notifier, child) => Text(
@@ -232,7 +233,6 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
 //shape: Border.all(width: 2.0, color: Colors.black)
                                 ),
                               ),
-
 
 /*    Consumer<int_item>(
     builder: (context, int_item, child) => IconButton(
@@ -332,12 +332,27 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
         //margin: const EdgeInsets.only(left: 4.0),
         child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
           final eventDate = widget.eventrequest.eventDate;
+          final eventTime = widget.eventrequest.eventStartTime;
           DateTime EventDate = DateTime.parse(eventDate);
           DateTime now = DateTime.now();
           var dateTime = DateFormat('yyyy-MM-dd').format(now);
           DateTime dateTimeNow = DateTime.parse(dateTime);
           int daysRemaining = EventDate.difference(dateTimeNow).inDays;
           if (daysRemaining == 0) {
+            String currentTime =
+                "${DateTime.now().hour < 10 ? ("0" + DateTime.now().hour.toString()) : DateTime.now().hour.toString()}:${DateTime.now().minute < 10 ? ("0" + DateTime.now().minute.toString()) : DateTime.now().minute.toString()}";
+            final format = DateFormat("HH:mm");
+            if (eventTime.compareTo(currentTime) == -1) {
+              return Text(
+                'On-going',
+                //daysRemaining.abs().toString() + ' days ago',
+                style: TextStyle(
+                  // color: KirthanStyles.subTitleColor,
+                    fontSize: notifier.custFontSize,
+                    color: Colors.green[700]),
+              );
+            }
+
             return Text(
               'Today',
               //daysRemaining.abs().toString() + ' days ago',
@@ -508,7 +523,6 @@ class _EventRequestsListItemState extends State<EventRequestsListItem> {
                           ]),
                         ),
                       ),
-
                       FutureBuilder(
                           future: getDetails(),
                           builder: (_, AsyncSnapshot snapshot) {
