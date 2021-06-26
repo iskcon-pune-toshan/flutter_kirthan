@@ -15,6 +15,7 @@ import 'package:flutter_kirthan/views/pages/myevent/myevent_view.dart';
 import 'package:flutter_kirthan/views/pages/signin/login.dart';
 import 'package:flutter_kirthan/views/pages/signin/signup.dart';
 import 'package:flutter_kirthan/views/pages/team/request_code.dart';
+import 'package:flutter_kirthan/views/pages/team/initiate_team.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
 import 'package:flutter_kirthan/views/pages/team/team_profile_page.dart';
 import 'package:flutter_kirthan/views/pages/user/inviteLocalAdmin.dart';
@@ -298,7 +299,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     },
                   ),
                 ),
-              if (role_id == 1 || role_id == 2)
+              if (role_id == 2)
                 Card(
                   child: ListTile(
                     title: Text(
@@ -314,7 +315,21 @@ class _MyDrawerState extends State<MyDrawer> {
                     },
                   ),
                 ),
-              if (role_id == 3 || role_id == 4)
+              if(role_id == 1)
+                Card(
+                  child: ListTile(
+                    title:Text(
+                      "Initiate team",
+                      style: TextStyle(fontSize: notifier.custFontSize),
+                    ),
+                    trailing: Icon(Icons.group_add),
+                    onTap: (){
+                      Navigator.push(context,
+                          MaterialPageRoute (builder: (context) => InitiateTeam()));
+                    },
+                  )
+                ),
+              if (role_id == 3 || role_id == 2 || role_id == 1)
                 Card(
                   child: ListTile(
                     title: Text(
