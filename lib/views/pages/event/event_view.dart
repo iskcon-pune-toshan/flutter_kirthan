@@ -41,7 +41,7 @@ class EventView extends StatefulWidget {
 }
 
 class _EventViewState extends State<EventView> with BaseAPIService {
-  Future<bool> _onWillPop() async {
+/*  Future<bool> _onWillPop() async {
     return (await showDialog(
         context: context,
         builder: (context) => new AlertDialog(
@@ -80,7 +80,7 @@ class _EventViewState extends State<EventView> with BaseAPIService {
               ),
             ]))) ??
         false;
-  }
+  }*/
 
   List<String> eventTime = [
     "Today",
@@ -88,7 +88,6 @@ class _EventViewState extends State<EventView> with BaseAPIService {
     "This Week",
     "This Month",
     "Clear Filter"
-    // "Near to you"
   ];
   String date;
   String datetomm;
@@ -363,15 +362,12 @@ class Search extends SearchDelegate {
             for (var event in eventlist) {
               DateTime date =
               DateTime.parse(event.eventDate).add(new Duration(days: 1));
-              String eventdate = date.toString();
             }
 
             eventlist = eventlist
                 .where((e) =>
             (format.format(DateTime.parse(e.eventDate)
                 .add(new Duration(days: 1)))
-
-                // .toString()
                 +
                 ":" +
                 e.eventEndTime)
@@ -390,14 +386,6 @@ class Search extends SearchDelegate {
             return ListView.builder(
               itemCount: suggestionList.length,
               itemBuilder: (context, index) {
-                // return Card(
-                //   child: ListTile(
-                //     title: Text(
-                //       suggestionList[index],
-                //     ),
-                //     //leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-                //   ),
-                // );
                 return EventRequestsListItem(
                   eventrequest: suggestionList[index],
                   eventPageVM: eventPageVM,
@@ -412,8 +400,6 @@ class Search extends SearchDelegate {
           );
         });
   }
-
-  // final List<String> listExample;
   List<String> recentList = [];
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -435,8 +421,6 @@ class Search extends SearchDelegate {
                 .where((e) =>
             (format.format(DateTime.parse(e.eventDate)
                 .add(new Duration(days: 1)))
-
-                // .toString()
                 +
                 ":" +
                 e.eventEndTime)
@@ -455,14 +439,6 @@ class Search extends SearchDelegate {
             return ListView.builder(
               itemCount: suggestionList.length,
               itemBuilder: (context, index) {
-                // return Card(
-                //   child: ListTile(
-                //     title: Text(
-                //       suggestionList[index],
-                //     ),
-                //     //leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-                //   ),
-                // );
                 return EventRequestsListItem(
                   eventrequest: suggestionList[index],
                   eventPageVM: eventPageVM,

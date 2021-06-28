@@ -49,7 +49,6 @@ class EventWritePublic extends StatefulWidget {
 
 class _EventWriteState extends State<EventWritePublic> {
   List<String> pinCode;
-
   getPinCode(String city) async {
     List<geo.Location> location;
     List<geo.Placemark> placemark;
@@ -59,11 +58,7 @@ class _EventWriteState extends State<EventWritePublic> {
     placemark = await geo.placemarkFromCoordinates(
         location[0].latitude, location[0].longitude);
     pincodeController.text = placemark[0].postalCode;
-    //pinCode = placemark.postalCode;
-
-    // return placemark;
   }
-
   String errorText;
   FocusNode myFocusNode = new FocusNode();
   TeamRequest selectedTeam;
@@ -76,9 +71,6 @@ class _EventWriteState extends State<EventWritePublic> {
   final _formKey = GlobalKey<FormState>();
   EventRequest eventrequest = new EventRequest();
 
-  String _selectedCity;
-  String _selectedState;
-  String _selectedCountry;
   String _selectedCategory;
   bool isDisabled;
   void initState() {
@@ -1226,75 +1218,6 @@ class _EventWriteState extends State<EventWritePublic> {
                           return null;
                         },
                       ),
-
-                      /*    Column(
-                        children: */ /*<Widget>[
-                          DropdownButtonFormField<String>(
-                            value: _selectedCity,
-                            icon: const Icon(Icons.location_city),
-                            hint: Text('Select City',
-                                style: TextStyle(color: Colors.grey)),
-                            items: _cities
-                                .map((city) => DropdownMenuItem<String>(
-                                      value: city,
-                                      child: Text(city),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedCity = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              eventrequest.city = input;
-                            },
-                          ),
-                          DropdownButtonFormField<String>(
-                            value: _selectedState,
-                            icon: const Icon(Icons.location_city),
-                            hint: Text(
-                              'Select State',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            items: _states
-                                .map((state) => DropdownMenuItem(
-                                      value: state,
-                                      child: Text(state),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedState = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              eventrequest.state = input;
-                            },
-                          ),
-                          DropdownButtonFormField<String>(
-                            value: _selectedCountry,
-                            icon: const Icon(Icons.location_city),
-                            hint: Text('Select Country',
-                                style: TextStyle(color: Colors.grey)),
-                            items: ['IND', 'Kyrgyzstan']
-                                .map((country) => DropdownMenuItem(
-                                      value: country,
-                                      child: Text(country),
-                                    ))
-                                .toList(),
-                            onChanged: (input) {
-                              setState(() {
-                                _selectedCountry = input;
-                              });
-                            },
-                            onSaved: (input) {
-                              eventrequest.country = input;
-                            },
-                          ),
-                        ],*/ /*
-                      ),*/
-                      //getTeamsWidget(),
-                      //getTeamsWidget(),
                       TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -1352,13 +1275,9 @@ class _EventWriteState extends State<EventWritePublic> {
                                   await auth.currentUser();
                                   final String email = user.email;
                                   eventrequest.createdBy = email;
-
                                   _formKey.currentState.save();
-                                  //eventrequest.isProcessed = true;
                                   eventrequest.isPublicEvent = true;
-                                  // eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
-
-                                  List<CommonLookupTable>
+                                 List<CommonLookupTable>
                                   selectedCategory =
                                   await commonLookupTablePageVM
                                       .getCommonLookupTable(
@@ -1372,12 +1291,8 @@ class _EventWriteState extends State<EventWritePublic> {
                                   eventrequest.createdTime = dt;
                                   eventrequest.updatedBy = email;
                                   eventrequest.updatedTime = null;
-                                  //eventrequest.approvalStatus = "Processing";
-                                  //eventrequest.approvalComments = "AAA";
                                   Map<String, dynamic> teammap =
                                   eventrequest.toJson();
-                                  //TeamRequest newteamrequest = await apiSvc
-                                  //  ?.submitNewTeamRequest(teammap);
                                   EventRequest neweventrequest =
                                   await eventPageVM
                                       .submitNewEventRequest(teammap);
@@ -1406,8 +1321,6 @@ class _EventWriteState extends State<EventWritePublic> {
                                                 EventView()));
                                   });
 
-                                  // Scaffold.of(context).showSnackBar(mysnackbar);
-                                  //eventteamPageVM.submitNewEventTeamMapping(listofEventUsers);
                                 }
                               }),
                         ],

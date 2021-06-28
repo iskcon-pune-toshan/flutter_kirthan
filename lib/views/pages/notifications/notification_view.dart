@@ -328,52 +328,6 @@ class NotificationViewState extends State<NotificationView> {
               : notificationPageVM.getNotifications();
         });
       });
-    // return Column(
-    //   mainAxisAlignment: MainAxisAlignment.start,
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: [
-    //     SizedBox(
-    //       height: 10,
-    //     ),
-    //     Row(
-    //       children: [
-    //         SizedBox(
-    //           width: 10,
-    //         ),
-    //         Text(
-    //           "Today",
-    //           style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //     CustomTile(data, () {
-    //       setState(() {
-    //         notificationPageVM.getNotificationsBySpec("TODAY");
-    //       });
-    //     }),
-    //     Divider(),
-    //     Row(
-    //       children: [
-    //         SizedBox(
-    //           width: 10,
-    //         ),
-    //         Text(
-    //           "Pending Notifications",
-    //           style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //     CustomTile(data, () {
-    //       setState(() {
-    //         notificationPageVM.getNotificationsBySpec("NOT TODAY");
-    //       });
-    //     }),
-    //   ],
-    // );
     else if (icon == null)
       //user accept, reject ntf layout
       return Container(
@@ -959,13 +913,6 @@ class NotificationViewState extends State<NotificationView> {
                             overflow: TextOverflow.clip,
                           ),
                         ),
-                        // Text(
-                        //   data.createdAt
-                        //       .toString()
-                        //       .substring(11, 16),
-                        //   overflow: TextOverflow.clip,
-                        //   style: TextStyle(color: Colors.grey[500]),
-                        // ),
                       ],
                     ),
                     subtitle: Text(
@@ -1130,11 +1077,6 @@ class NotificationViewState extends State<NotificationView> {
       onSlideAnimationChanged: slideAnimationChanged,
       onSlideIsOpenChanged: slideIsOpenChanged,
     );
-    //print(notificationPageVM.newNotificationCount);
-    //notificationPageVM.newNotificationCount;
-    //  print(context);
-    //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
-    //_nvm.notificationCount = 0;
   }
 
   void slideAnimationChanged(Animation<double> slideAnimation) {
@@ -1154,7 +1096,6 @@ class NotificationViewState extends State<NotificationView> {
     await Future.delayed(Duration(seconds: 2));
 
     setState(() {
-      // notificationPageVM.getNotificationsBySpec("Today");
       notificationPageVM.getNotifications();
     });
 
@@ -1192,7 +1133,6 @@ class NotificationViewState extends State<NotificationView> {
             return ListView.builder(
                 scrollDirection: direction,
                 itemBuilder: (context, itemCount) {
-                  //final Axis slidableDirection =
                   direction == Axis.horizontal
                       ? Axis.vertical
                       : Axis.horizontal;
@@ -1204,107 +1144,6 @@ class NotificationViewState extends State<NotificationView> {
                     actionPane: SlidableDrawerActionPane(),
                     actions: <Widget>[],
                     secondaryActions: <Widget>[
-                     /* Visibility(
-                        visible: isVisible,
-                        child:*/ /*IconSlideAction(
-                          caption: 'View',
-                          color: Colors.grey.shade200,
-                          icon: Icons.more_horiz,
-                          onTap: () async {
-                            UserRequest userReq = new UserRequest();
-                            UserRequest localAdmin = new UserRequest();
-                            TeamRequest team = new TeamRequest();
-                            EventRequest eventRequest = new EventRequest();
-                            if (snapshot.data[itemCount].targetType == "team") {
-                              List<TeamRequest> teamList =
-                              await teamPageVM.getTeamRequests(snapshot
-                                  .data[itemCount].targetId
-                                  .toString());
-                              for (var t in teamList) {
-                                team = t;
-                              }
-                            }
-                            if (snapshot.data[itemCount].targetType == "user" &&
-                                snapshot.data[itemCount].message
-                                    .contains("Invited user")) {
-                              List<TeamRequest> teamList = await teamPageVM
-                                  .getTeamRequests("teamLeadId:" +
-                                  snapshot.data[itemCount].createdBy);
-                              for (var t in teamList) {
-                                team = t;
-                              }
-                            }
-                            List<UserRequest> userRequestList =
-                            await userPageVM.getUserRequests(
-                                snapshot.data[itemCount].createdBy);
-                            for (var user in userRequestList) {
-                              userReq = user;
-                            }
-                            List<UserRequest> user =
-                            await userPageVM.getUserRequests(
-                                snapshot.data[itemCount].createdBy);
-                            String userName = " ";
-                            for (var u in user) {
-                              userName = u.fullName;
-                            }
-                            String eventId =
-                            snapshot.data[itemCount].targetId.toString();
-                            List<EventRequest> eventList = await eventPageVM
-                                .getEventRequests("event_id:$eventId");
-                            for (var event in eventList) {
-                              eventRequest = event;
-                            }
-                            List<UserRequest> localAdminList =
-                            await userPageVM.getUserRequests(
-                                snapshot.data[itemCount].updatedBy);
-                            for (var user in localAdminList) {
-                              localAdmin = user;
-                            }
-                            // if (snapshot.data[itemCount].message
-                            //     .contains("Request to create an event") &&
-                            //     snapshot.data[itemCount].targetType
-                            //         .contains("event")) {
-                            //   //   print("Printing dara");
-                            //   // print(snapshot.data[itemCount]);
-                            //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) => AdminEventDetails(
-                            //               UserName: userName,
-                            //               eventRequest: eventRequest,
-                            //               data: snapshot.data[itemCount],
-                            //             )));
-                            //   });
-                            // } else
-                            if (snapshot.data[itemCount].message
-                                .contains("team") ||
-                                snapshot.data[itemCount].message
-                                    .contains("Invited user")) {
-                              // print(snapshot.data[itemCount].targetId);
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                //Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TeamProfilePage(
-                                          teamTitle: team.teamTitle,
-                                        )));
-                              });
-                            }
-                            // else {
-                            //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                            //     Navigator.pop(context);
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) => AdminView()));
-                            //   });
-                            // }
-                          },
-                          closeOnTap: false,
-                        ),*/
-                    //  ),
                       IconSlideAction(
                         caption: 'Delete',
                         color: Colors.red,
@@ -1349,8 +1188,7 @@ class NotificationViewState extends State<NotificationView> {
                 },
                 itemCount: snapshot.data.length);
           } else if (snapshot.hasError) {
-            // print(snapshot);
-            //print(snapshot.error.toString() + " Error ");
+
             return Center(
                 child: Text(
                     'Error loading notifications' + snapshot.error.toString()));
@@ -1371,84 +1209,3 @@ class NotificationViewState extends State<NotificationView> {
     }
   }
 }
-
-bool isVisible;
-void showNotification(
-    BuildContext context, NotificationModel notification, var callback) {
-  bool setAction = false;
-  if (notification.action == "waiting") setAction = true;
-  showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: Text(notification.message),
-        title: Center(
-          child: Text(
-            "Notification Alert!",
-          ),
-        ),
-        actions: <Widget>[
-          /*Visibility(
-            visible: isVisible,
-            child: FlatButton(
-              child: Text("View"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AdminView()));
-              },
-            ),
-          ),*/
-          FlatButton(
-              child: Text("Discard"),
-              onPressed: () {
-                /*setState(() {
-                    Map<String, dynamic> processrequestmap =
-                    new Map<String, dynamic>();
-                    processrequestmap["id"] = notification.id;
-                    print(notification.id);
-                    notification.message.contains("Your") ||
-                        notification.message.contains("Registered") ||
-                        notification.message.contains("cancelled") ||
-                        notification.message
-                            .contains("has been created")
-                        ? notificationPageVM.deleteNotification(
-                        processrequestmap, false)
-                        : notificationPageVM.deleteNotification(
-                        processrequestmap, true);
-                    Navigator.pop(context);
-                  });*/
-              }),
-        ],
-      ));
-}
-
-// void createTeam(
-//     BuildContext context, NotificationModel notification) {
-//   bool setAction = false;
-//   UserRequest userRequest = new UserRequest();
-//
-//   if (notification.action == "waiting") setAction = true;
-//   showDialog(
-//     context: context,
-//     builder: (context) => Visibility(
-//       visible: isVisible,
-//       child: FlatButton(
-//         child: Text("Create team"),
-//         onPressed: () async {
-//           List<UserRequest> userRequestList =
-//               await userPageVM.getUserRequests(notification.createdBy);
-//           for (var user in userRequestList) {
-//             userRequest = user;
-//           }
-//           Navigator.pop(context);
-//           Navigator.push(
-//               context,
-//               MaterialPageRoute(
-//                   builder: (context) => TeamWrite(
-//                         userRequest: userRequest,
-//                       )));
-//         },
-//       ),
-//     ),
-//   );
-// }
