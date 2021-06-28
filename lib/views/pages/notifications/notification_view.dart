@@ -1204,9 +1204,9 @@ class NotificationViewState extends State<NotificationView> {
                     actionPane: SlidableDrawerActionPane(),
                     actions: <Widget>[],
                     secondaryActions: <Widget>[
-                      Visibility(
+                     /* Visibility(
                         visible: isVisible,
-                        child: IconSlideAction(
+                        child:*/ /*IconSlideAction(
                           caption: 'View',
                           color: Colors.grey.shade200,
                           icon: Icons.more_horiz,
@@ -1303,8 +1303,8 @@ class NotificationViewState extends State<NotificationView> {
                             // }
                           },
                           closeOnTap: false,
-                        ),
-                      ),
+                        ),*/
+                    //  ),
                       IconSlideAction(
                         caption: 'Delete',
                         color: Colors.red,
@@ -1387,7 +1387,7 @@ void showNotification(
           ),
         ),
         actions: <Widget>[
-          Visibility(
+          /*Visibility(
             visible: isVisible,
             child: FlatButton(
               child: Text("View"),
@@ -1397,7 +1397,7 @@ void showNotification(
                     MaterialPageRoute(builder: (context) => AdminView()));
               },
             ),
-          ),
+          ),*/
           FlatButton(
               child: Text("Discard"),
               onPressed: () {
