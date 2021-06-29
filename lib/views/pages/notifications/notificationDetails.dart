@@ -22,14 +22,15 @@ class NotificationDetails extends StatefulWidget {
   String status;
   int targetId;
   String teamLeadId;
+  String teamName;
   @override
   _NotificationDetailsState createState() => _NotificationDetailsState();
-  NotificationDetails({
-    @required this.eventId,
-    this.status,
-    this.teamId,
-    this.teamLeadId,
-  });
+  NotificationDetails(
+      {@required this.eventId,
+        this.status,
+        this.teamId,
+        this.teamLeadId,
+        this.teamName});
 }
 
 class _NotificationDetailsState extends State<NotificationDetails> {
@@ -522,7 +523,7 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   ),
                                   initialValue: finalTeam != null
                                       ? finalTeam.experience
-                                      : " ",
+                                      : "",
                                 ),
                               ],
                             ),
@@ -555,7 +556,9 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                         for (var team in teamRequests
                             .where((element) =>
                         element.approvalStatus ==
-                            "Rejected")
+                            "Rejected" &&
+                            element.teamTitle ==
+                                widget.teamName)
                             .toList()) {
                           print("email");
                           print(team.teamLeadId);
@@ -932,7 +935,9 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                           color:
                                           Colors.grey)),
                                 ),
-                                initialValue: "l",
+                                initialValue: finalTeam != null
+                                    ? finalTeam.experience
+                                    : "",
                               ),
                             ],
                           ),
@@ -1129,7 +1134,9 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                       borderSide: BorderSide(
                                           color: Colors.grey)),
                                 ),
-                                initialValue: "l",
+                                initialValue: finalTeam != null
+                                    ? finalTeam.experience
+                                    : "",
                               ),
                             ],
                           ),
