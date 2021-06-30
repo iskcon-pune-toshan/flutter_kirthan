@@ -95,442 +95,474 @@ class _description_profileState extends State<description_profile> {
             style: TextStyle(fontSize: notifier.custFontSize),
           ),
         ),
-        body: FutureBuilder(
-            future: getEmail(),
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                String email = snapshot.data;
-                return FutureBuilder(
-                    future: teamPageVM.getTeamRequests("teamLead:" + email),
-                    builder: (context, snapshot) {
-                      if (snapshot.data != null) {
-                        List<TeamRequest> teamList = snapshot.data;
-                        if (teamList.isNotEmpty) {
-                          for (var u in teamList) {
-                            teamrequest = u;
-                          }
-                          counter++;
+        body: SingleChildScrollView(
+          child: FutureBuilder(
+              future: getEmail(),
+              builder: (context, snapshot) {
+                if (snapshot.data != null) {
+                  String email = snapshot.data;
+                  return FutureBuilder(
+                      future: teamPageVM.getTeamRequests("teamLead:" + email),
+                      builder: (context, snapshot) {
+                        if (snapshot.data != null) {
+                          List<TeamRequest> teamList = snapshot.data;
+                          if (teamList.isNotEmpty) {
+                            for (var u in teamList) {
+                              teamrequest = u;
+                            }
+                            counter++;
 
-                          return Form(
-                            key: _formKey,
-                            autovalidate: true,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Container(
-                                    //color: Colors.black26,
-                                    padding: const EdgeInsets.all(10),
-                                    child: TextFormField(
-                                      style: TextStyle(
-                                          fontSize: notifier.custFontSize),
-                                      initialValue: teamrequest.teamDescription,
-                                      decoration: InputDecoration(
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide:
-                                          BorderSide(color: Colors.grey),
+                            return Form(
+                              key: _formKey,
+                              autovalidate: true,
+                              child: Column(
+                                children: [
+                                  Card(
+                                    child: Container(
+                                      //color: Colors.black26,
+                                      padding: const EdgeInsets.all(10),
+                                      child: TextFormField(
+                                        style: TextStyle(
+                                            fontSize: notifier.custFontSize),
+                                        initialValue:
+                                        teamrequest.teamDescription,
+                                        decoration: InputDecoration(
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide:
+                                            BorderSide(color: Colors.grey),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide:
+                                            BorderSide(color: Colors.green),
+                                          ),
+                                          labelText: "Enter team description",
+                                          hintText:
+                                          "Please enter the team description",
+                                          labelStyle: TextStyle(
+                                              fontSize: notifier.custFontSize,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey),
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                          ),
                                         ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide:
-                                          BorderSide(color: Colors.green),
-                                        ),
-                                        labelText: "Enter team description",
-                                        hintText:
-                                        "Please enter the team description",
-                                        labelStyle: TextStyle(
-                                            fontSize: notifier.custFontSize,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey),
-                                        hintStyle: TextStyle(
-                                          color: Colors.grey,
-                                        ),
+                                        onSaved: (input) {
+                                          teamrequest.teamDescription = input;
+                                        },
+                                        validator: (input) {
+                                          if (input.isEmpty) {
+                                            return "Enter valid description";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
                                       ),
-                                      validator: (input) {
-                                        if (input.isEmpty) {
-                                          return "Enter valid description";
-                                        } else {
-                                          return null;
-                                        }
-                                      },
                                     ),
                                   ),
-                                ),
-                                FutureBuilder(
-                                    future: commonLookupTablePageVM
-                                        .getCommonLookupTable(
-                                        "lookupType:Event-type-Category"),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.data != null) {
-                                        List<CommonLookupTable> cltList =
-                                            snapshot.data;
-                                        List<CommonLookupTable> currCategory =
-                                        cltList
-                                            .where((element) =>
-                                        element.id ==
-                                            teamrequest.category)
-                                            .toList();
-                                        for (var i in currCategory) {
-                                          _selectedCategory = i.description;
-                                        }
+                                  FutureBuilder(
+                                      future: commonLookupTablePageVM
+                                          .getCommonLookupTable(
+                                          "lookupType:Event-type-Category"),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.data != null) {
+                                          List<CommonLookupTable> cltList =
+                                              snapshot.data;
+                                          List<CommonLookupTable> currCategory =
+                                          cltList
+                                              .where((element) =>
+                                          element.id ==
+                                              teamrequest.category)
+                                              .toList();
+                                          for (var i in currCategory) {
+                                            _selectedCategory = i.description;
+                                          }
 
-                                        List<String> _category = cltList
-                                            .map((user) => user.description)
-                                            .toSet()
-                                            .toList();
-                                        return Card(
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                bottom: 20.0,
-                                                top: 20.0,
-                                                left: 10.0,
-                                                right: 10.0),
-                                            child: Consumer<ThemeNotifier>(
-                                              builder: (context, notifier,
-                                                  child) =>
-                                              (DropdownButtonFormField<
-                                                  String>(
+                                          List<String> _category = cltList
+                                              .map((user) => user.description)
+                                              .toSet()
+                                              .toList();
+                                          return Card(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  bottom: 20.0,
+                                                  top: 20.0,
+                                                  left: 10.0,
+                                                  right: 10.0),
+                                              child: Consumer<ThemeNotifier>(
+                                                builder: (context, notifier,
+                                                    child) =>
+                                                (DropdownButtonFormField<
+                                                    String>(
+                                                  style: TextStyle(
+                                                      fontSize: notifier
+                                                          .custFontSize +
+                                                          10,
+                                                      color: Colors.grey),
+                                                  value: _selectedCategory,
+                                                  //icon: const Icon(Icons.category),
+                                                  hint: Text('Select Category',
+                                                      style: TextStyle(
+                                                          fontSize: notifier
+                                                              .custFontSize,
+                                                          color: Colors.black)),
+                                                  items: _category
+                                                      .map(
+                                                          (category) =>
+                                                          DropdownMenuItem<
+                                                              String>(
+                                                            value: category,
+                                                            child: Consumer<
+                                                                ThemeNotifier>(
+                                                              builder: (context,
+                                                                  notifier,
+                                                                  child) =>
+                                                              (Text(
+                                                                category,
+                                                                style: TextStyle(
+                                                                    fontSize: notifier.custFontSize > 20
+                                                                        ? notifier.custFontSize +
+                                                                        10
+                                                                        : notifier
+                                                                        .custFontSize,
+                                                                    color: notifier.darkTheme
+                                                                        ? Colors.white
+                                                                        : Colors.black),
+                                                              )),
+                                                            ),
+                                                          ))
+                                                      .toList(),
+                                                  onChanged: (input) {
+                                                    setState(() {
+                                                      _selectedCategory = input;
+                                                    });
+                                                  },
+                                                  onSaved: (input) {
+                                                    _selectedCategory = input;
+                                                  },
+                                                )),
+                                              ),
+                                            ),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return Container();
+                                        } else {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                      }),
+                                  Card(
+                                    child: Container(
+                                      width: double.infinity,
+                                      //color: Colors.white,
+                                      padding: const EdgeInsets.all(10),
+                                      child: Consumer<ThemeNotifier>(
+                                        builder: (context, notifier, child) =>
+                                            FlatButton(
+                                              focusColor: myFocusNode.hasFocus
+                                                  ? Colors.black
+                                                  : Colors.grey,
+                                              focusNode: myFocusNode,
+                                              onPressed: () => _showIntegerDialog(),
+                                              child: new Align(
+                                                alignment: Alignment.topLeft,
+                                                child: counter == 1
+                                                    ? teamrequest.experience != null
+                                                    ? new Text(
+                                                  "Experience: " +
+                                                      teamrequest
+                                                          .experience,
+                                                  style: TextStyle(
+                                                      fontSize: notifier
+                                                          .custFontSize >
+                                                          20
+                                                          ? notifier
+                                                          .custFontSize +
+                                                          10
+                                                          : notifier
+                                                          .custFontSize,
+                                                      color: notifier
+                                                          .darkTheme
+                                                          ? Colors.white
+                                                          : Colors.black),
+                                                )
+                                                    : new Text(
+                                                  "Experience: ",
+                                                  style: TextStyle(
+                                                      fontSize: notifier
+                                                          .custFontSize >
+                                                          20
+                                                          ? notifier
+                                                          .custFontSize +
+                                                          10
+                                                          : notifier
+                                                          .custFontSize,
+                                                      color: notifier
+                                                          .darkTheme
+                                                          ? Colors.white
+                                                          : Colors.black),
+                                                )
+                                                    : new Text(
+                                                  "Experience: " +
+                                                      _currentvalue
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: notifier
+                                                          .custFontSize >
+                                                          20
+                                                          ? notifier
+                                                          .custFontSize +
+                                                          10
+                                                          : notifier
+                                                          .custFontSize,
+                                                      color:
+                                                      notifier.darkTheme
+                                                          ? Colors.white
+                                                          : Colors.black),
+                                                ),
+                                              ),
+                                            ),
+                                      ), //
+                                    ),
+                                    //),
+                                    elevation: 5,
+                                  ),
+                                  SizedBox(height: 20),
+
+                                  /*  Card(
+                                        child: Container(
+                                          padding: new EdgeInsets.all(10),
+                                          child: TextFormField(
+                                            style: TextStyle(fontSize: notifier.custFontSize),
+                                            initialValue: teamrequest.experience,
+                                            decoration: InputDecoration(
+                                                enabledBorder: UnderlineInputBorder(
+                                                  borderSide:
+                                                  BorderSide(color: Colors.grey),
+                                                ),
+                                                focusedBorder: UnderlineInputBorder(
+                                                  borderSide:
+                                                  BorderSide(color: Colors.green),
+                                                ),
+                                                labelText: "Experience",
+                                                hintText: "Add experience",
+                                                hintStyle: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: notifier.custFontSize
+                                                ),
+                                                labelStyle: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: notifier.custFontSize
+                                                )),
+                                           onSaved: (input) {
+                                              teamrequest.experience = input;
+                                            },
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Please enter some text";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        )
+                                         elevation: 5,
+                                      ),*/
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Divider(
+                                        thickness: 100.0,
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 20.0),
+                                        child: SizedBox(
+                                          width: 150,
+                                          height: 50,
+                                          child: RaisedButton(
+                                            color: KirthanStyles.colorPallete30,
+                                            child: Text('Submit',
                                                 style: TextStyle(
                                                     fontSize:
-                                                    notifier.custFontSize +
-                                                        10,
-                                                    color: Colors.grey),
-                                                value: _selectedCategory,
-                                                //icon: const Icon(Icons.category),
-                                                hint: Text('Select Category',
-                                                    style: TextStyle(
-                                                        fontSize: notifier
-                                                            .custFontSize,
-                                                        color: Colors.black)),
-                                                items: _category
-                                                    .map(
-                                                        (category) =>
-                                                        DropdownMenuItem<
-                                                            String>(
-                                                          value: category,
-                                                          child: Consumer<
-                                                              ThemeNotifier>(
-                                                            builder: (context,
-                                                                notifier,
-                                                                child) =>
-                                                            (Text(
-                                                              category,
-                                                              style: TextStyle(
-                                                                  fontSize: notifier.custFontSize > 20
-                                                                      ? notifier.custFontSize +
-                                                                      10
-                                                                      : notifier
-                                                                      .custFontSize,
-                                                                  color: notifier.darkTheme
-                                                                      ? Colors
-                                                                      .white
-                                                                      : Colors
-                                                                      .black),
-                                                            )),
-                                                          ),
-                                                        ))
-                                                    .toList(),
-                                                onChanged: (input) {
-                                                  setState(() {
-                                                    _selectedCategory = input;
-                                                  });
-                                                },
-                                                onSaved: (input) {
-                                                  _selectedCategory = input;
-                                                },
-                                              )),
-                                            ),
-                                          ),
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        return Container();
-                                      } else {
-                                        return Container(
-                                          padding: new EdgeInsets.all(10),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            children: [
-                                              Center(
-                                                  child: Text(
-                                                      "It seems like you don't have a team.",
+                                                    notifier.custFontSize)),
+                                            onPressed: () async {
+                                              if (_formKey.currentState
+                                                  .validate()) {
+                                                _formKey.currentState.save();
+                                                List<CommonLookupTable>
+                                                selectedCategory =
+                                                await commonLookupTablePageVM
+                                                    .getCommonLookupTable(
+                                                    "description:" +
+                                                        _selectedCategory);
+                                                for (var i
+                                                in selectedCategory) {
+                                                  teamrequest.category = i.id;
+                                                }
+                                                String dt = DateFormat(
+                                                    "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                                    .format(DateTime.now());
+                                                teamrequest.updatedTime = dt;
+                                                teamrequest.updatedBy = email;
+                                                teamrequest.experience =
+                                                    _currentvalue.toString();
+
+                                                String teamrequestStr =
+                                                jsonEncode(teamrequest
+                                                    .toStrJson());
+                                                teamPageVM
+                                                    .submitUpdateTeamRequest(
+                                                    teamrequestStr);
+                                                SnackBar mysnackbar = SnackBar(
+                                                  content: Text(
+                                                      "Team details updated $successful",
                                                       style: TextStyle(
                                                           fontSize: notifier
-                                                              .custFontSize))),
-                                              Center(
-                                                  child: Text(
-                                                      "Click on the button below to create one",
-                                                      style: TextStyle(
-                                                          fontSize: notifier
-                                                              .custFontSize))),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              FlatButton(
-                                                textColor: KirthanStyles
-                                                    .colorPallete60,
-                                                color: KirthanStyles
-                                                    .colorPallete30,
-                                                child: Text("Create team",
-                                                    style: TextStyle(
-                                                        fontSize: notifier
-                                                            .custFontSize)),
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              TeamWrite(
-                                                                userRequest:
-                                                                null,
-                                                                localAdmin:
-                                                                null,
-                                                              )));
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }
-                                    }),
-                                Card(
-                                  child: Container(
-                                    width: double.infinity,
-                                    //color: Colors.white,
-                                    padding: const EdgeInsets.all(10),
-                                    child: Consumer<ThemeNotifier>(
-                                      builder: (context, notifier, child) =>
-                                          FlatButton(
-                                            focusColor: myFocusNode.hasFocus
-                                                ? Colors.black
-                                                : Colors.grey,
-                                            focusNode: myFocusNode,
-                                            onPressed: () => _showIntegerDialog(),
-                                            child: new Align(
-                                              alignment: Alignment.topLeft,
-                                              child: counter == 1
-                                                  ? new Text(
-                                                "Experience: " +
-                                                    teamrequest.experience,
-                                                style: TextStyle(
-                                                    fontSize: notifier
-                                                        .custFontSize >
-                                                        20
-                                                        ? notifier
-                                                        .custFontSize +
-                                                        10
-                                                        : notifier
-                                                        .custFontSize,
-                                                    color: notifier.darkTheme
-                                                        ? Colors.white
-                                                        : Colors.black),
-                                              )
-                                                  : new Text(
-                                                "Experience: " +
-                                                    _currentvalue.toString(),
-                                                style: TextStyle(
-                                                    fontSize: notifier
-                                                        .custFontSize >
-                                                        20
-                                                        ? notifier
-                                                        .custFontSize +
-                                                        10
-                                                        : notifier
-                                                        .custFontSize,
-                                                    color: notifier.darkTheme
-                                                        ? Colors.white
-                                                        : Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                    ), //
-                                  ),
-                                  //),
-                                  elevation: 5,
-                                ),
-                                SizedBox(height: 20),
-
-                                /*  Card(
-                                      child: Container(
-                                        padding: new EdgeInsets.all(10),
-                                        child: TextFormField(
-                                          style: TextStyle(fontSize: notifier.custFontSize),
-                                          initialValue: teamrequest.experience,
-                                          decoration: InputDecoration(
-                                              enabledBorder: UnderlineInputBorder(
-                                                borderSide:
-                                                BorderSide(color: Colors.grey),
-                                              ),
-                                              focusedBorder: UnderlineInputBorder(
-                                                borderSide:
-                                                BorderSide(color: Colors.green),
-                                              ),
-                                              labelText: "Experience",
-                                              hintText: "Add experience",
-                                              hintStyle: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: notifier.custFontSize
-                                              ),
-                                              labelStyle: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: notifier.custFontSize
-                                              )),
-                                         onSaved: (input) {
-                                            teamrequest.experience = input;
-                                          },
-                                          validator: (value) {
-                                            if (value.isEmpty) {
-                                              return "Please enter some text";
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      )
-                                       elevation: 5,
-                                    ),*/
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Divider(
-                                      thickness: 100.0,
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(left: 20.0),
-                                      child: SizedBox(
-                                        width: 150,
-                                        height: 50,
-                                        child: RaisedButton(
-                                          color: KirthanStyles.colorPallete30,
-                                          child: Text('Submit',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  notifier.custFontSize)),
-                                          onPressed: () async {
-                                            if (_formKey.currentState
-                                                .validate()) {
-                                              _formKey.currentState.save();
-                                              List<CommonLookupTable>
-                                              selectedCategory =
-                                              await commonLookupTablePageVM
-                                                  .getCommonLookupTable(
-                                                  "description:" +
-                                                      _selectedCategory);
-                                              for (var i in selectedCategory) {
-                                                teamrequest.category = i.id;
+                                                              .custFontSize)),
+                                                  duration:
+                                                  new Duration(seconds: 4),
+                                                  backgroundColor: Colors.green,
+                                                );
+                                                Scaffold.of(context)
+                                                    .showSnackBar(mysnackbar);
                                               }
-                                              String dt = DateFormat(
-                                                  "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                                  .format(DateTime.now());
-                                              teamrequest.updatedTime = dt;
-                                              teamrequest.updatedBy = email;
-                                              teamrequest.experience =
-                                                  _currentvalue.toString();
-                                              String teamrequestStr =
-                                              jsonEncode(
-                                                  teamrequest.toStrJson());
-                                              teamPageVM
-                                                  .submitUpdateTeamRequest(
-                                                  teamrequestStr);
-                                              SnackBar mysnackbar = SnackBar(
-                                                content: Text(
-                                                    "Team details updated $successful",
-                                                    style: TextStyle(
-                                                        fontSize: notifier
-                                                            .custFontSize)),
-                                                duration:
-                                                new Duration(seconds: 4),
-                                                backgroundColor: Colors.green,
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(mysnackbar);
-                                            }
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(50.0),
-                                              side: BorderSide(width: 2)),
+                                            },
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(50.0),
+                                                side: BorderSide(width: 2)),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(left: 20.0),
-                                      child: SizedBox(
-                                        width: 150,
-                                        height: 50,
-                                        child: RaisedButton(
-                                          color: Colors.redAccent,
-                                          child: Text('Cancel',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  notifier.custFontSize)),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(50.0),
-                                              side: BorderSide(width: 2)),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 20.0),
+                                        child: SizedBox(
+                                          width: 150,
+                                          height: 50,
+                                          child: RaisedButton(
+                                            color: Colors.redAccent,
+                                            child: Text('Cancel',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                    notifier.custFontSize)),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(50.0),
+                                                side: BorderSide(width: 2)),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          return Container(
-                            padding: new EdgeInsets.all(10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Center(
-                                    child: Text(
-                                        "It seems like you don't have a team.",
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Container(
+                              padding: new EdgeInsets.all(10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Center(
+                                      child: Text(
+                                          "It seems like you don't have a team.",
+                                          style: TextStyle(
+                                              fontSize:
+                                              notifier.custFontSize))),
+                                  Center(
+                                      child: Text(
+                                        "Click on the button below to create one",
                                         style: TextStyle(
-                                            fontSize: notifier.custFontSize))),
-                                Center(
+                                            fontSize: notifier.custFontSize),
+                                      )),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  FlatButton(
+                                    textColor: KirthanStyles.colorPallete60,
+                                    color: KirthanStyles.colorPallete30,
                                     child: Text(
-                                      "Click on the button below to create one",
+                                      "Create team",
                                       style: TextStyle(
                                           fontSize: notifier.custFontSize),
-                                    )),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                FlatButton(
-                                  textColor: KirthanStyles.colorPallete60,
-                                  color: KirthanStyles.colorPallete30,
-                                  child: Text(
-                                    "Create team",
-                                    style: TextStyle(
-                                        fontSize: notifier.custFontSize),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => TeamWrite(
+                                                userRequest: null,
+                                                localAdmin: null,
+                                              )));
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => TeamWrite(
-                                              userRequest: null,
-                                              localAdmin: null,
-                                            )));
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
+                                ],
+                              ),
+                            );
+                          }
                         }
-                      }
-                      return Container();
-                    });
-              }
-              return Container();
-            }),
+                        return Container();
+                      });
+                }
+                return Container();
+              }),
+        ),
       )),
     );
   }
 }
+
+//return Container(
+//                                           padding: new EdgeInsets.all(10),
+//                                           child: Column(
+//                                             mainAxisAlignment:
+//                                                 MainAxisAlignment.center,
+//                                             crossAxisAlignment:
+//                                                 CrossAxisAlignment.center,
+//                                             children: [
+//                                               Center(
+//                                                   child: Text(
+//                                                       "It seems like you don't have a team.",
+//                                                       style: TextStyle(
+//                                                           fontSize: notifier
+//                                                               .custFontSize))),
+//                                               Center(
+//                                                   child: Text(
+//                                                       "Click on the button below to create one",
+//                                                       style: TextStyle(
+//                                                           fontSize: notifier
+//                                                               .custFontSize))),
+//                                               SizedBox(
+//                                                 height: 10,
+//                                               ),
+//                                               FlatButton(
+//                                                 textColor: KirthanStyles
+//                                                     .colorPallete60,
+//                                                 color: KirthanStyles
+//                                                     .colorPallete30,
+//                                                 child: Text("Create team",
+//                                                     style: TextStyle(
+//                                                         fontSize: notifier
+//                                                             .custFontSize)),
+//                                                 onPressed: () {
+//                                                   Navigator.push(
+//                                                       context,
+//                                                       MaterialPageRoute(
+//                                                           builder: (context) =>
+//                                                               TeamWrite(
+//                                                                 userRequest:
+//                                                                     null,
+//                                                                 localAdmin:
+//                                                                     null,
+//                                                               )));
+//                                                 },
+//                                               ),
+//                                             ],
+//                                           ),
+//                                         );
