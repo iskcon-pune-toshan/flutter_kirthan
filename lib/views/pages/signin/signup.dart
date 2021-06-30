@@ -360,7 +360,7 @@ class _SignUpState extends State<SignUp> {
                             return null;
                           },
                           onSaved: (input) => password = input,
-                          obscureText: true,
+                          obscureText: _isHidden,
                         ),
                       ),
                       Row(

@@ -9,6 +9,7 @@ class NotificationModel {
   String _createdBy;
   String _updatedBy;
   int _id;
+  DateTime _updatedAt;
 
   NotificationModel(
       {DateTime createdAt,
@@ -19,7 +20,8 @@ class NotificationModel {
       int targetId,
       String action,
       int id,
-      String updatedBy}) {
+      String updatedBy,
+      DateTime updatedAt}) {
     this._targetType = type;
     this._targetId = targetId;
     this._action = action;
@@ -29,6 +31,7 @@ class NotificationModel {
     this._message = message;
     this._id = id;
     this._updatedBy = updatedBy;
+    this._updatedAt = updatedAt;
   }
 
   Map<String, dynamic> toJson() {
@@ -42,12 +45,14 @@ class NotificationModel {
     data["message"] = this._message;
     data["id"] = this._id;
     data["updatedBy"] = this._updatedBy;
+    data["updatedTime"] = this._updatedAt;
     return data;
   }
 
   factory NotificationModel.fromJson(Map<String, dynamic> data) {
     return NotificationModel(
       createdAt: DateTime.parse(data["createdTime"]),
+      updatedAt: DateTime.parse(data["updatedTime"]),
       // == null
       //   ? null
       //   : DateTime.parse(data["createdTime"]),
@@ -59,6 +64,7 @@ class NotificationModel {
       id: data["id"],
       updatedBy: data["updatedBy"],
       targetId: data["targetId"],
+
     );
   }
 
@@ -78,4 +84,5 @@ class NotificationModel {
 
   int get targetId => _targetId;
   String get updatedBy => _updatedBy;
+  DateTime get updatedAt => _updatedAt;
 }

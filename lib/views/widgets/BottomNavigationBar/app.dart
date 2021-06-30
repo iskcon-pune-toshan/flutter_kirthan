@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_kirthan/connection.dart';
 import 'package:flutter_kirthan/models/user.dart';
 import 'package:flutter_kirthan/services/prospective_user_service_impl.dart';
 import 'package:flutter_kirthan/services/user_service_impl.dart';
@@ -42,18 +41,11 @@ class AppState extends State<App> {
     return email;
   }
 
-  StreamSubscription _connectionChangeStream;
-
   bool isOffline = false;
   @override
   void initState() {
     getRoleId();
     super.initState();
-    // print("+++++++++++++ Role Id");
-    //print("//////////");
-    ConnectionStatus connectionStatus = ConnectionStatus.getInstance();
-    _connectionChangeStream =
-        connectionStatus.connectionChange.listen(connectionChanged);
   }
 
   void connectionChanged(dynamic hasConnection) {
@@ -68,16 +60,7 @@ class AppState extends State<App> {
       icon: Icons.home,
       page: EventView(),
     ),
-    /*TabItem(
-      tabName: "Users",
-      icon: Icons.account_circle,
-      page: UserView(),
-    ),*/
-    // TabItem(
-    //   tabName: "Teams",
-    //   icon: Icons.people,
-    //   page: TeamView(),
-    // ),
+
     TabItem(
       tabName: "Notifications",
       icon: Icons.notifications,
@@ -88,33 +71,7 @@ class AppState extends State<App> {
       icon: Icons.calendar_today,
       page: MyEventView(),
     ),
-    // TabItem(
-    //   tabName: "Initiate team",
-    //   icon: Icons.group_add,
-    //   page: InitiateTeam(),
-    // ),
-    // //  if (role_id == 1)
-    // TabItem(
-    //   tabName: "Users",
-    //   icon: Icons.group,
-    //   page: InviteLocalAdmin(),
-    // ),
 
-    /*TabItem(
-      tabName: "Screens",
-      icon: Icons.fullscreen,
-      page: ScreensView(),
-    ),
-    TabItem(
-      tabName: "Roles",
-      icon: Icons.person_outline,
-      page: RolesView(),
-    ),
-    TabItem(
-      tabName: "RoleScreen",
-      icon: Icons.fullscreen_exit,
-      page: RoleScreenView(),
-    ),*/
   ];
 
   final List<TabItem> tabs_alternative = [
@@ -296,17 +253,11 @@ class AppState extends State<App> {
     final FirebaseUser user = await auth.currentUser();
     userRequestList = await userPageVM.getUserRequests("Approved");
     for (var users in userRequestList) {
-      // print("HELLOHELLOHELLOHELLOHELLO");
-      //print(users.email);
-      // print(user.email);
       if (users.email == user.email) {
         setState(() {
           role_id = users.roleId;
         });
       }
     }
-    // print("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
-    //print(email);
-    // print(role_id.toString());
   }
 }

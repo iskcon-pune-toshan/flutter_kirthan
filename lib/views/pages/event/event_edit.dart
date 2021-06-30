@@ -362,82 +362,6 @@ class _EditEventState extends State<EditEvent> {
                         return Container();
                       }
                     }),
-             /*   FutureBuilder(
-                    future: commonLookupTablePageVM
-                        .getCommonLookupTable("lookupType:Event-type-Category"),
-                    builder: (context, snapshot) {
-                      if (snapshot.data != null) {
-                        List<CommonLookupTable> cltList = snapshot.data;
-                        List<CommonLookupTable> currCategory = cltList
-                            .where((element) =>
-                                element.id == widget.eventrequest.eventType)
-                            .toList();
-
-                        for (var i in currCategory) {
-                          _selectedCategory = i.description;
-                        }
-                        List<String> _category = cltList
-                            .map((user) => user.description)
-                            .toSet()
-                            .toList();
-                        if(!widget.eventrequest.isPublicEvent)
-                          return new Container(
-                            child: new TextFormField(
-                              decoration:  InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.green),
-                                  ),
-                                  labelText: "Event Type",
-                                  hintText: "Event Type eg: Bhajan, Kirtan",
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                  labelStyle: TextStyle(
-                                    color: Colors.grey,
-                                  )),
-                              autocorrect: false,
-                              controller: _,
-                              onSaved: (String value) {
-                                widget.eventrequest.eventTitle = value;
-                              },
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Please enter some title";
-                                }
-                              },
-                            ),
-                          );
-                              else
-                        return DropdownButtonFormField<String>(
-                          value: _selectedCategory,
-                          icon: const Icon(Icons.category),
-                          hint: Text('Select Category',
-                              style: TextStyle(color: Colors.grey)),
-                          items: _category
-                              .map((category) => DropdownMenuItem<String>(
-                                    value: category,
-                                    child: Text(category),
-                                  ))
-                              .toList(),
-                          onChanged: (input) {
-                            setState(() {
-                              _selectedCategory = input;
-                            });
-                          },
-                          onSaved: (input) {
-                            _selectedCategory = input;
-                          },
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }),*/
-              /*  Row(
-                   // mainAxisAlignment: MainAxisAlignment.start,
-    children:[*/
               if(widget.eventrequest.isPublicEvent==true)
               Container(
                   child: RaisedButton(
@@ -460,33 +384,6 @@ class _EditEventState extends State<EditEvent> {
     )],
     ),),
                 ),
-                /*  new Container(
-                  child: DateTimeField(
-                    format: DateFormat("yyyy-MM-dd"),
-                    onShowPicker: (context, currentValue) async {
-                      final date = await showDatePicker(
-                          context: context,
-                          firstDate:
-                              DateTime.now(),
-                          initialDate:
-                          currentValue ?? DateTime.now(),
-                          lastDate: DateTime(2100));
-                      return date;
-                    },
-                    controller: _eventDateController,
-                    readOnly: readonly(widget.eventrequest.isPublicEvent),
-                    onSaved: (input) {
-                      if (input != null) {
-                        widget.eventrequest.eventDate =
-                            DateFormat("yyyy-MM-dd").format(input).toString();
-                      } else
-                        _eventDateController.text =
-                            widget.eventrequest.eventDate;
-                    },
-                    //controller: _eventDateController,
-                    autocorrect: false,
-                  ),
-               )*/
                 if(widget.eventrequest.isPublicEvent==true)
                 Container(
                   child: RaisedButton(
@@ -529,65 +426,6 @@ class _EditEventState extends State<EditEvent> {
                         )],
                     ),),
                 ),
-               /* Container(
-                  child: RaisedButton(
-                      onPressed: () => _selectEndTime(context), // Refer step 3
-                      child: Text(
-                        "${widget.eventrequest.eventEndTime}",
-                      )),
-                ),*/
-                /*     new Container(
-                  child: DateTimeField(
-                    format: DateFormat("HH:mm"),
-                    onShowPicker: (context, currentValue) async {
-                      final time = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.fromDateTime(
-                            currentValue ?? DateTime.now()),
-                      );
-
-                      final date = DateTime.now();
-                      return DateTimeField.convert(time);
-                    },
-                    readOnly: readonly(widget.eventrequest.isPublicEvent),
-                    autocorrect: false,
-                    controller: _eventStartTimeController,
-                    onSaved: (input) {
-                      if (input != null) {
-                        widget.eventrequest.eventStartTime =
-                            DateFormat("HH:mm").format(input).toString();
-                      } else
-                        _eventStartTimeController.text =
-                            widget.eventrequest.eventStartTime;
-                    },
-                  ),
-                ),*/
-              /*  new Container(
-                  child: DateTimeField(
-                    format: DateFormat("HH:mm"),
-                    onShowPicker: (context, currentValue) async {
-                      final time = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.fromDateTime(
-                            currentValue ?? DateTime.now()),
-                      );
-
-                      final date = DateTime.now();
-                      return DateTimeField.convert(time);
-                    },
-                    readOnly: readonly(widget.eventrequest.isPublicEvent),
-                    autocorrect: false,
-                    controller: _eventEndTimeController,
-                    onSaved: (input) {
-                      if (input != null) {
-                        widget.eventrequest.eventEndTime =
-                            DateFormat("HH:mm").format(input).toString();
-                      } else
-                        _eventEndTimeController.text =
-                            widget.eventrequest.eventEndTime;
-                    },
-                  ),
-                ),*/
                 if(widget.eventrequest.isPublicEvent==true)
                 new Container(
                   child: new TextFormField(
@@ -708,30 +546,6 @@ class _EditEventState extends State<EditEvent> {
                     },
                   ),
                 ),
-               /* new Container(
-                  child: new TextFormField(
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                        labelText: "CreatedTime",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    autocorrect: false,
-                    readOnly: readonly(widget.eventrequest.isPublicEvent),
-                    controller: _createdTimeController,
-                    onSaved: (String value) {
-                      widget.eventrequest.createdTime = value;
-                    },
-                  ),
-                ),*/
                 if(widget.eventrequest.isPublicEvent==true)
                 new Container(
                   child: new TextFormField(
@@ -776,9 +590,6 @@ class _EditEventState extends State<EditEvent> {
                       ),
     ),
                       onPressed: () async {
-                        // _handleSubmitted();
-                        //String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
-                        //_createTimeController.text = dt;
                         _formKey.currentState.save();
                         List<CommonLookupTable> selectedCategory =
                         await commonLookupTablePageVM.getCommonLookupTable(
@@ -790,15 +601,11 @@ class _EditEventState extends State<EditEvent> {
                         _updatedTimeController.text =
                             widget.eventrequest.updatedTime = dt;
                         eventPageVM.getEventRequests("MyEvent");
-                       // Navigator.pop(context);
-                        //Navigator.pop(context);
                         Navigator.of(context).pushNamed('/screen3');
                         print(eventTitle);
                         print(eventDate);
                         print(eventDuration);
                         print(widget.eventrequest.eventDescription);
-                        //Map<String,dynamic> eventmap = widget.eventrequest.toJson();
-                        //String eventmap = widget.eventrequest.toStrJsonJson();
                         String eventrequestStr =
                         jsonEncode(widget.eventrequest.toStrJson());
                         eventPageVM.submitUpdateEventRequest(eventrequestStr);

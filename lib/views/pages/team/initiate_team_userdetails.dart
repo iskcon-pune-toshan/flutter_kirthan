@@ -16,7 +16,6 @@ import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.
 import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());

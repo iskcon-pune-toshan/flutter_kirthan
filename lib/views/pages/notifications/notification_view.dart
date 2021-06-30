@@ -16,15 +16,13 @@ import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/user_page_view_model.dart';
-import 'package:flutter_kirthan/views/pages/admin/admin_view.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/drawer.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/team/team_create.dart';
-import 'package:flutter_kirthan/views/pages/team/team_profile_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:intl/intl.dart';
 import 'notificationDetails.dart';
 
 /* The view for the notifications */
@@ -108,6 +106,12 @@ class NotificationViewState extends State<NotificationView> {
 
   //Yet to be approved events
   Widget CustomTile(NotificationModel data, var callback) {
+    String createdAt = DateFormat('yyyy-MM-dd HH:mm a').format(DateTime.parse(data.createdAt.toString())
+        .add(Duration(hours: 5, minutes: 30)))
+        .toString();
+    String updatedAt = DateFormat('yyyy-MM-dd HH:mm a').format(DateTime.parse(data.updatedAt.toString())
+        .add(Duration(hours: 5, minutes: 30)))
+        .toString();
     return Container(
       margin: EdgeInsets.all(5),
       child: FlatButton(
@@ -117,10 +121,6 @@ class NotificationViewState extends State<NotificationView> {
               borderRadius: BorderRadius.circular(10)),
           padding: EdgeInsets.only(top: 10, left: 20, bottom: 0, right: 20),
           onPressed: () async {
-            //Screen doesn't pop. User, team lead should be able to view admin panel until ntf is not accepted or declined
-            // Navigator.pop(context);
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => AdminView()));
             if (data.targetType.contains("event") ||
                 data.message.contains("event")) {
               List<UserRequest> user =
@@ -137,27 +137,94 @@ class NotificationViewState extends State<NotificationView> {
               for (var event in eventList) {
                 eventRequest = event;
               }
-              //  print("Printing dara");
-              //print(data);
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => AdminEventDetails(
-                //           UserName: userName,
-                //           eventRequest: eventRequest,
-                //           data: data,
-                //         )));
+
+                if (data.message.contains("Approved")) {
+                  getTeamId(data.message.split("\"")[1], "Approved");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationDetails(
+                              eventId: data.targetId, status: "Approved")));
+                } else if (data.message.contains("Waiting")) {
+                  getTeamId(data.message.split("\"")[1], "Waiting");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationDetails(
+                              eventId: data.targetId, status: "Waiting")));
+                } else {
+                  getTeamId(data.message.split("\"")[1], "Rejected");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationDetails(
+                              eventId: data.targetId, status: "Rejected")));
+                }
               });
-            } else {
-              getTeamId(data.message.split("\"")[1], "Waiting");
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NotificationDetails(
-                          eventId: null,
-                          teamLeadId: teamLead,
-                          status: "Waiting")));
+            } else if (data.targetType.contains("team")) {
+              if (data.message.contains("Approved")) {
+                getTeamId(data.message.split("\"")[1], "Approved");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationDetails(
+                            eventId: null,
+                            teamId: data.targetId,
+                            status: "Approved")));
+              } else if (data.message.contains("Waiting")) {
+                getTeamId(data.message.split("\"")[1], "Waiting");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationDetails(
+                            eventId: null,
+                            teamId: data.targetId,
+                            status: "Waiting")));
+              } else {
+                getTeamId(data.message.split("\"")[1], "Rejected");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationDetails(
+                            eventId: null,
+                            teamId: data.targetId,
+                            status: "Rejected")));
+              }
+            } else if (data.targetType.contains("user")) {
+              if (data.message.contains("team")) {
+                if (data.message.contains("Approved")) {
+                  getTeamId(data.message.split("\"")[1], "Approved");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationDetails(
+                              eventId: null,
+                              teamLeadId: teamLead,
+                              teamName: data.message.split("\"")[1],
+                              status: "Approved")));
+                } else if (data.message.contains("Waiting")) {
+                  getTeamId(data.message.split("\"")[1], "Waiting");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationDetails(
+                              eventId: null,
+                              teamLeadId: teamLead,
+                              teamName: data.message.split("\"")[1],
+                              status: "Waiting")));
+                } else {
+                  getTeamId(data.message.split("\"")[1], "Rejected");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationDetails(
+                              eventId: null,
+                              teamLeadId: teamLead,
+                              teamName: data.message.split("\"")[1],
+                              status: "Rejected")));
+                }
+              }
             }
           },
           child: Column(children: [
@@ -170,7 +237,6 @@ class NotificationViewState extends State<NotificationView> {
                       Expanded(
                           flex: 3,
                           child: Column(
-                            //mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               Row(
@@ -192,17 +258,20 @@ class NotificationViewState extends State<NotificationView> {
                                                   color: notifier.darkTheme
                                                       ? Colors.white
                                                       : Colors.black),
-                                              // softWrap: true,
-                                              // overflow: TextOverflow.clip,
                                             ),
                                       ),
                                     ),
                                   ),
                                   Container(
-                                    child: Text(
-                                      data.createdAt
-                                          .toString()
-                                          .substring(11, 16),
+                                    child: updatedAt==null?Text(
+                                      createdAt.toString().substring(11, 19),
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                      ),
+                                    )
+                                        :Text(
+                                      updatedAt.toString().substring(11, 19),
                                       overflow: TextOverflow.clip,
                                       style: TextStyle(
                                         color: Colors.grey[500],
@@ -220,16 +289,11 @@ class NotificationViewState extends State<NotificationView> {
                                     child: Consumer<ThemeNotifier>(
                                       builder: (context, notifier, child) =>
                                           Text(
-                                            //'By ' + data.createdBy.toString(),
-                                            // data.updatedBy == null
-                                            //     ? "By " + data.createdBy.toString()
-                                            //     :
                                             data.message.contains("Your")
                                                 ? "By " + data.updatedBy.toString()
                                                 : "By " + data.createdBy.toString(),
                                             overflow: TextOverflow.clip,
                                             style: TextStyle(
-                                              //fontWeight: FontWeight.w300,
                                               color: notifier.darkTheme
                                                   ? Colors.white
                                                   : Colors.grey[500],
@@ -238,10 +302,13 @@ class NotificationViewState extends State<NotificationView> {
                                     ),
                                   ),
                                   Container(
-                                    child: Text(
-                                      data.createdAt
-                                          .toString()
-                                          .substring(0, 10),
+                                    child: updatedAt==null?Text(
+                                      createdAt.toString().substring(0, 10),
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(color: Colors.grey[500]),
+                                    )
+                                        :Text(
+                                      updatedAt.toString().substring(0, 10),
                                       overflow: TextOverflow.clip,
                                       style: TextStyle(color: Colors.grey[500]),
                                     ),
@@ -272,10 +339,6 @@ class NotificationViewState extends State<NotificationView> {
                         FlatButton(
                           color: Colors.red,
                           shape: RoundedRectangleBorder(
-                            /*  side: BorderSide(
-                                color: Colors.grey[700],
-                                width: 1,
-                                style: BorderStyle.solid),*/
                             borderRadius: BorderRadius.circular(12),
                           ),
                           textColor: KirthanStyles.colorPallete60,
@@ -296,6 +359,12 @@ class NotificationViewState extends State<NotificationView> {
   }
 
   Widget _buildNotification(NotificationModel data, bool flag) {
+    String createdAt = DateFormat('yyyy-MM-dd HH:mm a').format(DateTime.parse(data.createdAt.toString())
+        .add(Duration(hours: 5, minutes: 30)))
+        .toString();
+    String updatedAt = DateFormat('yyyy-MM-dd HH:mm a').format(DateTime.parse(data.updatedAt.toString())
+        .add(Duration(hours: 5, minutes: 30)))
+        .toString();
     IconData icon;
     Widget actions = Container(
         padding: EdgeInsets.all(0),
@@ -328,58 +397,11 @@ class NotificationViewState extends State<NotificationView> {
               : notificationPageVM.getNotifications();
         });
       });
-    // return Column(
-    //   mainAxisAlignment: MainAxisAlignment.start,
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: [
-    //     SizedBox(
-    //       height: 10,
-    //     ),
-    //     Row(
-    //       children: [
-    //         SizedBox(
-    //           width: 10,
-    //         ),
-    //         Text(
-    //           "Today",
-    //           style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //     CustomTile(data, () {
-    //       setState(() {
-    //         notificationPageVM.getNotificationsBySpec("TODAY");
-    //       });
-    //     }),
-    //     Divider(),
-    //     Row(
-    //       children: [
-    //         SizedBox(
-    //           width: 10,
-    //         ),
-    //         Text(
-    //           "Pending Notifications",
-    //           style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //     CustomTile(data, () {
-    //       setState(() {
-    //         notificationPageVM.getNotificationsBySpec("NOT TODAY");
-    //       });
-    //     }),
-    //   ],
-    // );
     else if (icon == null)
       //user accept, reject ntf layout
       return Container(
         margin: EdgeInsets.all(5),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FlatButton(
@@ -410,10 +432,19 @@ class NotificationViewState extends State<NotificationView> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  child: Text(
-                                    data.createdAt
+                                  child: updatedAt==null?Text(
+                                    createdAt
                                         .toString()
-                                        .substring(11, 16),
+                                        .substring(11, 19),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  )
+                                      :Text(
+                                    updatedAt
+                                        .toString()
+                                        .substring(11, 19),
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
                                       color: Colors.grey[500],
@@ -421,15 +452,20 @@ class NotificationViewState extends State<NotificationView> {
                                   ),
                                 ),
                                 Container(
-                                  child: Text(
-                                    data.createdAt
-                                        .toString()
-                                        .substring(0, 10),
+                                  child: updatedAt==null?Text(
+                                    createdAt.toString().substring(0, 10),
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
                                       color: Colors.grey[500],
                                     ),
-                                  ),
+                                  )
+                                      :Text(
+                                    updatedAt.toString().substring(0, 10),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  )
                                 ),
                               ],
                             )
@@ -459,10 +495,19 @@ class NotificationViewState extends State<NotificationView> {
                               CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  child: Text(
-                                    data.createdAt
+                                  child: updatedAt==null?Text(
+                                    createdAt
                                         .toString()
-                                        .substring(11, 16),
+                                        .substring(11, 19),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  )
+                                      :Text(
+                                    updatedAt
+                                        .toString()
+                                        .substring(11, 19),
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
                                       color: Colors.grey[500],
@@ -470,8 +515,17 @@ class NotificationViewState extends State<NotificationView> {
                                   ),
                                 ),
                                 Container(
-                                  child: Text(
-                                    data.createdAt
+                                  child: updatedAt==null?Text(
+                                    createdAt
+                                        .toString()
+                                        .substring(0, 11),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  )
+                                      :Text(
+                                    updatedAt
                                         .toString()
                                         .substring(0, 11),
                                     overflow: TextOverflow.clip,
@@ -510,19 +564,36 @@ class NotificationViewState extends State<NotificationView> {
                               CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  child: Text(
-                                    data.createdAt
+                                  child: updatedAt==null?Text(
+                                    createdAt
                                         .toString()
-                                        .substring(11, 16),
+                                        .substring(11, 19),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  ):Text(
+                                    updatedAt
+                                        .toString()
+                                        .substring(11, 19),
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
                                       color: Colors.grey[500],
                                     ),
                                   ),
+
                                 ),
                                 Container(
-                                  child: Text(
-                                    data.createdAt
+                                  child: updatedAt==null?Text(
+                                    createdAt
+                                        .toString()
+                                        .substring(0, 10),
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                  ):Text(
+                                    updatedAt
                                         .toString()
                                         .substring(0, 10),
                                     overflow: TextOverflow.clip,
@@ -560,10 +631,20 @@ class NotificationViewState extends State<NotificationView> {
                                 CrossAxisAlignment.end,
                                 children: [
                                   Container(
-                                    child: Text(
-                                      data.createdAt
+                                    child: updatedAt==null?Text(
+                                      createdAt
                                           .toString()
-                                          .substring(11, 16),
+                                          .substring(11, 19),
+                                      overflow:
+                                      TextOverflow.clip,
+                                      style: TextStyle(
+                                        color:
+                                        Colors.grey[500],
+                                      ),
+                                    ):Text(
+                                      updatedAt
+                                          .toString()
+                                          .substring(11, 19),
                                       overflow:
                                       TextOverflow.clip,
                                       style: TextStyle(
@@ -573,8 +654,18 @@ class NotificationViewState extends State<NotificationView> {
                                     ),
                                   ),
                                   Container(
-                                    child: Text(
-                                      data.createdAt
+                                    child: updatedAt==null?Text(
+                                      createdAt
+                                          .toString()
+                                          .substring(0, 10),
+                                      overflow:
+                                      TextOverflow.clip,
+                                      style: TextStyle(
+                                        color:
+                                        Colors.grey[500],
+                                      ),
+                                    ):Text(
+                                      updatedAt
                                           .toString()
                                           .substring(0, 10),
                                       overflow:
@@ -615,11 +706,23 @@ class NotificationViewState extends State<NotificationView> {
                                     .end,
                                 children: [
                                   Container(
-                                    child: Text(
-                                      data.createdAt
+                                    child: updatedAt==null?Text(
+                                      createdAt
                                           .toString()
                                           .substring(
-                                          11, 16),
+                                          11, 19),
+                                      overflow:
+                                      TextOverflow
+                                          .clip,
+                                      style: TextStyle(
+                                        color: Colors
+                                            .grey[500],
+                                      ),
+                                    ):Text(
+                                      updatedAt
+                                          .toString()
+                                          .substring(
+                                          11, 19),
                                       overflow:
                                       TextOverflow
                                           .clip,
@@ -630,8 +733,21 @@ class NotificationViewState extends State<NotificationView> {
                                     ),
                                   ),
                                   Container(
-                                    child: Text(
-                                      data.createdAt
+                                    child: updatedAt==null?Text(
+                                      createdAt
+                                          .toString()
+                                          .substring(
+                                          0, 10),
+                                      overflow:
+                                      TextOverflow
+                                          .clip,
+                                      style: TextStyle(
+                                        color: Colors
+                                            .grey[500],
+                                      ),
+                                    )
+                                        :Text(
+                                      updatedAt
                                           .toString()
                                           .substring(
                                           0, 10),
@@ -674,11 +790,24 @@ class NotificationViewState extends State<NotificationView> {
                                     .end,
                                 children: [
                                   Container(
-                                    child: Text(
-                                      data.createdAt
+                                    child: updatedAt==null?Text(
+                                      createdAt
                                           .toString()
                                           .substring(
-                                          11, 16),
+                                          11, 19),
+                                      overflow:
+                                      TextOverflow
+                                          .clip,
+                                      style: TextStyle(
+                                        color: Colors
+                                            .grey[500],
+                                      ),
+                                    )
+                                        :Text(
+                                      updatedAt
+                                          .toString()
+                                          .substring(
+                                          11, 19),
                                       overflow:
                                       TextOverflow
                                           .clip,
@@ -689,8 +818,20 @@ class NotificationViewState extends State<NotificationView> {
                                     ),
                                   ),
                                   Container(
-                                    child: Text(
-                                      data.createdAt
+                                    child: updatedAt==null?Text(
+                                      createdAt
+                                          .toString()
+                                          .substring(
+                                          0, 10),
+                                      overflow:
+                                      TextOverflow
+                                          .clip,
+                                      style: TextStyle(
+                                        color: Colors
+                                            .grey[500],
+                                      ),
+                                    ):Text(
+                                      updatedAt
                                           .toString()
                                           .substring(
                                           0, 10),
@@ -740,7 +881,7 @@ class NotificationViewState extends State<NotificationView> {
                       CrossAxisAlignment.start,
                       children: [
                         data.message.contains(
-                            "Approved(Request to create a team") //&& data.action.toString()=="Approved"
+                            "Approved(Request to create a team")
                             ? Column(
                           crossAxisAlignment:
                           CrossAxisAlignment.start,
@@ -826,202 +967,22 @@ class NotificationViewState extends State<NotificationView> {
                     ),
                     //isThreeLine: true,
                     //trailing:
-                    onTap: () {
-                      // print("Target id");
-                      // print(data.targetId);
-
-                      if (data.targetType == "team") {
-                        if (data.message.contains("Approved")) {
-                          getTeamId(data.message.split("\"")[1], "Approved");
-                        } else if (data.message.contains("Waiting"))
-                          getTeamId(data.message.split("\"")[1], "Waiting");
-                        else
-                          getTeamId(data.message.split("\"")[1], "Rejected");
-                      }
-                      if (data.targetType == "user") {
-                        if (data.message.contains("team")) {
-                          if (data.message.contains("Approved")) {
-                            print("Inside approve");
-                            getTeamId(data.message.split("\"")[1], "Approved");
-                          } else if (data.message.contains("Waiting"))
-                            getTeamId(data.message.split("\"")[1], "Waiting");
-                          else
-                            getTeamId(data.message.split("\"")[1], "Rejected");
-                        }
-                      }
-                      data.message.contains("event")
-                          ? data.message.contains("Approved")
-                          ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationDetails(
-                                  eventId: data.targetId,
-                                  status: "Approved")))
-                          : data.message.contains("Waiting")
-                          ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationDetails(
-                                  eventId: data.targetId,
-                                  status: "Waiting")))
-                          : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationDetails(
-                                  eventId: data.targetId,
-                                  status: "Rejected")))
-                          : data.targetType.contains("team")
-                          ? data.message.contains("Approved")
-                          ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationDetails(
-                                  teamId: data.targetId,
-                                  status: "Approved")))
-                          : data.message.contains("Waiting")
-                          ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationDetails(
-                                  teamId: data.targetId,
-                                  status: "Waiting")))
-                          : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  NotificationDetails(
-                                      teamId: data.targetId,
-                                      status: "Rejected")))
-                          : data.targetType.contains("user")
-                          ? data.message.contains("team")
-                          ? data.message.contains("Approved")
-                          ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationDetails(
-                                eventId: null,
-                                teamId: null,
-                                teamLeadId: teamLead,
-                                status: "Approved",
-                              )))
-                          : data.message.contains("Waiting")
-                          ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationDetails(
-                                eventId: null,
-                                teamId: null,
-                                teamLeadId:
-                                teamLead,
-                                status: "Waiting",
-                              )))
-                          : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationDetails(
-                                eventId: null,
-                                teamId: null,
-                                teamLeadId:
-                                teamLead,
-                                status: "Rejected",
-                              )))
-                          : null
-                          : null;
-                    }),
-              ),
-            ]),
-      );
-    //Team Admin accept, reject ntf layout
-    else
-      return Container(
-        margin: EdgeInsets.all(5),
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              FlatButton(
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.grey[400],
-                        width: 1,
-                        style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(10)),
-                child: ListTile(
-                    dense: false,
-                    contentPadding: EdgeInsets.all(5),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          child: Text(
-                            data.message,
-                            overflow: TextOverflow.clip,
-                          ),
-                        ),
-                        // Text(
-                        //   data.createdAt
-                        //       .toString()
-                        //       .substring(11, 16),
-                        //   overflow: TextOverflow.clip,
-                        //   style: TextStyle(color: Colors.grey[500]),
-                        // ),
-                      ],
-                    ),
-                    subtitle: Text(
-                      //"By " +//data.createdBy.toString(),
-                      "By " + data.createdBy.toString(),
-                    ),
-                    //isThreeLine: true,
-                    trailing: icon == Icons.pause
-                        ? actions
-                        : Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          data.createdAt.toString().substring(11, 16),
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          data.createdAt.toString().substring(0, 10),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        icon == Icons.close
-                            ? Text(
-                          "Rejected ",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        )
-                            : Text(
-                          "Accepted",
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
                     onTap: () async {
                       // print("Target id");
                       // print(data.targetId);
 
                       if (data.targetType == "user") {
                         if (data.message.contains("team")) {
-                          if (data.message.contains("Approved"))
+                          if (data.message
+                              .contains("Approved(Request to create a team"))
+                            teamLead = await getEmail();
+                          else if (data.message.contains("Approved"))
                             getTeamId(data.message.split("\"")[1], "Approved");
                           else if (data.message.contains("Waiting"))
                             getTeamId(data.message.split("\"")[1], "Waiting");
+                          else if (data.message
+                              .contains("Rejected(Request to create a team"))
+                            teamLead = await getEmail();
                           else
                             getTeamId(data.message.split("\"")[1], "Rejected");
                         }
@@ -1033,7 +994,8 @@ class NotificationViewState extends State<NotificationView> {
                         else
                           getTeamId(data.message.split("\"")[1], "Rejected");
                       }
-                      data.message.contains("event")
+
+                      data.targetType == "event"
                           ? data.message.contains("Approved")
                           ? Navigator.push(
                           context,
@@ -1078,7 +1040,7 @@ class NotificationViewState extends State<NotificationView> {
                                       status: "Waiting")))
                           : data.targetType == "user"
                           ? data.message.contains("team")
-                          ? data.message.contains("Rejected")
+                          ? data.message.split("(")[0].contains("Rejected")
                           ? Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -1087,17 +1049,22 @@ class NotificationViewState extends State<NotificationView> {
                                 teamId: null,
                                 teamLeadId: teamLead,
                                 status: "Rejected",
+                                teamName: data.message
+                                    .split("\"")[1]
+                                    .toString(),
                               )))
-                          : data.message.contains("Approved")
+                          : data.message.split("(")[0].contains("Approved")
                           ? Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => NotificationDetails(
-                                eventId: null,
-                                teamId: null,
                                 teamLeadId:
                                 teamLead,
                                 status: "Approved",
+                                teamName: data
+                                    .message
+                                    .split("\"")[1]
+                                    .toString(),
                               )))
                           : Navigator.push(
                           context,
@@ -1108,11 +1075,209 @@ class NotificationViewState extends State<NotificationView> {
                                 teamLeadId:
                                 teamLead,
                                 status: "Waiting",
+                                teamName: data
+                                    .message
+                                    .split("\"")[1],
                               )))
                           : null
                           : null;
                     }),
               ),
+            ]),
+      );
+    //Team Admin accept, reject ntf layout
+    else
+      return Container(
+        margin: EdgeInsets.all(5),
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.grey[400],
+                        width: 1,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(10)),
+                child: ListTile(
+                    dense: false,
+                    contentPadding: EdgeInsets.all(5),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: Text(
+                            data.message,
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(updatedAt==null?
+                            createdAt.toString().substring(11, 19):updatedAt.toString().substring(11,19),
+                              style: TextStyle(
+                                color: Colors.grey[500],
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(updatedAt==null?
+                            createdAt.toString().substring(0, 10):updatedAt.toString().substring(0, 10),
+                              style: TextStyle(
+                                color: Colors.grey[500],
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            icon == Icons.close
+                                ? Text(
+                              "Rejected ",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            )
+                                : Text(
+                              "Accepted",
+                              style: TextStyle(
+                                color: Colors.green,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    subtitle: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "By " + data.createdBy.toString(),
+                        ),
+                        // SizedBox(width: 10,),
+                        //
+                        // SizedBox(height: 10,)
+                      ],
+                    ),
+                    onTap: () async {
+                      if (data.targetType == "user") {
+                        if (data.message.contains("team")) {
+                          if (data.message
+                              .contains("Approved(Request to create a team"))
+                            teamLead = await getEmail();
+                          else if (data.message.contains("Approved"))
+                            getTeamId(data.message.split("\"")[1], "Approved");
+                          else if (data.message.contains("Waiting"))
+                            getTeamId(data.message.split("\"")[1], "Waiting");
+                          else if (data.message
+                              .contains("Rejected(Request to create a team"))
+                            teamLead = await getEmail();
+                          else
+                            getTeamId(data.message.split("\"")[1], "Rejected");
+                        }
+                      } else if (data.targetType == "team") {
+                        if (data.message.contains("Approved"))
+                          getTeamId(data.message.split("\"")[1], "Approved");
+                        else if (data.message.contains("Waiting"))
+                          getTeamId(data.message.split("\"")[1], "Waiting");
+                        else
+                          getTeamId(data.message.split("\"")[1], "Rejected");
+                      }
+                      data.targetType == "event"
+                          ? data.message.contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Approved")))
+                          : data.message.contains("Waiting")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Waiting")))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  eventId: data.targetId,
+                                  status: "Rejected")))
+                          : data.targetType == "team"
+                          ? data.message.contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  teamId: data.targetId,
+                                  status: "Approved")))
+                          : data.message.contains("Rejected")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                  teamId: data.targetId,
+                                  status: "Rejected")))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  NotificationDetails(
+                                      teamId: data.targetId,
+                                      status: "Waiting")))
+                          : data.targetType == "user"
+                          ? data.message.contains("team")
+                          ? data.message.split("(")[0].contains("Rejected")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId: teamLead,
+                                status: "Rejected",
+                                teamName: data.message
+                                    .split("\"")[1]
+                                    .toString(),
+                              )))
+                          : data.message.split("(")[0].contains("Approved")
+                          ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId:
+                                teamLead,
+                                status: "Approved",
+                                teamName: data
+                                    .message
+                                    .split("\"")[1]
+                                    .toString(),
+                              )))
+                          : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationDetails(
+                                eventId: null,
+                                teamId: null,
+                                teamLeadId:
+                                teamLead,
+                                status: "Waiting",
+                                teamName: data
+                                    .message
+                                    .split("\"")[1],
+                              )))
+                          : null
+                          : null;
+                    }),
+              ),
+              SizedBox(height: 10,),
             ]),
       );
   }
@@ -1123,18 +1288,15 @@ class NotificationViewState extends State<NotificationView> {
   List<NotificationModel> ntfList = new List<NotificationModel>();
   @override
   void initState() {
+    notificationPageVM.getNotifications();
     super.initState();
+    teamLead = null;
     loadPref();
     getRoleId();
     _slidableController = SlidableController(
       onSlideAnimationChanged: slideAnimationChanged,
       onSlideIsOpenChanged: slideIsOpenChanged,
     );
-    //print(notificationPageVM.newNotificationCount);
-    //notificationPageVM.newNotificationCount;
-    //  print(context);
-    //NotificationViewModel _nvm =  ScopedModel.of<NotificationViewModel>(context);
-    //_nvm.notificationCount = 0;
   }
 
   void slideAnimationChanged(Animation<double> slideAnimation) {
@@ -1192,7 +1354,6 @@ class NotificationViewState extends State<NotificationView> {
             return ListView.builder(
                 scrollDirection: direction,
                 itemBuilder: (context, itemCount) {
-                  //final Axis slidableDirection =
                   direction == Axis.horizontal
                       ? Axis.vertical
                       : Axis.horizontal;
@@ -1204,107 +1365,107 @@ class NotificationViewState extends State<NotificationView> {
                     actionPane: SlidableDrawerActionPane(),
                     actions: <Widget>[],
                     secondaryActions: <Widget>[
-                      Visibility(
-                        visible: isVisible,
-                        child: IconSlideAction(
-                          caption: 'View',
-                          color: Colors.grey.shade200,
-                          icon: Icons.more_horiz,
-                          onTap: () async {
-                            UserRequest userReq = new UserRequest();
-                            UserRequest localAdmin = new UserRequest();
-                            TeamRequest team = new TeamRequest();
-                            EventRequest eventRequest = new EventRequest();
-                            if (snapshot.data[itemCount].targetType == "team") {
-                              List<TeamRequest> teamList =
-                              await teamPageVM.getTeamRequests(snapshot
-                                  .data[itemCount].targetId
-                                  .toString());
-                              for (var t in teamList) {
-                                team = t;
-                              }
-                            }
-                            if (snapshot.data[itemCount].targetType == "user" &&
-                                snapshot.data[itemCount].message
-                                    .contains("Invited user")) {
-                              List<TeamRequest> teamList = await teamPageVM
-                                  .getTeamRequests("teamLeadId:" +
-                                  snapshot.data[itemCount].createdBy);
-                              for (var t in teamList) {
-                                team = t;
-                              }
-                            }
-                            List<UserRequest> userRequestList =
-                            await userPageVM.getUserRequests(
-                                snapshot.data[itemCount].createdBy);
-                            for (var user in userRequestList) {
-                              userReq = user;
-                            }
-                            List<UserRequest> user =
-                            await userPageVM.getUserRequests(
-                                snapshot.data[itemCount].createdBy);
-                            String userName = " ";
-                            for (var u in user) {
-                              userName = u.fullName;
-                            }
-                            String eventId =
-                            snapshot.data[itemCount].targetId.toString();
-                            List<EventRequest> eventList = await eventPageVM
-                                .getEventRequests("event_id:$eventId");
-                            for (var event in eventList) {
-                              eventRequest = event;
-                            }
-                            List<UserRequest> localAdminList =
-                            await userPageVM.getUserRequests(
-                                snapshot.data[itemCount].updatedBy);
-                            for (var user in localAdminList) {
-                              localAdmin = user;
-                            }
-                            // if (snapshot.data[itemCount].message
-                            //     .contains("Request to create an event") &&
-                            //     snapshot.data[itemCount].targetType
-                            //         .contains("event")) {
-                            //   //   print("Printing dara");
-                            //   // print(snapshot.data[itemCount]);
-                            //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) => AdminEventDetails(
-                            //               UserName: userName,
-                            //               eventRequest: eventRequest,
-                            //               data: snapshot.data[itemCount],
-                            //             )));
-                            //   });
-                            // } else
-                            if (snapshot.data[itemCount].message
-                                .contains("team") ||
-                                snapshot.data[itemCount].message
-                                    .contains("Invited user")) {
-                              // print(snapshot.data[itemCount].targetId);
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                //Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TeamProfilePage(
-                                          teamTitle: team.teamTitle,
-                                        )));
-                              });
-                            }
-                            // else {
-                            //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                            //     Navigator.pop(context);
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) => AdminView()));
-                            //   });
-                            // }
-                          },
-                          closeOnTap: false,
-                        ),
-                      ),
+                      // Visibility(
+                      //   visible: isVisible,
+                      //   child: IconSlideAction(
+                      //     caption: 'View',
+                      //     color: Colors.grey.shade200,
+                      //     icon: Icons.more_horiz,
+                      //     onTap: () async {
+                      //       UserRequest userReq = new UserRequest();
+                      //       UserRequest localAdmin = new UserRequest();
+                      //       TeamRequest team = new TeamRequest();
+                      //       EventRequest eventRequest = new EventRequest();
+                      //       if (snapshot.data[itemCount].targetType == "team") {
+                      //         List<TeamRequest> teamList =
+                      //             await teamPageVM.getTeamRequests(snapshot
+                      //                 .data[itemCount].targetId
+                      //                 .toString());
+                      //         for (var t in teamList) {
+                      //           team = t;
+                      //         }
+                      //       }
+                      //       if (snapshot.data[itemCount].targetType == "user" &&
+                      //           snapshot.data[itemCount].message
+                      //               .contains("Invited user")) {
+                      //         List<TeamRequest> teamList = await teamPageVM
+                      //             .getTeamRequests("teamLeadId:" +
+                      //                 snapshot.data[itemCount].createdBy);
+                      //         for (var t in teamList) {
+                      //           team = t;
+                      //         }
+                      //       }
+                      //       List<UserRequest> userRequestList =
+                      //           await userPageVM.getUserRequests(
+                      //               snapshot.data[itemCount].createdBy);
+                      //       for (var user in userRequestList) {
+                      //         userReq = user;
+                      //       }
+                      //       List<UserRequest> user =
+                      //           await userPageVM.getUserRequests(
+                      //               snapshot.data[itemCount].createdBy);
+                      //       String userName = " ";
+                      //       for (var u in user) {
+                      //         userName = u.fullName;
+                      //       }
+                      //       String eventId =
+                      //           snapshot.data[itemCount].targetId.toString();
+                      //       List<EventRequest> eventList = await eventPageVM
+                      //           .getEventRequests("event_id:$eventId");
+                      //       for (var event in eventList) {
+                      //         eventRequest = event;
+                      //       }
+                      //       List<UserRequest> localAdminList =
+                      //           await userPageVM.getUserRequests(
+                      //               snapshot.data[itemCount].updatedBy);
+                      //       for (var user in localAdminList) {
+                      //         localAdmin = user;
+                      //       }
+                      //       // if (snapshot.data[itemCount].message
+                      //       //     .contains("Request to create an event") &&
+                      //       //     snapshot.data[itemCount].targetType
+                      //       //         .contains("event")) {
+                      //       //   //   print("Printing dara");
+                      //       //   // print(snapshot.data[itemCount]);
+                      //       //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                      //       //     Navigator.push(
+                      //       //         context,
+                      //       //         MaterialPageRoute(
+                      //       //             builder: (context) => AdminEventDetails(
+                      //       //               UserName: userName,
+                      //       //               eventRequest: eventRequest,
+                      //       //               data: snapshot.data[itemCount],
+                      //       //             )));
+                      //       //   });
+                      //       // } else
+                      //       if (snapshot.data[itemCount].message
+                      //               .contains("team") ||
+                      //           snapshot.data[itemCount].message
+                      //               .contains("Invited user")) {
+                      //         // print(snapshot.data[itemCount].targetId);
+                      //         WidgetsBinding.instance.addPostFrameCallback((_) {
+                      //           //Navigator.pop(context);
+                      //           Navigator.push(
+                      //               context,
+                      //               MaterialPageRoute(
+                      //                   builder: (context) => TeamProfilePage(
+                      //                         teamTitle: team.teamTitle,
+                      //                       )));
+                      //         });
+                      //       }
+                      //       // else {
+                      //       //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                      //       //     Navigator.pop(context);
+                      //       //     Navigator.push(
+                      //       //         context,
+                      //       //         MaterialPageRoute(
+                      //       //             builder: (context) => AdminView()));
+                      //       //   });
+                      //       // }
+                      //     },
+                      //     closeOnTap: false,
+                      //   ),
+                      // ),
                       IconSlideAction(
                         caption: 'Delete',
                         color: Colors.red,
@@ -1316,8 +1477,6 @@ class NotificationViewState extends State<NotificationView> {
 
                             processrequestmap["id"] =
                                 snapshot.data[itemCount].id;
-                            // print(snapshot.data[itemCount].id);
-
                             snapshot.data[itemCount].message.contains("Your") ||
                                 snapshot.data[itemCount].message
                                     .contains("Request") ||
@@ -1341,7 +1500,6 @@ class NotificationViewState extends State<NotificationView> {
                               Navigator.of(context);
                             });
                           }),
-                          //_showSnackBar(context, 'Delete'),
                         },
                       ),
                     ],
@@ -1349,11 +1507,9 @@ class NotificationViewState extends State<NotificationView> {
                 },
                 itemCount: snapshot.data.length);
           } else if (snapshot.hasError) {
-            // print(snapshot);
-            //print(snapshot.error.toString() + " Error ");
             return Center(
                 child: Text(
-                    'Error loading notifications' + snapshot.error.toString()));
+                    'Could not Load Notification. Please try again after some time'));
           } else {
             return Center(child: CircularProgressIndicator());
           }
@@ -1361,12 +1517,13 @@ class NotificationViewState extends State<NotificationView> {
   }
 
   getTeamId(String teamTitle, String status) async {
-    print("team title");
-    print(teamTitle);
     List<TeamRequest> teamList = await teamPageVM.getTeamRequests(status);
+
     for (var team in teamList) {
       if (team.teamTitle == teamTitle) {
-        teamLead = team.teamLeadId;
+        setState(() {
+          teamLead = team.teamLeadId;
+        });
       }
     }
   }
@@ -1387,68 +1544,12 @@ void showNotification(
           ),
         ),
         actions: <Widget>[
-          Visibility(
-            visible: isVisible,
-            child: FlatButton(
-              child: Text("View"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AdminView()));
-              },
-            ),
-          ),
           FlatButton(
               child: Text("Discard"),
               onPressed: () {
-                /*setState(() {
-                    Map<String, dynamic> processrequestmap =
-                    new Map<String, dynamic>();
-                    processrequestmap["id"] = notification.id;
-                    print(notification.id);
-                    notification.message.contains("Your") ||
-                        notification.message.contains("Registered") ||
-                        notification.message.contains("cancelled") ||
-                        notification.message
-                            .contains("has been created")
-                        ? notificationPageVM.deleteNotification(
-                        processrequestmap, false)
-                        : notificationPageVM.deleteNotification(
-                        processrequestmap, true);
-                    Navigator.pop(context);
-                  });*/
+                null;
               }),
         ],
       ));
 }
 
-// void createTeam(
-//     BuildContext context, NotificationModel notification) {
-//   bool setAction = false;
-//   UserRequest userRequest = new UserRequest();
-//
-//   if (notification.action == "waiting") setAction = true;
-//   showDialog(
-//     context: context,
-//     builder: (context) => Visibility(
-//       visible: isVisible,
-//       child: FlatButton(
-//         child: Text("Create team"),
-//         onPressed: () async {
-//           List<UserRequest> userRequestList =
-//               await userPageVM.getUserRequests(notification.createdBy);
-//           for (var user in userRequestList) {
-//             userRequest = user;
-//           }
-//           Navigator.pop(context);
-//           Navigator.push(
-//               context,
-//               MaterialPageRoute(
-//                   builder: (context) => TeamWrite(
-//                         userRequest: userRequest,
-//                       )));
-//         },
-//       ),
-//     ),
-//   );
-// }

@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
-import 'package:flutter_kirthan/views/pages/drawer/settings/display_settings.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'dart:math' show cos, sqrt, asin;
-
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -205,22 +202,6 @@ else
         100.0,
       ),
     );
-// camera view of the map (both locations)
-  /* controller.animateCamera(
-      CameraUpdate.newLatLngBounds(
-        LatLngBounds(
-          northeast: LatLng(
-            _northeastCoordinates.latitude,
-            _northeastCoordinates.longitude,
-          ),
-          southwest: LatLng(
-            _southwestCoordinates.latitude,
-            _southwestCoordinates.longitude,
-          ),
-        ),
-        100.0, // padding
-      ),
-   );*/
     double totalDistance = 0.0;
     await createPolylines(startCoordinates, destinationCoordinates);
     setState(() {

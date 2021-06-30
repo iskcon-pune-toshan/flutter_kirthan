@@ -17,7 +17,6 @@ import 'package:flutter_kirthan/view_models/team_page_view_model.dart';
 import 'package:flutter_kirthan/views/pages/drawer/settings/theme/theme_manager.dart';
 import 'package:flutter_kirthan/views/pages/event/event_view.dart';
 import 'package:geocoding/geocoding.dart';
-//import 'package:flutter_kirthan/views/pages/eventteam/team_selection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -31,8 +30,6 @@ final CommonLookupTablePageViewModel commonLookupTablePageVM =
 CommonLookupTablePageViewModel(apiSvc: CommonLookupTableAPIService());
 
 class EventWrite extends StatefulWidget {
-  // EventWrite({Key key}) : super(key: key);
-  //TeamUserCreate({this.selectedUsers}) : super();
   TeamRequest selectedTeam;
   final String screenName = SCR_EVENT;
   EventRequest eventrequest;
@@ -65,9 +62,6 @@ class _EventWriteState extends State<EventWrite> {
     placemark = await placemarkFromCoordinates(
         location[0].latitude, location[0].longitude);
     pincodeController.text = placemark[0].postalCode;
-    //pinCode = placemark.postalCode;
-
-    // return placemark;
   }
 
   bool mapToggle = false;
@@ -92,7 +86,6 @@ class _EventWriteState extends State<EventWrite> {
   EventRequest eventrequest = new EventRequest();
 
   String _selectedCategory;
-  String _selectedPin;
   bool selected;
   Future<List<TeamRequest>> teams;
   void initState() {
@@ -106,102 +99,11 @@ class _EventWriteState extends State<EventWrite> {
 
     });
   }
-  handleTap(LatLng tappedPoint1) {
-    print(tappedPoint1);
-    //print(tappedPoint2);
-    setState(() {
-      myMarker = [];
-
-      myMarker.add(
-        Marker(
-          markerId: MarkerId(tappedPoint1.toString()),
-          infoWindow: InfoWindow(title: 'Event Location'),
-          position: tappedPoint1,
-        ),
-      );
-
-      eventrequest.longitudeS = tappedPoint1.longitude;
-      eventrequest.latitudeS = tappedPoint1.latitude;
-      /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
-      infoWindow: InfoWindow(
-        title: 'End Point') ,
-      position: tappedPoint2,
-      ),
-      );*/
-    });
-  }
-
-  handleTap2(LatLng tappedPoint1) {
-    print(tappedPoint1);
-    //print(tappedPoint2);
-    setState(() {
-      myMarker = [];
-
-      myMarker.add(
-        Marker(
-          markerId: MarkerId(tappedPoint1.toString()),
-          infoWindow: InfoWindow(title: 'Event Location'),
-          position: tappedPoint1,
-        ),
-      );
-
-      eventrequest.longitudeD = tappedPoint1.longitude;
-      eventrequest.latitudeD = tappedPoint1.latitude;
-      /*myMarker.add(Marker(markerId: MarkerId(tappedPoint2.toString()),
-      infoWindow: InfoWindow(
-        title: 'End Point') ,
-      position: tappedPoint2,
-      ),
-      );*/
-    });
-  }
 
   void onMapCreated(controller) {
     setState(() {
       mapController = controller;
     });
-  }
-
-  List type = ["Stationary", "Moving"];
-
-  String select;
-  Row addRadioButton(int btnValue, String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Radio(
-          activeColor: Colors.black,
-          value: type[btnValue],
-          groupValue: select,
-          onChanged: (value) {
-            setState(() {
-              print(value);
-              eventrequest.eventMobility = value;
-              select = value;
-            });
-          },
-        ),
-        Consumer<ThemeNotifier>(
-          builder: (context, notifier, child) => Text(
-            title,
-            style: TextStyle(
-              //color:  KirthanStyles.titleColor ,
-                fontWeight: FontWeight.normal),
-          ),
-        )
-      ],
-    );
-  }
-
-  String validateMobile(String value) {
-    String patttern = r'(^(?:[+0]9)?[0-9]{10}$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return 'Please enter mobile number';
-    } else if (!regExp.hasMatch(value)) {
-      return 'Please enter valid mobile number';
-    }
-    return null;
   }
 
   String validatePin(String value) {
@@ -220,8 +122,6 @@ class _EventWriteState extends State<EventWrite> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      //resizeToAvoidBottomInset: false,
-
       appBar: AppBar(
           elevation: 0.0,
           iconTheme: IconThemeData(
@@ -235,7 +135,6 @@ class _EventWriteState extends State<EventWrite> {
                     fontSize: notifier.custFontSize)),
           )),
       body: Builder(builder: (context) {
-
         return SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.all(10),
@@ -245,15 +144,11 @@ class _EventWriteState extends State<EventWrite> {
               child: Form(
                 // context,
                 key: _formKey,
-
-                // readonly: true,
                 child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     new Consumer<ThemeNotifier>(
                       builder: (context, notifier, child) => Container(
                           alignment: Alignment.centerLeft,
-                          // margin: const EdgeInsets.only(top: 30),
                           child: new Text(
                             "About Event",
                             style: new TextStyle(
@@ -267,8 +162,6 @@ class _EventWriteState extends State<EventWrite> {
                         child: TextFormField(
                           style: TextStyle(fontSize: notifier.custFontSize),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          //focusNode: myFocusNode,
-                          //attribute: "eventTitle",
                           decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -276,7 +169,6 @@ class _EventWriteState extends State<EventWrite> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                              //icon: const Icon(Icons.title, color: Colors.grey),
                               labelText: "Title",
                               hintText: "Type title of Event",
                               hintStyle: TextStyle(
@@ -313,8 +205,6 @@ class _EventWriteState extends State<EventWrite> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
                               ),
-                              //icon: const Icon(Icons.description,
-                              //   color: Colors.grey),
                               labelText: "Description",
                               hintText: "Type Description of event",
                               hintStyle: TextStyle(
@@ -481,10 +371,6 @@ class _EventWriteState extends State<EventWrite> {
                                 } else {
                                   String time =
                                       "${value.hour < 10 ? ("0" + value.hour.toString()) : value.hour}:${value.minute < 10 ? ("0" + value.minute.toString()) : value.minute}";
-                                  /*print(time.compareTo(
-                                      eventrequest.eventStartTime != null
-                                          ? eventrequest.eventStartTime
-                                          : ""));*/
 
                                   return time.compareTo(
                                       eventrequest.eventStartTime !=
@@ -554,76 +440,6 @@ class _EventWriteState extends State<EventWrite> {
                             return Container();
                           }
                         }),
-
-                    /*Container(
-                        //padding: new EdgeInsets.all(10),
-                        child: TextFormField(
-                  //focusNode: myFocusNode,
-                          //attribute: "Type",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                             // icon: const Icon(Icons.low_priority,
-                               //   color: Colors.grey),
-                              labelText: "Event Type",
-
-                              hintText: "Event Type eg: Bhajan",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: myFocusNode.hasFocus ? Colors.black : Colors.grey
-                              )),
-                          onSaved: (input) {
-                            eventrequest.eventType = input;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },
-                        ),
-                      ),*/
-
-                    Container(
-                      //padding: new EdgeInsets.all(10),
-                      /*child: TextFormField(
-
-                        //attribute: "PhoneNumber",
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green),
-                              ),
-                              // icon: const Icon(Icons.phone_iphone,
-                              //   color: Colors.grey),
-                              labelText: "Phone Number",
-                              hintText: "Type Phone Number",
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          onSaved: (input) {
-                            eventrequest.phoneNumber = int.parse(input);
-                          },
-                          validator: validateMobile
-                        /*  (value) {
-                            if (value.isEmpty) {
-                              return "Please enter some text";
-                            }
-                            return null;
-                          },*/
-                      ),*/
-                    ),
                     new Consumer<ThemeNotifier>(
                       builder: (context, notifier, child) => Container(
                           alignment: Alignment.centerLeft,
@@ -661,7 +477,6 @@ class _EventWriteState extends State<EventWrite> {
                                     fontSize: notifier.custFontSize)),
                             onSaved: (input) {
                               eventrequest.addLineOneS = input;
-                              //eventrequest.eventLocation = input;
                             },
                             validator: (value) {
                               if (value.trimLeft().isEmpty) {
@@ -917,21 +732,13 @@ class _EventWriteState extends State<EventWrite> {
                                       _selectedCategory);
                                   for (var i in selectedCategory)
                                     eventrequest.eventType = i.id;
-                                  // eventrequest.isProcessed = true;
                                   eventrequest.isPublicEvent = false;
-// eventrequest.createdBy =getCurrentUser().toString(); //"afrah.17u278@viit.ac.in";
-// print(eventrequest.createdBy);
                                   String dt =
                                   DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                       .format(DateTime.now());
                                   eventrequest.createdTime = dt;
                                   eventrequest.updatedBy = null;
                                   eventrequest.updatedTime = null;
-//eventrequest.approvalStatus = "Processing";
-                                  //eventrequest.approvalComments = "AAA";
-
-//TeamRequest newteamrequest = await apiSvc
-//  ?.submitNewTeamRequest(teammap);
                                   eventrequest.serviceType = "Free";
 
                                   Map<String, dynamic> teammap =
@@ -958,23 +765,8 @@ class _EventWriteState extends State<EventWrite> {
                                                 builder: (context) => EventView()));
                                       });
 
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => ServiceType(
-                                  //             eventRequest: eventrequest)));
                                 }
-                                //String s = jsonEncode(userrequest.mapToJson());
-                                //service.registerUser(s);
-                                //print(s);
                               })
-                          /*MaterialButton(
-                        child: Text("Reset",style: TextStyle(color: Colors.white),),
-                        color: Colors.pink,
-                        onPressed: () {
-                          _fbKey.currentState.reset();
-                        },
-                      ),*/
                         ],
                       ),
                     )

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/services/event_service_impl.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
@@ -25,23 +24,14 @@ List<String> views = <String>[
 ];
 
 class CalendarClass extends State<CalendarPage> {
-  CalendarView _calendarView;
-  DateTime _datePicked;
-  DateTime _calendarDate;
-
   @override
   void initState() {
-    _calendarView = CalendarView.month;
-    _datePicked = DateTime.now();
-    _calendarDate = DateTime.now();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      // drawer: MyDrawer(),
       body:
       Container(
         child: FutureBuilder(
@@ -101,13 +91,6 @@ class CalendarClass extends State<CalendarPage> {
       appointmentData.add(meetingData);
     }
     return appointmentData;
-  }
-
-  void _viewChanged(ViewChangedDetails viewChangedDetails) {
-    SchedulerBinding.instance.addPostFrameCallback((duration) {
-      _datePicked = viewChangedDetails
-          .visibleDates[viewChangedDetails.visibleDates.length ~/ 2];
-    });
   }
 }
 

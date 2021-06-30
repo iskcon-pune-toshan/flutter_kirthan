@@ -66,36 +66,6 @@ class LocationMark extends State<MapPage> {
     //getloc();
     super.initState();
   }
-  //Set<Marker> _markers = {};
-  //final Map<String, Marker> _markerss = {};
-/*  getloc() async {
-    double lat;
-    double long;
-    if (widget.eventrequest?.latitudeS == null) {
-      final query = widget.eventrequest?.addLineOneS +
-          widget.eventrequest?.addLineTwoS +
-          widget.eventrequest?.localityS +
-          widget.eventrequest?.city +
-          widget.eventrequest.state;
-      var addresses = await Geocoder.local.findAddressesFromQuery(query);
-      var first = addresses.first;
-      print(query);
-      lat = first.coordinates.latitude;
-      long = first.coordinates.longitude;
-    }
-    else {
-      lat = widget.eventrequest.latitudeS;
-      long = widget.eventrequest.longitudeS;
-      print("else part exceuted");
-    }
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.best);
-    List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
-    _initialPosition = LatLng(position.latitude, position.longitude);
-    print(_initialPosition.longitude);
-    print("locationssss");
-  }*/
   _onMapCreated(GoogleMapController controller) async {
     eventRequest = await eventPageVM.getEventRequests("All");
 
@@ -131,13 +101,6 @@ class LocationMark extends State<MapPage> {
         controller.animateCamera(
           CameraUpdate.newCameraPosition(CameraPosition(
               target: LatLng(_initialPosition.latitude,_initialPosition.longitude), zoom: 12))
-          /*.newLatLngBounds(
-            LatLngBounds(
-              northeast: LatLng(_initialPosition, northEastLongitude),
-              southwest: LatLng(southWestLatitude, southWestLongitude),
-            ),
-            100.0,
-          ),*/
         );
 String id=eventName.id.toString();
         setState(() {
@@ -152,11 +115,6 @@ String id=eventName.id.toString();
         print(listMarkers.length);
       }
   }
-
-
-
-
-
 
   Widget _buildGoogleMap()  {
 
@@ -173,7 +131,6 @@ String id=eventName.id.toString();
             target: LatLng(17,22), zoom: 16),
         onMapCreated: _onMapCreated,
         markers: listMarkers,
-        //polylines: Set<Polyline>.of(polylines.values),
       ),
     );
   }
@@ -192,10 +149,7 @@ String id=eventName.id.toString();
         ),
         body: Stack(
           children: <Widget>[
-
              _buildGoogleMap(),
-
-
           ],
         ),
       ),
