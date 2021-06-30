@@ -21,15 +21,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//final MainPageViewModel mainPageVM =
-//  MainPageViewModel(apiSvc: RestAPIServices());
 
 final UserPageViewModel userPageVM =
 UserPageViewModel(apiSvc: UserAPIService());
 
 class LoginApp extends StatefulWidget {
-  //final MainPageViewModel viewModel;
-  //LoginApp({Key key,this.viewModel}): super(key: key);
   LoginApp({Key key}) : super(key: key);
 
   final String title = "Login";
@@ -58,7 +54,6 @@ class _LoginAppState extends State<LoginApp> {
   FocusNode myFocusNode = new FocusNode();
   void loadPref() async {
     prefs = await SharedPreferences.getInstance();
-    //prefs.setString("My Name", "Manjunath Bijinepalli");
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -94,8 +89,8 @@ class _LoginAppState extends State<LoginApp> {
 //    NotificationManager _config = new NotificationManager();
 //    _config.initMessageHandler(context);
 
-//    NotificationView _config = new NotificationView();
-//    _config.initMessageHandler(context);
+   // NotificationView _config = new NotificationView();
+   // _config.initMessageHandler(context);
   }
 
   void connectionChanged(dynamic hasConnection) {
@@ -150,8 +145,6 @@ class _LoginAppState extends State<LoginApp> {
 
     String dt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.now());
 
-    // user.firstName = userName;
-    // user.lastName = userName;
     user.email = email;
     user.password = pass;
     user.phoneNumber = null;
@@ -166,8 +159,6 @@ class _LoginAppState extends State<LoginApp> {
     user.country = " ";
     user.govtIdType = 8;
     user.govtId = "Aadhaar";
-    //user.isProcessed = true;
-    // user.approvalComments = "Waiting";
     user.approvalStatus = "Waiting";
     user.roleId = 3;
     user.createdBy = email;
@@ -422,8 +413,8 @@ class _LoginAppState extends State<LoginApp> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 50),
-        alignment: Alignment.centerRight,
+        // padding: EdgeInsets.symmetric(horizontal: 50),
+        alignment: Alignment.center,
         height: 55.0,
         width: MediaQuery.of(context).size.width * 0.85,
         decoration: BoxDecoration(
@@ -437,14 +428,22 @@ class _LoginAppState extends State<LoginApp> {
               blurRadius: 6.0,
             ),
           ],
-          image: DecorationImage(
-            alignment: Alignment.centerLeft,
-            image: logo,
-          ),
+        //   image: DecorationImage(
+        //     alignment: Alignment.centerLeft,
+        //     image: logo,
+        //   ),
         ),
-        child: Text(
-          "Sign in with Google",
-          style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          children: [
+            Container(height:50,width:50,child: Image(image: logo)),
+            SizedBox(width:20),
+            Text(
+              "Sign in with Google",
+              style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+            ),
+          ],
         ),
       ),
     );
@@ -651,13 +650,6 @@ final kBoxDecorationStyle = BoxDecoration(
   color: Colors.white,
   border: Border.all(color: Color(0xFF61bcbc)),
   borderRadius: BorderRadius.circular(10.0),
-  /* boxShadow: [
-    BoxShadow(
-      color: Color(0xFF61bcbc),
-      blurRadius: 6.0,
-      offset: Offset(0, 2),
-    ),
-  ],*/
 );
 
 void showFlushBar(BuildContext context, String errMessage) {
@@ -665,13 +657,8 @@ void showFlushBar(BuildContext context, String errMessage) {
     padding: EdgeInsets.all(10),
     borderRadius: 8,
     backgroundColor: Colors.blueGrey.withOpacity(0.7),
-    // boxShadows: [
-    //   BoxShadow(color: Colors.black45,offset: Offset(3,3),blurRadius: 3),
-    // ],
     margin: EdgeInsets.all(20),
     leftBarIndicatorColor: Colors.black,
-    // dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-    // forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
     titleText: Text(
       errMessage,
       style: TextStyle(fontSize: 18, color: Colors.black),

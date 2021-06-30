@@ -58,7 +58,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
   @override
   void initState() {
     // TODO: implement initState
-
+    finalTeam = null;
+    teamRequest = null;
     super.initState();
   }
 
@@ -354,13 +355,14 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                           for (var team in teamRequests
                               .where((element) =>
                           element.approvalStatus ==
-                              "Approved")
+                              "Approved" &&
+                              element.teamTitle ==
+                                  widget.teamName)
                               .toList()) {
-                            print("email");
-                            print(team.teamLeadId);
                             finalTeam = team;
                           }
-                          return SingleChildScrollView(
+                          return finalTeam != null
+                              ? SingleChildScrollView(
                             physics: BouncingScrollPhysics(),
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
@@ -370,8 +372,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                     Text(
                                       "Team Title",
                                       style: TextStyle(
-                                          fontSize:
-                                          notifier.custFontSize,
+                                          fontSize: notifier
+                                              .custFontSize,
                                           color: KirthanStyles
                                               .colorPallete30),
                                     ),
@@ -382,10 +384,13 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   decoration: InputDecoration(
                                     disabledBorder:
                                     UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.grey)),
+                                        borderSide:
+                                        BorderSide(
+                                            color: Colors
+                                                .grey)),
                                   ),
-                                  initialValue: finalTeam == null
+                                  initialValue:
+                                  finalTeam == null
                                       ? ""
                                       : finalTeam.teamTitle,
                                 ),
@@ -397,8 +402,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                     Text(
                                       "Team Description",
                                       style: TextStyle(
-                                          fontSize:
-                                          notifier.custFontSize,
+                                          fontSize: notifier
+                                              .custFontSize,
                                           color: KirthanStyles
                                               .colorPallete30),
                                     ),
@@ -410,11 +415,15 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   decoration: InputDecoration(
                                     disabledBorder:
                                     UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.grey)),
+                                        borderSide:
+                                        BorderSide(
+                                            color: Colors
+                                                .grey)),
                                   ),
-                                  initialValue: finalTeam != null
-                                      ? finalTeam.teamDescription
+                                  initialValue:
+                                  finalTeam != null
+                                      ? finalTeam
+                                      .teamDescription
                                       : " ",
                                 ),
                                 SizedBox(
@@ -447,8 +456,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                     Text(
                                       "Team Lead",
                                       style: TextStyle(
-                                          fontSize:
-                                          notifier.custFontSize,
+                                          fontSize: notifier
+                                              .custFontSize,
                                           color: KirthanStyles
                                               .colorPallete30),
                                     ),
@@ -460,10 +469,13 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   decoration: InputDecoration(
                                     disabledBorder:
                                     UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.grey)),
+                                        borderSide:
+                                        BorderSide(
+                                            color: Colors
+                                                .grey)),
                                   ),
-                                  initialValue: finalTeam != null
+                                  initialValue:
+                                  finalTeam != null
                                       ? finalTeam.teamLeadId
                                       : " ",
                                 ),
@@ -476,8 +488,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                     Text(
                                       "Team Lead Phone Number",
                                       style: TextStyle(
-                                          fontSize:
-                                          notifier.custFontSize,
+                                          fontSize: notifier
+                                              .custFontSize,
                                           color: KirthanStyles
                                               .colorPallete30),
                                     ),
@@ -489,10 +501,13 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   decoration: InputDecoration(
                                     disabledBorder:
                                     UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.grey)),
+                                        borderSide:
+                                        BorderSide(
+                                            color: Colors
+                                                .grey)),
                                   ),
-                                  initialValue: finalTeam != null
+                                  initialValue: finalTeam !=
+                                      null
                                       ? finalTeam.phoneNumber
                                       .toString()
                                       : " ",
@@ -505,8 +520,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                     Text(
                                       "Team Experience",
                                       style: TextStyle(
-                                          fontSize:
-                                          notifier.custFontSize,
+                                          fontSize: notifier
+                                              .custFontSize,
                                           color: KirthanStyles
                                               .colorPallete30),
                                     ),
@@ -518,14 +533,27 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   decoration: InputDecoration(
                                     disabledBorder:
                                     UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.grey)),
+                                        borderSide:
+                                        BorderSide(
+                                            color: Colors
+                                                .grey)),
                                   ),
-                                  initialValue: finalTeam != null
+                                  initialValue:
+                                  finalTeam != null
                                       ? finalTeam.experience
                                       : "",
                                 ),
                               ],
+                            ),
+                          )
+                              : Center(
+                            child: Container(
+                              child: Text(
+                                "No data to show. Please try after some time",
+                                style: TextStyle(
+                                    color: KirthanStyles
+                                        .colorPallete30),
+                              ),
                             ),
                           );
                         }
@@ -560,13 +588,13 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                             element.teamTitle ==
                                 widget.teamName)
                             .toList()) {
-                          print("email");
-                          print(team.teamLeadId);
                           finalTeam = team;
                         }
-                        return SingleChildScrollView(
+                        return finalTeam != null
+                            ? SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
-                          padding: const EdgeInsets.all(16.0),
+                          padding:
+                          const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
                               Row(
@@ -574,8 +602,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Title",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -587,10 +615,11 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
+                                initialValue: finalTeam !=
+                                    null
                                     ? finalTeam.teamTitle
                                     : " ",
                               ),
@@ -602,8 +631,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Description",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -616,11 +645,13 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
-                                    ? finalTeam.teamDescription
+                                initialValue:
+                                finalTeam != null
+                                    ? finalTeam
+                                    .teamDescription
                                     : " ",
                               ),
                               SizedBox(
@@ -653,8 +684,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Lead",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -667,10 +698,11 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
+                                initialValue: finalTeam !=
+                                    null
                                     ? finalTeam.teamLeadId
                                     : " ",
                               ),
@@ -683,8 +715,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Lead Phone Number",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -697,10 +729,11 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
+                                initialValue: finalTeam !=
+                                    null
                                     ? finalTeam.phoneNumber
                                     .toString()
                                     : " ",
@@ -713,8 +746,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Experience",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -727,16 +760,28 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
+                                initialValue: finalTeam !=
+                                    null
                                     ? finalTeam.experience
                                     : "",
                               ),
                             ],
                           ),
+                        )
+                            : Center(
+                          child: Container(
+                            child: Text(
+                              "No data to show. Please try after some time",
+                              style: TextStyle(
+                                  color: KirthanStyles
+                                      .colorPallete30),
+                            ),
+                          ),
                         );
+                        ;
                       }
                       return Center(
                         child: CircularProgressIndicator(),
@@ -769,9 +814,11 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                           print(team.teamLeadId);
                           finalTeam = team;
                         }
-                        return SingleChildScrollView(
+                        return finalTeam != null
+                            ? SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
-                          padding: const EdgeInsets.all(16.0),
+                          padding:
+                          const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
                               Row(
@@ -779,8 +826,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Title",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -792,10 +839,11 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
+                                initialValue: finalTeam !=
+                                    null
                                     ? finalTeam.teamTitle
                                     : " ",
                               ),
@@ -807,8 +855,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Description",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -821,11 +869,13 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
-                                    ? finalTeam.teamDescription
+                                initialValue:
+                                finalTeam != null
+                                    ? finalTeam
+                                    .teamDescription
                                     : " ",
                               ),
                               SizedBox(
@@ -858,8 +908,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Lead",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -872,10 +922,11 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
+                                initialValue: finalTeam !=
+                                    null
                                     ? finalTeam.teamLeadId
                                     : " ",
                               ),
@@ -888,8 +939,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Lead Phone Number",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -902,10 +953,11 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
+                                initialValue: finalTeam !=
+                                    null
                                     ? finalTeam.phoneNumber
                                     .toString()
                                     : " ",
@@ -918,8 +970,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Experience",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -932,16 +984,28 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   disabledBorder:
                                   UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color:
-                                          Colors.grey)),
+                                          color: Colors
+                                              .grey)),
                                 ),
-                                initialValue: finalTeam != null
+                                initialValue: finalTeam !=
+                                    null
                                     ? finalTeam.experience
                                     : "",
                               ),
                             ],
                           ),
+                        )
+                            : Center(
+                          child: Container(
+                            child: Text(
+                              "No data to show. Please try after some time",
+                              style: TextStyle(
+                                  color: KirthanStyles
+                                      .colorPallete30),
+                            ),
+                          ),
                         );
+                        ;
                       }
                       return Center(
                         child: CircularProgressIndicator(),
@@ -974,7 +1038,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                         for (var team in teamRequests) {
                           finalTeam = team;
                         }
-                        return SingleChildScrollView(
+                        return finalTeam != null
+                            ? SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -984,8 +1049,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Title",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -996,8 +1061,10 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                 decoration: InputDecoration(
                                   disabledBorder:
                                   UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey)),
+                                      borderSide:
+                                      BorderSide(
+                                          color: Colors
+                                              .grey)),
                                 ),
                                 initialValue: finalTeam != null
                                     ? finalTeam.teamTitle
@@ -1011,8 +1078,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Description",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -1024,8 +1091,10 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                 decoration: InputDecoration(
                                   disabledBorder:
                                   UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey)),
+                                      borderSide:
+                                      BorderSide(
+                                          color: Colors
+                                              .grey)),
                                 ),
                                 initialValue: finalTeam != null
                                     ? finalTeam.teamDescription
@@ -1061,8 +1130,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Lead",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -1074,8 +1143,10 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                 decoration: InputDecoration(
                                   disabledBorder:
                                   UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey)),
+                                      borderSide:
+                                      BorderSide(
+                                          color: Colors
+                                              .grey)),
                                 ),
                                 initialValue: finalTeam != null
                                     ? finalTeam.teamLeadId
@@ -1090,8 +1161,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Lead Phone Number",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -1103,11 +1174,14 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                 decoration: InputDecoration(
                                   disabledBorder:
                                   UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey)),
+                                      borderSide:
+                                      BorderSide(
+                                          color: Colors
+                                              .grey)),
                                 ),
                                 initialValue: finalTeam != null
-                                    ? finalTeam.phoneNumber.toString()
+                                    ? finalTeam.phoneNumber
+                                    .toString()
                                     : " ",
                               ),
                               SizedBox(
@@ -1118,8 +1192,8 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                   Text(
                                     "Team Experience",
                                     style: TextStyle(
-                                        fontSize:
-                                        notifier.custFontSize,
+                                        fontSize: notifier
+                                            .custFontSize,
                                         color: KirthanStyles
                                             .colorPallete30),
                                   ),
@@ -1131,8 +1205,10 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                                 decoration: InputDecoration(
                                   disabledBorder:
                                   UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey)),
+                                      borderSide:
+                                      BorderSide(
+                                          color: Colors
+                                              .grey)),
                                 ),
                                 initialValue: finalTeam != null
                                     ? finalTeam.experience
@@ -1140,7 +1216,18 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                               ),
                             ],
                           ),
+                        )
+                            : Center(
+                          child: Container(
+                            child: Text(
+                              "No data to show. Please try after some time",
+                              style: TextStyle(
+                                  color: KirthanStyles
+                                      .colorPallete30),
+                            ),
+                          ),
                         );
+                        ;
                       }
                       return Center(
                         child: CircularProgressIndicator(),
@@ -1149,9 +1236,19 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                 onRefresh: refreshList,
               ));
         })
-        : Center(
+        : Scaffold(
+      appBar: AppBar(
+          title: Text(
+            "Team Details",
+          )),
+      body: Center(
         child: Container(
-          child: Text("No data to show"),
-        ));
+          child: Text(
+            "No data to show. Please try after some time",
+            style: TextStyle(color: KirthanStyles.colorPallete30),
+          ),
+        ),
+      ),
+    );
   }
 }

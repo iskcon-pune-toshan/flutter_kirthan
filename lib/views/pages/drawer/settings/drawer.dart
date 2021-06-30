@@ -315,20 +315,20 @@ class _MyDrawerState extends State<MyDrawer> {
                     },
                   ),
                 ),
-              if(role_id == 1)
-                Card(
-                  child: ListTile(
-                    title:Text(
-                      "Initiate team",
-                      style: TextStyle(fontSize: notifier.custFontSize),
-                    ),
-                    trailing: Icon(Icons.group_add),
-                    onTap: (){
-                      Navigator.push(context,
-                          MaterialPageRoute (builder: (context) => InitiateTeam()));
-                    },
-                  )
-                ),
+              // if(role_id == 1)
+              //   Card(
+              //     child: ListTile(
+              //       title:Text(
+              //         "Initiate team",
+              //         style: TextStyle(fontSize: notifier.custFontSize),
+              //       ),
+              //       trailing: Icon(Icons.group_add),
+              //       onTap: (){
+              //         Navigator.push(context,
+              //             MaterialPageRoute (builder: (context) => InitiateTeam()));
+              //       },
+              //     )
+              //   ),
               if (role_id == 3 || role_id == 2 || role_id == 1)
                 Card(
                   child: ListTile(
