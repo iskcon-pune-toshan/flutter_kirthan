@@ -1473,7 +1473,7 @@ class NotificationViewState extends State<NotificationView> {
                         onTap: () => {
                           setState(() {
                             Map<String, dynamic> processrequestmap =
-                            new Map<String, dynamic>();
+                            new Map<String, dynamic>.from(snapshot.data);
 
                             processrequestmap["id"] =
                                 snapshot.data[itemCount].id;

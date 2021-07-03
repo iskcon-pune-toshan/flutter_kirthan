@@ -27,6 +27,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
+  bool _isHidden2 = true;
   File _image;
   String _uploadedFileURL;
   FocusNode myFocusNode = new FocusNode();
@@ -50,9 +51,15 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  void _togglePasswordView() {
+  void _togglePasswordView1() {
     setState(() {
       _isHidden = !_isHidden;
+    });
+  }
+
+  void _togglePasswordView2() {
+    setState(() {
+      _isHidden2 = !_isHidden2;
     });
   }
 
@@ -286,7 +293,7 @@ class _SignUpState extends State<SignUp> {
                               hintStyle: kHintTextStyle,
                               labelText: 'Password',
                               suffixIcon: InkWell(
-                                onTap: _togglePasswordView,
+                                onTap: _togglePasswordView1,
                                 child: Icon(
                                   _isHidden
                                       ? Icons.visibility
@@ -342,9 +349,9 @@ class _SignUpState extends State<SignUp> {
                             hintStyle: kHintTextStyle,
                             labelText: 'Confirm Password',
                             suffixIcon: InkWell(
-                              onTap: _togglePasswordView,
+                              onTap: _togglePasswordView2,
                               child: Icon(
-                                _isHidden
+                                _isHidden2
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                                 color: Color(0xFF61bcbc),
@@ -360,7 +367,7 @@ class _SignUpState extends State<SignUp> {
                             return null;
                           },
                           onSaved: (input) => password = input,
-                          obscureText: _isHidden,
+                          obscureText: _isHidden2,
                         ),
                       ),
                       Row(
