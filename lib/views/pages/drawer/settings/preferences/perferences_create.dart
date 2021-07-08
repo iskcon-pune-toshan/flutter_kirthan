@@ -305,8 +305,7 @@ class _PreferenceState extends State<Preference> {
                                                       .hasError) {
                                                     return Text("Error");
                                                   } else {
-                                                    return Text(
-                                                        "Retrieved null values");
+                                                    return Container();
                                                   }
                                                 }),
                                             SizedBox(height: 35),
@@ -384,8 +383,7 @@ class _PreferenceState extends State<Preference> {
                                                       .hasError) {
                                                     return Text("Error");
                                                   } else {
-                                                    return Text(
-                                                        "Retrieved null values");
+                                                    return Container();
                                                   }
                                                 }),
                                           ],
@@ -393,7 +391,7 @@ class _PreferenceState extends State<Preference> {
                                       } else if (snapshot.hasError) {
                                         return Text("Error");
                                       } else {
-                                        return Text("Retrieved null values");
+                                        return Container();
                                       }
                                     }),
                                 Divider(),

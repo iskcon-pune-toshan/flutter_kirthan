@@ -315,20 +315,20 @@ class _EventWriteState extends State<EventWrite> {
                                 if (value.toString().isEmpty || value == null) {
                                   return "Please select time";
                                 } else
-                                  {
-                                    DateFormat dateFormat = new DateFormat.Hm();
-                                    DateTime currenttime=dateFormat.parse(DateTime.now().toString().substring(11,15));
-                                    if(eventrequest.eventDate ==  DateFormat("yyyy-MM-dd")
-                                        .format(DateTime.now())
-                                        .toString()){
-                                      return value.isAfter(currenttime) ==true
-                                      ? null
-                                      : "Enter correct time";
-                                    }
-                                    else
-                                      return null;
-
+                                {
+                                  DateFormat dateFormat = new DateFormat.Hm();
+                                  DateTime currenttime=dateFormat.parse(DateTime.now().toString().substring(11,15));
+                                  if(eventrequest.eventDate ==  DateFormat("yyyy-MM-dd")
+                                      .format(DateTime.now())
+                                      .toString()){
+                                    return value.isAfter(currenttime) ==true
+                                        ? null
+                                        : "Enter correct time";
                                   }
+                                  else
+                                    return null;
+
+                                }
 
                               },
                             ),
@@ -637,34 +637,28 @@ class _EventWriteState extends State<EventWrite> {
                     Consumer<ThemeNotifier>(
                       builder: (context, notifier, child) =>
                           TextFormField(
-                        style: TextStyle(fontSize: notifier.custFontSize),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
+                            style: TextStyle(fontSize: notifier.custFontSize),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              isCollapsed: true,
+                              errorBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                            ),
+                            validator: (value) {
+                                  if (eventrequest.country == null) {
+                                    return "Please select country, state & city";
+                                  }
+                              return null;
+                            },
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (eventrequest.city == null) {
-                            if (eventrequest.state == null) {
-                              if (eventrequest.country == null) {
-                                return "Please select country, state & city";
-                              }
-                              return "Please select state & city";
-                            }
-                            return "Please select city";
-                          }
-                          return null;
-                        },
-                      ),
                     ),
                     Consumer<ThemeNotifier>(
                       builder: (context, notifier, child) => TextFormField(

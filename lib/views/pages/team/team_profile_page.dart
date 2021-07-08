@@ -203,7 +203,7 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                   if (snapshot.hasData) {
                     teamList = snapshot.data;
                     for (var team in snapshot.data) {
-                      if (team.teamTitle == this.teamTitle) {
+                      if (team.teamTitle == this.teamTitle && team.teamLeadId == this.teamLeadId) {
                         // teamTitle = team.teamTitle;
                         experience = team.experience;
                         Email = team.teamLeadId;
@@ -351,8 +351,14 @@ class _TeamProfilePageState extends State<TeamProfilePage> {
                                                           color:
                                                           notifier.darkTheme?Colors.grey[300]:Colors.grey[700]),
                                                     )),
-                                                Text(
-                                                  experience,
+                                                experience==null
+                                                ?Text("(Null)",
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                      notifier.custFontSize,
+                                                      color: notifier.darkTheme?Colors.grey[400]:Colors.grey[600]),
+                                                )
+                                                :Text(experience,
                                                   style: TextStyle(
                                                       fontSize:
                                                           notifier.custFontSize,

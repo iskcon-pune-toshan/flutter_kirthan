@@ -249,7 +249,7 @@ class _InitiateTeamState extends State<InitiateTeam> {
                                                                   builder: (context) =>
                                                                       TeamProfilePage(
                                                                           teamTitle:
-                                                                          teamList[index].teamTitle)));
+                                                                          teamList[index].teamTitle, teamLeadId: teamList[index].teamLeadId,)));
                                                         },
                                                         title: Text(
                                                           teamtitles[index],

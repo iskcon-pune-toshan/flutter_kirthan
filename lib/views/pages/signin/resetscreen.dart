@@ -60,9 +60,17 @@ class _ResetScreenState extends State<ResetScreen> {
     return Consumer<ThemeNotifier>(
       builder:(context, notifier, child)=> Scaffold(
         appBar: AppBar(
+          elevation: 0.0,
+          iconTheme: IconThemeData(color: KirthanStyles.colorPallete60),
           //icon: Icon(Icons.arrow_back, color: Colors.white),
           backgroundColor: KirthanStyles.colorPallete30,
-          title: Text('Reset Password',  style: TextStyle(fontSize: notifier.custFontSize),),),
+          title: Text('Reset Password',  style: TextStyle(color: KirthanStyles.colorPallete60),
+          ),
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
         body: Container(
           color: Colors.white,
           child: Column(
@@ -80,34 +88,86 @@ class _ResetScreenState extends State<ResetScreen> {
                     style: kLabelStyle,
                   ),*/
               SizedBox(height: 10.0),
-              Container(
-                alignment: Alignment.centerLeft,
-                decoration: kBoxDecorationStyle,
-                height: 60.0,
-                child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller:_email,
-                  focusNode: myFocusNode,
-                  keyboardType: TextInputType.emailAddress,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'OpenSans',
-                  ),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 14.0),
-                    prefixIcon: Icon(
-                      Icons.email,
-                      color: KirthanStyles.colorPallete30,
+              // Container(
+              //   alignment: Alignment.centerLeft,
+              //   decoration: kBoxDecorationStyle,
+              //   height: 60.0,
+              //   child: TextFormField(
+              //     autovalidateMode: AutovalidateMode.onUserInteraction,
+              //     controller:_email,
+              //     focusNode: myFocusNode,
+              //     keyboardType: TextInputType.emailAddress,
+              //     style: TextStyle(
+              //       color: Colors.black,
+              //       fontFamily: 'OpenSans',
+              //     ),
+              //     decoration: InputDecoration(
+              //       border: InputBorder.none,
+              //       contentPadding: EdgeInsets.only(top: 14.0),
+              //       prefixIcon: Icon(
+              //         Icons.email,
+              //         color: KirthanStyles.colorPallete30,
+              //       ),
+              //       hintText: 'Email address',
+              //       hintStyle: kHintTextStyle,
+              //     ),
+              //     // controller: username,
+              //     validator: (input) =>
+              //     EmailValidator.validate(input) ? null : "Not a Valid User",
+              //   ),
+              // ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.emailAddress,
+                    style: TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: KirthanStyles.colorPallete30,
+                          width: 1.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: KirthanStyles.colorPallete30,
+                          width: 1.5,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.zero,
+                        borderSide: BorderSide(
+                          color: KirthanStyles.colorPallete30,
+                          width: 1.5,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: KirthanStyles.colorPallete30,
+                          width: 1.5,
+                        ),
+                      ),
+                      prefixIcon: Icon(Icons.email, color: Color(0xFF61bcbc)),
+                      hintText: 'Enter Email',
+                      hintStyle: kHintTextStyle,
                     ),
-                    hintText: 'Email address',
-                    hintStyle: kHintTextStyle,
+                    controller: username,
+                    validator: (value) {
+                      if (value.trimLeft().isEmpty) {
+                        return 'Please enter email';
+                      } else {
+                        return EmailValidator.validate(value)
+                            ? null
+                            : "Please enter valid email";
+                      }
+                    },
+                    //onSaved: (input) => email = input,
                   ),
-                  // controller: username,
-                  validator: (input) =>
-                  EmailValidator.validate(input) ? null : "Not a Valid User",
                 ),
-              ),
                 SizedBox(height: 10.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

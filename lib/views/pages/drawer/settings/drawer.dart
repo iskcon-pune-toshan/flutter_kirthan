@@ -265,6 +265,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           MaterialPageRoute(
                               builder: (context) => TeamProfilePage(
                                 teamTitle: team_title,
+                                teamLeadId: currUserEmail,
                               )));
                       // } else if (currUserRole == 'Local Admin') {
                       //   Navigator.push(
