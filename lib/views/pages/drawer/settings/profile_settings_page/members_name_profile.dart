@@ -601,7 +601,7 @@ class _members_profileState extends State<members_profile> {
                                                                 color: KirthanStyles
                                                                     .colorPallete30,
                                                                 child: Text(
-                                                                    'Get Approved', style: TextStyle(fontSize: notifier
+                                                                    'Submit', style: TextStyle(fontSize: notifier
                                                                     .custFontSize)),
 //color: Colors.redAccent,
 //padding: const EdgeInsets.fromLTRB100.0, 0.0, 50.0, 0.0),
@@ -707,7 +707,7 @@ class _members_profileState extends State<members_profile> {
                                                                   : RaisedButton(
                                                                 color: Colors.grey,
                                                                 child: Text(
-                                                                  'Get Approved',
+                                                                  'Submit',
                                                                   style: TextStyle(
                                                                       fontSize: notifier.custFontSize,
                                                                       color: Colors
