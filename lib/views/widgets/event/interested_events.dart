@@ -60,10 +60,11 @@ class _Interested_eventsState extends State<Interested_events> {
                               borderRadius: new BorderRadius.all(
                                   new Radius.circular(10.0)),
                               gradient: new LinearGradient(
-                                  colors: [Colors.blue[100], Colors.blue],
+                                  //colors: [Colors.blue[100], Colors.blue],
                                   begin: Alignment.centerLeft,
                                   end: Alignment.centerRight,
-                                  tileMode: TileMode.clamp)),
+                                 // tileMode: TileMode.clamp
+                              )),
                           child:Text(
                             '${int_item.itemlist[index]}',
                             style: TextStyle(
