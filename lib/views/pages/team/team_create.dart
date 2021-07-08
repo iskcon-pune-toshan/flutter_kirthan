@@ -694,7 +694,7 @@ class _TeamWriteState extends State<TeamWrite> {
                               padding: EdgeInsets.all(30.0),
                               //TODO:added search bar
                               child: CSCPicker(
-                                // disabled: notifier.darkTheme ? false : true,
+                                disabled: notifier.darkTheme ? false : true,
                                 onCountryChanged: (value) {
                                   setState(() {
                                     country = value;
