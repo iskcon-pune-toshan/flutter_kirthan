@@ -1472,8 +1472,16 @@ class NotificationViewState extends State<NotificationView> {
                         icon: Icons.delete,
                         onTap: () => {
                           setState(() {
-                            Map<String, dynamic> processrequestmap =
+    Map<String, dynamic> processrequestmap =
                             new Map<String, dynamic>();
+
+                            processrequestmap["id"] = item?.id;
+    notificationPageVM.deleteNotification(
+        processrequestmap, true);
+                            //processrequestmap["teamLeadId"] =
+                              //  teamrequest?.teamLeadId;
+                            /*Map<String, dynamic> processrequestmap =
+                            new Map<String, dynamic>.from(snapshot.data);
 
                             processrequestmap["id"] =
                                 snapshot.data[itemCount].id;
@@ -1495,7 +1503,7 @@ class NotificationViewState extends State<NotificationView> {
                                 ? notificationPageVM.deleteNotification(
                                 processrequestmap, false)
                                 : notificationPageVM.deleteNotification(
-                                processrequestmap, true);
+                                processrequestmap, true);*/
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Navigator.of(context);
                             });

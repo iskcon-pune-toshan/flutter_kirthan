@@ -1206,15 +1206,9 @@ class _EventWriteState extends State<EventWritePublic> {
                           ),
                         ),
                         validator: (value) {
-                          if (eventrequest.city == null) {
-                            if (eventrequest.state == null) {
                               if (eventrequest.country == null) {
                                 return "Please select country, state, city";
                               }
-                              return "Please select state, city";
-                            }
-                            return "Please select city";
-                          }
                           return null;
                         },
                       ),
@@ -1277,7 +1271,7 @@ class _EventWriteState extends State<EventWritePublic> {
                                   eventrequest.createdBy = email;
                                   _formKey.currentState.save();
                                   eventrequest.isPublicEvent = true;
-                                 List<CommonLookupTable>
+                                  List<CommonLookupTable>
                                   selectedCategory =
                                   await commonLookupTablePageVM
                                       .getCommonLookupTable(

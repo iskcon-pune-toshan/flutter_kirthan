@@ -79,7 +79,8 @@ class UserTempleRequestsListItem extends StatelessWidget {
                   //colors: [notifier.currentColor, notifier.currentColor],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
-                  tileMode: TileMode.clamp),
+                 // tileMode: TileMode.clamp
+              ),
               color: notifier.currentColorStatus
                   ? notifier.currentColor
                   : Theme.of(context).cardColor,

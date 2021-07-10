@@ -608,9 +608,7 @@ class _TeamWriteState extends State<TeamWrite> {
                                     ),
                                     elevation: 5,
                                   )
-
                                  : Container();
-
                                 }
                               }),*/
 
@@ -735,15 +733,9 @@ class _TeamWriteState extends State<TeamWrite> {
                                 ),
                               ),
                               validator: (value) {
-                                if (teamrequest.location == null) {
-                                  if (state == null) {
                                     if (country == null) {
                                       return "Please select country, state & city";
                                     }
-                                    return "Please select state & city";
-                                  }
-                                  return "Please select city";
-                                }
                                 return null;
                               },
                             ),

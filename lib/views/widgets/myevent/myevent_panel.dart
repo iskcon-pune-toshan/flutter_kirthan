@@ -2,22 +2,46 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_kirthan/models/event.dart';
 import 'package:flutter_kirthan/models/eventteam.dart';
+import 'package:flutter_kirthan/services/event_service_impl.dart';
+import 'package:flutter_kirthan/utils/kirthan_styles.dart';
 import 'package:flutter_kirthan/view_models/event_page_view_model.dart';
 import 'package:flutter_kirthan/view_models/event_team_page_view_model.dart';
 import 'package:flutter_kirthan/views/widgets/myevent/myevent_list_item.dart';
 import 'package:flutter_kirthan/views/widgets/no_internet_connection.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class MyEventsPanel extends StatelessWidget {
+final EventPageViewModel eventPageVM =
+EventPageViewModel(apiSvc: EventAPIService());
+
+class MyEventsPanel extends StatefulWidget {
   String eventType;
   EventRequest eventRequest;
 
-  final String screenName = "My Events";
-
   MyEventsPanel({@required this.eventType, @required this.eventRequest});
+
+  @override
+  _MyEventsPanelState createState() => _MyEventsPanelState();
+}
+
+class _MyEventsPanelState extends State<MyEventsPanel> {
+  final String screenName = "My Events";
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  Future loadData() async {
+    await eventPageVM.setEventRequests("MyEvent");
+  }
+
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      loadData();
+    });
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String dropdownValue = eventRequest?.city;
+    String dropdownValue = widget.eventRequest?.city;
     return ScopedModelDescendant<EventPageViewModel>(
       builder: (context, child, model) {
         return FutureBuilder<List<EventRequest>>(
@@ -30,7 +54,6 @@ class MyEventsPanel extends StatelessWidget {
                 return Center(child: const CircularProgressIndicator());
               case ConnectionState.done:
                 if (snapshot.hasData) {
-                  print("INSIDE SNAPSHOT");
                   var eventRequests = snapshot.data;
                   return eventRequests.isNotEmpty
                       ? new Column(
@@ -89,15 +112,41 @@ class MyEventsPanel extends StatelessWidget {
                       ),
                     ],
                   )
-                  //TODO:added no event created
-                      : Container(
-                    alignment: Alignment.center,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: Text(
-                      "No events created",
-                      style: TextStyle(fontSize: 20),
-                    ),
+                      : new Column(
+                    children: [
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Expanded(
+                          child: Scrollbar(
+                              controller: ScrollController(
+                                  initialScrollOffset: 2,
+                                  keepScrollOffset: false),
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: ListView.builder(
+                                  //shrinkWrap: true,
+                                  itemCount: 1,
+                                  itemBuilder: (_, int index) {
+                                    return Container(
+                                        height: MediaQuery.of(context)
+                                            .size
+                                            .height *
+                                            0.75,
+                                        width: MediaQuery.of(context)
+                                            .size
+                                            .width,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "No event created",
+                                          style: TextStyle(
+                                              color: KirthanStyles
+                                                  .colorPallete30),
+                                        ));
+                                  },
+                                ),
+                              )))
+                    ],
                   );
                 } else if (snapshot.hasError) {
                   return NoInternetConnection(
