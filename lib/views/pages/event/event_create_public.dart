@@ -649,6 +649,18 @@ class _EventWriteState extends State<EventWritePublic> {
                                                     IconButton(
                                                       icon: Icon(Icons.done),
                                                       onPressed: () {
+                                                        /*if(eventrequest.longitudeS == null &&
+                                                            eventrequest.latitudeS == null)
+                                                          {
+                                                            SnackBar mysnackbar = SnackBar(
+                                                              content: Text(
+                                                                  "Please select a location"),
+                                                              duration: new Duration(seconds: 4),
+                                                              backgroundColor: Colors.green,
+                                                            );
+                                                            _scaffoldKey.currentState
+                                                                .showSnackBar(mysnackbar);
+                                                          }*/
                                                         //handleTap(tappedPoint1);
                                                         Navigator.pop(
                                                             context);
