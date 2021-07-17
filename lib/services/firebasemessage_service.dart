@@ -4,10 +4,11 @@ import 'package:flutter_kirthan/view_models/notification_view_model.dart';
 import 'package:flutter_kirthan/views/pages/notifications/notification_view.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_kirthan/views/widgets/BottomNavigationBar/app.dart';
 
 class FirebaseMessageService {
   static final FirebaseMessageService _internal =
-      FirebaseMessageService.internal();
+  FirebaseMessageService.internal();
 
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
@@ -22,7 +23,7 @@ class FirebaseMessageService {
           print("Configuration Called : Here");
           try {
             NotificationViewModel _temp =
-                ScopedModel.of<NotificationViewModel>(context);
+            ScopedModel.of<NotificationViewModel>(context);
             _temp.notificationCount = _temp.newNotificationCount + 1;
           } catch (Exception) {
             print(Exception);
@@ -31,9 +32,7 @@ class FirebaseMessageService {
         },
         onBackgroundMessage: null,
         onLaunch: (Map<String, Object> message) async {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => NotificationView()));
-          return Future.value(null);
+
         },
         onResume: (Map<String, Object> message) {
           Navigator.push(context,
@@ -53,7 +52,7 @@ class FirebaseMessageService {
     );
     await flutterLocalNotificationPlugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+        AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(androdiNotificationChannel);
   }
 
@@ -67,4 +66,18 @@ class FirebaseMessageService {
       print("Error uploading token");
     }
   }
+}
+void _showNotificationAsSnackBar(BuildContext context){
+  final snackBar = SnackBar(
+    content: Text('New Notification'),
+    action: SnackBarAction(
+      label: 'View More',
+      onPressed: () =>
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NotificationView()),
+          ),
+    ),
+  );
 }

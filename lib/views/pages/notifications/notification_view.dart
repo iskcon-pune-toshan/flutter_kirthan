@@ -1474,10 +1474,11 @@ class NotificationViewState extends State<NotificationView> {
                           setState(() {
     Map<String, dynamic> processrequestmap =
                             new Map<String, dynamic>();
-
                             processrequestmap["id"] = item?.id;
     notificationPageVM.deleteNotification(
         processrequestmap, true);
+    notificationPageVM.deleteNotification(
+        processrequestmap, false);
                             //processrequestmap["teamLeadId"] =
                               //  teamrequest?.teamLeadId;
                             /*Map<String, dynamic> processrequestmap =
